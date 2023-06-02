@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  stip-database:
+    image: docker-registry.dvbern.ch/dockerhub/library/postgres:15.3
+    env_file:
+      - './developer_local_settings/config/stip-db.env'
+    volumes:
+      - 'stip-database-data:/var/lib/postgresql/data'
+    networks:
+      - stip-net
+    environment:
+      POSTGRES_USER: stip
+      POSTGRES_DB: stip
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+
+networks:
+  stip-net:
+
+volumes:
+  stip-database-data:
+    external: true
+
