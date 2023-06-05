@@ -3,12 +3,24 @@
 
 ## Installation
 
-1. Copy `developer_local_settings_template` to  `developer_local_settings` and adjust secrets
-2. Copy `.env-template` to `.env` and adjust secrets/config
-3. Copy `docker-compose.override-template.yml` to `docker-compose.override.yml` and configure the local stack
-4. Create a Docker volume for the database by running `docker volume create stip-database-data`
-5. Start the local infra stack using `docker compose up -d`
-6. You can now the application
+1. Copy `.env-template` to `.env` and adjust secrets/config
+2. Copy `docker-compose.override-template.yml` to `docker-compose.override.yml` and configure the local stack
+3. Create a Docker volume for the database by running `docker volume create stip-database-data`
+4. Start the local infra stack using `docker compose up -d`
+5. You can now the application
+
+## Prepare the environment
+
+In order to start STIP you need to start the required services.
+
+All the required services are located in the docker-compose file located at the root of the project.
+Just run the next command in order to start them:
+```
+docker compose up
+```
+
+It will start the next services:
+* stip-database => a postgreSQL database, require a volume =>  docker volume create stip-database-data
 
 
 ## Running the application in dev mode

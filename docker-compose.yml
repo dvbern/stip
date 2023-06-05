@@ -4,14 +4,17 @@ services:
   stip-database:
     image: docker-registry.dvbern.ch/dockerhub/library/postgres:15.3
     env_file:
-      - './developer_local_settings/config/stip-db.env'
+      - '.env'
     volumes:
       - 'stip-database-data:/var/lib/postgresql/data'
     networks:
       - stip-net
+    ports:
+      - "${STIP_DB_PORT}:5432"
     environment:
-      POSTGRES_USER: stip
-      POSTGRES_DB: stip
+      POSTGRES_USER: ${STIP_DB_USERNAME}
+      POSTGRES_DB: ${STIP_DB}
+      POSTGRES_PASSWORD: ${STIP_DB_PASSWORD}
     deploy:
       resources:
         limits:

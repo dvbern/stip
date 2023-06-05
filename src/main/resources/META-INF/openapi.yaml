@@ -1,0 +1,23 @@
+---
+info:
+  title: STIP Service API
+  version: "1.0"
+
+components:
+  responses:
+    Unauthorized:
+      description: Die Zugriffsdaten sind nicht gültig
+      content:
+        text/plain: { }
+    Forbidden:
+      description: Der Zugriff wurde verweigert
+      content:
+        text/plain: { }
+    NotFound:
+      description: Die angeforderte Ressource existiert nicht
+      content:
+        text/plain: { }
+    ServerError:
+      description: Interner Server Fehler
+      content:
+        text/plain: { }
