@@ -20,30 +20,21 @@ package ch.dvbern.stip.personinausbildung.model;
 import ch.dvbern.stip.persistence.AbstractEntity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.envers.Audited;
 
+@Audited
 @Entity
+@Getter
+@Setter
 public class PersonInAusbildungContainer extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_container_person_in_ausbildunggs_id"), nullable = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_container_person_in_ausbildung_gs_id"), nullable = true)
     private PersonInAusbildung personInAusbildungGS;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_container_person_in_ausbildungsb_id"), nullable = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_container_person_in_ausbildung_sb_id"), nullable = true)
     private PersonInAusbildung personInAusbildungSB;
-    public PersonInAusbildung getPersonInAusbildungGS() {
-        return personInAusbildungGS;
-    }
-
-    public void setPersonInAusbildungGS(PersonInAusbildung personInAusbildungGS) {
-        this.personInAusbildungGS = personInAusbildungGS;
-    }
-
-    public PersonInAusbildung getPersonInAusbildungSB() {
-        return personInAusbildungSB;
-    }
-
-    public void setPersonInAusbildungSB(PersonInAusbildung personInAusbildungSB) {
-        this.personInAusbildungSB = personInAusbildungSB;
-    }
 }

@@ -25,12 +25,18 @@ import ch.dvbern.stip.shared.enums.Land;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 
 import static ch.dvbern.stip.shared.util.Constants.*;
 
+@Audited
 @Entity
+@Getter
+@Setter
 public class PersonInAusbildung extends AbstractEntity {
 
     @NotNull
@@ -38,7 +44,6 @@ public class PersonInAusbildung extends AbstractEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
     private Adresse adresse;
     @NotNull
-    @Size(max = DB_DEFAULT_SHORT_LENGTH)
     @Column(nullable = false)
     private String sozialversicherungsnummer;
 
@@ -121,166 +126,4 @@ public class PersonInAusbildung extends AbstractEntity {
     @Column(nullable = false)
     private boolean digitaleKommunikation = true;
 
-    public Adresse getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(Adresse adresse) {
-        this.adresse = adresse;
-    }
-
-    public String getSozialversicherungsnummer() {
-        return sozialversicherungsnummer;
-    }
-
-    public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
-        this.sozialversicherungsnummer = sozialversicherungsnummer;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getVorname() {
-        return vorname;
-    }
-
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
-    }
-
-    public Anrede getAnrede() {
-        return anrede;
-    }
-
-    public void setAnrede(Anrede anrede) {
-        this.anrede = anrede;
-    }
-
-    public boolean isIdentischerZivilrechtlicherWohnsitz() {
-        return identischerZivilrechtlicherWohnsitz;
-    }
-
-    public void setIdentischerZivilrechtlicherWohnsitz(boolean identischerZivilrechtlicherWohnsitz) {
-        this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
-    }
-
-    public String getIzvOrt() {
-        return izvOrt;
-    }
-
-    public void setIzvOrt(String izvOrt) {
-        this.izvOrt = izvOrt;
-    }
-
-    public String getIzvPLZ() {
-        return izvPLZ;
-    }
-
-    public void setIzvPLZ(String izvPLZ) {
-        this.izvPLZ = izvPLZ;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefonnummer() {
-        return telefonnummer;
-    }
-
-    public void setTelefonnummer(String telefonnummer) {
-        this.telefonnummer = telefonnummer;
-    }
-
-    public LocalDate getGeburtsdatum() {
-        return geburtsdatum;
-    }
-
-    public void setGeburtsdatum(LocalDate geburtsdatum) {
-        this.geburtsdatum = geburtsdatum;
-    }
-
-    public Land getNationalitaet() {
-        return nationalitaet;
-    }
-
-    public void setNationalitaet(Land nationalitaet) {
-        this.nationalitaet = nationalitaet;
-    }
-
-    public String getHeimatort() {
-        return heimatort;
-    }
-
-    public void setHeimatort(String heimatort) {
-        this.heimatort = heimatort;
-    }
-
-    public Niederlassungsstatus getNiederlassungsstatus() {
-        return niederlassungsstatus;
-    }
-
-    public void setNiederlassungsstatus(Niederlassungsstatus niederlassungsstatus) {
-        this.niederlassungsstatus = niederlassungsstatus;
-    }
-
-    public Zivilstand getZivilstand() {
-        return zivilstand;
-    }
-
-    public void setZivilstand(Zivilstand zivilstand) {
-        this.zivilstand = zivilstand;
-    }
-
-    public Wohnsitz getWohnsitz() {
-        return wohnsitz;
-    }
-
-    public void setWohnsitz(Wohnsitz wohnsitz) {
-        this.wohnsitz = wohnsitz;
-    }
-
-    public boolean isSozialhilfebeitraege() {
-        return sozialhilfebeitraege;
-    }
-
-    public void setSozialhilfebeitraege(boolean sozialhilfebeitraege) {
-        this.sozialhilfebeitraege = sozialhilfebeitraege;
-    }
-
-    public boolean isQuellenbesteuert() {
-        return quellenbesteuert;
-    }
-
-    public void setQuellenbesteuert(boolean quellenbesteuert) {
-        this.quellenbesteuert = quellenbesteuert;
-    }
-
-    public boolean isKinder() {
-        return kinder;
-    }
-
-    public void setKinder(boolean kinder) {
-        this.kinder = kinder;
-    }
-
-    public boolean isDigitaleKommunikation() {
-        return digitaleKommunikation;
-    }
-
-    public void setDigitaleKommunikation(boolean digitaleKommunikation) {
-        this.digitaleKommunikation = digitaleKommunikation;
-    }
-
-    public void apply(PersonInAusbildung personInAusbildungGS) {
-    }
 }

@@ -27,8 +27,8 @@ ALTER sequence revinfo_seq start with 1 increment by 50;
 CREATE TABLE fall
 (
     id                 UUID         NOT NULL,
-    timestamp_erstellt TIMESTAMP     NOT NULL,
-    timestamp_mutiert  TIMESTAMP     NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
     user_erstellt      VARCHAR(255) NOT NULL,
     user_mutiert       VARCHAR(255) NOT NULL,
     version            BIGINT       NOT NULL,
@@ -54,49 +54,49 @@ CREATE TABLE fall_aud
 ALTER TABLE fall_aud
     ADD CONSTRAINT FK_fall_aud_revinfo
         FOREIGN KEY (rev)
-            REFERENCES revinfo(rev);
+            REFERENCES revinfo (rev);
 
 CREATE TABLE gesuchsperiode
 (
-    id                    UUID         NOT NULL,
-    timestamp_erstellt    TIMESTAMP     NOT NULL,
-    timestamp_mutiert     TIMESTAMP     NOT NULL,
-    user_erstellt         VARCHAR(255) NOT NULL,
-    user_mutiert          VARCHAR(255) NOT NULL,
-    version               BIGINT       NOT NULL,
-    gueltig_ab            DATE         NOT NULL,
-    gueltig_bis           DATE         NOT NULL,
-    einreichfrist         DATE,
-    aufschaltdatum        DATE,
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    gueltig_ab         DATE         NOT NULL,
+    gueltig_bis        DATE         NOT NULL,
+    einreichfrist      DATE,
+    aufschaltdatum     DATE,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE gesuchsperiode_aud
 (
-    id                    UUID    NOT NULL,
-    rev                   INTEGER NOT NULL,
-    revtype               SMALLINT,
-    timestamp_erstellt    TIMESTAMP,
-    timestamp_mutiert     TIMESTAMP,
-    user_erstellt         VARCHAR(255),
-    user_mutiert          VARCHAR(255),
-    gueltig_ab            DATE,
-    gueltig_bis           DATE,
-    einreichfrist         DATE,
-    aufschaltdatum        DATE,
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    gueltig_ab         DATE,
+    gueltig_bis        DATE,
+    einreichfrist      DATE,
+    aufschaltdatum     DATE,
     PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE gesuchsperiode_aud
     ADD CONSTRAINT FK_gesuchsperiode_aud_revinfo
         FOREIGN KEY (rev)
-            REFERENCES revinfo(rev);
+            REFERENCES revinfo (rev);
 
 CREATE TABLE adresse
 (
     id                 UUID         NOT NULL,
-    timestamp_erstellt TIMESTAMP     NOT NULL,
-    timestamp_mutiert  TIMESTAMP     NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
     user_erstellt      VARCHAR(255) NOT NULL,
     user_mutiert       VARCHAR(255) NOT NULL,
     version            BIGINT       NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE adresse
     ort                VARCHAR(255) NOT NULL,
     plz                VARCHAR(255) NOT NULL,
     strasse            VARCHAR(255) NOT NULL,
-    CONSTRAINT adresse_pk PRIMARY KEY (id)  /* uberall name geben */
+    CONSTRAINT adresse_pk PRIMARY KEY (id) /* uberall name geben */
 );
 
 CREATE TABLE adresse_aud
@@ -132,13 +132,13 @@ CREATE TABLE adresse_aud
 ALTER TABLE adresse_aud
     ADD CONSTRAINT FK_adresse_aud_revinfo
         FOREIGN KEY (rev)
-            REFERENCES revinfo(rev);
+            REFERENCES revinfo (rev);
 
 CREATE TABLE person_in_ausbildung
 (
     id                                    UUID         NOT NULL,
-    timestamp_erstellt                    TIMESTAMP     NOT NULL,
-    timestamp_mutiert                     TIMESTAMP     NOT NULL,
+    timestamp_erstellt                    TIMESTAMP    NOT NULL,
+    timestamp_mutiert                     TIMESTAMP    NOT NULL,
     user_erstellt                         VARCHAR(255) NOT NULL,
     user_mutiert                          VARCHAR(255) NOT NULL,
     version                               BIGINT       NOT NULL,
@@ -208,13 +208,13 @@ CREATE TABLE person_in_ausbildung_aud
 ALTER TABLE person_in_ausbildung_aud
     ADD CONSTRAINT FK_person_in_ausbildung_aud_revinfo
         FOREIGN KEY (rev)
-            REFERENCES revinfo(rev);
+            REFERENCES revinfo (rev);
 
 CREATE TABLE person_in_ausbildung_container
 (
     id                         UUID         NOT NULL,
-    timestamp_erstellt         TIMESTAMP     NOT NULL,
-    timestamp_mutiert          TIMESTAMP     NOT NULL,
+    timestamp_erstellt         TIMESTAMP    NOT NULL,
+    timestamp_mutiert          TIMESTAMP    NOT NULL,
     user_erstellt              VARCHAR(255) NOT NULL,
     user_mutiert               VARCHAR(255) NOT NULL,
     version                    BIGINT       NOT NULL,
@@ -253,20 +253,20 @@ CREATE TABLE person_in_ausbildung_container_aud
 ALTER TABLE person_in_ausbildung_container_aud
     ADD CONSTRAINT FK_person_in_ausbildung_container_aud_revinfo
         FOREIGN KEY (rev)
-            REFERENCES revinfo(rev);
+            REFERENCES revinfo (rev);
 
 CREATE TABLE gesuch
 (
     id                                UUID         NOT NULL,
-    timestamp_erstellt                TIMESTAMP     NOT NULL,
-    timestamp_mutiert                 TIMESTAMP     NOT NULL,
+    timestamp_erstellt                TIMESTAMP    NOT NULL,
+    timestamp_mutiert                 TIMESTAMP    NOT NULL,
     user_erstellt                     VARCHAR(255) NOT NULL,
     user_mutiert                      VARCHAR(255) NOT NULL,
     version                           BIGINT       NOT NULL,
     vorgaenger_id                     UUID,
-    gesuch_nummer                     INTEGER       NOT NULL,
+    gesuch_nummer                     INTEGER      NOT NULL,
     gesuch_status                     VARCHAR(255) NOT NULL,
-    gesuch_status_aenderung_datum     TIMESTAMP     NOT NULL,
+    gesuch_status_aenderung_datum     TIMESTAMP    NOT NULL,
     gesuchsperiode_id                 UUID         NOT NULL,
     fall_id                           UUID         NOT NULL,
     person_in_ausbildung_container_id UUID,
@@ -310,4 +310,106 @@ CREATE TABLE gesuch_aud
 ALTER TABLE gesuch_aud
     ADD CONSTRAINT FK_gesuch_aud_revinfo
         FOREIGN KEY (rev)
-            REFERENCES revinfo(rev);
+            REFERENCES revinfo (rev);
+
+CREATE TABLE eltern
+(
+    id                              UUID         NOT NULL,
+    timestamp_erstellt              TIMESTAMP    NOT NULL,
+    timestamp_mutiert               TIMESTAMP    NOT NULL,
+    user_erstellt                   VARCHAR(255) NOT NULL,
+    user_mutiert                    VARCHAR(255) NOT NULL,
+    version                         BIGINT       NOT NULL,
+    geschlecht                      VARCHAR(255) NOT NULL,
+    name                            VARCHAR(255) NOT NULL,
+    vorname                         VARCHAR(255) NOT NULL,
+    sozialversicherungsnummer       VARCHAR(255) NOT NULL,
+    telefonnummer                   VARCHAR(255) NOT NULL,
+    geburtsdatum                    DATE         NOT NULL,
+    sozialhilfebeitraege_ausbezahlt BOOLEAN      NOT NULL,
+    ausweisb_fluechtling            BOOLEAN      NOT NULL,
+    ergaenzungsleistung_ausbezahlt  BOOLEAN      NOT NULL,
+    vorgaenger_id                   UUID,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE eltern_aud
+(
+    id                              UUID    NOT NULL,
+    rev                             INTEGER NOT NULL,
+    revtype                         SMALLINT,
+    timestamp_erstellt              TIMESTAMP,
+    timestamp_mutiert               TIMESTAMP,
+    user_erstellt                   VARCHAR(255),
+    user_mutiert                    VARCHAR(255),
+    version                         BIGINT,
+    geschlecht                      VARCHAR(255),
+    name                            VARCHAR(255),
+    vorname                         VARCHAR(255),
+    sozialversicherungsnummer       VARCHAR(255),
+    telefonnummer                   VARCHAR(255),
+    geburtsdatum                    DATE,
+    sozialhilfebeitraege_ausbezahlt BOOLEAN,
+    ausweisb_fluechtling            BOOLEAN,
+    ergaenzungsleistung_ausbezahlt  BOOLEAN,
+    vorgaenger_id                   UUID,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE eltern_aud
+    ADD CONSTRAINT FK_eltern_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE eltern_container
+(
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    gesuch_id          UUID         NOT NULL,
+    eltern_gs_id       UUID,
+    eltern_sb_id       UUID,
+    vorgaenger_id      UUID,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE eltern_container
+    ADD CONSTRAINT FK_eltern_container_eltern_gs_id
+        FOREIGN KEY (eltern_gs_id)
+            REFERENCES eltern (id);
+
+ALTER TABLE eltern_container
+    ADD CONSTRAINT FK_eltern_container_eltern_sb_id
+        FOREIGN KEY (eltern_sb_id)
+            REFERENCES eltern (id);
+
+ALTER TABLE eltern_container
+    ADD CONSTRAINT FK_eltern_container_gesuch_id
+        FOREIGN KEY (gesuch_id)
+            REFERENCES gesuch (id);
+
+CREATE TABLE eltern_container_aud
+(
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    version            BIGINT,
+    gesuch_id          UUID,
+    eltern_gs_id       UUID,
+    eltern_sb_id       UUID,
+    vorgaenger_id      UUID,
+
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE eltern_container_aud
+    ADD CONSTRAINT FK_eltern_container_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
