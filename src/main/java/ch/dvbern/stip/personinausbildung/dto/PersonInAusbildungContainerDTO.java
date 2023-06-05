@@ -22,6 +22,7 @@ import ch.dvbern.stip.personinausbildung.model.PersonInAusbildungContainer;
 import lombok.Value;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 @Value
@@ -35,12 +36,12 @@ public class PersonInAusbildungContainerDTO {
     private PersonInAusbildungDTO personInAusbildungSB;
 
     public static PersonInAusbildungContainerDTO from(PersonInAusbildungContainer changed) {
-        return new PersonInAusbildungContainerDTO(changed.getId(), PersonInAusbildungDTO.from(changed.getPersonInAusbildungGS()), PersonInAusbildungDTO.from(changed.getPersonInAusbildungSB()));
+        return changed == null ? null : new PersonInAusbildungContainerDTO(changed.getId(), PersonInAusbildungDTO.from(changed.getPersonInAusbildungGS()), PersonInAusbildungDTO.from(changed.getPersonInAusbildungSB()));
     }
 
-    public void apply(PersonInAusbildungContainer personInAusbildungContainer, PersonInAusbildung personInAusbildungGS, PersonInAusbildung personInAusbildungSB){
+    public void apply(PersonInAusbildungContainer personInAusbildungContainer, PersonInAusbildung personInAusbildungGS, PersonInAusbildung personInAusbildungSB) {
         personInAusbildungGS.apply(personInAusbildungGS);
 
-       // personInAusbildungContainer.setPersonInAusbildungGS();
+        // personInAusbildungContainer.setPersonInAusbildungGS();
     }
 }

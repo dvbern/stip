@@ -17,10 +17,14 @@
 
 package ch.dvbern.stip.gesuch.service;
 
+import ch.dvbern.stip.fall.model.Fall;
+import ch.dvbern.stip.fall.service.FallService;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.model.QGesuch;
 import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
+import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
+import ch.dvbern.stip.gesuchsperiode.service.GesuchsperiodeService;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -28,6 +32,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 
 import jakarta.inject.Inject;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,6 +42,12 @@ public class GesuchService {
     @Inject
     private EntityManager entityManager;
 
+    @Inject
+    private FallService fallService;
+
+    @Inject
+    private GesuchsperiodeService gesuchsperiodeService;
+
     public Optional<Gesuch> findGesuch(UUID id) {
         Objects.requireNonNull(id, "id muss gesetzt sein");
         Gesuch g = entityManager.find(Gesuch.class, id);
@@ -45,7 +56,18 @@ public class GesuchService {
 
     public Gesuch saveGesuch(GesuchDTO gesuchDTO) {
         Gesuch gesuch = findGesuch(gesuchDTO.getId()).orElse(new Gesuch());
-        gesuchDTO.apply(gesuch, gesuch.getGesuchsperiode(), gesuch.getPersonInAusbildungContainer());
+        if (gesuch.getFall() == null) {
+            Fall fall = fallService.findFall(gesuchDTO.getFall().getId()).orElseThrow(
+                    () -> new RuntimeException("Fall existiert nicht")
+            );
+            gesuch.setFall(fall);
+        }
+        if (gesuch.getGesuchsperiode() == null) {
+            Gesuchsperiode gesuchsperiode = gesuchsperiodeService.findGesuchsperiode(gesuchDTO.getGesuchsperiode().getId())
+                    .orElseThrow(() -> new RuntimeException("Gesuchsperiode existiert nicht"));
+            gesuch.setGesuchsperiode(gesuchsperiode);
+        }
+        gesuchDTO.apply(gesuch);
         return entityManager.merge(gesuch);
     }
 
