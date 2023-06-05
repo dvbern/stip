@@ -25,9 +25,16 @@ import ch.dvbern.stip.personinausbildung.model.PersonInAusbildungContainer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.envers.Audited;
+
 import java.time.LocalDateTime;
 
+@Audited
 @Entity
+@Getter
+@Setter
 public class Gesuch extends AbstractEntity {
 
     @NotNull
@@ -57,52 +64,4 @@ public class Gesuch extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
-
-    public Gesuchsperiode getGesuchsperiode() {
-        return gesuchsperiode;
-    }
-
-    public void setGesuchsperiode(Gesuchsperiode gesuchsperiode) {
-        this.gesuchsperiode = gesuchsperiode;
-    }
-
-    public PersonInAusbildungContainer getPersonInAusbildungContainer() {
-        return personInAusbildungContainer;
-    }
-
-    public void setPersonInAusbildungContainer(PersonInAusbildungContainer personInAusbildungContainer) {
-        this.personInAusbildungContainer = personInAusbildungContainer;
-    }
-
-    public Gesuchstatus getGesuchStatus() {
-        return gesuchStatus;
-    }
-
-    public void setGesuchStatus(Gesuchstatus gesuchStatus) {
-        this.gesuchStatus = gesuchStatus;
-    }
-
-    public int getGesuchNummer() {
-        return gesuchNummer;
-    }
-
-    public void setGesuchNummer(int gesuchNummer) {
-        this.gesuchNummer = gesuchNummer;
-    }
-
-    public LocalDateTime getGesuchStatusAenderungDatum() {
-        return gesuchStatusAenderungDatum;
-    }
-
-    public void setGesuchStatusAenderungDatum(LocalDateTime gesuchStatusAenderungDatum) {
-        this.gesuchStatusAenderungDatum = gesuchStatusAenderungDatum;
-    }
-
-    public Fall getFall() {
-        return fall;
-    }
-
-    public void setFall(Fall fall) {
-        this.fall = fall;
-    }
 }

@@ -39,9 +39,7 @@ public class PersonInAusbildungContainerDTO {
         return changed == null ? null : new PersonInAusbildungContainerDTO(changed.getId(), PersonInAusbildungDTO.from(changed.getPersonInAusbildungGS()), PersonInAusbildungDTO.from(changed.getPersonInAusbildungSB()));
     }
 
-    public void apply(PersonInAusbildungContainer personInAusbildungContainer, PersonInAusbildung personInAusbildungGS, PersonInAusbildung personInAusbildungSB) {
-        personInAusbildungGS.apply(personInAusbildungGS);
-
-        // personInAusbildungContainer.setPersonInAusbildungGS();
+    public void apply(PersonInAusbildungContainer personInAusbildungContainer) {
+        //Todo noch bestimmen was man genau hier kopiert, GS sollte aus meiner Sicht gar nicht vorkommen
     }
 }
