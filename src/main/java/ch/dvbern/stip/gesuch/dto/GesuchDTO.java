@@ -21,12 +21,11 @@ import ch.dvbern.stip.fall.dto.FallDTO;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.Gesuchstatus;
 import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
-import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
 import ch.dvbern.stip.personinausbildung.dto.PersonInAusbildungContainerDTO;
-import ch.dvbern.stip.personinausbildung.model.PersonInAusbildungContainer;
 import lombok.Value;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 @Value
@@ -53,10 +52,8 @@ public class GesuchDTO {
         return new GesuchDTO(changed.getId(), FallDTO.from(changed.getFall()), GesuchsperiodeDTO.from(changed.getGesuchsperiode()), PersonInAusbildungContainerDTO.from(changed.getPersonInAusbildungContainer()), changed.getGesuchStatus(), changed.getGesuchNummer());
     }
 
-    public void apply(Gesuch gesuch, Gesuchsperiode gesuchsperiode, PersonInAusbildungContainer personInAusbildungContainer) {
+    public void apply(Gesuch gesuch) {
         gesuch.setGesuchNummer(gesuchNummer);
         gesuch.setGesuchStatus(gesuchStatus);
-        gesuch.setGesuchsperiode(gesuchsperiode);
-        //gesuch.setPersonInAusbildungContainer(PersonInAusbildungContainer);
     }
 }
