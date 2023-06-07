@@ -4,18 +4,11 @@ kind: Kustomization
 nameSuffix: -dev
 
 resources:
-  - ../../base
+  - ../base
 
 images:
   - name: docker-registry.dvbern.ch/kibon/stip/api
     newTag: latest
-
-
-secretGenerator:
-  - name: database-app-user
-    literals:
-      - username=stip-app-dev
-      - password=Mxmvc3rmUtmPVZUPZWvWWHAf
 
 patches:
   - target:
