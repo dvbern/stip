@@ -29,6 +29,7 @@ build-image:
 deploy:
   stage: deploy
   image: "${DVB_DOCKER_REGISTRY}/devops/tools/k8s:latest"
+  tags: ["os:linux", "type:docker", "zone:tz"]
   variables:
     STAGE: dev
   script:
