@@ -9,7 +9,7 @@ stages:
   - deploy
 
 variables:
-  IMAGE: ${IMAGE_REGISTRY}/${CI_PROJECT_ROOT_NAMESPACE}/stip/api:${$CI_COMMIT_SHORT_SHA}
+  IMAGE: ${DVB_DOCKER_REGISTRY}/${CI_PROJECT_ROOT_NAMESPACE}/stip/api:${CI_COMMIT_SHORT_SHA}
 
 build-image:
   extends: .docker-build
