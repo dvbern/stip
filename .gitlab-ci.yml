@@ -29,7 +29,7 @@ build-image:
 # WIP
 deploy:
   stage: deploy
-  image: "${DVB_DOCKER_REGISTRY}/devops/tools/k8s:latest"
+  image: "${DVB_DOCKER_REGISTRY}/devops/tools/k8s/main:latest"
   tags: ["os:linux", "type:docker", "zone:tz"]
   variables:
     STAGE: dev
