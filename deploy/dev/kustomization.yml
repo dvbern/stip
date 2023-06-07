@@ -9,7 +9,7 @@ resources:
 images:
 - name: /kibon/stip/api
 - name: docker-registry.dvbern.ch/kibon/stip/api
-  newTag: latest
+  newTag: 7d863413
 
 patches:
 - path: route-patch.yml
