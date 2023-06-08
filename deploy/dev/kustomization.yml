@@ -11,7 +11,7 @@ resources:
 
 images:
 - name: docker-registry.dvbern.ch/kibon/stip/api
-  newTag: 83af160b
+  newTag: 3d78a0dd
 
 replacements:
 - source:
@@ -28,20 +28,20 @@ replacements:
     kind: Secret
     name: cluster-super-user
   targets:
-    - select:
-        kind: Cluster
-        name: cluster
-      fieldPaths:
-        - spec.superuserSecret.name
+  - fieldPaths:
+    - spec.superuserSecret.name
+    select:
+      kind: Cluster
+      name: cluster
 - source:
     kind: Secret
     name: cluster-app-user
   targets:
-    - select:
-        kind: Cluster
-        name: cluster
-      fieldPaths:
-        - spec.bootstrap.initdb.secret.name
+  - fieldPaths:
+    - spec.bootstrap.initdb.secret.name
+    select:
+      kind: Cluster
+      name: cluster
 
 patches:
 - path: route-patch.yml
