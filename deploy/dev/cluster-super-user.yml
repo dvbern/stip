@@ -3,7 +3,7 @@ kind: Secret
 type: kubernetes.io/basic-auth
 metadata:
     name: cluster-super-user
-stringData:
+data:
     username: ENC[AES256_GCM,data:B8L+3dJvjp87heA=,iv:8SzMS7INm0+5A8/IYrtlLmLLGa7+2g5L3ro9xH392J8=,tag:bidgQuHM2MUy2kpyNvtsfA==,type:str]
     password: ENC[AES256_GCM,data:M/F/1J651AnH00v8z+tT1npKAV7m9IQ+2lvP7GYDKTsr,iv:YuoGW1kycwKCVKCqaGsw4xgQdFpwXZV+whWYK0BIvAs=,tag:g1YbBIyoh5KJ+LfpHNq7NA==,type:str]
 sops:
