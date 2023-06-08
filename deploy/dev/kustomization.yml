@@ -6,8 +6,6 @@ nameSuffix: -dev
 resources:
 - ../base
 - ingress-config.yml
-- cluster-super-user.yml
-- cluster-app-user.yml
 
 images:
 - name: docker-registry.dvbern.ch/kibon/stip/api
@@ -44,6 +42,8 @@ replacements:
       name: cluster
 
 patches:
+- path: cluster-app-user.yml
+- path: cluster-super-user.yml
 - path: route-patch.yml
   target:
     kind: Route
