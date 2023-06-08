@@ -3,8 +3,8 @@ kind: Secret
 metadata:
     name: cluster-app-user
 stringData:
-    username: ENC[AES256_GCM,data:8pjX2dUMGr0=,iv:jqm9E456fIAM3DKu5aOnMTdokKeahprIQsJy3hhjapE=,tag:r1zG/GbOTkLCIAT9n+OkXg==,type:str]
-    password: ENC[AES256_GCM,data:aEKiTQ==,iv:I+AsHwN526k9vKK8t77xe1pipydSkLAhCOky6YSKyW8=,tag:W9Gksr6bca7Srsmh/Pdozw==,type:str]
+    username: "ENC[AES256_GCM,data:8pjX2dUMGr0=,iv:jqm9E456fIAM3DKu5aOnMTdokKeahprIQsJy3hhjapE=,tag:r1zG/GbOTkLCIAT9n+OkXg==,type:str]"
+    password: "ENC[AES256_GCM,data:aEKiTQ==,iv:I+AsHwN526k9vKK8t77xe1pipydSkLAhCOky6YSKyW8=,tag:W9Gksr6bca7Srsmh/Pdozw==,type:str]"
 sops:
     kms: []
     gcp_kms: []
