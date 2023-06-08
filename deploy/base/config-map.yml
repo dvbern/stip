@@ -5,23 +5,3 @@ metadata:
 data:
   # TODO: make dynamic
   STIP_DB_URL: 'jdbc:postgresql://kibon-stip-cluster-dev-rw.kibon-dev.svc.cluster.local:5432/stip'
-
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: kibon-stip-api-dev
-  namespace: kibon-dev
-spec:
-  timeout: 2m
-  path: ./deploy/dev
-  interval: 1m
-  targetNamespace: kibon-dev
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: stip-api-source
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
