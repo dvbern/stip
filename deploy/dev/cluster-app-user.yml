@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/basic-auth
+metadata:
+    name: cluster-app-user
+stringData:
+    username: ENC[AES256_GCM,data:XSUqlw==,iv:Rx8UV0DYopJgurCbYZeaN18FAcsWaWdKJEUNU8rAnGU=,tag:wnmVs8m4pgFolSm0Cs6pWw==,type:str]
+    password: ENC[AES256_GCM,data:fA6Bcm8L9DS7UVGvhuO2CAD/5s73Pa8AOkC1gnExGw==,iv:2EZSLc3/PSrrp96awHc8vejj7PakJ6c2Jk/MhX/i4f4=,tag:lGCprdAZIJvod80xQp8EAQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1helqcqsh9464r8chnwc2fzj8uv7vr5ntnsft0tn45v2xtz0hpfwq98cmsg
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSNzNPcGl4Q1B2ZkhUc041
+            OWlva3ZnaXIvQm9Edk1XU1VZYVJVbC9mamlnClNFZmVFalBPU3Zwc3dRS1lzanl0
+            RHl2RG5LZVNRdm4wQUJGRUNTRUM3dXMKLS0tIDBSSUM3V0lOc1NFbHZPYUJiYVds
+            NElSc1FzRFpPRDRZem02Qlk4SG5VNVUKdQS9AFz9mZcK3TQFAlzaU19Zf1hM/JJ6
+            7I4wF8IbCgfwH7ejbVsnzmuW3UrS5vYSuQDdT2f5NFPVv6iTAYiPjw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-06-07T20:21:56Z"
+    mac: ENC[AES256_GCM,data:BEHNPh78wQ5rvK3Tbqpn4W5OKgz64ezezRsQU6FfWiUWuXlxBXCiDC5hK67H2ARa62fiPzMKm4XbxUay8O2QKB4hO7Qcm5iiJ0xTZ+ss1sWxukEWyTwdxpqZ0OCBsbYO2ecAYQU8dfTlp2dWkSim0eeA9qeGB/EzC/9mhFWHX8U=,iv:0h9Ov65JorJDlBN/A8ldp95xH6VsLmNWJ+RTE4wxuW4=,tag:UvtjpJvx81wTvbxTPcsiTQ==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.7.3

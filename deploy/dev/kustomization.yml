@@ -5,13 +5,27 @@ nameSuffix: -dev
 
 resources:
 - ../base
+- ingress-config.yml
 
 images:
-- name: /kibon/stip/api
 - name: docker-registry.dvbern.ch/kibon/stip/api
   newTag: 7d863413
 
+replacements:
+  - source:
+      kind: ConfigMap
+      name: ingress-config
+      fieldPath: data.host
+    targets:
+      - select:
+          kind: Ingress
+          name: www
+        fieldPaths:
+          - spec.rules.0.host
+
 patches:
+- path: cluster-app-user.yml
+- path: cluster-super-user.yml
 - path: route-patch.yml
   target:
     kind: Route

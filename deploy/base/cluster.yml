@@ -8,10 +8,16 @@ spec:
   storage:
     size: 5Gi
     storageClass: dvb-nfs-0-client
+
+  superuserSecret:
+    name: cluster-super-user
+
   bootstrap:
     initdb:
-      database: stip-dev
-      owner: stip-dev
+      database: stip
+      owner: stip-app
+      secret:
+        name: cluster-app-user
   resources:
     requests:
       memory: "512Mi"

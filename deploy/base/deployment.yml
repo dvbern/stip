@@ -52,12 +52,12 @@ spec:
             - name: STIP_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: kibon-stip-cluster-dev-app
+                  name: cluster-app-user
                   key: username
             - name: STIP_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kibon-stip-cluster-dev-app
+                  name: cluster-app-user
                   key: password
           envFrom:
             - configMapRef:

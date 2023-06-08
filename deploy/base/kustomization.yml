@@ -18,6 +18,29 @@ resources:
   - route.yml
   - cluster.yml
   - config-map.yml
+  - cluster-super-user.yml
+  - cluster-app-user.yml
+  - ingress.yml
+
+replacements:
+  - source:
+      kind: Secret
+      name: cluster-super-user
+    targets:
+      - select:
+          kind: Cluster
+          name: cluster
+        fieldPaths:
+          - spec.superuserSecret.name
+  - source:
+      kind: Secret
+      name: cluster-app-user
+    targets:
+      - select:
+          kind: Cluster
+          name: cluster
+        fieldPaths:
+          - spec.bootstrap.initdb.secret.name
 
 crds:
   - crds/openshift-route.json
