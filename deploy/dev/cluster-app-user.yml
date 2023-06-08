@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
     name: cluster-app-user
-data:
+stringData:
     username: ENC[AES256_GCM,data:mVqW95cTbl0=,iv:vaiQxMKLppYx4yTxpFS4rrZ3mnyqCVZKVRvQeFshQSk=,tag:BD3g9rv4606HuhEy5e6Uug==,type:str]
     password: ENC[AES256_GCM,data:wGOG60WE2VsZVY0neNMAJnsGxP4y5newQJwfGgeC,iv:XWZ6GulDjzE4GVVWVuerQH06zgG8XIpC9Z/fuLHXqlY=,tag:pjKvmqW9zhfSjl2uwV6oTg==,type:str]
 sops:
