@@ -15,7 +15,6 @@ spec:
                 name: gesuch-app
                 port:
                   name: http
-                  number: 80
             pathType: Prefix
   tls:
     - {}
