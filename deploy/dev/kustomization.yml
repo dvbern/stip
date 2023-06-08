@@ -9,7 +9,7 @@ resources:
 
 images:
 - name: docker-registry.dvbern.ch/kibon/stip/api
-  newTag: b65ac881
+  newTag: be8d5c93
 
 replacements:
 - source:
