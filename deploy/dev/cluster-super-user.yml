@@ -4,25 +4,25 @@ type: kubernetes.io/basic-auth
 metadata:
     name: cluster-super-user
 stringData:
-    username: ENC[AES256_GCM,data:842uxvR/I2dXIw==,iv:cKG8sbBlDsjl31kGpCHU1D7LACDPF4e/Bg09GcRLyOc=,tag:HY86urIzbNAygcoavr4taw==,type:str]
-    password: ENC[AES256_GCM,data:Kf7W2Lq4I6rYu8jIJAR1GnkA2Cbm4dzdcS0eKJ4T,iv:Qlm/4VN8LlmWw3h0IpGzVzrv/us1g9rzgOtgz7ihGH8=,tag:RpT1xp3cn7773Ijh9l785g==,type:str]
+    username: ENC[AES256_GCM,data:B8L+3dJvjp87heA=,iv:8SzMS7INm0+5A8/IYrtlLmLLGa7+2g5L3ro9xH392J8=,tag:bidgQuHM2MUy2kpyNvtsfA==,type:str]
+    password: ENC[AES256_GCM,data:M/F/1J651AnH00v8z+tT1npKAV7m9IQ+2lvP7GYDKTsr,iv:YuoGW1kycwKCVKCqaGsw4xgQdFpwXZV+whWYK0BIvAs=,tag:g1YbBIyoh5KJ+LfpHNq7NA==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age:
-        - recipient: age1xa5rf0wyew7k2r9378p5n05lt2e9ev0rrqtgh0mlzfkkqzl9qy2q3ljxfl
+        - recipient: age15sj5e38qgvwt4zw6xmggs6pgh2s7y6h7nuvpasasfg5adzlkqc4q97arte
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTTGlUdFVvZnNSNUxnL3Fx
-            eG90K1lGMjhOMkNQVEp5K3QwcEo3NDZPNUZrCmJpbjJHVUpkN2JwRzluZWFTcHp1
-            bFl2ZHpjYmo3ektveWdvNHRGbElqaEEKLS0tIGNCSitWMmppcE40aHhIbTJEMlZR
-            NXkzMzRIYTBnekJOUXJSWlFFYWFUK3cK+0ktHzGp3QhYyZiZhVZWy+iDWRpVZII5
-            aJLsAtvRf3GqCYcBfyrRWdpp6SzSRbL1HgbtA06S9KaqSXUzCLmfUQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAyM2tsMXhNczR6aUpjaGRw
+            V0plQ1pvVk44ank0M1ZoalVZSFZFdDlRZFVzCk8ydkdBRkRUOG9maWYvaHM1Sk5K
+            SUd5cnBhUUJyeWU0clpkWHgxbHRXck0KLS0tIGZYQitIc0R1SGpJVW1vd1I5VkhQ
+            bkozRHY0OWloYzFOSGdzRFNHZUphaHcKbQryTcaci9rLOLDYjnTtsw7teAQ3MzSm
+            fCGSx8YYqkMjHIa31gRF4uHNkkG4Yyy68oQ0WFt4mzD81xtv8a+LXA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-06-08T07:04:43Z"
-    mac: ENC[AES256_GCM,data:w1bIdl7N3jxXMJyp+JiMtzJDR4rP/m4udRnp8/aTGm/Jn8TnsMp76pYH3eFQKrc9gmtLx7vVMBI21RTRvHNXk68p9ufJRhSA8+VgHCEtgSuF3bP/2m2JnZx1x99C7AfD3zdAdtXEM+BMMxU0JEIwjOuk5rFcL+l89kfMqRs2cJc=,iv:XsCuHBYg6KReWr51i0hoGvBORMSsx5ek3k+APUtN58M=,tag:1ec6oXPn+iAcLimgEsMO/Q==,type:str]
+    lastmodified: "2023-06-08T09:08:31Z"
+    mac: ENC[AES256_GCM,data:i2qybY3j2uWE4as2+ogl9Ck1ABK0rqyXXUZTdLm++m7nrLZTMvvuqFECJUp3Nw5WlkD0NilN3lvXR09d36/tKZuB36xL5/PyQ7apzYMtCwRMtIo1JMMVZfb/CXLZX36IagkBUM0Q5+kxFLlBj+UqlfeSZA64rOxph+enRbVaHB8=,iv:2X6xDO2FgQvF+KgWLNmzn9va6uxguwg60VBaqfznVFM=,tag:lbI8wdHfptzhFaOTRi0x/A==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.7.3
