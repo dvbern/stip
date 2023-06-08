@@ -19,8 +19,6 @@ resources:
   - cluster.yml
   - config-map.yml
   - ingress.yml
-  - cluster-app-user.yml
-  - cluster-super-user.yml
 
 
 crds:

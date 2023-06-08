@@ -1,11 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+
+namePrefix: kibon-stip-
 nameSuffix: -dev
 
 resources:
 - ../base
 - ingress-config.yml
+- cluster-app-user.yml
+- cluster-super-user.yml
 
 images:
 - name: docker-registry.dvbern.ch/kibon/stip/api
@@ -42,8 +46,6 @@ replacements:
       name: cluster
 
 patches:
-- path: cluster-app-user.yml
-- path: cluster-super-user.yml
 - path: route-patch.yml
   target:
     kind: Route
