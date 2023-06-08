@@ -9,19 +9,19 @@ resources:
 
 images:
 - name: docker-registry.dvbern.ch/kibon/stip/api
-  newTag: 7d863413
+  newTag: ea96a401
 
 replacements:
-  - source:
-      kind: ConfigMap
-      name: ingress-config
-      fieldPath: data.host
-    targets:
-      - select:
-          kind: Ingress
-          name: www
-        fieldPaths:
-          - spec.rules.0.host
+- source:
+    fieldPath: data.host
+    kind: ConfigMap
+    name: ingress-config
+  targets:
+  - fieldPaths:
+    - spec.rules.0.host
+    select:
+      kind: Ingress
+      name: www
 
 patches:
 - path: cluster-app-user.yml
