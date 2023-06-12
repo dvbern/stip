@@ -1,22 +1,27 @@
 # stip-api
 
 
-## Installation
+## Installation (quick-start)
 
 1. Copy `.env-template` to `.env` and adjust secrets/config
 2. Copy `docker-compose.override-template.yml` to `docker-compose.override.yml` and configure the local stack
 3. Create a Docker volume for the database by running `docker volume create stip-database-data`
 4. Start the local infra stack using `docker compose up -d`
-5. You can now the application
+5. You can now start the application
 
 ## Prepare the environment
 
 In order to start STIP you need to start the required services.
 
+In the .env-template you can find some configuration required for any environment. Just change the file name and replace the CHANGE_ME or adapt the properties as needed.
+It is required to have a .env file in order to run the stip-api project.
+
+The docker-compose.override.yml allow you to change the docker configuration without having to think about the code repository. 
+
 All the required services are located in the docker-compose file located at the root of the project.
 Just run the next command in order to start them:
 ```
-docker compose up
+docker compose up -d
 ```
 
 It will start the next services:

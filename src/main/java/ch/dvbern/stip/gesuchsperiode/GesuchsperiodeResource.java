@@ -93,10 +93,27 @@ public class GesuchsperiodeResource {
     @APIResponse(responseCode = "404", ref = "#/components/responses/NotFound")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response getAlleAktiveGesuchsperiode(
+    public Response getAlleGesuchsperiode(
+    ) {
+        return gesuchsperiodeService.findAlleGesuchsperiodeDTO().map(Response::ok)
+            .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
+    }
+
+    @GET
+    @Path("/aktive")
+    @Operation(
+            summary = "Returniert der Gesuchsperiode mit der gegebene Id.")
+    @APIResponse(responseCode = "200")
+    @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
+    @APIResponse(responseCode = "403", ref = "#/components/responses/Forbidden")
+    @APIResponse(responseCode = "500", ref = "#/components/responses/ServerError")
+    @APIResponse(responseCode = "404", ref = "#/components/responses/NotFound")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    public Response getAktiveGesuchsperiode(
     ) {
         return gesuchsperiodeService.findAlleAktiveGesuchsperiodeDTO().map(Response::ok)
-            .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
+                .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
     }
 
 }

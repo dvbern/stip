@@ -27,10 +27,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 
 import jakarta.inject.Inject;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.time.LocalDate;
+import java.util.*;
 
 @ApplicationScoped
 public class GesuchsperiodeService {
@@ -51,7 +50,7 @@ public class GesuchsperiodeService {
         return entityManager.merge(gesuchsperiode);
     }
 
-    public Optional<List<GesuchsperiodeDTO>> findAlleAktiveGesuchsperiodeDTO() {
+    public Optional<List<GesuchsperiodeDTO>> findAlleGesuchsperiodeDTO() {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QGesuchsperiode gesuchsperiode = new QGesuchsperiode("gesuchsperiode");
 
@@ -61,7 +60,24 @@ public class GesuchsperiodeService {
                 gesuchsperiode.gueltigkeit.gueltigBis,
                 gesuchsperiode.einreichfrist,
                 gesuchsperiode.aufschaltdatum
-            )).from(gesuchsperiode);
+        )).from(gesuchsperiode);
+
+        return Optional.ofNullable(query.fetch());
+    }
+
+    public Optional<List<GesuchsperiodeDTO>> findAlleAktiveGesuchsperiodeDTO() {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QGesuchsperiode gesuchsperiode = new QGesuchsperiode("gesuchsperiode");
+        LocalDate now = LocalDate.now();
+
+        var query = queryFactory.select(Projections.constructor(GesuchsperiodeDTO.class,
+                gesuchsperiode.id,
+                gesuchsperiode.gueltigkeit.gueltigAb,
+                gesuchsperiode.gueltigkeit.gueltigBis,
+                gesuchsperiode.einreichfrist,
+                gesuchsperiode.aufschaltdatum
+        )).from(gesuchsperiode).where(gesuchsperiode.aufschaltdatum.before(now)
+                .and(gesuchsperiode.gueltigkeit.gueltigBis.before(now).or(gesuchsperiode.gueltigkeit.gueltigBis.eq(now))));
 
         return Optional.ofNullable(query.fetch());
     }
