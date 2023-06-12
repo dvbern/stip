@@ -77,7 +77,7 @@ public class GesuchsperiodeService {
                 gesuchsperiode.einreichfrist,
                 gesuchsperiode.aufschaltdatum
         )).from(gesuchsperiode).where(gesuchsperiode.aufschaltdatum.before(now)
-                .and(gesuchsperiode.gueltigkeit.gueltigBis.before(now).or(gesuchsperiode.gueltigkeit.gueltigBis.eq(now))));
+                .and(gesuchsperiode.gueltigkeit.gueltigBis.after(now).or(gesuchsperiode.gueltigkeit.gueltigBis.eq(now))));
 
         return Optional.ofNullable(query.fetch());
     }
