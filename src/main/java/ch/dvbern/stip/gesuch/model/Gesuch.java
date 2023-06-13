@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.gesuch.model;
 
+import ch.dvbern.stip.ausbildung.model.AusbildungContainer;
 import ch.dvbern.stip.fall.model.Fall;
 import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
 import ch.dvbern.stip.persistence.AbstractEntity;
@@ -48,8 +49,12 @@ public class Gesuch extends AbstractEntity {
     private Gesuchsperiode gesuchsperiode;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_container_id"), nullable = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_person_in_ausbildung_container_id"), nullable = true)
     private PersonInAusbildungContainer personInAusbildungContainer;
+
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_container_id"), nullable = true)
+    private AusbildungContainer ausbildungContainer;
 
     @NotNull
     @Column(nullable = false)

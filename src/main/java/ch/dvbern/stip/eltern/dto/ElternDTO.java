@@ -2,17 +2,11 @@ package ch.dvbern.stip.eltern.dto;
 
 import ch.dvbern.stip.eltern.model.Eltern;
 import ch.dvbern.stip.shared.enums.Anrede;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
-import static ch.dvbern.stip.shared.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Value
 public class ElternDTO {
