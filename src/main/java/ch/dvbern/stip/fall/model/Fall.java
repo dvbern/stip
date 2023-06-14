@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.fall.model;
 
+import ch.dvbern.stip.fall.dto.FallDTO;
 import ch.dvbern.stip.persistence.AbstractEntity;
 import ch.dvbern.stip.shared.enums.MandantIdentifier;
 import lombok.Getter;

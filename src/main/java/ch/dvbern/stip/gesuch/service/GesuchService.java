@@ -56,11 +56,17 @@ public class GesuchService {
     }
 
     public Gesuch saveGesuch(GesuchDTO gesuchDTO) {
-        Gesuch gesuch = findGesuch(gesuchDTO.getId()).orElse(new Gesuch());
+        Gesuch gesuch = gesuchDTO.getId() != null ? findGesuch(gesuchDTO.getId()).orElse(new Gesuch()) : new Gesuch();
         if (gesuch.getFall() == null) {
-            Fall fall = fallService.findFall(gesuchDTO.getFall().getId()).orElseThrow(
-                    () -> new RuntimeException("Fall existiert nicht")
-            );
+            Fall fall;
+            if(gesuchDTO.getFall().getId() != null) {
+                fall = fallService.findFall(gesuchDTO.getFall().getId()).orElseThrow(
+                        () -> new RuntimeException("Fall existiert nicht")
+                );
+            }
+            else {
+               fall = fallService.saveFall(gesuchDTO.getFall());
+            }
             gesuch.setFall(fall);
         }
         if (gesuch.getGesuchsperiode() == null) {
@@ -75,20 +81,15 @@ public class GesuchService {
     // it doesn't make any sense anymore too much object to map for such a query, this is good for small dtos...
     public Optional<GesuchDTO> findGesuchDTO(UUID id) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QGesuch gesuch = new QGesuch("gesuch");
+        QGesuch qgesuch = new QGesuch("gesuch");
 
-        var query = queryFactory.select(Projections.constructor(GesuchDTO.class,
-                        gesuch.id,
-                        Projections.constructor(GesuchsperiodeDTO.class,
-                                gesuch.gesuchsperiode.id,
-                                gesuch.gesuchsperiode.gueltigkeit),
-                        null,
-                        gesuch.gesuchStatus,
-                        gesuch.gesuchNummer
-                )).from(gesuch)
-                .where(gesuch.id.eq(id));
+        Gesuch gesuch = queryFactory.select(qgesuch
+                ).from(qgesuch)
+                .where(qgesuch.id.eq(id)).fetchOne();
 
-        return Optional.ofNullable(query.fetchOne());
+        GesuchDTO gesuchDTO = gesuch != null ? GesuchDTO.from(gesuch) : null;
+
+        return Optional.ofNullable(gesuchDTO);
     }
 
     public Optional<List<GesuchDTO>> findAll() {

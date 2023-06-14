@@ -59,7 +59,7 @@ public class Gesuch extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Gesuchstatus gesuchStatus;
+    private Gesuchstatus gesuchStatus = Gesuchstatus.OFFEN;
 
     @NotNull
     @Min(0)

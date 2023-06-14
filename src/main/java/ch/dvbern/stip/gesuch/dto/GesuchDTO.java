@@ -52,7 +52,5 @@ public class GesuchDTO {
     }
 
     public void apply(Gesuch gesuch) {
-        gesuch.setGesuchNummer(gesuchNummer);
-        gesuch.setGesuchStatus(gesuchStatus);
     }
 }
