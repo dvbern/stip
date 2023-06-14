@@ -40,6 +40,8 @@ public class PersonInAusbildungContainerDTO {
     }
 
     public void apply(PersonInAusbildungContainer personInAusbildungContainer) {
-        //Todo noch bestimmen was man genau hier kopiert, GS sollte aus meiner Sicht gar nicht vorkommen
+        PersonInAusbildung personInAusbildung = personInAusbildungContainer.getPersonInAusbildungSB() != null ? personInAusbildungContainer.getPersonInAusbildungSB() : new PersonInAusbildung();
+        personInAusbildungSB.apply(personInAusbildung);
+        personInAusbildungContainer.setPersonInAusbildungSB(personInAusbildung);
     }
 }

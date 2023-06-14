@@ -93,7 +93,7 @@ public class PersonInAusbildungDTO {
     private boolean digitaleKommunikation;
 
     public static PersonInAusbildungDTO from(PersonInAusbildung changed) {
-        return new PersonInAusbildungDTO(changed.getId(), AdresseDTO.from(changed.getAdresse()), changed.getSozialversicherungsnummer(),
+        return changed == null ? null :new PersonInAusbildungDTO(changed.getId(), AdresseDTO.from(changed.getAdresse()), changed.getSozialversicherungsnummer(),
                 changed.getName(), changed.getVorname(), changed.getAnrede(), changed.isIdentischerZivilrechtlicherWohnsitz(),
                 changed.getIzvOrt(), changed.getIzvPLZ(), changed.getEmail(), changed.getTelefonnummer(),
                 changed.getGeburtsdatum(), changed.getHeimatort(), changed.getNiederlassungsstatus(),
@@ -120,6 +120,10 @@ public class PersonInAusbildungDTO {
         personInAusbildung.setWohnsitz(wohnsitz);
         personInAusbildung.setQuellenbesteuert(quellenbesteuert);
         personInAusbildung.setSozialhilfebeitraege(sozialhilfebeitraege);
-        adresse.apply(personInAusbildung.getAdresse() != null ? personInAusbildung.getAdresse() : new Adresse());
+        if(adresse != null) {
+            Adresse adresse1 = personInAusbildung.getAdresse() != null ? personInAusbildung.getAdresse() : new Adresse();
+            adresse.apply(adresse1);
+            personInAusbildung.setAdresse(adresse1);
+        }
     }
 }

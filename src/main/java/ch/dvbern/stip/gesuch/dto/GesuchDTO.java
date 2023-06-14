@@ -22,6 +22,7 @@ import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.Gesuchstatus;
 import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
 import ch.dvbern.stip.personinausbildung.dto.PersonInAusbildungContainerDTO;
+import ch.dvbern.stip.personinausbildung.model.PersonInAusbildungContainer;
 import lombok.Value;
 
 import jakarta.validation.constraints.NotNull;
@@ -52,5 +53,10 @@ public class GesuchDTO {
     }
 
     public void apply(Gesuch gesuch) {
+        if (this.personInAusbildungContainer != null) {
+            PersonInAusbildungContainer personInAusbildungContainer1 = gesuch.getPersonInAusbildungContainer() != null ? gesuch.getPersonInAusbildungContainer() : new PersonInAusbildungContainer();
+            personInAusbildungContainer.apply(personInAusbildungContainer1);
+            gesuch.setPersonInAusbildungContainer(personInAusbildungContainer1);
+        }
     }
 }

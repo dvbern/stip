@@ -46,7 +46,7 @@ public class AdresseDTO {
     private String ort;
 
     public static AdresseDTO from(Adresse changed) {
-        return new AdresseDTO(changed.getId(), changed.getLand(), changed.getCoAdresse(), changed.getStrasse(), changed.getHausnummer(), changed.getPlz(), changed.getOrt());
+        return changed == null ? null : new AdresseDTO(changed.getId(), changed.getLand(), changed.getCoAdresse(), changed.getStrasse(), changed.getHausnummer(), changed.getPlz(), changed.getOrt());
     }
 
     public void apply(Adresse adresse) {

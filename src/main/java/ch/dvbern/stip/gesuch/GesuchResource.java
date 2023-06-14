@@ -72,8 +72,8 @@ public class GesuchResource {
     public Response saveGesuch(
             GesuchDTO gesuch
     ){
-        Gesuch changed = gesuchService.saveGesuch(gesuch);
-        return Response.ok(GesuchDTO.from(changed)).build();
+        gesuchService.saveGesuch(gesuch);
+        return Response.ok().build();
     }
 
     @GET
@@ -105,7 +105,7 @@ public class GesuchResource {
     @APIResponse(responseCode = "404", ref = "#/components/responses/NotFound")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response getGesuch() {
+    public Response getGesuchs() {
         return gesuchService.findAll().map(Response::ok)
                 .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
     }
