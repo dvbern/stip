@@ -31,7 +31,6 @@ import java.util.UUID;
 @Value
 public class GesuchDTO {
 
-    //@Schema(type = SchemaType.STRING, format = "entity-id", implementation = String.class)
     private UUID id;
 
     @NotNull

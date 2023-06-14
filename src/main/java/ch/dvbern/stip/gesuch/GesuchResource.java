@@ -94,4 +94,19 @@ public class GesuchResource {
         return gesuchService.findGesuchDTO(gesuchId).map(Response::ok)
                 .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
     }
+
+    @GET
+    @Operation(
+            summary = "Returniert alle Gesuch.")
+    @APIResponse(responseCode = "200")
+    @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
+    @APIResponse(responseCode = "403", ref = "#/components/responses/Forbidden")
+    @APIResponse(responseCode = "500", ref = "#/components/responses/ServerError")
+    @APIResponse(responseCode = "404", ref = "#/components/responses/NotFound")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    public Response getGesuch() {
+        return gesuchService.findAll().map(Response::ok)
+                .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
+    }
 }

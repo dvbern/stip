@@ -33,6 +33,7 @@ import jakarta.persistence.EntityManager;
 
 import jakarta.inject.Inject;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -88,5 +89,18 @@ public class GesuchService {
                 .where(gesuch.id.eq(id));
 
         return Optional.ofNullable(query.fetchOne());
+    }
+
+    public Optional<List<GesuchDTO>> findAll() {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QGesuch qgesuch = new QGesuch("gesuch");
+
+        var query = queryFactory.select(qgesuch
+        ).from(qgesuch);
+        List<Gesuch> gesuchList = query.fetch();
+        List<GesuchDTO> gesuchDTOList = gesuchList.stream().map(gesuch -> GesuchDTO.from(gesuch)).toList();
+
+
+        return Optional.ofNullable(gesuchDTOList);
     }
 }
