@@ -18,6 +18,10 @@
 package ch.dvbern.stip.gesuch;
 
 import ch.dvbern.stip.annotations.ApiResource;
+import ch.dvbern.stip.dokument.dto.DownloadFileData;
+import ch.dvbern.stip.dokument.model.Dokument;
+import ch.dvbern.stip.dokument.model.DokumentTyp;
+import ch.dvbern.stip.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.service.GesuchService;
@@ -32,19 +36,26 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import java.io.File;
+import java.util.Optional;
 import java.util.UUID;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("gesuch")
-@Tag(name ="Gesuch")
+@Tag(name = "Gesuch")
 @ApiResource
 @DenyAll
 public class GesuchResource {
 
     @Inject
     GesuchService gesuchService;
+
+    @Inject
+    GesuchDokumentService gesuchDokumentService;
 
     @POST
     @APIResponse(responseCode = "200",
@@ -56,12 +67,13 @@ public class GesuchResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(
             GesuchDTO gesuch
-    ){
+    ) {
         Gesuch changed = gesuchService.saveGesuch(gesuch);
         return Response.ok(changed.getId()).build();
     }
 
     @PUT
+    @Path("/{gesuchId}")
     @APIResponse(responseCode = "200",
             content = @Content(schema = @Schema(implementation = GesuchDTO.class)))
     @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
@@ -70,8 +82,12 @@ public class GesuchResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveGesuch(
+            @PathParam("gesuchId") UUID gesuchId,
             GesuchDTO gesuch
-    ){
+    ) {
+        if (gesuchId.equals(gesuch.getId())) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
         gesuchService.saveGesuch(gesuch);
         return Response.ok().build();
     }
@@ -92,7 +108,7 @@ public class GesuchResource {
             @PathParam("gesuchId") UUID gesuchId
     ) {
         return gesuchService.findGesuchDTO(gesuchId).map(Response::ok)
-                .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
+                .orElseGet(() -> Response.status(Response.Status.NOT_FOUND)).build();
     }
 
     @GET
@@ -107,6 +123,61 @@ public class GesuchResource {
     @Produces(APPLICATION_JSON)
     public Response getGesuchs() {
         return gesuchService.findAll().map(Response::ok)
-                .orElseGet(()-> Response.status(Response.Status.NOT_FOUND)).build();
+                .orElseGet(() -> Response.status(Response.Status.NOT_FOUND)).build();
+    }
+
+    @POST
+    @Path("/{gesuchId}/dokument/{dokumentTyp}")
+    @APIResponse(responseCode = "200")
+    @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
+    @APIResponse(responseCode = "403", ref = "#/components/responses/Forbidden")
+    @APIResponse(responseCode = "500", ref = "#/components/responses/ServerError")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response uploadDokument(
+            @PathParam("gesuchId") UUID gesuchId,
+            @PathParam("dokumentTyp") DokumentTyp dokumentTyp,
+            @RestForm("file") FileUpload file
+    ) {
+        return Response.ok().entity(gesuchDokumentService.uploadDokument(gesuchId, dokumentTyp, file)).build();
+    }
+
+    @GET
+    @Path("/{gesuchId}/dokument/{dokumentTyp}/{dokumentID}")
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public DownloadFileData downloadDokument(@PathParam("dokumentID") UUID dokumentId) {
+        Optional<Dokument> optionalDokument = gesuchDokumentService.findDokument(dokumentId);
+        DownloadFileData downloadFileData = null;
+        if (optionalDokument.isPresent()) {
+            //TODO add validation gesuchId dokumentTyp stimmen ???
+            Dokument dokument = optionalDokument.get();
+            File nf = new File(dokument.getFilepfad() + dokument.getFilename());
+            downloadFileData = new DownloadFileData(dokument.getFilename(), nf);
+        }
+        return downloadFileData;
+    }
+
+
+    @GET
+    @Path("/{gesuchId}/dokument/{dokumentTyp}")
+    @Operation(
+            summary = "Returniert der Gesuchsperiode mit der gegebene Id.")
+    @APIResponse(responseCode = "200")
+    @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
+    @APIResponse(responseCode = "403", ref = "#/components/responses/Forbidden")
+    @APIResponse(responseCode = "500", ref = "#/components/responses/ServerError")
+    @APIResponse(responseCode = "404", ref = "#/components/responses/NotFound")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    public Response getAllDokumenteForTyp(@PathParam("gesuchId") UUID gesuchId,
+                                          @PathParam("dokumentTyp") DokumentTyp dokumentTyp) {
+        return gesuchDokumentService.findGesuchDokumentForTyp(gesuchId, dokumentTyp).map(Response::ok)
+                .orElseGet(() -> Response.status(Response.Status.NOT_FOUND)).build();
+    }
+
+    @DELETE
+    @Path("/{gesuchId}/dokument/{dokumentTyp}/{dokumentID}")
+    public Response deleteDokument(@PathParam("dokumentID") UUID dokumentId) {
+        return Response.ok().build();
     }
 }

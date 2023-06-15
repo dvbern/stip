@@ -585,3 +585,81 @@ ALTER TABLE eltern_container_aud
     ADD CONSTRAINT FK_eltern_container_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
+
+CREATE TABLE gesuch_dokument
+(
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    gesuch_id          UUID       NOT NULL,
+    dokument_typ            VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE gesuch_dokument
+    ADD CONSTRAINT FK_gesuch_dokument_gesuch_id
+        FOREIGN KEY (gesuch_id)
+            REFERENCES gesuch (id);
+
+CREATE TABLE gesuch_dokument_aud
+(
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    gesuch_id          UUID,
+    dokument_typ            VARCHAR(255),
+    PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE gesuch_dokument_aud
+    ADD CONSTRAINT FK_gesuch_dokument_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE dokument
+(
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    gesuch_dokument_id          UUID       NOT NULL,
+    filename            VARCHAR(255) NOT NULL,
+    filepfad            VARCHAR(255) NOT NULL,
+    filesize            VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE dokument
+    ADD CONSTRAINT FK_dokument_gesuch_dokument_id
+        FOREIGN KEY (gesuch_dokument_id)
+            REFERENCES gesuch_dokument (id);
+
+CREATE TABLE dokument_aud
+(
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    gesuch_dokument_id          UUID       ,
+    filename            VARCHAR(255) ,
+    filepfad            VARCHAR(255) ,
+    filesize            VARCHAR(255) ,
+    PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE dokument_aud
+    ADD CONSTRAINT FK_dokument_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
