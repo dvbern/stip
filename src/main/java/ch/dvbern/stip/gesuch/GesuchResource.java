@@ -25,6 +25,7 @@ import ch.dvbern.stip.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.service.GesuchService;
+import ch.dvbern.stip.shared.dto.ResponseId;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -69,7 +70,7 @@ public class GesuchResource {
             GesuchDTO gesuch
     ) {
         Gesuch changed = gesuchService.saveGesuch(gesuch);
-        return Response.ok(changed.getId()).build();
+        return Response.ok(new ResponseId(changed.getId())).build();
     }
 
     @PUT
