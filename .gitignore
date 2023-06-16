@@ -41,6 +41,7 @@ nb-configuration.xml
 .env
 developer_local_settings
 docker-compose.override.yml
+tmp
 
 # Plugin directory
 /.quarkus/cli/plugins/

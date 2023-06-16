@@ -19,6 +19,8 @@ package ch.dvbern.stip.gesuch;
 
 import ch.dvbern.stip.annotations.ApiResource;
 import ch.dvbern.stip.dokument.dto.DownloadFileData;
+import ch.dvbern.stip.dokument.dto.GesuchDokumentDTO;
+import ch.dvbern.stip.dokument.dto.MultipartBody;
 import ch.dvbern.stip.dokument.model.Dokument;
 import ch.dvbern.stip.dokument.model.DokumentTyp;
 import ch.dvbern.stip.dokument.service.GesuchDokumentService;
@@ -27,6 +29,7 @@ import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.service.GesuchService;
 import ch.dvbern.stip.shared.dto.ResponseId;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
@@ -37,10 +40,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.resteasy.reactive.RestForm;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -86,7 +88,7 @@ public class GesuchResource {
             @PathParam("gesuchId") UUID gesuchId,
             GesuchDTO gesuch
     ) {
-        if (gesuchId.equals(gesuch.getId())) {
+        if (!gesuchId.equals(gesuch.getId())) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         gesuchService.saveGesuch(gesuch);
@@ -138,15 +140,16 @@ public class GesuchResource {
     public Response uploadDokument(
             @PathParam("gesuchId") UUID gesuchId,
             @PathParam("dokumentTyp") DokumentTyp dokumentTyp,
-            @RestForm("file") FileUpload file
-    ) {
-        return Response.ok().entity(gesuchDokumentService.uploadDokument(gesuchId, dokumentTyp, file)).build();
+            MultipartBody body
+    ) throws IOException {
+        return Response.ok().entity(gesuchDokumentService.uploadDokument(gesuchId, dokumentTyp, body.files)).build();
     }
-
     @GET
     @Path("/{gesuchId}/dokument/{dokumentTyp}/{dokumentID}")
     @Produces(MediaType.MULTIPART_FORM_DATA)
-    public DownloadFileData downloadDokument(@PathParam("dokumentID") UUID dokumentId) {
+    public DownloadFileData downloadDokument(@PathParam("gesuchId") UUID gesuchId,
+                                             @PathParam("dokumentTyp") DokumentTyp dokumentTyp,
+                                             @PathParam("dokumentID") UUID dokumentId) {
         Optional<Dokument> optionalDokument = gesuchDokumentService.findDokument(dokumentId);
         DownloadFileData downloadFileData = null;
         if (optionalDokument.isPresent()) {
@@ -162,8 +165,9 @@ public class GesuchResource {
     @GET
     @Path("/{gesuchId}/dokument/{dokumentTyp}")
     @Operation(
-            summary = "Returniert der Gesuchsperiode mit der gegebene Id.")
-    @APIResponse(responseCode = "200")
+            summary = "Returniert der GesuchDokument mit der gegebene Id und alle Dokument die dazu gehoeren.")
+    @APIResponse(responseCode = "200",
+            content = @Content(schema = @Schema(implementation = GesuchDokumentDTO.class)))
     @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
     @APIResponse(responseCode = "403", ref = "#/components/responses/Forbidden")
     @APIResponse(responseCode = "500", ref = "#/components/responses/ServerError")
@@ -178,7 +182,9 @@ public class GesuchResource {
 
     @DELETE
     @Path("/{gesuchId}/dokument/{dokumentTyp}/{dokumentID}")
-    public Response deleteDokument(@PathParam("dokumentID") UUID dokumentId) {
+    public Response deleteDokument(@PathParam("gesuchId") UUID gesuchId,
+                                   @PathParam("dokumentTyp") DokumentTyp dokumentTyp,
+                                   @PathParam("dokumentID") UUID dokumentId) {
         return Response.ok().build();
     }
 }

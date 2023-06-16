@@ -33,7 +33,15 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.version")
     String version;
 
+    @Inject
+    @ConfigProperty(name = "kstip.file.path")
+    String filePath;
+
     public DeploymentConfigDTO getDeploymentConfiguration() {
         return new DeploymentConfigDTO(environment, version);
+    }
+
+    public String getFilePath() {
+        return filePath;
     }
 }

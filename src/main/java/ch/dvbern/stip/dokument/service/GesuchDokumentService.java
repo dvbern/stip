@@ -1,5 +1,6 @@
 package ch.dvbern.stip.dokument.service;
 
+import ch.dvbern.stip.config.service.ConfigService;
 import ch.dvbern.stip.dokument.dto.GesuchDokumentDTO;
 import ch.dvbern.stip.dokument.model.Dokument;
 import ch.dvbern.stip.dokument.model.DokumentTyp;
@@ -12,6 +13,10 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,11 +29,23 @@ public class GesuchDokumentService {
     @Inject
     GesuchService gesuchService;
 
-    public String uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload input) {
+    @Inject
+    ConfigService configService;
 
+    public String uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, List<FileUpload> files) throws IOException {
         Gesuch gesuch = gesuchService.findGesuch(gesuchId).orElseThrow(() -> new RuntimeException("Gesuch not found"));
-
-
+        // TODO find DokumentTyp or create if not exist
+        for(FileUpload fileUpload: files) {
+            Dokument dokument = new Dokument();
+            dokument.setFilename(fileUpload.fileName());
+            dokument.setFilesize(String.valueOf(fileUpload.size()));
+            // TODO find better path, or save dok with uuid as name
+            File file = new File(configService.getFilePath() + "/" + dokumentTyp.toString());
+            file.mkdirs();
+            Files.move(fileUpload.filePath(), file.toPath());
+            dokument.setFilepfad(file.getPath());
+            // TODO set dokumentTyp to dokument for reference
+        }
         return "Dokument hochgeladen";
     }
 
@@ -38,11 +55,7 @@ public class GesuchDokumentService {
         var query = queryFactory.select(qGesuchDokument).from(qGesuchDokument).where(
                 qGesuchDokument.dokumentTyp.eq(dokumentTyp).and(qGesuchDokument.gesuch.id.eq(gesuchId))
         );
-
-
         GesuchDokumentDTO gesuchDokument =  GesuchDokumentDTO.from(query.fetchOne());
-
-
         return Optional.ofNullable(gesuchDokument);
     }
 

@@ -1,6 +1,6 @@
 package ch.dvbern.stip.ausbildung.dto;
 
-import ch.dvbern.stip.ausbildung.model.Aubildungsland;
+import ch.dvbern.stip.ausbildung.model.Ausbildungsland;
 import ch.dvbern.stip.ausbildung.model.AusbildungsPensum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
@@ -19,7 +19,7 @@ public class AusbildungDTO {
     private AusbildungstaetteDTO ausbildungstaette;
 
     @NotNull
-    private Aubildungsland ausbildungsland;
+    private Ausbildungsland ausbildungsland;
 
     private String alternativeAusbildungsgang;
 

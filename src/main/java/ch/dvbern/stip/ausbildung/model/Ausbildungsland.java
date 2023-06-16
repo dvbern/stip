@@ -1,6 +1,6 @@
 package ch.dvbern.stip.ausbildung.model;
 
-public enum Aubildungsland {
+public enum Ausbildungsland {
 
     SCHWEIZ,
     AUSLAND

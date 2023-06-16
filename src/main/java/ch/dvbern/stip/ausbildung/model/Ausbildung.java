@@ -29,7 +29,7 @@ public class Ausbildung extends AbstractEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Aubildungsland ausbildungsland;
+    private Ausbildungsland ausbildungsland;
 
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column

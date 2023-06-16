@@ -2,6 +2,7 @@ package ch.dvbern.stip.ausbildung;
 
 
 import ch.dvbern.stip.annotations.ApiResource;
+import ch.dvbern.stip.ausbildung.dto.AusbildungstaetteDTO;
 import ch.dvbern.stip.ausbildung.service.AusbildungService;
 import jakarta.annotation.security.DenyAll;
 import jakarta.inject.Inject;
@@ -11,6 +12,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -29,7 +32,8 @@ public class AusbildungstaetteResource {
     @Path("/all")
     @Operation(
             summary = "Returniert alle Ausbildungstaette zur Verfuegung.")
-    @APIResponse(responseCode = "200")
+    @APIResponse(responseCode = "200",
+            content = @Content(schema = @Schema(implementation = AusbildungstaetteDTO.class)))
     @APIResponse(responseCode = "401", ref = "#/components/responses/Unauthorized")
     @APIResponse(responseCode = "403", ref = "#/components/responses/Forbidden")
     @APIResponse(responseCode = "500", ref = "#/components/responses/ServerError")
