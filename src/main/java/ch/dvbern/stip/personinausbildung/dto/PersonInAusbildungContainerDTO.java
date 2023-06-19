@@ -40,8 +40,8 @@ public class PersonInAusbildungContainerDTO {
     }
 
     public void apply(PersonInAusbildungContainer personInAusbildungContainer) {
-        PersonInAusbildung personInAusbildung = personInAusbildungContainer.getPersonInAusbildungSB() != null ? personInAusbildungContainer.getPersonInAusbildungSB() : new PersonInAusbildung();
-        personInAusbildungSB.apply(personInAusbildung);
-        personInAusbildungContainer.setPersonInAusbildungSB(personInAusbildung);
+        PersonInAusbildung personInAusbildungSBFromGesuch = personInAusbildungContainer.getPersonInAusbildungSB() != null ? personInAusbildungContainer.getPersonInAusbildungSB() : new PersonInAusbildung();
+        personInAusbildungSB.apply(personInAusbildungSBFromGesuch);
+        personInAusbildungContainer.setPersonInAusbildungSB(personInAusbildungSBFromGesuch);
     }
 }

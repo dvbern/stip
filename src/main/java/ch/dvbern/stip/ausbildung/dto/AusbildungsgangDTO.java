@@ -20,4 +20,10 @@ public class AusbildungsgangDTO {
     public static AusbildungsgangDTO from(Ausbildungsgang ausbildungsgang) {
         return new AusbildungsgangDTO(ausbildungsgang.getId(),ausbildungsgang.getBezeichnungDe(),ausbildungsgang.getBezeichnungFr());
     }
+
+    public void apply(Ausbildungsgang ausbildungsgang) {
+        ausbildungsgang.setId(id);
+        ausbildungsgang.setBezeichnungDe(bezeichnungDe);
+        ausbildungsgang.setBezeichnungFr(bezeichnungFr);
+    }
 }

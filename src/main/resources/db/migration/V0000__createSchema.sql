@@ -375,7 +375,7 @@ CREATE TABLE ausbildung_aud
     ausbildung_end                DATE,
     alternative_ausbildungsgang   VARCHAR(255),
     alternative_ausbildungstaette VARCHAR(255),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE ausbildung_aud
@@ -418,7 +418,7 @@ CREATE TABLE ausbildung_container_aud
     version                    BIGINT,
     ausbildung_gs_id UUID,
     ausbildung_sb_id UUID,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE ausbildung_container_aud

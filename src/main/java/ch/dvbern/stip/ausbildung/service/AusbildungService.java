@@ -1,24 +1,18 @@
 package ch.dvbern.stip.ausbildung.service;
 
-import ch.dvbern.stip.ausbildung.dto.AusbildungsgangDTO;
 import ch.dvbern.stip.ausbildung.dto.AusbildungstaetteDTO;
 import ch.dvbern.stip.ausbildung.model.Ausbildungsgang;
 import ch.dvbern.stip.ausbildung.model.Ausbildungstaette;
-import ch.dvbern.stip.ausbildung.model.QAusbildungsgang;
 import ch.dvbern.stip.ausbildung.model.QAusbildungstaette;
-import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
-import ch.dvbern.stip.gesuchsperiode.model.QGesuchsperiode;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.Projections.list;
+import java.util.UUID;
 
 @ApplicationScoped
 public class AusbildungService {
@@ -34,5 +28,17 @@ public class AusbildungService {
         ).from(ausbildungstaette).fetch();
 
         return ausbildungstaetteList.stream().map(ausbildungstaette1 -> AusbildungstaetteDTO.from(ausbildungstaette1)).toList();
+    }
+
+    public Optional<Ausbildungstaette> findAusbildungstaetteByID(UUID id) {
+        Objects.requireNonNull(id, "id muss gesetzt sein");
+        Ausbildungstaette ausbildungstaette = entityManager.find(Ausbildungstaette.class, id);
+        return Optional.ofNullable(ausbildungstaette);
+    }
+
+    public Optional<Ausbildungsgang> findAusbildungsgangByID(UUID id) {
+        Objects.requireNonNull(id, "id muss gesetzt sein");
+        Ausbildungsgang ausbildungsgang = entityManager.find(Ausbildungsgang.class, id);
+        return Optional.ofNullable(ausbildungsgang);
     }
 }

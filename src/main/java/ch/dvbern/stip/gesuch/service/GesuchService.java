@@ -17,15 +17,14 @@
 
 package ch.dvbern.stip.gesuch.service;
 
+import ch.dvbern.stip.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.fall.model.Fall;
 import ch.dvbern.stip.fall.service.FallService;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.model.QGesuch;
-import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
 import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
 import ch.dvbern.stip.gesuchsperiode.service.GesuchsperiodeService;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,6 +48,9 @@ public class GesuchService {
     @Inject
     private GesuchsperiodeService gesuchsperiodeService;
 
+    @Inject
+    private AusbildungService ausbildungService;
+
     public Optional<Gesuch> findGesuch(UUID id) {
         Objects.requireNonNull(id, "id muss gesetzt sein");
         Gesuch g = entityManager.find(Gesuch.class, id);
@@ -59,13 +61,12 @@ public class GesuchService {
         Gesuch gesuch = gesuchDTO.getId() != null ? findGesuch(gesuchDTO.getId()).orElse(new Gesuch()) : new Gesuch();
         if (gesuch.getFall() == null) {
             Fall fall;
-            if(gesuchDTO.getFall().getId() != null) {
+            if (gesuchDTO.getFall().getId() != null) {
                 fall = fallService.findFall(gesuchDTO.getFall().getId()).orElseThrow(
                         () -> new RuntimeException("Fall existiert nicht")
                 );
-            }
-            else {
-               fall = fallService.saveFall(gesuchDTO.getFall());
+            } else {
+                fall = fallService.saveFall(gesuchDTO.getFall());
             }
             gesuch.setFall(fall);
         }
@@ -74,8 +75,33 @@ public class GesuchService {
                     .orElseThrow(() -> new RuntimeException("Gesuchsperiode existiert nicht"));
             gesuch.setGesuchsperiode(gesuchsperiode);
         }
+
         gesuchDTO.apply(gesuch);
+        // linked entities auf der Ausbildung
+        handleAusbildungStammdaten(gesuch, gesuchDTO);
+
         return entityManager.merge(gesuch);
+    }
+
+    private void handleAusbildungStammdaten(Gesuch gesuch, GesuchDTO gesuchDTO) {
+        if (gesuch.getAusbildungContainer() != null && gesuch.getAusbildungContainer().getAusbildungSB() != null) {
+            if (gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungsgang() == null ||
+            !gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungsgang().getId().equals(
+                    gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungsgangId())) {
+                gesuch.getAusbildungContainer().getAusbildungSB().setAusbildungsgang(
+                        ausbildungService.findAusbildungsgangByID(
+                                        gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungsgangId())
+                                .orElseThrow(() -> new RuntimeException("Ausbildungsgang nicht gefunden")));
+            }
+            if (gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungstaette() == null ||
+                    !gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungstaette().getId().equals(
+                            gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungstaetteId())) {
+                gesuch.getAusbildungContainer().getAusbildungSB().setAusbildungstaette(
+                        ausbildungService.findAusbildungstaetteByID(
+                                        gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungstaetteId())
+                                .orElseThrow(() -> new RuntimeException("Ausbildungstaette nicht gefunden")));
+            }
+        }
     }
 
     // it doesn't make any sense anymore too much object to map for such a query, this is good for small dtos...

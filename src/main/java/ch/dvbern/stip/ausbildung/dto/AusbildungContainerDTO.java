@@ -1,5 +1,7 @@
 package ch.dvbern.stip.ausbildung.dto;
 
+import ch.dvbern.stip.ausbildung.model.Ausbildung;
+import ch.dvbern.stip.ausbildung.model.AusbildungContainer;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
@@ -13,4 +15,15 @@ public class AusbildungContainerDTO {
     private AusbildungDTO ausbildungGS;
 
     private AusbildungDTO ausbildungSB;
+
+    public static AusbildungContainerDTO from(AusbildungContainer ausbildungContainer) {
+        return ausbildungContainer == null ? null : new AusbildungContainerDTO(ausbildungContainer.getId(), AusbildungDTO.from(ausbildungContainer.getAusbildungGS()), AusbildungDTO.from(ausbildungContainer.getAusbildungSB()));
+
+    }
+
+    public void apply(AusbildungContainer ausbildungContainer) {
+        Ausbildung ausbildungSBFromGesuch = ausbildungContainer.getAusbildungSB() != null ? ausbildungContainer.getAusbildungSB() : new Ausbildung();
+        ausbildungSB.apply(ausbildungSBFromGesuch);
+        ausbildungContainer.setAusbildungSB(ausbildungSBFromGesuch);
+    }
 }

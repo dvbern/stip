@@ -1,7 +1,9 @@
 package ch.dvbern.stip.ausbildung.dto;
 
-import ch.dvbern.stip.ausbildung.model.Ausbildungsland;
+
+import ch.dvbern.stip.ausbildung.model.Ausbildung;
 import ch.dvbern.stip.ausbildung.model.AusbildungsPensum;
+import ch.dvbern.stip.ausbildung.model.Ausbildungsland;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
@@ -14,16 +16,18 @@ public class AusbildungDTO {
     @NotNull
     private UUID id;
 
-    private AusbildungsgangDTO ausbildungsgang;
+    @NotNull
+    private UUID ausbildungsgangId;
 
-    private AusbildungstaetteDTO ausbildungstaette;
+    @NotNull
+    private UUID ausbildungstaetteId;
 
     @NotNull
     private Ausbildungsland ausbildungsland;
 
     private String alternativeAusbildungsgang;
 
-    private String AlternativeAusbildungstaette;
+    private String alternativeAusbildungstaette;
 
     @NotNull
     private String fachrichtung;
@@ -38,4 +42,29 @@ public class AusbildungDTO {
 
     @NotNull
     private AusbildungsPensum pensum;
+
+    public static AusbildungDTO from(Ausbildung ausbildung) {
+        return ausbildung == null ? null : new AusbildungDTO(ausbildung.getId(),
+                ausbildung.getAusbildungsgang().getId(),
+                ausbildung.getAusbildungstaette().getId(),
+                ausbildung.getAusbildungsland(),
+                ausbildung.getAlternativeAusbildungsgang(),
+                ausbildung.getAlternativeAusbildungstaette(),
+                ausbildung.getFachrichtung(),
+                ausbildung.isAusbildungNichtGefunden(),
+                ausbildung.getAusbildungBegin(),
+                ausbildung.getAusbildungEnd(),
+                ausbildung.getPensum());
+    }
+
+    public void apply(Ausbildung ausbildung) {
+        ausbildung.setAusbildungEnd(ausbildungEnd);
+        ausbildung.setAusbildungBegin(ausbildungBegin);
+        ausbildung.setAusbildungNichtGefunden(ausbildungNichtGefunden);
+        ausbildung.setPensum(pensum);
+        ausbildung.setFachrichtung(fachrichtung);
+        ausbildung.setAusbildungsland(ausbildungsland);
+        ausbildung.setAlternativeAusbildungsgang(alternativeAusbildungsgang);
+        ausbildung.setAlternativeAusbildungstaette(alternativeAusbildungstaette);
+    }
 }

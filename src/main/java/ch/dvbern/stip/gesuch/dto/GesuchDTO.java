@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.gesuch.dto;
 
+import ch.dvbern.stip.ausbildung.dto.AusbildungContainerDTO;
+import ch.dvbern.stip.ausbildung.model.AusbildungContainer;
 import ch.dvbern.stip.fall.dto.FallDTO;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.Gesuchstatus;
@@ -42,6 +44,8 @@ public class GesuchDTO {
 
     private PersonInAusbildungContainerDTO personInAusbildungContainer;
 
+    private AusbildungContainerDTO ausbildungContainer;
+
     @NotNull
     private Gesuchstatus gesuchStatus;
 
@@ -49,14 +53,24 @@ public class GesuchDTO {
     private int gesuchNummer;
 
     public static GesuchDTO from(Gesuch changed) {
-        return new GesuchDTO(changed.getId(), FallDTO.from(changed.getFall()), GesuchsperiodeDTO.from(changed.getGesuchsperiode()), PersonInAusbildungContainerDTO.from(changed.getPersonInAusbildungContainer()), changed.getGesuchStatus(), changed.getGesuchNummer());
+        return new GesuchDTO(changed.getId(), FallDTO.from(changed.getFall()),
+                GesuchsperiodeDTO.from(changed.getGesuchsperiode()),
+                PersonInAusbildungContainerDTO.from(changed.getPersonInAusbildungContainer()),
+                AusbildungContainerDTO.from(changed.getAusbildungContainer()),
+                changed.getGesuchStatus(),
+                changed.getGesuchNummer());
     }
 
     public void apply(Gesuch gesuch) {
         if (this.personInAusbildungContainer != null) {
-            PersonInAusbildungContainer personInAusbildungContainer1 = gesuch.getPersonInAusbildungContainer() != null ? gesuch.getPersonInAusbildungContainer() : new PersonInAusbildungContainer();
-            personInAusbildungContainer.apply(personInAusbildungContainer1);
-            gesuch.setPersonInAusbildungContainer(personInAusbildungContainer1);
+            PersonInAusbildungContainer personInAusbildungContainerFromGesuch = gesuch.getPersonInAusbildungContainer() != null ? gesuch.getPersonInAusbildungContainer() : new PersonInAusbildungContainer();
+            personInAusbildungContainer.apply(personInAusbildungContainerFromGesuch);
+            gesuch.setPersonInAusbildungContainer(personInAusbildungContainerFromGesuch);
+        }
+        if (this.ausbildungContainer != null) {
+            AusbildungContainer ausbildungContainerFromGesuch = gesuch.getAusbildungContainer() != null ? gesuch.getAusbildungContainer() : new AusbildungContainer();
+            ausbildungContainer.apply(ausbildungContainerFromGesuch);
+            gesuch.setAusbildungContainer(ausbildungContainerFromGesuch);
         }
     }
 }
