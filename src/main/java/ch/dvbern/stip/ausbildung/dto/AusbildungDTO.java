@@ -4,6 +4,7 @@ package ch.dvbern.stip.ausbildung.dto;
 import ch.dvbern.stip.ausbildung.model.Ausbildung;
 import ch.dvbern.stip.ausbildung.model.AusbildungsPensum;
 import ch.dvbern.stip.ausbildung.model.Ausbildungsland;
+import ch.dvbern.stip.shared.util.DateUtil;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
@@ -35,10 +36,10 @@ public class AusbildungDTO {
     private boolean ausbildungNichtGefunden;
 
     @NotNull
-    private LocalDate ausbildungBegin;
+    private String ausbildungBegin;
 
     @NotNull
-    private LocalDate ausbildungEnd;
+    private String ausbildungEnd;
 
     @NotNull
     private AusbildungsPensum pensum;
@@ -52,14 +53,14 @@ public class AusbildungDTO {
                 ausbildung.getAlternativeAusbildungstaette(),
                 ausbildung.getFachrichtung(),
                 ausbildung.isAusbildungNichtGefunden(),
-                ausbildung.getAusbildungBegin(),
-                ausbildung.getAusbildungEnd(),
+                DateUtil.DateToMonthYear(ausbildung.getAusbildungBegin()) ,
+                DateUtil.DateToMonthYear(ausbildung.getAusbildungEnd()),
                 ausbildung.getPensum());
     }
 
     public void apply(Ausbildung ausbildung) {
-        ausbildung.setAusbildungEnd(ausbildungEnd);
-        ausbildung.setAusbildungBegin(ausbildungBegin);
+        ausbildung.setAusbildungEnd(DateUtil.MonthYearToEndOfMonth(ausbildungEnd));
+        ausbildung.setAusbildungBegin(DateUtil.MonthYearToBeginOfMonth(ausbildungBegin));
         ausbildung.setAusbildungNichtGefunden(ausbildungNichtGefunden);
         ausbildung.setPensum(pensum);
         ausbildung.setFachrichtung(fachrichtung);
