@@ -20,6 +20,8 @@ package ch.dvbern.stip.gesuch.dto;
 import ch.dvbern.stip.ausbildung.dto.AusbildungContainerDTO;
 import ch.dvbern.stip.ausbildung.model.AusbildungContainer;
 import ch.dvbern.stip.fall.dto.FallDTO;
+import ch.dvbern.stip.familiensituation.dto.FamiliensituationContainerDTO;
+import ch.dvbern.stip.familiensituation.model.FamiliensituationContainer;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.Gesuchstatus;
 import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
@@ -46,6 +48,8 @@ public class GesuchDTO {
 
     private AusbildungContainerDTO ausbildungContainer;
 
+    private FamiliensituationContainerDTO familiensituationContainer;
+
     @NotNull
     private Gesuchstatus gesuchStatus;
 
@@ -57,6 +61,7 @@ public class GesuchDTO {
                 GesuchsperiodeDTO.from(changed.getGesuchsperiode()),
                 PersonInAusbildungContainerDTO.from(changed.getPersonInAusbildungContainer()),
                 AusbildungContainerDTO.from(changed.getAusbildungContainer()),
+                FamiliensituationContainerDTO.from(changed.getFamiliensituationContainer()),
                 changed.getGesuchStatus(),
                 changed.getGesuchNummer());
     }
@@ -71,6 +76,11 @@ public class GesuchDTO {
             AusbildungContainer ausbildungContainerFromGesuch = gesuch.getAusbildungContainer() != null ? gesuch.getAusbildungContainer() : new AusbildungContainer();
             ausbildungContainer.apply(ausbildungContainerFromGesuch);
             gesuch.setAusbildungContainer(ausbildungContainerFromGesuch);
+        }
+        if(this.familiensituationContainer != null) {
+            FamiliensituationContainer familiensituationContainerFromGesuch = gesuch.getFamiliensituationContainer() != null ? gesuch.getFamiliensituationContainer() : new FamiliensituationContainer();
+            familiensituationContainer.apply(familiensituationContainerFromGesuch);
+            gesuch.setFamiliensituationContainer(familiensituationContainerFromGesuch);
         }
     }
 }

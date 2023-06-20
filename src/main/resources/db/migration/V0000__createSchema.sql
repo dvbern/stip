@@ -200,7 +200,7 @@ CREATE TABLE person_in_ausbildung_aud
     quellenbesteuert                      BOOLEAN,
     kinder                                BOOLEAN,
     digitale_kommunikation                BOOLEAN,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE person_in_ausbildung_aud
@@ -243,7 +243,7 @@ CREATE TABLE person_in_ausbildung_container_aud
     version                    BIGINT,
     person_in_ausbildung_gs_id UUID,
     person_in_ausbildung_sb_id UUID,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE person_in_ausbildung_container_aud
@@ -385,14 +385,14 @@ ALTER TABLE ausbildung_aud
 
 CREATE TABLE ausbildung_container
 (
-    id                         UUID         NOT NULL,
-    timestamp_erstellt         TIMESTAMP    NOT NULL,
-    timestamp_mutiert          TIMESTAMP    NOT NULL,
-    user_erstellt              VARCHAR(255) NOT NULL,
-    user_mutiert               VARCHAR(255) NOT NULL,
-    version                    BIGINT       NOT NULL,
-    ausbildung_gs_id UUID,
-    ausbildung_sb_id UUID,
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    ausbildung_gs_id   UUID,
+    ausbildung_sb_id   UUID,
     PRIMARY KEY (id)
 );
 
@@ -408,16 +408,16 @@ ALTER TABLE ausbildung_container
 
 CREATE TABLE ausbildung_container_aud
 (
-    id                         UUID    NOT NULL,
-    rev                        INTEGER NOT NULL,
-    revtype                    SMALLINT,
-    timestamp_erstellt         TIMESTAMP,
-    timestamp_mutiert          TIMESTAMP,
-    user_erstellt              VARCHAR(255),
-    user_mutiert               VARCHAR(255),
-    version                    BIGINT,
-    ausbildung_gs_id UUID,
-    ausbildung_sb_id UUID,
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    version            BIGINT,
+    ausbildung_gs_id   UUID,
+    ausbildung_sb_id   UUID,
     PRIMARY KEY (id, rev)
 );
 
@@ -425,6 +425,107 @@ ALTER TABLE ausbildung_container_aud
     ADD CONSTRAINT FK_ausbildung_container_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
+
+CREATE TABLE familiensituation
+(
+    id                              UUID         NOT NULL,
+    timestamp_erstellt              TIMESTAMP    NOT NULL,
+    timestamp_mutiert               TIMESTAMP    NOT NULL,
+    user_erstellt                   VARCHAR(255) NOT NULL,
+    user_mutiert                    VARCHAR(255) NOT NULL,
+    version                         BIGINT       NOT NULL,
+    eltern_verheiratet_zusammen     BOOLEAN      NOT NULL,
+    elternteil_verstorben           BOOLEAN,
+    elternteil_unbekannt_verstorben BOOLEAN,
+    gerichtliche_alimentenregelung  BOOLEAN,
+    mutter_unbekannt_verstorben     VARCHAR(255),
+    mutter_unbekannt_grund          VARCHAR(255),
+    mutter_wiederverheiratet        BOOLEAN,
+    vater_unbekannt_verstorben      VARCHAR(255),
+    vater_unbekannt_grund           VARCHAR(255),
+    vater_wiederverheiratet         BOOLEAN,
+    sorgerecht                      VARCHAR(255),
+    sorgerecht_mutter               NUMERIC(19, 2),
+    sorgerecht_vater                NUMERIC(19, 2),
+    obhut                           VARCHAR(255),
+    obhut_mutter                    NUMERIC(19, 2),
+    obhut_vater                     NUMERIC(19, 2),
+    wer_zahlt_alimente              VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE familiensituation_aud
+(
+    id                              UUID    NOT NULL,
+    rev                             INTEGER NOT NULL,
+    revtype                         SMALLINT,
+    timestamp_erstellt              TIMESTAMP,
+    timestamp_mutiert               TIMESTAMP,
+    user_erstellt                   VARCHAR(255),
+    user_mutiert                    VARCHAR(255),
+    version                         BIGINT,
+    eltern_verheiratet_zusammen     BOOLEAN,
+    elternteil_verstorben           BOOLEAN,
+    elternteil_unbekannt_verstorben BOOLEAN,
+    gerichtliche_alimentenregelung  BOOLEAN,
+    mutter_unbekannt_verstorben     VARCHAR(255),
+    mutter_unbekannt_grund          VARCHAR(255),
+    mutter_wiederverheiratet        BOOLEAN,
+    vater_unbekannt_verstorben      VARCHAR(255),
+    vater_unbekannt_grund           VARCHAR(255),
+    vater_wiederverheiratet         BOOLEAN,
+    sorgerecht                      VARCHAR(255),
+    sorgerecht_mutter               NUMERIC(19, 2),
+    sorgerecht_vater                NUMERIC(19, 2),
+    obhut                           VARCHAR(255),
+    obhut_mutter                    NUMERIC(19, 2),
+    obhut_vater                     NUMERIC(19, 2),
+    wer_zahlt_alimente              VARCHAR(255),
+    PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE familiensituation_aud
+    ADD CONSTRAINT FK_familiensituation_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE familiensituation_container
+(
+    id                      UUID         NOT NULL,
+    timestamp_erstellt      TIMESTAMP    NOT NULL,
+    timestamp_mutiert       TIMESTAMP    NOT NULL,
+    user_erstellt           VARCHAR(255) NOT NULL,
+    user_mutiert            VARCHAR(255) NOT NULL,
+    version                 BIGINT       NOT NULL,
+    familiensituation_gs_id UUID,
+    familiensituation_sb_id UUID,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE familiensituation_container
+    ADD CONSTRAINT FK_familiensituation_container_familiensituation_gs_id
+        FOREIGN KEY (familiensituation_gs_id)
+            REFERENCES familiensituation (id);
+
+ALTER TABLE familiensituation_container
+    ADD CONSTRAINT FK_familiensituation_container_familiensituation_sb_id
+        FOREIGN KEY (familiensituation_sb_id)
+            REFERENCES familiensituation (id);
+
+CREATE TABLE familiensituation_container_aud
+(
+    id                      UUID    NOT NULL,
+    rev                     INTEGER NOT NULL,
+    revtype                 SMALLINT,
+    timestamp_erstellt      TIMESTAMP,
+    timestamp_mutiert       TIMESTAMP,
+    user_erstellt           VARCHAR(255),
+    user_mutiert            VARCHAR(255),
+    version                 BIGINT,
+    familiensituation_gs_id UUID,
+    familiensituation_sb_id UUID,
+    PRIMARY KEY (id, rev)
+);
 
 CREATE TABLE gesuch
 (
@@ -440,7 +541,8 @@ CREATE TABLE gesuch
     gesuchsperiode_id                 UUID         NOT NULL,
     fall_id                           UUID         NOT NULL,
     person_in_ausbildung_container_id UUID,
-    ausbildung_container_id UUID,
+    ausbildung_container_id           UUID,
+    familiensituation_container_id    UUID,
     PRIMARY KEY (id)
 );
 
@@ -464,6 +566,11 @@ ALTER TABLE gesuch
         FOREIGN KEY (ausbildung_container_id)
             REFERENCES ausbildung_container (id);
 
+ALTER TABLE gesuch
+    ADD CONSTRAINT FK_gesuch_familiensituation_container_id
+        FOREIGN KEY (familiensituation_container_id)
+            REFERENCES familiensituation_container (id);
+
 CREATE TABLE gesuch_aud
 (
     id                                UUID    NOT NULL,
@@ -479,7 +586,8 @@ CREATE TABLE gesuch_aud
     gesuchsperiode_id                 UUID,
     fall_id                           UUID,
     person_in_ausbildung_container_id UUID,
-    ausbildung_container_id UUID,
+    ausbildung_container_id           UUID,
+    familiensituation_container_id    UUID,
     PRIMARY KEY (id, rev)
 );
 
@@ -527,7 +635,7 @@ CREATE TABLE eltern_aud
     sozialhilfebeitraege_ausbezahlt BOOLEAN,
     ausweisb_fluechtling            BOOLEAN,
     ergaenzungsleistung_ausbezahlt  BOOLEAN,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE eltern_aud
@@ -578,7 +686,7 @@ CREATE TABLE eltern_container_aud
     eltern_gs_id       UUID,
     eltern_sb_id       UUID,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE eltern_container_aud
@@ -594,8 +702,8 @@ CREATE TABLE gesuch_dokument
     user_erstellt      VARCHAR(255) NOT NULL,
     user_mutiert       VARCHAR(255) NOT NULL,
     version            BIGINT       NOT NULL,
-    gesuch_id          UUID       NOT NULL,
-    dokument_typ            VARCHAR(255) NOT NULL,
+    gesuch_id          UUID         NOT NULL,
+    dokument_typ       VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -614,7 +722,7 @@ CREATE TABLE gesuch_dokument_aud
     user_erstellt      VARCHAR(255),
     user_mutiert       VARCHAR(255),
     gesuch_id          UUID,
-    dokument_typ            VARCHAR(255),
+    dokument_typ       VARCHAR(255),
     PRIMARY KEY (id, rev)
 );
 
@@ -631,10 +739,10 @@ CREATE TABLE dokument
     user_erstellt      VARCHAR(255) NOT NULL,
     user_mutiert       VARCHAR(255) NOT NULL,
     version            BIGINT       NOT NULL,
-    gesuch_dokument_id          UUID       NOT NULL,
-    filename            VARCHAR(255) NOT NULL,
-    filepfad            VARCHAR(255) NOT NULL,
-    filesize            VARCHAR(255) NOT NULL,
+    gesuch_dokument_id UUID         NOT NULL,
+    filename           VARCHAR(255) NOT NULL,
+    filepfad           VARCHAR(255) NOT NULL,
+    filesize           VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -652,10 +760,10 @@ CREATE TABLE dokument_aud
     timestamp_mutiert  TIMESTAMP,
     user_erstellt      VARCHAR(255),
     user_mutiert       VARCHAR(255),
-    gesuch_dokument_id          UUID       ,
-    filename            VARCHAR(255) ,
-    filepfad            VARCHAR(255) ,
-    filesize            VARCHAR(255) ,
+    gesuch_dokument_id UUID,
+    filename           VARCHAR(255),
+    filepfad           VARCHAR(255),
+    filesize           VARCHAR(255),
     PRIMARY KEY (id, rev)
 );
 
