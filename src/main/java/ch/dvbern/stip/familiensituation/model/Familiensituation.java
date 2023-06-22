@@ -58,12 +58,6 @@ public class Familiensituation extends AbstractEntity {
     private Elternschaftsteilung sorgerecht;
 
     @Column(nullable = true)
-    private BigDecimal sorgerechtMutter;
-
-    @Column(nullable = true)
-    private BigDecimal sorgerechtVater;
-
-    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Elternschaftsteilung obhut;
 

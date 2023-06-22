@@ -445,8 +445,6 @@ CREATE TABLE familiensituation
     vater_unbekannt_grund           VARCHAR(255),
     vater_wiederverheiratet         BOOLEAN,
     sorgerecht                      VARCHAR(255),
-    sorgerecht_mutter               NUMERIC(19, 2),
-    sorgerecht_vater                NUMERIC(19, 2),
     obhut                           VARCHAR(255),
     obhut_mutter                    NUMERIC(19, 2),
     obhut_vater                     NUMERIC(19, 2),
@@ -475,8 +473,6 @@ CREATE TABLE familiensituation_aud
     vater_unbekannt_grund           VARCHAR(255),
     vater_wiederverheiratet         BOOLEAN,
     sorgerecht                      VARCHAR(255),
-    sorgerecht_mutter               NUMERIC(19, 2),
-    sorgerecht_vater                NUMERIC(19, 2),
     obhut                           VARCHAR(255),
     obhut_mutter                    NUMERIC(19, 2),
     obhut_vater                     NUMERIC(19, 2),
@@ -593,6 +589,95 @@ CREATE TABLE gesuch_aud
 
 ALTER TABLE gesuch_aud
     ADD CONSTRAINT FK_gesuch_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE lebenslauf_item
+(
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    lebenslauf_typ     VARCHAR(255) NOT NULL,
+    lebenslauf_subtyp  VARCHAR(255) NOT NULL,
+    name               VARCHAR(255) NOT NULL,
+    von                DATE         NOT NULL,
+    bis                DATE         NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE lebenslauf_item_aud
+(
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    version            BIGINT,
+    lebenslauf_typ     VARCHAR(255),
+    lebenslauf_subtyp  VARCHAR(255),
+    name               VARCHAR(255),
+    von                DATE,
+    bis                DATE,
+    PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE lebenslauf_item_aud
+    ADD CONSTRAINT FK_lebenslauf_item_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE lebenslauf_item_container
+(
+    id                    UUID         NOT NULL,
+    timestamp_erstellt    TIMESTAMP    NOT NULL,
+    timestamp_mutiert     TIMESTAMP    NOT NULL,
+    user_erstellt         VARCHAR(255) NOT NULL,
+    user_mutiert          VARCHAR(255) NOT NULL,
+    version               BIGINT       NOT NULL,
+    gesuch_id             UUID         NOT NULL,
+    lebenslauf_item_gs_id UUID,
+    lebenslauf_item_sb_id UUID,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE lebenslauf_item_container
+    ADD CONSTRAINT FK_lebenslauf_item_container_gesuch_id
+        FOREIGN KEY (gesuch_id)
+            REFERENCES gesuch (id);
+
+ALTER TABLE lebenslauf_item_container
+    ADD CONSTRAINT FK_lebenslauf_item_container_lebenslauf_item_gs_id
+        FOREIGN KEY (lebenslauf_item_gs_id)
+            REFERENCES lebenslauf_item (id);
+
+ALTER TABLE lebenslauf_item_container
+    ADD CONSTRAINT FK_ausbildung_container_ausbildung_sb_id
+        FOREIGN KEY (lebenslauf_item_sb_id)
+            REFERENCES lebenslauf_item (id);
+
+CREATE TABLE lebenslauf_item_container_aud
+(
+    id                    UUID    NOT NULL,
+    rev                   INTEGER NOT NULL,
+    revtype               SMALLINT,
+    timestamp_erstellt    TIMESTAMP,
+    timestamp_mutiert     TIMESTAMP,
+    user_erstellt         VARCHAR(255),
+    user_mutiert          VARCHAR(255),
+    version               BIGINT,
+    gesuch_id             UUID,
+    lebenslauf_item_gs_id UUID,
+    lebenslauf_item_sb_id UUID,
+    PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE lebenslauf_item_container_aud
+    ADD CONSTRAINT FK_lebenslauf_item_container_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 

@@ -39,10 +39,6 @@ public class FamiliensituationDTO {
 
     private Elternschaftsteilung sorgerecht;
 
-    private BigDecimal sorgerechtMutter;
-
-    private BigDecimal sorgerechtVater;
-
     private Elternschaftsteilung obhut;
 
     private BigDecimal obhutMutter;
@@ -64,8 +60,6 @@ public class FamiliensituationDTO {
                 familiensituation.getVaterUnbekanntGrund(),
                 familiensituation.getVaterWiederverheiratet(),
                 familiensituation.getSorgerecht(),
-                familiensituation.getSorgerechtMutter(),
-                familiensituation.getSorgerechtVater(),
                 familiensituation.getObhut(),
                 familiensituation.getObhutMutter(),
                 familiensituation.getObhutVater(),
@@ -84,8 +78,6 @@ public class FamiliensituationDTO {
         familiensituation.setVaterUnbekanntGrund(vaterUnbekanntGrund);
         familiensituation.setVaterWiederverheiratet(vaterWiederverheiratet);
         familiensituation.setSorgerecht(sorgerecht);
-        familiensituation.setSorgerechtMutter(sorgerechtMutter);
-        familiensituation.setSorgerechtVater(sorgerechtVater);
         familiensituation.setObhut(obhut);
         familiensituation.setObhutMutter(obhutMutter);
         familiensituation.setObhutVater(obhutVater);
