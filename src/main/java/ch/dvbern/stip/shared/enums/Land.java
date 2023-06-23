@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.shared.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Land {
     CH("Schweiz", "Suisse"),
     AF("Afghanistan", "Afghanistan"),
