@@ -20,6 +20,7 @@ package ch.dvbern.stip.personinausbildung.model;
 public enum Zivilstand {
     LEDIG,
     VERHEIRATET,
+    KONKUBINAT,
     EINGETRAGENE_PARTNERSCHAFT,
     GESCHIEDEN_GERICHTLICH,
     AUFGELOESTE_PARTNERSCHAFT,
