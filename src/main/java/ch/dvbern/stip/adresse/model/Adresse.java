@@ -18,8 +18,7 @@
 package ch.dvbern.stip.adresse.model;
 
 import ch.dvbern.stip.persistence.AbstractEntity;
-import ch.dvbern.stip.shared.enums.Land;
-
+import ch.dvbern.stip.stammdaten.entity.Land;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

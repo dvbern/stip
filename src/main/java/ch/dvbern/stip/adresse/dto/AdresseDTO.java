@@ -18,7 +18,7 @@
 package ch.dvbern.stip.adresse.dto;
 
 import ch.dvbern.stip.adresse.model.Adresse;
-import ch.dvbern.stip.shared.enums.Land;
+import ch.dvbern.stip.stammdaten.entity.Land;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 

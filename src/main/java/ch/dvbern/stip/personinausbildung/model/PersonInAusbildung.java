@@ -20,8 +20,7 @@ package ch.dvbern.stip.personinausbildung.model;
 import ch.dvbern.stip.adresse.model.Adresse;
 import ch.dvbern.stip.persistence.AbstractEntity;
 import ch.dvbern.stip.shared.enums.Anrede;
-import ch.dvbern.stip.shared.enums.Land;
-
+import ch.dvbern.stip.stammdaten.entity.Land;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,7 +30,8 @@ import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 
-import static ch.dvbern.stip.shared.util.Constants.*;
+import static ch.dvbern.stip.shared.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.shared.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Audited
 @Entity

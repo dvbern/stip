@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.shared.enums;
+package ch.dvbern.stip.stammdaten.entity;
 
 import lombok.Getter;
 

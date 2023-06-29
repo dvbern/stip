@@ -21,10 +21,9 @@ import ch.dvbern.stip.adresse.dto.AdresseDTO;
 import ch.dvbern.stip.adresse.model.Adresse;
 import ch.dvbern.stip.personinausbildung.model.*;
 import ch.dvbern.stip.shared.enums.Anrede;
-import ch.dvbern.stip.shared.enums.Land;
-import lombok.Value;
-
+import ch.dvbern.stip.stammdaten.entity.Land;
 import jakarta.validation.constraints.NotNull;
+import lombok.Value;
 
 import java.time.LocalDate;
 import java.util.UUID;
