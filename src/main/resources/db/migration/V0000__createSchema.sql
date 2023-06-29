@@ -162,6 +162,7 @@ CREATE TABLE person_in_ausbildung
     quellenbesteuert                      BOOLEAN      NOT NULL,
     kinder                                BOOLEAN      NOT NULL,
     digitale_kommunikation                BOOLEAN      NOT NULL DEFAULT TRUE,
+    korrespondenz_sprache                 VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -200,6 +201,7 @@ CREATE TABLE person_in_ausbildung_aud
     quellenbesteuert                      BOOLEAN,
     kinder                                BOOLEAN,
     digitale_kommunikation                BOOLEAN,
+    korrespondenz_sprache                 VARCHAR(255),
     PRIMARY KEY (id, rev)
 );
 

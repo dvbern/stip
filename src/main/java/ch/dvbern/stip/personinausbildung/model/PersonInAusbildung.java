@@ -126,4 +126,9 @@ public class PersonInAusbildung extends AbstractEntity {
     @Column(nullable = false)
     private boolean digitaleKommunikation = true;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Sprache korrespondenzSprache;
+
 }

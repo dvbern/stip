@@ -19,15 +19,13 @@ package ch.dvbern.stip.personinausbildung.dto;
 
 import ch.dvbern.stip.adresse.dto.AdresseDTO;
 import ch.dvbern.stip.adresse.model.Adresse;
-import ch.dvbern.stip.personinausbildung.model.Niederlassungsstatus;
-import ch.dvbern.stip.personinausbildung.model.PersonInAusbildung;
-import ch.dvbern.stip.personinausbildung.model.Wohnsitz;
-import ch.dvbern.stip.personinausbildung.model.Zivilstand;
+import ch.dvbern.stip.personinausbildung.model.*;
 import ch.dvbern.stip.shared.enums.Anrede;
 import ch.dvbern.stip.shared.enums.Land;
 import lombok.Value;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -92,16 +90,19 @@ public class PersonInAusbildungDTO {
     @NotNull
     private boolean digitaleKommunikation;
 
+    @NotNull
+    private Sprache korrespondenzSprache;
+
     public static PersonInAusbildungDTO from(PersonInAusbildung changed) {
-        return changed == null ? null :new PersonInAusbildungDTO(changed.getId(), AdresseDTO.from(changed.getAdresse()), changed.getSozialversicherungsnummer(),
+        return changed == null ? null : new PersonInAusbildungDTO(changed.getId(), AdresseDTO.from(changed.getAdresse()), changed.getSozialversicherungsnummer(),
                 changed.getName(), changed.getVorname(), changed.getAnrede(), changed.isIdentischerZivilrechtlicherWohnsitz(),
                 changed.getIzvOrt(), changed.getIzvPLZ(), changed.getEmail(), changed.getTelefonnummer(),
                 changed.getGeburtsdatum(), changed.getHeimatort(), changed.getNiederlassungsstatus(),
                 changed.getZivilstand(), changed.getWohnsitz(), changed.isSozialhilfebeitraege(), changed.isQuellenbesteuert(),
-                changed.isKinder(), changed.isDigitaleKommunikation());
+                changed.isKinder(), changed.isDigitaleKommunikation(), changed.getKorrespondenzSprache());
     }
 
-    public void apply(PersonInAusbildung personInAusbildung){
+    public void apply(PersonInAusbildung personInAusbildung) {
         personInAusbildung.setAnrede(anrede);
         personInAusbildung.setSozialversicherungsnummer(sozialversicherungsnummer);
         personInAusbildung.setName(name);
@@ -120,7 +121,8 @@ public class PersonInAusbildungDTO {
         personInAusbildung.setWohnsitz(wohnsitz);
         personInAusbildung.setQuellenbesteuert(quellenbesteuert);
         personInAusbildung.setSozialhilfebeitraege(sozialhilfebeitraege);
-        if(adresse != null) {
+        personInAusbildung.setKorrespondenzSprache(korrespondenzSprache);
+        if (adresse != null) {
             Adresse adresse1 = personInAusbildung.getAdresse() != null ? personInAusbildung.getAdresse() : new Adresse();
             adresse.apply(adresse1);
             personInAusbildung.setAdresse(adresse1);
