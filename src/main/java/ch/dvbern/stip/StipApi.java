@@ -15,18 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.benutzer.dto;
+package ch.dvbern.stip;
 
-import lombok.Value;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
-import jakarta.validation.constraints.NotNull;
-
-@Value
-public class BenutzerLoginDTO {
-
-    @NotNull
-    private String username;
-    @NotNull
-    private String password;
-
+@ApplicationPath("api/v1")
+public class StipApi extends Application {
 }

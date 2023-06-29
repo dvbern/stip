@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.gesuch.service;
 
-import ch.dvbern.stip.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.fall.repo.FallRepository;
 import ch.dvbern.stip.fall.service.FallService;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
@@ -45,9 +44,6 @@ public class GesuchService {
 
     @Inject
     private GesuchsperiodeService gesuchsperiodeService;
-
-    @Inject
-    private AusbildungService ausbildungService;
 
     @Inject
     private FallService fallService;
@@ -85,24 +81,7 @@ public class GesuchService {
     }
 
     private void handleAusbildungStammdaten(Gesuch gesuch, GesuchDTO gesuchDTO) {
-        if (gesuch.getAusbildungContainer() != null && gesuch.getAusbildungContainer().getAusbildungSB() != null) {
-            if (gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungsgang() == null ||
-            !gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungsgang().getId().equals(
-                    gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungsgangId())) {
-                gesuch.getAusbildungContainer().getAusbildungSB().setAusbildungsgang(
-                        ausbildungService.findAusbildungsgangByID(
-                                        gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungsgangId())
-                                .orElseThrow(() -> new RuntimeException("Ausbildungsgang nicht gefunden")));
-            }
-            if (gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungstaette() == null ||
-                    !gesuch.getAusbildungContainer().getAusbildungSB().getAusbildungstaette().getId().equals(
-                            gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungstaetteId())) {
-                gesuch.getAusbildungContainer().getAusbildungSB().setAusbildungstaette(
-                        ausbildungService.findAusbildungstaetteByID(
-                                        gesuchDTO.getAusbildungContainer().getAusbildungSB().getAusbildungstaetteId())
-                                .orElseThrow(() -> new RuntimeException("Ausbildungstaette nicht gefunden")));
-            }
-        }
+
     }
 
     // it doesn't make any sense anymore too much object to map for such a query, this is good for small dtos...

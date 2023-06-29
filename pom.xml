@@ -289,7 +289,7 @@
                             <apiNameSuffix>Resource</apiNameSuffix>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <configOptions>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <sourceFolder>target/generated-sources</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
                                 <modelPackage>${package.generated}.dto</modelPackage>
                                 <invokerPackage>${package.generated}</invokerPackage>
@@ -321,7 +321,8 @@
                             <templateDirectory>${project.basedir}/templates</templateDirectory>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
-
+                            <apiNameSuffix>ApiSpec</apiNameSuffix>
+                            <modelNameSuffix>DtoSpec</modelNameSuffix>
                             <configOptions>
                                 <modelPackage>${package.generated.test}.dto</modelPackage>
                                 <invokerPackage>${package.generated.test}</invokerPackage>
@@ -334,40 +335,10 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>net.revelc.code.formatter</groupId>
-                <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.16.0</version>
-                <executions>
-                    <execution>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                        <configuration>
-                            <directories>
-                                <directory>${project.basedir}/src/gen/java</directory>
-                            </directories>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>3.2.0</version>
                 <executions>
-                    <execution>
-                        <id>add-generated-stubs</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/gen/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>add-generated-api-test-client</id>
                         <phase>generate-test-sources</phase>

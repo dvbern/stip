@@ -1,12 +1,12 @@
 package ch.dvbern.stip.gesuchsperiode;
 
-import ch.dvbern.stip.generated.test.api.GesuchsperiodeApi;
-import ch.dvbern.stip.generated.test.dto.Gesuchsperiode;
-import ch.dvbern.stip.generated.test.dto.GesuchsperiodeCreate;
+import ch.dvbern.stip.generated.test.api.GesuchsperiodeApiSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchsperiodeCreateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchsperiodeDtoSpec;
+import ch.dvbern.stip.shared.util.RequestSpecUtil;
 import ch.dvbern.stip.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.MethodOrderer;
@@ -24,14 +24,12 @@ import static org.hamcrest.Matchers.is;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GesuchsperiodeResourceTest {
 
-    private final GesuchsperiodeApi api = GesuchsperiodeApi.gesuchsperiode(() -> new RequestSpecBuilder()
-            .setBaseUri("http://localhost:8081")
-            .setBasePath("/api/v1"));
+    private final GesuchsperiodeApiSpec api = GesuchsperiodeApiSpec.gesuchsperiode(RequestSpecUtil.quarkusSpec());
 
     @Test
     @Order(1)
     void test_create_gesuchsperiode() {
-        var newPeriode = new GesuchsperiodeCreate();
+        var newPeriode = new GesuchsperiodeCreateDtoSpec();
         newPeriode.setAufschaltdatum(LocalDate.of(2023, 1, 1));
         newPeriode.setEinreichfrist(LocalDate.of(2023, 12, 1));
         newPeriode.setGueltigAb(LocalDate.of(2023, 1, 1));
@@ -53,7 +51,7 @@ public class GesuchsperiodeResourceTest {
                 .then()
                 .extract()
                 .body()
-                .as(Gesuchsperiode[].class);
+                .as(GesuchsperiodeDtoSpec[].class);
 
         assertThat(gesuchperioden.length, is(2));
     }
