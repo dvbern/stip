@@ -31,7 +31,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FallResourceImpl implements FallResource {
 
-	private FallService fallService;
+	private final FallService fallService;
 	private final UriInfo uriInfo;
 
 	@Override
