@@ -1,47 +1,29 @@
-/*
- * Copyright (C) 2023 DV Bern AG, Switzerland
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package ch.dvbern.stip.fall.service;
 
-import ch.dvbern.stip.fall.model.Fall;
-import ch.dvbern.stip.fall.dto.FallDTO;
+import ch.dvbern.stip.fall.entity.Fall;
+import ch.dvbern.stip.fall.repo.FallRepository;
+import ch.dvbern.stip.generated.dto.FallDto;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.RequiredArgsConstructor;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-
-import jakarta.inject.Inject;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@RequestScoped
+@RequiredArgsConstructor
 public class FallService {
-    @Inject
-    private EntityManager entityManager;
 
-    public Optional<Fall> findFall(UUID id) {
-        Objects.requireNonNull(id, "id muss gesetzt sein");
-        Fall a = entityManager.find(Fall.class, id);
-        return Optional.ofNullable(a);
+    private FallMapper fallMapper;
+    private FallRepository fallRepository;
+
+    public FallDto createFall() {
+        var fall = new Fall();
+        fallRepository.persist(fall);
+        return fallMapper.toDto(fall);
     }
 
-    public Fall saveFall(FallDTO fallDTO) {
-        Fall fall = fallDTO.getId() != null ? findFall(fallDTO.getId()).orElse(new Fall()) : new Fall();
-        fallDTO.apply(fall);
-        return entityManager.merge(fall);
+    public Optional<FallDto> getFall(UUID id) {
+        var optionalFall = fallRepository.findByIdOptional(id);
+        return optionalFall.map(fallMapper::toDto);
     }
 }

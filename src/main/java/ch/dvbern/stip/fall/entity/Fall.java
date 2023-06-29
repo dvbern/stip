@@ -15,19 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.fall.model;
+package ch.dvbern.stip.fall.entity;
 
-import ch.dvbern.stip.fall.dto.FallDTO;
 import ch.dvbern.stip.persistence.AbstractEntity;
 import ch.dvbern.stip.shared.enums.MandantIdentifier;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.envers.Audited;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 @Audited
 @Entity

@@ -1,6 +1,6 @@
 package ch.dvbern.stip.gesuch;
 
-import ch.dvbern.stip.fall.model.Fall;
+import ch.dvbern.stip.fall.entity.Fall;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.Gesuchstatus;

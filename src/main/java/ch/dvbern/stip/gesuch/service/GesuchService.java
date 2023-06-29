@@ -18,19 +18,17 @@
 package ch.dvbern.stip.gesuch.service;
 
 import ch.dvbern.stip.ausbildung.service.AusbildungService;
-import ch.dvbern.stip.fall.model.Fall;
+import ch.dvbern.stip.fall.repo.FallRepository;
 import ch.dvbern.stip.fall.service.FallService;
-import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
+import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.QGesuch;
 import ch.dvbern.stip.gesuchsperiode.service.GesuchsperiodeService;
 import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,13 +41,16 @@ public class GesuchService {
     private EntityManager entityManager;
 
     @Inject
-    private FallService fallService;
+    private FallRepository fallRepository;
 
     @Inject
     private GesuchsperiodeService gesuchsperiodeService;
 
     @Inject
     private AusbildungService ausbildungService;
+
+    @Inject
+    private FallService fallService;
 
     public Optional<Gesuch> findGesuch(UUID id) {
         Objects.requireNonNull(id, "id muss gesetzt sein");
@@ -59,7 +60,7 @@ public class GesuchService {
 
     public Gesuch saveGesuch(GesuchDTO gesuchDTO) {
         Gesuch gesuch = gesuchDTO.getId() != null ? findGesuch(gesuchDTO.getId()).orElse(new Gesuch()) : new Gesuch();
-        if (gesuch.getFall() == null) {
+        /*if (gesuch.getFall() == null) {
             Fall fall;
             if (gesuchDTO.getFall().getId() != null) {
                 fall = fallService.findFall(gesuchDTO.getFall().getId()).orElseThrow(
@@ -69,7 +70,7 @@ public class GesuchService {
                 fall = fallService.saveFall(gesuchDTO.getFall());
             }
             gesuch.setFall(fall);
-        }
+        }*/
         if (gesuch.getGesuchsperiode() == null) {
             Gesuchsperiode gesuchsperiode = gesuchsperiodeService.findGesuchsperiode(gesuchDTO.getGesuchsperiode().getId())
                     .orElseThrow(() -> new RuntimeException("Gesuchsperiode existiert nicht"));
