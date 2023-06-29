@@ -28,5 +28,4 @@ public class DateUtilTest {
         LocalDate dateToTest = DateUtil.MonthYearToEndOfMonth(MONTH_YEAR);
         Assertions.assertEquals(LocalDate.of(2023,10,31), dateToTest);
     }
-
 }

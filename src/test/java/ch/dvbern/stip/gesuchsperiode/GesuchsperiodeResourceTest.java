@@ -1,8 +1,8 @@
 package ch.dvbern.stip.gesuchsperiode;
 
 import ch.dvbern.stip.generated.test.api.GesuchsperiodeApi;
-import ch.dvbern.stip.generated.test.dto.CreateGesuchsperiode;
 import ch.dvbern.stip.generated.test.dto.Gesuchsperiode;
+import ch.dvbern.stip.generated.test.dto.GesuchsperiodeCreate;
 import ch.dvbern.stip.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -31,7 +31,7 @@ public class GesuchsperiodeResourceTest {
     @Test
     @Order(1)
     void test_create_gesuchsperiode() {
-        var newPeriode = new CreateGesuchsperiode();
+        var newPeriode = new GesuchsperiodeCreate();
         newPeriode.setAufschaltdatum(LocalDate.of(2023, 1, 1));
         newPeriode.setEinreichfrist(LocalDate.of(2023, 12, 1));
         newPeriode.setGueltigAb(LocalDate.of(2023, 1, 1));

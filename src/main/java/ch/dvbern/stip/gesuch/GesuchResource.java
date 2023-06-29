@@ -184,6 +184,6 @@ public class GesuchResource {
     public Response deleteDokument(@PathParam("gesuchId") UUID gesuchId,
                                    @PathParam("dokumentTyp") DokumentTyp dokumentTyp,
                                    @PathParam("dokumentID") UUID dokumentId) {
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }
