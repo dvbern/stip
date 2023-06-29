@@ -1,4 +1,4 @@
-package ch.dvbern.stip.ausbildung.model;
+package ch.dvbern.stip.ausbildung.entity;
 
 public enum AusbildungsPensum {
 

@@ -1,14 +1,13 @@
 package ch.dvbern.stip.ausbildung.dto;
 
 
-import ch.dvbern.stip.ausbildung.model.Ausbildung;
-import ch.dvbern.stip.ausbildung.model.AusbildungsPensum;
-import ch.dvbern.stip.ausbildung.model.Ausbildungsland;
+import ch.dvbern.stip.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.ausbildung.entity.AusbildungsPensum;
+import ch.dvbern.stip.ausbildung.entity.Ausbildungsland;
 import ch.dvbern.stip.shared.util.DateUtil;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Value

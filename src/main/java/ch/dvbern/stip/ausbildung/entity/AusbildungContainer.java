@@ -1,4 +1,4 @@
-package ch.dvbern.stip.ausbildung.model;
+package ch.dvbern.stip.ausbildung.entity;
 
 import ch.dvbern.stip.persistence.AbstractEntity;
 import jakarta.persistence.*;

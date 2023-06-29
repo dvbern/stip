@@ -18,7 +18,7 @@
 package ch.dvbern.stip.gesuch.dto;
 
 import ch.dvbern.stip.ausbildung.dto.AusbildungContainerDTO;
-import ch.dvbern.stip.ausbildung.model.AusbildungContainer;
+import ch.dvbern.stip.ausbildung.entity.AusbildungContainer;
 import ch.dvbern.stip.fall.dto.FallDTO;
 import ch.dvbern.stip.familiensituation.dto.FamiliensituationContainerDTO;
 import ch.dvbern.stip.familiensituation.model.FamiliensituationContainer;

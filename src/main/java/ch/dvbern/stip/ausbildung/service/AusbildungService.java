@@ -1,9 +1,9 @@
 package ch.dvbern.stip.ausbildung.service;
 
 import ch.dvbern.stip.ausbildung.dto.AusbildungstaetteDTO;
-import ch.dvbern.stip.ausbildung.model.Ausbildungsgang;
-import ch.dvbern.stip.ausbildung.model.Ausbildungstaette;
-import ch.dvbern.stip.ausbildung.model.QAusbildungstaette;
+import ch.dvbern.stip.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.ausbildung.entity.Ausbildungstaette;
+import ch.dvbern.stip.ausbildung.entity.QAusbildungstaette;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

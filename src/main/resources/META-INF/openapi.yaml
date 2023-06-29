@@ -849,12 +849,12 @@ components:
         familiensituationContainer:
           $ref: '#/components/schemas/FamiliensituationContainer'
     DokumentCreate:
+      required:
+        - file
       type: object
       properties:
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/UploadItem'
+        file:
+          $ref: '#/components/schemas/UploadItem'
     UploadItem:
       format: binary
       type: string

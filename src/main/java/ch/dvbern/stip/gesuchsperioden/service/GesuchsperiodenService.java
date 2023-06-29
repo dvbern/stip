@@ -1,6 +1,6 @@
 package ch.dvbern.stip.gesuchsperioden.service;
 
-import ch.dvbern.stip.generated.dto.CreateGesuchsperiodeDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.gesuchsperioden.repo.GesuchsperiodeRepository;
 import jakarta.enterprise.context.RequestScoped;
@@ -22,7 +22,7 @@ public class GesuchsperiodenService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @Transactional
-    public GesuchsperiodeDto createGesuchsperiode(CreateGesuchsperiodeDto createDto) {
+    public GesuchsperiodeDto createGesuchsperiode(GesuchsperiodeCreateDto createDto) {
         var newEntity = gesuchsperiodeMapper.toEntity(createDto);
         gesuchsperiodeRepository.persist(newEntity);
         return gesuchsperiodeMapper.toDto(newEntity);

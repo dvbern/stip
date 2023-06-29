@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.gesuch.model;
 
-import ch.dvbern.stip.ausbildung.model.AusbildungContainer;
+import ch.dvbern.stip.ausbildung.entity.AusbildungContainer;
 import ch.dvbern.stip.fall.model.Fall;
 import ch.dvbern.stip.familiensituation.model.FamiliensituationContainer;
 import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;

@@ -1,7 +1,7 @@
 package ch.dvbern.stip.gesuchsperioden.resource;
 
-import ch.dvbern.stip.generated.api.GesuchsperiodenResource;
-import ch.dvbern.stip.generated.dto.CreateGesuchsperiodeDto;
+import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.gesuchsperioden.service.GesuchsperiodenService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -13,13 +13,13 @@ import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
-public class GesuchsperiodeResourceImpl implements GesuchsperiodenResource {
+public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
 
     private final UriInfo uriInfo;
     private final GesuchsperiodenService gesuchsperiodenService;
 
     @Override
-    public Response createGesuchsperiode(CreateGesuchsperiodeDto createGesuchsperiodeDto) {
+    public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
         var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(gesuchsperiode.getId().toString()).build()).build();
     }

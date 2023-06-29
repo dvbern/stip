@@ -1,6 +1,6 @@
 package ch.dvbern.stip.ausbildung.dto;
 
-import ch.dvbern.stip.ausbildung.model.Ausbildungsgang;
+import ch.dvbern.stip.ausbildung.entity.Ausbildungsgang;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 

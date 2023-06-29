@@ -321,8 +321,7 @@
                             <templateDirectory>${project.basedir}/templates</templateDirectory>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
-                            <!-- TODO add more apis here -->
-                            <apisToGenerate>Gesuchsperiode</apisToGenerate>
+
                             <configOptions>
                                 <modelPackage>${package.generated.test}.dto</modelPackage>
                                 <invokerPackage>${package.generated.test}</invokerPackage>
