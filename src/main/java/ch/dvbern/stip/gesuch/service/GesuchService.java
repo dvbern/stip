@@ -23,8 +23,8 @@ import ch.dvbern.stip.fall.service.FallService;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.model.QGesuch;
-import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
 import ch.dvbern.stip.gesuchsperiode.service.GesuchsperiodeService;
+import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.enterprise.context.ApplicationScoped;

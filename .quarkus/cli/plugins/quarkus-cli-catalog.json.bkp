@@ -1,0 +1,13 @@
+{
+  "version" : "v1",
+  "lastUpdate" : "28/06/2023 11:19:18",
+  "plugins" : {
+    "GenerateComponent" : {
+      "name" : "generate",
+      "type" : "java",
+      "location" : ".quarkus/plugins/generator/GenerateComponent.java",
+      "description" : null,
+      "inProjectCatalog" : false
+    }
+  }
+}

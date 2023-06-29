@@ -1,90 +1,42 @@
 # stip-api
 
+## Requirements
 
-## Installation (quick-start)
+Building the API client library requires [Maven](https://maven.apache.org/) to be installed.
 
-1. Copy `.env-template` to `.env` and adjust secrets/config
-2. Copy `docker-compose.override-template.yml` to `docker-compose.override.yml` and configure the local stack
-3. Create a Docker volume for the database by running `docker volume create stip-database-data`
-4. Start the local infra stack using `docker compose up -d`
-5. You can now start the application
+## Installation & Usage
 
-## Prepare the environment
+To install the API client library to your local Maven repository, simply execute:
 
-In order to start STIP you need to start the required services.
-
-In the .env-template you can find some configuration required for any environment. Just change the file name and replace the CHANGE_ME or adapt the properties as needed.
-It is required to have a .env file in order to run the stip-api project.
-
-The docker-compose.override.yml allow you to change the docker configuration without having to think about the code repository. 
-
-All the required services are located in the docker-compose file located at the root of the project.
-Just run the next command in order to start them:
-```
-docker compose up -d
+```shell
+mvn install
 ```
 
-It will start the next services:
-* stip-database => a postgreSQL database, require a volume =>  docker volume create stip-database-data
+To deploy it to a remote Maven repository instead, configure the settings of the repository and execute:
 
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
+```shell
+mvn deploy
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+Refer to the [official documentation](https://maven.apache.org/plugins/maven-deploy-plugin/usage.html) for more information.
 
-## Running the integration tests
+After the client library is installed/deployed, you can use it in your Maven project by adding the following to your *pom.xml*:
 
-The integration tests can be started using:
-```shell script
-./mvnw verify
+```xml
+<dependency>
+    <groupId>ch.dvbern.oss.stip</groupId>
+    <artifactId>stip-api</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <scope>compile</scope>
+</dependency>
+
 ```
 
-## Packaging and running the application
+## Recommendation
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issues.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+## Author
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
 
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/stip-api-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and Jakarta Persistence
-- Flyway ([guide](https://quarkus.io/guides/flyway)): Handle your database schema migrations
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and method parameters for your beans (REST, CDI, Jakarta Persistence)
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- Logging GELF ([guide](https://quarkus.io/guides/centralized-log-management)): Log using the Graylog Extended Log Format and centralize your logs in ELK or EFK
-- SmallRye Health ([guide](https://quarkus.io/guides/smallrye-health)): Monitor service health
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC

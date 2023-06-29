@@ -19,8 +19,8 @@ package ch.dvbern.stip.gesuchsperiode;
 
 import ch.dvbern.stip.annotations.ApiResource;
 import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
-import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
 import ch.dvbern.stip.gesuchsperiode.service.GesuchsperiodeService;
+import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;

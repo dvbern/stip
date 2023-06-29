@@ -4,7 +4,7 @@ import ch.dvbern.stip.fall.model.Fall;
 import ch.dvbern.stip.gesuch.dto.GesuchDTO;
 import ch.dvbern.stip.gesuch.model.Gesuch;
 import ch.dvbern.stip.gesuch.model.Gesuchstatus;
-import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
+import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;

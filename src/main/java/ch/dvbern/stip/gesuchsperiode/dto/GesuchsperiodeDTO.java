@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.gesuchsperiode.dto;
 
-import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
+import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.types.DateRange;
 import lombok.Value;
 

@@ -18,8 +18,8 @@
 package ch.dvbern.stip.gesuchsperiode.service;
 
 import ch.dvbern.stip.gesuchsperiode.dto.GesuchsperiodeDTO;
-import ch.dvbern.stip.gesuchsperiode.model.Gesuchsperiode;
-import ch.dvbern.stip.gesuchsperiode.model.QGesuchsperiode;
+import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.gesuchsperioden.entity.QGesuchsperiode;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -71,13 +71,16 @@ public class GesuchsperiodeService {
         LocalDate now = LocalDate.now();
 
         var query = queryFactory.select(Projections.constructor(GesuchsperiodeDTO.class,
-                gesuchsperiode.id,
-                gesuchsperiode.gueltigkeit.gueltigAb,
-                gesuchsperiode.gueltigkeit.gueltigBis,
-                gesuchsperiode.einreichfrist,
-                gesuchsperiode.aufschaltdatum
-        )).from(gesuchsperiode).where(gesuchsperiode.aufschaltdatum.before(now)
-                .and(gesuchsperiode.gueltigkeit.gueltigBis.after(now).or(gesuchsperiode.gueltigkeit.gueltigBis.eq(now))));
+                        gesuchsperiode.id,
+                        gesuchsperiode.gueltigkeit.gueltigAb,
+                        gesuchsperiode.gueltigkeit.gueltigBis,
+                        gesuchsperiode.einreichfrist,
+                        gesuchsperiode.aufschaltdatum
+                )).from(gesuchsperiode)
+                .where(gesuchsperiode.aufschaltdatum.before(now)
+                        .and(gesuchsperiode.gueltigkeit.gueltigBis.after(now).or(gesuchsperiode.gueltigkeit.gueltigBis.eq(now
+                                )
+                        )));
 
         return Optional.ofNullable(query.fetch());
     }
