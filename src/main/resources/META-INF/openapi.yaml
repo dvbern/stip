@@ -85,6 +85,12 @@ paths:
       operationId: getGesuch
       summary: Returns the Gesuch with the given Id
     patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
       tags:
         - Gesuch
       parameters:
@@ -355,7 +361,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Land'
+                  type: string
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -364,8 +370,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getLaender
-      summary: Returns a List of Laender
+      summary: Returns a List of LandCode
   '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
+    get:
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDokument
+      summary: get Dokument
     delete:
       tags:
         - Gesuch
@@ -439,14 +464,6 @@ components:
         - ELTERN_DOK
         - PARTNER_DOK
       type: string
-    DownloadFileData:
-      type: object
-      properties:
-        name:
-          type: string
-        file:
-          format: binary
-          type: string
     ElternAbwesenheitsGrund:
       enum:
         - VERSTORBEN
@@ -854,8 +871,8 @@ components:
       type: object
       properties:
         file:
-          $ref: '#/components/schemas/UploadItem'
-    UploadItem:
+          $ref: '#/components/schemas/FileUpload'
+    FileUpload:
       format: binary
       type: string
   responses:

@@ -1,13 +1,15 @@
 package ch.dvbern.stip.gesuch;
 
 import ch.dvbern.stip.fall.entity.Fall;
-import ch.dvbern.stip.gesuch.dto.GesuchDTO;
-import ch.dvbern.stip.gesuch.model.Gesuch;
-import ch.dvbern.stip.gesuch.model.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.gesuch.entity.Gesuch;
+import ch.dvbern.stip.gesuch.entity.Gesuchstatus;
+import ch.dvbern.stip.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -22,9 +24,12 @@ import static org.hamcrest.Matchers.*;
 @QuarkusTest
 public class GesuchResourceTest {
 
+    @Inject
+    GesuchMapper gesuchMapper;
+
     @Test
     void testCreateAndGetEndpoint() {
-        GesuchDTO gesuchDTO = createGesuchWithExistingFallandGP();
+        GesuchDto gesuchDTO = createGesuchWithExistingFallandGP();
 
         given().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .body(gesuchDTO)
@@ -43,7 +48,7 @@ public class GesuchResourceTest {
                 .body(is(not(empty())));
     }
 
-    private GesuchDTO createGesuchWithExistingFallandGP(){
+    private GesuchDto createGesuchWithExistingFallandGP(){
         final Gesuch gesuch = new Gesuch();
         gesuch.setGesuchNummer(0);
         gesuch.setGesuchStatus(Gesuchstatus.OFFEN);
@@ -53,6 +58,6 @@ public class GesuchResourceTest {
         Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
         gesuchsperiode.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
         gesuch.setGesuchsperiode(gesuchsperiode);
-        return GesuchDTO.from(gesuch);
+        return gesuchMapper.toDto(gesuch);
     }
 }

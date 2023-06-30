@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.personinausbildung.model;
 
-import ch.dvbern.stip.adresse.model.Adresse;
+import ch.dvbern.stip.adresse.entity.Adresse;
 import ch.dvbern.stip.persistence.AbstractEntity;
 import ch.dvbern.stip.shared.enums.Anrede;
 import ch.dvbern.stip.stammdaten.entity.Land;

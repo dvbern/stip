@@ -1,7 +1,7 @@
 package ch.dvbern.stip.lebenslauf.model;
 
 
-import ch.dvbern.stip.gesuch.model.Gesuch;
+import ch.dvbern.stip.gesuch.entity.Gesuch;
 import ch.dvbern.stip.persistence.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

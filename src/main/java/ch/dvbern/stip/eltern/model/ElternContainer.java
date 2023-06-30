@@ -1,8 +1,7 @@
 package ch.dvbern.stip.eltern.model;
 
-import ch.dvbern.stip.gesuch.model.Gesuch;
+import ch.dvbern.stip.gesuch.entity.Gesuch;
 import ch.dvbern.stip.persistence.AbstractEntity;
-import ch.dvbern.stip.personinausbildung.model.PersonInAusbildung;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
