@@ -497,10 +497,6 @@ components:
         - NIEDERLASSUNGSBEWILLIGUNG_C
         - NIEDERLASSUNGSBEWILLIGUNG_G
       type: string
-    UUID:
-      format: uuid
-      pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
-      type: string
     Wohnsitz:
       enum:
         - ELTERN
@@ -861,10 +857,11 @@ components:
       properties:
         personInAusbildungContainer:
           $ref: '#/components/schemas/PersonInAusbildungContainer'
-        ausbildungContainer:
-          $ref: '#/components/schemas/AusbildungContainer'
         familiensituationContainer:
           $ref: '#/components/schemas/FamiliensituationContainer'
+        ausbildung:
+          $ref: '#/components/schemas/AusbildungUpdate'
+          description: ''
     DokumentCreate:
       required:
         - file
@@ -875,6 +872,40 @@ components:
     FileUpload:
       format: binary
       type: string
+    UUID:
+      format: uuid
+      type: string
+    AusbildungUpdate:
+      required:
+        - ausbildungsgangId
+        - ausbildungstaetteId
+        - ausbildungsland
+        - fachrichtung
+        - ausbildungBegin
+        - ausbildungEnd
+        - pensum
+      type: object
+      properties:
+        ausbildungsgangId:
+          $ref: '#/components/schemas/UUID'
+        ausbildungstaetteId:
+          $ref: '#/components/schemas/UUID'
+        ausbildungsland:
+          $ref: '#/components/schemas/Ausbildungsland'
+        alternativeAusbildungsgang:
+          type: string
+        alternativeAusbildungstaette:
+          type: string
+        fachrichtung:
+          type: string
+        ausbildungNichtGefunden:
+          type: boolean
+        ausbildungBegin:
+          type: string
+        ausbildungEnd:
+          type: string
+        pensum:
+          $ref: '#/components/schemas/AusbildungsPensum'
   responses:
     Unauthorized:
       content:

@@ -290,19 +290,18 @@
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <schemaMappings>
                                 FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                                Gesuchstatus=ch.dvbern.stip.gesuch.entity.Gesuchstatus,
-                                Anrede=ch.dvbern.stip.shared.enums.Anrede,
-                                Niederlassungsstatus=ch.dvbern.stip.personinausbildung.model.Niederlassungsstatus,
-                                Sprache=ch.dvbern.stip.personinausbildung.model.Sprache,
-                                Wohnsitz=ch.dvbern.stip.personinausbildung.model.Wohnsitz,
-                                Zivilstand=ch.dvbern.stip.personinausbildung.model.Zivilstand,
-                                ElternAbwesenheitsGrund=ch.dvbern.stip.familiensituation.entity.ElternAbwesenheitsGrund,
-                                ElternUnbekanntheitsGrund=ch.dvbern.stip.familiensituation.entity.ElternUnbekanntheitsGrund,
-                                Elternschaftsteilung=ch.dvbern.stip.familiensituation.entity.Elternschaftsteilung,
-                                Land=ch.dvbern.stip.stammdaten.entity.Land,
-                                DokumentTyp=ch.dvbern.stip.dokument.entity.DokumentTyp,
-                                Ausbildungsgang=ch.dvbern.stip.ausbildung.entity.Ausbildungsgang,
-                                Ausbildungsland=ch.dvbern.stip.ausbildung.entity.Ausbildungsland
+                                Gesuchstatus=ch.dvbern.stip.api.gesuch.entity.Gesuchstatus,
+                                Anrede=ch.dvbern.stip.api.common.entity.Anrede,
+                                Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.entity.Niederlassungsstatus,
+                                Sprache=ch.dvbern.stip.api.personinausbildung.entity.Sprache,
+                                Wohnsitz=ch.dvbern.stip.api.personinausbildung.entity.Wohnsitz,
+                                Zivilstand=ch.dvbern.stip.api.personinausbildung.entity.Zivilstand,
+                                ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.entity.ElternAbwesenheitsGrund,
+                                ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.entity.ElternUnbekanntheitsGrund,
+                                Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.entity.Elternschaftsteilung,
+                                Land=ch.dvbern.stip.api.stammdaten.entity.Land,
+                                DokumentTyp=ch.dvbern.stip.api.dokument.entity.DokumentTyp,
+                                Ausbildungsland=ch.dvbern.stip.api.ausbildung.entity.Ausbildungsland
                             </schemaMappings>
                             <configOptions>
                                 <sourceFolder>target/generated-sources</sourceFolder>
