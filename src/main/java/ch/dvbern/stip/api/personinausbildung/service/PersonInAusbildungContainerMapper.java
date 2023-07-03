@@ -5,7 +5,7 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildungContainer;
 import org.mapstruct.*;
 
-@Mapper(config = MappingConfig.class, uses = PersonInAusbildungMapper.class)
+@Mapper(config = MappingConfig.class)
 public interface PersonInAusbildungContainerMapper {
     PersonInAusbildungContainer toEntity(PersonInAusbildungContainerDto personInAusbildungContainerDto);
 

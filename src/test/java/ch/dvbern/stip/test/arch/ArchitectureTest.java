@@ -37,7 +37,7 @@ public class ArchitectureTest {
                 .whereLayer("Repository")
                 .mayOnlyBeAccessedByLayers("Service")
                 .whereLayer("Entity")
-                .mayOnlyBeAccessedByLayers("Service", "Repository", "Generated");
+                .mayOnlyBeAccessedByLayers("Resource","Service", "Repository", "Generated");
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }

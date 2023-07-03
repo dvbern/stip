@@ -1,6 +1,7 @@
 package ch.dvbern.stip.test.gesuch;
 
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.Gesuchstatus;
@@ -29,14 +30,14 @@ public class GesuchResourceTest {
 
     @Test
     void testCreateAndGetEndpoint() {
-        GesuchDto gesuchDTO = createGesuchWithExistingFallandGP();
+        GesuchCreateDto gesuchDTO = createGesuchWithExistingFallandGP();
 
         given().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .body(gesuchDTO)
                 .when()
                 .post("/api/v1/gesuch")
                 .then().assertThat()
-                .statusCode(Response.Status.OK.getStatusCode());
+                .statusCode(Response.Status.CREATED.getStatusCode());
 
 
         given()
@@ -48,7 +49,7 @@ public class GesuchResourceTest {
                 .body(is(not(empty())));
     }
 
-    private GesuchDto createGesuchWithExistingFallandGP(){
+    private GesuchDto gesuchDTOWithExistingFallandGP(){
         final Gesuch gesuch = new Gesuch();
         gesuch.setGesuchNummer(0);
         gesuch.setGesuchStatus(Gesuchstatus.OFFEN);
@@ -59,5 +60,12 @@ public class GesuchResourceTest {
         gesuchsperiode.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
         gesuch.setGesuchsperiode(gesuchsperiode);
         return gesuchMapper.toDto(gesuch);
+    }
+
+    private GesuchCreateDto createGesuchWithExistingFallandGP(){
+        GesuchCreateDto createDto = new GesuchCreateDto();
+        createDto.setFallId(UUID.fromString("4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b"));
+        createDto.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+        return createDto;
     }
 }
