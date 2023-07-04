@@ -51,6 +51,5 @@ public class GesuchResourceTest {
         assertThat(gesuche.length, is(1));
         assertThat(gesuche[0].getFall().getId(), is(UUID.fromString("4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b")));
         assertThat(gesuche[0].getGesuchsperiode().getId(), is(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")));
-
     }
 }
