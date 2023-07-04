@@ -1,6 +1,9 @@
 package ch.dvbern.stip.api.familiensituation.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

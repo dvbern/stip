@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.stammdaten.service;
 
-import ch.dvbern.stip.api.stammdaten.entity.Land;
+import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 

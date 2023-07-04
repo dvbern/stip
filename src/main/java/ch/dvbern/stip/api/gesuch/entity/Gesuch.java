@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungContainer;
 import ch.dvbern.stip.api.fall.entity.Fall;

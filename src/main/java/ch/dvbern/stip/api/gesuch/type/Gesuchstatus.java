@@ -15,11 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.personinausbildung.entity;
+package ch.dvbern.stip.api.gesuch.type;
 
-public enum Niederlassungsstatus {
-    NIEDERLASSUNGSBEWILLIGUNG_L,
-    NIEDERLASSUNGSBEWILLIGUNG_B,
-    NIEDERLASSUNGSBEWILLIGUNG_C,
-    NIEDERLASSUNGSBEWILLIGUNG_G;
+public enum Gesuchstatus {
+    OFFEN,
+    IN_BEARBEITUNG
 }

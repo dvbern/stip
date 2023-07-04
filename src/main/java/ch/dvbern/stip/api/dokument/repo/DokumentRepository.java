@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.dokument.repo;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.dokument.entity.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import com.querydsl.jpa.impl.JPAQueryFactory;

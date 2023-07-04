@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.lebenslauf.type.LebenslaufTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

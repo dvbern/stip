@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.entity.Anrede;
+import ch.dvbern.stip.api.common.type.Anrede;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

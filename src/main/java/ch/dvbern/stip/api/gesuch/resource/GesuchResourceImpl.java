@@ -1,11 +1,12 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
 import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.dokument.entity.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
@@ -42,7 +43,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
-        Gesuch created = gesuchService.createGesuch(gesuchCreateDto);
+        GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(created.getId().toString()).build()).build();
     }
 
@@ -53,7 +54,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     public Response getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
-        Dokument dokument = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
+        DokumentDto dokument = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         File nf = new File(dokument.getFilepfad() + dokument.getFilename());
 
         return ResponseBuilder

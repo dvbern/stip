@@ -15,11 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.personinausbildung.entity;
+package ch.dvbern.stip.api.personinausbildung.type;
 
-public enum Wohnsitz {
-    ELTERN,
-    MUTTER,
-    VATER,
-    EIGENER_HAUSHALT;
+public enum Niederlassungsstatus {
+    NIEDERLASSUNGSBEWILLIGUNG_L,
+    NIEDERLASSUNGSBEWILLIGUNG_B,
+    NIEDERLASSUNGSBEWILLIGUNG_C,
+    NIEDERLASSUNGSBEWILLIGUNG_G;
 }

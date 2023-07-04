@@ -28,7 +28,9 @@ public class ArchitectureTest {
             .layer("Entity")
             .definedBy("..entity..")
             .optionalLayer("Generated")
-            .definedBy("..generated..");
+            .definedBy("..generated..")
+            .optionalLayer("Type")
+            .definedBy("..type..");
 
     @Test
     public void test_layer_boundaries() {

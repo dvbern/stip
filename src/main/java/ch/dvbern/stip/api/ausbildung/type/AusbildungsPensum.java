@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.ausbildung.entity;
+package ch.dvbern.stip.api.ausbildung.type;
 
 public enum AusbildungsPensum {
 

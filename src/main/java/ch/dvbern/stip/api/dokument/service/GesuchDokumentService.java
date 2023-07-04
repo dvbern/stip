@@ -3,7 +3,7 @@ package ch.dvbern.stip.api.dokument.service;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.dokument.entity.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import jakarta.enterprise.context.RequestScoped;
@@ -28,7 +28,7 @@ public class GesuchDokumentService {
 
     private DokumentRepository dokumentRepository;
 
-    public Dokument uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload) throws IOException {
+    public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload) throws IOException {
         //Gesuch gesuch = gesuchService.findGesuch(gesuchId).orElseThrow(() -> new RuntimeException("Gesuch not found"));
         // TODO find DokumentTyp or create if not exist
 
@@ -43,7 +43,7 @@ public class GesuchDokumentService {
         // TODO set dokumentTyp to dokument for reference
         dokumentRepository.persist(dokument);
 
-        return dokument;
+        return dokumentMapper.toDto(dokument);
     }
 
     public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
@@ -51,9 +51,9 @@ public class GesuchDokumentService {
         return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
     }
 
-    public Optional<Dokument> findDokument(UUID dokumentId) {
+    public Optional<DokumentDto> findDokument(UUID dokumentId) {
         Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
         Dokument dokument = dokumentRepository.findById(dokumentId);
-        return Optional.ofNullable(dokument);
+        return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 }

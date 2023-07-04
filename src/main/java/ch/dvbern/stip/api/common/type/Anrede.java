@@ -15,14 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.personinausbildung.entity;
+package ch.dvbern.stip.api.common.type;
 
-public enum Zivilstand {
-    LEDIG,
-    VERHEIRATET,
-    KONKUBINAT,
-    EINGETRAGENE_PARTNERSCHAFT,
-    GESCHIEDEN_GERICHTLICH,
-    AUFGELOESTE_PARTNERSCHAFT,
-    VERWITWET;
+public enum Anrede {
+
+    HERR,
+    FRAU
 }

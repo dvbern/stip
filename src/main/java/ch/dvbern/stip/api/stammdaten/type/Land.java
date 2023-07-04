@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.stammdaten.entity;
+package ch.dvbern.stip.api.stammdaten.type;
 
 import lombok.Getter;
 

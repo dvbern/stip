@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.familiensituation.entity;
+package ch.dvbern.stip.api.familiensituation.type;
 
 public enum Elternschaftsteilung {
     MUTTER,

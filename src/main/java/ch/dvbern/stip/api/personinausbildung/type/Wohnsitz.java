@@ -15,9 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.personinausbildung.type;
 
-public enum Gesuchstatus {
-    OFFEN,
-    IN_BEARBEITUNG
+public enum Wohnsitz {
+    ELTERN,
+    MUTTER,
+    VATER,
+    EIGENER_HAUSHALT;
 }

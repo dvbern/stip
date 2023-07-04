@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.ausbildung;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsland;
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungstaetteRepository;
 import ch.dvbern.stip.generated.test.api.AusbildungstaetteApiSpec;
 import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;

@@ -15,10 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.entity;
+package ch.dvbern.stip.api.common.type;
 
-public enum Anrede {
+public enum MandantIdentifier {
 
-    HERR,
-    FRAU
+    BERN;
 }

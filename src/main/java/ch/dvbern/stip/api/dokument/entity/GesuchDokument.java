@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.dokument.entity;
 
 
 
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 

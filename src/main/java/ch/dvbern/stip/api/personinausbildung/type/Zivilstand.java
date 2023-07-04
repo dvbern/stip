@@ -15,9 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.entity;
+package ch.dvbern.stip.api.personinausbildung.type;
 
-public enum MandantIdentifier {
-
-    BERN;
+public enum Zivilstand {
+    LEDIG,
+    VERHEIRATET,
+    KONKUBINAT,
+    EINGETRAGENE_PARTNERSCHAFT,
+    GESCHIEDEN_GERICHTLICH,
+    AUFGELOESTE_PARTNERSCHAFT,
+    VERWITWET;
 }

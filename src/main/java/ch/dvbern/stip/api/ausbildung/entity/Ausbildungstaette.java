@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
 import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;

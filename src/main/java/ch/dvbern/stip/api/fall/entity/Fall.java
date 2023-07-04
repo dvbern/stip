@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.fall.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.entity.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Min;

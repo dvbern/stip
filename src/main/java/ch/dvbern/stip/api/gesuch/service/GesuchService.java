@@ -56,9 +56,9 @@ public class GesuchService {
     }
 
     @Transactional
-    public Gesuch createGesuch(GesuchCreateDto gesuchCreateDto) {
+    public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuchRepository.persist(gesuch);
-        return gesuch;
+        return gesuchMapper.toDto(gesuch);
     }
 }

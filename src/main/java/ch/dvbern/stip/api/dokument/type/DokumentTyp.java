@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.dokument.entity;
+package ch.dvbern.stip.api.dokument.type;
 
 public enum DokumentTyp {
     PERSON_IN_AUSBILDUNG_DOK,
