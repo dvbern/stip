@@ -1,71 +1,56 @@
 package ch.dvbern.stip.test.gesuch;
 
-import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.Gesuchstatus;
-import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
-import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchDtoSpec;
+import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
+import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
-import org.junit.jupiter.api.Test;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
-import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@RequiredArgsConstructor
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GesuchResourceTest {
 
-    @Inject
-    GesuchMapper gesuchMapper;
+    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
     @Test
-    void testCreateAndGetEndpoint() {
-        GesuchCreateDto gesuchDTO = createGesuchWithExistingFallandGP();
+    @Order(1)
+    void testCreateEndpoint() {
+        var gesuchDTO = new GesuchCreateDtoSpec();
+        gesuchDTO.setFallId(UUID.fromString("4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b"));
+        gesuchDTO.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
 
-        given().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .body(gesuchDTO)
-                .when()
-                .post("/api/v1/gesuch")
-                .then().assertThat()
-                .statusCode(Response.Status.CREATED.getStatusCode());
-
-
-        given()
-                .when()
-                .get("/api/v1/gesuch")
+        gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .body(is(not(empty())));
+                .statusCode(Response.Status.CREATED.getStatusCode());
     }
 
-    private GesuchDto gesuchDTOWithExistingFallandGP(){
-        final Gesuch gesuch = new Gesuch();
-        gesuch.setGesuchNummer(0);
-        gesuch.setGesuchStatus(Gesuchstatus.OFFEN);
-        Fall fall = new Fall();
-        fall.setId(UUID.fromString("4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b"));
-        gesuch.setFall(fall);
-        Gesuchsperiode gesuchsperiode = new Gesuchsperiode();
-        gesuchsperiode.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
-        gesuch.setGesuchsperiode(gesuchsperiode);
-        return gesuchMapper.toDto(gesuch);
-    }
+    @Test
+    @Order(2)
+    void testFindGesuchEndpoint() {
+        var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchDtoSpec[].class);
 
-    private GesuchCreateDto createGesuchWithExistingFallandGP(){
-        GesuchCreateDto createDto = new GesuchCreateDto();
-        createDto.setFallId(UUID.fromString("4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b"));
-        createDto.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
-        return createDto;
+        assertThat(gesuche.length, is(1));
+        assertThat(gesuche[0].getFall().getId(), is(UUID.fromString("4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b")));
+        assertThat(gesuche[0].getGesuchsperiode().getId(), is(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")));
+
     }
 }
