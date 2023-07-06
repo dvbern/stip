@@ -551,13 +551,11 @@ components:
     Ausbildung:
       required:
         - id
-        - ausbildungsgangId
-        - ausbildungstaetteId
-        - ausbildungsland
         - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
         - pensum
+        - ausbildungsland
       type: object
       properties:
         id:
