@@ -13,6 +13,10 @@ stages:
 variables:
   IMAGE: ${DVB_DOCKER_REGISTRY}/${CI_PROJECT_ROOT_NAMESPACE}/stip/api:${CI_COMMIT_SHORT_SHA}
 
+maven-build:
+  variables:
+    MAVEN_ARGS: -Pcoverage
+
 sonarqube-check:
   image: docker-registry.dvbern.ch/dockerhub/library/maven:3.8-eclipse-temurin-17
   stage: analyze
@@ -33,6 +37,9 @@ sonarqube-check:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  needs:
+    - job: maven-build
+      artifacts: true
 
 build-image:
   extends: .docker-build
