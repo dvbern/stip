@@ -25,6 +25,7 @@
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.0.0</surefire-plugin.version>
         <testcontainers.version>1.18.3</testcontainers.version>
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     </properties>
     <dependencyManagement>
         <dependencies>
