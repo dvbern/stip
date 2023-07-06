@@ -15,6 +15,7 @@ variables:
 sonarqube-check:
   image: docker-registry.dvbern.ch/dockerhub/library/maven:3.8-eclipse-temurin-17
   stage: analyze
+  tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
     SONAR_PROJECT_KEY: kibon_stip-api_AYkrwku6SZqri_oH9Xle
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
