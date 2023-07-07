@@ -537,17 +537,6 @@ components:
           type: string
         ort:
           type: string
-    AusbildungContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        ausbildungGS:
-          $ref: '#/components/schemas/Ausbildung'
-        ausbildungSB:
-          $ref: '#/components/schemas/Ausbildung'
     Ausbildung:
       required:
         - id
@@ -656,17 +645,6 @@ components:
           type: integer
         mandant:
           type: string
-    FamiliensituationContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        familiensituationGS:
-          $ref: '#/components/schemas/Familiensituation'
-        familiensituationSB:
-          $ref: '#/components/schemas/Familiensituation'
     Familiensituation:
       required:
         - id
@@ -705,59 +683,6 @@ components:
           type: number
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
-    Gesuch:
-      required:
-        - fall
-        - gesuchsperiode
-        - gesuchStatus
-        - gesuchNummer
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        fall:
-          $ref: '#/components/schemas/Fall'
-        gesuchsperiode:
-          $ref: '#/components/schemas/Gesuchsperiode'
-        personInAusbildungContainer:
-          $ref: '#/components/schemas/PersonInAusbildungContainer'
-        ausbildungContainer:
-          $ref: '#/components/schemas/AusbildungContainer'
-        familiensituationContainer:
-          $ref: '#/components/schemas/FamiliensituationContainer'
-        gesuchStatus:
-          $ref: '#/components/schemas/Gesuchstatus'
-        gesuchNummer:
-          format: int32
-          type: integer
-        lebenslaufItemContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItemContainer'
-        elternContainers:
-          description: ''
-          maxItems: 2
-          type: array
-          items:
-            $ref: '#/components/schemas/ElternContainer'
-        GeschwisterContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/GeschwisterContainer'
-        partnerContainer:
-          $ref: '#/components/schemas/PartnerContainer'
-          description: ''
-        kindContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/KindContainer'
-        auzahlungContainer:
-          $ref: '#/components/schemas/AuszahlungContainer'
-          description: ''
     Gesuchsperiode:
       required:
         - id
@@ -784,17 +709,6 @@ components:
           type: string
         landFR:
           type: string
-    PersonInAusbildungContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        lebenslaufItemGS:
-          $ref: '#/components/schemas/LebenslaufItem'
-        lebenslaufItemSB:
-          $ref: '#/components/schemas/LebenslaufItem'
     PersonInAusbildung:
       required:
         - id
@@ -868,54 +782,6 @@ components:
           $ref: '#/components/schemas/LocalDate'
         aufschaltdatum:
           $ref: '#/components/schemas/LocalDate'
-    GesuchCreate:
-      required:
-        - fallId
-        - gesuchsperiodeId
-      type: object
-      properties:
-        fallId:
-          $ref: '#/components/schemas/UUID'
-        gesuchsperiodeId:
-          $ref: '#/components/schemas/UUID'
-    GesuchUpdate:
-      required: []
-      type: object
-      properties:
-        ausbildung:
-          $ref: '#/components/schemas/AusbildungUpdate'
-          description: ''
-        personInAusbildung:
-          $ref: '#/components/schemas/PersonInAusbildungUpdate'
-          description: ''
-        familiensituation:
-          $ref: '#/components/schemas/FamiliensituationUpdate'
-        elternContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/ElternContainerUpdate'
-        lebenslaufItemContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItemContainerUpdate'
-        geschwisterContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/GeschwisterContainerUpdate'
-        partner:
-          $ref: '#/components/schemas/PartnerUpdate'
-          description: ''
-        kindContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/KindUpdate'
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
-          description: ''
     DokumentCreate:
       required:
         - file
@@ -1046,6 +912,9 @@ components:
           type: string
         von:
           type: string
+        copyOfId:
+          $ref: '#/components/schemas/UUID'
+          description: ''
     LebenslaufTyp:
       enum:
         - AUSBILDUNG
@@ -1078,17 +947,6 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
           description: ''
-    LebenslaufItemContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        lebenslaufItemSB:
-          $ref: '#/components/schemas/LebenslaufItem'
-        lebenslaufItemGS:
-          $ref: '#/components/schemas/LebenslaufItem'
     FamiliensituationUpdate:
       required:
         - elternVerheiratetZusammen
@@ -1182,17 +1040,9 @@ components:
           $ref: '#/components/schemas/UUID'
         geschlecht:
           $ref: '#/components/schemas/Anrede'
-    ElternContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
+        copyOfId:
           $ref: '#/components/schemas/UUID'
-        elternGS:
-          $ref: '#/components/schemas/Eltern'
-        elternSB:
-          $ref: '#/components/schemas/Eltern'
+          description: ''
     ElternUpdate:
       title: Root Type for Eltern
       description: ''
@@ -1282,6 +1132,9 @@ components:
         wohnsitzAnteilVater:
           description: ''
           type: number
+        copyOfId:
+          $ref: '#/components/schemas/UUID'
+          description: ''
     Ausbildungssituation:
       description: ''
       enum:
@@ -1290,33 +1143,6 @@ components:
         - IN_AUSBILDUNG
         - KEINE
       type: string
-    GeschwisterContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        geschwisterGS:
-          $ref: '#/components/schemas/Geschwister'
-        geschwisterSB:
-          $ref: '#/components/schemas/Geschwister'
-    ElternContainerUpdate:
-      required: []
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        elternSB:
-          $ref: '#/components/schemas/ElternUpdate'
-    LebenslaufItemContainerUpdate:
-      required: []
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        lebenslaufItemSB:
-          $ref: '#/components/schemas/LebenslaufItemUpdate'
     GeschwisterUpdate:
       title: Root Type for Geschwister
       description: ''
@@ -1347,14 +1173,6 @@ components:
         wohnsitzAnteilVater:
           description: ''
           type: number
-    GeschwisterContainerUpdate:
-      required: []
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        geschwisterSB:
-          $ref: '#/components/schemas/GeschwisterUpdate'
     Partner:
       required:
         - id
@@ -1382,17 +1200,6 @@ components:
         sozialversicherungsnummer:
           description: ''
           type: string
-    PartnerContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        partnerGS:
-          $ref: '#/components/schemas/Partner'
-        partnerSB:
-          $ref: '#/components/schemas/Partner'
     PartnerUpdate:
       required:
         - adresse
@@ -1448,17 +1255,9 @@ components:
         wohnsitzAnteilVater:
           description: ''
           type: number
-    KindContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
+        copyOfId:
           $ref: '#/components/schemas/UUID'
-        kindGS:
-          $ref: '#/components/schemas/Kind'
-        kingSB:
-          $ref: '#/components/schemas/Kind'
+          description: ''
     KindUpdate:
       title: Root Type for Geschwister
       description: ''
@@ -1489,14 +1288,6 @@ components:
         wohnsitzAnteilVater:
           description: ''
           type: number
-    KindContainerUpdate:
-      required: []
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        kingSB:
-          $ref: '#/components/schemas/KindUpdate'
     Auszahlung:
       title: Root Type for Auszahlung
       description: ''
@@ -1544,17 +1335,6 @@ components:
         - SOZIALDIENST_INSTITUTION
         - ANDERE
       type: string
-    AuszahlungContainer:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        auszahlungGS:
-          $ref: '#/components/schemas/Auszahlung'
-        auszahlungSB:
-          $ref: '#/components/schemas/Auszahlung'
     AuszahlungUpdate:
       title: Root Type for Auszahlung
       description: ''
@@ -1589,6 +1369,133 @@ components:
               type: string
         iban:
           type: string
+    GesuchFormular:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ausbildung:
+          $ref: '#/components/schemas/Ausbildung'
+        auzahlung:
+          $ref: '#/components/schemas/Auszahlung'
+          description: ''
+        familiensituation:
+          $ref: '#/components/schemas/Familiensituation'
+        elterns:
+          description: ''
+          maxItems: 2
+          type: array
+          items:
+            $ref: '#/components/schemas/Eltern'
+        kinds:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/Kind'
+        lebenslaufItems:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/LebenslaufItem'
+        partner:
+          $ref: '#/components/schemas/Partner'
+          description: ''
+        personInAusbildung:
+          $ref: '#/components/schemas/PersonInAusbildung'
+        geschwisters:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/Geschwister'
+    GesuchFormularUpdate:
+      required: []
+      type: object
+      properties:
+        ausbildung:
+          $ref: '#/components/schemas/AusbildungUpdate'
+          description: ''
+        personInAusbildung:
+          $ref: '#/components/schemas/PersonInAusbildungUpdate'
+          description: ''
+        familiensituation:
+          $ref: '#/components/schemas/FamiliensituationUpdate'
+        partner:
+          $ref: '#/components/schemas/PartnerUpdate'
+          description: ''
+        kindContainers:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/KindUpdate'
+        auszahlung:
+          $ref: '#/components/schemas/AuszahlungUpdate'
+          description: ''
+        elterns:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/ElternUpdate'
+        geschwisters:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/GeschwisterUpdate'
+        lebenslaufItems:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/LebenslaufItemUpdate'
+    Gesuch:
+      description: ''
+      required:
+        - fall
+        - gesuchsperiode
+        - gesuchStatus
+        - gesuchNummer
+        - id
+      type: object
+      properties:
+        fall:
+          $ref: '#/components/schemas/Fall'
+          description: ''
+        gesuchsperiode:
+          $ref: '#/components/schemas/Gesuchsperiode'
+          description: ''
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+          description: ''
+        gesuchNummer:
+          format: int32
+          description: ''
+          type: integer
+        id:
+          $ref: '#/components/schemas/UUID'
+          description: ''
+        gesuch_formular_freigabe_copy:
+          $ref: '#/components/schemas/GesuchFormular'
+          description: ''
+        gesuch_formular_to_work_with:
+          $ref: '#/components/schemas/GesuchFormular'
+          description: ''
+    GesuchCreate:
+      required:
+        - fallId
+        - gesuchsperiodeId
+      type: object
+      properties:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        gesuchsperiodeId:
+          $ref: '#/components/schemas/UUID'
+    GesuchUpdate:
+      description: ''
+      type: object
+      properties:
+        gesuch_formular_to_work_with:
+          $ref: '#/components/schemas/GesuchFormular'
+          description: ''
   responses:
     Unauthorized:
       content:

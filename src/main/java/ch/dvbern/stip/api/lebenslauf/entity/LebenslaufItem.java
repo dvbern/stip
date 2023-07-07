@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.lebenslauf.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufTyp;
+import ch.dvbern.stip.api.personinausbildung.type.Wohnsitz;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,4 +45,10 @@ public class LebenslaufItem extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     private LocalDate bis;
+
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Wohnsitz wohnsitz;
 }
