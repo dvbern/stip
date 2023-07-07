@@ -34,7 +34,7 @@ CREATE TABLE fall
     version            BIGINT       NOT NULL,
     fall_nummer        BIGINT       NOT NULL,
     mandant            VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    CONSTRAINT fall_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE fall_aud
@@ -48,7 +48,7 @@ CREATE TABLE fall_aud
     user_mutiert       VARCHAR(255),
     fall_nummer        BIGINT,
     mandant            VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT fall_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE fall_aud
@@ -68,7 +68,7 @@ CREATE TABLE gesuchsperiode
     gueltig_bis        DATE         NOT NULL,
     einreichfrist      DATE,
     aufschaltdatum     DATE,
-    PRIMARY KEY (id)
+    CONSTRAINT gesuchsperiode_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE gesuchsperiode_aud
@@ -84,7 +84,7 @@ CREATE TABLE gesuchsperiode_aud
     gueltig_bis        DATE,
     einreichfrist      DATE,
     aufschaltdatum     DATE,
-    PRIMARY KEY (id, rev)
+    CONSTRAINT gesuchsperiode_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE gesuchsperiode_aud
@@ -107,7 +107,7 @@ CREATE TABLE adresse
     ort                VARCHAR(255) NOT NULL,
     plz                VARCHAR(255) NOT NULL,
     strasse            VARCHAR(255) NOT NULL,
-    CONSTRAINT adresse_pk PRIMARY KEY (id) /* uberall name geben */
+    CONSTRAINT adresse_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE adresse_aud
@@ -126,7 +126,7 @@ CREATE TABLE adresse_aud
     ort                VARCHAR(255),
     plz                VARCHAR(255),
     strasse            VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT adresse_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE adresse_aud
@@ -163,7 +163,7 @@ CREATE TABLE person_in_ausbildung
     kinder                                BOOLEAN      NOT NULL,
     digitale_kommunikation                BOOLEAN      NOT NULL DEFAULT TRUE,
     korrespondenz_sprache                 VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    CONSTRAINT person_in_ausbildung_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE person_in_ausbildung
@@ -202,58 +202,13 @@ CREATE TABLE person_in_ausbildung_aud
     kinder                                BOOLEAN,
     digitale_kommunikation                BOOLEAN,
     korrespondenz_sprache                 VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT person_in_ausbildung_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE person_in_ausbildung_aud
     ADD CONSTRAINT FK_person_in_ausbildung_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
-
-CREATE TABLE person_in_ausbildung_container
-(
-    id                         UUID         NOT NULL,
-    timestamp_erstellt         TIMESTAMP    NOT NULL,
-    timestamp_mutiert          TIMESTAMP    NOT NULL,
-    user_erstellt              VARCHAR(255) NOT NULL,
-    user_mutiert               VARCHAR(255) NOT NULL,
-    version                    BIGINT       NOT NULL,
-    person_in_ausbildung_gs_id UUID,
-    person_in_ausbildung_sb_id UUID,
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE person_in_ausbildung_container
-    ADD CONSTRAINT FK_person_in_ausbildung_container_person_in_ausbildung_gs_id
-        FOREIGN KEY (person_in_ausbildung_gs_id)
-            REFERENCES person_in_ausbildung (id);
-
-ALTER TABLE person_in_ausbildung_container
-    ADD CONSTRAINT FK_person_in_ausbildung_container_person_in_ausbildung_sb_id
-        FOREIGN KEY (person_in_ausbildung_sb_id)
-            REFERENCES person_in_ausbildung (id);
-
-CREATE TABLE person_in_ausbildung_container_aud
-(
-    id                         UUID    NOT NULL,
-    rev                        INTEGER NOT NULL,
-    revtype                    SMALLINT,
-    timestamp_erstellt         TIMESTAMP,
-    timestamp_mutiert          TIMESTAMP,
-    user_erstellt              VARCHAR(255),
-    user_mutiert               VARCHAR(255),
-    version                    BIGINT,
-    person_in_ausbildung_gs_id UUID,
-    person_in_ausbildung_sb_id UUID,
-    PRIMARY KEY (id, rev)
-);
-
-ALTER TABLE person_in_ausbildung_container_aud
-    ADD CONSTRAINT FK_person_in_ausbildung_container_aud_revinfo
-        FOREIGN KEY (rev)
-            REFERENCES revinfo (rev);
-
-
 
 CREATE TABLE ausbildungstaette
 (
@@ -279,7 +234,7 @@ CREATE TABLE ausbildungstaette_aud
     user_mutiert       VARCHAR(255),
     name               VARCHAR(255) NOT NULL,
     ausbildungsland    VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id, rev)
+    CONSTRAINT ausbildungstaette_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE ausbildungstaette_aud
@@ -318,7 +273,7 @@ CREATE TABLE ausbildungsgang_aud
     bezeichnung_de       VARCHAR(255),
     bezeichnung_fr       VARCHAR(255),
     ausbildungstaette_id UUID,
-    PRIMARY KEY (id, rev)
+    CONSTRAINT ausbildungsgang_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE ausbildungsgang_aud
@@ -344,7 +299,7 @@ CREATE TABLE ausbildung
     ausbildung_end                DATE         NOT NULL,
     alternative_ausbildungsgang   VARCHAR(255),
     alternative_ausbildungstaette VARCHAR(255),
-    PRIMARY KEY (id)
+    CONSTRAINT ausbildung_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE ausbildung
@@ -377,54 +332,11 @@ CREATE TABLE ausbildung_aud
     ausbildung_end                DATE,
     alternative_ausbildungsgang   VARCHAR(255),
     alternative_ausbildungstaette VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT ausbildung_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE ausbildung_aud
     ADD CONSTRAINT FK_ausbildung_aud_revinfo
-        FOREIGN KEY (rev)
-            REFERENCES revinfo (rev);
-
-CREATE TABLE ausbildung_container
-(
-    id                 UUID         NOT NULL,
-    timestamp_erstellt TIMESTAMP    NOT NULL,
-    timestamp_mutiert  TIMESTAMP    NOT NULL,
-    user_erstellt      VARCHAR(255) NOT NULL,
-    user_mutiert       VARCHAR(255) NOT NULL,
-    version            BIGINT       NOT NULL,
-    ausbildung_gs_id   UUID,
-    ausbildung_sb_id   UUID,
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE ausbildung_container
-    ADD CONSTRAINT FK_ausbildung_container_ausbildung_gs_id
-        FOREIGN KEY (ausbildung_gs_id)
-            REFERENCES ausbildung (id);
-
-ALTER TABLE ausbildung_container
-    ADD CONSTRAINT FK_ausbildung_container_ausbildung_sb_id
-        FOREIGN KEY (ausbildung_sb_id)
-            REFERENCES ausbildung (id);
-
-CREATE TABLE ausbildung_container_aud
-(
-    id                 UUID    NOT NULL,
-    rev                INTEGER NOT NULL,
-    revtype            SMALLINT,
-    timestamp_erstellt TIMESTAMP,
-    timestamp_mutiert  TIMESTAMP,
-    user_erstellt      VARCHAR(255),
-    user_mutiert       VARCHAR(255),
-    version            BIGINT,
-    ausbildung_gs_id   UUID,
-    ausbildung_sb_id   UUID,
-    PRIMARY KEY (id, rev)
-);
-
-ALTER TABLE ausbildung_container_aud
-    ADD CONSTRAINT FK_ausbildung_container_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
@@ -451,7 +363,7 @@ CREATE TABLE familiensituation
     obhut_mutter                    NUMERIC(19, 2),
     obhut_vater                     NUMERIC(19, 2),
     wer_zahlt_alimente              VARCHAR(255),
-    PRIMARY KEY (id)
+    CONSTRAINT familiensituation_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE familiensituation_aud
@@ -479,7 +391,7 @@ CREATE TABLE familiensituation_aud
     obhut_mutter                    NUMERIC(19, 2),
     obhut_vater                     NUMERIC(19, 2),
     wer_zahlt_alimente              VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT familiensituation_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE familiensituation_aud
@@ -487,45 +399,7 @@ ALTER TABLE familiensituation_aud
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
-CREATE TABLE familiensituation_container
-(
-    id                      UUID         NOT NULL,
-    timestamp_erstellt      TIMESTAMP    NOT NULL,
-    timestamp_mutiert       TIMESTAMP    NOT NULL,
-    user_erstellt           VARCHAR(255) NOT NULL,
-    user_mutiert            VARCHAR(255) NOT NULL,
-    version                 BIGINT       NOT NULL,
-    familiensituation_gs_id UUID,
-    familiensituation_sb_id UUID,
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE familiensituation_container
-    ADD CONSTRAINT FK_familiensituation_container_familiensituation_gs_id
-        FOREIGN KEY (familiensituation_gs_id)
-            REFERENCES familiensituation (id);
-
-ALTER TABLE familiensituation_container
-    ADD CONSTRAINT FK_familiensituation_container_familiensituation_sb_id
-        FOREIGN KEY (familiensituation_sb_id)
-            REFERENCES familiensituation (id);
-
-CREATE TABLE familiensituation_container_aud
-(
-    id                      UUID    NOT NULL,
-    rev                     INTEGER NOT NULL,
-    revtype                 SMALLINT,
-    timestamp_erstellt      TIMESTAMP,
-    timestamp_mutiert       TIMESTAMP,
-    user_erstellt           VARCHAR(255),
-    user_mutiert            VARCHAR(255),
-    version                 BIGINT,
-    familiensituation_gs_id UUID,
-    familiensituation_sb_id UUID,
-    PRIMARY KEY (id, rev)
-);
-
-CREATE TABLE gesuch
+CREATE TABLE gesuch_formular
 (
     id                                UUID         NOT NULL,
     timestamp_erstellt                TIMESTAMP    NOT NULL,
@@ -533,15 +407,63 @@ CREATE TABLE gesuch
     user_erstellt                     VARCHAR(255) NOT NULL,
     user_mutiert                      VARCHAR(255) NOT NULL,
     version                           BIGINT       NOT NULL,
+    person_in_ausbildung_id UUID,
+    ausbildung_id           UUID,
+    familiensituation_id    UUID,
+    CONSTRAINT gesuch_formular_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE gesuch_formular
+    ADD CONSTRAINT FK_gesuch_person_in_ausbildung_id
+        FOREIGN KEY (person_in_ausbildung_id)
+            REFERENCES person_in_ausbildung (id);
+
+ALTER TABLE gesuch_formular
+    ADD CONSTRAINT FK_gesuch_ausbildung_id
+        FOREIGN KEY (ausbildung_id)
+            REFERENCES ausbildung (id);
+
+ALTER TABLE gesuch_formular
+    ADD CONSTRAINT FK_gesuch_familiensituation_id
+        FOREIGN KEY (familiensituation_id)
+            REFERENCES familiensituation (id);
+
+CREATE TABLE gesuch_formular_aud
+(
+    id                                UUID    NOT NULL,
+    rev                               INTEGER NOT NULL,
+    revtype                           SMALLINT,
+    timestamp_erstellt                TIMESTAMP,
+    timestamp_mutiert                 TIMESTAMP,
+    user_erstellt                     VARCHAR(255),
+    user_mutiert                      VARCHAR(255),
+    person_in_ausbildung_id UUID,
+    ausbildung_id           UUID,
+    familiensituation_id    UUID,
+    CONSTRAINT gesuch_formular_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE gesuch_formular_aud
+    ADD CONSTRAINT FK_gesuch_formular_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE gesuch
+(
+    id                               UUID         NOT NULL,
+    timestamp_erstellt               TIMESTAMP    NOT NULL,
+    timestamp_mutiert                TIMESTAMP    NOT NULL,
+    user_erstellt                    VARCHAR(255) NOT NULL,
+    user_mutiert                     VARCHAR(255) NOT NULL,
+    version                          BIGINT       NOT NULL,
     gesuch_nummer                     INTEGER      NOT NULL,
     gesuch_status                     VARCHAR(255) NOT NULL,
     gesuch_status_aenderung_datum     TIMESTAMP    NOT NULL,
     gesuchsperiode_id                 UUID         NOT NULL,
     fall_id                           UUID         NOT NULL,
-    person_in_ausbildung_container_id UUID,
-    ausbildung_container_id           UUID,
-    familiensituation_container_id    UUID,
-    PRIMARY KEY (id)
+    gesuch_formular_freigabe_copy_id UUID,
+    gesuch_formular_to_work_with_id  UUID,
+    CONSTRAINT gesuch_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE gesuch
@@ -555,38 +477,33 @@ ALTER TABLE gesuch
             REFERENCES fall (id);
 
 ALTER TABLE gesuch
-    ADD CONSTRAINT FK_gesuch_person_in_ausbildung_container_id
-        FOREIGN KEY (person_in_ausbildung_container_id)
-            REFERENCES person_in_ausbildung_container (id);
+    ADD CONSTRAINT FK_gesuch_gesuch_formular_freigabe_copy_id
+        FOREIGN KEY (gesuch_formular_freigabe_copy_id)
+            REFERENCES gesuch_formular (id);
 
 ALTER TABLE gesuch
-    ADD CONSTRAINT FK_gesuch_ausbildung_container_id
-        FOREIGN KEY (ausbildung_container_id)
-            REFERENCES ausbildung_container (id);
-
-ALTER TABLE gesuch
-    ADD CONSTRAINT FK_gesuch_familiensituation_container_id
-        FOREIGN KEY (familiensituation_container_id)
-            REFERENCES familiensituation_container (id);
+    ADD CONSTRAINT FK_gesuch_gesuch_formular_to_work_with_id
+        FOREIGN KEY (gesuch_formular_to_work_with_id)
+            REFERENCES gesuch_formular (id);
 
 CREATE TABLE gesuch_aud
 (
-    id                                UUID    NOT NULL,
-    rev                               INTEGER NOT NULL,
-    revtype                           SMALLINT,
-    timestamp_erstellt                TIMESTAMP,
-    timestamp_mutiert                 TIMESTAMP,
-    user_erstellt                     VARCHAR(255),
-    user_mutiert                      VARCHAR(255),
-    gesuch_nummer                     INTEGER,
-    gesuch_status                     VARCHAR(255),
-    gesuch_status_aenderung_datum     TIMESTAMP,
-    gesuchsperiode_id                 UUID,
-    fall_id                           UUID,
-    person_in_ausbildung_container_id UUID,
-    ausbildung_container_id           UUID,
-    familiensituation_container_id    UUID,
-    PRIMARY KEY (id, rev)
+    id                               UUID    NOT NULL,
+    rev                              INTEGER NOT NULL,
+    revtype                          SMALLINT,
+    timestamp_erstellt               TIMESTAMP,
+    timestamp_mutiert                TIMESTAMP,
+    user_erstellt                    VARCHAR(255),
+    user_mutiert                     VARCHAR(255),
+    version                          BIGINT,
+    gesuch_nummer                    INTEGER,
+    gesuch_status                    VARCHAR(255),
+    gesuch_status_aenderung_datum    TIMESTAMP,
+    gesuchsperiode_id                UUID,
+    fall_id                          UUID,
+    gesuch_formular_freigabe_copy_id UUID,
+    gesuch_formular_to_work_with_id  UUID,
+    CONSTRAINT gesuch_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE gesuch_aud
@@ -607,8 +524,15 @@ CREATE TABLE lebenslauf_item
     name               VARCHAR(255) NOT NULL,
     von                DATE         NOT NULL,
     bis                DATE         NOT NULL,
-    PRIMARY KEY (id)
+    wohnsitz           VARCHAR(255) NOT NULL,
+    gesuch_formular_id UUID         NOT NULL,
+    CONSTRAINT lebenslauf_item_pk PRIMARY KEY (id)
 );
+
+ALTER TABLE lebenslauf_item
+    ADD CONSTRAINT FK_lebenslauf_item_gesuch_fomular_id
+        FOREIGN KEY (gesuch_formular_id)
+            REFERENCES gesuch_formular (id);
 
 CREATE TABLE lebenslauf_item_aud
 (
@@ -625,61 +549,13 @@ CREATE TABLE lebenslauf_item_aud
     name               VARCHAR(255),
     von                DATE,
     bis                DATE,
-    PRIMARY KEY (id, rev)
+    wohnsitz           VARCHAR(255),
+    gesuch_formular_id UUID,
+    CONSTRAINT lebenslauf_item_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE lebenslauf_item_aud
     ADD CONSTRAINT FK_lebenslauf_item_aud_revinfo
-        FOREIGN KEY (rev)
-            REFERENCES revinfo (rev);
-
-CREATE TABLE lebenslauf_item_container
-(
-    id                    UUID         NOT NULL,
-    timestamp_erstellt    TIMESTAMP    NOT NULL,
-    timestamp_mutiert     TIMESTAMP    NOT NULL,
-    user_erstellt         VARCHAR(255) NOT NULL,
-    user_mutiert          VARCHAR(255) NOT NULL,
-    version               BIGINT       NOT NULL,
-    gesuch_id             UUID         NOT NULL,
-    lebenslauf_item_gs_id UUID,
-    lebenslauf_item_sb_id UUID,
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE lebenslauf_item_container
-    ADD CONSTRAINT FK_lebenslauf_item_container_gesuch_id
-        FOREIGN KEY (gesuch_id)
-            REFERENCES gesuch (id);
-
-ALTER TABLE lebenslauf_item_container
-    ADD CONSTRAINT FK_lebenslauf_item_container_lebenslauf_item_gs_id
-        FOREIGN KEY (lebenslauf_item_gs_id)
-            REFERENCES lebenslauf_item (id);
-
-ALTER TABLE lebenslauf_item_container
-    ADD CONSTRAINT FK_ausbildung_container_ausbildung_sb_id
-        FOREIGN KEY (lebenslauf_item_sb_id)
-            REFERENCES lebenslauf_item (id);
-
-CREATE TABLE lebenslauf_item_container_aud
-(
-    id                    UUID    NOT NULL,
-    rev                   INTEGER NOT NULL,
-    revtype               SMALLINT,
-    timestamp_erstellt    TIMESTAMP,
-    timestamp_mutiert     TIMESTAMP,
-    user_erstellt         VARCHAR(255),
-    user_mutiert          VARCHAR(255),
-    version               BIGINT,
-    gesuch_id             UUID,
-    lebenslauf_item_gs_id UUID,
-    lebenslauf_item_sb_id UUID,
-    PRIMARY KEY (id, rev)
-);
-
-ALTER TABLE lebenslauf_item_container_aud
-    ADD CONSTRAINT FK_lebenslauf_item_container_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
@@ -700,8 +576,14 @@ CREATE TABLE eltern
     sozialhilfebeitraege_ausbezahlt BOOLEAN      NOT NULL,
     ausweisb_fluechtling            BOOLEAN      NOT NULL,
     ergaenzungsleistung_ausbezahlt  BOOLEAN      NOT NULL,
-    PRIMARY KEY (id)
+    gesuch_formular_id              UUID         NOT NULL,
+    CONSTRAINT eltern_pk PRIMARY KEY (id)
 );
+
+ALTER TABLE eltern
+    ADD CONSTRAINT FK_eltern_gesuch_fomular_id
+        FOREIGN KEY (gesuch_formular_id)
+            REFERENCES gesuch_formular (id);
 
 CREATE TABLE eltern_aud
 (
@@ -722,62 +604,12 @@ CREATE TABLE eltern_aud
     sozialhilfebeitraege_ausbezahlt BOOLEAN,
     ausweisb_fluechtling            BOOLEAN,
     ergaenzungsleistung_ausbezahlt  BOOLEAN,
-    PRIMARY KEY (id, rev)
+    gesuch_formular_id              UUID,
+    CONSTRAINT eltern_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE eltern_aud
     ADD CONSTRAINT FK_eltern_aud_revinfo
-        FOREIGN KEY (rev)
-            REFERENCES revinfo (rev);
-
-CREATE TABLE eltern_container
-(
-    id                 UUID         NOT NULL,
-    timestamp_erstellt TIMESTAMP    NOT NULL,
-    timestamp_mutiert  TIMESTAMP    NOT NULL,
-    user_erstellt      VARCHAR(255) NOT NULL,
-    user_mutiert       VARCHAR(255) NOT NULL,
-    version            BIGINT       NOT NULL,
-    gesuch_id          UUID         NOT NULL,
-    eltern_gs_id       UUID,
-    eltern_sb_id       UUID,
-    PRIMARY KEY (id)
-);
-
-ALTER TABLE eltern_container
-    ADD CONSTRAINT FK_eltern_container_eltern_gs_id
-        FOREIGN KEY (eltern_gs_id)
-            REFERENCES eltern (id);
-
-ALTER TABLE eltern_container
-    ADD CONSTRAINT FK_eltern_container_eltern_sb_id
-        FOREIGN KEY (eltern_sb_id)
-            REFERENCES eltern (id);
-
-ALTER TABLE eltern_container
-    ADD CONSTRAINT FK_eltern_container_gesuch_id
-        FOREIGN KEY (gesuch_id)
-            REFERENCES gesuch (id);
-
-CREATE TABLE eltern_container_aud
-(
-    id                 UUID    NOT NULL,
-    rev                INTEGER NOT NULL,
-    revtype            SMALLINT,
-    timestamp_erstellt TIMESTAMP,
-    timestamp_mutiert  TIMESTAMP,
-    user_erstellt      VARCHAR(255),
-    user_mutiert       VARCHAR(255),
-    version            BIGINT,
-    gesuch_id          UUID,
-    eltern_gs_id       UUID,
-    eltern_sb_id       UUID,
-
-    PRIMARY KEY (id, rev)
-);
-
-ALTER TABLE eltern_container_aud
-    ADD CONSTRAINT FK_eltern_container_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
@@ -791,7 +623,7 @@ CREATE TABLE gesuch_dokument
     version            BIGINT       NOT NULL,
     gesuch_id          UUID         NOT NULL,
     dokument_typ       VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    CONSTRAINT gesuch_dokument_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE gesuch_dokument
@@ -810,7 +642,7 @@ CREATE TABLE gesuch_dokument_aud
     user_mutiert       VARCHAR(255),
     gesuch_id          UUID,
     dokument_typ       VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT gesuch_dokument_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE gesuch_dokument_aud
@@ -830,7 +662,7 @@ CREATE TABLE dokument
     filename           VARCHAR(255) NOT NULL,
     filepfad           VARCHAR(255) NOT NULL,
     filesize           VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    CONSTRAINT dokument_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE dokument
@@ -851,7 +683,7 @@ CREATE TABLE dokument_aud
     filename           VARCHAR(255),
     filepfad           VARCHAR(255),
     filesize           VARCHAR(255),
-    PRIMARY KEY (id, rev)
+    CONSTRAINT dokument_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE dokument_aud
