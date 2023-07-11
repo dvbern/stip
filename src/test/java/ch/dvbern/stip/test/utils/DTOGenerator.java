@@ -94,4 +94,20 @@ public class DTOGenerator {
         gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
         return gesuchUpdatDTO;
     }
+
+    public static GesuchUpdateDtoSpec prepareGesuchUpdateForPartner() {
+        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        var partner = new PartnerUpdateDtoSpec();
+        partner.setAdresse(prepareAdresseUpdate());
+        partner.setGeburtsdatum(LocalDate.of(2002, 12, 1));
+        partner.setNachname("Testname");
+        partner.setVorname("Testvorname");
+        partner.setSozialversicherungsnummer("756.0000.0000.05");
+        partner.setJahreseinkommen(new BigDecimal(100000));
+        gesuchformularToWorkWith.setPartner(partner);
+        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+        return gesuchUpdatDTO;
+    }
+
 }
