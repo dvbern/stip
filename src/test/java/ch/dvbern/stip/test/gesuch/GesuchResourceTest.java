@@ -1,6 +1,5 @@
 package ch.dvbern.stip.test.gesuch;
 
-import ch.dvbern.stip.api.personinausbildung.type.Wohnsitz;
 import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.test.dto.*;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
@@ -8,7 +7,6 @@ import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
@@ -69,6 +67,35 @@ public class GesuchResourceTest {
                 .then()
                 .assertThat()
                 .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(4)
+    void testUpdateGesuchAusbildungEndpoint() {
+        var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
+
+
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    private GesuchUpdateDtoSpec prepareGesuchUpdateForAusbildung() {
+        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        var ausbildung = new AusbildungUpdateDtoSpec();
+        ausbildung.setAusbildungBegin("01.2022");
+        ausbildung.setAusbildungEnd("02.2022");
+        ausbildung.setAusbildungsland(AusbildungslandDtoSpec.SCHWEIZ);
+        ausbildung.setAusbildungNichtGefunden(false);
+        ausbildung.setPensum(AusbildungsPensumDtoSpec.VOLLZEIT);
+        ausbildung.setAusbildungsgangId(UUID.fromString("3a8c2023-f29e-4466-a2d7-411a7d032f42"));
+        ausbildung.setAusbildungstaetteId(UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"));
+        ausbildung.setFachrichtung("test");
+        gesuchformularToWorkWith.setAusbildung(ausbildung);
+        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+        return gesuchUpdatDTO;
     }
 
     // Not working, cannot override mapping in collection with mapstruct
