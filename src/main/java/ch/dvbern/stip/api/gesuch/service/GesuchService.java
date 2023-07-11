@@ -45,9 +45,9 @@ public class GesuchService {
     }
 
     @Transactional
-    public void updateGesuch(UUID gesuchContainerId, GesuchUpdateDto gesuchUpdateDto) {
-        var gesuchContainer = gesuchRepository.findByIdOptional(gesuchContainerId).orElseThrow(NotFoundException::new);
-        gesuchMapper.partialUpdate(gesuchUpdateDto, gesuchContainer);
+    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+        var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
     }
 
 

@@ -516,7 +516,6 @@ components:
       type: string
     Adresse:
       required:
-        - id
         - land
         - strasse
         - plz
@@ -537,38 +536,6 @@ components:
           type: string
         ort:
           type: string
-    Ausbildung:
-      required:
-        - id
-        - fachrichtung
-        - ausbildungBegin
-        - ausbildungEnd
-        - pensum
-        - ausbildungsland
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        ausbildungsgangId:
-          $ref: '#/components/schemas/UUID'
-        ausbildungstaetteId:
-          $ref: '#/components/schemas/UUID'
-        ausbildungsland:
-          $ref: '#/components/schemas/Ausbildungsland'
-        alternativeAusbildungsgang:
-          type: string
-        alternativeAusbildungstaette:
-          type: string
-        fachrichtung:
-          type: string
-        ausbildungNichtGefunden:
-          type: boolean
-        ausbildungBegin:
-          type: string
-        ausbildungEnd:
-          type: string
-        pensum:
-          $ref: '#/components/schemas/AusbildungsPensum'
     Ausbildungsgang:
       required:
         - id
@@ -645,132 +612,6 @@ components:
           type: integer
         mandant:
           type: string
-    Familiensituation:
-      required:
-        - id
-        - elternVerheiratetZusammen
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        elternVerheiratetZusammen:
-          type: boolean
-        elternteilVerstorben:
-          type: boolean
-        elternteilUnbekanntVerstorben:
-          type: boolean
-        gerichtlicheAlimentenregelung:
-          type: boolean
-        mutterUnbekanntVerstorben:
-          $ref: '#/components/schemas/ElternAbwesenheitsGrund'
-        mutterUnbekanntGrund:
-          $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        mutterWiederverheiratet:
-          type: boolean
-        vaterUnbekanntVerstorben:
-          $ref: '#/components/schemas/ElternAbwesenheitsGrund'
-        vaterUnbekanntGrund:
-          $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        vaterWiederverheiratet:
-          type: boolean
-        sorgerecht:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-        obhut:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-        obhutMutter:
-          type: number
-        obhutVater:
-          type: number
-        werZahltAlimente:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-    Gesuchsperiode:
-      required:
-        - id
-        - gueltigAb
-        - gueltigBis
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-        einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
-          $ref: '#/components/schemas/LocalDate'
-    Land:
-      type: object
-      properties:
-        landCode:
-          type: string
-        landDE:
-          type: string
-        landFR:
-          type: string
-    PersonInAusbildung:
-      required:
-        - id
-        - adresse
-        - sozialversicherungsnummer
-        - name
-        - vorname
-        - anrede
-        - identischerZivilrechtlicherWohnsitz
-        - email
-        - telefonnummer
-        - geburtsdatum
-        - nationalitaet
-        - wohnsitz
-        - sozialhilfebeitraege
-        - quellenbesteuert
-        - kinder
-        - digitaleKommunikation
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-        sozialversicherungsnummer:
-          type: string
-        name:
-          type: string
-        vorname:
-          type: string
-        anrede:
-          $ref: '#/components/schemas/Anrede'
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        izvOrt:
-          type: string
-        izvPLZ:
-          type: string
-        email:
-          type: string
-        telefonnummer:
-          type: string
-        geburtsdatum:
-          $ref: '#/components/schemas/LocalDate'
-        nationalitaet:
-          $ref: '#/components/schemas/Land'
-        heimatort:
-          type: string
-        niederlassungsstatus:
-          $ref: '#/components/schemas/Niederlassungsstatus'
-        zivilstand:
-          $ref: '#/components/schemas/Zivilstand'
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        sozialhilfebeitraege:
-          type: boolean
-        quellenbesteuert:
-          type: boolean
-        kinder:
-          type: boolean
-        digitaleKommunikation:
-          type: boolean
     GesuchsperiodeCreate:
       type: object
       properties:
@@ -797,8 +638,6 @@ components:
       type: string
     AusbildungUpdate:
       required:
-        - ausbildungsgangId
-        - ausbildungstaetteId
         - ausbildungsland
         - fachrichtung
         - ausbildungBegin
@@ -808,153 +647,68 @@ components:
       properties:
         ausbildungsgangId:
           $ref: '#/components/schemas/UUID'
+          description: |
+            Required wenn andere ausbildungNichtGefunden = false
         ausbildungstaetteId:
           $ref: '#/components/schemas/UUID'
+          description: |
+            Required wenn andere ausbildungNichtGefunden = false
         ausbildungsland:
           $ref: '#/components/schemas/Ausbildungsland'
         alternativeAusbildungsgang:
+          description: |
+            Required wenn andere ausbildungNichtGefunden = true
           type: string
         alternativeAusbildungstaette:
+          description: Required wenn andere ausbildungNichtGefunden = true
           type: string
         fachrichtung:
           type: string
         ausbildungNichtGefunden:
           type: boolean
         ausbildungBegin:
+          description: Datum im Format mm.YYYY
           type: string
         ausbildungEnd:
+          description: Datum im Format mm.YYYY
           type: string
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
-    PersonInAusbildungUpdate:
-      required:
-        - adresse
-        - sozialversicherungsnummer
-        - name
-        - vorname
-        - anrede
-        - identischerZivilrechtlicherWohnsitz
-        - email
-        - telefonnummer
-        - geburtsdatum
-        - nationalitaet
-        - wohnsitz
-        - sozialhilfebeitraege
-        - quellenbesteuert
-        - kinder
-        - digitaleKommunikation
-      type: object
-      properties:
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-        sozialversicherungsnummer:
-          type: string
-        name:
-          type: string
-        vorname:
-          type: string
-        anrede:
-          $ref: '#/components/schemas/Anrede'
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        izvOrt:
-          type: string
-        izvPLZ:
-          type: string
-        email:
-          type: string
-        telefonnummer:
-          type: string
-        geburtsdatum:
-          $ref: '#/components/schemas/LocalDate'
-        nationalitaet:
-          $ref: '#/components/schemas/Land'
-        heimatort:
-          type: string
-        niederlassungsstatus:
-          $ref: '#/components/schemas/Niederlassungsstatus'
-        zivilstand:
-          $ref: '#/components/schemas/Zivilstand'
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        sozialhilfebeitraege:
-          type: boolean
-        quellenbesteuert:
-          type: boolean
-        kinder:
-          type: boolean
-        digitaleKommunikation:
-          type: boolean
-    LebenslaufItem:
-      title: Root Type for Lebenslauf
-      description: ''
-      required:
-        - lebenslaufTyp
-        - name
-        - lebenslaufSubtyp
-        - bis
-        - von
-        - id
-        - wohnsitz
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        name:
-          type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        lebenslaufTyp:
-          $ref: '#/components/schemas/LebenslaufTyp'
-        lebenslaufSubtyp:
-          type: string
-        bis:
-          type: string
-        von:
-          type: string
-        copyOfId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-    LebenslaufTyp:
-      enum:
-        - AUSBILDUNG
-        - TAETIGKEIT
-      type: string
     LebenslaufItemUpdate:
       title: Root Type for Lebenslauf
       description: ''
       required:
-        - type
-        - name
-        - subtype
-        - dateEnd
-        - dateStart
+        - beschreibung
+        - bis
+        - von
         - wohnsitz
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/LebenslaufTyp'
-        name:
-          type: string
-        subtype:
-          type: string
-        dateStart:
-          type: string
-        dateEnd:
-          type: string
         wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
+          $ref: '#/components/schemas/WohnsitzKanton'
         id:
           $ref: '#/components/schemas/UUID'
           description: ''
+        beschreibung:
+          type: string
+        bildungsart:
+          $ref: '#/components/schemas/Bildungsart'
+          description: Required wenn taetigkeitsart = null
+        taetigskeitsart:
+          $ref: '#/components/schemas/Taetigskeitsart'
+          description: Required wenn bildungsart = null
+        von:
+          description: Datum im Format mm.YYYY
+          type: string
+        bis:
+          description: Datum im Format mm.YYYY
+          type: string
     FamiliensituationUpdate:
       required:
         - elternVerheiratetZusammen
       type: object
       properties:
         elternVerheiratetZusammen:
-          type: boolean
-        elternteilVerstorben:
           type: boolean
         elternteilUnbekanntVerstorben:
           type: boolean
@@ -977,164 +731,14 @@ components:
         obhut:
           $ref: '#/components/schemas/Elternschaftsteilung'
         obhutMutter:
+          description: Required nur wenn obhut = GEMEINSAM
           type: number
         obhutVater:
+          description: Required nur wenn obhut = GEMEINSAM
           type: number
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
-    Eltern:
-      title: Root Type for Eltern
-      description: ''
-      required:
-        - adresse
-        - id
-        - ausweisbFluechtling
-        - ergaenzungsleistungAusbezahlt
-        - geburtsdatum
-        - identischerZivilrechtlicherWohnsitz
-        - name
-        - sozialhilfebeitraegeAusbezahlt
-        - sozialversicherungsnummer
-        - telefonnummer
-        - vorname
-        - geschlecht
-      type: object
-      properties:
-        name:
-          type: string
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-          properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
-            id:
-              type: string
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        telefonnummer:
-          type: string
-        sozialversicherungsnummer:
-          type: string
-        geburtsdatum:
-          format: date
-          type: string
-        sozialhilfebeitraegeAusbezahlt:
-          type: boolean
-        ausweisbFluechtling:
-          type: boolean
-        ergaenzungsleistungAusbezahlt:
-          type: boolean
-        id:
-          $ref: '#/components/schemas/UUID'
-        geschlecht:
-          $ref: '#/components/schemas/Anrede'
-        copyOfId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-    ElternUpdate:
-      title: Root Type for Eltern
-      description: ''
-      required:
-        - adresse
-        - ausweisbFluechtling
-        - ergaenzungsleistungAusbezahlt
-        - geburtsdatum
-        - identischerZivilrechtlicherWohnsitz
-        - name
-        - sozialhilfebeitraegeAusbezahlt
-        - sozialversicherungsnummer
-        - telefonnummer
-        - vorname
-        - geschlecht
-      type: object
-      properties:
-        name:
-          type: string
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-          properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
-            id:
-              type: string
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        telefonnummer:
-          type: string
-        sozialversicherungsnummer:
-          type: string
-        geburtsdatum:
-          format: date
-          type: string
-        sozialhilfebeitraegeAusbezahlt:
-          type: boolean
-        ausweisbFluechtling:
-          type: boolean
-        ergaenzungsleistungAusbezahlt:
-          type: boolean
-        geschlecht:
-          $ref: '#/components/schemas/Anrede'
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-    Geschwister:
-      title: Root Type for Geschwister
-      description: ''
-      required:
-        - id
-        - wohnsitz
-        - vorname
-        - name
-        - geburtsdatum
-        - ausbildungssituation
-      type: object
-      properties:
-        name:
-          type: string
-        vorname:
-          type: string
-        geburtsdatum:
-          format: date
-          type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        ausbildungssituation:
-          $ref: '#/components/schemas/Ausbildungssituation'
-        id:
-          $ref: '#/components/schemas/UUID'
-        wohnsitzAnteilMutter:
-          description: ''
-          type: number
-        wohnsitzAnteilVater:
-          description: ''
-          type: number
-        copyOfId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
+          description: Required nur wenn gerichtlicheAlimentenregelung = true
     Ausbildungssituation:
       description: ''
       enum:
@@ -1149,17 +753,16 @@ components:
       required:
         - wohnsitz
         - vorname
-        - name
+        - nachname
         - geburtsdatum
         - ausbildungssituation
       type: object
       properties:
-        name:
-          type: string
         vorname:
           type: string
         geburtsdatum:
           format: date
+          description: dd.MM.YYYY
           type: string
         wohnsitz:
           $ref: '#/components/schemas/Wohnsitz'
@@ -1168,42 +771,17 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         wohnsitzAnteilMutter:
-          description: ''
+          description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
         wohnsitzAnteilVater:
-          description: ''
+          description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
-    Partner:
-      required:
-        - id
-        - adresse
-        - name
-        - vorname
-        - geburtsdatum
-        - jahreseinkommen
-        - sozialversicherungsnummer
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-        name:
-          type: string
-        vorname:
-          type: string
-        geburtsdatum:
-          $ref: '#/components/schemas/LocalDate'
-        jahreseinkommen:
-          description: ''
-          type: string
-        sozialversicherungsnummer:
-          description: ''
+        nachname:
           type: string
     PartnerUpdate:
       required:
         - adresse
-        - name
+        - nachname
         - vorname
         - geburtsdatum
         - jahreseinkommen
@@ -1212,69 +790,35 @@ components:
       properties:
         adresse:
           $ref: '#/components/schemas/Adresse'
-        name:
-          type: string
         vorname:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
+          description: dd.MM.YYYY
         jahreseinkommen:
           description: ''
-          type: string
+          type: number
         sozialversicherungsnummer:
           description: ''
           type: string
-    Kind:
-      title: Root Type for Geschwister
-      description: ''
-      required:
-        - id
-        - wohnsitz
-        - vorname
-        - name
-        - geburtsdatum
-        - ausbildungssituation
-      type: object
-      properties:
-        name:
+        nachname:
           type: string
-        vorname:
-          type: string
-        geburtsdatum:
-          format: date
-          type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        ausbildungssituation:
-          $ref: '#/components/schemas/Ausbildungssituation'
-        id:
-          $ref: '#/components/schemas/UUID'
-        wohnsitzAnteilMutter:
-          description: ''
-          type: number
-        wohnsitzAnteilVater:
-          description: ''
-          type: number
-        copyOfId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
     KindUpdate:
       title: Root Type for Geschwister
       description: ''
       required:
         - wohnsitz
         - vorname
-        - name
+        - nachname
         - geburtsdatum
         - ausbildungssituation
       type: object
       properties:
-        name:
-          type: string
         vorname:
           type: string
         geburtsdatum:
           format: date
+          description: dd.MM.YYYY
           type: string
         wohnsitz:
           $ref: '#/components/schemas/Wohnsitz'
@@ -1283,53 +827,32 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         wohnsitzAnteilMutter:
-          description: ''
+          description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
         wohnsitzAnteilVater:
-          description: ''
+          description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
+        nachname:
+          type: string
     Auszahlung:
       title: Root Type for Auszahlung
       description: ''
-      required:
-        - adresse
-        - iban
-        - name
-        - vorname
-        - kontoinhaberin
-        - id
       type: object
-      properties:
-        kontoinhaberin:
-          $ref: '#/components/schemas/Kontoinhaberin'
-        name:
-          type: string
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
+      allOf:
+        -
+          required:
+            - id
+          type: object
           properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
-        iban:
-          type: string
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
+            id:
+              $ref: '#/components/schemas/UUID'
+              description: ''
+        -
+          $ref: '#/components/schemas/AuszahlungUpdate'
     Kontoinhaberin:
       description: ''
       enum:
-        - GESUCHSTELLERIN
+        - GESUCHSTELLER
         - VATER
         - MUTTER
         - SOZIALDIENST_INSTITUTION
@@ -1341,15 +864,13 @@ components:
       required:
         - adresse
         - iban
-        - name
+        - nachname
         - vorname
         - kontoinhaberin
       type: object
       properties:
         kontoinhaberin:
           $ref: '#/components/schemas/Kontoinhaberin'
-        name:
-          type: string
         vorname:
           type: string
         adresse:
@@ -1368,6 +889,8 @@ components:
             land:
               type: string
         iban:
+          type: string
+        nachname:
           type: string
     GesuchFormular:
       required:
@@ -1424,11 +947,6 @@ components:
         partner:
           $ref: '#/components/schemas/PartnerUpdate'
           description: ''
-        kindContainers:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/KindUpdate'
         auszahlung:
           $ref: '#/components/schemas/AuszahlungUpdate'
           description: ''
@@ -1447,6 +965,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LebenslaufItemUpdate'
+        kinds:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/KindUpdate'
     Gesuch:
       description: ''
       required:
@@ -1494,8 +1017,343 @@ components:
       type: object
       properties:
         gesuch_formular_to_work_with:
-          $ref: '#/components/schemas/GesuchFormular'
+          $ref: '#/components/schemas/GesuchFormularUpdate'
           description: ''
+    Land:
+      enum:
+        - CH
+        - DE
+        - FR
+        - IT
+      type: string
+    Sprache:
+      description: ''
+      enum:
+        - DEUTSCH
+        - FRANZOESISCH
+      type: string
+    PersonInAusbildungUpdate:
+      required:
+        - adresse
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - anrede
+        - identischerZivilrechtlicherWohnsitz
+        - email
+        - telefonnummer
+        - geburtsdatum
+        - nationalitaet
+        - wohnsitz
+        - sozialhilfebeitraege
+        - quellenbesteuert
+        - digitaleKommunikation
+        - korrespondenzSprache
+      type: object
+      properties:
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        sozialversicherungsnummer:
+          type: string
+        vorname:
+          type: string
+        anrede:
+          $ref: '#/components/schemas/Anrede'
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        email:
+          type: string
+        telefonnummer:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        nationalitaet:
+          $ref: '#/components/schemas/Land'
+        heimatort:
+          description: Required nur wenn Land = CH
+          type: string
+        niederlassungsstatus:
+          $ref: '#/components/schemas/Niederlassungsstatus'
+          description: Required wenn Nationalitaet != CH
+        zivilstand:
+          $ref: '#/components/schemas/Zivilstand'
+        wohnsitz:
+          $ref: '#/components/schemas/Wohnsitz'
+        sozialhilfebeitraege:
+          type: boolean
+        quellenbesteuert:
+          type: boolean
+        digitaleKommunikation:
+          type: boolean
+        vormundschaft:
+          description: Required nur wenn Land = CH
+          type: boolean
+        nachname:
+          type: string
+        identischerZivilrechtlicherWohnsitzOrt:
+          description: Required wenn identischerZivilrechtlicherWohnsitz = false
+          type: string
+        identischerZivilrechtlicherWohnsitzPLZ:
+          description: Required wenn identischerZivilrechtlicherWohnsitz = false
+          type: string
+        korrespondenzSprache:
+          $ref: '#/components/schemas/Sprache'
+          description: ''
+    WohnsitzKanton:
+      description: ''
+      enum:
+        - AG
+        - AI
+        - AR
+        - BL
+        - BS
+        - BE
+        - FR
+        - GE
+        - GL
+        - GR
+        - JU
+        - LU
+        - NE
+        - NW
+        - OW
+        - SG
+        - SH
+        - SZ
+        - SO
+        - TI
+        - TG
+        - UR
+        - VD
+        - VS
+        - ZG
+        - ZH
+        - AUSLAND
+      type: string
+    Ausbildung:
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+        -
+          $ref: '#/components/schemas/AusbildungUpdate'
+    Familiensituation:
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+        -
+          $ref: '#/components/schemas/FamiliensituationUpdate'
+    Taetigskeitsart:
+      enum:
+        - ERWERBSTAETIGKEIT
+        - ANDERE_TAETIGKEIT
+      type: string
+    Bildungsart:
+      description: ''
+      enum:
+        - BERUFSVORBEREITENDES_SCHULJAHR_VORLEHRE
+        - GYMNASIALE_MATURITAETSSCHULEN
+        - SCHULEN_FUER_ALLGEMEINBILDUNG
+        - VOLLZEITBERUFSSCHULEN
+        - LEHREN_ANLEHREN
+        - BERUFSMATURITAET_NACH_LEHRE
+        - HOEHERE_BERUFSBILDUNG
+        - FACHHOCHSCHULEN
+        - UNIVERSITAETEN_ETH
+      type: string
+    PersonInAusbildung:
+      type: object
+      allOf:
+        -
+          required:
+            - id
+            - adresse.id
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+        -
+          $ref: '#/components/schemas/PersonInAusbildungUpdate'
+    Gesuchsperiode:
+      required:
+        - id
+        - gueltigAb
+        - gueltigBis
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gueltigAb:
+          $ref: '#/components/schemas/LocalDate'
+        gueltigBis:
+          $ref: '#/components/schemas/LocalDate'
+        einreichfrist:
+          $ref: '#/components/schemas/LocalDate'
+        aufschaltdatum:
+          $ref: '#/components/schemas/LocalDate'
+          example: '2022-12-12'
+      example:
+        -
+          id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
+          gueltigAb: '2022-02-01'
+          gueltigBis: '2023-01-31'
+          einreichfrist: '2022-06-30'
+          aufschaltdatum: '2022-06-01'
+        -
+          id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
+          gueltigAb: '2022-02-01'
+          gueltigBis: '2023-01-31'
+          einreichfrist: '2022-06-30'
+          aufschaltdatum: '2022-06-01'
+    ElternTyp:
+      description: ''
+      enum:
+        - VATER
+        - MUTTER
+      type: string
+    ElternUpdate:
+      title: Root Type for Eltern
+      description: ''
+      required:
+        - adresse
+        - ausweisbFluechtling
+        - ergaenzungsleistungAusbezahlt
+        - geburtsdatum
+        - identischerZivilrechtlicherWohnsitz
+        - nachname
+        - sozialhilfebeitraegeAusbezahlt
+        - sozialversicherungsnummer
+        - telefonnummer
+        - vorname
+        - elternTyp
+      type: object
+      properties:
+        vorname:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+          properties:
+            coAdresse:
+              type: string
+            strasse:
+              type: string
+            hausnummer:
+              type: string
+            plz:
+              type: string
+            ort:
+              type: string
+            land:
+              type: string
+            id:
+              type: string
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        identischerZivilrechtlicherWohnsitzOrt:
+          description: Required wenn identischerZivilrechtlicherWohnsitz = false
+          type: string
+        identischerZivilrechtlicherWohnsitzPLZ:
+          description: Required wenn identischerZivilrechtlicherWohnsitz = false
+          type: string
+        telefonnummer:
+          type: string
+        sozialversicherungsnummer:
+          type: string
+        geburtsdatum:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        sozialhilfebeitraegeAusbezahlt:
+          type: boolean
+        ausweisbFluechtling:
+          type: boolean
+        ergaenzungsleistungAusbezahlt:
+          type: boolean
+        id:
+          $ref: '#/components/schemas/UUID'
+          description: ''
+        elternTyp:
+          $ref: '#/components/schemas/ElternTyp'
+        nachname:
+          type: string
+    Eltern:
+      title: Root Type for Eltern
+      description: ''
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            copyOfId:
+              $ref: '#/components/schemas/UUID'
+              description: ''
+        -
+          $ref: '#/components/schemas/ElternUpdate'
+    Geschwister:
+      title: Root Type for Geschwister
+      description: ''
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            copyOfId:
+              $ref: '#/components/schemas/UUID'
+              description: ''
+        -
+          $ref: '#/components/schemas/GeschwisterUpdate'
+    Kind:
+      title: Root Type for Geschwister
+      description: ''
+      required:
+        - id
+      type: object
+      properties:
+        copyOfId:
+          $ref: '#/components/schemas/UUID'
+          description: ''
+    LebenslaufItem:
+      title: Root Type for Lebenslauf
+      description: ''
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            copyOfId:
+              $ref: '#/components/schemas/UUID'
+              description: ''
+        -
+          $ref: '#/components/schemas/LebenslaufItemUpdate'
+    Partner:
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+        -
+          $ref: '#/components/schemas/PartnerUpdate'
   responses:
     Unauthorized:
       content:
