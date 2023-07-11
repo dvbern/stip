@@ -10,10 +10,9 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
-
-import java.time.LocalDate;
 import java.util.UUID;
 
+import static ch.dvbern.stip.test.utils.DTOGenerator.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -61,8 +60,6 @@ public class GesuchResourceTest {
     @Order(3)
     void testUpdateGesuchPersonInAusbildungEndpoint() {
         var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
-
-
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
@@ -73,29 +70,33 @@ public class GesuchResourceTest {
     @Order(4)
     void testUpdateGesuchAusbildungEndpoint() {
         var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
-
-
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
                 .statusCode(Response.Status.ACCEPTED.getStatusCode());
     }
 
-    private GesuchUpdateDtoSpec prepareGesuchUpdateForAusbildung() {
-        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
-        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
-        var ausbildung = new AusbildungUpdateDtoSpec();
-        ausbildung.setAusbildungBegin("01.2022");
-        ausbildung.setAusbildungEnd("02.2022");
-        ausbildung.setAusbildungsland(AusbildungslandDtoSpec.SCHWEIZ);
-        ausbildung.setAusbildungNichtGefunden(false);
-        ausbildung.setPensum(AusbildungsPensumDtoSpec.VOLLZEIT);
-        ausbildung.setAusbildungsgangId(UUID.fromString("3a8c2023-f29e-4466-a2d7-411a7d032f42"));
-        ausbildung.setAusbildungstaetteId(UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"));
-        ausbildung.setFachrichtung("test");
-        gesuchformularToWorkWith.setAusbildung(ausbildung);
-        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
-        return gesuchUpdatDTO;
+    @Test
+    @Order(5)
+    void testUpdateGesuchFamiliensituationEndpoint() {
+        var gesuchUpdatDTO = prepareGesuchUpdateForFamiliensituation();
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(6)
+    void testAllFormularPresent() {
+        var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+                .body()
+                .as(GesuchDtoSpec.class);
+        assertThat(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung(), is(notNullValue()));
+        assertThat(gesuch.getGesuchFormularToWorkWith().getAusbildung(), is(notNullValue()));
+        assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
+
+
     }
 
     // Not working, cannot override mapping in collection with mapstruct
@@ -121,55 +122,5 @@ public class GesuchResourceTest {
         assertThat(gesuche[0].getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
     }
 
-    private GesuchUpdateDtoSpec prepareGesuchUpdateForLebenslauf() {
-        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
-        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
-        var lebenslaufItem = new LebenslaufItemUpdateDtoSpec();
-        lebenslaufItem.setBeschreibung("Test");
-        lebenslaufItem.setBis("02.2022");
-        lebenslaufItem.setVon("01.2022");
-        lebenslaufItem.setTaetigskeitsart(TaetigskeitsartDtoSpec.ERWERBSTAETIGKEIT);
-        lebenslaufItem.setBildungsart(BildungsartDtoSpec.FACHHOCHSCHULEN);
-        lebenslaufItem.setWohnsitz(WohnsitzKantonDtoSpec.BE);
 
-        gesuchformularToWorkWith.getLebenslaufItems().add(lebenslaufItem);
-        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
-        return gesuchUpdatDTO;
-    }
-
-    private GesuchUpdateDtoSpec prepareGesuchUpdateForPersonInAusbildung() {
-        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
-        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
-        var personInAusbildung = new PersonInAusbildungUpdateDtoSpec();
-        var adresseDTO = prepareAdresseUpdate();
-        personInAusbildung.setAdresse(adresseDTO);
-        personInAusbildung.setAnrede(AnredeDtoSpec.HERR);
-        personInAusbildung.setEmail("test@test.ch");
-        personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 10, 10));
-        personInAusbildung.setNachname("Tester");
-        personInAusbildung.setVorname("Prosper");
-        personInAusbildung.setNationalitaet(LandDtoSpec.CH);
-        personInAusbildung.setTelefonnummer("078 888 88 88");
-        personInAusbildung.setDigitaleKommunikation(true);
-        personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
-        personInAusbildung.setKorrespondenzSprache(SpracheDtoSpec.DEUTSCH);
-        personInAusbildung.setSozialhilfebeitraege(false);
-        personInAusbildung.setZivilstand(ZivilstandDtoSpec.LEDIG);
-        personInAusbildung.setSozialversicherungsnummer("756.0000.0000.05");
-        personInAusbildung.setQuellenbesteuert(false);
-        personInAusbildung.setWohnsitz(WohnsitzDtoSpec.ELTERN);
-
-        gesuchformularToWorkWith.setPersonInAusbildung(personInAusbildung);
-        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
-        return gesuchUpdatDTO;
-    }
-
-    private AdresseDtoSpec prepareAdresseUpdate() {
-        var adresseDTO = new AdresseDtoSpec();
-        adresseDTO.setLand(LandDtoSpec.CH);
-        adresseDTO.setPlz("3000");
-        adresseDTO.setOrt("Bern");
-        adresseDTO.setStrasse("Strasse");
-        return adresseDTO;
-    }
 }
