@@ -16,9 +16,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Ausbildungstaette extends AbstractEntity {
+public class Ausbildungsstaette extends AbstractEntity {
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungstaette")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
     private List<Ausbildungsgang> ausbildungsgaenge;
 
     @NotNull

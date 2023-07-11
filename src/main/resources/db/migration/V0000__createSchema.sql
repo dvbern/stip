@@ -210,7 +210,7 @@ ALTER TABLE person_in_ausbildung_aud
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
-CREATE TABLE ausbildungstaette
+CREATE TABLE ausbildungsstaette
 (
     id                 UUID         NOT NULL,
     timestamp_erstellt TIMESTAMP    NOT NULL,
@@ -220,10 +220,10 @@ CREATE TABLE ausbildungstaette
     version            BIGINT       NOT NULL,
     name               VARCHAR(255) NOT NULL,
     ausbildungsland    VARCHAR(255) NOT NULL,
-    CONSTRAINT ausbildungstaette_pk PRIMARY KEY (id)
+    CONSTRAINT ausbildungsstaette_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE ausbildungstaette_aud
+CREATE TABLE ausbildungsstaette_aud
 (
     id                 UUID         NOT NULL,
     rev                INTEGER      NOT NULL,
@@ -234,11 +234,11 @@ CREATE TABLE ausbildungstaette_aud
     user_mutiert       VARCHAR(255),
     name               VARCHAR(255) NOT NULL,
     ausbildungsland    VARCHAR(255) NOT NULL,
-    CONSTRAINT ausbildungstaette_aud_pk PRIMARY KEY (id, rev)
+    CONSTRAINT ausbildungsstaette_aud_pk PRIMARY KEY (id, rev)
 );
 
-ALTER TABLE ausbildungstaette_aud
-    ADD CONSTRAINT FK_ausbildungstaette_aud_revinfo
+ALTER TABLE ausbildungsstaette_aud
+    ADD CONSTRAINT FK_ausbildungsstaette_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
@@ -252,14 +252,14 @@ CREATE TABLE ausbildungsgang
     version              BIGINT       NOT NULL,
     bezeichnung_de       VARCHAR(255) NOT NULL,
     bezeichnung_fr       VARCHAR(255),
-    ausbildungstaette_id UUID         NOT NULL,
+    ausbildungsstaette_id UUID         NOT NULL,
     CONSTRAINT ausbildungsgang_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE ausbildungsgang
-    ADD CONSTRAINT FK_ausbildungsgang_ausbildungstaette_id
-        FOREIGN KEY (ausbildungstaette_id)
-            REFERENCES ausbildungstaette (id);
+    ADD CONSTRAINT FK_ausbildungsgang_ausbildungsstaette_id
+        FOREIGN KEY (ausbildungsstaette_id)
+            REFERENCES ausbildungsstaette (id);
 
 CREATE TABLE ausbildungsgang_aud
 (
@@ -272,7 +272,7 @@ CREATE TABLE ausbildungsgang_aud
     user_mutiert         VARCHAR(255),
     bezeichnung_de       VARCHAR(255),
     bezeichnung_fr       VARCHAR(255),
-    ausbildungstaette_id UUID,
+    ausbildungsstaette_id UUID,
     CONSTRAINT ausbildungsgang_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -290,7 +290,7 @@ CREATE TABLE ausbildung
     user_mutiert                  VARCHAR(255) NOT NULL,
     version                       BIGINT       NOT NULL,
     ausbildungsgang_id            UUID,
-    ausbildungstaette_id          UUID,
+    ausbildungsstaette_id          UUID,
     ausbildungsland               VARCHAR(255) NOT NULL,
     fachrichtung                  VARCHAR(255) NOT NULL,
     pensum                        VARCHAR(255) NOT NULL,
@@ -298,7 +298,7 @@ CREATE TABLE ausbildung
     ausbildung_begin              DATE         NOT NULL,
     ausbildung_end                DATE         NOT NULL,
     alternative_ausbildungsgang   VARCHAR(255),
-    alternative_ausbildungstaette VARCHAR(255),
+    alternative_ausbildungsstaette VARCHAR(255),
     CONSTRAINT ausbildung_pk PRIMARY KEY (id)
 );
 
@@ -308,9 +308,9 @@ ALTER TABLE ausbildung
             REFERENCES ausbildungsgang (id);
 
 ALTER TABLE ausbildung
-    ADD CONSTRAINT FK_ausbildung_ausbildungstaette_id
-        FOREIGN KEY (ausbildungstaette_id)
-            REFERENCES ausbildungstaette (id);
+    ADD CONSTRAINT FK_ausbildung_ausbildungsstaette_id
+        FOREIGN KEY (ausbildungsstaette_id)
+            REFERENCES ausbildungsstaette (id);
 
 CREATE TABLE ausbildung_aud
 (
@@ -323,7 +323,7 @@ CREATE TABLE ausbildung_aud
     user_mutiert                  VARCHAR(255),
     version                       BIGINT,
     ausbildungsgang_id            UUID,
-    ausbildungstaette_id          UUID,
+    ausbildungsstaette_id          UUID,
     ausbildungsland               VARCHAR(255),
     fachrichtung                  VARCHAR(255),
     pensum                        VARCHAR(255),
@@ -331,7 +331,7 @@ CREATE TABLE ausbildung_aud
     ausbildung_begin              DATE,
     ausbildung_end                DATE,
     alternative_ausbildungsgang   VARCHAR(255),
-    alternative_ausbildungstaette VARCHAR(255),
+    alternative_ausbildungsstaette VARCHAR(255),
     CONSTRAINT ausbildung_aud_pk PRIMARY KEY (id, rev)
 );
 

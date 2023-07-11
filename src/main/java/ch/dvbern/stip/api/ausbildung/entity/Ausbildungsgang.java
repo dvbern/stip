@@ -18,8 +18,8 @@ public class Ausbildungsgang extends AbstractEntity {
 
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungstaette_id"), nullable = true)
-    private Ausbildungstaette ausbildungstaette;
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"), nullable = true)
+    private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

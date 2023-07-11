@@ -11,8 +11,8 @@ docs/AusbildungContainer.md
 docs/AusbildungsPensum.md
 docs/Ausbildungsgang.md
 docs/Ausbildungsland.md
-docs/Ausbildungstaette.md
-docs/AusbildungstaetteApi.md
+docs/Ausbildungsstaette.md
+docs/AusbildungsstaetteApi.md
 docs/BenutzerLogin.md
 docs/ConfigurationApi.md
 docs/CreateGesuchsperiode.md
@@ -53,7 +53,7 @@ target/generated-test-sources/ch/dvbern/stip/generated/test/RFC3339DateFormat.ja
 target/generated-test-sources/ch/dvbern/stip/generated/test/ResponseSpecBuilders.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/ServerConfiguration.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/ServerVariable.java
-target/generated-test-sources/ch/dvbern/stip/generated/test/api/AusbildungstaetteApi.java
+target/generated-test-sources/ch/dvbern/stip/generated/test/api/AusbildungsstaetteApi.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/api/ConfigurationApi.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/api/FallApi.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/api/GesuchApi.java
@@ -67,7 +67,7 @@ target/generated-test-sources/ch/dvbern/stip/generated/test/dto/AusbildungContai
 target/generated-test-sources/ch/dvbern/stip/generated/test/dto/AusbildungsPensum.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/dto/Ausbildungsgang.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/dto/Ausbildungsland.java
-target/generated-test-sources/ch/dvbern/stip/generated/test/dto/Ausbildungstaette.java
+target/generated-test-sources/ch/dvbern/stip/generated/test/dto/Ausbildungsstaette.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/dto/BenutzerLogin.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/dto/CreateGesuchsperiode.java
 target/generated-test-sources/ch/dvbern/stip/generated/test/dto/DeploymentConfig.java

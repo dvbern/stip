@@ -23,7 +23,7 @@ public interface AusbildungMapper {
     Ausbildung partialUpdate(AusbildungDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 
     @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
-    @Mapping(source = "ausbildungstaetteId", target = "ausbildungstaette.id")
+    @Mapping(source = "ausbildungsstaetteId", target = "ausbildungsstaette.id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(source = "ausbildungBegin", target = "ausbildungBegin", qualifiedBy = {MonthYearMapper.class, MonthYearToBeginOfMonth.class})
     @Mapping(source = "ausbildungEnd", target = "ausbildungEnd", qualifiedBy = {MonthYearMapper.class, MonthYearToEndOfMonth.class})

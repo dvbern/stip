@@ -25,8 +25,8 @@ public class Ausbildung extends AbstractEntity {
     private Ausbildungsgang ausbildungsgang;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungstaette_id"))
-    private Ausbildungstaette ausbildungstaette;
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsstaette_id"))
+    private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -39,7 +39,7 @@ public class Ausbildung extends AbstractEntity {
 
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column
-    private String AlternativeAusbildungstaette;
+    private String AlternativeAusbildungsstaette;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

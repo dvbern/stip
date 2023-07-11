@@ -243,10 +243,10 @@ paths:
       operationId: getDeploymentConfig
       summary: Returniert der Deployment Configuration.
       description: Gibt zuerueck die Version und Stage aus das Backend
-  /ausbildungstaette:
+  /ausbildungsstaette:
     get:
       tags:
-        - Ausbildungstaette
+        - Ausbildungsstaette
       responses:
         '200':
           content:
@@ -254,7 +254,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Ausbildungstaette'
+                  $ref: '#/components/schemas/Ausbildungsstaette'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -262,8 +262,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungstaetten
-      summary: Returniert alle Ausbildungstaette zur Verfuegung.
+      operationId: getAusbildungsstaetten
+      summary: Returniert alle Ausbildungsstaette zur Verfuegung.
   /gesuchsperiode:
     get:
       tags:
@@ -548,23 +548,6 @@ components:
           type: string
         bezeichnungFr:
           type: string
-    Ausbildungstaette:
-      required:
-        - id
-        - ausbildungsland
-        - name
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        ausbildungsgaenge:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ausbildungsgang'
-        ausbildungsland:
-          $ref: '#/components/schemas/Ausbildungsland'
-        name:
-          type: string
     BenutzerLogin:
       required:
         - username
@@ -649,7 +632,7 @@ components:
           $ref: '#/components/schemas/UUID'
           description: |
             Required wenn andere ausbildungNichtGefunden = false
-        ausbildungstaetteId:
+        ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
           description: |
             Required wenn andere ausbildungNichtGefunden = false
@@ -659,7 +642,7 @@ components:
           description: |
             Required wenn andere ausbildungNichtGefunden = true
           type: string
-        alternativeAusbildungstaette:
+        alternativeAusbildungsstaette:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
         fachrichtung:
@@ -1354,6 +1337,23 @@ components:
               $ref: '#/components/schemas/UUID'
         -
           $ref: '#/components/schemas/PartnerUpdate'
+    Ausbildungsstaette:
+      required:
+        - id
+        - ausbildungsland
+        - name
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ausbildungsgaenge:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ausbildungsgang'
+        ausbildungsland:
+          $ref: '#/components/schemas/Ausbildungsland'
+        name:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -1378,7 +1378,7 @@ components:
       description: Authentication
 tags:
   -
-    name: Ausbildungstaette
+    name: Ausbildungsstaette
   -
     name: Auth
   -
