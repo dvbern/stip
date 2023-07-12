@@ -305,6 +305,7 @@
                                 Bildungsart=ch.dvbern.stip.api.lebenslauf.type.Bildungsart,
                                 Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
                                 LebenslaufTyp=ch.dvbern.stip.api.lebenslauf.type.LebenslaufTyp
+                                Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber
                             </schemaMappings>
                             <configOptions>
                                 <sourceFolder>target/generated-sources</sourceFolder>

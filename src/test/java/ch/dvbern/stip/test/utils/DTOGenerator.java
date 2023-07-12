@@ -110,4 +110,18 @@ public class DTOGenerator {
         return gesuchUpdatDTO;
     }
 
+    public static GesuchUpdateDtoSpec prepareGesuchUpdateForAuszahlung() {
+        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        var auszahlung = new AuszahlungUpdateDtoSpec();
+        auszahlung.setAdresse(prepareAdresseUpdate());
+        auszahlung.setNachname("Testname");
+        auszahlung.setVorname("Testvorname");
+        auszahlung.setIban("IBAN TODO");
+        auszahlung.setKontoinhaber(KontoinhaberDtoSpec.GESUCHSTELLER);
+        gesuchformularToWorkWith.setAuszahlung(auszahlung);
+        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+        return gesuchUpdatDTO;
+    }
+
 }

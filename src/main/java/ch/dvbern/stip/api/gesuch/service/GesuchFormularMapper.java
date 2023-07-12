@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -20,7 +21,8 @@ import org.mapstruct.*;
                         FamiliensituationMapper.class,
                         AusbildungMapper.class,
                         LebenslaufItemMapper.class,
-                        PartnerMapper.class
+                        PartnerMapper.class,
+                        AuszahlungMapper.class
                 })
 public interface GesuchFormularMapper {
     GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);

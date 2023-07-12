@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -54,6 +55,10 @@ public class GesuchFormular extends AbstractEntity {
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
     private Partner partner;
+
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
+    private Auszahlung auszahlung;
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

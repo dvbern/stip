@@ -445,6 +445,50 @@ ALTER TABLE partner_aud
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
+CREATE TABLE auszahlung
+(
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    adresse_id         UUID         NOT NULL,
+    kontoinhaber       VARCHAR(255) NOT NULL,
+    nachname           VARCHAR(255) NOT NULL,
+    vorname            VARCHAR(255) NOT NULL,
+    iban               VARCHAR(255) NOT NULL,
+    CONSTRAINT auszahlung_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE auszahlung
+    ADD CONSTRAINT FK_auszahlung_adresse_id
+        FOREIGN KEY (adresse_id)
+            REFERENCES adresse (id);
+
+CREATE TABLE auszahlung_aud
+(
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    version            BIGINT,
+    adresse_id         UUID,
+    kontoinhaber       VARCHAR(255),
+    nachname           VARCHAR(255),
+    vorname            VARCHAR(255),
+    iban               VARCHAR(255),
+    CONSTRAINT auszahlung_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE auszahlung_aud
+    ADD CONSTRAINT FK_auszahlung_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
 CREATE TABLE gesuch_formular
 (
     id                      UUID         NOT NULL,
@@ -457,6 +501,7 @@ CREATE TABLE gesuch_formular
     ausbildung_id           UUID,
     familiensituation_id    UUID,
     partner_id              UUID,
+    auszahlung_id           UUID,
     CONSTRAINT gesuch_formular_pk PRIMARY KEY (id)
 );
 
@@ -480,6 +525,11 @@ ALTER TABLE gesuch_formular
         FOREIGN KEY (partner_id)
             REFERENCES partner (id);
 
+ALTER TABLE gesuch_formular
+    ADD CONSTRAINT FK_gesuch_formular_auszahlung_id
+        FOREIGN KEY (auszahlung_id)
+            REFERENCES auszahlung (id);
+
 CREATE TABLE gesuch_formular_aud
 (
     id                      UUID    NOT NULL,
@@ -493,6 +543,7 @@ CREATE TABLE gesuch_formular_aud
     ausbildung_id           UUID,
     familiensituation_id    UUID,
     partner_id              UUID,
+    auszahlung_id           UUID,
     CONSTRAINT gesuch_formular_aud_pk PRIMARY KEY (id, rev)
 );
 

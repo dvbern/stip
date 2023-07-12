@@ -243,27 +243,6 @@ paths:
       operationId: getDeploymentConfig
       summary: Returniert der Deployment Configuration.
       description: Gibt zuerueck die Version und Stage aus das Backend
-  /ausbildungsstaette:
-    get:
-      tags:
-        - Ausbildungsstaette
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ausbildungsstaette'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungsstaetten
-      summary: Returniert alle Ausbildungsstaette zur Verfuegung.
   /gesuchsperiode:
     get:
       tags:
@@ -440,6 +419,27 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+  /ausbildungsstaette:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ausbildungsstaette'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungsstaetten
+      summary: Returniert alle Ausbildungsstaette zur Verfuegung.
 components:
   schemas:
     Anrede:
@@ -632,18 +632,11 @@ components:
           $ref: '#/components/schemas/UUID'
           description: |
             Required wenn andere ausbildungNichtGefunden = false
-        ausbildungsstaetteId:
-          $ref: '#/components/schemas/UUID'
-          description: |
-            Required wenn andere ausbildungNichtGefunden = false
         ausbildungsland:
           $ref: '#/components/schemas/Ausbildungsland'
         alternativeAusbildungsgang:
           description: |
             Required wenn andere ausbildungNichtGefunden = true
-          type: string
-        alternativeAusbildungsstaette:
-          description: Required wenn andere ausbildungNichtGefunden = true
           type: string
         fachrichtung:
           type: string
@@ -657,6 +650,13 @@ components:
           type: string
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
+        ausbildungsstaetteId:
+          $ref: '#/components/schemas/UUID'
+          description: |
+            Required wenn andere ausbildungNichtGefunden = false
+        alternativeAusbildungsstaette:
+          description: Required wenn andere ausbildungNichtGefunden = true
+          type: string
     LebenslaufItemUpdate:
       title: Root Type for Lebenslauf
       description: ''
@@ -832,15 +832,6 @@ components:
               description: ''
         -
           $ref: '#/components/schemas/AuszahlungUpdate'
-    Kontoinhaberin:
-      description: ''
-      enum:
-        - GESUCHSTELLER
-        - VATER
-        - MUTTER
-        - SOZIALDIENST_INSTITUTION
-        - ANDERE
-      type: string
     AuszahlungUpdate:
       title: Root Type for Auszahlung
       description: ''
@@ -849,11 +840,9 @@ components:
         - iban
         - nachname
         - vorname
-        - kontoinhaberin
+        - kontoinhaber
       type: object
       properties:
-        kontoinhaberin:
-          $ref: '#/components/schemas/Kontoinhaberin'
         vorname:
           type: string
         adresse:
@@ -875,46 +864,8 @@ components:
           type: string
         nachname:
           type: string
-    GesuchFormular:
-      required:
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        ausbildung:
-          $ref: '#/components/schemas/Ausbildung'
-        auzahlung:
-          $ref: '#/components/schemas/Auszahlung'
-          description: ''
-        familiensituation:
-          $ref: '#/components/schemas/Familiensituation'
-        elterns:
-          description: ''
-          maxItems: 2
-          type: array
-          items:
-            $ref: '#/components/schemas/Eltern'
-        kinds:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/Kind'
-        lebenslaufItems:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItem'
-        partner:
-          $ref: '#/components/schemas/Partner'
-          description: ''
-        personInAusbildung:
-          $ref: '#/components/schemas/PersonInAusbildung'
-        geschwisters:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/Geschwister'
+        kontoinhaber:
+          $ref: '#/components/schemas/Kontoinhaber'
     GesuchFormularUpdate:
       required: []
       type: object
@@ -1354,6 +1305,27 @@ components:
           $ref: '#/components/schemas/Ausbildungsland'
         name:
           type: string
+    Kontoinhaber:
+      description: ''
+      enum:
+        - GESUCHSTELLER
+        - VATER
+        - MUTTER
+        - SOZIALDIENST_INSTITUTION
+        - ANDERE
+      type: string
+    GesuchFormular:
+      type: object
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+        -
+          $ref: '#/components/schemas/GesuchFormularUpdate'
   responses:
     Unauthorized:
       content:

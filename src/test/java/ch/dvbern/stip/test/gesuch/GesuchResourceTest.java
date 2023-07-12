@@ -98,6 +98,16 @@ public class GesuchResourceTest {
 
     @Test
     @Order(7)
+    void testUpdateGesuchAuszahlungEndpoint() {
+        var gesuchUpdatDTO = prepareGesuchUpdateForAuszahlung();
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(8)
     void testAllFormularPresent() {
         var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
@@ -106,6 +116,8 @@ public class GesuchResourceTest {
         assertThat(gesuch.getGesuchFormularToWorkWith().getAusbildung(), is(notNullValue()));
         assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
         assertThat(gesuch.getGesuchFormularToWorkWith().getPartner(), is(notNullValue()));
+        assertThat(gesuch.getGesuchFormularToWorkWith().getAuszahlung(), is(notNullValue()));
+
     }
 
     // Not working, cannot override mapping in collection with mapstruct
