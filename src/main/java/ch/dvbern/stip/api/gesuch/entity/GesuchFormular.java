@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -72,4 +73,9 @@ public class GesuchFormular extends AbstractEntity {
     @JoinColumn(name = "gesuch_formular_id")
     @OrderBy("geburtsdatum")
     private Set<Geschwister> geschwisters = new LinkedHashSet<>();
+
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id")
+    private Set<Eltern> elterns = new LinkedHashSet<>();
 }

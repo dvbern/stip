@@ -47,6 +47,7 @@ public class PersonInAusbildung extends AbstractEntity {
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
     private Adresse adresse;
+
     @NotNull
     @Column(nullable = false)
     private String sozialversicherungsnummer;
@@ -72,11 +73,11 @@ public class PersonInAusbildung extends AbstractEntity {
 
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = true)
-    private String izvOrt;
+    private String identischerZivilrechtlicherWohnsitzOrt;
 
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
     @Column(nullable = true)
-    private String izvPLZ;
+    private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

@@ -130,7 +130,7 @@ public class DTOGenerator {
         var geschwister = new GeschwisterUpdateDtoSpec();
         geschwister.setNachname("Geschwisternachname");
         geschwister.setVorname("Geschwistervorname");
-        geschwister.setGeburtsdatum(LocalDate.of(2001,1,1));
+        geschwister.setGeburtsdatum(LocalDate.of(2001, 1, 1));
         geschwister.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
         geschwister.setWohnsitz(WohnsitzDtoSpec.ELTERN);
         geschwister.setWohnsitzAnteilMutter(new BigDecimal(40));
@@ -141,4 +141,25 @@ public class DTOGenerator {
         return gesuchUpdatDTO;
     }
 
+    public static GesuchUpdateDtoSpec prepareGesuchUpdateForEltern() {
+        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        var eltern = new ElternUpdateDtoSpec();
+        eltern.setNachname("Elternnachname");
+        eltern.setVorname("Elternvorname");
+        eltern.setGeburtsdatum(LocalDate.of(2001, 1, 1));
+        eltern.setTelefonnummer("");
+        eltern.setAusweisbFluechtling(false);
+        eltern.setAdresse(prepareAdresseUpdate());
+        eltern.setElternTyp(ElternTypDtoSpec.VATER);
+        eltern.setErgaenzungsleistungAusbezahlt(false);
+        eltern.setIdentischerZivilrechtlicherWohnsitz(false);
+        eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
+        eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
+        eltern.setSozialhilfebeitraegeAusbezahlt(false);
+        eltern.setSozialversicherungsnummer("756.0000.0000.05");
+        gesuchformularToWorkWith.getElterns().add(eltern);
+        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+        return gesuchUpdatDTO;
+    }
 }
