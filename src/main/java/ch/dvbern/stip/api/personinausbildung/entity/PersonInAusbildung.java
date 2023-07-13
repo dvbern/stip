@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -42,7 +43,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Entity
 @Getter
 @Setter
-public class PersonInAusbildung extends AbstractEntity {
+public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -52,16 +53,6 @@ public class PersonInAusbildung extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     private String sozialversicherungsnummer;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String nachname;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String vorname;
 
     @NotNull
     @Column(nullable = false)
@@ -91,10 +82,6 @@ public class PersonInAusbildung extends AbstractEntity {
     private String telefonnummer;
 
     @NotNull
-    @Column(nullable = false)
-    private LocalDate geburtsdatum;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Land nationalitaet = Land.CH;
@@ -110,17 +97,6 @@ public class PersonInAusbildung extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private Zivilstand zivilstand;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Wohnsitz wohnsitz;
-
-    @Column(nullable = true)
-    private BigDecimal wohnsitzAnteilMutter;
-
-    @Column(nullable = true)
-    private BigDecimal wohnsitzAnteilVater;
 
     @NotNull
     @Column(nullable = false)
