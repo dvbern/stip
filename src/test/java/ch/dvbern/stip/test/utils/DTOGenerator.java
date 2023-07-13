@@ -44,7 +44,7 @@ public class DTOGenerator {
         personInAusbildung.setZivilstand(ZivilstandDtoSpec.LEDIG);
         personInAusbildung.setSozialversicherungsnummer("756.0000.0000.05");
         personInAusbildung.setQuellenbesteuert(false);
-        personInAusbildung.setWohnsitz(WohnsitzDtoSpec.ELTERN);
+        personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
 
         gesuchformularToWorkWith.setPersonInAusbildung(personInAusbildung);
         gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
@@ -132,7 +132,7 @@ public class DTOGenerator {
         geschwister.setVorname("Geschwistervorname");
         geschwister.setGeburtsdatum(LocalDate.of(2001, 1, 1));
         geschwister.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
-        geschwister.setWohnsitz(WohnsitzDtoSpec.ELTERN);
+        geschwister.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
         geschwister.setWohnsitzAnteilMutter(new BigDecimal(40));
         geschwister.setWohnsitzAnteilVater(new BigDecimal(60));
 
@@ -159,6 +159,23 @@ public class DTOGenerator {
         eltern.setSozialhilfebeitraegeAusbezahlt(false);
         eltern.setSozialversicherungsnummer("756.0000.0000.05");
         gesuchformularToWorkWith.getElterns().add(eltern);
+        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+        return gesuchUpdatDTO;
+    }
+
+    public static GesuchUpdateDtoSpec prepareGesuchUpdateForKind() {
+        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        var kind = new KindUpdateDtoSpec();
+        kind.setNachname("Kindnachname");
+        kind.setVorname("Kindvorname");
+        kind.setGeburtsdatum(LocalDate.of(2011, 1, 1));
+        kind.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
+        kind.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
+        kind.setWohnsitzAnteilMutter(new BigDecimal(40));
+        kind.setWohnsitzAnteilVater(new BigDecimal(60));
+
+        gesuchformularToWorkWith.getKinds().add(kind);
         gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
         return gesuchUpdatDTO;
     }

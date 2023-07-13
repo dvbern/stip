@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
-import ch.dvbern.stip.api.personinausbildung.type.Wohnsitz;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
@@ -114,6 +115,12 @@ public class PersonInAusbildung extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Wohnsitz wohnsitz;
+
+    @Column(nullable = true)
+    private BigDecimal wohnsitzAnteilMutter;
+
+    @Column(nullable = true)
+    private BigDecimal wohnsitzAnteilVater;
 
     @NotNull
     @Column(nullable = false)

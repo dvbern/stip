@@ -158,6 +158,8 @@ CREATE TABLE person_in_ausbildung
     niederlassungsstatus                      VARCHAR(255),
     zivilstand                                VARCHAR(255),
     wohnsitz                                  VARCHAR(255) NOT NULL,
+    wohnsitz_anteil_mutter                    NUMERIC(19, 2),
+    wohnsitz_anteil_vater                     NUMERIC(19, 2),
     sozialhilfebeitraege                      BOOLEAN      NOT NULL,
     quellenbesteuert                          BOOLEAN      NOT NULL,
     kinder                                    BOOLEAN      NOT NULL,
@@ -197,6 +199,8 @@ CREATE TABLE person_in_ausbildung_aud
     niederlassungsstatus                      VARCHAR(255),
     zivilstand                                VARCHAR(255),
     wohnsitz                                  VARCHAR(255),
+    wohnsitz_anteil_mutter                    NUMERIC(19, 2),
+    wohnsitz_anteil_vater                     NUMERIC(19, 2),
     sozialhilfebeitraege                      BOOLEAN,
     quellenbesteuert                          BOOLEAN,
     kinder                                    BOOLEAN,
@@ -855,5 +859,55 @@ CREATE TABLE geschwister_aud
 
 ALTER TABLE geschwister_aud
     ADD CONSTRAINT FK_geschwister_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE kind
+(
+    id                     UUID         NOT NULL,
+    timestamp_erstellt     TIMESTAMP    NOT NULL,
+    timestamp_mutiert      TIMESTAMP    NOT NULL,
+    user_erstellt          VARCHAR(255) NOT NULL,
+    user_mutiert           VARCHAR(255) NOT NULL,
+    version                BIGINT       NOT NULL,
+    nachname               VARCHAR(255) NOT NULL,
+    vorname                VARCHAR(255) NOT NULL,
+    geburtsdatum           DATE         NOT NULL,
+    ausbildungssituation   VARCHAR(255) NOT NULL,
+    wohnsitz               VARCHAR(255) NOT NULL,
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID         NOT NULL,
+    CONSTRAINT kind_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE kind
+    ADD CONSTRAINT FK_kind_gesuch_fomular_id
+        FOREIGN KEY (gesuch_formular_id)
+            REFERENCES gesuch_formular (id);
+
+CREATE TABLE kind_aud
+(
+    id                     UUID    NOT NULL,
+    rev                    INTEGER NOT NULL,
+    revtype                SMALLINT,
+    timestamp_erstellt     TIMESTAMP,
+    timestamp_mutiert      TIMESTAMP,
+    user_erstellt          VARCHAR(255),
+    user_mutiert           VARCHAR(255),
+    version                BIGINT,
+    nachname               VARCHAR(255),
+    vorname                VARCHAR(255),
+    geburtsdatum           DATE,
+    ausbildungssituation   VARCHAR(255),
+    wohnsitz               VARCHAR(255),
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID,
+    CONSTRAINT kind_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE kind_aud
+    ADD CONSTRAINT FK_kind_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);

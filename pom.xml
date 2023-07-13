@@ -294,7 +294,6 @@
                                 Anrede=ch.dvbern.stip.api.common.type.Anrede,
                                 Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
                                 Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
-                                Wohnsitz=ch.dvbern.stip.api.personinausbildung.type.Wohnsitz,
                                 Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
                                 ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
                                 ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
@@ -306,7 +305,8 @@
                                 Bildungsart=ch.dvbern.stip.api.lebenslauf.type.Bildungsart,
                                 Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
                                 Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
-                                Ausbildungssituation=ch.dvbern.stip.api.geschwister.type.Ausbildungssituation
+                                Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
+                                Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz
                             </schemaMappings>
                             <configOptions>
                                 <sourceFolder>target/generated-sources</sourceFolder>

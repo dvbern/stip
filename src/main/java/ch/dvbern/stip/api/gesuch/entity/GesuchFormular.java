@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -78,4 +79,10 @@ public class GesuchFormular extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id")
     private Set<Eltern> elterns = new LinkedHashSet<>();
+
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id")
+    @OrderBy("geburtsdatum")
+    private Set<Kind> kinds = new LinkedHashSet<>();
 }

@@ -155,6 +155,16 @@ public class GesuchResourceTest {
 
     @Test
     @Order(12)
+    void testUpdateGesuchEndpointAddKind() {
+        var gesuchUpdatDTO = prepareGesuchUpdateForKind();
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(13)
     void testAllFormularPresent() {
         var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
@@ -168,5 +178,7 @@ public class GesuchResourceTest {
         assertThat(gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getNachname(), is(geschwisterNameUpdateTest));
         assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
         assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), is(1));
+        assertThat(gesuch.getGesuchFormularToWorkWith().getKinds().size(), is(1));
+
     }
 }

@@ -20,19 +20,19 @@ public interface GeschwisterMapper {
     Geschwister partialUpdate(GeschwisterUpdateDto geschwisterUpdateDto, @MappingTarget Geschwister geschwister);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    default Set<Geschwister> map(List<GeschwisterUpdateDto> geschwisterUpdateDtos, @MappingTarget Set<Geschwister> geschwister) {
+    default Set<Geschwister> map(List<GeschwisterUpdateDto> geschwisterUpdateDtos, @MappingTarget Set<Geschwister> geschwisterSet) {
         for (GeschwisterUpdateDto geschwisterUpdateDto : geschwisterUpdateDtos) {
             if (geschwisterUpdateDto.getId() != null) {
-                Geschwister found = geschwister.stream().filter(geschwister1 -> geschwister1.getId().equals(geschwisterUpdateDto.getId())).findFirst().orElseThrow(
+                Geschwister found = geschwisterSet.stream().filter(geschwister -> geschwister.getId().equals(geschwisterUpdateDto.getId())).findFirst().orElseThrow(
                         () -> new NotFoundException("geschwister Not FOUND")
                 );
-                geschwister.remove(found);
-                geschwister.add(partialUpdate(geschwisterUpdateDto, found));
+                geschwisterSet.remove(found);
+                geschwisterSet.add(partialUpdate(geschwisterUpdateDto, found));
             }
             else {
-                geschwister.add(partialUpdate(geschwisterUpdateDto, new Geschwister()));
+                geschwisterSet.add(partialUpdate(geschwisterUpdateDto, new Geschwister()));
             }
         }
-        return geschwister;
+        return geschwisterSet;
     }
 }

@@ -1,9 +1,12 @@
-package ch.dvbern.stip.api.geschwister.entity;
+package ch.dvbern.stip.api.kind.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -19,7 +22,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Getter
 @Setter
-public class Geschwister extends AbstractEntity {
+public class Kind extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
@@ -49,5 +52,4 @@ public class Geschwister extends AbstractEntity {
 
     @Column(nullable = true)
     private BigDecimal wohnsitzAnteilVater;
-
 }

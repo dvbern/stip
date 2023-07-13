@@ -23,8 +23,8 @@ public interface ElternMapper {
     default Set<Eltern> map(List<ElternUpdateDto> elternUpdateDtos, @MappingTarget Set<Eltern> elternSet) {
         for (ElternUpdateDto elternUpdateDto : elternUpdateDtos) {
             if (elternUpdateDto.getId() != null) {
-                Eltern found = elternSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(elternUpdateDto.getId())).findFirst().orElseThrow(
-                        () -> new NotFoundException("LebenslaufItem Not FOUND")
+                Eltern found = elternSet.stream().filter(eltern -> eltern.getId().equals(elternUpdateDto.getId())).findFirst().orElseThrow(
+                        () -> new NotFoundException("Eltern Not FOUND")
                 );
                 elternSet.remove(found);
                 elternSet.add(partialUpdate(elternUpdateDto, found));
