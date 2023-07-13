@@ -823,13 +823,7 @@ components:
       type: object
       allOf:
         -
-          required:
-            - id
           type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         -
           $ref: '#/components/schemas/AuszahlungUpdate'
     AuszahlungUpdate:
@@ -1068,24 +1062,14 @@ components:
       type: object
       allOf:
         -
-          required:
-            - id
           type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
         -
           $ref: '#/components/schemas/AusbildungUpdate'
     Familiensituation:
       type: object
       allOf:
         -
-          required:
-            - id
           type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
         -
           $ref: '#/components/schemas/FamiliensituationUpdate'
     Taetigskeitsart:
@@ -1111,12 +1095,8 @@ components:
       allOf:
         -
           required:
-            - id
             - adresse.id
           type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
         -
           $ref: '#/components/schemas/PersonInAusbildungUpdate'
     Gesuchsperiode:
@@ -1280,12 +1260,7 @@ components:
       type: object
       allOf:
         -
-          required:
-            - id
           type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
         -
           $ref: '#/components/schemas/PartnerUpdate'
     Ausbildungsstaette:
@@ -1318,12 +1293,7 @@ components:
       type: object
       allOf:
         -
-          required:
-            - id
           type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
         -
           $ref: '#/components/schemas/GesuchFormularUpdate'
   responses:

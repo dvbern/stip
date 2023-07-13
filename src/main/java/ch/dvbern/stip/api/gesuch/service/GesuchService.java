@@ -48,6 +48,7 @@ public class GesuchService {
     public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
         gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+        gesuchRepository.getEntityManager().merge(gesuch);
     }
 
 

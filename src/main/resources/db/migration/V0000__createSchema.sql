@@ -672,7 +672,7 @@ CREATE TABLE eltern
     user_mutiert                    VARCHAR(255) NOT NULL,
     version                         BIGINT       NOT NULL,
     geschlecht                      VARCHAR(255) NOT NULL,
-    name                            VARCHAR(255) NOT NULL,
+    nachname                        VARCHAR(255) NOT NULL,
     vorname                         VARCHAR(255) NOT NULL,
     sozialversicherungsnummer       VARCHAR(255) NOT NULL,
     telefonnummer                   VARCHAR(255) NOT NULL,
@@ -700,7 +700,7 @@ CREATE TABLE eltern_aud
     user_mutiert                    VARCHAR(255),
     version                         BIGINT,
     geschlecht                      VARCHAR(255),
-    name                            VARCHAR(255),
+    nachname                        VARCHAR(255),
     vorname                         VARCHAR(255),
     sozialversicherungsnummer       VARCHAR(255),
     telefonnummer                   VARCHAR(255),
@@ -792,5 +792,55 @@ CREATE TABLE dokument_aud
 
 ALTER TABLE dokument_aud
     ADD CONSTRAINT FK_dokument_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE geschwister
+(
+    id                     UUID         NOT NULL,
+    timestamp_erstellt     TIMESTAMP    NOT NULL,
+    timestamp_mutiert      TIMESTAMP    NOT NULL,
+    user_erstellt          VARCHAR(255) NOT NULL,
+    user_mutiert           VARCHAR(255) NOT NULL,
+    version                BIGINT       NOT NULL,
+    nachname               VARCHAR(255) NOT NULL,
+    vorname                VARCHAR(255) NOT NULL,
+    geburtsdatum           DATE         NOT NULL,
+    ausbildungssituation   VARCHAR(255) NOT NULL,
+    wohnsitz               VARCHAR(255) NOT NULL,
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID         NOT NULL,
+    CONSTRAINT geschwister_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE geschwister
+    ADD CONSTRAINT FK_geschwister_gesuch_fomular_id
+        FOREIGN KEY (gesuch_formular_id)
+            REFERENCES gesuch_formular (id);
+
+CREATE TABLE geschwister_aud
+(
+    id                     UUID    NOT NULL,
+    rev                    INTEGER NOT NULL,
+    revtype                SMALLINT,
+    timestamp_erstellt     TIMESTAMP,
+    timestamp_mutiert      TIMESTAMP,
+    user_erstellt          VARCHAR(255),
+    user_mutiert           VARCHAR(255),
+    version                BIGINT,
+    nachname               VARCHAR(255),
+    vorname                VARCHAR(255),
+    geburtsdatum           DATE,
+    ausbildungssituation   VARCHAR(255),
+    wohnsitz               VARCHAR(255),
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID,
+    CONSTRAINT geschwister_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE geschwister_aud
+    ADD CONSTRAINT FK_geschwister_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);

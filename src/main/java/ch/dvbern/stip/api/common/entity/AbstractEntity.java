@@ -54,11 +54,11 @@ public abstract class AbstractEntity implements Serializable {
     private LocalDateTime timestampMutiert;
 
     @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false, length = Constants.DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
     private String userErstellt;
 
     @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false, length = Constants.DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
     private String userMutiert;
 
     @Override

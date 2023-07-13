@@ -28,7 +28,7 @@ public class Eltern extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
-    private String name;
+    private String nachname;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

@@ -58,7 +58,7 @@ public class GesuchResourceTest {
 
     @Test
     @Order(3)
-    void testUpdateGesuchPersonInAusbildungEndpoint() {
+    void testUpdateGesuchEndpointPersonInAusbildung() {
         var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
@@ -68,7 +68,7 @@ public class GesuchResourceTest {
 
     @Test
     @Order(4)
-    void testUpdateGesuchAusbildungEndpoint() {
+    void testUpdateGesuchEndpointAusbildung() {
         var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
@@ -78,7 +78,7 @@ public class GesuchResourceTest {
 
     @Test
     @Order(5)
-    void testUpdateGesuchFamiliensituationEndpoint() {
+    void testUpdateGesuchEndpointFamiliensituation() {
         var gesuchUpdatDTO = prepareGesuchUpdateForFamiliensituation();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
@@ -88,7 +88,7 @@ public class GesuchResourceTest {
 
     @Test
     @Order(6)
-    void testUpdateGesuchPartnerEndpoint() {
+    void testUpdateGesuchEndpointPartner() {
         var gesuchUpdatDTO = prepareGesuchUpdateForPartner();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
@@ -98,7 +98,7 @@ public class GesuchResourceTest {
 
     @Test
     @Order(7)
-    void testUpdateGesuchAuszahlungEndpoint() {
+    void testUpdateGesuchEndpointAuszahlung() {
         var gesuchUpdatDTO = prepareGesuchUpdateForAuszahlung();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
@@ -108,6 +108,31 @@ public class GesuchResourceTest {
 
     @Test
     @Order(8)
+    void testUpdateGesuchEndpointAddGeschwister() {
+        var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(9)
+    void testUpdateGesuchEndpointUpdateGeschwister() {
+        var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+                .body()
+                .as(GesuchDtoSpec.class);
+        var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
+        gesuchUpdatDTO.getGesuchFormularToWorkWith().getGeschwisters().get(0).setId(gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getId());
+        gesuchUpdatDTO.getGesuchFormularToWorkWith().getGeschwisters().get(0).setNachname("UPADTEDGeschwister");
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(10)
     void testAllFormularPresent() {
         var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
@@ -117,7 +142,7 @@ public class GesuchResourceTest {
         assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
         assertThat(gesuch.getGesuchFormularToWorkWith().getPartner(), is(notNullValue()));
         assertThat(gesuch.getGesuchFormularToWorkWith().getAuszahlung(), is(notNullValue()));
-
+        assertThat(gesuch.getGesuchFormularToWorkWith().getGeschwisters().size(), is(1));
     }
 
     // Not working, cannot override mapping in collection with mapstruct

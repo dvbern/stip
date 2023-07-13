@@ -304,8 +304,9 @@
                                 Ausbildungsland=ch.dvbern.stip.api.ausbildung.type.Ausbildungsland,
                                 Bildungsart=ch.dvbern.stip.api.lebenslauf.type.Bildungsart,
                                 Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
-                                LebenslaufTyp=ch.dvbern.stip.api.lebenslauf.type.LebenslaufTyp
-                                Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber
+                                LebenslaufTyp=ch.dvbern.stip.api.lebenslauf.type.LebenslaufTyp,
+                                Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
+                                Ausbildungssituation=ch.dvbern.stip.api.geschwister.type.Ausbildungssituation
                             </schemaMappings>
                             <configOptions>
                                 <sourceFolder>target/generated-sources</sourceFolder>

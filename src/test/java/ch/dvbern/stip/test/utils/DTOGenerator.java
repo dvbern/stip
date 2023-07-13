@@ -124,4 +124,21 @@ public class DTOGenerator {
         return gesuchUpdatDTO;
     }
 
+    public static GesuchUpdateDtoSpec prepareGesuchUpdateForGeschwister() {
+        var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+        var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        var geschwister = new GeschwisterUpdateDtoSpec();
+        geschwister.setNachname("Geschwisternachname");
+        geschwister.setVorname("Geschwistervorname");
+        geschwister.setGeburtsdatum(LocalDate.of(2001,1,1));
+        geschwister.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
+        geschwister.setWohnsitz(WohnsitzDtoSpec.ELTERN);
+        geschwister.setWohnsitzAnteilMutter(new BigDecimal(40));
+        geschwister.setWohnsitzAnteilVater(new BigDecimal(60));
+
+        gesuchformularToWorkWith.getGeschwisters().add(geschwister);
+        gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+        return gesuchUpdatDTO;
+    }
+
 }
