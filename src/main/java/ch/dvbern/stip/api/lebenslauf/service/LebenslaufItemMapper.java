@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
+import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -28,5 +29,20 @@ public interface LebenslaufItemMapper {
     @Mapping(source = "bis", target = "bis", qualifiedBy = {MonthYearMapper.class, MonthYearToEndOfMonth.class})
     LebenslaufItem partialUpdate(LebenslaufItemUpdateDto lebenslaufItemUpdateDto, @MappingTarget LebenslaufItem lebenslaufItem);
 
-    Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDto);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
+        for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {
+            if (lebenslaufItemUpdateDto.getId() != null) {
+                LebenslaufItem found = lebenslaufItemSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())).findFirst().orElseThrow(
+                        () -> new NotFoundException("LebenslaufItem Not FOUND")
+                );
+                lebenslaufItemSet.remove(found);
+                lebenslaufItemSet.add(partialUpdate(lebenslaufItemUpdateDto, found));
+            }
+            else {
+                lebenslaufItemSet.add(partialUpdate(lebenslaufItemUpdateDto, new LebenslaufItem()));
+            }
+        }
+        return lebenslaufItemSet;
+    }
 }

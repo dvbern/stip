@@ -27,6 +27,8 @@ public class GesuchResourceTest {
 
     private UUID gesuchId;
 
+    private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
+
     @Test
     @Order(1)
     void testCreateEndpoint() {
@@ -124,7 +126,7 @@ public class GesuchResourceTest {
                 .as(GesuchDtoSpec.class);
         var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
         gesuchUpdatDTO.getGesuchFormularToWorkWith().getGeschwisters().get(0).setId(gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getId());
-        gesuchUpdatDTO.getGesuchFormularToWorkWith().getGeschwisters().get(0).setNachname("UPADTEDGeschwister");
+        gesuchUpdatDTO.getGesuchFormularToWorkWith().getGeschwisters().get(0).setNachname(geschwisterNameUpdateTest);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
@@ -133,6 +135,16 @@ public class GesuchResourceTest {
 
     @Test
     @Order(10)
+    void testUpdateGesuchAddLebenslaufEndpoint() {
+        var gesuchUpdatDTO = prepareGesuchUpdateForLebenslauf();
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @Order(11)
     void testAllFormularPresent() {
         var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
@@ -143,30 +155,7 @@ public class GesuchResourceTest {
         assertThat(gesuch.getGesuchFormularToWorkWith().getPartner(), is(notNullValue()));
         assertThat(gesuch.getGesuchFormularToWorkWith().getAuszahlung(), is(notNullValue()));
         assertThat(gesuch.getGesuchFormularToWorkWith().getGeschwisters().size(), is(1));
+        assertThat(gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getNachname(), is(geschwisterNameUpdateTest));
+        assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
     }
-
-    // Not working, cannot override mapping in collection with mapstruct
-    //@Test
-    //@Order(4)
-    void testUpdateGesuchAddLebenslaufEndpoint() {
-        var gesuchUpdatDTO = prepareGesuchUpdateForLebenslauf();
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.ACCEPTED.getStatusCode());
-
-        var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
-
-        gesuchId = gesuche[0].getId();
-
-        assertThat(gesuche.length, is(1));
-        assertThat(gesuche[0].getGesuchFormularToWorkWith().getPersonInAusbildung(), is(notNullValue()));
-        assertThat(gesuche[0].getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
-    }
-
-
 }

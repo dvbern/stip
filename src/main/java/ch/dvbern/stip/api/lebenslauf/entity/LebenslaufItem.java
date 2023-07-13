@@ -1,7 +1,8 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufTyp;
+import ch.dvbern.stip.api.lebenslauf.type.Bildungsart;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,16 +25,17 @@ public class LebenslaufItem extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private LebenslaufTyp lebenslaufTyp;
+    private Bildungsart bildungsart;
 
     @NotNull
     @Column(nullable = false)
-    private String lebenslaufSubtyp;
+    @Enumerated(EnumType.STRING)
+    private Taetigskeitsart taetigskeitsart;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
-    private String name;
+    private String beschreibung;
 
     @NotNull
     @Column(nullable = false)
