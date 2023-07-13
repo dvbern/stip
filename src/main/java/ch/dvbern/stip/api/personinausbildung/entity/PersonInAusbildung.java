@@ -35,6 +35,7 @@ import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
@@ -119,4 +120,57 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(nullable = false)
     private Sprache korrespondenzSprache;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        PersonInAusbildung that = (PersonInAusbildung) o;
+        return isIdentischerZivilrechtlicherWohnsitz() == that.isIdentischerZivilrechtlicherWohnsitz()
+                && isSozialhilfebeitraege() == that.isSozialhilfebeitraege()
+                && isQuellenbesteuert() == that.isQuellenbesteuert()
+                && isKinder() == that.isKinder()
+                && isDigitaleKommunikation() == that.isDigitaleKommunikation()
+                && Objects.equals(getAdresse(), that.getAdresse())
+                && Objects.equals(getSozialversicherungsnummer(), that.getSozialversicherungsnummer())
+                && getAnrede() == that.getAnrede()
+                && Objects.equals(getIdentischerZivilrechtlicherWohnsitzOrt(), that.getIdentischerZivilrechtlicherWohnsitzOrt())
+                && Objects.equals(getIdentischerZivilrechtlicherWohnsitzPLZ(), that.getIdentischerZivilrechtlicherWohnsitzPLZ())
+                && Objects.equals(getEmail(), that.getEmail())
+                && Objects.equals(getTelefonnummer(), that.getTelefonnummer())
+                && getNationalitaet() == that.getNationalitaet()
+                && Objects.equals(getHeimatort(), that.getHeimatort())
+                && getNiederlassungsstatus() == that.getNiederlassungsstatus()
+                && getZivilstand() == that.getZivilstand()
+                && getKorrespondenzSprache() == that.getKorrespondenzSprache();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                super.hashCode(),
+                getAdresse(),
+                getSozialversicherungsnummer(),
+                getAnrede(),
+                isIdentischerZivilrechtlicherWohnsitz(),
+                getIdentischerZivilrechtlicherWohnsitzOrt(),
+                getIdentischerZivilrechtlicherWohnsitzPLZ(),
+                getEmail(),
+                getTelefonnummer(),
+                getNationalitaet(),
+                getHeimatort(),
+                getNiederlassungsstatus(),
+                getZivilstand(),
+                isSozialhilfebeitraege(),
+                isQuellenbesteuert(),
+                isKinder(),
+                isDigitaleKommunikation(),
+                getKorrespondenzSprache());
+    }
 }

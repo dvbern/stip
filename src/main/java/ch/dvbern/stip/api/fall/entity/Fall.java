@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.fall.entity;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import jakarta.persistence.Column;
@@ -41,4 +43,24 @@ public class Fall extends AbstractEntity {
 	@NotNull
 	@Column(nullable = false)
 	private String mandant = MandantIdentifier.BERN.name();
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		Fall fall = (Fall) o;
+		return getFallNummer() == fall.getFallNummer() && Objects.equals(getMandant(), fall.getMandant());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), getFallNummer(), getMandant());
+	}
 }

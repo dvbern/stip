@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
@@ -20,45 +21,85 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Setter
 public class Ausbildung extends AbstractEntity {
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
-    private Ausbildungsgang ausbildungsgang;
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
+	private Ausbildungsgang ausbildungsgang;
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsstaette_id"))
-    private Ausbildungsstaette ausbildungsstaette;
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsstaette_id"))
+	private Ausbildungsstaette ausbildungsstaette;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Ausbildungsland ausbildungsland;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Ausbildungsland ausbildungsland;
 
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
-    private String alternativeAusbildungsgang;
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column
+	private String alternativeAusbildungsgang;
 
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
-    private String AlternativeAusbildungsstaette;
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column
+	private String alternativeAusbildungstaette;
 
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String fachrichtung;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String fachrichtung;
 
-    @Column(nullable = false)
-    private boolean ausbildungNichtGefunden = false;
+	@Column(nullable = false)
+	private boolean ausbildungNichtGefunden = false;
 
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate ausbildungBegin;
+	@NotNull
+	@Column(nullable = false)
+	private LocalDate ausbildungBegin;
 
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate ausbildungEnd;
+	@NotNull
+	@Column(nullable = false)
+	private LocalDate ausbildungEnd;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AusbildungsPensum pensum;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private AusbildungsPensum pensum;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		Ausbildung that = (Ausbildung) o;
+		return isAusbildungNichtGefunden() == that.isAusbildungNichtGefunden()
+				&& Objects.equals(getAusbildungsgang(), that.getAusbildungsgang())
+				&& Objects.equals(getAusbildungsstaette(), that.getAusbildungsstaette())
+				&& getAusbildungsland() == that.getAusbildungsland()
+				&& Objects.equals(getAlternativeAusbildungsgang(), that.getAlternativeAusbildungsgang())
+				&& Objects.equals(getAlternativeAusbildungstaette(), that.getAlternativeAusbildungstaette())
+				&& Objects.equals(getFachrichtung(), that.getFachrichtung())
+				&& Objects.equals(getAusbildungBegin(), that.getAusbildungBegin())
+				&& Objects.equals(getAusbildungEnd(), that.getAusbildungEnd())
+				&& getPensum() == that.getPensum();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(
+				super.hashCode(),
+				getAusbildungsgang(),
+				getAusbildungsstaette(),
+				getAusbildungsland(),
+				getAlternativeAusbildungsgang(),
+				getAlternativeAusbildungstaette(),
+				getFachrichtung(),
+				isAusbildungNichtGefunden(),
+				getAusbildungBegin(),
+				getAusbildungEnd(),
+				getPensum());
+	}
 }
