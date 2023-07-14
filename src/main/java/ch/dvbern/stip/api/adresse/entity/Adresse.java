@@ -25,6 +25,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -38,6 +39,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Audited
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Adresse extends AbstractEntity {
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -66,36 +68,4 @@ public class Adresse extends AbstractEntity {
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String ort;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		if (!super.equals(o)) {
-			return false;
-		}
-		Adresse adresse = (Adresse) o;
-		return getLand() == adresse.getLand()
-				&& getCoAdresse().equals(adresse.getCoAdresse())
-				&& Objects.equals(getStrasse(), adresse.getStrasse())
-				&& getHausnummer().equals(adresse.getHausnummer())
-				&& Objects.equals(getPlz(), adresse.getPlz())
-				&& Objects.equals(getOrt(), adresse.getOrt());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-				super.hashCode(),
-				getLand(),
-				getCoAdresse(),
-				getStrasse(),
-				getHausnummer(),
-				getPlz(),
-				getOrt());
-	}
 }

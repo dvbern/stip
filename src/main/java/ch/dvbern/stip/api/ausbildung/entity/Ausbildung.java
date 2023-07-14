@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -19,6 +20,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Ausbildung extends AbstractEntity {
 
 	@ManyToOne
@@ -62,44 +64,4 @@ public class Ausbildung extends AbstractEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private AusbildungsPensum pensum;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		if (!super.equals(o)) {
-			return false;
-		}
-		Ausbildung that = (Ausbildung) o;
-		return isAusbildungNichtGefunden() == that.isAusbildungNichtGefunden()
-				&& Objects.equals(getAusbildungsgang(), that.getAusbildungsgang())
-				&& Objects.equals(getAusbildungsstaette(), that.getAusbildungsstaette())
-				&& getAusbildungsland() == that.getAusbildungsland()
-				&& Objects.equals(getAlternativeAusbildungsgang(), that.getAlternativeAusbildungsgang())
-				&& Objects.equals(getAlternativeAusbildungstaette(), that.getAlternativeAusbildungstaette())
-				&& Objects.equals(getFachrichtung(), that.getFachrichtung())
-				&& Objects.equals(getAusbildungBegin(), that.getAusbildungBegin())
-				&& Objects.equals(getAusbildungEnd(), that.getAusbildungEnd())
-				&& getPensum() == that.getPensum();
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-				super.hashCode(),
-				getAusbildungsgang(),
-				getAusbildungsstaette(),
-				getAusbildungsland(),
-				getAlternativeAusbildungsgang(),
-				getAlternativeAusbildungstaette(),
-				getFachrichtung(),
-				isAusbildungNichtGefunden(),
-				getAusbildungBegin(),
-				getAusbildungEnd(),
-				getPensum());
-	}
 }

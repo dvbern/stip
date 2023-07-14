@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Ausbildungsstaette extends AbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
@@ -31,26 +33,4 @@ public class Ausbildungsstaette extends AbstractEntity {
 	@Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String name;
-
-	@Override
-	public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-		Ausbildungsstaette that = (Ausbildungsstaette) o;
-		return Objects.equals(getAusbildungsgaenge(), that.getAusbildungsgaenge())
-				&& getAusbildungsland() == that.getAusbildungsland()
-				&& Objects.equals(getName(), that.getName());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), getAusbildungsgaenge(), getAusbildungsland(), getName());
-	}
 }
