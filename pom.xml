@@ -162,11 +162,6 @@
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-jacoco</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -265,7 +260,6 @@
 								</native.image.path>
 								<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 								<maven.home>${maven.home}</maven.home>
-								<quarkus.test.arg-line>${argLine}</quarkus.test.arg-line>
 							</systemPropertyVariables>
 						</configuration>
 					</execution>
@@ -409,13 +403,9 @@
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
-								<configuration>
-									<exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
-								</configuration>
 							</execution>
 							<execution>
 								<id>report</id>
-								<phase>post-integration-test</phase>
 								<goals>
 									<goal>report</goal>
 								</goals>
@@ -423,16 +413,6 @@
 									<formats>
 										<format>XML</format>
 									</formats>
-								</configuration>
-							</execution>
-							<execution>
-								<id>default-prepare-agent-integration</id>
-								<goals>
-									<goal>prepare-agent-integration</goal>
-								</goals>
-								<configuration>
-									<destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
-									<append>true</append>
 								</configuration>
 							</execution>
 						</executions>

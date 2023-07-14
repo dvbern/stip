@@ -15,8 +15,8 @@ public class DateRangeTest {
 	private DateRange sameOtherDateRange = new DateRange(von, bis);
 	@Test
 	public void testDateRangeEquality(){
-		Assertions.assertEquals(dateRange.equals(otherDateRange), false);
-		Assertions.assertEquals(otherDateRange.equals(sameOtherDateRange), true);
+		Assertions.assertEquals(false, dateRange.equals(otherDateRange));
+		Assertions.assertEquals(true, otherDateRange.equals(sameOtherDateRange));
 	}
 
 	@Test
