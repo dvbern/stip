@@ -2,14 +2,44 @@ include:
   - project: 'devops/gitlab/templates'
     file:
       - '/maven/maven-3-jdk-17.gitlab-ci.yml'
+      - '/maven/maven-base.gitlab-ci.yml'
       - '/docker/docker.gitlab-ci.yml'
 
 stages:
   - build
+  - analyze
   - deploy
 
 variables:
   IMAGE: ${DVB_DOCKER_REGISTRY}/${CI_PROJECT_ROOT_NAMESPACE}/stip/api:${CI_COMMIT_SHORT_SHA}
+
+maven-build:
+  variables:
+    MAVEN_ARGS: -Pcoverage
+
+sonarqube-check:
+  image: docker-registry.dvbern.ch/dockerhub/library/maven:3.8-eclipse-temurin-17
+  stage: analyze
+  tags: [ "os:linux", "type:docker", "zone:tz" ]
+  extends: .maven-build-base
+  variables:
+    MAVEN_IMAGE_TAG: 3.8-eclipse-temurin-11
+    SONAR_PROJECT_KEY: kibon_stip-api_AYkrwku6SZqri_oH9Xle
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_ARGS sonar:sonar -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.qualitygate.wait=true
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  needs:
+    - job: maven-build
+      artifacts: true
 
 build-image:
   extends: .docker-build
@@ -30,7 +60,7 @@ build-image:
 deploy:
   stage: deploy
   image: "${DVB_DOCKER_REGISTRY}/devops/docker/tools/k8s/main"
-  tags: ["os:linux", "type:docker", "zone:tz"]
+  tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
     STAGE: dev
   script:
