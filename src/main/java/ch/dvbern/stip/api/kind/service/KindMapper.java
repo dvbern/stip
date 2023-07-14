@@ -20,8 +20,8 @@ public interface KindMapper {
     Kind partialUpdate(KindUpdateDto kindUpdateDto, @MappingTarget Kind kind);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    default Set<Kind> map(List<KindUpdateDto> KindUpdateDtos, @MappingTarget Set<Kind> kinder) {
-        for (KindUpdateDto kindUpdateDto : KindUpdateDtos) {
+    default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
+        for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
                 Kind found = kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
                         () -> new NotFoundException("Kind Not FOUND")

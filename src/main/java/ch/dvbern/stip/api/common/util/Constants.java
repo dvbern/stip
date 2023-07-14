@@ -17,11 +17,9 @@
 
 package ch.dvbern.stip.api.common.util;
 
-public class Constants {
+public final class Constants {
 
 	public static final int DB_DEFAULT_MAX_LENGTH = 255;
-
-	public static final int DB_DEFAULT_SHORT_LENGTH = 100;
 
 	public static final int DB_DEFAULT_SMALL_VALUE_LENGTH = 20;
 }

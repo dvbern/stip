@@ -6,7 +6,6 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @RequestScoped
 @RequiredArgsConstructor

@@ -10,19 +10,19 @@ import java.time.LocalDate;
 public class DateUtil {
 
     @DateToMonthYear
-    public String DateToMonthYear(LocalDate date) {
+    public String dateToMonthYear(LocalDate date) {
         return date.getMonthValue() + "." + date.getYear();
     }
 
     @MonthYearToBeginOfMonth
-    public LocalDate MonthYearToBeginOfMonth(String monthYear){
+    public LocalDate monthYearToBeginOfMonth(String monthYear){
        String[] date = monthYear.split("\\.");
       return LocalDate.parse(date[1] + "-" + date[0] + "-01");
     }
 
     @MonthYearToEndOfMonth
-    public LocalDate MonthYearToEndOfMonth(String monthYear){
-        LocalDate date= MonthYearToBeginOfMonth(monthYear);
+    public LocalDate monthYearToEndOfMonth(String monthYear){
+        LocalDate date= monthYearToBeginOfMonth(monthYear);
         return date.plusMonths(1).minusDays(1);
     }
 }

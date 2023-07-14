@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.kind.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import jakarta.persistence.Column;
