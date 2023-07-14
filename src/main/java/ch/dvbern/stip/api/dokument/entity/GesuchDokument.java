@@ -25,17 +25,18 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.util.List;
-import java.util.Objects;
 
 @Audited
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class GesuchDokument extends AbstractEntity {
 
     @NotNull
@@ -50,18 +51,4 @@ public class GesuchDokument extends AbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchDokument")
     private List<Dokument> dokumente;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        GesuchDokument that = (GesuchDokument) o;
-        return Objects.equals(getGesuch(), that.getGesuch()) && getDokumentTyp() == that.getDokumentTyp() && Objects.equals(getDokumente(), that.getDokumente());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getGesuch(), getDokumentTyp(), getDokumente());
-    }
 }

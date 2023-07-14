@@ -24,17 +24,18 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Audited
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Gesuchsperiode extends AbstractEntity {
 
     @NotNull
@@ -47,26 +48,4 @@ public class Gesuchsperiode extends AbstractEntity {
 
     @Column(nullable = true)
     private LocalDate aufschaltdatum;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        Gesuchsperiode that = (Gesuchsperiode) o;
-        return Objects.equals(getGueltigkeit(), that.getGueltigkeit()) && Objects.equals(
-                getEinreichfrist(),
-                that.getEinreichfrist()) && Objects.equals(getAufschaltdatum(), that.getAufschaltdatum());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), getGueltigkeit(), getEinreichfrist(), getAufschaltdatum());
-    }
 }

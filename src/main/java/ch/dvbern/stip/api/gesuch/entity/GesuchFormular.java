@@ -30,18 +30,19 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Audited
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class GesuchFormular extends AbstractEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -86,44 +87,4 @@ public class GesuchFormular extends AbstractEntity {
     @JoinColumn(name = "gesuch_formular_id")
     @OrderBy("geburtsdatum")
     private Set<Kind> kinds = new LinkedHashSet<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        GesuchFormular that = (GesuchFormular) o;
-        return Objects.equals(getPersonInAusbildung(), that.getPersonInAusbildung())
-                && Objects.equals(
-                getAusbildung(),
-                that.getAusbildung())
-                && Objects.equals(getFamiliensituation(), that.getFamiliensituation())
-                && Objects.equals(getPartner(), that.getPartner())
-                && Objects.equals(getAuszahlung(), that.getAuszahlung())
-                && Objects.equals(getLebenslaufItems(), that.getLebenslaufItems())
-                && Objects.equals(getGeschwisters(), that.getGeschwisters())
-                && Objects.equals(getElterns(), that.getElterns())
-                && Objects.equals(getKinds(), that.getKinds());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                super.hashCode(),
-                getPersonInAusbildung(),
-                getAusbildung(),
-                getFamiliensituation(),
-                getPartner(),
-                getAuszahlung(),
-                getLebenslaufItems(),
-                getGeschwisters(),
-                getElterns(),
-                getKinds());
-    }
 }

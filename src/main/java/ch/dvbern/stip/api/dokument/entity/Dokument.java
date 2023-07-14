@@ -4,11 +4,10 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.util.Objects;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
@@ -16,6 +15,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Dokument extends AbstractEntity {
 
 	@NotNull
@@ -37,27 +37,4 @@ public class Dokument extends AbstractEntity {
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String filesize;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		if (!super.equals(o)) {
-			return false;
-		}
-		Dokument dokument = (Dokument) o;
-		return Objects.equals(getGesuchDokument(), dokument.getGesuchDokument())
-				&& Objects.equals(getFilename(), dokument.getFilename())
-				&& Objects.equals(getFilepfad(), dokument.getFilepfad())
-				&& Objects.equals(getFilesize(), dokument.getFilesize());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), getGesuchDokument(), getFilename(), getFilepfad(), getFilesize());
-	}
 }

@@ -7,12 +7,12 @@ import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
@@ -20,6 +20,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class LebenslaufItem extends AbstractEntity {
 
 	@NotNull
@@ -49,36 +50,4 @@ public class LebenslaufItem extends AbstractEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private WohnsitzKanton wohnsitz;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		if (!super.equals(o)) {
-			return false;
-		}
-		LebenslaufItem that = (LebenslaufItem) o;
-		return getBildungsart() == that.getBildungsart()
-				&& getTaetigskeitsart() == that.getTaetigskeitsart()
-				&& Objects.equals(getBeschreibung(), that.getBeschreibung())
-				&& Objects.equals(getVon(), that.getVon())
-				&& Objects.equals(getBis(), that.getBis())
-				&& getWohnsitz() == that.getWohnsitz();
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-				super.hashCode(),
-				getBildungsart(),
-				getTaetigskeitsart(),
-				getBeschreibung(),
-				getVon(),
-				getBis(),
-				getWohnsitz());
-	}
 }

@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.common.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;

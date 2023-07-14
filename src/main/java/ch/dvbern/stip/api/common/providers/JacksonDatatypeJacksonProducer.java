@@ -17,7 +17,7 @@ public class JacksonDatatypeJacksonProducer implements ContextResolver<ObjectMap
 
     private final ObjectMapper json;
 
-    public JacksonDatatypeJacksonProducer() throws Exception {
+    public JacksonDatatypeJacksonProducer() {
         this.json = JsonMapper.builder()
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .addModule(new JavaTimeModule())

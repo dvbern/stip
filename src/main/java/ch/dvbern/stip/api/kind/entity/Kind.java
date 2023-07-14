@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -17,6 +18,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Kind  extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)

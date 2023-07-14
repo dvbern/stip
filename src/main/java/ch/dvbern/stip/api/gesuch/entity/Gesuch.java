@@ -7,17 +7,18 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Audited
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Gesuch extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false)
@@ -50,38 +51,4 @@ public class Gesuch extends AbstractEntity {
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_cotainer_gesuch_to_work_with_id"), nullable = true)
     private GesuchFormular gesuchFormularToWorkWith;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        Gesuch gesuch = (Gesuch) o;
-        return getGesuchNummer() == gesuch.getGesuchNummer()
-                && Objects.equals(getFall(), gesuch.getFall())
-                && Objects.equals(getGesuchsperiode(), gesuch.getGesuchsperiode())
-                && getGesuchStatus() == gesuch.getGesuchStatus()
-                && Objects.equals(getGesuchStatusAenderungDatum(), gesuch.getGesuchStatusAenderungDatum())
-                && Objects.equals(getGesuchFormularFreigabeCopy(), gesuch.getGesuchFormularFreigabeCopy())
-                && Objects.equals(getGesuchFormularToWorkWith(), gesuch.getGesuchFormularToWorkWith());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                super.hashCode(),
-                getFall(),
-                getGesuchsperiode(),
-                getGesuchStatus(),
-                getGesuchNummer(),
-                getGesuchStatusAenderungDatum(),
-                getGesuchFormularFreigabeCopy(),
-                getGesuchFormularToWorkWith());
-    }
 }

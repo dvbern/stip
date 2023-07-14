@@ -6,12 +6,12 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
@@ -20,6 +20,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Eltern extends AbstractEntity {
 
 	@NotNull
@@ -79,50 +80,4 @@ public class Eltern extends AbstractEntity {
 	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
 	@Column(nullable = true)
 	private String identischerZivilrechtlicherWohnsitzPLZ;
-
-	@Override
-	public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-		Eltern eltern = (Eltern) o;
-		return isIdentischerZivilrechtlicherWohnsitz() == eltern.isIdentischerZivilrechtlicherWohnsitz()
-				&& Objects.equals(getAdresse(), eltern.getAdresse())
-				&& Objects.equals(getSozialversicherungsnummer(), eltern.getSozialversicherungsnummer())
-				&& Objects.equals(getNachname(), eltern.getNachname())
-				&& Objects.equals(getVorname(), eltern.getVorname())
-				&& getElternTyp() == eltern.getElternTyp()
-				&& Objects.equals(getTelefonnummer(), eltern.getTelefonnummer())
-				&& Objects.equals(getGeburtsdatum(), eltern.getGeburtsdatum())
-				&& Objects.equals(getSozialhilfebeitraegeAusbezahlt(), eltern.getSozialhilfebeitraegeAusbezahlt())
-				&& Objects.equals(getAusweisbFluechtling(), eltern.getAusweisbFluechtling())
-				&& Objects.equals(getErgaenzungsleistungAusbezahlt(), eltern.getErgaenzungsleistungAusbezahlt())
-				&& Objects.equals(getIdentischerZivilrechtlicherWohnsitzOrt(), eltern.getIdentischerZivilrechtlicherWohnsitzOrt())
-				&& Objects.equals(getIdentischerZivilrechtlicherWohnsitzPLZ(), eltern.getIdentischerZivilrechtlicherWohnsitzPLZ());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-				super.hashCode(),
-				getAdresse(),
-				getSozialversicherungsnummer(),
-				getNachname(),
-				getVorname(),
-				getElternTyp(),
-				getTelefonnummer(),
-				getGeburtsdatum(),
-				getSozialhilfebeitraegeAusbezahlt(),
-				getAusweisbFluechtling(),
-				getErgaenzungsleistungAusbezahlt(),
-				isIdentischerZivilrechtlicherWohnsitz(),
-				getIdentischerZivilrechtlicherWohnsitzOrt(),
-				getIdentischerZivilrechtlicherWohnsitzPLZ());
-	}
 }
