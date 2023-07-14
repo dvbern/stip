@@ -415,6 +415,7 @@
 							</execution>
 							<execution>
 								<id>report</id>
+								<phase>post-integration-test</phase>
 								<goals>
 									<goal>report</goal>
 								</goals>
@@ -432,19 +433,6 @@
 								<configuration>
 									<destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
 									<append>true</append>
-								</configuration>
-							</execution>
-							<execution>
-								<id>report</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>report</goal>
-								</goals>
-								<configuration>
-									<dataFile>${project.build.directory}/jacoco-quarkus.exec</dataFile>
-									<formats>
-										<format>XML</format>
-									</formats>
 								</configuration>
 							</execution>
 						</executions>
