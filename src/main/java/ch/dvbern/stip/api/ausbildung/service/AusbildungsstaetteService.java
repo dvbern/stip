@@ -17,7 +17,7 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
 
     public Collection<AusbildungsstaetteDto> getAusbildungsstaetten() {
-        return ausbildungsstaetteRepository.findAll().stream().map(ausbildungsstaetteMapper::toDto).collect(Collectors.toList());
+        return ausbildungsstaetteRepository.findAll().stream().map(ausbildungsstaetteMapper::toDto).toList();
     }
 
 }

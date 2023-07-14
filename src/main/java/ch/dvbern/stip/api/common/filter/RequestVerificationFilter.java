@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.filter;
 
+import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -45,7 +46,7 @@ public class RequestVerificationFilter implements ContainerRequestFilter {
         if (isEnvAndVersionMatching(containerRequestContext)) {
             return;
         }
-        throw new RuntimeException("headers not available");
+        throw new AppErrorException("headers not available");
     }
 
     private boolean excludeResource(ContainerRequestContext req) {
