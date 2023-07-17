@@ -41,7 +41,7 @@ public class Ausbildung extends AbstractEntity {
 
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column
-	private String alternativeAusbildungstaette;
+	private String alternativeAusbildungsstaette;
 
 	@NotNull
 	@Size(max = DB_DEFAULT_MAX_LENGTH)

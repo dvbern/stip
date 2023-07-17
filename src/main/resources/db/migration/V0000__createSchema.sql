@@ -676,7 +676,7 @@ CREATE TABLE eltern
     user_mutiert                              VARCHAR(255) NOT NULL,
     version                                   BIGINT       NOT NULL,
     adresse_id                                UUID         NOT NULL,
-    elternTyp                                 VARCHAR(255) NOT NULL,
+    eltern_typ                                 VARCHAR(255) NOT NULL,
     nachname                                  VARCHAR(255) NOT NULL,
     vorname                                   VARCHAR(255) NOT NULL,
     sozialversicherungsnummer                 VARCHAR(255) NOT NULL,
@@ -693,7 +693,7 @@ CREATE TABLE eltern
 );
 
 ALTER TABLE eltern
-    ADD CONSTRAINT FK_eltern_gesuch_fomular_id
+    ADD CONSTRAINT FK_eltern_gesuch_formular_id
         FOREIGN KEY (gesuch_formular_id)
             REFERENCES gesuch_formular (id);
 
@@ -713,7 +713,7 @@ CREATE TABLE eltern_aud
     user_mutiert                              VARCHAR(255),
     version                                   BIGINT,
     adresse_id                                UUID,
-    elternTyp                                 VARCHAR(255),
+    eltern_typ                                 VARCHAR(255),
     nachname                                  VARCHAR(255),
     vorname                                   VARCHAR(255),
     sozialversicherungsnummer                 VARCHAR(255),
@@ -832,7 +832,7 @@ CREATE TABLE geschwister
 );
 
 ALTER TABLE geschwister
-    ADD CONSTRAINT FK_geschwister_gesuch_fomular_id
+    ADD CONSTRAINT FK_geschwister_gesuch_formular_id
         FOREIGN KEY (gesuch_formular_id)
             REFERENCES gesuch_formular (id);
 
@@ -882,7 +882,7 @@ CREATE TABLE kind
 );
 
 ALTER TABLE kind
-    ADD CONSTRAINT FK_kind_gesuch_fomular_id
+    ADD CONSTRAINT FK_kind_gesuch_formular_id
         FOREIGN KEY (gesuch_formular_id)
             REFERENCES gesuch_formular (id);
 

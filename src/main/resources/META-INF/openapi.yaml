@@ -497,6 +497,12 @@ components:
         - NIEDERLASSUNGSBEWILLIGUNG_C
         - NIEDERLASSUNGSBEWILLIGUNG_G
       type: string
+    Wohnsitz:
+      enum:
+        - EIGENER_HAUSHALT
+        - FAMILIE
+        - MUTTER_VATER
+      type: string
     Zivilstand:
       enum:
         - LEDIG
@@ -1289,12 +1295,6 @@ components:
           type: object
         -
           $ref: '#/components/schemas/GesuchFormularUpdate'
-    Wohnsitz:
-      enum:
-        - EIGENER_HAUSHALT
-        - FAMILIE
-        - MUTTER_VATER
-      type: string
   responses:
     Unauthorized:
       content:
