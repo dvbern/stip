@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.partner.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,7 +21,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Partner extends AbstractEntity {
+public class Partner extends AbstractPerson {
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
@@ -28,20 +29,6 @@ public class Partner extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     private String sozialversicherungsnummer;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String nachname;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String vorname;
-
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate geburtsdatum;
 
     @NotNull
     @Column(nullable = false)

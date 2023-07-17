@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Eltern extends AbstractEntity {
+public class Eltern extends AbstractPerson {
 
 	@NotNull
 	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -34,16 +35,6 @@ public class Eltern extends AbstractEntity {
 	private String sozialversicherungsnummer;
 
 	@NotNull
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String nachname;
-
-	@NotNull
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String vorname;
-
-	@NotNull
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ElternTyp elternTyp;
@@ -52,10 +43,6 @@ public class Eltern extends AbstractEntity {
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String telefonnummer;
-
-	@NotNull
-	@Column(nullable = false)
-	private LocalDate geburtsdatum;
 
 	@NotNull
 	@Column(nullable = false)
