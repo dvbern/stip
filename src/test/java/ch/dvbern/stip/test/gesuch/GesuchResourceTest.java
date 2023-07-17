@@ -136,7 +136,7 @@ public class GesuchResourceTest {
     @Test
     @Order(10)
     void testUpdateGesuchAddLebenslaufEndpoint() {
-        var gesuchUpdatDTO = prepareGesuchUpdateForLebenslauf();
+        var gesuchUpdatDTO = prepareGesuchUpdateForLebenslaufBildungsart();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()

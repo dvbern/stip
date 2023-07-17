@@ -8,17 +8,15 @@ import java.util.UUID;
 
 public class DTOGenerator {
 
-    public static GesuchUpdateDtoSpec prepareGesuchUpdateForLebenslauf() {
+    public static GesuchUpdateDtoSpec prepareGesuchUpdateForLebenslaufBildungsart() {
         var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
         var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
         var lebenslaufItem = new LebenslaufItemUpdateDtoSpec();
         lebenslaufItem.setBeschreibung("Test");
         lebenslaufItem.setBis("02.2022");
         lebenslaufItem.setVon("01.2022");
-        lebenslaufItem.setTaetigskeitsart(TaetigskeitsartDtoSpec.ERWERBSTAETIGKEIT);
         lebenslaufItem.setBildungsart(BildungsartDtoSpec.FACHHOCHSCHULEN);
         lebenslaufItem.setWohnsitz(WohnsitzKantonDtoSpec.BE);
-
         gesuchformularToWorkWith.getLebenslaufItems().add(lebenslaufItem);
         gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
         return gesuchUpdatDTO;

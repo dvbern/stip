@@ -23,13 +23,13 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @EqualsAndHashCode
 public class LebenslaufItem extends AbstractEntity {
 
-	@NotNull
-	@Column(nullable = false)
+
+	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)
 	private Bildungsart bildungsart;
 
-	@NotNull
-	@Column(nullable = false)
+
+	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)
 	private Taetigskeitsart taetigskeitsart;
 
