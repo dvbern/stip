@@ -67,24 +67,24 @@ public class GesuchFormular extends AbstractEntity {
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_formular_id")
+    @JoinColumn(name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
     @OrderBy("von")
     private Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_formular_id")
+    @JoinColumn(name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     private Set<Geschwister> geschwisters = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn( name = "gesuch_formular_id")
+    @JoinColumn( name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
     private Set<Eltern> elterns = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_formular_id")
+    @JoinColumn(name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     private Set<Kind> kinds = new LinkedHashSet<>();
 }
