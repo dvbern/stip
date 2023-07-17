@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.eltern.entity;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.type.Anrede;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,12 +13,18 @@ import org.hibernate.envers.Audited;
 import java.time.LocalDate;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Audited
 @Entity
 @Getter
 @Setter
 public class Eltern extends AbstractEntity {
+
+    @NotNull
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"), nullable = false)
+    private Adresse adresse;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
@@ -28,7 +34,7 @@ public class Eltern extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
-    private String name;
+    private String nachname;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
@@ -38,7 +44,7 @@ public class Eltern extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Anrede geschlecht;
+    private ElternTyp elternTyp;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
@@ -62,7 +68,14 @@ public class Eltern extends AbstractEntity {
     private Boolean ergaenzungsleistungAusbezahlt;
 
     @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_eltern_container_gesuch_id"))
-    private GesuchFormular gesuchFormular;
+    @Column(nullable = false)
+    private boolean identischerZivilrechtlicherWohnsitz = true;
+
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = true)
+    private String identischerZivilrechtlicherWohnsitzOrt;
+
+    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Column(nullable = true)
+    private String identischerZivilrechtlicherWohnsitzPLZ;
 }

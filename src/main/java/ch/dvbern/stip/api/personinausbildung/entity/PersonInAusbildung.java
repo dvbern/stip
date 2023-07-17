@@ -18,9 +18,10 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
-import ch.dvbern.stip.api.personinausbildung.type.Wohnsitz;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
@@ -32,6 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
@@ -41,25 +43,16 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Entity
 @Getter
 @Setter
-public class PersonInAusbildung extends AbstractEntity {
+public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
     private Adresse adresse;
+
     @NotNull
     @Column(nullable = false)
     private String sozialversicherungsnummer;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String name;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String vorname;
 
     @NotNull
     @Column(nullable = false)
@@ -72,11 +65,11 @@ public class PersonInAusbildung extends AbstractEntity {
 
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = true)
-    private String izvOrt;
+    private String identischerZivilrechtlicherWohnsitzOrt;
 
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
     @Column(nullable = true)
-    private String izvPLZ;
+    private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
@@ -87,10 +80,6 @@ public class PersonInAusbildung extends AbstractEntity {
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
     private String telefonnummer;
-
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate geburtsdatum;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -108,11 +97,6 @@ public class PersonInAusbildung extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private Zivilstand zivilstand;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Wohnsitz wohnsitz;
 
     @NotNull
     @Column(nullable = false)

@@ -18,14 +18,25 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Audited
 @Entity
 @Getter
@@ -43,4 +54,35 @@ public class GesuchFormular extends AbstractEntity {
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"), nullable = true)
     private Familiensituation familiensituation;
+
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
+    private Partner partner;
+
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
+    private Auszahlung auszahlung;
+
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id")
+    @OrderBy("von")
+    private Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
+
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id")
+    @OrderBy("geburtsdatum")
+    private Set<Geschwister> geschwisters = new LinkedHashSet<>();
+
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id")
+    private Set<Eltern> elterns = new LinkedHashSet<>();
+
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id")
+    @OrderBy("geburtsdatum")
+    private Set<Kind> kinds = new LinkedHashSet<>();
 }

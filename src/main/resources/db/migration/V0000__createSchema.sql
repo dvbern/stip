@@ -136,33 +136,35 @@ ALTER TABLE adresse_aud
 
 CREATE TABLE person_in_ausbildung
 (
-    id                                    UUID         NOT NULL,
-    timestamp_erstellt                    TIMESTAMP    NOT NULL,
-    timestamp_mutiert                     TIMESTAMP    NOT NULL,
-    user_erstellt                         VARCHAR(255) NOT NULL,
-    user_mutiert                          VARCHAR(255) NOT NULL,
-    version                               BIGINT       NOT NULL,
-    adresse_id                            UUID         NOT NULL,
-    sozialversicherungsnummer             VARCHAR(255) NOT NULL,
-    anrede                                VARCHAR(255) NOT NULL,
-    name                                  VARCHAR(255) NOT NULL,
-    vorname                               VARCHAR(255) NOT NULL,
-    identischer_zivilrechtlicher_wohnsitz BOOLEAN      NOT NULL,
-    izv_ort                               VARCHAR(255),
-    izv_plz                               VARCHAR(255),
-    email                                 VARCHAR(255) NOT NULL,
-    telefonnummer                         VARCHAR(255) NOT NULL,
-    geburtsdatum                          DATE         NOT NULL,
-    nationalitaet                         VARCHAR(255) NOT NULL DEFAULT 'CH',
-    heimatort                             VARCHAR(255),
-    niederlassungsstatus                  VARCHAR(255),
-    zivilstand                            VARCHAR(255),
-    wohnsitz                              VARCHAR(255) NOT NULL,
-    sozialhilfebeitraege                  BOOLEAN      NOT NULL,
-    quellenbesteuert                      BOOLEAN      NOT NULL,
-    kinder                                BOOLEAN      NOT NULL,
-    digitale_kommunikation                BOOLEAN      NOT NULL DEFAULT TRUE,
-    korrespondenz_sprache                 VARCHAR(255) NOT NULL,
+    id                                        UUID         NOT NULL,
+    timestamp_erstellt                        TIMESTAMP    NOT NULL,
+    timestamp_mutiert                         TIMESTAMP    NOT NULL,
+    user_erstellt                             VARCHAR(255) NOT NULL,
+    user_mutiert                              VARCHAR(255) NOT NULL,
+    version                                   BIGINT       NOT NULL,
+    adresse_id                                UUID         NOT NULL,
+    sozialversicherungsnummer                 VARCHAR(255) NOT NULL,
+    anrede                                    VARCHAR(255) NOT NULL,
+    nachname                                  VARCHAR(255) NOT NULL,
+    vorname                                   VARCHAR(255) NOT NULL,
+    identischer_zivilrechtlicher_wohnsitz     BOOLEAN      NOT NULL,
+    identischer_zivilrechtlicher_wohnsitz_ort VARCHAR(255),
+    identischer_zivilrechtlicher_wohnsitz_plz VARCHAR(255),
+    email                                     VARCHAR(255) NOT NULL,
+    telefonnummer                             VARCHAR(255) NOT NULL,
+    geburtsdatum                              DATE         NOT NULL,
+    nationalitaet                             VARCHAR(255) NOT NULL DEFAULT 'CH',
+    heimatort                                 VARCHAR(255),
+    niederlassungsstatus                      VARCHAR(255),
+    zivilstand                                VARCHAR(255),
+    wohnsitz                                  VARCHAR(255) NOT NULL,
+    wohnsitz_anteil_mutter                    NUMERIC(19, 2),
+    wohnsitz_anteil_vater                     NUMERIC(19, 2),
+    sozialhilfebeitraege                      BOOLEAN      NOT NULL,
+    quellenbesteuert                          BOOLEAN      NOT NULL,
+    kinder                                    BOOLEAN      NOT NULL,
+    digitale_kommunikation                    BOOLEAN      NOT NULL DEFAULT TRUE,
+    korrespondenz_sprache                     VARCHAR(255) NOT NULL,
     CONSTRAINT person_in_ausbildung_pk PRIMARY KEY (id)
 );
 
@@ -173,35 +175,37 @@ ALTER TABLE person_in_ausbildung
 
 CREATE TABLE person_in_ausbildung_aud
 (
-    id                                    UUID    NOT NULL,
-    rev                                   INTEGER NOT NULL,
-    revtype                               SMALLINT,
-    timestamp_erstellt                    TIMESTAMP,
-    timestamp_mutiert                     TIMESTAMP,
-    user_erstellt                         VARCHAR(255),
-    user_mutiert                          VARCHAR(255),
-    version                               BIGINT,
-    adresse_id                            UUID,
-    sozialversicherungsnummer             VARCHAR(255),
-    anrede                                VARCHAR(255),
-    name                                  VARCHAR(255),
-    vorname                               VARCHAR(255),
-    identischer_zivilrechtlicher_wohnsitz BOOLEAN,
-    izv_ort                               VARCHAR(255),
-    izv_plz                               VARCHAR(255),
-    email                                 VARCHAR(255),
-    telefonnummer                         VARCHAR(255),
-    geburtsdatum                          DATE,
-    nationalitaet                         VARCHAR(255),
-    heimatort                             VARCHAR(255),
-    niederlassungsstatus                  VARCHAR(255),
-    zivilstand                            VARCHAR(255),
-    wohnsitz                              VARCHAR(255),
-    sozialhilfebeitraege                  BOOLEAN,
-    quellenbesteuert                      BOOLEAN,
-    kinder                                BOOLEAN,
-    digitale_kommunikation                BOOLEAN,
-    korrespondenz_sprache                 VARCHAR(255),
+    id                                        UUID    NOT NULL,
+    rev                                       INTEGER NOT NULL,
+    revtype                                   SMALLINT,
+    timestamp_erstellt                        TIMESTAMP,
+    timestamp_mutiert                         TIMESTAMP,
+    user_erstellt                             VARCHAR(255),
+    user_mutiert                              VARCHAR(255),
+    version                                   BIGINT,
+    adresse_id                                UUID,
+    sozialversicherungsnummer                 VARCHAR(255),
+    anrede                                    VARCHAR(255),
+    nachname                                  VARCHAR(255),
+    vorname                                   VARCHAR(255),
+    identischer_zivilrechtlicher_wohnsitz     BOOLEAN,
+    identischer_zivilrechtlicher_wohnsitz_ort VARCHAR(255),
+    identischer_zivilrechtlicher_wohnsitz_plz VARCHAR(255),
+    email                                     VARCHAR(255),
+    telefonnummer                             VARCHAR(255),
+    geburtsdatum                              DATE,
+    nationalitaet                             VARCHAR(255),
+    heimatort                                 VARCHAR(255),
+    niederlassungsstatus                      VARCHAR(255),
+    zivilstand                                VARCHAR(255),
+    wohnsitz                                  VARCHAR(255),
+    wohnsitz_anteil_mutter                    NUMERIC(19, 2),
+    wohnsitz_anteil_vater                     NUMERIC(19, 2),
+    sozialhilfebeitraege                      BOOLEAN,
+    quellenbesteuert                          BOOLEAN,
+    kinder                                    BOOLEAN,
+    digitale_kommunikation                    BOOLEAN,
+    korrespondenz_sprache                     VARCHAR(255),
     CONSTRAINT person_in_ausbildung_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -210,7 +214,7 @@ ALTER TABLE person_in_ausbildung_aud
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
-CREATE TABLE ausbildungstaette
+CREATE TABLE ausbildungsstaette
 (
     id                 UUID         NOT NULL,
     timestamp_erstellt TIMESTAMP    NOT NULL,
@@ -220,10 +224,10 @@ CREATE TABLE ausbildungstaette
     version            BIGINT       NOT NULL,
     name               VARCHAR(255) NOT NULL,
     ausbildungsland    VARCHAR(255) NOT NULL,
-    CONSTRAINT ausbildungstaette_pk PRIMARY KEY (id)
+    CONSTRAINT ausbildungsstaette_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE ausbildungstaette_aud
+CREATE TABLE ausbildungsstaette_aud
 (
     id                 UUID         NOT NULL,
     rev                INTEGER      NOT NULL,
@@ -234,45 +238,45 @@ CREATE TABLE ausbildungstaette_aud
     user_mutiert       VARCHAR(255),
     name               VARCHAR(255) NOT NULL,
     ausbildungsland    VARCHAR(255) NOT NULL,
-    CONSTRAINT ausbildungstaette_aud_pk PRIMARY KEY (id, rev)
+    CONSTRAINT ausbildungsstaette_aud_pk PRIMARY KEY (id, rev)
 );
 
-ALTER TABLE ausbildungstaette_aud
-    ADD CONSTRAINT FK_ausbildungstaette_aud_revinfo
+ALTER TABLE ausbildungsstaette_aud
+    ADD CONSTRAINT FK_ausbildungsstaette_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
 CREATE TABLE ausbildungsgang
 (
-    id                   UUID         NOT NULL,
-    timestamp_erstellt   TIMESTAMP    NOT NULL,
-    timestamp_mutiert    TIMESTAMP    NOT NULL,
-    user_erstellt        VARCHAR(255) NOT NULL,
-    user_mutiert         VARCHAR(255) NOT NULL,
-    version              BIGINT       NOT NULL,
-    bezeichnung_de       VARCHAR(255) NOT NULL,
-    bezeichnung_fr       VARCHAR(255),
-    ausbildungstaette_id UUID         NOT NULL,
+    id                    UUID         NOT NULL,
+    timestamp_erstellt    TIMESTAMP    NOT NULL,
+    timestamp_mutiert     TIMESTAMP    NOT NULL,
+    user_erstellt         VARCHAR(255) NOT NULL,
+    user_mutiert          VARCHAR(255) NOT NULL,
+    version               BIGINT       NOT NULL,
+    bezeichnung_de        VARCHAR(255) NOT NULL,
+    bezeichnung_fr        VARCHAR(255),
+    ausbildungsstaette_id UUID         NOT NULL,
     CONSTRAINT ausbildungsgang_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE ausbildungsgang
-    ADD CONSTRAINT FK_ausbildungsgang_ausbildungstaette_id
-        FOREIGN KEY (ausbildungstaette_id)
-            REFERENCES ausbildungstaette (id);
+    ADD CONSTRAINT FK_ausbildungsgang_ausbildungsstaette_id
+        FOREIGN KEY (ausbildungsstaette_id)
+            REFERENCES ausbildungsstaette (id);
 
 CREATE TABLE ausbildungsgang_aud
 (
-    id                   UUID    NOT NULL,
-    rev                  INTEGER NOT NULL,
-    revtype              SMALLINT,
-    timestamp_erstellt   TIMESTAMP,
-    timestamp_mutiert    TIMESTAMP,
-    user_erstellt        VARCHAR(255),
-    user_mutiert         VARCHAR(255),
-    bezeichnung_de       VARCHAR(255),
-    bezeichnung_fr       VARCHAR(255),
-    ausbildungstaette_id UUID,
+    id                    UUID    NOT NULL,
+    rev                   INTEGER NOT NULL,
+    revtype               SMALLINT,
+    timestamp_erstellt    TIMESTAMP,
+    timestamp_mutiert     TIMESTAMP,
+    user_erstellt         VARCHAR(255),
+    user_mutiert          VARCHAR(255),
+    bezeichnung_de        VARCHAR(255),
+    bezeichnung_fr        VARCHAR(255),
+    ausbildungsstaette_id UUID,
     CONSTRAINT ausbildungsgang_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -283,22 +287,22 @@ ALTER TABLE ausbildungsgang_aud
 
 CREATE TABLE ausbildung
 (
-    id                            UUID         NOT NULL,
-    timestamp_erstellt            TIMESTAMP    NOT NULL,
-    timestamp_mutiert             TIMESTAMP    NOT NULL,
-    user_erstellt                 VARCHAR(255) NOT NULL,
-    user_mutiert                  VARCHAR(255) NOT NULL,
-    version                       BIGINT       NOT NULL,
-    ausbildungsgang_id            UUID,
-    ausbildungstaette_id          UUID,
-    ausbildungsland               VARCHAR(255) NOT NULL,
-    fachrichtung                  VARCHAR(255) NOT NULL,
-    pensum                        VARCHAR(255) NOT NULL,
-    ausbildung_nicht_gefunden     BOOLEAN      NOT NULL DEFAULT FALSE,
-    ausbildung_begin              DATE         NOT NULL,
-    ausbildung_end                DATE         NOT NULL,
-    alternative_ausbildungsgang   VARCHAR(255),
-    alternative_ausbildungstaette VARCHAR(255),
+    id                             UUID         NOT NULL,
+    timestamp_erstellt             TIMESTAMP    NOT NULL,
+    timestamp_mutiert              TIMESTAMP    NOT NULL,
+    user_erstellt                  VARCHAR(255) NOT NULL,
+    user_mutiert                   VARCHAR(255) NOT NULL,
+    version                        BIGINT       NOT NULL,
+    ausbildungsgang_id             UUID,
+    ausbildungsstaette_id          UUID,
+    ausbildungsland                VARCHAR(255) NOT NULL,
+    fachrichtung                   VARCHAR(255) NOT NULL,
+    pensum                         VARCHAR(255) NOT NULL,
+    ausbildung_nicht_gefunden      BOOLEAN      NOT NULL DEFAULT FALSE,
+    ausbildung_begin               DATE         NOT NULL,
+    ausbildung_end                 DATE         NOT NULL,
+    alternative_ausbildungsgang    VARCHAR(255),
+    alternative_ausbildungsstaette VARCHAR(255),
     CONSTRAINT ausbildung_pk PRIMARY KEY (id)
 );
 
@@ -308,30 +312,30 @@ ALTER TABLE ausbildung
             REFERENCES ausbildungsgang (id);
 
 ALTER TABLE ausbildung
-    ADD CONSTRAINT FK_ausbildung_ausbildungstaette_id
-        FOREIGN KEY (ausbildungstaette_id)
-            REFERENCES ausbildungstaette (id);
+    ADD CONSTRAINT FK_ausbildung_ausbildungsstaette_id
+        FOREIGN KEY (ausbildungsstaette_id)
+            REFERENCES ausbildungsstaette (id);
 
 CREATE TABLE ausbildung_aud
 (
-    id                            UUID    NOT NULL,
-    rev                           INTEGER NOT NULL,
-    revtype                       SMALLINT,
-    timestamp_erstellt            TIMESTAMP,
-    timestamp_mutiert             TIMESTAMP,
-    user_erstellt                 VARCHAR(255),
-    user_mutiert                  VARCHAR(255),
-    version                       BIGINT,
-    ausbildungsgang_id            UUID,
-    ausbildungstaette_id          UUID,
-    ausbildungsland               VARCHAR(255),
-    fachrichtung                  VARCHAR(255),
-    pensum                        VARCHAR(255),
-    ausbildung_nicht_gefunden     BOOLEAN,
-    ausbildung_begin              DATE,
-    ausbildung_end                DATE,
-    alternative_ausbildungsgang   VARCHAR(255),
-    alternative_ausbildungstaette VARCHAR(255),
+    id                             UUID    NOT NULL,
+    rev                            INTEGER NOT NULL,
+    revtype                        SMALLINT,
+    timestamp_erstellt             TIMESTAMP,
+    timestamp_mutiert              TIMESTAMP,
+    user_erstellt                  VARCHAR(255),
+    user_mutiert                   VARCHAR(255),
+    version                        BIGINT,
+    ausbildungsgang_id             UUID,
+    ausbildungsstaette_id          UUID,
+    ausbildungsland                VARCHAR(255),
+    fachrichtung                   VARCHAR(255),
+    pensum                         VARCHAR(255),
+    ausbildung_nicht_gefunden      BOOLEAN,
+    ausbildung_begin               DATE,
+    ausbildung_end                 DATE,
+    alternative_ausbildungsgang    VARCHAR(255),
+    alternative_ausbildungsstaette VARCHAR(255),
     CONSTRAINT ausbildung_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -399,47 +403,151 @@ ALTER TABLE familiensituation_aud
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);
 
+CREATE TABLE partner
+(
+    id                        UUID           NOT NULL,
+    timestamp_erstellt        TIMESTAMP      NOT NULL,
+    timestamp_mutiert         TIMESTAMP      NOT NULL,
+    user_erstellt             VARCHAR(255)   NOT NULL,
+    user_mutiert              VARCHAR(255)   NOT NULL,
+    version                   BIGINT         NOT NULL,
+    adresse_id                UUID           NOT NULL,
+    sozialversicherungsnummer VARCHAR(255)   NOT NULL,
+    nachname                  VARCHAR(255)   NOT NULL,
+    vorname                   VARCHAR(255)   NOT NULL,
+    geburtsdatum              DATE           NOT NULL,
+    jahreseinkommen           NUMERIC(19, 2) NOT NULL,
+    CONSTRAINT partner_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE partner
+    ADD CONSTRAINT FK_partner_adresse_id
+        FOREIGN KEY (adresse_id)
+            REFERENCES adresse (id);
+
+CREATE TABLE partner_aud
+(
+    id                        UUID    NOT NULL,
+    rev                       INTEGER NOT NULL,
+    revtype                   SMALLINT,
+    timestamp_erstellt        TIMESTAMP,
+    timestamp_mutiert         TIMESTAMP,
+    user_erstellt             VARCHAR(255),
+    user_mutiert              VARCHAR(255),
+    version                   BIGINT,
+    adresse_id                UUID,
+    sozialversicherungsnummer VARCHAR(255),
+    nachname                  VARCHAR(255),
+    vorname                   VARCHAR(255),
+    geburtsdatum              DATE,
+    jahreseinkommen           NUMERIC(19, 2),
+    CONSTRAINT partner_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE partner_aud
+    ADD CONSTRAINT FK_partner_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE auszahlung
+(
+    id                 UUID         NOT NULL,
+    timestamp_erstellt TIMESTAMP    NOT NULL,
+    timestamp_mutiert  TIMESTAMP    NOT NULL,
+    user_erstellt      VARCHAR(255) NOT NULL,
+    user_mutiert       VARCHAR(255) NOT NULL,
+    version            BIGINT       NOT NULL,
+    adresse_id         UUID         NOT NULL,
+    kontoinhaber       VARCHAR(255) NOT NULL,
+    nachname           VARCHAR(255) NOT NULL,
+    vorname            VARCHAR(255) NOT NULL,
+    iban               VARCHAR(255) NOT NULL,
+    CONSTRAINT auszahlung_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE auszahlung
+    ADD CONSTRAINT FK_auszahlung_adresse_id
+        FOREIGN KEY (adresse_id)
+            REFERENCES adresse (id);
+
+CREATE TABLE auszahlung_aud
+(
+    id                 UUID    NOT NULL,
+    rev                INTEGER NOT NULL,
+    revtype            SMALLINT,
+    timestamp_erstellt TIMESTAMP,
+    timestamp_mutiert  TIMESTAMP,
+    user_erstellt      VARCHAR(255),
+    user_mutiert       VARCHAR(255),
+    version            BIGINT,
+    adresse_id         UUID,
+    kontoinhaber       VARCHAR(255),
+    nachname           VARCHAR(255),
+    vorname            VARCHAR(255),
+    iban               VARCHAR(255),
+    CONSTRAINT auszahlung_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE auszahlung_aud
+    ADD CONSTRAINT FK_auszahlung_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
 CREATE TABLE gesuch_formular
 (
-    id                                UUID         NOT NULL,
-    timestamp_erstellt                TIMESTAMP    NOT NULL,
-    timestamp_mutiert                 TIMESTAMP    NOT NULL,
-    user_erstellt                     VARCHAR(255) NOT NULL,
-    user_mutiert                      VARCHAR(255) NOT NULL,
-    version                           BIGINT       NOT NULL,
+    id                      UUID         NOT NULL,
+    timestamp_erstellt      TIMESTAMP    NOT NULL,
+    timestamp_mutiert       TIMESTAMP    NOT NULL,
+    user_erstellt           VARCHAR(255) NOT NULL,
+    user_mutiert            VARCHAR(255) NOT NULL,
+    version                 BIGINT       NOT NULL,
     person_in_ausbildung_id UUID,
     ausbildung_id           UUID,
     familiensituation_id    UUID,
+    partner_id              UUID,
+    auszahlung_id           UUID,
     CONSTRAINT gesuch_formular_pk PRIMARY KEY (id)
 );
 
 ALTER TABLE gesuch_formular
-    ADD CONSTRAINT FK_gesuch_person_in_ausbildung_id
+    ADD CONSTRAINT FK_gesuch_formular_person_in_ausbildung_id
         FOREIGN KEY (person_in_ausbildung_id)
             REFERENCES person_in_ausbildung (id);
 
 ALTER TABLE gesuch_formular
-    ADD CONSTRAINT FK_gesuch_ausbildung_id
+    ADD CONSTRAINT FK_gesuch_formular_ausbildung_id
         FOREIGN KEY (ausbildung_id)
             REFERENCES ausbildung (id);
 
 ALTER TABLE gesuch_formular
-    ADD CONSTRAINT FK_gesuch_familiensituation_id
+    ADD CONSTRAINT FK_gesuch_formular_familiensituation_id
         FOREIGN KEY (familiensituation_id)
             REFERENCES familiensituation (id);
 
+ALTER TABLE gesuch_formular
+    ADD CONSTRAINT FK_gesuch_formular_partner_id
+        FOREIGN KEY (partner_id)
+            REFERENCES partner (id);
+
+ALTER TABLE gesuch_formular
+    ADD CONSTRAINT FK_gesuch_formular_auszahlung_id
+        FOREIGN KEY (auszahlung_id)
+            REFERENCES auszahlung (id);
+
 CREATE TABLE gesuch_formular_aud
 (
-    id                                UUID    NOT NULL,
-    rev                               INTEGER NOT NULL,
-    revtype                           SMALLINT,
-    timestamp_erstellt                TIMESTAMP,
-    timestamp_mutiert                 TIMESTAMP,
-    user_erstellt                     VARCHAR(255),
-    user_mutiert                      VARCHAR(255),
+    id                      UUID    NOT NULL,
+    rev                     INTEGER NOT NULL,
+    revtype                 SMALLINT,
+    timestamp_erstellt      TIMESTAMP,
+    timestamp_mutiert       TIMESTAMP,
+    user_erstellt           VARCHAR(255),
+    user_mutiert            VARCHAR(255),
     person_in_ausbildung_id UUID,
     ausbildung_id           UUID,
     familiensituation_id    UUID,
+    partner_id              UUID,
+    auszahlung_id           UUID,
     CONSTRAINT gesuch_formular_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -456,11 +564,11 @@ CREATE TABLE gesuch
     user_erstellt                    VARCHAR(255) NOT NULL,
     user_mutiert                     VARCHAR(255) NOT NULL,
     version                          BIGINT       NOT NULL,
-    gesuch_nummer                     INTEGER      NOT NULL,
-    gesuch_status                     VARCHAR(255) NOT NULL,
-    gesuch_status_aenderung_datum     TIMESTAMP    NOT NULL,
-    gesuchsperiode_id                 UUID         NOT NULL,
-    fall_id                           UUID         NOT NULL,
+    gesuch_nummer                    INTEGER      NOT NULL,
+    gesuch_status                    VARCHAR(255) NOT NULL,
+    gesuch_status_aenderung_datum    TIMESTAMP    NOT NULL,
+    gesuchsperiode_id                UUID         NOT NULL,
+    fall_id                          UUID         NOT NULL,
     gesuch_formular_freigabe_copy_id UUID,
     gesuch_formular_to_work_with_id  UUID,
     CONSTRAINT gesuch_pk PRIMARY KEY (id)
@@ -519,9 +627,9 @@ CREATE TABLE lebenslauf_item
     user_erstellt      VARCHAR(255) NOT NULL,
     user_mutiert       VARCHAR(255) NOT NULL,
     version            BIGINT       NOT NULL,
-    lebenslauf_typ     VARCHAR(255) NOT NULL,
-    lebenslauf_subtyp  VARCHAR(255) NOT NULL,
-    name               VARCHAR(255) NOT NULL,
+    bildungsart        VARCHAR(255),
+    taetigskeitsart    VARCHAR(255),
+    beschreibung       VARCHAR(255) NOT NULL,
     von                DATE         NOT NULL,
     bis                DATE         NOT NULL,
     wohnsitz           VARCHAR(255) NOT NULL,
@@ -544,9 +652,9 @@ CREATE TABLE lebenslauf_item_aud
     user_erstellt      VARCHAR(255),
     user_mutiert       VARCHAR(255),
     version            BIGINT,
-    lebenslauf_typ     VARCHAR(255),
-    lebenslauf_subtyp  VARCHAR(255),
-    name               VARCHAR(255),
+    bildungsart        VARCHAR(255),
+    taetigskeitsart    VARCHAR(255),
+    beschreibung       VARCHAR(255),
     von                DATE,
     bis                DATE,
     wohnsitz           VARCHAR(255),
@@ -561,22 +669,26 @@ ALTER TABLE lebenslauf_item_aud
 
 CREATE TABLE eltern
 (
-    id                              UUID         NOT NULL,
-    timestamp_erstellt              TIMESTAMP    NOT NULL,
-    timestamp_mutiert               TIMESTAMP    NOT NULL,
-    user_erstellt                   VARCHAR(255) NOT NULL,
-    user_mutiert                    VARCHAR(255) NOT NULL,
-    version                         BIGINT       NOT NULL,
-    geschlecht                      VARCHAR(255) NOT NULL,
-    name                            VARCHAR(255) NOT NULL,
-    vorname                         VARCHAR(255) NOT NULL,
-    sozialversicherungsnummer       VARCHAR(255) NOT NULL,
-    telefonnummer                   VARCHAR(255) NOT NULL,
-    geburtsdatum                    DATE         NOT NULL,
-    sozialhilfebeitraege_ausbezahlt BOOLEAN      NOT NULL,
-    ausweisb_fluechtling            BOOLEAN      NOT NULL,
-    ergaenzungsleistung_ausbezahlt  BOOLEAN      NOT NULL,
-    gesuch_formular_id              UUID         NOT NULL,
+    id                                        UUID         NOT NULL,
+    timestamp_erstellt                        TIMESTAMP    NOT NULL,
+    timestamp_mutiert                         TIMESTAMP    NOT NULL,
+    user_erstellt                             VARCHAR(255) NOT NULL,
+    user_mutiert                              VARCHAR(255) NOT NULL,
+    version                                   BIGINT       NOT NULL,
+    adresse_id                                UUID         NOT NULL,
+    elternTyp                                 VARCHAR(255) NOT NULL,
+    nachname                                  VARCHAR(255) NOT NULL,
+    vorname                                   VARCHAR(255) NOT NULL,
+    sozialversicherungsnummer                 VARCHAR(255) NOT NULL,
+    telefonnummer                             VARCHAR(255) NOT NULL,
+    geburtsdatum                              DATE         NOT NULL,
+    sozialhilfebeitraege_ausbezahlt           BOOLEAN      NOT NULL,
+    ausweisb_fluechtling                      BOOLEAN      NOT NULL,
+    ergaenzungsleistung_ausbezahlt            BOOLEAN      NOT NULL,
+    identischer_zivilrechtlicher_wohnsitz     BOOLEAN      NOT NULL,
+    identischer_zivilrechtlicher_wohnsitz_ort VARCHAR(255),
+    identischer_zivilrechtlicher_wohnsitz_plz VARCHAR(255),
+    gesuch_formular_id                        UUID         NOT NULL,
     CONSTRAINT eltern_pk PRIMARY KEY (id)
 );
 
@@ -585,26 +697,35 @@ ALTER TABLE eltern
         FOREIGN KEY (gesuch_formular_id)
             REFERENCES gesuch_formular (id);
 
+ALTER TABLE eltern
+    ADD CONSTRAINT FK_eltern_adresse_id
+        FOREIGN KEY (adresse_id)
+            REFERENCES adresse (id);
+
 CREATE TABLE eltern_aud
 (
-    id                              UUID    NOT NULL,
-    rev                             INTEGER NOT NULL,
-    revtype                         SMALLINT,
-    timestamp_erstellt              TIMESTAMP,
-    timestamp_mutiert               TIMESTAMP,
-    user_erstellt                   VARCHAR(255),
-    user_mutiert                    VARCHAR(255),
-    version                         BIGINT,
-    geschlecht                      VARCHAR(255),
-    name                            VARCHAR(255),
-    vorname                         VARCHAR(255),
-    sozialversicherungsnummer       VARCHAR(255),
-    telefonnummer                   VARCHAR(255),
-    geburtsdatum                    DATE,
-    sozialhilfebeitraege_ausbezahlt BOOLEAN,
-    ausweisb_fluechtling            BOOLEAN,
-    ergaenzungsleistung_ausbezahlt  BOOLEAN,
-    gesuch_formular_id              UUID,
+    id                                        UUID    NOT NULL,
+    rev                                       INTEGER NOT NULL,
+    revtype                                   SMALLINT,
+    timestamp_erstellt                        TIMESTAMP,
+    timestamp_mutiert                         TIMESTAMP,
+    user_erstellt                             VARCHAR(255),
+    user_mutiert                              VARCHAR(255),
+    version                                   BIGINT,
+    adresse_id                                UUID,
+    elternTyp                                 VARCHAR(255),
+    nachname                                  VARCHAR(255),
+    vorname                                   VARCHAR(255),
+    sozialversicherungsnummer                 VARCHAR(255),
+    telefonnummer                             VARCHAR(255),
+    geburtsdatum                              DATE,
+    sozialhilfebeitraege_ausbezahlt           BOOLEAN,
+    ausweisb_fluechtling                      BOOLEAN,
+    ergaenzungsleistung_ausbezahlt            BOOLEAN,
+    identischer_zivilrechtlicher_wohnsitz     BOOLEAN,
+    identischer_zivilrechtlicher_wohnsitz_ort VARCHAR(255),
+    identischer_zivilrechtlicher_wohnsitz_plz VARCHAR(255),
+    gesuch_formular_id                        UUID,
     CONSTRAINT eltern_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -688,5 +809,105 @@ CREATE TABLE dokument_aud
 
 ALTER TABLE dokument_aud
     ADD CONSTRAINT FK_dokument_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE geschwister
+(
+    id                     UUID         NOT NULL,
+    timestamp_erstellt     TIMESTAMP    NOT NULL,
+    timestamp_mutiert      TIMESTAMP    NOT NULL,
+    user_erstellt          VARCHAR(255) NOT NULL,
+    user_mutiert           VARCHAR(255) NOT NULL,
+    version                BIGINT       NOT NULL,
+    nachname               VARCHAR(255) NOT NULL,
+    vorname                VARCHAR(255) NOT NULL,
+    geburtsdatum           DATE         NOT NULL,
+    ausbildungssituation   VARCHAR(255) NOT NULL,
+    wohnsitz               VARCHAR(255) NOT NULL,
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID         NOT NULL,
+    CONSTRAINT geschwister_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE geschwister
+    ADD CONSTRAINT FK_geschwister_gesuch_fomular_id
+        FOREIGN KEY (gesuch_formular_id)
+            REFERENCES gesuch_formular (id);
+
+CREATE TABLE geschwister_aud
+(
+    id                     UUID    NOT NULL,
+    rev                    INTEGER NOT NULL,
+    revtype                SMALLINT,
+    timestamp_erstellt     TIMESTAMP,
+    timestamp_mutiert      TIMESTAMP,
+    user_erstellt          VARCHAR(255),
+    user_mutiert           VARCHAR(255),
+    version                BIGINT,
+    nachname               VARCHAR(255),
+    vorname                VARCHAR(255),
+    geburtsdatum           DATE,
+    ausbildungssituation   VARCHAR(255),
+    wohnsitz               VARCHAR(255),
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID,
+    CONSTRAINT geschwister_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE geschwister_aud
+    ADD CONSTRAINT FK_geschwister_aud_revinfo
+        FOREIGN KEY (rev)
+            REFERENCES revinfo (rev);
+
+CREATE TABLE kind
+(
+    id                     UUID         NOT NULL,
+    timestamp_erstellt     TIMESTAMP    NOT NULL,
+    timestamp_mutiert      TIMESTAMP    NOT NULL,
+    user_erstellt          VARCHAR(255) NOT NULL,
+    user_mutiert           VARCHAR(255) NOT NULL,
+    version                BIGINT       NOT NULL,
+    nachname               VARCHAR(255) NOT NULL,
+    vorname                VARCHAR(255) NOT NULL,
+    geburtsdatum           DATE         NOT NULL,
+    ausbildungssituation   VARCHAR(255) NOT NULL,
+    wohnsitz               VARCHAR(255) NOT NULL,
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID         NOT NULL,
+    CONSTRAINT kind_pk PRIMARY KEY (id)
+);
+
+ALTER TABLE kind
+    ADD CONSTRAINT FK_kind_gesuch_fomular_id
+        FOREIGN KEY (gesuch_formular_id)
+            REFERENCES gesuch_formular (id);
+
+CREATE TABLE kind_aud
+(
+    id                     UUID    NOT NULL,
+    rev                    INTEGER NOT NULL,
+    revtype                SMALLINT,
+    timestamp_erstellt     TIMESTAMP,
+    timestamp_mutiert      TIMESTAMP,
+    user_erstellt          VARCHAR(255),
+    user_mutiert           VARCHAR(255),
+    version                BIGINT,
+    nachname               VARCHAR(255),
+    vorname                VARCHAR(255),
+    geburtsdatum           DATE,
+    ausbildungssituation   VARCHAR(255),
+    wohnsitz               VARCHAR(255),
+    wohnsitz_anteil_mutter NUMERIC(19, 2),
+    wohnsitz_anteil_vater  NUMERIC(19, 2),
+    gesuch_formular_id     UUID,
+    CONSTRAINT kind_aud_pk PRIMARY KEY (id, rev)
+);
+
+ALTER TABLE kind_aud
+    ADD CONSTRAINT FK_kind_aud_revinfo
         FOREIGN KEY (rev)
             REFERENCES revinfo (rev);

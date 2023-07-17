@@ -1,10 +1,10 @@
 package ch.dvbern.stip.test.ausbildung;
 
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
-import ch.dvbern.stip.api.ausbildung.repo.AusbildungstaetteRepository;
-import ch.dvbern.stip.generated.test.api.AusbildungstaetteApiSpec;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
+import ch.dvbern.stip.generated.test.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungstaette;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -25,29 +25,29 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 public class AusbildungsstaeteResourceTest {
 
 
-    private final AusbildungstaetteRepository ausbildungstaetteRepository;
+    private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
 
-    public final AusbildungstaetteApiSpec api = AusbildungstaetteApiSpec.ausbildungstaette(RequestSpecUtil.quarkusSpec());
+    public final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
     @BeforeAll
     @Transactional
     public void setup() {
 
-        Ausbildungstaette entity = new Ausbildungstaette();
+        Ausbildungsstaette entity = new Ausbildungsstaette();
         entity.setName("Test");
         entity.setAusbildungsland(Ausbildungsland.SCHWEIZ);
 
-        ausbildungstaetteRepository.persist(entity);
+        ausbildungsstaetteRepository.persist(entity);
     }
 
     @Test
     public void test_get_ausbildungsstaetten() {
-        var res = api.getAusbildungstaetten().execute(ResponseBody::prettyPeek)
+        var res = api.getAusbildungsstaetten().execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract()
-                .as(Ausbildungstaette[].class);
+                .as(Ausbildungsstaette[].class);
 
         assertThat(res.length, greaterThanOrEqualTo(1));
     }
