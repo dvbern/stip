@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -41,6 +42,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class GesuchFormular extends AbstractEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

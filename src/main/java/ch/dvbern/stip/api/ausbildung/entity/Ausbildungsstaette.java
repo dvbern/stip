@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -16,18 +17,19 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Ausbildungsstaette extends AbstractEntity {
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
-    private List<Ausbildungsgang> ausbildungsgaenge;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
+	private List<Ausbildungsgang> ausbildungsgaenge;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Ausbildungsland ausbildungsland;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Ausbildungsland ausbildungsland;
 
-    @NotNull
-    @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String name;
+	@NotNull
+	@Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String name;
 }

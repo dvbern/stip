@@ -20,11 +20,16 @@ package ch.dvbern.stip.api.common.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Embeddable
+@Getter
+@Setter
 public class DateRange implements Serializable, Comparable<DateRange> {
 
     @NotNull
@@ -42,22 +47,6 @@ public class DateRange implements Serializable, Comparable<DateRange> {
 
     public DateRange() {
         this(LocalDate.now(), LocalDate.now());
-    }
-
-    public LocalDate getGueltigAb() {
-        return gueltigAb;
-    }
-
-    public void setGueltigAb(LocalDate gueltigAb) {
-        this.gueltigAb = gueltigAb;
-    }
-
-    public LocalDate getGueltigBis() {
-        return gueltigBis;
-    }
-
-    public void setGueltigBis(LocalDate gueltigBis) {
-        this.gueltigBis = gueltigBis;
     }
 
     @Override

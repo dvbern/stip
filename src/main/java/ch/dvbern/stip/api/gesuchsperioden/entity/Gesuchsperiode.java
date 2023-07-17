@@ -24,6 +24,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -34,6 +35,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Gesuchsperiode extends AbstractEntity {
 
     @NotNull
@@ -46,5 +48,4 @@ public class Gesuchsperiode extends AbstractEntity {
 
     @Column(nullable = true)
     private LocalDate aufschaltdatum;
-
 }

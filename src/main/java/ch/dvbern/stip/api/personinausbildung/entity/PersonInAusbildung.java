@@ -29,12 +29,10 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
@@ -43,6 +41,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
@@ -118,5 +117,4 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Sprache korrespondenzSprache;
-
 }

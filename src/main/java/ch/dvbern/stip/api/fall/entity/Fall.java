@@ -23,6 +23,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -31,6 +32,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Fall extends AbstractEntity {
 
 	@NotNull

@@ -25,6 +25,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
@@ -32,79 +35,35 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 
 @Entity
 @Audited
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Adresse extends AbstractEntity {
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Land land = Land.CH;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Land land = Land.CH;
 
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = true)
-    private String coAdresse;
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = true)
+	private String coAdresse;
 
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String strasse;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String strasse;
 
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(nullable = true)
-    private String hausnummer;
+	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+	@Column(nullable = true)
+	private String hausnummer;
 
-    @NotNull
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(nullable = false)
-    private String plz;
+	@NotNull
+	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+	@Column(nullable = false)
+	private String plz;
 
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String ort;
-    public Land getLand() {
-        return land;
-    }
-
-    public void setLand(Land land) {
-        this.land = land;
-    }
-
-    public String getCoAdresse() {
-        return coAdresse;
-    }
-
-    public void setCoAdresse(String coAdresse) {
-        this.coAdresse = coAdresse;
-    }
-
-    public String getStrasse() {
-        return strasse;
-    }
-
-    public void setStrasse(String strasse) {
-        this.strasse = strasse;
-    }
-
-    public String getHausnummer() {
-        return hausnummer;
-    }
-
-    public void setHausnummer(String hausnummer) {
-        this.hausnummer = hausnummer;
-    }
-
-    public String getPlz() {
-        return plz;
-    }
-
-    public void setPlz(String plz) {
-        this.plz = plz;
-    }
-
-    public String getOrt() {
-        return ort;
-    }
-
-    public void setOrt(String ort) {
-        this.ort = ort;
-    }
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String ort;
 }

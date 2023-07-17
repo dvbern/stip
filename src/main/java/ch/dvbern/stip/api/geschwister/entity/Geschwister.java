@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -12,6 +13,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Geschwister extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)

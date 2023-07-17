@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Gesuch extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false)

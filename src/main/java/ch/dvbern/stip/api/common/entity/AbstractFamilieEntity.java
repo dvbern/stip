@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -18,29 +19,30 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @Getter
 @Setter
+@EqualsAndHashCode
 public abstract class AbstractFamilieEntity extends AbstractEntity {
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String nachname;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String nachname;
 
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String vorname;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String vorname;
 
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate geburtsdatum;
+	@NotNull
+	@Column(nullable = false)
+	private LocalDate geburtsdatum;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Wohnsitz wohnsitz;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Wohnsitz wohnsitz;
 
-    @Column(nullable = true)
-    private BigDecimal wohnsitzAnteilMutter;
+	@Column(nullable = true)
+	private BigDecimal wohnsitzAnteilMutter;
 
-    @Column(nullable = true)
-    private BigDecimal wohnsitzAnteilVater;
+	@Column(nullable = true)
+	private BigDecimal wohnsitzAnteilVater;
 }

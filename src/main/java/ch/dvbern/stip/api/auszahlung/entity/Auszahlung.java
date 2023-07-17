@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -16,27 +17,28 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Auszahlung extends AbstractEntity {
 
-    @NotNull
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Kontoinhaber kontoinhaber;
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String vorname;
+	@NotNull
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Kontoinhaber kontoinhaber;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String vorname;
 
-    @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"), nullable = false)
-    private Adresse adresse;
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String iban;
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String nachname;
+	@NotNull
+	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"), nullable = false)
+	private Adresse adresse;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String iban;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String nachname;
 }

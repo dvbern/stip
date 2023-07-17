@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -32,7 +30,7 @@ public class GesuchsperiodenService {
         return this.gesuchsperiodeRepository.findAll()
                 .stream()
                 .map(gesuchsperiodeMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Optional<GesuchsperiodeDto> getGesuchsperiode(UUID id) {
@@ -46,6 +44,6 @@ public class GesuchsperiodenService {
         return gesuchsperiodeRepository
                 .findAllActiveForDate(LocalDate.now())
                 .map(gesuchsperiodeMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

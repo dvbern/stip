@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -18,47 +19,48 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Ausbildung extends AbstractEntity {
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
-    private Ausbildungsgang ausbildungsgang;
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
+	private Ausbildungsgang ausbildungsgang;
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsstaette_id"))
-    private Ausbildungsstaette ausbildungsstaette;
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsstaette_id"))
+	private Ausbildungsstaette ausbildungsstaette;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Ausbildungsland ausbildungsland;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Ausbildungsland ausbildungsland;
 
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
-    private String alternativeAusbildungsgang;
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column
+	private String alternativeAusbildungsgang;
 
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
-    private String AlternativeAusbildungsstaette;
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column
+	private String alternativeAusbildungstaette;
 
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String fachrichtung;
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String fachrichtung;
 
-    @Column(nullable = false)
-    private boolean ausbildungNichtGefunden = false;
+	@Column(nullable = false)
+	private boolean ausbildungNichtGefunden = false;
 
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate ausbildungBegin;
+	@NotNull
+	@Column(nullable = false)
+	private LocalDate ausbildungBegin;
 
-    @NotNull
-    @Column(nullable = false)
-    private LocalDate ausbildungEnd;
+	@NotNull
+	@Column(nullable = false)
+	private LocalDate ausbildungEnd;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AusbildungsPensum pensum;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private AusbildungsPensum pensum;
 }

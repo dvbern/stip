@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.entity;
 
 import ch.dvbern.stip.api.common.util.Constants;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
@@ -28,7 +29,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -36,6 +36,7 @@ import java.util.UUID;
 @EntityListeners(AbstractEntityListener.class)
 @Getter
 @Setter
+@EqualsAndHashCode
 public abstract class AbstractEntity implements Serializable {
 
     @Id
@@ -60,33 +61,4 @@ public abstract class AbstractEntity implements Serializable {
     @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
     private String userMutiert;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        AbstractEntity that = (AbstractEntity) o;
-        return getVersion() == that.getVersion()
-                && Objects.equals(getId(), that.getId())
-                && Objects.equals(getTimestampErstellt(), that.getTimestampErstellt())
-                && Objects.equals(getTimestampMutiert(), that.getTimestampMutiert())
-                && Objects.equals(getUserErstellt(), that.getUserErstellt())
-                && Objects.equals(getUserMutiert(), that.getUserMutiert());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                getId(),
-                getVersion(),
-                getTimestampErstellt(),
-                getTimestampMutiert(),
-                getUserErstellt(),
-                getUserMutiert());
-    }
-
 }

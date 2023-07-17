@@ -6,7 +6,6 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -17,7 +16,7 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
 
     public Collection<AusbildungsstaetteDto> getAusbildungsstaetten() {
-        return ausbildungsstaetteRepository.findAll().stream().map(ausbildungsstaetteMapper::toDto).collect(Collectors.toList());
+        return ausbildungsstaetteRepository.findAll().stream().map(ausbildungsstaetteMapper::toDto).toList();
     }
 
 }

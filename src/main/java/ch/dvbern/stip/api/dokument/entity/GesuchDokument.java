@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -35,6 +36,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class GesuchDokument extends AbstractEntity {
 
     @NotNull
