@@ -2,10 +2,8 @@ package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Anrede;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -62,4 +60,9 @@ public class Eltern extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     private Boolean ergaenzungsleistungAusbezahlt;
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_eltern_container_gesuch_id"))
+    private GesuchFormular gesuchFormular;
 }

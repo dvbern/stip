@@ -1,14 +1,9 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
-import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.DokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.generated.dto.*;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -63,7 +58,6 @@ public class GesuchResourceImpl implements GesuchResource {
                 .build()
                 .toResponse();
     }
-
 
     @Override
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {

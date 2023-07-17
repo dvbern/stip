@@ -37,6 +37,7 @@ import java.util.UUID;
 public class GesuchService {
 
     private final GesuchRepository gesuchRepository;
+
     private final GesuchMapper gesuchMapper;
 
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -44,9 +45,9 @@ public class GesuchService {
     }
 
     @Transactional
-    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-        var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        gesuchMapper.partialUpdateGS(gesuchUpdateDto, gesuch);
+    public void updateGesuch(UUID gesuchContainerId, GesuchUpdateDto gesuchUpdateDto) {
+        var gesuchContainer = gesuchRepository.findByIdOptional(gesuchContainerId).orElseThrow(NotFoundException::new);
+        gesuchMapper.partialUpdate(gesuchUpdateDto, gesuchContainer);
     }
 
 
