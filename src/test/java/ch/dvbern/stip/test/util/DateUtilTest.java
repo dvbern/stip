@@ -26,6 +26,12 @@ public class DateUtilTest {
     }
 
     @Test
+    public void testShotMonthYearToBeginOfMonth() {
+        LocalDate dateToTest = dateUtil.monthYearToBeginOfMonth("1.2023");
+        Assertions.assertEquals(LocalDate.of(2023,1,1), dateToTest);
+    }
+
+    @Test
     public void testMonthYearToEndOfMonth() {
         LocalDate dateToTest = dateUtil.monthYearToEndOfMonth(MONTH_YEAR);
         Assertions.assertEquals(LocalDate.of(2023,10,31), dateToTest);
