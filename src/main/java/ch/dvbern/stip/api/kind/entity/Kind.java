@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.kind.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import jakarta.persistence.Column;
@@ -23,4 +25,7 @@ public class Kind  extends AbstractFamilieEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Ausbildungssituation ausbildungssituation;
+
+    @Column(nullable = true)
+    private UUID copyOfId;
 }

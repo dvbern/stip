@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
@@ -50,4 +51,7 @@ public class LebenslaufItem extends AbstractEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private WohnsitzKanton wohnsitz;
+
+	@Column(nullable = true)
+	private UUID copyOfId;
 }

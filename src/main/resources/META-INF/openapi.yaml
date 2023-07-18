@@ -959,73 +959,6 @@ components:
         - DEUTSCH
         - FRANZOESISCH
       type: string
-    PersonInAusbildungUpdate:
-      required:
-        - adresse
-        - sozialversicherungsnummer
-        - nachname
-        - vorname
-        - anrede
-        - identischerZivilrechtlicherWohnsitz
-        - email
-        - telefonnummer
-        - geburtsdatum
-        - nationalitaet
-        - wohnsitz
-        - sozialhilfebeitraege
-        - quellenbesteuert
-        - digitaleKommunikation
-        - korrespondenzSprache
-      type: object
-      properties:
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-        sozialversicherungsnummer:
-          type: string
-        vorname:
-          type: string
-        anrede:
-          $ref: '#/components/schemas/Anrede'
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        email:
-          type: string
-        telefonnummer:
-          type: string
-        geburtsdatum:
-          $ref: '#/components/schemas/LocalDate'
-        nationalitaet:
-          $ref: '#/components/schemas/Land'
-        heimatort:
-          description: Required nur wenn Land = CH
-          type: string
-        niederlassungsstatus:
-          $ref: '#/components/schemas/Niederlassungsstatus'
-          description: Required wenn Nationalitaet != CH
-        zivilstand:
-          $ref: '#/components/schemas/Zivilstand'
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        sozialhilfebeitraege:
-          type: boolean
-        quellenbesteuert:
-          type: boolean
-        digitaleKommunikation:
-          type: boolean
-        vormundschaft:
-          description: Required nur wenn Land = CH
-          type: boolean
-        nachname:
-          type: string
-        identischerZivilrechtlicherWohnsitzOrt:
-          description: Required wenn identischerZivilrechtlicherWohnsitz = false
-          type: string
-        identischerZivilrechtlicherWohnsitzPLZ:
-          description: Required wenn identischerZivilrechtlicherWohnsitz = false
-          type: string
-        korrespondenzSprache:
-          $ref: '#/components/schemas/Sprache'
-          description: ''
     WohnsitzKanton:
       description: ''
       enum:
@@ -1326,6 +1259,79 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Kind'
+    PersonInAusbildungUpdate:
+      required:
+        - adresse
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - anrede
+        - identischerZivilrechtlicherWohnsitz
+        - email
+        - telefonnummer
+        - geburtsdatum
+        - nationalitaet
+        - wohnsitz
+        - sozialhilfebeitraege
+        - quellenbesteuert
+        - digitaleKommunikation
+        - korrespondenzSprache
+      type: object
+      properties:
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        sozialversicherungsnummer:
+          type: string
+        vorname:
+          type: string
+        anrede:
+          $ref: '#/components/schemas/Anrede'
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        email:
+          type: string
+        telefonnummer:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        nationalitaet:
+          $ref: '#/components/schemas/Land'
+        heimatort:
+          description: Required nur wenn Land = CH
+          type: string
+        niederlassungsstatus:
+          $ref: '#/components/schemas/Niederlassungsstatus'
+          description: Required wenn Nationalitaet != CH
+        zivilstand:
+          $ref: '#/components/schemas/Zivilstand'
+        wohnsitz:
+          $ref: '#/components/schemas/Wohnsitz'
+        wohnsitzAnteilMutter:
+          description: Required wenn Wohnsitz.MUTTER_VATER.
+          type: number
+        wohnsitzAnteilVater:
+          description: Required wenn Wohnsitz.MUTTER_VATER.
+          type: number
+        sozialhilfebeitraege:
+          type: boolean
+        quellenbesteuert:
+          type: boolean
+        digitaleKommunikation:
+          type: boolean
+        vormundschaft:
+          description: Required nur wenn Land = CH
+          type: boolean
+        nachname:
+          type: string
+        identischerZivilrechtlicherWohnsitzOrt:
+          description: Required wenn identischerZivilrechtlicherWohnsitz = false
+          type: string
+        identischerZivilrechtlicherWohnsitzPLZ:
+          description: Required wenn identischerZivilrechtlicherWohnsitz = false
+          type: string
+        korrespondenzSprache:
+          $ref: '#/components/schemas/Sprache'
+          description: ''
   responses:
     Unauthorized:
       content:

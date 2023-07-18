@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.time.LocalDate;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
@@ -68,4 +66,7 @@ public class Eltern extends AbstractPerson {
 	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
 	@Column(nullable = true)
 	private String identischerZivilrechtlicherWohnsitzPLZ;
+
+	@Column(nullable = true)
+	private UUID copyOfId;
 }

@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.geschwister.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import jakarta.persistence.*;
@@ -19,4 +21,7 @@ public class Geschwister extends AbstractFamilieEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Ausbildungssituation ausbildungssituation;
+
+    @Column(nullable = true)
+    private UUID copyOfId;
 }
