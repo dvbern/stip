@@ -8,6 +8,7 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public interface LebenslaufItemMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
+        if(lebenslaufItemUpdateDtos.size() == 0) return new LinkedHashSet<LebenslaufItem>();
         for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {
             if (lebenslaufItemUpdateDto.getId() != null) {
                 LebenslaufItem found = lebenslaufItemSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())).findFirst().orElseThrow(

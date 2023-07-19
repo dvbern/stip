@@ -1166,13 +1166,15 @@ components:
     Kind:
       title: Root Type for Geschwister
       description: ''
-      required:
-        - id
-      type: object
-      properties:
-        copyOfId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
+      allOf:
+        - required:
+            - id
+          type: object
+          properties:
+            copyOfId:
+              $ref: '#/components/schemas/UUID'
+              description: ''
+        - $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf
       description: ''

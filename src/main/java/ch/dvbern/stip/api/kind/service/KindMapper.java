@@ -7,6 +7,7 @@ import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public interface KindMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
+        if(kindUpdateDtos.size() == 0) return new LinkedHashSet<Kind>();
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
                 Kind found = kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(

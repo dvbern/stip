@@ -7,6 +7,7 @@ import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public interface ElternMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Eltern> map(List<ElternUpdateDto> elternUpdateDtos, @MappingTarget Set<Eltern> elternSet) {
+        if(elternUpdateDtos.size() == 0) return new LinkedHashSet<Eltern>();
         for (ElternUpdateDto elternUpdateDto : elternUpdateDtos) {
             if (elternUpdateDto.getId() != null) {
                 Eltern found = elternSet.stream().filter(eltern -> eltern.getId().equals(elternUpdateDto.getId())).findFirst().orElseThrow(

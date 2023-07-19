@@ -2,11 +2,13 @@ package ch.dvbern.stip.api.geschwister.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.generated.dto.GeschwisterDto;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +23,7 @@ public interface GeschwisterMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Geschwister> map(List<GeschwisterUpdateDto> geschwisterUpdateDtos, @MappingTarget Set<Geschwister> geschwisterSet) {
+        if(geschwisterUpdateDtos.size() == 0) return new LinkedHashSet<Geschwister>();
         for (GeschwisterUpdateDto geschwisterUpdateDto : geschwisterUpdateDtos) {
             if (geschwisterUpdateDto.getId() != null) {
                 Geschwister found = geschwisterSet.stream().filter(geschwister -> geschwister.getId().equals(geschwisterUpdateDto.getId())).findFirst().orElseThrow(
