@@ -307,7 +307,8 @@
 								Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
 								Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
 								Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
-								Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz
+								Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
+								WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton
 							</schemaMappings>
 							<configOptions>
 								<sourceFolder>target/generated-sources</sourceFolder>
