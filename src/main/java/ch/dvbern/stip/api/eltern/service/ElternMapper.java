@@ -22,7 +22,7 @@ public interface ElternMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Eltern> map(List<ElternUpdateDto> elternUpdateDtos, @MappingTarget Set<Eltern> elternSet) {
-        if(elternUpdateDtos.size() == 0) return new LinkedHashSet<Eltern>();
+        if(elternUpdateDtos.size() == 0) elternSet.clear();
         for (ElternUpdateDto elternUpdateDto : elternUpdateDtos) {
             if (elternUpdateDto.getId() != null) {
                 Eltern found = elternSet.stream().filter(eltern -> eltern.getId().equals(elternUpdateDto.getId())).findFirst().orElseThrow(
