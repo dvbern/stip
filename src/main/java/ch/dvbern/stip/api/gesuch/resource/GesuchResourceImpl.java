@@ -77,6 +77,11 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    public Response getGesucheForBenutzer(UUID benutzerId) {
+        return null;
+    }
+
+    @Override
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
         return Response.accepted().build();

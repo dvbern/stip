@@ -1,0 +1,1 @@
+INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname, vorname, sozialversicherungsnummer, benutzer_status, mandant) VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae5', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin', 'Admin', 0, 'Margreth', 'Daniel','756.0000.0000.02','AKTIV','bern');

@@ -440,6 +440,103 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAusbildungsstaetten
       summary: Returniert alle Ausbildungsstaette zur Verfuegung.
+  /benutzer:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Benutzer'
+          description: Return alle Benutzende
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBenutzende
+      summary: Get all Benutzer
+  '/benutzer/{benutzerId}':
+    get:
+      parameters:
+        -
+          name: benutzerId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: Return der Benutzende die zu der ID gehoert
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBenutzer
+      summary: Get Benutzer mit ID
+  '/fall/benutzer/{benutzerId}':
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+          description: Return der Fall des Benutzende
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallForBenutzer
+      summary: Get alle Fälle für den gegebene Benutzende
+    parameters:
+      -
+        name: benutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+  '/gesuch/benutzer/{benutzerId}':
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Return alle Gesuche die gehoeren zu dieser Gesuchstellende
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheForBenutzer
+      summary: Get all Gesuch for Benutzende
+    parameters:
+      -
+        name: benutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
 components:
   schemas:
     Anrede:
@@ -1166,13 +1263,18 @@ components:
     Kind:
       title: Root Type for Geschwister
       description: ''
-      required:
-        - id
       type: object
-      properties:
-        copyOfId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
+      allOf:
+        -
+          required:
+            - id
+          type: object
+          properties:
+            copyOfId:
+              $ref: '#/components/schemas/UUID'
+              description: ''
+        -
+          $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf
       description: ''
@@ -1332,6 +1434,24 @@ components:
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
           description: ''
+    Benutzer:
+      description: ''
+      required:
+        - id
+        - nachname
+        - sozialversicherungsnummer
+        - vorname
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+          description: ''
+        sozialversicherungsnummer:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
   responses:
     Unauthorized:
       content:

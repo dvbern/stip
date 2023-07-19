@@ -35,7 +35,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class Gesuchsperiode extends AbstractEntity {
 
     @NotNull

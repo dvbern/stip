@@ -47,4 +47,9 @@ public class FallResourceImpl implements FallResource {
 				.orElseThrow(NotFoundException::new);
 		return Response.ok(fall).build();
 	}
+
+	@Override
+	public Response getFallForBenutzer(UUID benutzerId) {
+		return null;
+	}
 }

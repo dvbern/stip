@@ -37,7 +37,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Audited
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class Adresse extends AbstractEntity {
 	@NotNull
 	@Enumerated(EnumType.STRING)

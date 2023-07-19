@@ -15,7 +15,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class Geschwister extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
