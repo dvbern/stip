@@ -351,6 +351,7 @@
 								<apiPackage>${package.generated.test}.api</apiPackage>
 								<useJakartaEe>true</useJakartaEe>
 								<serializationLibrary>jackson</serializationLibrary>
+								<containerDefaultToNull>true</containerDefaultToNull>
 							</configOptions>
 						</configuration>
 					</execution>
