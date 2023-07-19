@@ -78,7 +78,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     public Response getGesucheForBenutzer(UUID benutzerId) {
-        return null;
+        return Response.ok(gesuchService.findAllForBenutzer(benutzerId)).build();
     }
 
     @Override

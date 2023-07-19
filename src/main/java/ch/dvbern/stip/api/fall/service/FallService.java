@@ -7,6 +7,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,5 +28,9 @@ public class FallService {
     public Optional<FallDto> getFall(UUID id) {
         var optionalFall = fallRepository.findByIdOptional(id);
         return optionalFall.map(fallMapper::toDto);
+    }
+
+    public List<FallDto> findAllForBenutzer(UUID benutzerId) {
+        return fallRepository.findAllForBenutzer(benutzerId).map(fallMapper::toDto).toList();
     }
 }

@@ -50,6 +50,6 @@ public class FallResourceImpl implements FallResource {
 
 	@Override
 	public Response getFallForBenutzer(UUID benutzerId) {
-		return null;
+		return Response.ok(fallService.findAllForBenutzer(benutzerId)).build();
 	}
 }

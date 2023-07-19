@@ -63,4 +63,9 @@ public class GesuchService {
         gesuchRepository.persist(gesuch);
         return gesuchMapper.toDto(gesuch);
     }
+
+    public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
+        return gesuchRepository.findAllForBenutzer(benutzerId).map(gesuchMapper::toDto).toList();
+    }
+
 }
