@@ -442,6 +442,8 @@ paths:
       summary: Returniert alle Ausbildungsstaette zur Verfuegung.
   /benutzer:
     get:
+      tags:
+        - Benutzer
       responses:
         '200':
           content:
@@ -461,6 +463,8 @@ paths:
       summary: Get all Benutzer
   '/benutzer/{benutzerId}':
     get:
+      tags:
+        - Benutzer
       parameters:
         -
           name: benutzerId
@@ -487,6 +491,8 @@ paths:
       summary: Get Benutzer mit ID
   '/fall/benutzer/{benutzerId}':
     get:
+      tags:
+        - Fall
       responses:
         '200':
           content:
@@ -513,6 +519,8 @@ paths:
         required: true
   '/gesuch/benutzer/{benutzerId}':
     get:
+      tags:
+        - Gesuch
       responses:
         '200':
           content:
@@ -956,44 +964,6 @@ components:
           type: string
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
-    GesuchFormularUpdate:
-      required: []
-      type: object
-      properties:
-        ausbildung:
-          $ref: '#/components/schemas/AusbildungUpdate'
-          description: ''
-        personInAusbildung:
-          $ref: '#/components/schemas/PersonInAusbildungUpdate'
-          description: ''
-        familiensituation:
-          $ref: '#/components/schemas/FamiliensituationUpdate'
-        partner:
-          $ref: '#/components/schemas/PartnerUpdate'
-          description: ''
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
-          description: ''
-        elterns:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/ElternUpdate'
-        geschwisters:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/GeschwisterUpdate'
-        lebenslaufItems:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItemUpdate'
-        kinds:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/KindUpdate'
     Gesuch:
       description: ''
       required:
@@ -1452,6 +1422,44 @@ components:
           type: string
         nachname:
           type: string
+    GesuchFormularUpdate:
+      required: []
+      type: object
+      properties:
+        ausbildung:
+          $ref: '#/components/schemas/AusbildungUpdate'
+          description: ''
+        personInAusbildung:
+          $ref: '#/components/schemas/PersonInAusbildungUpdate'
+          description: ''
+        familiensituation:
+          $ref: '#/components/schemas/FamiliensituationUpdate'
+        partner:
+          $ref: '#/components/schemas/PartnerUpdate'
+          description: ''
+        auszahlung:
+          $ref: '#/components/schemas/AuszahlungUpdate'
+          description: ''
+        elterns:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/ElternUpdate'
+        geschwisters:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/GeschwisterUpdate'
+        lebenslaufItems:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/LebenslaufItemUpdate'
+        kinds:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/KindUpdate'
   responses:
     Unauthorized:
       content:
@@ -1489,3 +1497,6 @@ tags:
     name: Gesuchsperiode
   -
     name: Stammdaten
+  -
+    name: Benutzer
+    description: ''

@@ -1,0 +1,53 @@
+package ch.dvbern.stip.test.fall;
+
+import ch.dvbern.stip.generated.test.api.FallApiSpec;
+import ch.dvbern.stip.generated.test.dto.FallDtoSpec;
+import ch.dvbern.stip.test.util.RequestSpecUtil;
+import ch.dvbern.stip.test.utils.TestConstants;
+import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.response.ResponseBody;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+
+@QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@RequiredArgsConstructor
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class FallResourceTest {
+
+	public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+
+	@Test
+	@Order(1)
+	void testFindFallEndpoint() {
+		var fall = fallApiSpec.getFall().fallIdPath(TestConstants.FALL_TEST_ID).execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(FallDtoSpec.class);
+
+		assertThat(fall, notNullValue());
+	}
+
+	@Test
+	@Order(1)
+	void testGetFallForBenutzer() {
+		var fall = fallApiSpec.getFallForBenutzer().benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID).execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(FallDtoSpec.class);
+
+		assertThat(fall, notNullValue());
+	}
+}
