@@ -9,6 +9,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
 
@@ -203,5 +204,16 @@ public class GesuchResourceTest {
 				.body()
 				.as(GesuchDtoSpec[].class);
 		assertThat(gesuche.length, is(1));
+	}
+
+	@Test
+	@Order(15)
+	void testDelteGesuch() {
+		var gesuche = gesuchApiSpec.deleteGesuch()
+				.gesuchIdPath(gesuchId)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Status.NO_CONTENT.getStatusCode());
 	}
 }
