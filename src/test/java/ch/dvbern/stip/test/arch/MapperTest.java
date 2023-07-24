@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-public class MapperTest {
+class MapperTest {
 
     @Test
     public void ensure_mapping_config_is_used() {

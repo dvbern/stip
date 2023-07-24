@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Audited
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public abstract class AbstractFamilieEntity extends AbstractPerson {
 
 	@NotNull

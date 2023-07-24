@@ -56,63 +56,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  '/gesuch/{gesuchId}':
-    get:
-      tags:
-        - Gesuch
-      parameters:
-        -
-          name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Gesuch'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuch
-      summary: Returns the Gesuch with the given Id
-    patch:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GesuchUpdate'
-        required: true
-      tags:
-        - Gesuch
-      parameters:
-        -
-          name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '202':
-          description: Gesuch updated
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateGesuch
-      summary: Updates the Gesuch with the given Id
   '/gesuch/{gesuchId}/dokument/{dokumentTyp}':
     get:
       tags:
@@ -181,20 +124,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
-  /fall:
-    post:
-      tags:
-        - Fall
-      responses:
-        '201':
-          description: New Fall created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createFall
   '/fall/{fallId}':
     get:
       tags:
@@ -223,6 +152,13 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getFall
       summary: Returniert der Fall mit der gegebene Id.
+    parameters:
+      -
+        name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
   /config/deployment:
     get:
       tags:
@@ -352,6 +288,8 @@ paths:
       summary: Returns a List of LandCode
   '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
     get:
+      tags:
+        - Gesuch
       responses:
         '200':
           content:
@@ -440,6 +378,233 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAusbildungsstaetten
       summary: Returniert alle Ausbildungsstaette zur Verfuegung.
+  /benutzer:
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Benutzer'
+          description: Return alle Benutzende
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBenutzende
+      summary: Get all Benutzer
+  '/benutzer/{benutzerId}':
+    get:
+      tags:
+        - Benutzer
+      parameters:
+        -
+          name: benutzerId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: Return der Benutzende die zu der ID gehoert
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBenutzer
+      summary: Get Benutzer mit ID
+  '/gesuch/benutzer/{benutzerId}':
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Return alle Gesuche die gehoeren zu dieser Gesuchstellende
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheForBenutzer
+      summary: Get all Gesuch for Benutzende
+    parameters:
+      -
+        name: benutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+  '/fall/benutzer/{benutzerId}':
+    get:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+          description: Return der Fall des Benutzende
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallForBenutzer
+      summary: Get alle Fälle für den gegebene Benutzende
+    post:
+      tags:
+        - Fall
+      responses:
+        '201':
+          description: New Fall created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createFall
+    parameters:
+      -
+        name: benutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+  '/gesuch/fall/{fallId}':
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Return alle Gesuche die gehoeren zu dieser Fall
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheForFall
+      summary: Return alle Gesuche die gehören zu dieser Fall
+    parameters:
+      -
+        name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+  '/gesuch/{gesuchId}':
+    get:
+      tags:
+        - Gesuch
+      parameters:
+        -
+          name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuch
+      summary: Returns the Gesuch with the given Id
+    delete:
+      tags:
+        - Gesuch
+      parameters:
+        -
+          name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '204':
+          description: |
+            Gesuch deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteGesuch
+      summary: delete a Gesuch
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
+      tags:
+        - Gesuch
+      parameters:
+        -
+          name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '202':
+          description: Gesuch updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateGesuch
+      summary: Updates the Gesuch with the given Id
 components:
   schemas:
     Anrede:
@@ -859,44 +1024,6 @@ components:
           type: string
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
-    GesuchFormularUpdate:
-      required: []
-      type: object
-      properties:
-        ausbildung:
-          $ref: '#/components/schemas/AusbildungUpdate'
-          description: ''
-        personInAusbildung:
-          $ref: '#/components/schemas/PersonInAusbildungUpdate'
-          description: ''
-        familiensituation:
-          $ref: '#/components/schemas/FamiliensituationUpdate'
-        partner:
-          $ref: '#/components/schemas/PartnerUpdate'
-          description: ''
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
-          description: ''
-        elterns:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/ElternUpdate'
-        geschwisters:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/GeschwisterUpdate'
-        lebenslaufItems:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItemUpdate'
-        kinds:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/KindUpdate'
     Gesuch:
       description: ''
       required:
@@ -1166,15 +1293,18 @@ components:
     Kind:
       title: Root Type for Geschwister
       description: ''
+      type: object
       allOf:
-        - required:
+        -
+          required:
             - id
           type: object
           properties:
             copyOfId:
               $ref: '#/components/schemas/UUID'
               description: ''
-        - $ref: '#/components/schemas/KindUpdate'
+        -
+          $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf
       description: ''
@@ -1334,6 +1464,62 @@ components:
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
           description: ''
+    Benutzer:
+      description: ''
+      required:
+        - id
+        - nachname
+        - sozialversicherungsnummer
+        - vorname
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+          description: ''
+        sozialversicherungsnummer:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
+    GesuchFormularUpdate:
+      required: []
+      type: object
+      properties:
+        ausbildung:
+          $ref: '#/components/schemas/AusbildungUpdate'
+          description: ''
+        personInAusbildung:
+          $ref: '#/components/schemas/PersonInAusbildungUpdate'
+          description: ''
+        familiensituation:
+          $ref: '#/components/schemas/FamiliensituationUpdate'
+        partner:
+          $ref: '#/components/schemas/PartnerUpdate'
+          description: ''
+        auszahlung:
+          $ref: '#/components/schemas/AuszahlungUpdate'
+          description: ''
+        elterns:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/ElternUpdate'
+        geschwisters:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/GeschwisterUpdate'
+        lebenslaufItems:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/LebenslaufItemUpdate'
+        kinds:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/KindUpdate'
   responses:
     Unauthorized:
       content:
@@ -1371,3 +1557,6 @@ tags:
     name: Gesuchsperiode
   -
     name: Stammdaten
+  -
+    name: Benutzer
+    description: ''

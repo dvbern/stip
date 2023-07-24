@@ -36,7 +36,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class GesuchDokument extends AbstractEntity {
 
     @NotNull

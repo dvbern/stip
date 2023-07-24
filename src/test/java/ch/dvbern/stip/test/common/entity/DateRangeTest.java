@@ -6,7 +6,7 @@ import ch.dvbern.stip.api.common.entity.DateRange;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class DateRangeTest {
+class DateRangeTest {
 	private LocalDate von = LocalDate.of(2022,12,1);
 	private LocalDate bis = LocalDate.of(2023,8,31);
 

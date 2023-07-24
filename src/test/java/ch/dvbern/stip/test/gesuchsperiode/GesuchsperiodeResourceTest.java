@@ -4,7 +4,7 @@ import ch.dvbern.stip.generated.test.api.GesuchsperiodeApiSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
-import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.is;
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class GesuchsperiodeResourceTest {
+class GesuchsperiodeResourceTest {
 
     private final GesuchsperiodeApiSpec api = GesuchsperiodeApiSpec.gesuchsperiode(RequestSpecUtil.quarkusSpec());
 

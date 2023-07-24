@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-public class CdiTest {
+class CdiTest {
 
     @Test
     public void resources_are_request_scoped() {
