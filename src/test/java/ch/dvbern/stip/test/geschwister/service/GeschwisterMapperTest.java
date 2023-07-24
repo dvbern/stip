@@ -16,7 +16,7 @@ import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GeschwisterMapperTest {
+class GeschwisterMapperTest {
 	GeschwisterMapper geschwisterMapper = new GeschwisterMapperImpl();
 
 	@Test

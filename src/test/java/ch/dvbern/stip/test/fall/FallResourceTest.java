@@ -3,8 +3,8 @@ package ch.dvbern.stip.test.fall;
 import ch.dvbern.stip.generated.test.api.FallApiSpec;
 import ch.dvbern.stip.generated.test.dto.FallDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
-import ch.dvbern.stip.test.utils.TestConstants;
-import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestConstants;
+import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class FallResourceTest {
+class FallResourceTest {
 
 	public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 

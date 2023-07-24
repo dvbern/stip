@@ -15,7 +15,7 @@ import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ElternMapperTest {
+class ElternMapperTest {
 
 	ElternMapper elternMapper = new ElternMapperImpl();
 

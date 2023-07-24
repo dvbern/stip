@@ -3,8 +3,8 @@ package ch.dvbern.stip.test.gesuch;
 import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.test.dto.*;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
-import ch.dvbern.stip.test.utils.TestConstants;
-import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestConstants;
+import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
-import static ch.dvbern.stip.test.utils.DTOGenerator.*;
+import static ch.dvbern.stip.test.util.DTOGenerator.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GesuchResourceTest {
+class GesuchResourceTest {
 
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 

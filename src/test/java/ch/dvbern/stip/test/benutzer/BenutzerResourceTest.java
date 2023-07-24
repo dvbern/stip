@@ -5,8 +5,8 @@ import java.util.UUID;
 import ch.dvbern.stip.generated.test.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.test.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
-import ch.dvbern.stip.test.utils.TestConstants;
-import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestConstants;
+import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.is;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class BenutzerResourceTest {
+class BenutzerResourceTest {
 
 	public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
 

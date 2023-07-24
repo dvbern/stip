@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.util;
+package ch.dvbern.stip.test.common.util;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 
-public class DateUtilTest {
+class DateUtilTest {
 
     private static final String MONTH_YEAR = "10.2023";
     DateUtil dateUtil = new DateUtil();
