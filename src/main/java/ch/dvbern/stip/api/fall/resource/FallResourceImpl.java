@@ -35,8 +35,8 @@ public class FallResourceImpl implements FallResource {
 	private final UriInfo uriInfo;
 
 	@Override
-	public Response createFall() {
-		var fall = fallService.createFall();
+	public Response createFall(UUID benutzerId) {
+		var fall = fallService.createFall(benutzerId);
 		return Response.created(uriInfo.getAbsolutePathBuilder().path(fall.getId().toString()).build()).build();
 	}
 
@@ -50,6 +50,6 @@ public class FallResourceImpl implements FallResource {
 
 	@Override
 	public Response getFallForBenutzer(UUID benutzerId) {
-		return Response.ok(fallService.findAllForBenutzer(benutzerId)).build();
+		return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();
 	}
 }

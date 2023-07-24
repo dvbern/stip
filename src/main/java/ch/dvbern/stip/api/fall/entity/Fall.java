@@ -20,17 +20,13 @@ package ch.dvbern.stip.api.fall.entity;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -44,12 +40,9 @@ import org.hibernate.envers.Audited;
 @EqualsAndHashCode(callSuper = true)
 public class Fall extends AbstractEntity {
 
-	@NotNull
-	@Column(nullable = false)
-	@Min(1)
-	@SequenceGenerator(name = "fallNummerSeq", sequenceName = "fall_nummer_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(generator = "fallNummerSeq")
-	private long fallNummer = 1;
+	@Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
+			insertable = false)
+	private Long fallNummer;
 
 	@NotNull
 	@Column(nullable = false)

@@ -68,4 +68,7 @@ public class GesuchService {
         return gesuchRepository.findAllForBenutzer(benutzerId).map(gesuchMapper::toDto).toList();
     }
 
+    public List<GesuchDto> findAllForFall(UUID fallId) {
+        return gesuchRepository.findAllForFall(fallId).map(gesuchMapper::toDto).toList();
+    }
 }

@@ -32,14 +32,14 @@ public class BenutzerResourceTest {
 
 	@Test
 	@Order(1)
-	void testFindGesuchEndpoint() {
+	void testFindBenutzendeEndpoint() {
 		var benutzende = benutzerApiSpec.getBenutzende().execute(ResponseBody::prettyPeek)
 				.then()
 				.extract()
 				.body()
 				.as(BenutzerDtoSpec[].class);
 
-		assertThat(benutzende.length, is(1));
+		assertThat(benutzende.length, is(2));
 		assertThat(benutzende[0].getId(), is(UUID.fromString(TestConstants.GESUCHSTELLER_TEST_ID)));
 
 	}

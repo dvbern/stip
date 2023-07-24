@@ -27,4 +27,15 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 				.where(gesuch.fall.gesuchsteller.id.eq(benutzerId).or(gesuch.fall.sachbearbeiter.id.eq(benutzerId)));
 		return query.stream();
 	}
+
+	public Stream<Gesuch> findAllForFall(UUID fallId) {
+		var queryFactory = new JPAQueryFactory(entityManager);
+		var gesuch = new QGesuch("gesuch");
+
+		var query = queryFactory
+				.select(gesuch)
+				.from(gesuch)
+				.where(gesuch.fall.id.eq(fallId));
+		return query.stream();
+	}
 }

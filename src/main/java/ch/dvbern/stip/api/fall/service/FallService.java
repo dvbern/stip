@@ -1,10 +1,12 @@
 package ch.dvbern.stip.api.fall.service;
 
+import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.generated.dto.FallDto;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,22 +17,26 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FallService {
 
-    private final FallMapper fallMapper;
-    private final FallRepository fallRepository;
+	private final FallMapper fallMapper;
+	private final FallRepository fallRepository;
 
-    @Transactional
-    public FallDto createFall() {
-        var fall = new Fall();
-        fallRepository.persist(fall);
-        return fallMapper.toDto(fall);
-    }
+	private final BenutzerRepository benutzerRepository;
 
-    public Optional<FallDto> getFall(UUID id) {
-        var optionalFall = fallRepository.findByIdOptional(id);
-        return optionalFall.map(fallMapper::toDto);
-    }
+	@Transactional
+	public FallDto createFall(UUID benutzerId) {
+		var benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(NotFoundException::new);
+		var fall = new Fall();
+		fall.setGesuchsteller(benutzer);
+		fallRepository.persist(fall);
+		return fallMapper.toDto(fall);
+	}
 
-    public List<FallDto> findAllForBenutzer(UUID benutzerId) {
-        return fallRepository.findAllForBenutzer(benutzerId).map(fallMapper::toDto).toList();
-    }
+	public Optional<FallDto> getFall(UUID id) {
+		var optionalFall = fallRepository.findByIdOptional(id);
+		return optionalFall.map(fallMapper::toDto);
+	}
+
+	public List<FallDto> findFaelleForBenutzer(UUID benutzerId) {
+		return fallRepository.findAllForBenutzer(benutzerId).map(fallMapper::toDto).toList();
+	}
 }

@@ -8,6 +8,7 @@ import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -40,14 +41,23 @@ public class FallResourceTest {
 	}
 
 	@Test
-	@Order(1)
+	@Order(2)
 	void testGetFallForBenutzer() {
 		var fall = fallApiSpec.getFallForBenutzer().benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID).execute(ResponseBody::prettyPeek)
 				.then()
 				.extract()
 				.body()
-				.as(FallDtoSpec.class);
+				.as(FallDtoSpec[].class);
 
 		assertThat(fall, notNullValue());
+	}
+
+	@Test
+	@Order(3)
+	void testCreateFallForBenutzer() {
+		fallApiSpec.createFall().benutzerIdPath(TestConstants.GESUCHSTELLER_2_TEST_ID).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.CREATED.getStatusCode());
 	}
 }

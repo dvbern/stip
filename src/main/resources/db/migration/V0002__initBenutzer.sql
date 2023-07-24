@@ -52,19 +52,34 @@ ADD CONSTRAINT FK_benutzer_aud_revinfo
 	FOREIGN KEY (rev)
 		REFERENCES revinfo(rev);
 
+ALTER TABLE fall
+ADD COLUMN gesuchsteller_id UUID;
 
-ALTER TABLE fall ADD COLUMN gesuchsteller_id UUID;
-ALTER TABLE fall_aud ADD COLUMN gesuchsteller_id UUID;
+ALTER TABLE fall_aud
+ADD COLUMN gesuchsteller_id UUID;
 
 ALTER TABLE fall
 ADD CONSTRAINT FK_fall_gesuchsteller_id
 	FOREIGN KEY (gesuchsteller_id)
 		REFERENCES benutzer(id);
 
-ALTER TABLE fall ADD COLUMN sachbearbeiter_id UUID;
-ALTER TABLE fall_aud ADD COLUMN sachbearbeiter_id UUID;
+ALTER TABLE fall
+ADD COLUMN sachbearbeiter_id UUID;
+ALTER TABLE fall_aud
+ADD COLUMN sachbearbeiter_id UUID;
 
 ALTER TABLE fall
 ADD CONSTRAINT FK_fall_sachbearbeiter_id
 	FOREIGN KEY (sachbearbeiter_id)
 		REFERENCES benutzer(id);
+
+ALTER TABLE fall
+ADD CONSTRAINT fall_nummer_uq UNIQUE (fall_nummer);
+
+ALTER TABLE fall
+ADD CONSTRAINT gesuchsteller_id_uq UNIQUE (gesuchsteller_id, mandant);
+
+CREATE SEQUENCE fall_nummer_seq START WITH 1 INCREMENT BY 1;
+
+ALTER TABLE fall
+ALTER fall_nummer SET DEFAULT nextval('fall_nummer_seq');
