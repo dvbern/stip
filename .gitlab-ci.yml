@@ -81,6 +81,7 @@ mirror:
   variables:
     GIT_STRATEGY: fetch
   script:
+    - git fetch origin $CI_COMMIT_BRANCH
     - git remote add github https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-api.git
     - git push github main
   rules:
