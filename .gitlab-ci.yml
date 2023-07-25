@@ -74,7 +74,9 @@ deploy:
 
 mirror:
   stage: mirror
-  image: "${DVB_DOCKER_REGISTRY}/dockerhub/alpine/git:2.40.1"
+  image: 
+    name: "${DVB_DOCKER_REGISTRY}/dockerhub/alpine/git:2.40.1"
+    entrypoint: [""]
   tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
     GIT_STRATEGY: fetch
