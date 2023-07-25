@@ -9,6 +9,7 @@ stages:
   - build
   - analyze
   - deploy
+  - mirror
 
 variables:
   IMAGE: ${DVB_DOCKER_REGISTRY}/${CI_PROJECT_ROOT_NAMESPACE}/stip/api:${CI_COMMIT_SHORT_SHA}
@@ -18,7 +19,7 @@ maven-build:
     MAVEN_ARGS: -Pcoverage
 
 sonarqube-check:
-  image: docker-registry.dvbern.ch/dockerhub/library/maven:3.8-eclipse-temurin-17
+  image: "${DVB_DOCKER_REGISTRY}/dockerhub/library/maven:3.8-eclipse-temurin-17"
   stage: analyze
   tags: [ "os:linux", "type:docker", "zone:tz" ]
   extends: .maven-build-base
@@ -56,8 +57,6 @@ build-image:
     - job: maven-build
       artifacts: true
 
-
-# WIP
 deploy:
   stage: deploy
   image: "${DVB_DOCKER_REGISTRY}/devops/docker/tools/k8s/main"
@@ -70,5 +69,17 @@ deploy:
     - kustomize edit set image $IMAGE
     - "git commit -a -m \"ci($STAGE): deploy image $IMAGE\""
     - git push -o ci.skip https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:$CI_COMMIT_BRANCH
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+mirror:
+  stage: mirror
+  image: "${DVB_DOCKER_REGISTRY}/dockerhub/alpine/git:2.40.1"
+  tags: [ "os:linux", "type:docker", "zone:tz" ]
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - git remote add github https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-api.git
+    - git push github main
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
