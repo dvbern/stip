@@ -9,7 +9,7 @@ spec:
     - host: "<overlay-specific>"
       http:
         paths:
-          - path: "/"
+          - path: "/api/v1"
             backend:
               service:
                 name: gesuch-app
