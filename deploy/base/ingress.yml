@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: api
   annotations:
-    route.openshift.io/termination: "edge"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
     - host: "<overlay-specific>"
@@ -17,4 +17,6 @@ spec:
                   name: http
             pathType: Prefix
   tls:
-    - {}
+    - hosts:
+        - "<overlay-specific>"
+      secretName: stip-ingress-cert
