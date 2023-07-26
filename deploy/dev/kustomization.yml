@@ -2,8 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- cluster-app-user.yml
-- cluster-super-user.yml
 - ../base
 - ingress-config.yml
 

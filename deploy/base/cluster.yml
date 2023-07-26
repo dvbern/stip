@@ -14,9 +14,6 @@ spec:
   bootstrap:
     initdb:
       database: stip
-      owner: stip-app
-      secret:
-        name: cluster-app-user
   resources:
     requests:
       memory: "512Mi"
