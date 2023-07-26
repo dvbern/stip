@@ -6,10 +6,10 @@ namePrefix: kibon-stip-
 nameSuffix: -dev
 
 resources:
-- ../base
-- ingress-config.yml
 - cluster-app-user.yml
 - cluster-super-user.yml
+- ../base
+- ingress-config.yml
 
 images:
 - name: docker-registry.dvbern.ch/kibon/stip/api
@@ -28,21 +28,3 @@ replacements:
     select:
       kind: Ingress
       name: www
-- source:
-    kind: Secret
-    name: cluster-super-user
-  targets:
-  - fieldPaths:
-    - spec.superuserSecret.name
-    select:
-      kind: Cluster
-      name: cluster
-- source:
-    kind: Secret
-    name: cluster-app-user
-  targets:
-  - fieldPaths:
-    - spec.bootstrap.initdb.secret.name
-    select:
-      kind: Cluster
-      name: cluster
