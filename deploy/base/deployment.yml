@@ -63,4 +63,4 @@ spec:
             - configMapRef:
                 name: app-config
       imagePullSecrets:
-        - name: dvbern-registry
+        - name: dvbern-public-registry
