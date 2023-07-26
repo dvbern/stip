@@ -8,9 +8,6 @@ spec:
   storage:
     size: 5Gi
 
-  superuserSecret:
-    name: cluster-super-user
-
   bootstrap:
     initdb:
       database: stip
