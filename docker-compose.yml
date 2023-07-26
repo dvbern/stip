@@ -19,6 +19,12 @@ services:
       resources:
         limits:
           memory: 2G
+  localstack:
+    image: localstack/localstack:2.2.0
+    ports:
+      - "${STIP_LOCALSTACK_PORT}:4566"
+    volumes:
+      - "./s3/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
 
 networks:
   stip-net:

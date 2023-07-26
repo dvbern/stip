@@ -1,18 +1,21 @@
 package ch.dvbern.stip.api.dokument.service;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,28 +25,34 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GesuchDokumentService {
 
-    private DokumentMapper dokumentMapper;
+    private final DokumentMapper dokumentMapper;
 
-    private ConfigService configService;
+    private final DokumentRepository dokumentRepository;
 
-    private DokumentRepository dokumentRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
 
-    public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload) throws IOException {
-        //Gesuch gesuch = gesuchService.findGesuch(gesuchId).orElseThrow(() -> new RuntimeException("Gesuch not found"));
-        // TODO find DokumentTyp or create if not exist
+    private final GesuchRepository gesuchRepository;
 
+    @Transactional
+    public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload) {
+        Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(),dokumentTyp).orElse(
+                createGesuchDokument(gesuch,dokumentTyp)
+        );
         Dokument dokument = new Dokument();
+        dokument.setGesuchDokument(gesuchDokument);
         dokument.setFilename(fileUpload.fileName());
         dokument.setFilesize(String.valueOf(fileUpload.size()));
-        // TODO find better path, or save dok with uuid as name
-        File file = new File(configService.getFilePath() + "/" + dokumentTyp.toString());
-        file.mkdirs();
-        Files.move(fileUpload.filePath(), file.toPath());
-        dokument.setFilepfad(file.getPath());
-        // TODO set dokumentTyp to dokument for reference
+        dokument.setFilepfad("DUMMY");
         dokumentRepository.persist(dokument);
 
         return dokumentMapper.toDto(dokument);
+    }
+
+    private GesuchDokument createGesuchDokument(Gesuch gesuch, DokumentTyp dokumentTyp){
+        GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
+        gesuchDokumentRepository.persist(gesuchDokument);
+        return gesuchDokument;
     }
 
     public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
@@ -55,5 +64,20 @@ public class GesuchDokumentService {
         Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
         Dokument dokument = dokumentRepository.findById(dokumentId);
         return Optional.ofNullable(dokumentMapper.toDto(dokument));
+    }
+
+    public PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName) {
+        return PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileUpload.fileName())
+                .contentType(fileUpload.contentType())
+                .build();
+    }
+
+    public GetObjectRequest buildGetRequest(String objectKey, String bucketName) {
+        return GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .build();
     }
 }

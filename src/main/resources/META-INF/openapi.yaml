@@ -6,8 +6,7 @@ info:
     name: GNU AGPLv3
     url: 'https://www.gnu.org/licenses/agpl.txt'
 servers:
-  -
-    url: 'http://localhost:{port}/api/v1'
+  - url: 'http://localhost:{port}/api/v1'
     description: ''
     variables:
       port:
@@ -61,14 +60,12 @@ paths:
       tags:
         - Gesuch
       parameters:
-        -
-          name: dokumentTyp
+        - name: dokumentTyp
           schema:
             $ref: '#/components/schemas/DokumentTyp'
           in: path
           required: true
-        -
-          name: gesuchId
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -102,14 +99,12 @@ paths:
       tags:
         - Gesuch
       parameters:
-        -
-          name: dokumentTyp
+        - name: dokumentTyp
           schema:
             $ref: '#/components/schemas/DokumentTyp'
           in: path
           required: true
-        -
-          name: gesuchId
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -129,8 +124,7 @@ paths:
       tags:
         - Fall
       parameters:
-        -
-          name: fallId
+        - name: fallId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -153,8 +147,7 @@ paths:
       operationId: getFall
       summary: Returniert der Fall mit der gegebene Id.
     parameters:
-      -
-        name: fallId
+      - name: fallId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -242,8 +235,7 @@ paths:
       tags:
         - Gesuchsperiode
       parameters:
-        -
-          name: gesuchsperiodeId
+        - name: gesuchsperiodeId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -312,14 +304,12 @@ paths:
       tags:
         - Gesuch
       parameters:
-        -
-          name: dokumentTyp
+        - name: dokumentTyp
           schema:
             $ref: '#/components/schemas/DokumentTyp'
           in: path
           required: true
-        -
-          name: gesuchId
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -339,20 +329,17 @@ paths:
       operationId: deleteDokument
       summary: deletes a Dokument
     parameters:
-      -
-        name: gesuchId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-      -
-        name: dokumentTyp
+      - name: dokumentTyp
         schema:
           $ref: '#/components/schemas/DokumentTyp'
         in: path
         required: true
-      -
-        name: dokumentId
+      - name: dokumentId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -404,8 +391,7 @@ paths:
       tags:
         - Benutzer
       parameters:
-        -
-          name: benutzerId
+        - name: benutzerId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -449,8 +435,7 @@ paths:
       operationId: getGesucheForBenutzer
       summary: Get all Gesuch for Benutzende
     parameters:
-      -
-        name: benutzerId
+      - name: benutzerId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -490,8 +475,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createFall
     parameters:
-      -
-        name: benutzerId
+      - name: benutzerId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -518,8 +502,7 @@ paths:
       operationId: getGesucheForFall
       summary: Return alle Gesuche die gehören zu dieser Fall
     parameters:
-      -
-        name: fallId
+      - name: fallId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -529,8 +512,7 @@ paths:
       tags:
         - Gesuch
       parameters:
-        -
-          name: gesuchId
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -556,8 +538,7 @@ paths:
       tags:
         - Gesuch
       parameters:
-        -
-          name: gesuchId
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -586,8 +567,7 @@ paths:
       tags:
         - Gesuch
       parameters:
-        -
-          name: gesuchId
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -986,10 +966,8 @@ components:
       description: ''
       type: object
       allOf:
-        -
-          type: object
-        -
-          $ref: '#/components/schemas/AuszahlungUpdate'
+        - type: object
+        - $ref: '#/components/schemas/AuszahlungUpdate'
     AuszahlungUpdate:
       title: Root Type for Auszahlung
       description: ''
@@ -1120,17 +1098,13 @@ components:
     Ausbildung:
       type: object
       allOf:
-        -
-          type: object
-        -
-          $ref: '#/components/schemas/AusbildungUpdate'
+        - type: object
+        - $ref: '#/components/schemas/AusbildungUpdate'
     Familiensituation:
       type: object
       allOf:
-        -
-          type: object
-        -
-          $ref: '#/components/schemas/FamiliensituationUpdate'
+        - type: object
+        - $ref: '#/components/schemas/FamiliensituationUpdate'
     Taetigskeitsart:
       enum:
         - ERWERBSTAETIGKEIT
@@ -1152,12 +1126,10 @@ components:
     PersonInAusbildung:
       type: object
       allOf:
-        -
-          required:
+        - required:
             - adresse.id
           type: object
-        -
-          $ref: '#/components/schemas/PersonInAusbildungUpdate'
+        - $ref: '#/components/schemas/PersonInAusbildungUpdate'
     Gesuchsperiode:
       required:
         - id
@@ -1177,14 +1149,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
           example: '2022-12-12'
       example:
-        -
-          id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
+        - id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
           gueltigAb: '2022-02-01'
           gueltigBis: '2023-01-31'
           einreichfrist: '2022-06-30'
           aufschaltdatum: '2022-06-01'
-        -
-          id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
+        - id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
           gueltigAb: '2022-02-01'
           gueltigBis: '2023-01-31'
           einreichfrist: '2022-06-30'
@@ -1265,68 +1235,58 @@ components:
       description: ''
       type: object
       allOf:
-        -
-          required:
+        - required:
             - id
           type: object
           properties:
             copyOfId:
               $ref: '#/components/schemas/UUID'
               description: ''
-        -
-          $ref: '#/components/schemas/ElternUpdate'
+        - $ref: '#/components/schemas/ElternUpdate'
     Geschwister:
       title: Root Type for Geschwister
       description: ''
       type: object
       allOf:
-        -
-          required:
+        - required:
             - id
           type: object
           properties:
             copyOfId:
               $ref: '#/components/schemas/UUID'
               description: ''
-        -
-          $ref: '#/components/schemas/GeschwisterUpdate'
+        - $ref: '#/components/schemas/GeschwisterUpdate'
     Kind:
       title: Root Type for Geschwister
       description: ''
       type: object
       allOf:
-        -
-          required:
+        - required:
             - id
           type: object
           properties:
             copyOfId:
               $ref: '#/components/schemas/UUID'
               description: ''
-        -
-          $ref: '#/components/schemas/KindUpdate'
+        - $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf
       description: ''
       type: object
       allOf:
-        -
-          required:
+        - required:
             - id
           type: object
           properties:
             copyOfId:
               $ref: '#/components/schemas/UUID'
               description: ''
-        -
-          $ref: '#/components/schemas/LebenslaufItemUpdate'
+        - $ref: '#/components/schemas/LebenslaufItemUpdate'
     Partner:
       type: object
       allOf:
-        -
-          type: object
-        -
-          $ref: '#/components/schemas/PartnerUpdate'
+        - type: object
+        - $ref: '#/components/schemas/PartnerUpdate'
     Ausbildungsstaette:
       required:
         - id
@@ -1354,7 +1314,7 @@ components:
         - ANDERE
       type: string
     GesuchFormular:
-      required: []
+      required: [ ]
       type: object
       properties:
         ausbildung:
@@ -1483,7 +1443,7 @@ components:
         nachname:
           type: string
     GesuchFormularUpdate:
-      required: []
+      required: [ ]
       type: object
       properties:
         ausbildung:
@@ -1520,22 +1480,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/KindUpdate'
+    FormData:
+      format: binary
+      type: string
   responses:
     Unauthorized:
       content:
-        text/plain: {}
+        text/plain: { }
       description: Die Zugriffsdaten sind nicht gültig
     Forbidden:
       content:
-        text/plain: {}
+        text/plain: { }
       description: Der Zugriff wurde verweigert
     NotFound:
       content:
-        text/plain: {}
+        text/plain: { }
       description: Die angeforderte Ressource existiert nicht
     ServerError:
       content:
-        text/plain: {}
+        text/plain: { }
       description: Interner Server Fehler
   securitySchemes:
     SecurityScheme:
@@ -1543,20 +1506,12 @@ components:
       type: http
       description: Authentication
 tags:
-  -
-    name: Ausbildungsstaette
-  -
-    name: Auth
-  -
-    name: Configuration
-  -
-    name: Fall
-  -
-    name: Gesuch
-  -
-    name: Gesuchsperiode
-  -
-    name: Stammdaten
-  -
-    name: Benutzer
+  - name: Ausbildungsstaette
+  - name: Auth
+  - name: Configuration
+  - name: Fall
+  - name: Gesuch
+  - name: Gesuchsperiode
+  - name: Stammdaten
+  - name: Benutzer
     description: ''
