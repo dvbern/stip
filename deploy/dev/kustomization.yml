@@ -12,7 +12,7 @@ resources:
 - cluster-super-user.yml
 
 images:
-- name: docker-registry.dvbern.ch/kibon/stip/api
+- name: docker-registry.public.dvbern.ch/kibon/stip/api
   newTag: 4476ffc3
 
 replacements:
@@ -45,7 +45,8 @@ replacements:
       kind: Cluster
       name: cluster
 
-patches:
-- path: route-patch.yml
-  target:
-    kind: Route
+# TODO: OpenShift
+# patches:
+# - path: route-patch.yml
+#   target:
+#     kind: Route

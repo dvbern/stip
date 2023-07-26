@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: ingress-config
 data:
-  host: "dev-kibon-stip-ingress.apps.mercury.ocp.dvbern.ch"
+  host: "stip.dev.apps.test.kibon.ch"

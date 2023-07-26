@@ -8,4 +8,4 @@ spec:
       port: 8080
   selector:
     app: api
-  type: LoadBalancer
+  type: ClusterIP
