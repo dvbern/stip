@@ -1,4 +1,4 @@
-apiVersion: postgresql.k8s.enterprisedb.io/v1
+apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: cluster
@@ -7,17 +7,10 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 5Gi
-    storageClass: dvb-nfs-0-client
-
-  superuserSecret:
-    name: cluster-super-user
 
   bootstrap:
     initdb:
       database: stip
-      owner: stip-app
-      secret:
-        name: cluster-app-user
   resources:
     requests:
       memory: "512Mi"

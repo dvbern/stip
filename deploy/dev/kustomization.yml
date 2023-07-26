@@ -1,19 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-
-namePrefix: kibon-stip-
-nameSuffix: -dev
-
 resources:
 - ../base
 - ingress-config.yml
-- cluster-app-user.yml
-- cluster-super-user.yml
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: 4476ffc3
+  newTag: 8302d7b1
 
 replacements:
 - source:
@@ -23,30 +17,7 @@ replacements:
   targets:
   - fieldPaths:
     - spec.rules.0.host
+    - spec.tls.0.hosts.0
     select:
       kind: Ingress
-      name: www
-- source:
-    kind: Secret
-    name: cluster-super-user
-  targets:
-  - fieldPaths:
-    - spec.superuserSecret.name
-    select:
-      kind: Cluster
-      name: cluster
-- source:
-    kind: Secret
-    name: cluster-app-user
-  targets:
-  - fieldPaths:
-    - spec.bootstrap.initdb.secret.name
-    select:
-      kind: Cluster
-      name: cluster
-
-# TODO: OpenShift
-# patches:
-# - path: route-patch.yml
-#   target:
-#     kind: Route
+      name: api

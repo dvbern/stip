@@ -4,4 +4,4 @@ metadata:
   name: app-config
 data:
   # TODO: make dynamic
-  STIP_DB_URL: 'jdbc:postgresql://kibon-stip-cluster-dev-rw.kibon-dev.svc.cluster.local:5432/stip'
+  STIP_DB_URL: 'jdbc:postgresql://cluster-rw:5432/stip'
