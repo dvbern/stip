@@ -19,4 +19,4 @@ replacements:
     - spec.rules.0.host
     select:
       kind: Ingress
-      name: www
+      name: api
