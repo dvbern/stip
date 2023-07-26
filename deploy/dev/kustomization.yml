@@ -12,8 +12,6 @@ resources:
 - ingress-config.yml
 
 images:
-- name: docker-registry.dvbern.ch/kibon/stip/api
-  newTag: d44325f9
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
   newTag: 93b0cfb2
 
