@@ -7,7 +7,6 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 5Gi
-    storageClass: dvb-nfs-0-client
 
   superuserSecret:
     name: cluster-super-user
