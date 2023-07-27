@@ -1,0 +1,3 @@
+- op: replace
+  path: /spec/host
+  value: "dev-kibon-stip.apps.mercury.ocp.dvbern.ch"
