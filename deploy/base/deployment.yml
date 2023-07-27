@@ -18,7 +18,7 @@ spec:
       containers:
         - name: api
           imagePullPolicy: Always
-          image: docker-registry.dvbern.ch/kibon/stip/api:latest
+          image: docker-registry.public.dvbern.ch/kibon/stip/api:latest
           ports:
             - name: http
               protocol: TCP
@@ -52,15 +52,15 @@ spec:
             - name: STIP_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: cluster-app-user
+                  name: cluster-app
                   key: username
             - name: STIP_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cluster-app-user
+                  name: cluster-app
                   key: password
           envFrom:
             - configMapRef:
                 name: app-config
       imagePullSecrets:
-        - name: dvbern-registry
+        - name: dvbern-public-registry
