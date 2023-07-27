@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class Familiensituation extends AbstractEntity {
 
 	@NotNull

@@ -3,7 +3,7 @@ package ch.dvbern.stip.test.ausbildung;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.generated.test.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.stip.test.utils.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import io.quarkus.test.common.QuarkusTestResource;

@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.utils;
+package ch.dvbern.stip.test.util;
 
 import ch.dvbern.stip.generated.test.dto.*;
 

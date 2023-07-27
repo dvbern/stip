@@ -36,31 +36,43 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GesuchService {
 
-    private final GesuchRepository gesuchRepository;
+	private final GesuchRepository gesuchRepository;
 
-    private final GesuchMapper gesuchMapper;
+	private final GesuchMapper gesuchMapper;
 
-    public Optional<GesuchDto> findGesuch(UUID id) {
-        return gesuchRepository.findByIdOptional(id).map(gesuchMapper::toDto);
-    }
+	public Optional<GesuchDto> findGesuch(UUID id) {
+		return gesuchRepository.findByIdOptional(id).map(gesuchMapper::toDto);
+	}
 
-    @Transactional
-    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-        var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
-        gesuchRepository.getEntityManager().merge(gesuch);
-    }
+	@Transactional
+	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+		var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+		gesuchRepository.getEntityManager().merge(gesuch);
+	}
 
+	public List<GesuchDto> findAll() {
+		return gesuchRepository.findAll().stream().map(gesuchMapper::toDto).toList();
+	}
 
+	@Transactional
+	public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
+		Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+		gesuchRepository.persist(gesuch);
+		return gesuchMapper.toDto(gesuch);
+	}
 
-    public List<GesuchDto> findAll() {
-        return gesuchRepository.findAll().stream().map(gesuchMapper::toDto).toList();
-    }
+	public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
+		return gesuchRepository.findAllForBenutzer(benutzerId).map(gesuchMapper::toDto).toList();
+	}
 
-    @Transactional
-    public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
-        Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
-        gesuchRepository.persist(gesuch);
-        return gesuchMapper.toDto(gesuch);
-    }
+	public List<GesuchDto> findAllForFall(UUID fallId) {
+		return gesuchRepository.findAllForFall(fallId).map(gesuchMapper::toDto).toList();
+	}
+
+	@Transactional
+	public void deleteGesuch(UUID gesuchId) {
+		Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+		gesuchRepository.delete(gesuch);
+	}
 }

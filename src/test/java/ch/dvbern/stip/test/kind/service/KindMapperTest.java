@@ -16,7 +16,7 @@ import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class KindMapperTest {
+class KindMapperTest {
 
 	KindMapper kindMapper = new KindMapperImpl();
 

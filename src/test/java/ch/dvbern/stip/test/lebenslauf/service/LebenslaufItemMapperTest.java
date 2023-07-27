@@ -15,7 +15,7 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LebenslaufItemMapperTest {
+class LebenslaufItemMapperTest {
 
 	LebenslaufItemMapper lebenslaufItemMapper = new LebenslaufItemMapperImpl(new DateUtil());
 

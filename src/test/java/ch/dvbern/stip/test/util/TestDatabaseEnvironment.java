@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.utils;
+package ch.dvbern.stip.test.util;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.JdbcDatabaseContainer;

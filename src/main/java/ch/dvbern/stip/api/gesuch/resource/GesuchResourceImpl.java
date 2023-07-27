@@ -48,6 +48,12 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    public Response deleteGesuch(UUID gesuchId) {
+        gesuchService.deleteGesuch(gesuchId);
+        return Response.noContent().build();
+    }
+
+    @Override
     public Response getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         DokumentDto dokument = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         File nf = new File(dokument.getFilepfad() + dokument.getFilename());
@@ -74,6 +80,16 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGesuche() {
         return Response.ok(gesuchService.findAll()).build();
+    }
+
+    @Override
+    public Response getGesucheForBenutzer(UUID benutzerId) {
+        return Response.ok(gesuchService.findAllForBenutzer(benutzerId)).build();
+    }
+
+    @Override
+    public Response getGesucheForFall(UUID fallId) {
+        return Response.ok(gesuchService.findAllForFall(fallId)).build();
     }
 
     @Override
