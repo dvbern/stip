@@ -74,16 +74,22 @@ build-image:
     - job: maven-build
       artifacts: true
 
+
+.default-clone: &default-clone
+  before_script:
+    - rm -rf ./*
+    - git clone --branch $CI_DEFAULT_BRANCH --single-branch https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git .
+    - git checkout $CI_DEFAULT_BRANCH
+
 deploy:
   stage: deploy
   image: "${DVB_DOCKER_REGISTRY}/devops/docker/tools/k8s/main"
   tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
-    STAGE: dev
     GIT_STRATEGY: none
+    STAGE: dev
+  <<: *default-clone
   script:
-    - git clone https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git .
-    - git checkout $CI_DEFAULT_BRANCH
     - cd deploy/$STAGE
     - kustomize edit set image $IMAGE
     - "git commit -a -m \"ci($STAGE): deploy image $IMAGE\""
@@ -96,7 +102,7 @@ deploy:
       when: manual
       variables:
         STAGE: uat
-
+  
 mirror:
   stage: mirror
   image: 
@@ -105,9 +111,8 @@ mirror:
   tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
     GIT_STRATEGY: none
+  <<: *default-clone
   script:
-    - git clone https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git .
-    - git checkout $CI_DEFAULT_BRANCH
     - git push -u https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-api.git $CI_DEFAULT_BRANCH
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
