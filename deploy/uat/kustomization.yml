@@ -7,10 +7,10 @@ resources:
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: "66563625"
+  newTag: v0.1.1.RC3
 
 patchesStrategicMerge:
-  - cluster.yml
+- cluster.yml
 
 replacements:
 - source:
