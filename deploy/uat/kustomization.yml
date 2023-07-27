@@ -9,6 +9,9 @@ images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
   newTag: "66563625"
 
+patchesStrategicMerge:
+  - cluster.yml
+
 replacements:
 - source:
     fieldPath: data.host

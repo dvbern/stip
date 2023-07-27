@@ -3,7 +3,7 @@ kind: Cluster
 metadata:
   name: cluster
 spec:
-  instances: 2
+  instances: 1
   primaryUpdateStrategy: unsupervised
   storage:
     size: 5Gi
@@ -12,9 +12,6 @@ spec:
     initdb:
       database: stip
   resources:
-    requests:
+    limits:
       memory: "512Mi"
       cpu: "1"
-    limits:
-      memory: "1Gi"
-      cpu: "2"
