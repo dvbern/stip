@@ -25,59 +25,63 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GesuchDokumentService {
 
-    private final DokumentMapper dokumentMapper;
+	private final DokumentMapper dokumentMapper;
 
-    private final DokumentRepository dokumentRepository;
+	private final DokumentRepository dokumentRepository;
 
-    private final GesuchDokumentRepository gesuchDokumentRepository;
+	private final GesuchDokumentRepository gesuchDokumentRepository;
 
-    private final GesuchRepository gesuchRepository;
+	private final GesuchRepository gesuchRepository;
 
-    @Transactional
-    public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload) {
-        Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(),dokumentTyp).orElse(
-                createGesuchDokument(gesuch,dokumentTyp)
-        );
-        Dokument dokument = new Dokument();
-        dokument.setGesuchDokument(gesuchDokument);
-        dokument.setFilename(fileUpload.fileName());
-        dokument.setFilesize(String.valueOf(fileUpload.size()));
-        dokument.setFilepfad("DUMMY");
-        dokumentRepository.persist(dokument);
+	private final String GESUCH_DOKUMENT_PATH = "gesuch/";
 
-        return dokumentMapper.toDto(dokument);
-    }
+	@Transactional
+	public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload, String objectId) {
+		Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+		GesuchDokument gesuchDokument =
+				gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(), dokumentTyp).orElse(
+						createGesuchDokument(gesuch, dokumentTyp)
+				);
+		Dokument dokument = new Dokument();
+		dokument.setGesuchDokument(gesuchDokument);
+		dokument.setFilename(fileUpload.fileName());
+		dokument.setObjectId(objectId);
+		dokument.setFilesize(String.valueOf(fileUpload.size()));
+		dokument.setFilepfad(GESUCH_DOKUMENT_PATH);
+		dokumentRepository.persist(dokument);
 
-    private GesuchDokument createGesuchDokument(Gesuch gesuch, DokumentTyp dokumentTyp){
-        GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
-        gesuchDokumentRepository.persist(gesuchDokument);
-        return gesuchDokument;
-    }
+		return dokumentMapper.toDto(dokument);
+	}
 
-    public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
-        GesuchDokument gesuchDokument = dokumentRepository.findGesuchDokument(dokumentTyp, gesuchId);
-        return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
-    }
+	private GesuchDokument createGesuchDokument(Gesuch gesuch, DokumentTyp dokumentTyp) {
+		GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
+		gesuchDokumentRepository.persist(gesuchDokument);
+		return gesuchDokument;
+	}
 
-    public Optional<DokumentDto> findDokument(UUID dokumentId) {
-        Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
-        Dokument dokument = dokumentRepository.findById(dokumentId);
-        return Optional.ofNullable(dokumentMapper.toDto(dokument));
-    }
+	public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
+		GesuchDokument gesuchDokument = dokumentRepository.findGesuchDokument(dokumentTyp, gesuchId);
+		return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
+	}
 
-    public PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName) {
-        return PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(fileUpload.fileName())
-                .contentType(fileUpload.contentType())
-                .build();
-    }
+	public Optional<DokumentDto> findDokument(UUID dokumentId) {
+		Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
+		Dokument dokument = dokumentRepository.findById(dokumentId);
+		return Optional.ofNullable(dokumentMapper.toDto(dokument));
+	}
 
-    public GetObjectRequest buildGetRequest(String objectKey, String bucketName) {
-        return GetObjectRequest.builder()
-                .bucket(bucketName)
-                .key(objectKey)
-                .build();
-    }
+	public PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName, String objectId) {
+		return PutObjectRequest.builder()
+				.bucket(bucketName)
+				.key(GESUCH_DOKUMENT_PATH + objectId)
+				.contentType(fileUpload.contentType())
+				.build();
+	}
+
+	public GetObjectRequest buildGetRequest(String objectKey, String bucketName) {
+		return GetObjectRequest.builder()
+				.bucket(bucketName)
+				.key(GESUCH_DOKUMENT_PATH + objectKey)
+				.build();
+	}
 }

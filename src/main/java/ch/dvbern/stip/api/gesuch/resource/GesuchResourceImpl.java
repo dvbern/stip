@@ -13,15 +13,14 @@ import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
-import io.vertx.core.buffer.Buffer;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,12 +44,13 @@ public class GesuchResourceImpl implements GesuchResource {
 		if (fileUpload.contentType() == null || fileUpload.contentType().isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-
+		String objectId = UUID.randomUUID() + "." + FilenameUtils.getExtension(fileUpload.fileName());
 		PutObjectResponse putResponse = s3.putObject(
-				gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName()),
+				gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName(), objectId),
 				RequestBody.fromFile(fileUpload.uploadedFile()));
 		if (putResponse != null) {
-			return Response.ok(gesuchDokumentService.uploadDokument(gesuchId, dokumentTyp, fileUpload)).build();
+			return Response.ok(gesuchDokumentService.uploadDokument(gesuchId, dokumentTyp, fileUpload, objectId))
+					.build();
 		} else {
 			return Response.serverError().build();
 		}
@@ -118,11 +118,5 @@ public class GesuchResourceImpl implements GesuchResource {
 	public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
 		gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
 		return Response.accepted().build();
-	}
-
-	private static Buffer toBuffer(ByteBuffer bytebuffer) {
-		byte[] result = new byte[bytebuffer.remaining()];
-		bytebuffer.get(result);
-		return Buffer.buffer(result);
 	}
 }
