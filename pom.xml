@@ -322,6 +322,7 @@
 								<useSwaggerAnnotations>false</useSwaggerAnnotations>
 								<interfaceOnly>true</interfaceOnly>
 								<returnResponse>true</returnResponse>
+								<templateDirectory>${project.basedir}/templates</templateDirectory>
 							</configOptions>
 						</configuration>
 					</execution>
