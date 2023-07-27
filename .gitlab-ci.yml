@@ -80,12 +80,14 @@ deploy:
   tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
     STAGE: dev
+    GIT_STRATEGY: none
   script:
-    - git fetch origin $CI_DEFAULT_BRANCH
+    - git clone https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git 
+    - git checkout $CI_DEFAULT_BRANCH
     - cd deploy/$STAGE
     - kustomize edit set image $IMAGE
     - "git commit -a -m \"ci($STAGE): deploy image $IMAGE\""
-    - git push -o ci.skip https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:$CI_DEFAULT_BRANCH
+    - git push -o ci.skip origin HEAD:$CI_DEFAULT_BRANCH
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
@@ -102,13 +104,11 @@ mirror:
     entrypoint: [""]
   tags: [ "os:linux", "type:docker", "zone:tz" ]
   variables:
-    GIT_STRATEGY: clone
-    GIT_CHECKOUT: 'true'
+    GIT_STRATEGY: none
   script:
-    - git fetch origin $CI_DEFAULT_BRANCH
+    - git clone https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git 
     - git checkout $CI_DEFAULT_BRANCH
-    - git remote add github https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-api.git || echo "Remote github exists"
-    - git push -u github $CI_DEFAULT_BRANCH
+    - git push -u https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-api.git $CI_DEFAULT_BRANCH
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_TAG
