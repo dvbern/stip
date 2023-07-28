@@ -6,22 +6,28 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.*;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
+import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.apache.commons.io.FilenameUtils;
+import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.core.ResponseBytes;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
+import org.reactivestreams.Publisher;
+import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RequestScoped
@@ -32,28 +38,35 @@ public class GesuchResourceImpl implements GesuchResource {
 	private final GesuchService gesuchService;
 	private final GesuchDokumentService gesuchDokumentService;
 	private final ConfigService configService;
-	private final S3Client s3;
+	private final S3AsyncClient s3;
 
 	@Override
-	public Response createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
+	public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
 
 		if (fileUpload.fileName() == null || fileUpload.fileName().isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+			return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
 		}
 
 		if (fileUpload.contentType() == null || fileUpload.contentType().isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+			return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
 		}
 		String objectId = UUID.randomUUID() + "." + FilenameUtils.getExtension(fileUpload.fileName());
-		PutObjectResponse putResponse = s3.putObject(
-				gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName(), objectId),
-				RequestBody.fromFile(fileUpload.uploadedFile()));
-		if (putResponse != null) {
-			return Response.ok(gesuchDokumentService.uploadDokument(gesuchId, dokumentTyp, fileUpload, objectId))
-					.build();
-		} else {
-			return Response.serverError().build();
-		}
+		return Uni.createFrom()
+				.completionStage(() -> {
+					return s3.putObject(
+							gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName(), objectId),
+							AsyncRequestBody.fromFile(fileUpload.uploadedFile()));
+				})
+				.onItem().invoke(() -> gesuchDokumentService.uploadDokument(
+						gesuchId,
+						dokumentTyp,
+						fileUpload,
+						objectId))
+				.onItem().ignore().andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+				.onFailure().recoverWithItem(th -> {
+					th.printStackTrace();
+					return Response.serverError().build();
+				});
 	}
 
 	@Override
@@ -74,17 +87,29 @@ public class GesuchResourceImpl implements GesuchResource {
 	}
 
 	@Override
-	public Response getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
-		DokumentDto dokument = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
+	@Blocking
+	public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
+		DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
+		return RestMulti.fromUniResponse(
+						Uni.createFrom().completionStage(() -> s3.getObject(
+								gesuchDokumentService.buildGetRequest(
+										dokumentDto.getObjectId(),
+										configService.getBucketName()),
+								AsyncResponseTransformer.toPublisher())),
+				response -> Multi.createFrom()
+						.safePublisher(AdaptersToFlow.publisher((Publisher<ByteBuffer>) response))
+						.map(GesuchResourceImpl::toBuffer),
+				response -> Map.of(
+						"Content-Disposition",
+						List.of("attachment;filename=" + dokumentDto.getFilename()),
+						"Content-Type",
+						List.of(response.response().contentType())));
+	}
 
-		ResponseBytes<GetObjectResponse> objectBytes =
-				s3.getObjectAsBytes(gesuchDokumentService.buildGetRequest(
-						dokument.getFilename(),
-						configService.getBucketName()));
-		ResponseBuilder response = Response.ok(objectBytes.asByteArray());
-		response.header("Content-Disposition", "attachment;filename=" + dokument.getFilename());
-		response.header("Content-Type", objectBytes.response().contentType());
-		return response.build();
+	private static Buffer toBuffer(ByteBuffer bytebuffer) {
+		byte[] result = new byte[bytebuffer.remaining()];
+		bytebuffer.get(result);
+		return Buffer.buffer(result);
 	}
 
 	@Override

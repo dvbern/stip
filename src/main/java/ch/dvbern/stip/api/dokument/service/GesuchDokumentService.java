@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -60,7 +61,8 @@ public class GesuchDokumentService {
 	}
 
 	public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
-		GesuchDokument gesuchDokument = dokumentRepository.findGesuchDokument(dokumentTyp, gesuchId);
+		GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp)
+				.orElseThrow(NotFoundException::new);
 		return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
 	}
 
