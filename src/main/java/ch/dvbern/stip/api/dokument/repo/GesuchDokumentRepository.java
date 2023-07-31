@@ -22,22 +22,22 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 	public Optional<GesuchDokument> findByGesuchAndDokumentType(UUID gesuchId, DokumentTyp dokumentTyp) {
 		var queryFactory = new JPAQueryFactory(entityManager);
 		var gesuchDokument = new QGesuchDokument("gesuchDokument");
-
 		var query = queryFactory
 				.select(gesuchDokument)
 				.from(gesuchDokument)
-				.where(gesuchDokument.gesuch.id.eq(gesuchId).and(gesuchDokument.dokumentTyp.eq(dokumentTyp)));
+				.where(gesuchDokument.gesuch.id.eq(gesuchId)
+						.and(gesuchDokument.dokumentTyp.eq(dokumentTyp)));
 		return query.stream().findFirst();
 	}
 
 	public Stream<GesuchDokument> findAllForGesuch(UUID gesuchId) {
-			var queryFactory = new JPAQueryFactory(entityManager);
-			var gesuchDokument = new QGesuchDokument("gesuchDokument");
+		var queryFactory = new JPAQueryFactory(entityManager);
+		var gesuchDokument = new QGesuchDokument("gesuchDokument");
 
-			var query = queryFactory
-					.select(gesuchDokument)
-					.from(gesuchDokument)
-					.where(gesuchDokument.gesuch.id.eq(gesuchId));
-			return query.stream();
+		var query = queryFactory
+				.select(gesuchDokument)
+				.from(gesuchDokument)
+				.where(gesuchDokument.gesuch.id.eq(gesuchId));
+		return query.stream();
 	}
 }

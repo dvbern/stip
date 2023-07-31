@@ -39,8 +39,8 @@ public class GesuchDokumentService {
 	public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload, String objectId) {
 		Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
 		GesuchDokument gesuchDokument =
-				gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(), dokumentTyp).orElse(
-						createGesuchDokument(gesuch, dokumentTyp)
+				gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(), dokumentTyp).orElseGet(
+						() -> createGesuchDokument(gesuch, dokumentTyp)
 				);
 		Dokument dokument = new Dokument();
 		dokument.setGesuchDokument(gesuchDokument);
