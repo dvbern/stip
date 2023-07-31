@@ -77,11 +77,13 @@ public class GesuchResourceImpl implements GesuchResource {
 
 	@Override
 	public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+		gesuchDokumentService.deleteDokument(dokumentId);
 		return Response.noContent().build();
 	}
 
 	@Override
 	public Response deleteGesuch(UUID gesuchId) {
+		gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
 		gesuchService.deleteGesuch(gesuchId);
 		return Response.noContent().build();
 	}
@@ -91,11 +93,11 @@ public class GesuchResourceImpl implements GesuchResource {
 	public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
 		DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
 		return RestMulti.fromUniResponse(
-						Uni.createFrom().completionStage(() -> s3.getObject(
-								gesuchDokumentService.buildGetRequest(
-										dokumentDto.getObjectId(),
-										configService.getBucketName()),
-								AsyncResponseTransformer.toPublisher())),
+				Uni.createFrom().completionStage(() -> s3.getObject(
+						gesuchDokumentService.buildGetRequest(
+								configService.getBucketName(),
+								dokumentDto.getObjectId()),
+						AsyncResponseTransformer.toPublisher())),
 				response -> Multi.createFrom()
 						.safePublisher(AdaptersToFlow.publisher((Publisher<ByteBuffer>) response))
 						.map(GesuchResourceImpl::toBuffer),

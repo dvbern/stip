@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -80,10 +79,23 @@ public class GesuchDokumentService {
 				.build();
 	}
 
-	public GetObjectRequest buildGetRequest(String objectKey, String bucketName) {
+	public GetObjectRequest buildGetRequest(String bucketName, String objectKey) {
 		return GetObjectRequest.builder()
 				.bucket(bucketName)
 				.key(GESUCH_DOKUMENT_PATH + objectKey)
 				.build();
+	}
+
+	@Transactional
+	public void deleteAllDokumentForGesuch(UUID gesuchId) {
+		gesuchDokumentRepository.findAllForGesuch(gesuchId).forEach(
+				gesuchDokument -> gesuchDokumentRepository.delete(gesuchDokument)
+		);
+	}
+
+	@Transactional
+	public void deleteDokument(UUID dokumentId) {
+		Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+		dokumentRepository.delete(dokument);
 	}
 }

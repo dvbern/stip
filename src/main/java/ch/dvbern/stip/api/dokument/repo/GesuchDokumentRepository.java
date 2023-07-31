@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.dokument.repo;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -27,5 +28,16 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 				.from(gesuchDokument)
 				.where(gesuchDokument.gesuch.id.eq(gesuchId).and(gesuchDokument.dokumentTyp.eq(dokumentTyp)));
 		return query.stream().findFirst();
+	}
+
+	public Stream<GesuchDokument> findAllForGesuch(UUID gesuchId) {
+			var queryFactory = new JPAQueryFactory(entityManager);
+			var gesuchDokument = new QGesuchDokument("gesuchDokument");
+
+			var query = queryFactory
+					.select(gesuchDokument)
+					.from(gesuchDokument)
+					.where(gesuchDokument.gesuch.id.eq(gesuchId));
+			return query.stream();
 	}
 }

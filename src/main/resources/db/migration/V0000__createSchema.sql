@@ -726,6 +726,10 @@ ADD CONSTRAINT FK_gesuch_dokument_gesuch_id
 	FOREIGN KEY (gesuch_id)
 		REFERENCES gesuch(id);
 
+ALTER TABLE gesuch_dokument
+ADD CONSTRAINT unique_dokument_typ_gesuch_id
+	UNIQUE (gesuch_id, dokument_typ);
+
 CREATE TABLE gesuch_dokument_aud (
 	id                 UUID    NOT NULL,
 	rev                INTEGER NOT NULL,
