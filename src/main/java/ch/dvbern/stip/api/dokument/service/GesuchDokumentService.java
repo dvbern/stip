@@ -33,7 +33,7 @@ public class GesuchDokumentService {
 
 	private final GesuchRepository gesuchRepository;
 
-	private final String GESUCH_DOKUMENT_PATH = "gesuch/";
+	private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
 
 	@Transactional
 	public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload, String objectId) {

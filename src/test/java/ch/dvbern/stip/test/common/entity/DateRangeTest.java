@@ -14,19 +14,19 @@ class DateRangeTest {
 	private DateRange otherDateRange = new DateRange(von, bis);
 	private DateRange sameOtherDateRange = new DateRange(von, bis);
 	@Test
-	public void testDateRangeEquality(){
+	void testDateRangeEquality(){
 		Assertions.assertEquals(false, dateRange.equals(otherDateRange));
 		Assertions.assertEquals(true, otherDateRange.equals(sameOtherDateRange));
 	}
 
 	@Test
-	public void testDateRangeHashCode(){
+	void testDateRangeHashCode(){
 		Assertions.assertNotEquals(dateRange.hashCode(), otherDateRange.hashCode());
 		Assertions.assertEquals(otherDateRange.hashCode(), sameOtherDateRange.hashCode());
 	}
 
 	@Test
-	public void testDateRangeEqualitySameHashCodeEquality(){
+	void testDateRangeEqualitySameHashCodeEquality(){
 		Assertions.assertEquals(dateRange.equals(otherDateRange), dateRange.hashCode() == otherDateRange.hashCode());
 		Assertions.assertEquals(otherDateRange.equals(sameOtherDateRange), otherDateRange.hashCode() == sameOtherDateRange.hashCode());
 	}

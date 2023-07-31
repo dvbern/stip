@@ -3,7 +3,6 @@ package ch.dvbern.stip.api.benutzer.entity;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

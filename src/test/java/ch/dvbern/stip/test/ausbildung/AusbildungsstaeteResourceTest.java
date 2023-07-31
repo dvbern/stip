@@ -41,7 +41,7 @@ public class AusbildungsstaeteResourceTest {
     }
 
     @Test
-    public void test_get_ausbildungsstaetten() {
+    void test_get_ausbildungsstaetten() {
         var res = api.getAusbildungsstaetten().execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()

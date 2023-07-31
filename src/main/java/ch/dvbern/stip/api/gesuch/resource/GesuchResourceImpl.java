@@ -52,21 +52,17 @@ public class GesuchResourceImpl implements GesuchResource {
 		}
 		String objectId = UUID.randomUUID() + "." + FilenameUtils.getExtension(fileUpload.fileName());
 		return Uni.createFrom()
-				.completionStage(() -> {
-					return s3.putObject(
+				.completionStage(() ->
+					 s3.putObject(
 							gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName(), objectId),
-							AsyncRequestBody.fromFile(fileUpload.uploadedFile()));
-				})
+							AsyncRequestBody.fromFile(fileUpload.uploadedFile())))
 				.onItem().invoke(() -> gesuchDokumentService.uploadDokument(
 						gesuchId,
 						dokumentTyp,
 						fileUpload,
 						objectId))
 				.onItem().ignore().andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
-				.onFailure().recoverWithItem(th -> {
-					th.printStackTrace();
-					return Response.serverError().build();
-				});
+				.onFailure().recoverWithItem(() -> Response.serverError().build());
 	}
 
 	@Override

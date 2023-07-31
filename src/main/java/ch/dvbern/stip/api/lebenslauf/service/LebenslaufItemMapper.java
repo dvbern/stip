@@ -32,7 +32,7 @@ public interface LebenslaufItemMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
-        if(lebenslaufItemUpdateDtos.size() == 0) lebenslaufItemSet.clear();
+        if(lebenslaufItemUpdateDtos.isEmpty()) lebenslaufItemSet.clear();
         for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {
             if (lebenslaufItemUpdateDto.getId() != null) {
                 LebenslaufItem found = lebenslaufItemSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())).findFirst().orElseThrow(
