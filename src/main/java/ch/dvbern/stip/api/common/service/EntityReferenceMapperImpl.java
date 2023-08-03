@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 @EntityReferenceMapper
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingQualifierConfig.class)
 public class EntityReferenceMapperImpl {
 
     @EntityIdReference

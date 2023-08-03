@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import java.time.LocalDate;
 
 @DateMapper
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingQualifierConfig.class)
 public class DateMapperImpl {
 
 	@DateToMonthYear
