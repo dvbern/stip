@@ -21,15 +21,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.utility.DockerImageName;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -43,22 +39,11 @@ import static org.hamcrest.Matchers.equalTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DokumentResourcesTest {
 
-	private static LocalStackContainer localStackContainer = new LocalStackContainer(DockerImageName.parse(
-					"docker-registry.dvbern.ch/dockerhub/localstack/localstack:2.2.0")
-			.asCompatibleSubstituteFor("localstack/localstack"))
-			.withServices(LocalStackContainer.Service.S3);
-
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
 	private UUID gesuchId;
 
 	private final String TEST_FILE_LOCATION = "./src/test/resources/testUpload.txt";
-
-	@BeforeAll
-	public static void setUp() {
-		// Start LocalStack S3 container before the tests
-		localStackContainer.start();
-	}
 
 	@Test
 	@Order(1)
@@ -78,7 +63,6 @@ public class DokumentResourcesTest {
 		gesuchId = gesuche[0].getId();
 		assertThat(gesuche.length, is(1));
 	}
-
 	@Test
 	@Order(2)
 	void testCreateDokumentForGesuch() {
@@ -133,10 +117,4 @@ public class DokumentResourcesTest {
 	private String readFileData() throws IOException {
 		return Files.readString(new File(TEST_FILE_LOCATION).toPath());
 	}
-
-	@AfterAll
-	public static void tearDown() {
-		localStackContainer.stop();
-	}
-
 }

@@ -24,11 +24,13 @@ import org.reactivestreams.Publisher;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -50,6 +52,20 @@ public class GesuchResourceImpl implements GesuchResource {
 		if (fileUpload.contentType() == null || fileUpload.contentType().isEmpty()) {
 			return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
 		}
+
+		try {
+		CompletableFuture<PutObjectResponse> test = s3.putObject(
+					gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName(), "objectId"),
+					AsyncRequestBody.fromFile(fileUpload.uploadedFile()));
+		while(!test.isDone()) {
+			Thread.sleep(10);
+		}
+		PutObjectResponse response = test.get();
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
 		String objectId = UUID.randomUUID() + "." + FilenameUtils.getExtension(fileUpload.fileName());
 		return Uni.createFrom()
 				.completionStage(() ->
