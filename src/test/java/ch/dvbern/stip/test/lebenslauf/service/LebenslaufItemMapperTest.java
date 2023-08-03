@@ -1,11 +1,6 @@
 package ch.dvbern.stip.test.lebenslauf.service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
@@ -15,9 +10,14 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 class LebenslaufItemMapperTest {
 
-	LebenslaufItemMapper lebenslaufItemMapper = new LebenslaufItemMapperImpl(new DateUtil());
+    LebenslaufItemMapper lebenslaufItemMapper = new LebenslaufItemMapperImpl(new DateMapperImpl());
 
 	@Test
 	void testGeschwisterMapperMapAddDelete() {
