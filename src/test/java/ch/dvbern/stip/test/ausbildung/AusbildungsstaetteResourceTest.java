@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AusbildungsstaeteResourceTest {
+public class AusbildungsstaetteResourceTest {
 
 
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;

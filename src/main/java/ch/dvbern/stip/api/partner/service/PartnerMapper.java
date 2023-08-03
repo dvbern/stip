@@ -12,6 +12,5 @@ public interface PartnerMapper {
 
     PartnerDto toDto(Partner partner);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Partner partialUpdate(PartnerUpdateDto partnerUpdateDto, @MappingTarget Partner partner);
 }

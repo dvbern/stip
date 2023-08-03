@@ -12,6 +12,5 @@ public interface AuszahlungMapper {
 
     AuszahlungDto toDto(Auszahlung auszahlung);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Auszahlung partialUpdate(AuszahlungUpdateDto auszahlungUpdateDto, @MappingTarget Auszahlung auszahlung);
 }

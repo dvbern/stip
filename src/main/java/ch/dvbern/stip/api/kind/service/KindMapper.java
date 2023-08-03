@@ -17,10 +17,8 @@ public interface KindMapper {
 
     KindDto toDto(Kind kind);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Kind partialUpdate(KindUpdateDto kindUpdateDto, @MappingTarget Kind kind);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
         if(kindUpdateDtos.isEmpty()) kinder.clear();
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {

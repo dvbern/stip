@@ -21,12 +21,10 @@ public interface LebenslaufItemMapper {
     @Mapping(source = "bis", target = "bis", qualifiedBy = {DateMapper.class, DateToMonthYear.class})
     LebenslaufItemDto toDto(LebenslaufItem lebenslaufItem);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(source = "von", target = "von", qualifiedBy = {DateMapper.class, MonthYearToBeginOfMonth.class})
     @Mapping(source = "bis", target = "bis", qualifiedBy = {DateMapper.class, MonthYearToEndOfMonth.class})
     LebenslaufItem partialUpdate(LebenslaufItemUpdateDto lebenslaufItemUpdateDto, @MappingTarget LebenslaufItem lebenslaufItem);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
         if(lebenslaufItemUpdateDtos.isEmpty()) lebenslaufItemSet.clear();
         for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {

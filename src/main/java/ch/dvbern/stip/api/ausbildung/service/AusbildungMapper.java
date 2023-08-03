@@ -24,6 +24,5 @@ public interface AusbildungMapper {
     @Mapping(source = "ausbildungsstaetteId", target = "ausbildungsstaette", qualifiedBy = {EntityReferenceMapper.class, EntityIdReference.class})
     @Mapping(source = "ausbildungBegin", target = "ausbildungBegin", qualifiedBy = {DateMapper.class, MonthYearToBeginOfMonth.class})
     @Mapping(source = "ausbildungEnd", target = "ausbildungEnd", qualifiedBy = {DateMapper.class, MonthYearToEndOfMonth.class})
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 }
