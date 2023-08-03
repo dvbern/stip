@@ -2,6 +2,7 @@ stages:
   - publish
 
 npm:
+  stage: publish
   image: node:lts
   tags: [ "zone:tz", "type:docker", "os:linux" ]
   script:
