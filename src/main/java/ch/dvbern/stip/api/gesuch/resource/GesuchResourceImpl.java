@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -51,12 +52,19 @@ public class GesuchResourceImpl implements GesuchResource {
 			return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
 		}
 
-		String objectId = UUID.randomUUID() + "." + FilenameUtils.getExtension(fileUpload.fileName());
+		if (!FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), configService.getAllowedMimeTypes())) {
+			return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
+		}
+
+		String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
 		return Uni.createFrom()
 				.completionStage(() ->
-					 s3.putObject(
-							gesuchDokumentService.buildPutRequest(fileUpload, configService.getBucketName(), objectId),
-							AsyncRequestBody.fromFile(fileUpload.uploadedFile())))
+						s3.putObject(
+								gesuchDokumentService.buildPutRequest(
+										fileUpload,
+										configService.getBucketName(),
+										objectId),
+								AsyncRequestBody.fromFile(fileUpload.uploadedFile())))
 				.onItem().invoke(() -> gesuchDokumentService.uploadDokument(
 						gesuchId,
 						dokumentTyp,
