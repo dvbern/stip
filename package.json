@@ -1,0 +1,15 @@
+{
+  "name": "@dvbern/stip-contract",
+  "version": "1.0.0",
+  "description": "OpenAPI Contract",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.dvbern.ch:kibon/stip-contract"
+  },
+  "author": "DV Bern AG",
+  "license": "AGPL-3.0",
+  "files": [
+    "openapi.yaml",
+    "**/*.yaml"
+  ]
+}
