@@ -117,7 +117,7 @@ public class GesuchResourceImpl implements GesuchResource {
 						"Content-Disposition",
 						List.of("attachment;filename=" + dokumentDto.getFilename()),
 						"Content-Type",
-						List.of(response.response().contentType())));
+						List.of("application/octet-stream")));
 	}
 
 	private static Buffer toBuffer(ByteBuffer bytebuffer) {
