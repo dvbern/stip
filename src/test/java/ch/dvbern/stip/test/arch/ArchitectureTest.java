@@ -33,7 +33,7 @@ class ArchitectureTest {
             .definedBy("..type..");
 
     @Test
-    public void test_layer_boundaries() {
+    void test_layer_boundaries() {
         var rule = LAYERS.whereLayer("Resource")
                 .mayNotBeAccessedByAnyLayer()
                 .whereLayer("Repository")
