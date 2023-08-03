@@ -6,6 +6,5 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 public final class ArchTestUtil {
 
     public static JavaClasses APP_CLASSES = new ClassFileImporter()
-            // .withImportOption(new ExcludeGeneratedClasses())
             .importPackages("ch.dvbern.stip.api");
 }

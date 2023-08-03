@@ -608,7 +608,7 @@ CREATE TABLE lebenslauf_item (
 	bis                DATE         NOT NULL,
 	wohnsitz           VARCHAR(255) NOT NULL,
 	gesuch_formular_id UUID         NOT NULL,
-	copy_of_id		   UUID,
+	copy_of_id         UUID,
 	CONSTRAINT lebenslauf_item_pk PRIMARY KEY (id)
 );
 
@@ -633,7 +633,7 @@ CREATE TABLE lebenslauf_item_aud (
 	bis                DATE,
 	wohnsitz           VARCHAR(255),
 	gesuch_formular_id UUID,
-	copy_of_id		   UUID,
+	copy_of_id         UUID,
 	CONSTRAINT lebenslauf_item_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -663,7 +663,7 @@ CREATE TABLE eltern (
 	identischer_zivilrechtlicher_wohnsitz_ort VARCHAR(255),
 	identischer_zivilrechtlicher_wohnsitz_plz VARCHAR(255),
 	gesuch_formular_id                        UUID         NOT NULL,
-	copy_of_id		   UUID,
+	copy_of_id                                UUID,
 	CONSTRAINT eltern_pk PRIMARY KEY (id)
 );
 
@@ -700,7 +700,7 @@ CREATE TABLE eltern_aud (
 	identischer_zivilrechtlicher_wohnsitz_ort VARCHAR(255),
 	identischer_zivilrechtlicher_wohnsitz_plz VARCHAR(255),
 	gesuch_formular_id                        UUID,
-	copy_of_id		   UUID,
+	copy_of_id                                UUID,
 	CONSTRAINT eltern_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -725,6 +725,10 @@ ALTER TABLE gesuch_dokument
 ADD CONSTRAINT FK_gesuch_dokument_gesuch_id
 	FOREIGN KEY (gesuch_id)
 		REFERENCES gesuch(id);
+
+ALTER TABLE gesuch_dokument
+ADD CONSTRAINT unique_dokument_typ_gesuch_id
+	UNIQUE (gesuch_id, dokument_typ);
 
 CREATE TABLE gesuch_dokument_aud (
 	id                 UUID    NOT NULL,
@@ -755,6 +759,7 @@ CREATE TABLE dokument (
 	filename           VARCHAR(255) NOT NULL,
 	filepfad           VARCHAR(255) NOT NULL,
 	filesize           VARCHAR(255) NOT NULL,
+	object_id          VARCHAR(255) NOT NULL,
 	CONSTRAINT dokument_pk PRIMARY KEY (id)
 );
 
@@ -775,6 +780,7 @@ CREATE TABLE dokument_aud (
 	filename           VARCHAR(255),
 	filepfad           VARCHAR(255),
 	filesize           VARCHAR(255),
+	object_id          VARCHAR(255),
 	CONSTRAINT dokument_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -798,7 +804,7 @@ CREATE TABLE geschwister (
 	wohnsitz_anteil_mutter NUMERIC(19, 2),
 	wohnsitz_anteil_vater  NUMERIC(19, 2),
 	gesuch_formular_id     UUID         NOT NULL,
-	copy_of_id		   UUID,
+	copy_of_id             UUID,
 	CONSTRAINT geschwister_pk PRIMARY KEY (id)
 );
 
@@ -824,7 +830,7 @@ CREATE TABLE geschwister_aud (
 	wohnsitz_anteil_mutter NUMERIC(19, 2),
 	wohnsitz_anteil_vater  NUMERIC(19, 2),
 	gesuch_formular_id     UUID,
-	copy_of_id		   UUID,
+	copy_of_id             UUID,
 	CONSTRAINT geschwister_aud_pk PRIMARY KEY (id, rev)
 );
 
@@ -848,7 +854,7 @@ CREATE TABLE kind (
 	wohnsitz_anteil_mutter NUMERIC(19, 2),
 	wohnsitz_anteil_vater  NUMERIC(19, 2),
 	gesuch_formular_id     UUID         NOT NULL,
-	copy_of_id		   UUID,
+	copy_of_id             UUID,
 	CONSTRAINT kind_pk PRIMARY KEY (id)
 );
 
@@ -874,7 +880,7 @@ CREATE TABLE kind_aud (
 	wohnsitz_anteil_mutter NUMERIC(19, 2),
 	wohnsitz_anteil_vater  NUMERIC(19, 2),
 	gesuch_formular_id     UUID,
-	copy_of_id		   UUID,
+	copy_of_id             UUID,
 	CONSTRAINT kind_aud_pk PRIMARY KEY (id, rev)
 );
 

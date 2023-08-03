@@ -1,13 +1,13 @@
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.common.service;
 
-import ch.dvbern.stip.api.common.service.*;
+import jakarta.ws.rs.BadRequestException;
 import org.mapstruct.Mapper;
 
 import java.time.LocalDate;
 
-@MonthYearMapper
-@Mapper(config = MappingConfig.class)
-public class DateUtil {
+@DateMapper
+@Mapper(config = MappingQualifierConfig.class)
+public class DateMapperImpl {
 
 	@DateToMonthYear
 	public String dateToMonthYear(LocalDate date) {
@@ -17,6 +17,12 @@ public class DateUtil {
 	@MonthYearToBeginOfMonth
 	public LocalDate monthYearToBeginOfMonth(String monthYear) {
 		String[] date = monthYear.split("\\.");
+
+		if (date.length != 2) {
+			// TODO: error handling
+			throw new BadRequestException("Invalid Date Format");
+		}
+
 		String month = date[0].length() == 1 ? "0" + date[0] : date[0];
 		return LocalDate.parse(date[1] + "-" + month + "-01");
 	}

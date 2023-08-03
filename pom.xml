@@ -20,12 +20,13 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		<quarkus.platform.version>3.1.0.Final</quarkus.platform.version>
+		<quarkus.platform.version>3.2.2.Final</quarkus.platform.version>
 		<querydsl.version>5.0.0</querydsl.version>
 		<skipITs>true</skipITs>
 		<surefire-plugin.version>3.0.0</surefire-plugin.version>
 		<testcontainers.version>1.18.3</testcontainers.version>
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+		<quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -40,6 +41,13 @@
 				<groupId>${quarkus.platform.group-id}</groupId>
 				<artifactId>${quarkus.platform.artifact-id}</artifactId>
 				<version>${quarkus.platform.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.quarkiverse.amazonservices</groupId>
+				<artifactId>quarkus-amazon-services-bom</artifactId>
+				<version>${quarkus-amazon-services.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -127,6 +135,32 @@
 			<artifactId>quarkus-hibernate-orm-panache</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>io.quarkiverse.amazonservices</groupId>
+			<artifactId>quarkus-amazon-s3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>url-connection-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>netty-nio-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-junit5</artifactId>
 			<scope>test</scope>
@@ -147,6 +181,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>localstack</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit</artifactId>
 			<version>${archunit.version}</version>
@@ -157,10 +196,6 @@
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>0.2.5</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>info.picocli</groupId>
-			<artifactId>picocli</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

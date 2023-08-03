@@ -208,8 +208,8 @@ class GesuchResourceTest {
 
 	@Test
 	@Order(15)
-	void testDelteGesuch() {
-		var gesuche = gesuchApiSpec.deleteGesuch()
+	void testDeleteGesuch() {
+		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
 				.then()

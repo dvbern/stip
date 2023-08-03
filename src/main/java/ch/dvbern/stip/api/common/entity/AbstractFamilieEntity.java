@@ -1,9 +1,11 @@
 package ch.dvbern.stip.api.common.entity;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -14,7 +16,6 @@ import java.math.BigDecimal;
 @Audited
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public abstract class AbstractFamilieEntity extends AbstractPerson {
 
 	@NotNull

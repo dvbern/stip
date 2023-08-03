@@ -19,13 +19,11 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -46,9 +44,8 @@ public class GesuchService {
 
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-		var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+		var gesuch = gesuchRepository.requireById(gesuchId);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
-		gesuchRepository.getEntityManager().merge(gesuch);
 	}
 
 	public List<GesuchDto> findAll() {
@@ -72,7 +69,7 @@ public class GesuchService {
 
 	@Transactional
 	public void deleteGesuch(UUID gesuchId) {
-		Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 		gesuchRepository.delete(gesuch);
 	}
 }

@@ -27,10 +27,8 @@ import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -40,9 +38,15 @@ import java.util.Set;
 
 @Audited
 @Entity
+@Table(indexes = {
+        @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
+        @Index(name = "IX_gesuch_formular_ausbildung_id", columnList = "ausbildung_id"),
+        @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
+        @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
+        @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
+})
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class GesuchFormular extends AbstractEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -67,24 +71,24 @@ public class GesuchFormular extends AbstractEntity {
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("von")
     private Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     private Set<Geschwister> geschwisters = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn( name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     private Set<Eltern> elterns = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_formular_id",  referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     private Set<Kind> kinds = new LinkedHashSet<>();
 }

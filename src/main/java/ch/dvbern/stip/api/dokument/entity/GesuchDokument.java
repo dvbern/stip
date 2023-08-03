@@ -18,14 +18,11 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 
-
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -34,9 +31,12 @@ import java.util.List;
 
 @Audited
 @Entity
+@Table(indexes = {
+        @Index(name = "IX_gesuch_dokument_gesuch_id", columnList = "gesuch_id"),
+        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ")
+})
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class GesuchDokument extends AbstractEntity {
 
     @NotNull
@@ -45,7 +45,7 @@ public class GesuchDokument extends AbstractEntity {
     private Gesuch gesuch;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "dokument_typ", nullable = false)
     @Enumerated(EnumType.STRING)
     private DokumentTyp dokumentTyp;
 

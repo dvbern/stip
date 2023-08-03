@@ -12,6 +12,5 @@ public interface FamiliensituationMapper {
 
     FamiliensituationDto toDto(Familiensituation familiensituation);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Familiensituation partialUpdate(FamiliensituationUpdateDto familiensituationUpdateDto, @MappingTarget Familiensituation familiensituation);
 }

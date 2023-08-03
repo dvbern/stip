@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AusbildungsstaeteResourceTest {
+public class AusbildungsstaetteResourceTest {
 
 
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
@@ -41,7 +41,7 @@ public class AusbildungsstaeteResourceTest {
     }
 
     @Test
-    public void test_get_ausbildungsstaetten() {
+    void test_get_ausbildungsstaetten() {
         var res = api.getAusbildungsstaetten().execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()

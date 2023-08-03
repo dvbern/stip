@@ -17,12 +17,10 @@ public interface ElternMapper {
 
     ElternDto toDto(Eltern eltern);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Eltern partialUpdate(ElternUpdateDto elternUpdateDto, @MappingTarget Eltern eltern);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Eltern> map(List<ElternUpdateDto> elternUpdateDtos, @MappingTarget Set<Eltern> elternSet) {
-        if(elternUpdateDtos.size() == 0) elternSet.clear();
+        if(elternUpdateDtos.isEmpty()) elternSet.clear();
         for (ElternUpdateDto elternUpdateDto : elternUpdateDtos) {
             if (elternUpdateDto.getId() != null) {
                 Eltern found = elternSet.stream().filter(eltern -> eltern.getId().equals(elternUpdateDto.getId())).findFirst().orElseThrow(

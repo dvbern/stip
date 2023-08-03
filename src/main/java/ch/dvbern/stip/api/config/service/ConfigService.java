@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.config.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -33,14 +35,22 @@ public class ConfigService {
     String version;
 
     @Inject
-    @ConfigProperty(name = "kstip.file.path")
-    String filePath;
+    @ConfigProperty(name = "bucket.name")
+    String bucketName;
+
+    @Inject
+    @ConfigProperty(name = "kstip.allowed.mimetypes")
+    List<String> allowedMimeTypes;
 
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto().version(version).environment(environment);
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getBucketName() {
+        return bucketName;
+    }
+
+    public List<String> getAllowedMimeTypes() {
+        return allowedMimeTypes;
     }
 }

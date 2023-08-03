@@ -11,6 +11,5 @@ public interface PersonInAusbildungMapper {
 
     PersonInAusbildungDto toDto(PersonInAusbildung personInAusbildung);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     PersonInAusbildung partialUpdate(PersonInAusbildungDto personInAusbildungDto, @MappingTarget PersonInAusbildung personInAusbildung);
 }

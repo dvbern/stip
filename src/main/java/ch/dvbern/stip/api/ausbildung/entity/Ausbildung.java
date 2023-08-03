@@ -6,7 +6,6 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -17,9 +16,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
 @Entity
+@Table(indexes = {
+		@Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
+		@Index(name = "IX_ausbildung_ausbildungsstaette_id", columnList = "ausbildungsstaette_id")
+})
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Ausbildung extends AbstractEntity {
 
 	@ManyToOne

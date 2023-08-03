@@ -7,7 +7,6 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -16,9 +15,14 @@ import java.time.LocalDateTime;
 
 @Audited
 @Entity
+@Table(indexes = {
+        @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
+        @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
+        @Index(name = "IX_gesuch_gesuch_formular_freigabe_copy_id", columnList = "gesuch_formular_freigabe_copy_id"),
+        @Index(name = "IX_gesuch_gesuch_forumular_to_work_with_id", columnList = "gesuch_formular_to_work_with_id"),
+})
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Gesuch extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false)
@@ -45,10 +49,10 @@ public class Gesuch extends AbstractEntity {
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_cotainer_gesuch_freigabe_copy_id"), nullable = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuch_formular_freigabe_copy_id"), nullable = true)
     private GesuchFormular gesuchFormularFreigabeCopy;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_cotainer_gesuch_to_work_with_id"), nullable = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuch_forumular_to_work_with_id"), nullable = true)
     private GesuchFormular gesuchFormularToWorkWith;
 }

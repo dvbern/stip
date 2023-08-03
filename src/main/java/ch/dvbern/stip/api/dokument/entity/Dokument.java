@@ -4,7 +4,6 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -13,14 +12,16 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
 @Entity
+@Table(indexes = {
+		@Index(name = "IX_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id")
+})
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class Dokument extends AbstractEntity {
 
 	@NotNull
 	@ManyToOne(optional = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_dokument_dokument_typ_id"), nullable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokument_id"), nullable = false)
 	private GesuchDokument gesuchDokument;
 
 	@NotNull
@@ -37,4 +38,9 @@ public class Dokument extends AbstractEntity {
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String filesize;
+
+	@NotNull
+	@Size(max = DB_DEFAULT_MAX_LENGTH)
+	@Column(nullable = false)
+	private String objectId;
 }

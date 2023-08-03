@@ -18,12 +18,10 @@ public interface GeschwisterMapper {
 
     GeschwisterDto toDto(Geschwister geschwister);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Geschwister partialUpdate(GeschwisterUpdateDto geschwisterUpdateDto, @MappingTarget Geschwister geschwister);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     default Set<Geschwister> map(List<GeschwisterUpdateDto> geschwisterUpdateDtos, @MappingTarget Set<Geschwister> geschwisterSet) {
-        if(geschwisterUpdateDtos.size() == 0) geschwisterSet.clear();
+        if(geschwisterUpdateDtos.isEmpty()) geschwisterSet.clear();
         for (GeschwisterUpdateDto geschwisterUpdateDto : geschwisterUpdateDtos) {
             if (geschwisterUpdateDto.getId() != null) {
                 Geschwister found = geschwisterSet.stream().filter(geschwister -> geschwister.getId().equals(geschwisterUpdateDto.getId())).findFirst().orElseThrow(
