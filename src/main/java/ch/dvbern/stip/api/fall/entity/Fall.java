@@ -20,24 +20,21 @@ package ch.dvbern.stip.api.fall.entity;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
+@Table(indexes = {
+		@Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
+		@Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+		// @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+})
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class Fall extends AbstractEntity {
 
 	@Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",

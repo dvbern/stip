@@ -7,7 +7,6 @@ import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -19,9 +18,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
 @Entity
+@Table
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class LebenslaufItem extends AbstractEntity {
 
 

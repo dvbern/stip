@@ -6,7 +6,6 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -18,9 +17,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 
 @Audited
 @Entity
+@Table(indexes = {
+		@Index(name = "IX_eltern_adresse_id", columnList = "adresse_id")
+})
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Eltern extends AbstractPerson {
 
 	@NotNull
