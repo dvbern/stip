@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.jboss.logging.Logger;
+
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,6 +22,8 @@ import static ch.dvbern.stip.test.util.TestConstants.TEST_FILE_LOCATION;
 
 @QuarkusTest
 public class MailServiceTest {
+
+	private static final Logger LOG = Logger.getLogger(MailServiceTest.class);
 	private static final String TO = "test@dvbern.ch";
 
 	private static final String SUBJECT = "test";
@@ -37,14 +41,15 @@ public class MailServiceTest {
 		mailbox.clear();
 	}
 
-	// reactive version is currently not working at all
 	@Test
-	@Disabled
 	void testMailAsync() throws InterruptedException {
-
 		CountDownLatch latch = new CountDownLatch(1);
-		// Call the asynchronous method
-		mailService.sendEmail(TO, SUBJECT, HTML_CONTENT);
+		// Call the asynchronous method with a subscription otherwise the async call is never made
+		mailService.sendEmail(TO, SUBJECT, HTML_CONTENT).subscribe().with(
+				(item) -> latch.countDown()
+				, failure -> {
+					LOG.error("Email couldn't be sent to: " + TO);
+				});
 
 		// Wait for the asynchronous operation to complete
 		boolean completed = latch.await(2, TimeUnit.SECONDS);
@@ -56,7 +61,33 @@ public class MailServiceTest {
 		MailMessage actual = sent.get(0);
 		Assertions.assertEquals(HTML_CONTENT, actual.getHtml());
 		Assertions.assertEquals(SUBJECT, actual.getSubject());
+	}
 
+	@Test
+	void testMailWithAttachmentAsync() throws InterruptedException {
+		File file = new File(TEST_FILE_LOCATION);
+		List<File> files = new ArrayList<>();
+		files.add(file);
+		CountDownLatch latch = new CountDownLatch(1);
+		// Call the asynchronous method with a subscription otherwise the async call is never made
+		mailService.sendEmailWithAttachment(TO, SUBJECT, HTML_CONTENT, files).subscribe().with(
+				(item) -> latch.countDown()
+				, failure -> {
+					LOG.error("Email couldn't be sent to: " + TO);
+				});
+
+		// Wait for the asynchronous operation to complete
+		boolean completed = latch.await(2, TimeUnit.SECONDS);
+		Assertions.assertTrue(completed);
+		// verify that it was sent
+		List<MailMessage> sent = mailbox.getMailMessagesSentTo(TO);
+		Assertions.assertEquals(1, sent.size());
+		MailMessage actual = sent.get(0);
+		Assertions.assertEquals(HTML_CONTENT, actual.getHtml());
+		Assertions.assertEquals(SUBJECT, actual.getSubject());
+		Assertions.assertEquals(1, actual.getAttachment().size());
+		Assertions.assertEquals("text/plain", actual.getAttachment().get(0).getContentType());
+		Assertions.assertEquals(file.getName(), actual.getAttachment().get(0).getName());
 	}
 
 	@Test
