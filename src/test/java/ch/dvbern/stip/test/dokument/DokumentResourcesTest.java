@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ch.dvbern.stip.test.util.TestConstants.TEST_FILE_LOCATION;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -42,8 +43,6 @@ public class DokumentResourcesTest {
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
 	private UUID gesuchId;
-
-	private final String TEST_FILE_LOCATION = "./src/test/resources/testUpload.txt";
 
 	@Test
 	@Order(1)

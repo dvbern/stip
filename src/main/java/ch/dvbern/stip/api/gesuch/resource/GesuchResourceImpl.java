@@ -18,7 +18,6 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
-import org.apache.commons.io.FilenameUtils;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.reactivestreams.Publisher;
