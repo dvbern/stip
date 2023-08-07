@@ -658,9 +658,9 @@ components:
       type: string
     Wohnsitz:
       enum:
-        - EIGENER_HAUSHALT
         - FAMILIE
         - MUTTER_VATER
+        - EIGENER_HAUSHALT
       type: string
     Zivilstand:
       enum:
