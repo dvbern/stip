@@ -18,7 +18,7 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
-import org.apache.commons.io.FilenameUtils;
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.reactivestreams.Publisher;
@@ -34,6 +34,8 @@ import java.util.UUID;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchResourceImpl implements GesuchResource {
+
+	private static final Logger LOG = Logger.getLogger(GesuchResource.class);
 
 	private final UriInfo uriInfo;
 	private final GesuchService gesuchService;
@@ -65,13 +67,19 @@ public class GesuchResourceImpl implements GesuchResource {
 										configService.getBucketName(),
 										objectId),
 								AsyncRequestBody.fromFile(fileUpload.uploadedFile())))
-				.onItem().invoke(() -> gesuchDokumentService.uploadDokument(
+				.onItem()
+				.invoke(() -> gesuchDokumentService.uploadDokument(
 						gesuchId,
 						dokumentTyp,
 						fileUpload,
 						objectId))
-				.onItem().ignore().andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
-				.onFailure().recoverWithItem(() -> Response.serverError().build());
+				.onItem()
+				.ignore()
+				.andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+				.onFailure()
+				.invoke(throwable -> LOG.error(throwable.getMessage()))
+				.onFailure()
+				.recoverWithItem(Response.serverError().build());
 	}
 
 	@Override
