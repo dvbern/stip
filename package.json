@@ -11,5 +11,37 @@
   "files": [
     "openapi.yaml",
     "**/*.yaml"
-  ]
+  ],
+  "devDependencies": {
+    "@semantic-release/gitlab": "^12.0.4",
+    "semantic-release": "^21.0.7",
+    "semantic-release-maven": "^1.1.7"
+  },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "semantic-release-maven",
+      [
+        "@semantic-release/gitlab",
+        {
+          "gitlabUrl": "https://gitlab.dvbern.ch",
+          "assets": [
+            {
+              "path": "openapi.yaml",
+              "label": "OpenAPI Specification"
+            }
+          ]
+        }
+      ]
+    ]
+  }
 }
