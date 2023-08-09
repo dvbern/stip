@@ -11,16 +11,28 @@ images:
 
 patchesStrategicMerge:
 - cluster.yml
+- identity-config-map.yml
 
 replacements:
-- source:
-    fieldPath: data.host
-    kind: ConfigMap
-    name: ingress-config
-  targets:
-  - fieldPaths:
-    - spec.rules.0.host
-    - spec.tls.0.hosts.0
-    select:
-      kind: Ingress
-      name: api
+  - source:
+      fieldPath: data.host
+      kind: ConfigMap
+      name: ingress-config
+    targets:
+      - fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
+        select:
+          kind: Ingress
+          name: api
+  - source:
+      fieldPath: data.identityHost
+      kind: ConfigMap
+      name: ingress-config
+    targets:
+      - fieldPaths:
+          - spec.rules.1.host
+          - spec.tls.0.hosts.1
+        select:
+          kind: Ingress
+          name: api
