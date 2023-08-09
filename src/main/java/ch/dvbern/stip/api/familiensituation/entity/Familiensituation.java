@@ -13,6 +13,8 @@ import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
 
 @Audited
+@ObhutGemeinsamRequiredFieldsConstraint
+@WerZahltAlimenteRequiredFieldConstraint
 @Entity
 @Table
 @Getter

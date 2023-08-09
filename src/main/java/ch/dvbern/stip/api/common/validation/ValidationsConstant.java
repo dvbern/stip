@@ -10,4 +10,7 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.wohnsitzanteil.required.message}";
 	public static final String VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.alternativeAusbildung.required.message}";
 	public static final String VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.ausbildung.required.message}";
+	public static final String VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.werZahltAlimente.required.message}";
+	public static final String VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.obhut.required.message}";
+
 }
