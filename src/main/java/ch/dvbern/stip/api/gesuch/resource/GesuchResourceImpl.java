@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -148,7 +149,13 @@ public class GesuchResourceImpl implements GesuchResource {
 
 	@Override
 	public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-		gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
-		return Response.accepted().build();
+		try {
+			gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
+			return Response.accepted().build();
+		}
+		catch (ValidationsException validationsException) {
+			// TODO Map Validations Exception inside DTO Wrapper mit DTO List of constraints with 3 properties: message, messageTemplate and Property optional
+			return Response.serverError().entity(validationsException).build();
+		}
 	}
 }

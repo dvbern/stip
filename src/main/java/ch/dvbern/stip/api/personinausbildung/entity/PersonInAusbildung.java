@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -35,6 +36,10 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Audited
+@IdentischerZivilrechtlicherWohnsitzRequiredConstraint
+@LandCHRequiredConstraint
+@NiederlassungsstatusRequiredConstraint
+@WohnsitzAnteilRequiredConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id")
@@ -46,7 +51,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
-    private Adresse adresse;
+    private @Valid Adresse adresse;
 
     @NotNull
     @Column(nullable = false)

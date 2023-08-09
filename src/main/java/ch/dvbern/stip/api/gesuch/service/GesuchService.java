@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -24,10 +25,13 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @RequestScoped
@@ -38,14 +42,20 @@ public class GesuchService {
 
 	private final GesuchMapper gesuchMapper;
 
+	private final Validator validator;
+
 	public Optional<GesuchDto> findGesuch(UUID id) {
 		return gesuchRepository.findByIdOptional(id).map(gesuchMapper::toDto);
 	}
 
 	@Transactional
-	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		if(!violations.isEmpty()) {
+			throw new ValidationsException("Die Entität ist nicht valid", violations);
+		}
 	}
 
 	public List<GesuchDto> findAll() {

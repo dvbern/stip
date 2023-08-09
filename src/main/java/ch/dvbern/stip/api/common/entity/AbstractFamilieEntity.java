@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,8 +26,12 @@ public abstract class AbstractFamilieEntity extends AbstractPerson {
 	private Wohnsitz wohnsitz;
 
 	@Column(nullable = true)
+	@DecimalMax("100.00")
+	@DecimalMin("0.00")
 	private BigDecimal wohnsitzAnteilMutter;
 
 	@Column(nullable = true)
+	@DecimalMax("100.00")
+	@DecimalMin("0.00")
 	private BigDecimal wohnsitzAnteilVater;
 }
