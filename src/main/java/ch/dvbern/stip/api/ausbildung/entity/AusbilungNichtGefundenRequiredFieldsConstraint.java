@@ -13,7 +13,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = usbilungNichtGefundenRequiredFieldsConstraintValidator.class)
+@Constraint(validatedBy = AusbilungNichtGefundenRequiredFieldsConstraintValidator.class)
 @Documented
 public @interface AusbilungNichtGefundenRequiredFieldsConstraint {
 
