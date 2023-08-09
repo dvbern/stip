@@ -8,7 +8,7 @@ resources:
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: 4c483ac2
+  newTag: 4e2991f3
 
 patchesStrategicMerge:
 - identity-config-map.yml
