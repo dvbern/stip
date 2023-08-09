@@ -19,7 +19,7 @@ spec:
         - name: identity
           imagePullPolicy: Always
           image: docker-registry.public.dvbern.ch/kibon/stip/identity:latest
-          command:
+          args:
             - 'start'
             - '--optimized'
             - '--import-realm'
