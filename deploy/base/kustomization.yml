@@ -21,6 +21,7 @@ resources:
   - identity-cluster.yml
   - identity-deployment.yml
   - identity-config-map.yml
+  - identity-service.yml
 
 crds:
   - crds/openshift-route.json
