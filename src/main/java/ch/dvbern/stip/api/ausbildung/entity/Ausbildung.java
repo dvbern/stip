@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
+@AusbilungNichtGefundenRequiredFieldsConstraint
 @Entity
 @Table(indexes = {
 		@Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),

@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
 
 public class IdentischerZivilrechtlicherWohnsitzRequiredConstraintValidator implements ConstraintValidator<IdentischerZivilrechtlicherWohnsitzRequiredConstraint, PersonInAusbildung> {
 
@@ -10,7 +11,7 @@ public class IdentischerZivilrechtlicherWohnsitzRequiredConstraintValidator impl
 			PersonInAusbildung personInAusbildung,
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (!personInAusbildung.isIdentischerZivilrechtlicherWohnsitz()) {
-			return personInAusbildung.getIdentischerZivilrechtlicherWohnsitzPLZ() != null && personInAusbildung.getIdentischerZivilrechtlicherWohnsitzOrt() != null;
+			return StringUtils.isNotEmpty(personInAusbildung.getIdentischerZivilrechtlicherWohnsitzPLZ()) && StringUtils.isNotEmpty(personInAusbildung.getIdentischerZivilrechtlicherWohnsitzOrt());
 		}
 		return true;
 	}
