@@ -75,6 +75,6 @@ spec:
                   key: password
           envFrom:
             - configMapRef:
-                name: app-config
+                name: identity-config
       imagePullSecrets:
         - name: dvbern-public-registry
