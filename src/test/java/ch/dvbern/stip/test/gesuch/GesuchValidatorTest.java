@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.*;
@@ -167,6 +169,33 @@ public class GesuchValidatorTest {
 		assertThat(violations.isEmpty(), is(false));
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testFieldValidationErrorEltern() {
+		Eltern eltern = new Eltern();
+		eltern.setIdentischerZivilrechtlicherWohnsitz(false);
+		Gesuch gesuch = prepareDummyGesuch();
+		Set<Eltern> elternSet = new HashSet<>();
+		elternSet.add(eltern);
+		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testNullFieldValidationErrorEltern() {
+		Eltern eltern = new Eltern();
+		eltern.setIdentischerZivilrechtlicherWohnsitz(true);
+		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
+		Gesuch gesuch = prepareDummyGesuch();
+		Set<Eltern> elternSet = new HashSet<>();
+		elternSet.add(eltern);
+		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
 	}
 
 	private Gesuch prepareDummyGesuch() {

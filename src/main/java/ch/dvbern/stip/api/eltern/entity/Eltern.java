@@ -18,6 +18,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 
 @Audited
 @Entity
+@IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @Table(indexes = {
 		@Index(name = "IX_eltern_adresse_id", columnList = "adresse_id")
 })
