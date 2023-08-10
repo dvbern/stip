@@ -132,7 +132,9 @@ public class GesuchValidatorTest {
 	@Test
 	void testFieldValidationErrorFamiliensituation() {
 		Familiensituation familiensituation = new Familiensituation();
+		// beim Obhut gemeinsam muessen die Obhut Mutter und Vater Feldern nicht null sein
 		familiensituation.setObhut(Elternschaftsteilung.GEMEINSAM);
+		// beim gerichtliche Alimentregelung muesst die Wer Zahlt Alimente ausgewaehlt werden
 		familiensituation.setGerichtlicheAlimentenregelung(true);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
@@ -140,13 +142,23 @@ public class GesuchValidatorTest {
 		assertThat(violations.isEmpty(), is(false));
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE)), is(true));
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE)), is(true));
+		// Test die Obhut Berechnung:
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutVater(new BigDecimal(40.00));
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutMutter(new BigDecimal(50.00));
+		violations = validator.validate(gesuch);
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE)), is(true));
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutMutter(new BigDecimal(60.00));
+		violations = validator.validate(gesuch);
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE)), is(false));
 	}
 
 	@Test
 	void testNullFieldValidationErrorFamiliensituation() {
 		Familiensituation familiensituation = new Familiensituation();
+		// beim Obhut != gemeinsam muessen die Obhut Mutter und Vater Feldern null sein
 		familiensituation.setObhut(Elternschaftsteilung.VATER);
 		familiensituation.setObhutVater(BigDecimal.ONE);
+		// beim keine gerichtliche Alimentregelung muesst die Wer Zahlt Alimente nicht ausgewaehlt werden
 		familiensituation.setGerichtlicheAlimentenregelung(false);
 		familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
 		Gesuch gesuch = prepareDummyGesuch();

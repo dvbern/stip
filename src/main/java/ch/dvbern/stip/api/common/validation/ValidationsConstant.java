@@ -40,4 +40,5 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.obhut.required.null.message}";
 	public static final String VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE =
 			"{jakarta.validation.constraints.wohnsitzanteil.berechnung.message}";
+	public static final String VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE = "{jakarta.validation.constraints.obhut.berechnung.message}";
 }

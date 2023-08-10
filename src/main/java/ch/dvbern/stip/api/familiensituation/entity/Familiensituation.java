@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 @Audited
 @ObhutGemeinsamRequiredFieldsConstraint
 @WerZahltAlimenteRequiredFieldConstraint
+@ObhutGemeinsamBerechnungConstraint
 @Entity
 @Table
 @Getter
