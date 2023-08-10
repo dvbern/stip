@@ -43,6 +43,10 @@ public class GesuchValidatorTest {
 
 	@Test
 	void testFieldValidationErrorForPersonInAusbildung() {
+		String[] constraintMessages = { VALIDATION_NACHNAME_NOTBLANK_MESSAGE, VALIDATION_VORNAME_NOTBLANK_MESSAGE,
+				VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_LAND_CH_FIELD_REQUIRED_MESSAGE,
+				VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE,
+				VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE };
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		personInAusbildung.setAdresse(new Adresse());
 		// Beim Land CH muss der Heimatort nicht leer sein
@@ -55,27 +59,29 @@ public class GesuchValidatorTest {
 		personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_NACHNAME_NOTBLANK_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_VORNAME_NOTBLANK_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_LAND_CH_FIELD_REQUIRED_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE)), is(true));
+		assertAllMessagesPresent(constraintMessages, gesuch);
 
-		// Die Anteil muessen wenn gegeben einen 100% Pensum im Total entsprechend, groessere oder kleiner Angaben sind rejektiert
+		// Die Anteil muessen wenn gegeben einen 100% Pensum im Total entsprechend, groessere oder kleiner Angaben
+		// sind rejektiert
 		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal(40.00));
 		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(50.00));
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
 		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(60.00));
 		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
 	}
 
 	@Test
 	void testNullFieldValidationErrorForPersonInAusbildung() {
+		String[] constraintMessages =
+				{ VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
+						VALIDATION_LAND_CH_FIELD_REQUIRED_NULL_MESSAGE,
+						VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE };
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		personInAusbildung.setAdresse(new Adresse());
 		// Wohnsitz Anteil muessen leer sein beim Wohnsitz != MUTTER_VATER
@@ -92,11 +98,7 @@ public class GesuchValidatorTest {
 		personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_B);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_LAND_CH_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
 	@Test
@@ -104,16 +106,13 @@ public class GesuchValidatorTest {
 		Ausbildung ausbildung = new Ausbildung();
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		// Die Ausbildungsgang und Staette muessen bei keine alternative Ausbildung gegeben werden
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)), is(false));
+		assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
+		assertAllMessagesNotPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
 		// Die alternative Ausbildungsgang und Staette muessen bei alternative Ausbildung gegeben werden
 		gesuch.getGesuchFormularToWorkWith().getAusbildung().setAusbildungNichtGefunden(true);
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)), is(false));
+		assertAllMessagesPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
+		assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
 	}
 
 	@Test
@@ -123,21 +122,24 @@ public class GesuchValidatorTest {
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
 		// Die alternative Ausbildungsgang und Staette muessen bei keine alternative Ausbildung null sein
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)), is(false));
+		assertAllMessagesPresent(
+				new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
+				gesuch);
+		assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 		// Die Ausbildungsgang und Staette muessen bei alternative Ausbildung null sein
 		gesuch.getGesuchFormularToWorkWith().getAusbildung().setAusbildungNichtGefunden(true);
 		gesuch.getGesuchFormularToWorkWith().getAusbildung().setAusbildungsgang(new Ausbildungsgang());
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)), is(false));
-
+		assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
+		assertAllMessagesNotPresent(
+				new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
+				gesuch);
 	}
 
 	@Test
 	void testFieldValidationErrorFamiliensituation() {
+		String[] constraintMessages = {
+				VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE, VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE
+		};
 		Familiensituation familiensituation = new Familiensituation();
 		// beim Obhut gemeinsam muessen die Obhut Mutter und Vater Feldern nicht null sein
 		familiensituation.setObhut(Elternschaftsteilung.GEMEINSAM);
@@ -145,22 +147,22 @@ public class GesuchValidatorTest {
 		familiensituation.setGerichtlicheAlimentenregelung(true);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE)), is(true));
+		assertAllMessagesPresent(constraintMessages, gesuch);
+
 		// Test die Obhut Berechnung:
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutVater(new BigDecimal(40.00));
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutMutter(new BigDecimal(50.00));
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
+		// korrekte Werten Meldung soll weg
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutMutter(new BigDecimal(60.00));
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE)), is(false));
+		assertAllMessagesNotPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
 	@Test
 	void testNullFieldValidationErrorFamiliensituation() {
+		String[] constraintMessages = {
+				VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE
+		};
 		Familiensituation familiensituation = new Familiensituation();
 		// beim Obhut != gemeinsam muessen die Obhut Mutter und Vater Feldern null sein
 		familiensituation.setObhut(Elternschaftsteilung.VATER);
@@ -170,27 +172,29 @@ public class GesuchValidatorTest {
 		familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
 	@Test
 	void testFieldValidationErrorEltern() {
+		String[] constraintMessages = {
+				VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE
+		};
 		Eltern eltern = new Eltern();
+		eltern.setSozialversicherungsnummer("123.456.789.101112");
 		eltern.setIdentischerZivilrechtlicherWohnsitz(false);
 		Gesuch gesuch = prepareDummyGesuch();
 		Set<Eltern> elternSet = new HashSet<>();
 		elternSet.add(eltern);
 		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_MESSAGE)), is(true));
+		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
 	@Test
 	void testNullFieldValidationErrorEltern() {
+		String[] constraintMessages = {
+				VALIDATION_AHV_MESSAGE, VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE
+		};
 		Eltern eltern = new Eltern();
 		eltern.setIdentischerZivilrechtlicherWohnsitz(true);
 		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
@@ -198,9 +202,7 @@ public class GesuchValidatorTest {
 		Set<Eltern> elternSet = new HashSet<>();
 		elternSet.add(eltern);
 		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
 	@Test
@@ -212,23 +214,21 @@ public class GesuchValidatorTest {
 		geschwisterSet.add(geschwister);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
+
 		// Test die Wohnsitzanteil Berechnung:
 		geschwister.setWohnsitzAnteilVater(new BigDecimal(55.00));
 		geschwister.setWohnsitzAnteilMutter(new BigDecimal(55.00));
 		geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
 		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
+
 		geschwister.setWohnsitzAnteilMutter(new BigDecimal(45.00));
 		geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
 		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+		assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
 	@Test
@@ -241,9 +241,7 @@ public class GesuchValidatorTest {
 		geschwisterSet.add(geschwister);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 	}
 
 	@Test
@@ -255,23 +253,19 @@ public class GesuchValidatorTest {
 		kindSet.add(kind);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 		// Test die Wohnsitzanteil Berechnung:
 		kind.setWohnsitzAnteilVater(new BigDecimal(55.00));
 		kind.setWohnsitzAnteilMutter(new BigDecimal(55.00));
 		kindSet = new HashSet<>();
 		kindSet.add(kind);
 		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 		kind.setWohnsitzAnteilMutter(new BigDecimal(45.00));
 		kindSet = new HashSet<>();
 		kindSet.add(kind);
 		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
-		violations = validator.validate(gesuch);
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+		assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
 	@Test
@@ -284,9 +278,7 @@ public class GesuchValidatorTest {
 		kindSet.add(kind);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 	}
 
 	@Test
@@ -296,9 +288,7 @@ public class GesuchValidatorTest {
 		lebenslaufItemSet.add(lebenslaufItem);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE }, gesuch);
 	}
 
 	@Test
@@ -310,11 +300,28 @@ public class GesuchValidatorTest {
 		lebenslaufItemSet.add(lebenslaufItem);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		assertThat(violations.isEmpty(), is(false));
-		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 	}
 
+	private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {
+		assertAll(messages, gesuch, true);
+	}
+
+	private void assertAllMessagesNotPresent(String[] messages, Gesuch gesuch) {
+		assertAll(messages, gesuch, false);
+	}
+
+	private void assertAll(String[] messages, Gesuch gesuch, boolean expected) {
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		if (expected) {
+			assertThat(violations.size() >= messages.length, is(true));
+		}
+		for (String message : messages) {
+			assertThat(violations.stream()
+					.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+							.equals(message)), is(expected));
+		}
+	}
 
 	private Gesuch prepareDummyGesuch() {
 		Gesuch gesuch = new Gesuch();

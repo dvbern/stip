@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -53,6 +54,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private @Valid Adresse adresse;
 
     @NotNull
+    @AhvConstraint
     @Column(nullable = false)
     private String sozialversicherungsnummer;
 

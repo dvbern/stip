@@ -43,4 +43,5 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE = "{jakarta.validation.constraints.obhut.berechnung.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE = "{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
+	public static final String VALIDATION_AHV_MESSAGE ="{jakarta.validation.constraints.ahv.message}";
 }

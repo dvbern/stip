@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
+
 public class DTOGenerator {
 
 	public static GesuchUpdateDtoSpec prepareGesuchUpdateForLebenslaufBildungsart() {
@@ -42,7 +44,7 @@ public class DTOGenerator {
 		personInAusbildung.setKorrespondenzSprache(SpracheDtoSpec.DEUTSCH);
 		personInAusbildung.setSozialhilfebeitraege(false);
 		personInAusbildung.setZivilstand(ZivilstandDtoSpec.LEDIG);
-		personInAusbildung.setSozialversicherungsnummer("756.0000.0000.05");
+		personInAusbildung.setSozialversicherungsnummer(AHV_NUMMER_VALID);
 		personInAusbildung.setQuellenbesteuert(false);
 		personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
 		personInAusbildung.setHeimatort("Bern");
@@ -104,7 +106,7 @@ public class DTOGenerator {
 		partner.setGeburtsdatum(LocalDate.of(2002, 12, 1));
 		partner.setNachname("Testname");
 		partner.setVorname("Testvorname");
-		partner.setSozialversicherungsnummer("756.0000.0000.05");
+		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID);
 		partner.setJahreseinkommen(new BigDecimal(100000));
 		gesuchformularToWorkWith.setPartner(partner);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
@@ -158,7 +160,7 @@ public class DTOGenerator {
 		eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
 		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
 		eltern.setSozialhilfebeitraegeAusbezahlt(false);
-		eltern.setSozialversicherungsnummer("756.0000.0000.05");
+		eltern.setSozialversicherungsnummer(AHV_NUMMER_VALID);
 		gesuchformularToWorkWith.setElterns(new ArrayList<>());
 		gesuchformularToWorkWith.getElterns().add(eltern);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);

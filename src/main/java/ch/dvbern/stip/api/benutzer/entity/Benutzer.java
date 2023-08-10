@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.benutzer.entity;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,6 +31,7 @@ public class Benutzer extends AbstractEntity {
 	private String vorname;
 
 	@NotNull
+	@AhvConstraint
 	@Column(nullable = false)
 	private String sozialversicherungsnummer;
 

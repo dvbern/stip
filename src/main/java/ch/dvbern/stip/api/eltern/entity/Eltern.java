@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +32,7 @@ public class Eltern extends AbstractPerson {
 	private Adresse adresse;
 
 	@NotNull
+	@AhvConstraint
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String sozialversicherungsnummer;
