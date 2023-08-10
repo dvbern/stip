@@ -17,12 +17,12 @@ import java.util.UUID;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
+@LebenslaufItemArtRequiredFieldsConstraint
 @Entity
 @Table
 @Getter
 @Setter
 public class LebenslaufItem extends AbstractEntity {
-
 
 	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)

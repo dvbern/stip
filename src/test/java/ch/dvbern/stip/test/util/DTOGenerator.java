@@ -45,6 +45,7 @@ public class DTOGenerator {
 		personInAusbildung.setSozialversicherungsnummer("756.0000.0000.05");
 		personInAusbildung.setQuellenbesteuert(false);
 		personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
+		personInAusbildung.setHeimatort("Bern");
 
 		gesuchformularToWorkWith.setPersonInAusbildung(personInAusbildung);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);

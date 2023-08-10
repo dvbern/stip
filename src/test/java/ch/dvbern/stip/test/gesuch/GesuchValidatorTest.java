@@ -13,6 +13,9 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.lebenslauf.type.Bildungsart;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.stammdaten.type.Land;
@@ -285,6 +288,33 @@ public class GesuchValidatorTest {
 		assertThat(violations.isEmpty(), is(false));
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
 	}
+
+	@Test
+	void testNullLebenslaufItemArtValidationError() {
+		LebenslaufItem lebenslaufItem = new LebenslaufItem();
+		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
+		lebenslaufItemSet.add(lebenslaufItem);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testLebenslaufItemArtValidationError() {
+		LebenslaufItem lebenslaufItem = new LebenslaufItem();
+		lebenslaufItem.setBildungsart(Bildungsart.FACHHOCHSCHULEN);
+		lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
+		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
+		lebenslaufItemSet.add(lebenslaufItem);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+	}
+
 
 	private Gesuch prepareDummyGesuch() {
 		Gesuch gesuch = new Gesuch();
