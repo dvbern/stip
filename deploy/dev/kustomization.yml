@@ -2,37 +2,45 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- ../base
-- ingress-config.yml
-- identity-secrets.yml
+  - ../base
+  - ingress-config.yml
+  - identity-secrets.yml
+  - api-secrets.yml
 
 images:
-- name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: 5e1e29ab
+  - name: docker-registry.public.dvbern.ch/kibon/stip/api
+    newTag: 5e1e29ab
 
-patchesStrategicMerge:
-- identity-config-map.yml
+configMapGenerator:
+  - name: app-config
+    behavior: merge
+    envs:
+      - 'api.env'
+  - name: identity-config
+    behavior: merge
+    envs:
+      - 'identity.env'
 
 replacements:
-- source:
-    fieldPath: data.host
-    kind: ConfigMap
-    name: ingress-config
-  targets:
-  - fieldPaths:
-    - spec.rules.0.host
-    - spec.tls.0.hosts.0
-    select:
-      kind: Ingress
-      name: api
-- source:
-    fieldPath: data.identityHost
-    kind: ConfigMap
-    name: ingress-config
-  targets:
-  - fieldPaths:
-    - spec.rules.1.host
-    - spec.tls.0.hosts.1
-    select:
-      kind: Ingress
-      name: api
+  - source:
+      fieldPath: data.host
+      kind: ConfigMap
+      name: ingress-config
+    targets:
+      - fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
+        select:
+          kind: Ingress
+          name: api
+  - source:
+      fieldPath: data.identityHost
+      kind: ConfigMap
+      name: ingress-config
+    targets:
+      - fieldPaths:
+          - spec.rules.1.host
+          - spec.tls.0.hosts.1
+        select:
+          kind: Ingress
+          name: api

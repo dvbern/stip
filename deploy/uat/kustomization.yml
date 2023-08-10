@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - ../base
 - ingress-config.yml
+- api-secrets.yml
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
@@ -11,7 +12,16 @@ images:
 
 patchesStrategicMerge:
 - cluster.yml
-- identity-config-map.yml
+
+configMapGenerator:
+  - name: app-config
+    behavior: merge
+    envs:
+      - 'api.env'
+  - name: identity-config
+    behavior: merge
+    envs:
+      - 'identity.env'
 
 replacements:
   - source:
