@@ -8,8 +8,8 @@ resources:
   - api-secrets.yml
 
 images:
-  - name: docker-registry.public.dvbern.ch/kibon/stip/api
-    newTag: 5e1e29ab
+- name: docker-registry.public.dvbern.ch/kibon/stip/api
+  newTag: b0cd0544
 
 configMapGenerator:
   - name: app-config
