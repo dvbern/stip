@@ -142,6 +142,21 @@ public class GesuchValidatorTest {
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE)), is(true));
 	}
 
+	@Test
+	void testNullFieldValidationErrorFamiliensituation() {
+		Familiensituation familiensituation = new Familiensituation();
+		familiensituation.setObhut(Elternschaftsteilung.VATER);
+		familiensituation.setObhutVater(BigDecimal.ONE);
+		familiensituation.setGerichtlicheAlimentenregelung(false);
+		familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+	}
+
 	private Gesuch prepareDummyGesuch() {
 		Gesuch gesuch = new Gesuch();
 		gesuch.setGesuchFormularToWorkWith(new GesuchFormular());

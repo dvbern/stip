@@ -4,7 +4,10 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ObhutGemeinsamRequiredFieldsConstraintValidator implements ConstraintValidator<ObhutGemeinsamRequiredFieldsConstraint, Familiensituation> {
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE;
+
+public class ObhutGemeinsamRequiredFieldsConstraintValidator
+		implements ConstraintValidator<ObhutGemeinsamRequiredFieldsConstraint, Familiensituation> {
 
 	@Override
 	public boolean isValid(
@@ -12,7 +15,12 @@ public class ObhutGemeinsamRequiredFieldsConstraintValidator implements Constrai
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (familiensituation.getObhut() == Elternschaftsteilung.GEMEINSAM) {
 			return familiensituation.getObhutVater() != null && familiensituation.getObhutMutter() != null;
+		} else {
+			constraintValidatorContext.disableDefaultConstraintViolation();
+			constraintValidatorContext.buildConstraintViolationWithTemplate(
+							VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE)
+					.addConstraintViolation();
+			return familiensituation.getObhutVater() == null && familiensituation.getObhutMutter() == null;
 		}
-		return true;
 	}
 }

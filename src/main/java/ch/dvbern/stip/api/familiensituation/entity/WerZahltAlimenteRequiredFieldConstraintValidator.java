@@ -3,7 +3,10 @@ package ch.dvbern.stip.api.familiensituation.entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class WerZahltAlimenteRequiredFieldConstraintValidator implements ConstraintValidator<WerZahltAlimenteRequiredFieldConstraint, Familiensituation> {
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE;
+
+public class WerZahltAlimenteRequiredFieldConstraintValidator
+		implements ConstraintValidator<WerZahltAlimenteRequiredFieldConstraint, Familiensituation> {
 
 	@Override
 	public boolean isValid(
@@ -11,7 +14,12 @@ public class WerZahltAlimenteRequiredFieldConstraintValidator implements Constra
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (familiensituation.getGerichtlicheAlimentenregelung()) {
 			return familiensituation.getWerZahltAlimente() != null;
+		} else {
+			constraintValidatorContext.disableDefaultConstraintViolation();
+			constraintValidatorContext.buildConstraintViolationWithTemplate(
+							VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE)
+					.addConstraintViolation();
+			return familiensituation.getWerZahltAlimente() == null;
 		}
-		return true;
 	}
 }
