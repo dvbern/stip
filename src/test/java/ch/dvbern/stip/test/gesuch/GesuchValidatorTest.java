@@ -8,9 +8,11 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.stammdaten.type.Land;
@@ -196,6 +198,92 @@ public class GesuchValidatorTest {
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		assertThat(violations.isEmpty(), is(false));
 		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testFieldValidationErrorGeschwister() {
+		Geschwister geschwister = new Geschwister();
+		// beim Wohnsitz MUTTER_VATER muessen die Anteil Mutter und Vater Feldern nicht null sein
+		geschwister.setWohnsitz(Wohnsitz.MUTTER_VATER);
+		Set<Geschwister> geschwisterSet = new HashSet<>();
+		geschwisterSet.add(geschwister);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE)), is(true));
+		// Test die Wohnsitzanteil Berechnung:
+		geschwister.setWohnsitzAnteilVater(new BigDecimal(55.00));
+		geschwister.setWohnsitzAnteilMutter(new BigDecimal(55.00));
+		geschwisterSet = new HashSet<>();
+		geschwisterSet.add(geschwister);
+		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		violations = validator.validate(gesuch);
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+		geschwister.setWohnsitzAnteilMutter(new BigDecimal(45.00));
+		geschwisterSet = new HashSet<>();
+		geschwisterSet.add(geschwister);
+		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		violations = validator.validate(gesuch);
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+	}
+
+	@Test
+	void testNullFieldValidationErrorGeschwister() {
+		Geschwister geschwister = new Geschwister();
+		// beim Wohnsitz != MUTTER_VATER muessen die Anteil Mutter und Vater Feldern null sein
+		geschwister.setWohnsitz(Wohnsitz.FAMILIE);
+		geschwister.setWohnsitzAnteilMutter(BigDecimal.TEN);
+		Set<Geschwister> geschwisterSet = new HashSet<>();
+		geschwisterSet.add(geschwister);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testFieldValidationErrorKind() {
+		Kind kind = new Kind();
+		// beim Wohnsitz MUTTER_VATER muessen die Anteil Mutter und Vater Feldern nicht null sein
+		kind.setWohnsitz(Wohnsitz.MUTTER_VATER);
+		Set<Kind> kindSet = new HashSet<>();
+		kindSet.add(kind);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE)), is(true));
+		// Test die Wohnsitzanteil Berechnung:
+		kind.setWohnsitzAnteilVater(new BigDecimal(55.00));
+		kind.setWohnsitzAnteilMutter(new BigDecimal(55.00));
+		kindSet = new HashSet<>();
+		kindSet.add(kind);
+		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		violations = validator.validate(gesuch);
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+		kind.setWohnsitzAnteilMutter(new BigDecimal(45.00));
+		kindSet = new HashSet<>();
+		kindSet.add(kind);
+		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		violations = validator.validate(gesuch);
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+	}
+
+	@Test
+	void testNullFieldValidationErrorKind() {
+		Kind kind = new Kind();
+		// beim Wohnsitz != MUTTER_VATER muessen die Anteil Mutter und Vater Feldern null sein
+		kind.setWohnsitz(Wohnsitz.FAMILIE);
+		kind.setWohnsitzAnteilMutter(BigDecimal.TEN);
+		Set<Kind> kindSet = new HashSet<>();
+		kindSet.add(kind);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		assertThat(violations.isEmpty(), is(false));
+		assertThat(violations.stream().anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate().equals(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)), is(true));
 	}
 
 	private Gesuch prepareDummyGesuch() {
