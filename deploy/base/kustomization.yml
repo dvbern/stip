@@ -1,10 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-commonLabels:
-  project: stip
-  app: api
-
 commonAnnotations:
   billing.dvbern.ch/customer: dvbern
   billing.dvbern.ch/project: kibon
@@ -18,7 +14,10 @@ resources:
   - cluster.yml
   - config-map.yml
   - ingress.yml
-
+  - identity-cluster.yml
+  - identity-deployment.yml
+  - identity-config-map.yml
+  - identity-service.yml
 
 crds:
   - crds/openshift-route.json

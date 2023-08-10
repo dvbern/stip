@@ -4,10 +4,14 @@ kind: Kustomization
 resources:
 - ../base
 - ingress-config.yml
+- identity-secrets.yml
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: f2c8eef2
+  newTag: 5e1e29ab
+
+patchesStrategicMerge:
+- identity-config-map.yml
 
 replacements:
 - source:
@@ -18,6 +22,17 @@ replacements:
   - fieldPaths:
     - spec.rules.0.host
     - spec.tls.0.hosts.0
+    select:
+      kind: Ingress
+      name: api
+- source:
+    fieldPath: data.identityHost
+    kind: ConfigMap
+    name: ingress-config
+  targets:
+  - fieldPaths:
+    - spec.rules.1.host
+    - spec.tls.0.hosts.1
     select:
       kind: Ingress
       name: api
