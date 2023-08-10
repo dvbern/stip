@@ -7,17 +7,23 @@ commonAnnotations:
   billing.dvbern.ch/category: stip
 
 resources:
-  - deployment.yml
-  - service.yml
+  - api-deployment.yml
+  - api-service.yml
   # TODO: OpenShift
   # - route.yml
-  - cluster.yml
-  - config-map.yml
+  - api-cluster.yml
   - ingress.yml
   - identity-cluster.yml
   - identity-deployment.yml
-  - identity-config-map.yml
   - identity-service.yml
+
+configMapGenerator:
+  - name: app-config
+    envs:
+      - 'api.env'
+  - name: identity-config
+    envs:
+      - 'identity.env'
 
 crds:
   - crds/openshift-route.json

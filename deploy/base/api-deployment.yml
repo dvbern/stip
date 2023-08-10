@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api
+  labels:
+    app: api
 spec:
   replicas: 1
   progressDeadlineSeconds: 120
@@ -59,6 +61,16 @@ spec:
                 secretKeyRef:
                   name: cluster-app
                   key: password
+            - name: STIP_S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: s3_api_key
+            - name: STIP_S3_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: s3_api_secret
           envFrom:
             - configMapRef:
                 name: app-config

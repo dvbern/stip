@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: identity-config
-data:
-  KC_HOSTNAME: 'auth.stip.uat.apps.test.kibon.ch'
-  STIP_IDENTITY_CLIENT_STIP_WEB_ROOT_URL: 'https://stip.uat.apps.test.kibon.ch'
