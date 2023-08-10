@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.ausbildung.entity;
+package ch.dvbern.stip.api.common.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,15 +9,15 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AusbilungNichtGefundenRequiredFieldsConstraintValidator.class)
+@Constraint(validatedBy = WohnsitzAnteilRequiredConstraintValidator.class)
 @Documented
-public @interface AusbilungNichtGefundenRequiredFieldsConstraint {
+public @interface WohnsitzAnteilRequiredConstraint {
 
-	String message() default VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
+	String message() default VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 
 	Class<?>[] groups() default {};
 

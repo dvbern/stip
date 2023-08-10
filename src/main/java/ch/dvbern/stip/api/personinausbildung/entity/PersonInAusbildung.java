@@ -39,7 +39,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @LandCHRequiredConstraint
 @NiederlassungsstatusRequiredConstraint
-@WohnsitzAnteilRequiredConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id")

@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 
 @MappedSuperclass
 @Audited
+@WohnsitzAnteilRequiredConstraint
+@WohnsitzAnteilBerechnungConstraint
 @Getter
 @Setter
 public abstract class AbstractFamilieEntity extends AbstractPerson {
