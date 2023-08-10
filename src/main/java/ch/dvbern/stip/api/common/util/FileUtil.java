@@ -29,4 +29,9 @@ public class FileUtil {
 		return false;
 	}
 
+	public static String getFileMimeType(File file) {
+		Tika tika = new Tika();
+		return tika.detect(file.getPath());
+	}
+
 }
