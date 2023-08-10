@@ -15,6 +15,9 @@ spec:
     matchLabels:
       app: identity
   template:
+    metadata:
+      labels:
+        app: identity
     spec:
       restartPolicy: Always
       containers:
