@@ -2,11 +2,14 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -17,8 +20,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.reactivestreams.Publisher;
@@ -33,9 +36,8 @@ import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Slf4j
 public class GesuchResourceImpl implements GesuchResource {
-
-	private static final Logger LOG = Logger.getLogger(GesuchResource.class);
 
 	private final UriInfo uriInfo;
 	private final GesuchService gesuchService;
