@@ -10,6 +10,8 @@ release:
   stage: release
   image: ${DVB_DOCKER_REGISTRY}/dockerhub/node:lts
   tags: [ "zone:tz", "type:docker", "os:linux" ]
+  variables:
+    NPM_TOKEN: $CI_JOB_TOKEN
   script:
     - npm install --legacy-peer-deps
     - npx semantic-release --verify-conditions=false --publish=false
