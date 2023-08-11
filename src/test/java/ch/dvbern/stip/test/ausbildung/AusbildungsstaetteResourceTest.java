@@ -1,8 +1,7 @@
 package ch.dvbern.stip.test.ausbildung;
 
+import ch.dvbern.oss.stip.contract.test.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
-import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
-import ch.dvbern.stip.generated.test.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -25,10 +24,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AusbildungsstaetteResourceTest {
 
-
-    private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
-
-    public final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
+   public final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
     @Test
     void test_get_ausbildungsstaetten() {
