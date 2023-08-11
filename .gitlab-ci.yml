@@ -40,6 +40,7 @@ maven:
   stage: publish
   variables:
     MAVEN_IMAGE_TAG: 3.8-eclipse-temurin-17
+    MAVEN_GOAL: deploy
   extends: .maven-build-base
   needs:
     - job: release
