@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.exception.mapper.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -41,6 +42,8 @@ public class GesuchResourceImpl implements GesuchResource {
 	private final GesuchDokumentService gesuchDokumentService;
 	private final ConfigService configService;
 	private final S3AsyncClient s3;
+
+	private final ValidationsExceptionMapper validationsExceptionMapper;
 
 	@Override
 	public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
@@ -154,8 +157,7 @@ public class GesuchResourceImpl implements GesuchResource {
 			return Response.accepted().build();
 		}
 		catch (ValidationsException validationsException) {
-			// TODO Map Validations Exception inside DTO Wrapper mit DTO List of constraints with 3 properties: message, messageTemplate and Property optional
-			return Response.serverError().entity(validationsException).build();
+			return Response.serverError().entity(validationsExceptionMapper.toDto(validationsException)).build();
 		}
 	}
 }
