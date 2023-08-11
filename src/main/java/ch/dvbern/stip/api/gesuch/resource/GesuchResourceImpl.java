@@ -4,11 +4,14 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.mapper.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -19,8 +22,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
-import org.apache.commons.io.FilenameUtils;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.reactivestreams.Publisher;
@@ -35,6 +38,7 @@ import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Slf4j
 public class GesuchResourceImpl implements GesuchResource {
 
 	private final UriInfo uriInfo;
@@ -69,13 +73,19 @@ public class GesuchResourceImpl implements GesuchResource {
 										configService.getBucketName(),
 										objectId),
 								AsyncRequestBody.fromFile(fileUpload.uploadedFile())))
-				.onItem().invoke(() -> gesuchDokumentService.uploadDokument(
+				.onItem()
+				.invoke(() -> gesuchDokumentService.uploadDokument(
 						gesuchId,
 						dokumentTyp,
 						fileUpload,
 						objectId))
-				.onItem().ignore().andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
-				.onFailure().recoverWithItem(() -> Response.serverError().build());
+				.onItem()
+				.ignore()
+				.andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+				.onFailure()
+				.invoke(throwable -> LOG.error(throwable.getMessage()))
+				.onFailure()
+				.recoverWithItem(Response.serverError().build());
 	}
 
 	@Override
