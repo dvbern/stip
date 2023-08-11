@@ -1,0 +1,137 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>ch.dvbern.oss.stip</groupId>
+        <artifactId>stip-contract</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../</relativePath>
+    </parent>
+
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>stip-contract-test-client</artifactId>
+    <packaging>jar</packaging>
+    <name>stip-contract-test-client</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <swagger-annotations-version>1.6.6</swagger-annotations-version>
+        <rest-assured.version>4.5.1</rest-assured.version>
+        <gson-version>2.8.9</gson-version>
+        <gson-fire-version>1.8.5</gson-fire-version>
+        <jackson-version>2.13.4</jackson-version>
+        <jackson-databind-version>2.13.4.2</jackson-databind-version>
+        <jackson-databind-nullable-version>0.2.4</jackson-databind-nullable-version>
+        <jakarta-annotation-version>2.1.1</jakarta-annotation-version>
+        <okio-version>1.17.5</okio-version>
+        <junit-version>4.13.2</junit-version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>6.3.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-test-client</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/../../openapi.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>rest-assured</library>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${project.artifactId}-test-client</artifactId>
+                            <artifactVersion>${project.version}</artifactVersion>
+                            <skipOverwrite>false</skipOverwrite>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiTests>false</generateApiTests>
+                            <apiNameSuffix>ApiSpec</apiNameSuffix>
+                            <modelNameSuffix>DtoSpec</modelNameSuffix>
+                            <configOptions>
+                                <modelPackage>${package.test}.dto</modelPackage>
+                                <invokerPackage>${package.test}</invokerPackage>
+                                <apiPackage>${package.test}.api</apiPackage>
+                                <useJakartaEe>true</useJakartaEe>
+                                <serializationLibrary>jackson</serializationLibrary>
+                                <containerDefaultToNull>true</containerDefaultToNull>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- @Nullable annotation -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta-annotation-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+        <!-- JSON processing: jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>${okio-version}</version>
+        </dependency>
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
