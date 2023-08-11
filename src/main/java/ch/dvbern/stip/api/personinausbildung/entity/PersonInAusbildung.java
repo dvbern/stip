@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,8 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EMAIL_MESSAGE;
 
 @Audited
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
@@ -76,6 +79,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
+    @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
     private String email;

@@ -2,6 +2,8 @@ package ch.dvbern.stip.api.common.validation;
 
 public final class ValidationsConstant {
 
+	public static final String EMAIL_VALIDATION_PATTERN = "^[a-z0-9]+[a-z0-9._-]*@[a-z0-9.-]+\\.[a-z]{2,4}$";
+
 	public static final String VALIDATION_NACHNAME_NOTBLANK_MESSAGE =
 			"{jakarta.validation.constraints.nachname.NotBlank.message}";
 	public static final String VALIDATION_VORNAME_NOTBLANK_MESSAGE =
@@ -44,4 +46,6 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE = "{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
 	public static final String VALIDATION_AHV_MESSAGE ="{jakarta.validation.constraints.ahv.message}";
+	public static final String VALIDATION_EMAIL_MESSAGE ="{jakarta.validation.constraints.email.message}";
+
 }
