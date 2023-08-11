@@ -43,4 +43,22 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <!-- properties set by CI -->
+        <repository>
+            <id>dvb</id>
+            <name>DV Bern Release Repository</name>
+            <url>${maven.repo.releases.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>dvb.snapshots</id>
+            <name>DV Bern Snapshots Repository</name>
+            <layout>default</layout>
+            <url>${maven.repo.snapshots.url}</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+
 </project>
