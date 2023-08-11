@@ -6,15 +6,18 @@
     <formats>
         <format>zip</format>
     </formats>
-    <includeBaseDirectory>true</includeBaseDirectory>
+    <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
             <directory>${project.basedir}</directory>
-            <outputDirectory>.</outputDirectory>
+            <outputDirectory>/</outputDirectory>
             <includes>
                 <include>openapi.yaml</include>
                 <include>**/*.yaml</include>
             </includes>
+            <excludes>
+                <exclude>modules/</exclude>
+            </excludes>
         </fileSet>
     </fileSets>
 </assembly>
