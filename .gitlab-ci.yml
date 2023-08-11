@@ -8,7 +8,7 @@ stages:
 
 release:
   stage: release
-  image: ${DVB_DOCKER_REGISTRY}/dockerhub/node:lts
+  image: ${DVB_DOCKER_REGISTRY}/devops/gitlab/semantic-release-helper:19.0.2
   tags: [ "zone:tz", "type:docker", "os:linux" ]
   script:
     - npm install --legacy-peer-deps
