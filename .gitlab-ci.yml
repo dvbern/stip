@@ -18,6 +18,8 @@ release:
   script:
     - npm install --legacy-peer-deps
     - npx semantic-release --verify-conditions=false --publish=false
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 npm:
   stage: publish
