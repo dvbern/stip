@@ -19,11 +19,11 @@ package ch.dvbern.stip.api.fall.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.TenantId;
 import org.hibernate.envers.Audited;
 
 @Audited
@@ -41,9 +41,10 @@ public class Fall extends AbstractEntity {
 			insertable = false)
 	private Long fallNummer;
 
+	@TenantId
 	@NotNull
 	@Column(nullable = false)
-	private String mandant = MandantIdentifier.BERN.name();
+	private String mandant;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
