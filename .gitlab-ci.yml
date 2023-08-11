@@ -24,6 +24,7 @@ release:
     paths:
       - package.json
       - pom.xml
+      - 'modules/**/pom.xml'
 
 npm:
   stage: publish
