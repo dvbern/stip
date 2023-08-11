@@ -45,4 +45,6 @@ tmp
 
 gen
 
+.envrc
+
 node_modules

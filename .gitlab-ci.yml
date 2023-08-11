@@ -14,6 +14,7 @@ release:
   tags: [ "zone:tz", "type:docker", "os:linux" ]
   variables:
     NPM_TOKEN: $CI_JOB_TOKEN
+    MAVEN_CLI_OPTS: -B
   script:
     - npm install --legacy-peer-deps
     - npx semantic-release --verify-conditions=false --publish=false
