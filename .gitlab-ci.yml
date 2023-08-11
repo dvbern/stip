@@ -8,7 +8,9 @@ stages:
 
 release:
   stage: release
-  image: ${DVB_DOCKER_REGISTRY}/devops/gitlab/semantic-release-helper:19.0.2
+  image:
+    name: ${DVB_DOCKER_REGISTRY}/devops/gitlab/semantic-release-helper:19.0.2
+    entrypoint: [""]
   tags: [ "zone:tz", "type:docker", "os:linux" ]
   variables:
     NPM_TOKEN: $CI_JOB_TOKEN
