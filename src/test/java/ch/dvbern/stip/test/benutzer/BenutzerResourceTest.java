@@ -1,9 +1,7 @@
 package ch.dvbern.stip.test.benutzer;
 
-import java.util.UUID;
-
-import ch.dvbern.stip.generated.test.api.BenutzerApiSpec;
-import ch.dvbern.stip.generated.test.dto.BenutzerDtoSpec;
+import ch.dvbern.oss.stip.contract.test.api.BenutzerApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -12,11 +10,9 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
+
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -1,8 +1,8 @@
 package ch.dvbern.stip.test.gesuchsperiode;
 
-import ch.dvbern.stip.generated.test.api.GesuchsperiodeApiSpec;
-import ch.dvbern.stip.generated.test.dto.GesuchsperiodeCreateDtoSpec;
-import ch.dvbern.stip.generated.test.dto.GesuchsperiodeDtoSpec;
+import ch.dvbern.oss.stip.contract.test.api.GesuchsperiodeApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchsperiodeCreateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
