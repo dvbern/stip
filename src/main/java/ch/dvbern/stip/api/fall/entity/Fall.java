@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.fall.entity;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.TenantId;
@@ -42,7 +41,6 @@ public class Fall extends AbstractEntity {
 	private Long fallNummer;
 
 	@TenantId
-	@NotNull
 	@Column(nullable = false)
 	private String mandant;
 

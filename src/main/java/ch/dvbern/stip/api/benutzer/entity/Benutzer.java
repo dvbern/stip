@@ -39,7 +39,6 @@ public class Benutzer extends AbstractEntity {
     private BenutzerStatus benutzerStatus;
 
     @TenantId
-    @NotNull
     @Column(nullable = false)
     private String mandant;
 }

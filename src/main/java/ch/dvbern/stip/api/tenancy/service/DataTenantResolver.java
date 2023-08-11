@@ -22,6 +22,13 @@ public class DataTenantResolver implements TenantResolver {
 
     @Override
     public String resolveTenantId() {
-        return context.get(TENANT_IDENTIFIER_CONTEXT_NAME); // tenant identifier already set by OIDC tenant resolver
+        String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME); // tenant identifier already set by OIDC tenant resolver
+
+        if (tenantId != null) {
+            return tenantId;
+        }
+
+        // tenant might not be set in tests etc.
+        return StipTenantResolver.DEFAULT_TENANT_IDENTIFIER;
     }
 }
