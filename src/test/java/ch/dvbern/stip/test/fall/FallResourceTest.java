@@ -1,7 +1,7 @@
 package ch.dvbern.stip.test.fall;
 
-import ch.dvbern.stip.generated.test.api.FallApiSpec;
-import ch.dvbern.stip.generated.test.dto.FallDtoSpec;
+import ch.dvbern.oss.stip.contract.test.api.FallApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.FallDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -10,11 +10,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;

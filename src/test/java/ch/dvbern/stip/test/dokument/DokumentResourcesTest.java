@@ -1,15 +1,10 @@
 package ch.dvbern.stip.test.dokument;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.UUID;
-
+import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.DokumentDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.test.dto.DokumentDtoSpec;
-import ch.dvbern.stip.generated.test.dto.GesuchCreateDtoSpec;
-import ch.dvbern.stip.generated.test.dto.GesuchDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -21,17 +16,18 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.UUID;
 
 import static ch.dvbern.stip.test.util.TestConstants.TEST_FILE_LOCATION;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
