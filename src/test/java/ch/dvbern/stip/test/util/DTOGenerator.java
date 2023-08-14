@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.util;
 
-import ch.dvbern.stip.generated.test.dto.*;
+import ch.dvbern.oss.stip.contract.test.dto.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

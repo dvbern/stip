@@ -1,7 +1,8 @@
 package ch.dvbern.stip.test.gesuch;
 
-import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.test.dto.*;
+import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -17,7 +18,8 @@ import java.util.UUID;
 
 import static ch.dvbern.stip.test.util.DTOGenerator.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
