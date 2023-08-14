@@ -16,7 +16,6 @@
         <package.contract>ch.dvbern.oss.stip.contract</package.contract>
         <package.test>ch.dvbern.oss.stip.contract.test</package.test>
     </properties>
-
     <dependencies>
     </dependencies>
 
