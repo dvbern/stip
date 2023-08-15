@@ -603,6 +603,8 @@ paths:
         required: true
   '/gesuch/{gesuchId}/einreichen':
     patch:
+      tags:
+        - Gesuch
       parameters:
         -
           name: gesuchId
