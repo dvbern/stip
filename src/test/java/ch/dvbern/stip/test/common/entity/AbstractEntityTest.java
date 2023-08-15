@@ -25,7 +25,15 @@ class AbstractEntityTest {
 
     @Test
     void test_class_not_equal() {
-        ReferenceEntity a = new ReferenceEntity(UUID.randomUUID());
+        AbstractEntity a = new ReferenceEntity(UUID.randomUUID());
+        Object b = new Object();
+
+        assertThat(a.equals(b), is(false));
+    }
+
+    @Test
+    void test_not_equals_with_null_id() {
+        AbstractEntity a = new ReferenceEntity(null);
         AbstractEntity b = new ReferenceEntity(UUID.randomUUID());
 
         assertThat(a.equals(b), is(false));
