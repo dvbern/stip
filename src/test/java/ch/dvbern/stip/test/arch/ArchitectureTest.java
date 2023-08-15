@@ -69,7 +69,7 @@ class ArchitectureTest {
     }
 
     @Test
-    public void transactional_boundary() {
+    void transactional_boundary() {
         var rule = classes().that()
                 .resideOutsideOfPackages("..service..", "..repo..")
                 .should()

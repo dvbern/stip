@@ -72,7 +72,7 @@ public abstract class AbstractEntity implements Serializable {
         Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 
-        if (!thisEffectiveClass.equals(oEffectiveClass)) {
+        if (thisEffectiveClass != oEffectiveClass) {
             return false;
         }
 
