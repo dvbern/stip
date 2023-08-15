@@ -8,20 +8,19 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 class AbstractEntityTest {
 
     @Test
     void test_equals_self() {
         AbstractEntity a = new ReferenceEntity(UUID.randomUUID());
-        assertThat(a, is(a));
+        assertThat(a.equals(a), is(true));
     }
 
     @Test
     void test_not_equals_null() {
         AbstractEntity a = new ReferenceEntity(UUID.randomUUID());
-        assertThat(null, not(a));
+        assertThat(a.equals(null), is(false));
     }
 
     @Test
@@ -29,7 +28,7 @@ class AbstractEntityTest {
         ReferenceEntity a = new ReferenceEntity(UUID.randomUUID());
         AbstractEntity b = new ReferenceEntity(UUID.randomUUID());
 
-        assertThat(a, not(b));
+        assertThat(a.equals(b), is(false));
     }
 
     @Test
@@ -38,7 +37,7 @@ class AbstractEntityTest {
         AbstractEntity a = new ReferenceEntity(id);
         AbstractEntity b = new ReferenceEntity(id);
 
-        assertThat(a, is(b));
+        assertThat(a.equals(b), is(true));
     }
 
     @Test
@@ -46,6 +45,6 @@ class AbstractEntityTest {
         AbstractEntity a = new ReferenceEntity(UUID.randomUUID());
         AbstractEntity b = new ReferenceEntity(UUID.randomUUID());
 
-        assertThat(a, not(b));
+        assertThat(a.equals(b), is(false));
     }
 }
