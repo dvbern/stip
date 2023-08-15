@@ -40,7 +40,7 @@ public class Gesuchsperiode extends AbstractEntity {
     @NotNull
     @Embedded
     @Valid
-    @AttributeOverrides({@AttributeOverride(name = "gueltigBis", column = @Column(name = "gueltig_bis"))})
+    @AttributeOverride(name = "gueltigBis", column = @Column(name = "gueltig_bis"))
     private DateRange gueltigkeit = new DateRange();
 
     @Column(nullable = true)

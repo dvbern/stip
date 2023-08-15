@@ -9,7 +9,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 class CdiTest {
 
     @Test
-    public void resources_are_request_scoped() {
+    void resources_are_request_scoped() {
         var rule = classes()
                 .that()
                 .resideInAPackage("..resource..")

@@ -22,9 +22,9 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AusbildungsstaetteResourceTest {
+class AusbildungsstaetteResourceTest {
 
-   public final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
     @Test
     void test_get_ausbildungsstaetten() {
