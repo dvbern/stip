@@ -16,10 +16,10 @@ import java.util.Arrays;
 import static ch.dvbern.stip.test.arch.util.ArchTestUtil.APP_CLASSES;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
-public class JpaTest {
+class JpaTest {
 
     @Test
-    public void test_index_on_foreign_keys() {
+    void test_index_on_foreign_keys() {
         var rule = fields().that().areAnnotatedWith(JoinColumn.class)
                 .and()
                 .areDeclaredInClassesThat()

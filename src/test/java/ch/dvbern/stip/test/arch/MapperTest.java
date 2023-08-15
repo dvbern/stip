@@ -17,7 +17,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 class MapperTest {
 
     @Test
-    public void ensure_mapping_config_is_used() {
+    void ensure_mapping_config_is_used() {
         var rule = classes()
                 .that()
                 .areAnnotatedWith(Mapper.class)
