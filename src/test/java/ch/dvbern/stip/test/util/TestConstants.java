@@ -9,5 +9,6 @@ public final class TestConstants {
 	public static final String FALL_TEST_ID ="4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b";
 
 	public static final String TEST_FILE_LOCATION = "./src/test/resources/testUpload.txt";
+	public static final String TEST_XML_FILE_LOCATION = "./src/test/resources/testUpload.xml";
 
 }

@@ -180,6 +180,7 @@ class GesuchResourceTest {
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
 				.body()
 				.as(GesuchDtoSpec.class);
+
 		assertThat(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getAusbildung(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
@@ -210,6 +211,19 @@ class GesuchResourceTest {
 
 	@Test
 	@Order(15)
+	void test_get_gesuch_for_fall() {
+		var gesuche = gesuchApiSpec.getGesucheForFall()
+				.fallIdPath(TestConstants.FALL_TEST_ID)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(GesuchDtoSpec[].class);
+		assertThat(gesuche.length, is(1));
+	}
+
+	@Test
+	@Order(16)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)
