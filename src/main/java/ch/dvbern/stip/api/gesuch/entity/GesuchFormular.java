@@ -37,6 +37,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Audited
+@FamiliensituationElternEntityRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),

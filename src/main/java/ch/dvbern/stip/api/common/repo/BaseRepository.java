@@ -11,5 +11,4 @@ public interface BaseRepository<T extends AbstractEntity> extends PanacheReposit
     default T requireById(UUID id) {
         return findByIdOptional(id).orElseThrow(NotFoundException::new);
     }
-
 }

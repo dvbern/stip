@@ -42,10 +42,14 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.obhut.required.null.message}";
 	public static final String VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE =
 			"{jakarta.validation.constraints.wohnsitzanteil.berechnung.message}";
-	public static final String VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE = "{jakarta.validation.constraints.obhut.berechnung.message}";
-	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
-	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE = "{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
-	public static final String VALIDATION_AHV_MESSAGE ="{jakarta.validation.constraints.ahv.message}";
-	public static final String VALIDATION_EMAIL_MESSAGE ="{jakarta.validation.constraints.email.message}";
-
+	public static final String VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE =
+			"{jakarta.validation.constraints.obhut.berechnung.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
+	public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
+	public static final String VALIDATION_EMAIL_MESSAGE = "{jakarta.validation.constraints.email.message}";
+	public static final String VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE =
+			"{jakarta.validation.constraints.familiensituation.eltern.entity.message}";
 }

@@ -19,7 +19,9 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -81,5 +83,16 @@ public class GesuchService {
 	public void deleteGesuch(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 		gesuchRepository.delete(gesuch);
+	}
+
+	@Transactional
+	public void gesuchEinreichen(UUID gesuchId) {
+		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
+		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) throw new RuntimeException("Eine unmoegliche Auruf wuerde durchgefuehrt: gesuchEinreichen");
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		if(!violations.isEmpty()) {
+			throw new ValidationsException("Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", violations);
+		}
 	}
 }

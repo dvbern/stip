@@ -5,11 +5,14 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -27,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -161,7 +165,8 @@ public class GesuchValidatorTest {
 	@Test
 	void testNullFieldValidationErrorFamiliensituation() {
 		String[] constraintMessages = {
-				VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE
+				VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE,
+				VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE
 		};
 		Familiensituation familiensituation = new Familiensituation();
 		// beim Obhut != gemeinsam muessen die Obhut Mutter und Vater Feldern null sein
@@ -293,6 +298,7 @@ public class GesuchValidatorTest {
 
 	@Test
 	void testLebenslaufItemArtValidationError() {
+
 		LebenslaufItem lebenslaufItem = new LebenslaufItem();
 		lebenslaufItem.setBildungsart(Bildungsart.FACHHOCHSCHULEN);
 		lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
@@ -301,6 +307,48 @@ public class GesuchValidatorTest {
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
+	}
+
+	@Test
+	void testGesuchEinreichenValidationEltern() {
+		Familiensituation familiensituation = new Familiensituation();
+		familiensituation.setElternteilUnbekanntVerstorben(true);
+		familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+		familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch,
+				GesuchEinreichenValidationGroup.class);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(true));
+		Eltern eltern = new Eltern();
+		eltern.setElternTyp(ElternTyp.MUTTER);
+		Set<Eltern> elternSet = new HashSet<>();
+		elternSet.add(eltern);
+		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
+		violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(false));
+	}
+
+	@Test
+	void testGesuchEinreichenValidationLebenslauf() {
+		LebenslaufItem lebenslaufItem = new LebenslaufItem();
+		lebenslaufItem.setBildungsart(Bildungsart.FACHHOCHSCHULEN);
+		lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
+		lebenslaufItem.setVon(LocalDate.of(2020, 10, 1));
+		lebenslaufItem.setBis(LocalDate.of(2020, 12, 1));
+		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
+		lebenslaufItemSet.add(lebenslaufItem);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch,
+				GesuchEinreichenValidationGroup.class);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(true));
 	}
 
 	private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {

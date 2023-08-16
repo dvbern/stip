@@ -108,6 +108,17 @@ public class GesuchResourceImpl implements GesuchResource {
 	}
 
 	@Override
+	public Response gesuchEinreichen(UUID gesuchId) {
+		try {
+			gesuchService.gesuchEinreichen(gesuchId);
+			return Response.accepted().build();
+		}
+		catch (ValidationsException validationsException) {
+			return Response.status(Status.BAD_REQUEST).entity(validationsExceptionMapper.toDto(validationsException)).build();
+		}
+	}
+
+	@Override
 	@Blocking
 	public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
 		DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
