@@ -1571,6 +1571,56 @@ components:
                 message:
                     description: ''
                     type: string
+        EinnahmenKostenUpdate:
+            required:
+                - nettoerwerbseinkommen
+                - fahrkosten
+                - wohnkosten
+                - personenImHaushalt
+                - verdienstRealisiert
+            type: object
+            properties:
+                nettoerwerbseinkommen:
+                    type: number
+                alimente:
+                    description: Required nur wenn mind. ein Elternteil Alimente zahlt
+                    type: number
+                zulagen:
+                    description: Required nur wenn die Person Kinder hat
+                    type: number
+                renten:
+                    description: Required nur wenn mind. ein Elternteil gestorben ist
+                    type: number
+                eoLeistungen:
+                    type: number
+                ergaenzungsleistungen:
+                    type: number
+                beitraege:
+                    type: number
+                ausbildungskostenSecondary:
+                    description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
+                    type: number
+                ausbildungskostenTertiary:
+                    description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
+                    type: number
+                fahrkosten:
+                    type: number
+                wohnkosten:
+                    type: number
+                personenImHaushalt:
+                    type: number
+                verdienstRealisiert:
+                    type: boolean
+                willDarlehen:
+                    description: Required nur wenn volljährig
+                    type: boolean
+        EinnahmenKosten:
+            type: object
+            allOf:
+                -
+                    type: object
+                -
+                    $ref: '#/components/schemas/EinnahmenKostenUpdate'
     responses:
         Unauthorized:
             content:
