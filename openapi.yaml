@@ -1597,10 +1597,10 @@ components:
                     type: number
                 beitraege:
                     type: number
-                ausbildungskostenSecondary:
+                ausbildungskostenSekundarstufeZwei:
                     description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
                     type: number
-                ausbildungskostenTertiary:
+                ausbildungskostenTertiaerstufe:
                     description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
                     type: number
                 fahrkosten:
