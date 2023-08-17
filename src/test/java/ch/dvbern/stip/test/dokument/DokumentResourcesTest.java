@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 import static ch.dvbern.stip.test.util.TestConstants.TEST_FILE_LOCATION;
+import static ch.dvbern.stip.test.util.TestConstants.TEST_XML_FILE_LOCATION;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -34,15 +35,16 @@ import static org.hamcrest.Matchers.is;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DokumentResourcesTest {
+class DokumentResourcesTest {
 
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
 	private UUID gesuchId;
+	private UUID dokumentId;
 
 	@Test
 	@Order(1)
-	void testPrepareGesuchForDokument() {
+	void test_prepare_gesuch_for_dokument() {
 		var gesuchDTO = new GesuchCreateDtoSpec();
 		gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
 		gesuchDTO.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
@@ -58,9 +60,25 @@ public class DokumentResourcesTest {
 		gesuchId = gesuche[0].getId();
 		assertThat(gesuche.length, is(1));
 	}
+
 	@Test
 	@Order(2)
-	void testCreateDokumentForGesuch() {
+	void test_create_dokument_with_wrong_mime_type() {
+		File file = new File(TEST_XML_FILE_LOCATION);
+		given()
+				.pathParam("gesuchId", gesuchId)
+				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
+				.multiPart("fileUpload", file)
+				.when()
+				.post("/api/v1" + gesuchApiSpec.createDokument().REQ_URI)
+				.then()
+				.statusCode(Status.BAD_REQUEST.getStatusCode());
+	}
+
+	@Test
+	@Order(3)
+	void test_create_dokument_for_gesuch() {
 		File file = new File(TEST_FILE_LOCATION);
 		given()
 				.pathParam("gesuchId", gesuchId)
@@ -74,8 +92,8 @@ public class DokumentResourcesTest {
 	}
 
 	@Test
-	@Order(3)
-	void testReadDokumentForGesuch() throws IOException {
+	@Order(4)
+	void test_list_and_read_dokument_for_gesuch() throws IOException {
 		var dokumentDtoList = gesuchApiSpec.getDokumenteForTyp()
 				.gesuchIdPath(gesuchId)
 				.dokumentTypPath(DokumentTyp.ELTERN_DOK)
@@ -87,20 +105,33 @@ public class DokumentResourcesTest {
 
 		assertThat(dokumentDtoList.length, is(1));
 
+		dokumentId = dokumentDtoList[0].getId();
+
 		given()
 				.pathParam("gesuchId", gesuchId)
 				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
-				.pathParam("dokumentId", dokumentDtoList[0].getId())
-				.when().get("/api/v1" + gesuchApiSpec.getDokument().REQ_URI)
+				.pathParam("dokumentId", dokumentId)
+				.when().get("/api/v1" + GesuchApiSpec.GetDokumentOper.REQ_URI)
 				.then()
 				.statusCode(200)
-				.body(equalTo(readFileData())
-				);
+				.body(equalTo(readFileData()));
 	}
 
 	@Test
-	@Order(4)
-	void testDeleteGesuch() {
+	@Order(5)
+	void test_delete_dokument() {
+		gesuchApiSpec.deleteDokument()
+				.gesuchIdPath(gesuchId)
+				.dokumentIdPath(dokumentId)
+				.dokumentTypPath(DokumentTyp.ELTERN_DOK)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.statusCode(Status.NO_CONTENT.getStatusCode());
+	}
+
+	@Test
+	@Order(6)
+	void test_delete_gesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)

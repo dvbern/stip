@@ -1,29 +1,27 @@
 package ch.dvbern.stip.test.communication.mail.service;
 
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import io.quarkus.mailer.MockMailbox;
+import io.quarkus.test.junit.QuarkusTest;
+import io.vertx.ext.mail.MailMessage;
+import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.jboss.logging.Logger;
-
-import ch.dvbern.stip.api.communication.mail.service.MailService;
-import io.quarkus.mailer.MockMailbox;
-import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.ext.mail.MailMessage;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import static ch.dvbern.stip.test.util.TestConstants.TEST_FILE_LOCATION;
 
 @QuarkusTest
-public class MailServiceTest {
+@Slf4j
+class MailServiceTest {
 
-	private static final Logger LOG = Logger.getLogger(MailServiceTest.class);
 	private static final String TO = "test@dvbern.ch";
 
 	private static final String SUBJECT = "test";

@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
-import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -88,9 +88,8 @@ public class GesuchDokumentService {
 
 	@Transactional
 	public void deleteAllDokumentForGesuch(UUID gesuchId) {
-		gesuchDokumentRepository.findAllForGesuch(gesuchId).forEach(
-				gesuchDokument -> gesuchDokumentRepository.delete(gesuchDokument)
-		);
+		gesuchDokumentRepository.findAllForGesuch(gesuchId)
+				.forEach(gesuchDokumentRepository::delete);
 	}
 
 	@Transactional

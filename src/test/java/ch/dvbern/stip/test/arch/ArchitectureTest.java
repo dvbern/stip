@@ -2,7 +2,6 @@ package ch.dvbern.stip.test.arch;
 
 import ch.dvbern.stip.test.arch.util.ArchTestUtil;
 import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.library.Architectures;
 import com.tngtech.archunit.library.dependencies.Slice;
 import jakarta.transaction.Transactional;
@@ -45,7 +44,7 @@ class ArchitectureTest {
     }
 
     @Test
-    public void no_cycles_between_features() {
+    void no_cycles_between_features() {
         var rule = slices().matching("..stip.api.(**)")
                 .should()
                 .beFreeOfCycles()
@@ -54,7 +53,7 @@ class ArchitectureTest {
     }
 
     @Test
-    public void no_cross_feature_repo_access() {
+    void no_cross_feature_repo_access() {
         var rule = slices()
                 .matching("..stip.api.(*).repo")
                 .that(new DescribedPredicate<>("features") {
@@ -70,7 +69,7 @@ class ArchitectureTest {
     }
 
     @Test
-    public void transactional_boundary() {
+    void transactional_boundary() {
         var rule = classes().that()
                 .resideOutsideOfPackages("..service..", "..repo..")
                 .should()

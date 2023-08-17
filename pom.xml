@@ -213,6 +213,11 @@
       <version>0.2.5</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -433,22 +438,21 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.7</version>
+            <configuration>
+              <excludes>
+                <exclude>ch/dvbern/stip/generated/dto/PersonInAusbildungDto.java</exclude>
+              </excludes>
+            </configuration>
             <executions>
               <execution>
-                <id>prepare-agent</id>
+                <id>default-prepare-agent</id>
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
-              </execution>
-              <execution>
-                <id>report</id>
-                <goals>
-                  <goal>report</goal>
-                </goals>
                 <configuration>
-                  <formats>
-                    <format>XML</format>
-                  </formats>
+                  <exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
+                  <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
+                  <append>true</append>
                 </configuration>
               </execution>
             </executions>

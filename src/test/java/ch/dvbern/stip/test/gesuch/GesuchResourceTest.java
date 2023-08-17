@@ -213,6 +213,19 @@ class GesuchResourceTest {
 
 	@Test
 	@Order(15)
+	void test_get_gesuch_for_fall() {
+		var gesuche = gesuchApiSpec.getGesucheForFall()
+				.fallIdPath(TestConstants.FALL_TEST_ID)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(GesuchDtoSpec[].class);
+		assertThat(gesuche.length, is(1));
+	}
+
+	@Test
+	@Order(16)
 	void testGesuchEinreichenValidationError(){
 		var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
@@ -229,7 +242,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
-	@Order(16)
+	@Order(17)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)
