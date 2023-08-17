@@ -84,6 +84,23 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 				, is(false));
 	}
 
+	@Test
+	void isLebenslaufBevorAusbildungStartTest() {
+		GesuchFormular gesuchFormular = initFormular();
+		LebenslaufItem lebenslaufItem = new LebenslaufItem();
+		lebenslaufItem.setVon(LocalDate.of(2016, 8, 1));
+		lebenslaufItem.setBis(LocalDate.of(2022, 6, 30));
+		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
+		lebenslaufItemSet.add(lebenslaufItem);
+		LebenslaufItem lebenslaufItemZwei = new LebenslaufItem();
+		lebenslaufItemZwei.setVon(LocalDate.of(2022, 8, 1));
+		lebenslaufItemZwei.setBis(LocalDate.of(2023, 11, 30));
+		lebenslaufItemSet.add(lebenslaufItemZwei);
+		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+	}
+
 	private GesuchFormular initFormular() {
 		GesuchFormular gesuchFormular = new GesuchFormular();
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
