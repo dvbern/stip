@@ -308,55 +308,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsstaetten
             summary: Returniert alle Ausbildungsstaette zur Verfuegung.
-    /benutzer:
-        get:
-            tags:
-                - Benutzer
-            responses:
-                '200':
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Benutzer'
-                    description: Return alle Benutzende
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: getBenutzende
-            summary: Get all Benutzer
-    '/benutzer/{benutzerId}':
-        get:
-            tags:
-                - Benutzer
-            parameters:
-                -
-                    name: benutzerId
-                    schema:
-                        $ref: '#/components/schemas/UUID'
-                    in: path
-                    required: true
-            responses:
-                '200':
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Benutzer'
-                    description: Return der Benutzende die zu der ID gehoert
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '404':
-                    $ref: '#/components/responses/NotFound'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: getBenutzer
-            summary: Get Benutzer mit ID
     '/gesuch/benutzer/{benutzerId}':
         get:
             tags:
@@ -625,6 +576,69 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: gesuchEinreichen
             summary: Das Gesuch einreichen
+    /tenant/current:
+        get:
+            tags:
+                - Tenant
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TenantInfo'
+                    description: Tenant
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getCurrentTenant
+            summary: Current Tenant
+            description: '`Tenant` based on the current Request'
+    /benutzer/me:
+        get:
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Benutzer'
+                    description: Current Benutzer
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getCurrentBenutzer
+            summary: Get the logged-in Benutzer
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/BenutzerUpdate'
+                required: true
+            tags:
+                - Benutzer
+            responses:
+                '202':
+                    description: Updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateCurrentBenutzer
+            summary: Update the logged-in Benutzer
 components:
     schemas:
         Anrede:
@@ -725,16 +739,6 @@ components:
                 bezeichnungDe:
                     type: string
                 bezeichnungFr:
-                    type: string
-        BenutzerLogin:
-            required:
-                - username
-                - password
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
                     type: string
         DeploymentConfig:
             type: object
@@ -1483,22 +1487,18 @@ components:
                     description: ''
         Benutzer:
             description: ''
-            required:
-                - id
-                - nachname
-                - sozialversicherungsnummer
-                - vorname
             type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                    description: ''
-                sozialversicherungsnummer:
-                    type: string
-                vorname:
-                    type: string
-                nachname:
-                    type: string
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        id:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/BenutzerUpdate'
         GesuchFormularUpdate:
             required: []
             type: object
@@ -1574,6 +1574,55 @@ components:
                     type: string
                 message:
                     description: ''
+                    type: string
+        TenantInfo:
+            title: Root Type for TenantInfo
+            description: Client Application Info about a `Tenant`
+            required:
+                - clientAuth
+                - identifier
+            type: object
+            properties:
+                identifier:
+                    type: string
+                clientAuth:
+                    $ref: '#/components/schemas/TenantAuthConfig'
+                    properties:
+                        authServerUrl:
+                            type: string
+                        clientId:
+                            type: string
+            example:
+                identifier: some text
+                clientAuth:
+                    authServerUrl: some text
+                    clientId: some text
+        TenantAuthConfig:
+            title: Root Type for TenantAuthConfig
+            description: ''
+            required:
+                - authServerUrl
+            type: object
+            properties:
+                authServerUrl:
+                    type: string
+            example:
+                authServerUrl: ''
+                clientId: ''
+                clientSecret: ''
+        BenutzerUpdate:
+            description: ''
+            required:
+                - nachname
+                - sozialversicherungsnummer
+                - vorname
+            type: object
+            properties:
+                sozialversicherungsnummer:
+                    type: string
+                vorname:
+                    type: string
+                nachname:
                     type: string
         EinnahmenKostenUpdate:
             required:
@@ -1679,4 +1728,7 @@ tags:
         name: Stammdaten
     -
         name: Benutzer
+        description: ''
+    -
+        name: Tenant
         description: ''
