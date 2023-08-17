@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 
 @Audited
 @Entity
-@Table
+@Table(indexes = {
+		@Index(name = "IX_familiensituation_mandant_id", columnList = "mandant")
+})
 @Getter
 @Setter
 public class Familiensituation extends AbstractEntity {

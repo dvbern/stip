@@ -13,7 +13,8 @@ import java.math.BigDecimal;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_partner_adresse_id", columnList = "adresse_id")
+        @Index(name = "IX_partner_adresse_id", columnList = "adresse_id"),
+        @Index(name = "IX_partner_mandant_id", columnList = "mandant")
 })
 @Getter
 @Setter

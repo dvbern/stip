@@ -14,7 +14,9 @@ import java.util.List;
 
 @Audited
 @Entity
-@Table
+@Table(indexes = {
+		@Index(name = "IX_ausbildungsstaette_mandant_id", columnList = "mandant")
+})
 @Getter
 @Setter
 public class Ausbildungsstaette extends AbstractEntity {

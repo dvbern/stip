@@ -12,7 +12,9 @@ import java.util.UUID;
 
 @Audited
 @Entity
-@Table
+@Table(indexes = {
+        @Index(name = "IX_geschwister_mandant_id", columnList = "mandant")
+})
 @Getter
 @Setter
 public class Geschwister extends AbstractFamilieEntity {

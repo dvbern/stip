@@ -31,7 +31,8 @@ import java.time.LocalDate;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis")
+        @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
+        @Index(name = "IX_gesuchsperiode_mandant_id", columnList = "mandant")
 })
 @Getter
 @Setter

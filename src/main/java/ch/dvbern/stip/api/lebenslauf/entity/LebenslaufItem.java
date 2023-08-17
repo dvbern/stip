@@ -18,7 +18,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
 @Entity
-@Table
+@Table(indexes = {
+		@Index(name = "IX_lebenslauf_item_mandant_id", columnList = "mandant")
+})
 @Getter
 @Setter
 public class LebenslaufItem extends AbstractEntity {

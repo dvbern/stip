@@ -44,6 +44,7 @@ import java.util.Set;
         @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
+        @Index(name = "IX_gesuch_formular_mandant_id", columnList = "mandant")
 })
 @Getter
 @Setter

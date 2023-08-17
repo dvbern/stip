@@ -33,7 +33,8 @@ import java.util.List;
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_dokument_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ")
+        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ"),
+        @Index(name = "IX_gesuch_dokument_mandant_id", columnList = "mandant")
 })
 @Getter
 @Setter
