@@ -308,55 +308,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsstaetten
             summary: Returniert alle Ausbildungsstaette zur Verfuegung.
-    /benutzer:
-        get:
-            tags:
-                - Benutzer
-            responses:
-                '200':
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Benutzer'
-                    description: Return alle Benutzende
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: getBenutzende
-            summary: Get all Benutzer
-    '/benutzer/{benutzerId}':
-        get:
-            tags:
-                - Benutzer
-            parameters:
-                -
-                    name: benutzerId
-                    schema:
-                        $ref: '#/components/schemas/UUID'
-                    in: path
-                    required: true
-            responses:
-                '200':
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Benutzer'
-                    description: Return der Benutzende die zu der ID gehoert
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '404':
-                    $ref: '#/components/responses/NotFound'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: getBenutzer
-            summary: Get Benutzer mit ID
     '/gesuch/benutzer/{benutzerId}':
         get:
             tags:
@@ -625,86 +576,10 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: gesuchEinreichen
             summary: Das Gesuch einreichen
-    /tenant:
-        summary: Path used to manage the list of tenants.
-        description: >-
-            The REST endpoint/path used to list and create zero or more `Tenant` entities.  This path contains
-            a `GET` and `POST` operation to perform the list and create tasks, respectively.
-        get:
-            responses:
-                '200':
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Tenant'
-                    description: Successful response - returns an array of `Tenant` entities.
-            operationId: getTenants
-            summary: List All tenants
-            description: Gets a list of all `Tenant` entities.
-        post:
-            requestBody:
-                description: A new `Tenant` to be created.
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/TenantCreate'
-                required: true
-            responses:
-                '201':
-                    description: Successful response.
-            operationId: createTenant
-            summary: Create a Tenant
-            description: Creates a new instance of a `Tenant`.
-    '/tenant/{tenantId}':
-        summary: Path used to manage a single Tenant.
-        description: >-
-            The REST endpoint/path used to get, update, and delete single instances of an `Tenant`.  This path
-            contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and delete tasks,
-            respectively.
-        get:
-            responses:
-                '200':
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Tenant'
-                    description: Successful response - returns a single `Tenant`.
-            operationId: getTenant
-            summary: Get a Tenant
-            description: Gets the details of a single instance of a `Tenant`.
-        put:
-            requestBody:
-                description: Updated `Tenant` information.
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/TenantUpdate'
-                required: true
-            responses:
-                '202':
-                    description: Successful response.
-            operationId: updateTenant
-            summary: Update a Tenant
-            description: Updates an existing `Tenant`.
-        delete:
-            responses:
-                '204':
-                    description: Successful response.
-            operationId: deleteTenant
-            summary: Delete a Tenant
-            description: Deletes an existing `Tenant`.
-        parameters:
-            -
-                name: tenantId
-                description: A unique identifier for a `Tenant`.
-                schema:
-                    type: string
-                in: path
-                required: true
     /tenant/current:
         get:
+            tags:
+                - Tenant
             responses:
                 '200':
                     content:
@@ -723,6 +598,47 @@ paths:
             operationId: getCurrentTenant
             summary: Current Tenant
             description: '`Tenant` based on the current Request'
+    /benutzer/me:
+        get:
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Benutzer'
+                    description: Current Benutzer
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getCurrentBenutzer
+            summary: Get the logged-in Benutzer
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/BenutzerUpdate'
+                required: true
+            tags:
+                - Benutzer
+            responses:
+                '202':
+                    description: Updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateCurrentBenutzer
+            summary: Update the logged-in Benutzer
 components:
     schemas:
         Anrede:
@@ -823,16 +739,6 @@ components:
                 bezeichnungDe:
                     type: string
                 bezeichnungFr:
-                    type: string
-        BenutzerLogin:
-            required:
-                - username
-                - password
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
                     type: string
         DeploymentConfig:
             type: object
@@ -1579,22 +1485,18 @@ components:
                     description: ''
         Benutzer:
             description: ''
-            required:
-                - id
-                - nachname
-                - sozialversicherungsnummer
-                - vorname
             type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                    description: ''
-                sozialversicherungsnummer:
-                    type: string
-                vorname:
-                    type: string
-                nachname:
-                    type: string
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        id:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/BenutzerUpdate'
         GesuchFormularUpdate:
             required: []
             type: object
@@ -1669,52 +1571,15 @@ components:
                 message:
                     description: ''
                     type: string
-        Tenant:
-            title: Root Type for Tenant
-            description: ''
-            type: object
-            allOf:
-                -
-                    type: object
-                -
-                    $ref: '#/components/schemas/TenantUpdate'
-            example:
-                identifier: BERN
-                name: Bern
-                auth:
-                    authServerUrl: ''
-                    clientId: ''
-        TenantUpdate:
-            title: Root Type for Tenant
-            description: ''
-            type: object
-            allOf:
-                -
-                    type: object
-                -
-                    $ref: '#/components/schemas/TenantCreate'
-            example:
-                identifier: some text
-                name: some text
-                serverAuth:
-                    authServerUrl: some text
-                    clientId: some text
-                    clientSecret: some text
-                clientAuth:
-                    authServerUrl: some text
-                    clientId: some text
         TenantInfo:
             title: Root Type for TenantInfo
             description: Client Application Info about a `Tenant`
             required:
                 - clientAuth
                 - identifier
-                - name
             type: object
             properties:
                 identifier:
-                    type: string
-                name:
                     type: string
                 clientAuth:
                     $ref: '#/components/schemas/TenantAuthConfig'
@@ -1724,61 +1589,37 @@ components:
                         clientId:
                             type: string
             example:
-                identifier: BERN
-                name: Bern
-                auth:
-                    authServerUrl: ''
-                    clientId: ''
+                identifier: some text
+                clientAuth:
+                    authServerUrl: some text
+                    clientId: some text
         TenantAuthConfig:
             title: Root Type for TenantAuthConfig
             description: ''
             required:
-                - clientId
                 - authServerUrl
             type: object
             properties:
                 authServerUrl:
                     type: string
-                clientId:
-                    type: string
-                clientSecret:
-                    type: string
             example:
                 authServerUrl: ''
                 clientId: ''
                 clientSecret: ''
-        TenantCreate:
-            title: Root Type for Tenant
+        BenutzerUpdate:
             description: ''
             required:
-                - identifier
-                - name
-                - serverAuth
-                - clientAuth
+                - nachname
+                - sozialversicherungsnummer
+                - vorname
             type: object
             properties:
-                identifier:
-                    description: ''
+                sozialversicherungsnummer:
                     type: string
-                name:
-                    description: User-Friendly name
+                vorname:
                     type: string
-                serverAuth:
-                    $ref: '#/components/schemas/TenantAuthConfig'
-                    description: API Auth Configuration
-                clientAuth:
-                    $ref: '#/components/schemas/TenantAuthConfig'
-                    description: Client Application Auth Config
-            example:
-                identifier: some text
-                name: some text
-                serverAuth:
-                    authServerUrl: some text
-                    clientId: some text
-                    clientSecret: some text
-                clientAuth:
-                    authServerUrl: some text
-                    clientId: some text
+                nachname:
+                    type: string
     responses:
         Unauthorized:
             content:
@@ -1833,4 +1674,7 @@ tags:
         name: Stammdaten
     -
         name: Benutzer
+        description: ''
+    -
+        name: Tenant
         description: ''
