@@ -5,8 +5,6 @@ import java.util.Set;
 
 import jakarta.validation.ConstraintViolation;
 import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 public class ValidationsException extends RuntimeException{
 	private Set<ConstraintViolation<?>> violations;

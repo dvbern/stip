@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class LebenslaufLuckenlosConstraintValidatorTest {
+class LebenslaufLuckenlosConstraintValidatorTest {
 	LebenslaufLuckenlosConstraintValidator lebenslaufLuckenlosConstraintValidator =
 			new LebenslaufLuckenlosConstraintValidator();
 

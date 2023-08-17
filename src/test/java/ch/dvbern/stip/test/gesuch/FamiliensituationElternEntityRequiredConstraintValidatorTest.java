@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class FamiliensituationElternEntityRequiredConstraintValidatorTest {
+class FamiliensituationElternEntityRequiredConstraintValidatorTest {
 
 	@Test
 	void isValidTest() {
@@ -74,6 +74,18 @@ public class FamiliensituationElternEntityRequiredConstraintValidatorTest {
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
 				, is(false));
 		gesuchFormular.setElterns(new HashSet<>());
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(true));
+
+		// Elternteil unbekannt, Vater Pflichtig, Mutter Verstorben:
+		familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+		familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+		gesuchFormular.setFamiliensituation(familiensituation);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+		elternSet.clear();
+		elternSet.add(vater);
+		gesuchFormular.setElterns(elternSet);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
 				, is(true));
 	}

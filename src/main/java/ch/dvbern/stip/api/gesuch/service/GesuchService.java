@@ -89,7 +89,7 @@ public class GesuchService {
 	public void gesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
-		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) throw new RuntimeException("Eine unmoegliche Auruf wuerde durchgefuehrt: gesuchEinreichen");
+		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
 		if(!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", violations);
