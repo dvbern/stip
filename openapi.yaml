@@ -1406,6 +1406,8 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/Kind'
+                einnahmenKosten:
+                    $ref: '#/components/schemas/EinnahmenKosten'
         PersonInAusbildungUpdate:
             required:
                 - adresse
@@ -1535,6 +1537,8 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/KindUpdate'
+                einnahmenKosten:
+                    $ref: '#/components/schemas/EinnahmenKostenUpdate'
         FileUpload:
             format: binary
             type: string
