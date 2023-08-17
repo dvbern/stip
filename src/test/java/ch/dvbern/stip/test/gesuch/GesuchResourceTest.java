@@ -3,6 +3,7 @@ package ch.dvbern.stip.test.gesuch;
 import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
+import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -35,6 +36,7 @@ class GesuchResourceTest {
 	private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(1)
 	void testCreateEndpoint() {
 		var gesuchDTO = new GesuchCreateDtoSpec();
@@ -48,6 +50,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(2)
 	void testFindGesuchEndpoint() {
 		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
@@ -65,6 +68,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(3)
 	void testUpdateGesuchEndpointPersonInAusbildung() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
@@ -75,6 +79,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(4)
 	void testUpdateGesuchEndpointAusbildung() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
@@ -85,6 +90,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(5)
 	void testUpdateGesuchEndpointFamiliensituation() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForFamiliensituation();
@@ -95,6 +101,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(6)
 	void testUpdateGesuchEndpointPartner() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForPartner();
@@ -105,6 +112,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(7)
 	void testUpdateGesuchEndpointAuszahlung() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForAuszahlung();
@@ -115,6 +123,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(8)
 	void testUpdateGesuchEndpointAddGeschwister() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
@@ -125,6 +134,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(9)
 	void testUpdateGesuchEndpointUpdateGeschwister() {
 		var gesuch =
@@ -144,6 +154,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(10)
 	void testUpdateGesuchAddLebenslaufEndpoint() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForLebenslaufBildungsart();
@@ -154,6 +165,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(11)
 	void testUpdateGesuchAddElternEndpoint() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForEltern();
@@ -164,6 +176,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(12)
 	void testUpdateGesuchEndpointAddKind() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForKind();
@@ -174,6 +187,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(13)
 	void testAllFormularPresent() {
 		var gesuch =
@@ -197,6 +211,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(14)
 	void testGetGesucheForBenutzende() {
 		var gesuche = gesuchApiSpec.getGesucheForBenutzer()
@@ -210,6 +225,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(15)
 	void test_get_gesuch_for_fall() {
 		var gesuche = gesuchApiSpec.getGesucheForFall()
@@ -223,6 +239,7 @@ class GesuchResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(16)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()

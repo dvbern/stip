@@ -5,20 +5,17 @@ import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.Objects;
+
 @ApplicationScoped
-public class StipTenantResolver implements TenantResolver {
+public class OidcTenantResolver implements TenantResolver {
 
     public static final String DEFAULT_TENANT_IDENTIFIER = MandantIdentifier.BERN.name().toLowerCase();
     public static final String TENANT_IDENTIFIER_CONTEXT_NAME = "tenantId";
 
     @Override
     public String resolve(RoutingContext context) {
-        String tenantId = DEFAULT_TENANT_IDENTIFIER;
-
-        if (context != null) {
-            context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenantId);
-        }
-
-        return tenantId;
+        String tenantId = context != null ? context.get(TENANT_IDENTIFIER_CONTEXT_NAME) : null;
+        return Objects.requireNonNullElse(tenantId, DEFAULT_TENANT_IDENTIFIER);
     }
 }

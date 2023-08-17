@@ -2,6 +2,7 @@ package ch.dvbern.stip.test.fall;
 
 import ch.dvbern.oss.stip.contract.test.api.FallApiSpec;
 import ch.dvbern.oss.stip.contract.test.dto.FallDtoSpec;
+import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -25,6 +26,7 @@ class FallResourceTest {
 	public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(1)
 	void testFindFallEndpoint() {
 		var fall = fallApiSpec.getFall().fallIdPath(TestConstants.FALL_TEST_ID).execute(ResponseBody::prettyPeek)
@@ -37,6 +39,7 @@ class FallResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(2)
 	void testGetFallForBenutzer() {
 		var fall = fallApiSpec.getFallForBenutzer().benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID).execute(ResponseBody::prettyPeek)
@@ -49,6 +52,7 @@ class FallResourceTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(3)
 	void testCreateFallForBenutzer() {
 		fallApiSpec.createFall().benutzerIdPath(TestConstants.GESUCHSTELLER_2_TEST_ID).execute(ResponseBody::prettyPeek)

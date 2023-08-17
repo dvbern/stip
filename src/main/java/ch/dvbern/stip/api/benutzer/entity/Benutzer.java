@@ -13,11 +13,17 @@ import org.hibernate.envers.Audited;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Entity
-@Table
+@Table(
+        indexes = {@Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true)}
+)
 @Audited
 @Getter
 @Setter
 public class Benutzer extends AbstractEntity {
+
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(name = "keycloak_id", nullable = true, unique = true)
+    private String keycloakId;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
@@ -29,8 +35,7 @@ public class Benutzer extends AbstractEntity {
     @Column(nullable = false)
     private String vorname;
 
-    @NotNull
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String sozialversicherungsnummer;
 
     @NotNull

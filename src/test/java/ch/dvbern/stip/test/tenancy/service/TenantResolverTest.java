@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.tenancy.service;
 
-import ch.dvbern.stip.api.tenancy.service.StipTenantResolver;
+import ch.dvbern.stip.api.tenancy.service.OidcTenantResolver;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.hamcrest.Matchers;
@@ -12,11 +12,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TenantResolverTest {
 
     @Inject
-    StipTenantResolver stipTenantResolver;
+    OidcTenantResolver oidcTenantResolver;
 
     @Test
     void test_get_default_tenant() {
-        var tenantId = stipTenantResolver.resolve(null);
-        assertThat(tenantId, Matchers.is(StipTenantResolver.DEFAULT_TENANT_IDENTIFIER));
+        var tenantId = oidcTenantResolver.resolve(null);
+        assertThat(tenantId, Matchers.is(OidcTenantResolver.DEFAULT_TENANT_IDENTIFIER));
     }
 }
