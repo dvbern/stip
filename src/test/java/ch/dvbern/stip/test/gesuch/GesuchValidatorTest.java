@@ -344,11 +344,17 @@ public class GesuchValidatorTest {
 		lebenslaufItemSet.add(lebenslaufItem);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
+		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		Ausbildung ausbildung = new Ausbildung();
+		ausbildung.setAusbildungBegin(LocalDate.of(2024, 01, 01));
+		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch,
 				GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-						.equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(true));
+						.equals(VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE)), is(true));
 	}
 
 	private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {

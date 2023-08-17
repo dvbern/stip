@@ -52,4 +52,6 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_EMAIL_MESSAGE = "{jakarta.validation.constraints.email.message}";
 	public static final String VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE =
 			"{jakarta.validation.constraints.familiensituation.eltern.entity.message}";
+
+	public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE = "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
 }
