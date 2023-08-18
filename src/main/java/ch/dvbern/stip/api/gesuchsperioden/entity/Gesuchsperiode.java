@@ -32,7 +32,7 @@ import java.time.LocalDate;
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
-        @Index(name = "IX_gesuchsperiode_mandant_id", columnList = "mandant")
+        @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

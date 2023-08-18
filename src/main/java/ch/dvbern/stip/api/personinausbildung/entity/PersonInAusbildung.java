@@ -38,7 +38,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Entity
 @Table(indexes = {
         @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_person_in_ausbildung_mandant_id", columnList = "mandant")
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

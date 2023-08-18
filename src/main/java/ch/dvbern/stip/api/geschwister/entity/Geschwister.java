@@ -13,7 +13,7 @@ import java.util.UUID;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_geschwister_mandant_id", columnList = "mandant")
+        @Index(name = "IX_geschwister_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
