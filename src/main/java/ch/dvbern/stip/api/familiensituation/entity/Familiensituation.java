@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @ObhutGemeinsamBerechnungConstraint
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_familiensituation_mandant_id", columnList = "mandant")
+		@Index(name = "IX_familiensituation_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

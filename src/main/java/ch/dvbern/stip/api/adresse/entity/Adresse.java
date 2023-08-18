@@ -32,7 +32,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_adresse_mandant_id", columnList = "mandant")
+		@Index(name = "IX_adresse_mandant", columnList = "mandant")
 })
 @Audited
 @Getter

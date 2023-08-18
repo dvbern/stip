@@ -15,7 +15,7 @@ import java.util.List;
 @Audited
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_ausbildungsstaette_mandant_id", columnList = "mandant")
+		@Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
