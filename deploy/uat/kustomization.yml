@@ -5,6 +5,7 @@ resources:
 - ../base
 - ingress-config.yml
 - api-secrets.yml
+- identity-secrets.yml
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
