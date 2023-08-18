@@ -1596,6 +1596,55 @@ components:
                 identifier: some text
                 clientAuth:
                     authServerUrl: some text
+                    clientId: some text
+        TenantAuthConfig:
+            title: Root Type for TenantAuthConfig
+            description: ''
+            required:
+                - authServerUrl
+            type: object
+            properties:
+                authServerUrl:
+                    type: string
+            example:
+                authServerUrl: ''
+                clientId: ''
+                clientSecret: ''
+        BenutzerUpdate:
+            description: ''
+            required:
+                - nachname
+                - sozialversicherungsnummer
+                - vorname
+            type: object
+            properties:
+                sozialversicherungsnummer:
+                    type: string
+                vorname:
+                    type: string
+                nachname:
+                    type: string
+        TenantInfo:
+            title: Root Type for TenantInfo
+            description: Client Application Info about a `Tenant`
+            required:
+                - clientAuth
+                - identifier
+            type: object
+            properties:
+                identifier:
+                    type: string
+                clientAuth:
+                    $ref: '#/components/schemas/TenantAuthConfig'
+                    properties:
+                        authServerUrl:
+                            type: string
+                        clientId:
+                            type: string
+            example:
+                identifier: some text
+                clientAuth:
+                    authServerUrl: some text
         TenantAuthConfig:
             title: Root Type for TenantAuthConfig
             description: ''
