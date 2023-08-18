@@ -1,11 +1,9 @@
 package ch.dvbern.stip.api.benutzer.resource;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
+import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
@@ -13,18 +11,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BenutzerResourceImpl implements BenutzerResource {
 
-	private final BenutzerService benutzerService;
+    private final BenutzerService benutzerService;
 
-	@Override
-	public Response getBenutzende() {
-		return Response.ok(benutzerService.getAllBenutzer()).build();
-	}
+    @Override
+    public Response getCurrentBenutzer() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        return Response.ok(benutzer).build();
+    }
 
-	@Override
-	public Response getBenutzer(UUID benutzerId) {
-		var benutzer = benutzerService
-				.getBenutzer(benutzerId)
-				.orElseThrow(NotFoundException::new);
-		return Response.ok(benutzer).build();
-	}
+    @Override
+    public Response updateCurrentBenutzer(BenutzerUpdateDto benutzerUpdateDto) {
+        benutzerService.updateCurrentBenutzer(benutzerUpdateDto);
+        return Response.accepted().build();
+    }
 }

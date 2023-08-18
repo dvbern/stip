@@ -6,7 +6,10 @@ import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.tenancy.service.StipTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
+import java.util.Objects;
+
+import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.DEFAULT_TENANT_IDENTIFIER;
+import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
 @PersistenceUnitExtension
 @RequestScoped
@@ -17,18 +20,12 @@ public class DataTenantResolver implements TenantResolver {
 
     @Override
     public String getDefaultTenantId() {
-        return StipTenantResolver.DEFAULT_TENANT_IDENTIFIER;
+        return OidcTenantResolver.DEFAULT_TENANT_IDENTIFIER;
     }
 
     @Override
     public String resolveTenantId() {
         String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME); // tenant identifier already set by OIDC tenant resolver
-
-        if (tenantId != null) {
-            return tenantId;
-        }
-
-        // tenant might not be set in tests etc.
-        return StipTenantResolver.DEFAULT_TENANT_IDENTIFIER;
+        return Objects.requireNonNullElse(tenantId, DEFAULT_TENANT_IDENTIFIER);
     }
 }

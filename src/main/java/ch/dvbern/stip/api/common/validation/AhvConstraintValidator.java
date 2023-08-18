@@ -5,9 +5,20 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class AhvConstraintValidator implements ConstraintValidator<AhvConstraint, String> {
 	private static final String START_DIGITS = "756";
+
+	boolean optional = false;
+
+	@Override
+	public void initialize(AhvConstraint constraintAnnotation) {
+		optional = constraintAnnotation.optional();
+	}
+
 	@Override
 	public boolean isValid(String ahvNummer, ConstraintValidatorContext constraintValidatorContext) {
-		if (ahvNummer == null) return false;
+
+		if (ahvNummer == null && !optional) return false;
+		if (ahvNummer == null) return true;
+
 		String cleanedAhv = ahvNummer.replace(".", "");
 		char[] digitsArray = cleanedAhv.toCharArray();
 

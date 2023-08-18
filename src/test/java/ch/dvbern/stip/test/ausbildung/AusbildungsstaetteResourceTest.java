@@ -2,6 +2,7 @@ package ch.dvbern.stip.test.ausbildung;
 
 import ch.dvbern.oss.stip.contract.test.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -27,6 +28,7 @@ class AusbildungsstaetteResourceTest {
     private final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
     @Test
+    @TestAsGesuchsteller
     void test_get_ausbildungsstaetten() {
         var res = api.getAusbildungsstaetten().execute(ResponseBody::prettyPeek)
                 .then()

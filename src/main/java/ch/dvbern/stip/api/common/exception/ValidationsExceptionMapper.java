@@ -1,15 +1,14 @@
-package ch.dvbern.stip.api.common.exception.mapper;
+package ch.dvbern.stip.api.common.exception;
 
-import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.generated.dto.ValidationErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
 
-@Singleton
-@Named
-public class ValidationsExceptionMapper {
-	public ValidationReportDto toDto(ValidationsException validationsException) {
+public final class ValidationsExceptionMapper {
+
+	private ValidationsExceptionMapper() {
+	}
+
+	public static ValidationReportDto toDto(ValidationsException validationsException) {
 		ValidationReportDto validationsReportDto = new ValidationReportDto();
 		if (validationsException == null) {
 			return validationsReportDto;
