@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.adresse.entity;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class Adresse extends AbstractEntity {
 	private String coAdresse;
 
 	@NotNull
+	@NotBlank
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String strasse;
@@ -56,11 +58,13 @@ public class Adresse extends AbstractEntity {
 	private String hausnummer;
 
 	@NotNull
+	@NotBlank
 	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
 	@Column(nullable = false)
 	private String plz;
 
 	@NotNull
+	@NotBlank
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String ort;
