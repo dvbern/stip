@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.CLAIM_AHV_NUMMER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_TEST_AHV_NUMMER;
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
 import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_TEST_ID;
 
 
@@ -21,7 +21,7 @@ import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_TEST_ID;
 @OidcSecurity(
         claims = {
                 @Claim(key = "sub", value = GESUCHSTELLER_TEST_ID),
-                @Claim(key = CLAIM_AHV_NUMMER, value = GESUCHSTELLER_TEST_AHV_NUMMER),
+                @Claim(key = CLAIM_AHV_NUMMER, value = AHV_NUMMER_VALID),
                 @Claim(key = "family_name", value = "Gesuchsteller"),
                 @Claim(key = "given_name", value = "Hans")
         }

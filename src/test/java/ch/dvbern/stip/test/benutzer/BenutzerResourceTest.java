@@ -16,8 +16,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_2_TEST_AHV_NUMMER;
-import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_TEST_AHV_NUMMER;
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -41,7 +40,7 @@ public class BenutzerResourceTest {
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
-        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(GESUCHSTELLER_TEST_AHV_NUMMER);
+        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(AHV_NUMMER_VALID);
     }
 
     @Test
@@ -58,7 +57,7 @@ public class BenutzerResourceTest {
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
-        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(GESUCHSTELLER_2_TEST_AHV_NUMMER);
+        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(AHV_NUMMER_VALID);
     }
 
     @Test

@@ -3,8 +3,8 @@ package ch.dvbern.stip.test.gesuch;
 import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
-import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.oss.stip.contract.test.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -247,6 +247,8 @@ class GesuchResourceTest {
 		var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
 				.then()
+				.assertThat()
+				.statusCode(Status.BAD_REQUEST.getStatusCode())
 				.extract()
 				.body()
 				.as(ValidationReportDtoSpec.class);

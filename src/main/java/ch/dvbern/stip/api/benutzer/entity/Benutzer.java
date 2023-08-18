@@ -36,7 +36,7 @@ public class Benutzer extends AbstractEntity {
     @Column(nullable = false)
     private String vorname;
 
-    @AhvConstraint
+    @AhvConstraint(optional = true)
     @Column(nullable = true)
 	private String sozialversicherungsnummer;
 
