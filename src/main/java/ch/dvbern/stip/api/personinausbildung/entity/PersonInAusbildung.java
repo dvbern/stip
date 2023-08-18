@@ -20,12 +20,15 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,8 +36,13 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EMAIL_MESSAGE;
 
 @Audited
+@IdentischerZivilrechtlicherWohnsitzRequiredConstraint
+@LandCHRequiredConstraint
+@NiederlassungsstatusRequiredConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id")
@@ -46,9 +54,10 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
-    private Adresse adresse;
+    private @Valid Adresse adresse;
 
     @NotNull
+    @AhvConstraint
     @Column(nullable = false)
     private String sozialversicherungsnummer;
 
@@ -70,6 +79,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
+    @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
     private String email;

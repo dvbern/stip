@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.partner.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -22,7 +23,9 @@ public class Partner extends AbstractPerson {
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_partner_adresse_id"), nullable = false)
     private Adresse adresse;
+
     @NotNull
+    @AhvConstraint
     @Column(nullable = false)
     private String sozialversicherungsnummer;
 
