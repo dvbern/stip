@@ -37,14 +37,14 @@ public class OidcTenantConfigResolver implements TenantConfigResolver {
         final var config = new OidcTenantConfig();
 
         config.setTenantId(identifier);
-        config.setAuthServerUrl(getAuthServerUrl(identifier));
+        config.setAuthServerUrl(getAuthServerUrl());
         config.setClientId(keycloakClientId);
 
         return () -> config;
 
     }
 
-    public String getAuthServerUrl(String identifier) {
-        return keycloakUrl + "/realms/" + identifier;
+    public String getAuthServerUrl() {
+        return keycloakUrl;
     }
 }

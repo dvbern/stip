@@ -47,8 +47,6 @@ public class TenantResourceTest {
         final var keycloakUrl = new URL(keycloakUrlString);
 
         assertThat(new URL(tenantInfo.getClientAuth().getAuthServerUrl()))
-                .hasProtocol(keycloakUrl.getProtocol())
-                .hasHost(keycloakUrl.getHost())
-                .hasPath("/realms/" + tenant);
+                .isEqualToWithSortedQueryParameters(keycloakUrl);
     }
 }
