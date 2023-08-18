@@ -7,7 +7,7 @@
   <artifactId>stip-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <contract.version>1.9.0</contract.version>
+    <contract.version>1.12.1</contract.version>
     <archunit.version>1.0.1</archunit.version>
     <checkerframework.version>3.19.0</checkerframework.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
@@ -28,6 +28,7 @@
     <testcontainers.version>1.18.3</testcontainers.version>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
+    <assertj.version>3.24.2</assertj.version>
     <contract.path>${project.basedir}/src/main/resources/META-INF/openapi.yaml</contract.path>
   </properties>
   <dependencyManagement>
@@ -216,6 +217,23 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-oidc-server</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-security-oidc</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

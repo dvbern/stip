@@ -3,6 +3,8 @@ package ch.dvbern.stip.test.gesuchsperiode;
 import ch.dvbern.oss.stip.contract.test.api.GesuchsperiodeApiSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchsperiodeDtoSpec;
+import ch.dvbern.stip.test.benutzer.util.TestAsAdmin;
+import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -27,6 +29,7 @@ class GesuchsperiodeResourceTest {
     private final GesuchsperiodeApiSpec api = GesuchsperiodeApiSpec.gesuchsperiode(RequestSpecUtil.quarkusSpec());
 
     @Test
+    @TestAsAdmin
     @Order(1)
     void test_create_gesuchsperiode() {
         var newPeriode = new GesuchsperiodeCreateDtoSpec();
@@ -44,6 +47,7 @@ class GesuchsperiodeResourceTest {
 
 
     @Test
+    @TestAsGesuchsteller
     @Order(2)
     void test_get_all() {
         var gesuchperioden = api.getGesuchsperioden()

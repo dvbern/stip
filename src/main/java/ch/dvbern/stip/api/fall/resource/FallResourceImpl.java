@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.fall.resource;
 
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
@@ -27,6 +28,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class FallResourceImpl implements FallResource {
@@ -34,12 +38,14 @@ public class FallResourceImpl implements FallResource {
 	private final FallService fallService;
 	private final UriInfo uriInfo;
 
+    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	public Response createFall(UUID benutzerId) {
 		var fall = fallService.createFall(benutzerId);
 		return Response.created(uriInfo.getAbsolutePathBuilder().path(fall.getId().toString()).build()).build();
 	}
 
+    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	public Response getFall(UUID fallId) {
 		var fall = fallService
@@ -48,6 +54,7 @@ public class FallResourceImpl implements FallResource {
 		return Response.ok(fall).build();
 	}
 
+    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	public Response getFallForBenutzer(UUID benutzerId) {
 		return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();

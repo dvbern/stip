@@ -5,6 +5,7 @@ import ch.dvbern.oss.stip.contract.test.dto.DokumentDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -43,6 +44,7 @@ class DokumentResourcesTest {
 	private UUID dokumentId;
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(1)
 	void test_prepare_gesuch_for_dokument() {
 		var gesuchDTO = new GesuchCreateDtoSpec();
@@ -62,6 +64,7 @@ class DokumentResourcesTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(2)
 	void test_create_dokument_with_wrong_mime_type() {
 		File file = new File(TEST_XML_FILE_LOCATION);
@@ -77,6 +80,7 @@ class DokumentResourcesTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(3)
 	void test_create_dokument_for_gesuch() {
 		File file = new File(TEST_FILE_LOCATION);
@@ -92,6 +96,7 @@ class DokumentResourcesTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(4)
 	void test_list_and_read_dokument_for_gesuch() throws IOException {
 		var dokumentDtoList = gesuchApiSpec.getDokumenteForTyp()
@@ -118,6 +123,7 @@ class DokumentResourcesTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(5)
 	void test_delete_dokument() {
 		gesuchApiSpec.deleteDokument()
@@ -130,6 +136,7 @@ class DokumentResourcesTest {
 	}
 
 	@Test
+	@TestAsGesuchsteller
 	@Order(6)
 	void test_delete_gesuch() {
 		gesuchApiSpec.deleteGesuch()
