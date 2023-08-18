@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.exception.mapper.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -43,15 +45,15 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @Slf4j
 public class GesuchResourceImpl implements GesuchResource {
 
-	private static final String RESOURCE_NAME = "GESUCH";
-
 	private final UriInfo uriInfo;
 	private final GesuchService gesuchService;
 	private final GesuchDokumentService gesuchDokumentService;
 	private final ConfigService configService;
 	private final S3AsyncClient s3;
 
-	@RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+	private final ValidationsExceptionMapper validationsExceptionMapper;
+
+    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
 
@@ -117,11 +119,15 @@ public class GesuchResourceImpl implements GesuchResource {
 	@RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	public Response gesuchEinreichen(UUID gesuchId) {
-		return null;
+		try {
+			gesuchService.gesuchEinreichen(gesuchId);
+			return Response.accepted().build();
+		}
+		catch (ValidationsException validationsException) {
+			return Response.status(Status.BAD_REQUEST).entity(validationsExceptionMapper.toDto(validationsException)).build();
+		}
 	}
 
-
-	@RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	@Blocking
 	public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
@@ -183,7 +189,12 @@ public class GesuchResourceImpl implements GesuchResource {
 	@RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
 	@Override
 	public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-		gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
-		return Response.accepted().build();
+		try {
+			gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
+			return Response.accepted().build();
+		}
+		catch (ValidationsException validationsException) {
+			return Response.serverError().entity(validationsExceptionMapper.toDto(validationsException)).build();
+		}
 	}
 }
