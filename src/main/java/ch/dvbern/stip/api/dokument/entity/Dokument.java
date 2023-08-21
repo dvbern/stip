@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,7 +18,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 })
 @Getter
 @Setter
-public class Dokument extends AbstractEntity {
+public class Dokument extends AbstractMandantEntity {
 
 	@NotNull
 	@ManyToOne(optional = false)

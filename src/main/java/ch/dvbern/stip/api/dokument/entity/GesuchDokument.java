@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.*;
@@ -38,7 +38,7 @@ import java.util.List;
 })
 @Getter
 @Setter
-public class GesuchDokument extends AbstractEntity {
+public class GesuchDokument extends AbstractMandantEntity {
 
     @NotNull
     @ManyToOne(optional = false)

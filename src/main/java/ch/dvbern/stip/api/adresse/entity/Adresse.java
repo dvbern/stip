@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.adresse.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -37,7 +37,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Audited
 @Getter
 @Setter
-public class Adresse extends AbstractEntity {
+public class Adresse extends AbstractMandantEntity {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)

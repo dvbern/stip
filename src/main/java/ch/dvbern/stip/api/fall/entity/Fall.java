@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.fall.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ import org.hibernate.envers.Audited;
 })
 @Getter
 @Setter
-public class Fall extends AbstractEntity {
+public class Fall extends AbstractMandantEntity {
 
 	@Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
 			insertable = false)
