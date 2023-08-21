@@ -37,6 +37,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Audited
+@FamiliensituationElternEntityRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
+@LebenslaufLuckenlosConstraint(groups = GesuchEinreichenValidationGroup.class)
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
@@ -52,15 +54,15 @@ public class GesuchFormular extends AbstractEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"), nullable = true)
-    private PersonInAusbildung personInAusbildung;
+    private @Valid PersonInAusbildung personInAusbildung;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"), nullable = true)
-    private Ausbildung ausbildung;
+    private @Valid Ausbildung ausbildung;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"), nullable = true)
-    private Familiensituation familiensituation;
+    private @Valid Familiensituation familiensituation;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)

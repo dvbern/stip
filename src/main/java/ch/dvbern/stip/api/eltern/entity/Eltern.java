@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 
 @Audited
 @Entity
+@IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @Table(indexes = {
 		@Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
 		@Index(name = "IX_eltern_mandant", columnList = "mandant")
@@ -31,6 +33,7 @@ public class Eltern extends AbstractPerson {
 	private Adresse adresse;
 
 	@NotNull
+	@AhvConstraint
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
 	private String sozialversicherungsnummer;

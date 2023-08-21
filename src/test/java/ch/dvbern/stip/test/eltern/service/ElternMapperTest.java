@@ -15,6 +15,8 @@ import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
+
 class ElternMapperTest {
 
 	ElternMapper elternMapper = new ElternMapperImpl();
@@ -46,7 +48,7 @@ class ElternMapperTest {
 		eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
 		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
 		eltern.setSozialhilfebeitraegeAusbezahlt(false);
-		eltern.setSozialversicherungsnummer("756.0000.0000.05");
+		eltern.setSozialversicherungsnummer(AHV_NUMMER_VALID);
 		return eltern;
 	}
 }

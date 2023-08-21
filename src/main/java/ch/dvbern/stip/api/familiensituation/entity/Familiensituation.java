@@ -13,6 +13,9 @@ import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
 
 @Audited
+@ObhutGemeinsamRequiredFieldsConstraint
+@WerZahltAlimenteRequiredFieldConstraint
+@ObhutGemeinsamBerechnungConstraint
 @Entity
 @Table(indexes = {
 		@Index(name = "IX_familiensituation_mandant", columnList = "mandant")

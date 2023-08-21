@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -51,9 +52,9 @@ public class Gesuch extends AbstractEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuch_formular_freigabe_copy_id"), nullable = true)
-    private GesuchFormular gesuchFormularFreigabeCopy;
+    private @Valid GesuchFormular gesuchFormularFreigabeCopy;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuch_forumular_to_work_with_id"), nullable = true)
-    private GesuchFormular gesuchFormularToWorkWith;
+    private @Valid GesuchFormular gesuchFormularToWorkWith;
 }
