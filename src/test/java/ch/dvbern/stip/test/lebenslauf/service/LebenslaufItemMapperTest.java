@@ -4,7 +4,7 @@ import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
-import ch.dvbern.stip.api.lebenslauf.type.Bildungsart;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.Assertions;

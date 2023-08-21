@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
@@ -46,6 +47,7 @@ import java.util.Set;
         @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
+        @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
         @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
 })
 @Getter
@@ -71,6 +73,10 @@ public class GesuchFormular extends AbstractMandantEntity {
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
     private Auszahlung auszahlung;
+
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"), nullable = true)
+    private @Valid EinnahmenKosten einnahmenKosten;
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
