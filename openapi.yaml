@@ -726,7 +726,7 @@ components:
             example: '2022-03-10'
         Niederlassungsstatus:
             enum:
-                - NIEDERLASSUNGSBEWILLIGUNG_L
+                - NIEDERLASSUNGSBEWILLIGUNG_C
                 - AUFENTHALTSBEWILLIGUNG_B
                 - FLUECHTLING
             type: string
