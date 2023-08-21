@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.ausbildung.entity;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,7 +25,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 })
 @Getter
 @Setter
-public class Ausbildung extends AbstractEntity {
+public class Ausbildung extends AbstractMandantEntity {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))

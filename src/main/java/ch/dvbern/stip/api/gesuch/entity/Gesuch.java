@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 })
 @Getter
 @Setter
-public class Gesuch extends AbstractEntity {
+public class Gesuch extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_fall_id"))

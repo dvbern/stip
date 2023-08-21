@@ -19,7 +19,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Audited
 @Getter
 @Setter
-public class AbstractPerson extends AbstractEntity {
+public abstract class AbstractPerson extends AbstractMandantEntity {
+
 	@NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)

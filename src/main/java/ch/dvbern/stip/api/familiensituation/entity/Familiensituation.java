@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.familiensituation.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 })
 @Getter
 @Setter
-public class Familiensituation extends AbstractEntity {
+public class Familiensituation extends AbstractMandantEntity {
 
 	@NotNull
 	@Column(nullable = false)

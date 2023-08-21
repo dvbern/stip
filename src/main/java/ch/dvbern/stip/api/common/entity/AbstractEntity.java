@@ -62,10 +62,6 @@ public abstract class AbstractEntity implements Serializable {
     @Column(nullable = false)
     private String userMutiert;
 
-    @TenantId
-    @Column(nullable = false)
-    private String mandant = MandantIdentifier.BERN.name().toLowerCase();
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) {

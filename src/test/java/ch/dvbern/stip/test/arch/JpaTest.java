@@ -1,5 +1,6 @@
 package ch.dvbern.stip.test.arch;
 
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.entity.StipPhysicalNamingStrategy;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
@@ -61,7 +62,8 @@ class JpaTest {
 
     @Test
     void test_index_on_tenant_field() {
-        var rule = classes().that().areAnnotatedWith(Entity.class)
+        var rule = classes().that().areAssignableTo(AbstractMandantEntity.class)
+                .and().areAnnotatedWith(Entity.class)
                 .should((new ArchCondition<>("have an index") {
                     @Override
                     public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
