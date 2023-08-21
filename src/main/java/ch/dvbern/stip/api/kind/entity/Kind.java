@@ -13,7 +13,9 @@ import java.util.UUID;
 
 @Audited
 @Entity
-@Table
+@Table(indexes = {
+        @Index(name = "IX_kind_mandant", columnList = "mandant")
+})
 @Getter
 @Setter
 public class Kind  extends AbstractFamilieEntity {

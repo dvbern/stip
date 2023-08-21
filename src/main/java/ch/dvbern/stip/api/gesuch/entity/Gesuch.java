@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -21,10 +21,11 @@ import java.time.LocalDateTime;
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
         @Index(name = "IX_gesuch_gesuch_formular_freigabe_copy_id", columnList = "gesuch_formular_freigabe_copy_id"),
         @Index(name = "IX_gesuch_gesuch_forumular_to_work_with_id", columnList = "gesuch_formular_to_work_with_id"),
+        @Index(name = "IX_gesuch_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
-public class Gesuch extends AbstractEntity {
+public class Gesuch extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_fall_id"))

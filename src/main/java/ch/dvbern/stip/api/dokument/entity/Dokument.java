@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,11 +13,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id")
+		@Index(name = "IX_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id"),
+		@Index(name = "IX_dokument_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
-public class Dokument extends AbstractEntity {
+public class Dokument extends AbstractMandantEntity {
 
 	@NotNull
 	@ManyToOne(optional = false)

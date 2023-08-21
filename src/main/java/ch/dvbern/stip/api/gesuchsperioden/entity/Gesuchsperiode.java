@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.entity.DateRange;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -31,11 +31,12 @@ import java.time.LocalDate;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis")
+        @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
+        @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
-public class Gesuchsperiode extends AbstractEntity {
+public class Gesuchsperiode extends AbstractMandantEntity {
 
     @NotNull
     @Embedded

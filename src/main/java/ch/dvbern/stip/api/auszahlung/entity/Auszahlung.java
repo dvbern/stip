@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,11 +15,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_auszahlung_adresse_id", columnList = "adresse_id")
+        @Index(name = "IX_auszahlung_adresse_id", columnList = "adresse_id"),
+        @Index(name = "IX_auszahlung_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
-public class Auszahlung extends AbstractEntity {
+public class Auszahlung extends AbstractMandantEntity {
 
     @NotNull
     @Column(nullable = false)

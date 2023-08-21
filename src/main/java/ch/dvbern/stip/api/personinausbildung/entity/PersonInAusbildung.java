@@ -45,7 +45,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @NiederlassungsstatusRequiredConstraint
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id")
+        @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.*;
@@ -33,11 +33,12 @@ import java.util.List;
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_dokument_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ")
+        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ"),
+        @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
-public class GesuchDokument extends AbstractEntity {
+public class GesuchDokument extends AbstractMandantEntity {
 
     @NotNull
     @ManyToOne(optional = false)

@@ -14,7 +14,6 @@ import java.util.List;
 
 @Audited
 @Entity
-@Table
 @Getter
 @Setter
 public class Ausbildungsstaette extends AbstractEntity {

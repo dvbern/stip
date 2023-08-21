@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.lebenslauf.type.Bildungsart;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
@@ -19,10 +19,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint
 @Entity
-@Table
+@Table(indexes = {
+		@Index(name = "IX_lebenslauf_item_mandant", columnList = "mandant")
+})
 @Getter
 @Setter
-public class LebenslaufItem extends AbstractEntity {
+public class LebenslaufItem extends AbstractMandantEntity {
 
 	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)

@@ -18,11 +18,10 @@
 package ch.dvbern.stip.api.fall.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.TenantId;
 import org.hibernate.envers.Audited;
 
 @Audited
@@ -30,19 +29,15 @@ import org.hibernate.envers.Audited;
 @Table(indexes = {
 		@Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
 		@Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-		// @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+		@Index(name = "IX_fall_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
-public class Fall extends AbstractEntity {
+public class Fall extends AbstractMandantEntity {
 
 	@Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
 			insertable = false)
 	private Long fallNummer;
-
-	@TenantId
-	@Column(nullable = false)
-	private String mandant;
 
 	@OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)

@@ -1,6 +1,8 @@
 package ch.dvbern.stip.test.arch;
 
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.entity.StipPhysicalNamingStrategy;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static ch.dvbern.stip.test.arch.util.ArchTestUtil.APP_CLASSES;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 class JpaTest {
@@ -51,6 +54,31 @@ class JpaTest {
                         String message = String.format("Foreign Key column %s on entity %s has no index", fieldName, fieldOwner.getSimpleName());
                         conditionEvents.add(SimpleConditionEvent.violated(javaField, message));
 
+                    }
+                }));
+
+        rule.check(APP_CLASSES);
+    }
+
+    @Test
+    void test_index_on_tenant_field() {
+        var rule = classes().that().areAssignableTo(AbstractMandantEntity.class)
+                .and().areAnnotatedWith(Entity.class)
+                .should((new ArchCondition<>("have an index") {
+                    @Override
+                    public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
+                        var tableAnnotation = javaClass.getAnnotationOfType(Table.class);
+                        if (tableAnnotation != null) {
+                            final var hasIndex = Arrays.stream(tableAnnotation.indexes())
+                                    .anyMatch(index -> index.columnList().contains("mandant"));
+
+                            if (hasIndex) {
+                                return;
+                            }
+                        }
+
+                        String message = String.format("Mandant column on entity %s has no index", javaClass.getName());
+                        conditionEvents.add(SimpleConditionEvent.violated(javaClass, message));
                     }
                 }));
 
