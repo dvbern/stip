@@ -12,7 +12,7 @@ public class WerZahltAlimenteRequiredFieldConstraintValidator
 	public boolean isValid(
 			Familiensituation familiensituation,
 			ConstraintValidatorContext constraintValidatorContext) {
-		if (familiensituation.getGerichtlicheAlimentenregelung()) {
+		if (familiensituation.getGerichtlicheAlimentenregelung() != null && familiensituation.getGerichtlicheAlimentenregelung()) {
 			return familiensituation.getWerZahltAlimente() != null;
 		} else {
 			constraintValidatorContext.disableDefaultConstraintViolation();
