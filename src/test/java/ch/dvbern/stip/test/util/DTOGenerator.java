@@ -183,4 +183,18 @@ public class DTOGenerator {
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;
 	}
+
+	public static GesuchUpdateDtoSpec prepareGesuchUpdateForEinnhamenKosten() {
+		var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+		var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+		var einnahmenKosten = new EinnahmenKostenUpdateDtoSpec();
+		einnahmenKosten.setNettoerwerbseinkommen(new BigDecimal(50000));
+		einnahmenKosten.setFahrkosten(new BigDecimal(2000));
+		einnahmenKosten.setWohnkosten(new BigDecimal(20000));
+		einnahmenKosten.setPersonenImHaushalt(new BigDecimal(10));
+		einnahmenKosten.setVerdienstRealisiert(false);
+		gesuchformularToWorkWith.setEinnahmenKosten(einnahmenKosten);
+		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+		return gesuchUpdatDTO;
+	}
 }

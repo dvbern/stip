@@ -1,25 +1,25 @@
 CREATE TABLE einnahmen_kosten (
-	id                                 UUID           NOT NULL,
-	timestamp_erstellt                 TIMESTAMP      NOT NULL,
-	timestamp_mutiert                  TIMESTAMP      NOT NULL,
-	user_erstellt                      VARCHAR(255)   NOT NULL,
-	user_mutiert                       VARCHAR(255)   NOT NULL,
-	version                            BIGINT         NOT NULL,
-	nettoerwerbseinkommen              NUMERIC(19, 2) NOT NULL,
-	fahrkosten                         NUMERIC(19, 2) NOT NULL,
-	wohnkosten                         NUMERIC(19, 2) NOT NULL,
-	personenImHaushalt                 NUMERIC(19, 2) NOT NULL,
-	verdienstRealisiert                BOOLEAN        NOT NULL,
-	alimente                           NUMERIC(19, 2),
-	zulagen                            NUMERIC(19, 2),
-	renten                             NUMERIC(19, 2),
-	eoLeistungen                       NUMERIC(19, 2),
-	ergaenzungsleistungen              NUMERIC(19, 2),
-	beitraege                          NUMERIC(19, 2),
-	ausbildungskostenSekundarstufeZwei NUMERIC(19, 2),
-	ausbildungskostenTertiaerstufe     NUMERIC(19, 2),
-	willDarlehen                       BOOLEAN,
-	mandant                            VARCHAR(255)   NOT NULL DEFAULT 'bern',
+	id                                   UUID           NOT NULL,
+	timestamp_erstellt                   TIMESTAMP      NOT NULL,
+	timestamp_mutiert                    TIMESTAMP      NOT NULL,
+	user_erstellt                        VARCHAR(255)   NOT NULL,
+	user_mutiert                         VARCHAR(255)   NOT NULL,
+	version                              BIGINT         NOT NULL,
+	nettoerwerbseinkommen                NUMERIC(19, 2) NOT NULL,
+	fahrkosten                           NUMERIC(19, 2) NOT NULL,
+	wohnkosten                           NUMERIC(19, 2) NOT NULL,
+	personen_im_haushalt                 NUMERIC(19, 2) NOT NULL,
+	verdienst_realisiert                 BOOLEAN        NOT NULL,
+	alimente                             NUMERIC(19, 2),
+	zulagen                              NUMERIC(19, 2),
+	renten                               NUMERIC(19, 2),
+	eo_leistungen                        NUMERIC(19, 2),
+	ergaenzungsleistungen                NUMERIC(19, 2),
+	beitraege                            NUMERIC(19, 2),
+	ausbildungskosten_sekundarstufe_zwei NUMERIC(19, 2),
+	ausbildungskosten_tertiaerstufe      NUMERIC(19, 2),
+	will_darlehen                        BOOLEAN,
+	mandant                              VARCHAR(255)   NOT NULL DEFAULT 'bern',
 	CONSTRAINT einnahmen_kosten_pk PRIMARY KEY (id)
 );
 
@@ -30,7 +30,7 @@ ADD COLUMN einnahmen_kosten_id UUID;
 ALTER TABLE gesuch_formular_aud
 ADD COLUMN einnahmen_kosten_id UUID;
 
-CREATE INDEX IF NOT EXISTS FK_gesuch_formular_einnahmen_kosten_id ON gesuch_formular (einnahmen_kosten_id);
+CREATE INDEX IF NOT EXISTS FK_gesuch_formular_einnahmen_kosten_id ON gesuch_formular(einnahmen_kosten_id);
 
 ALTER TABLE gesuch_formular
 ADD CONSTRAINT FK_gesuch_formular_einnahmen_kosten_id
@@ -38,29 +38,29 @@ ADD CONSTRAINT FK_gesuch_formular_einnahmen_kosten_id
 		REFERENCES einnahmen_kosten(id);
 
 CREATE TABLE einnahmen_kosten_aud (
-	id                                 UUID    NOT NULL,
-	rev                                INTEGER NOT NULL,
-	revtype                            SMALLINT,
-	timestamp_erstellt                 TIMESTAMP,
-	timestamp_mutiert                  TIMESTAMP,
-	user_erstellt                      VARCHAR(255),
-	user_mutiert                       VARCHAR(255),
-	version                            BIGINT,
-	nettoerwerbseinkommen              NUMERIC(19, 2),
-	fahrkosten                         NUMERIC(19, 2),
-	wohnkosten                         NUMERIC(19, 2),
-	personenImHaushalt                 NUMERIC(19, 2),
-	verdienstRealisiert                BOOLEAN,
-	alimente                           NUMERIC(19, 2),
-	zulagen                            NUMERIC(19, 2),
-	renten                             NUMERIC(19, 2),
-	eoLeistungen                       NUMERIC(19, 2),
-	ergaenzungsleistungen              NUMERIC(19, 2),
-	beitraege                          NUMERIC(19, 2),
-	ausbildungskostenSekundarstufeZwei NUMERIC(19, 2),
-	ausbildungskostenTertiaerstufe     NUMERIC(19, 2),
-	willDarlehen                       BOOLEAN,
-	mandant                            VARCHAR(255),
+	id                                   UUID    NOT NULL,
+	rev                                  INTEGER NOT NULL,
+	revtype                              SMALLINT,
+	timestamp_erstellt                   TIMESTAMP,
+	timestamp_mutiert                    TIMESTAMP,
+	user_erstellt                        VARCHAR(255),
+	user_mutiert                         VARCHAR(255),
+	version                              BIGINT,
+	nettoerwerbseinkommen                NUMERIC(19, 2),
+	fahrkosten                           NUMERIC(19, 2),
+	wohnkosten                           NUMERIC(19, 2),
+	personen_im_haushalt                 NUMERIC(19, 2),
+	verdienst_realisiert                 BOOLEAN,
+	alimente                             NUMERIC(19, 2),
+	zulagen                              NUMERIC(19, 2),
+	renten                               NUMERIC(19, 2),
+	eo_leistungen                        NUMERIC(19, 2),
+	ergaenzungsleistungen                NUMERIC(19, 2),
+	beitraege                            NUMERIC(19, 2),
+	ausbildungskosten_sekundarstufe_zwei NUMERIC(19, 2),
+	ausbildungskosten_tertiaerstufe      NUMERIC(19, 2),
+	will_darlehen                         BOOLEAN,
+	mandant                              VARCHAR(255),
 	CONSTRAINT einnahmen_kosten_aud_pk PRIMARY KEY (id, rev)
 );
 

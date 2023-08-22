@@ -181,6 +181,17 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(12)
+	void testUpdateGesuchEndpointAddEinnahmenKoster() {
+		var gesuchUpdatDTO = prepareGesuchUpdateForEinnhamenKosten();
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.ACCEPTED.getStatusCode());
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(13)
 	void testUpdateGesuchEndpointAddKind() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForKind();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -191,7 +202,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(13)
+	@Order(14)
 	void testAllFormularPresent() {
 		var gesuch =
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
@@ -202,6 +213,7 @@ class GesuchResourceTest {
 		assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getPartner(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getAuszahlung(), is(notNullValue()));
+		assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getGeschwisters().size(), is(1));
 		assertThat(
 				gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getNachname(),
@@ -209,12 +221,11 @@ class GesuchResourceTest {
 		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), is(1));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getKinds().size(), is(1));
-
 	}
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(14)
+	@Order(15)
 	void testGetGesucheForBenutzende() {
 		var gesuche = gesuchApiSpec.getGesucheForBenutzer()
 				.benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID)
@@ -228,7 +239,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(15)
+	@Order(16)
 	void test_get_gesuch_for_fall() {
 		var gesuche = gesuchApiSpec.getGesucheForFall()
 				.fallIdPath(TestConstants.FALL_TEST_ID)
@@ -242,7 +253,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(16)
+	@Order(17)
 	void testGesuchEinreichenValidationError(){
 		var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
@@ -262,7 +273,7 @@ class GesuchResourceTest {
 
 	@Test
     @TestAsGesuchsteller
-	@Order(17)
+	@Order(18)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)
