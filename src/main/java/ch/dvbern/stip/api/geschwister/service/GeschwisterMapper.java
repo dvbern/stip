@@ -8,7 +8,7 @@ import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
-import java.util.LinkedHashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +22,13 @@ public interface GeschwisterMapper {
 
     default Set<Geschwister> map(List<GeschwisterUpdateDto> geschwisterUpdateDtos, @MappingTarget Set<Geschwister> geschwisterSet) {
         if(geschwisterUpdateDtos.isEmpty()) geschwisterSet.clear();
+        Iterator<Geschwister> iterator = geschwisterSet.iterator();
+        while (iterator.hasNext()) {
+            Geschwister geschwister = iterator.next();
+            if (!geschwisterUpdateDtos.stream().anyMatch(geschwisterUpdateDto -> geschwister.getId().equals(geschwisterUpdateDto.getId()))) {
+                iterator.remove();
+            }
+        }
         for (GeschwisterUpdateDto geschwisterUpdateDto : geschwisterUpdateDtos) {
             if (geschwisterUpdateDto.getId() != null) {
                 Geschwister found = geschwisterSet.stream().filter(geschwister -> geschwister.getId().equals(geschwisterUpdateDto.getId())).findFirst().orElseThrow(

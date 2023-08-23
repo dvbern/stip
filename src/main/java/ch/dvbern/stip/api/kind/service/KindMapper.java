@@ -7,7 +7,7 @@ import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
-import java.util.LinkedHashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +21,13 @@ public interface KindMapper {
 
     default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
         if(kindUpdateDtos.isEmpty()) kinder.clear();
+        Iterator<Kind> iterator = kinder.iterator();
+        while (iterator.hasNext()) {
+            Kind kind = iterator.next();
+            if (!kindUpdateDtos.stream().anyMatch(kindUpdateDto -> kind.getId().equals(kindUpdateDto.getId()))) {
+                iterator.remove();
+            }
+        }
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
                 Kind found = kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(

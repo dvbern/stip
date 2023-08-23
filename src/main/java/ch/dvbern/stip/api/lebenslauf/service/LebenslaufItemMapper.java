@@ -7,6 +7,7 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,13 @@ public interface LebenslaufItemMapper {
 
     default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
         if(lebenslaufItemUpdateDtos.isEmpty()) lebenslaufItemSet.clear();
+        Iterator<LebenslaufItem> iterator = lebenslaufItemSet.iterator();
+        while (iterator.hasNext()) {
+            LebenslaufItem lebenslaufItem = iterator.next();
+            if (!lebenslaufItemUpdateDtos.stream().anyMatch(lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))) {
+                iterator.remove();
+            }
+        }
         for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {
             if (lebenslaufItemUpdateDto.getId() != null) {
                 LebenslaufItem found = lebenslaufItemSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())).findFirst().orElseThrow(
