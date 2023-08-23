@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LAND_CH_FIELD_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
@@ -17,7 +17,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Documented
 public @interface LandCHRequiredConstraint {
 
-	String message() default VALIDATION_LAND_CH_FIELD_REQUIRED_MESSAGE;
+	String message() default VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE;
 
 	Class<?>[] groups() default {};
 

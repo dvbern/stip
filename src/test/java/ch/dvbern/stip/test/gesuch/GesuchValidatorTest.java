@@ -49,17 +49,18 @@ class GesuchValidatorTest {
 	@Test
 	void testFieldValidationErrorForPersonInAusbildung() {
 		String[] constraintMessages = { VALIDATION_NACHNAME_NOTBLANK_MESSAGE, VALIDATION_VORNAME_NOTBLANK_MESSAGE,
-				VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_LAND_CH_FIELD_REQUIRED_MESSAGE,
-				VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE,
-				VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE };
+				VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE,
+				VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE,
+				VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE};
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		personInAusbildung.setAdresse(new Adresse());
 		// Beim Land CH muss der Heimatort nicht leer sein
 		personInAusbildung.getAdresse().setLand(Land.CH);
 		// Beim nicht IZV muessen die IZV PLZ und Ort nicht leer sein
 		personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(false);
-		// Beim andere Nationalitaet als CH muesst die Niederlassungsstatus gegeben werden
-		personInAusbildung.setNationalitaet(Land.FR);
+		// Beim Nationalitaet CH muesst die Niederlassungsstatus nicht gegeben werden
+		personInAusbildung.setNationalitaet(Land.CH);
+		personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C);
 		// Beim Wohnsitz MUTTER_VATER muessen die Anteile Feldern nicht null sein
 		personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
 		Gesuch gesuch = prepareDummyGesuch();
@@ -85,22 +86,17 @@ class GesuchValidatorTest {
 	void testNullFieldValidationErrorForPersonInAusbildung() {
 		String[] constraintMessages =
 				{ VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
-						VALIDATION_LAND_CH_FIELD_REQUIRED_NULL_MESSAGE,
-						VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE };
+						VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE};
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
-		personInAusbildung.setAdresse(new Adresse());
 		// Wohnsitz Anteil muessen leer sein beim Wohnsitz != MUTTER_VATER
 		personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
 		personInAusbildung.setWohnsitzAnteilVater(BigDecimal.ONE);
 		// Beim IZV muessen die IZV Ort und PLZ leer sein
 		personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
 		personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
-		// Beim Land != CH duerfen keinen Heimatort erfasst werden
-		personInAusbildung.getAdresse().setLand(Land.FR);
+		// Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
+		personInAusbildung.setNationalitaet(Land.FR);
 		personInAusbildung.setHeimatort("");
-		// Beim CH Nationalitatet duerfen keine Niederlassungsstatus gegeben werden
-		personInAusbildung.setNationalitaet(Land.CH);
-		personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
 		assertAllMessagesPresent(constraintMessages, gesuch);

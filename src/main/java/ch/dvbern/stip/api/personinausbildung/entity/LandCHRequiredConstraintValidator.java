@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LAND_CH_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class LandCHRequiredConstraintValidator implements ConstraintValidator<LandCHRequiredConstraint, PersonInAusbildung> {
 
@@ -18,7 +18,7 @@ public class LandCHRequiredConstraintValidator implements ConstraintValidator<La
 		}
 		else {
 			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_LAND_CH_FIELD_REQUIRED_NULL_MESSAGE)
+			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE)
 					.addConstraintViolation();
 			return personInAusbildung.getHeimatort() == null;
 		}

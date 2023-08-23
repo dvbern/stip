@@ -14,10 +14,10 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.izw.required.message}";
 	public static final String VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE =
 			"{jakarta.validation.constraints.izw.required.null.message}";
-	public static final String VALIDATION_LAND_CH_FIELD_REQUIRED_MESSAGE =
-			"{jakarta.validation.constraints.landCH.required.message}";
-	public static final String VALIDATION_LAND_CH_FIELD_REQUIRED_NULL_MESSAGE =
-			"{jakarta.validation.constraints.landCH.required.null.message}";
+	public static final String VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE =
+			"{jakarta.validation.constraints.heimatort.required.message}";
+	public static final String VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE =
+			"{jakarta.validation.constraints.heimatort.required.null.message}";
 	public static final String VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE =
 			"{jakarta.validation.constraints.niederlassungsstatus.required.message}";
 	public static final String VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE =
