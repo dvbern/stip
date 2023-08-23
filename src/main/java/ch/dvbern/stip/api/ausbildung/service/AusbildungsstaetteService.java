@@ -11,7 +11,6 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class AusbildungsstaetteService {
 
-
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
 

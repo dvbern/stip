@@ -71,21 +71,10 @@ ADD CONSTRAINT FK_einnahmen_kosten_aud_revinfo
 
 ALTER TABLE ausbildungsgang
 ADD COLUMN ausbildungsrichtung VARCHAR(255) NOT NULL DEFAULT 'UNIVERSITAETEN_ETH';
+ALTER TABLE ausbildungsgang ALTER COLUMN ausbildungsrichtung DROP DEFAULT;
 ALTER TABLE ausbildungsgang_aud
 ADD COLUMN ausbildungsrichtung VARCHAR(255);
 
-UPDATE ausbildungsgang
-SET ausbildungsrichtung = 'UNIVERSITAETEN_ETH'
-WHERE id = '3a8c2023-f29e-4466-a2d7-411a7d032f42';
-UPDATE ausbildungsgang
-SET ausbildungsrichtung = 'UNIVERSITAETEN_ETH'
-WHERE id = '384ba33a-eb4e-44e4-ac20-8e11101bbf3a';
-UPDATE ausbildungsgang
-SET ausbildungsrichtung = 'UNIVERSITAETEN_ETH'
-WHERE id = 'b18d06fb-1dd4-4929-8470-e9e44b0bc4a7';
-UPDATE ausbildungsgang
-SET ausbildungsrichtung = 'UNIVERSITAETEN_ETH'
-WHERE id = 'b319953d-f5a9-4a1a-a0f6-69bd3f745e02';
 UPDATE ausbildungsgang
 SET ausbildungsrichtung = 'GYMNASIALE_MATURITAETSSCHULEN'
 WHERE id = '345ef0b1-b62e-4fdd-abf4-cb789d4296ee';
@@ -98,9 +87,6 @@ WHERE id = 'abc07eed-19d4-4e1e-9899-6d5893556b1b';
 UPDATE ausbildungsgang
 SET ausbildungsrichtung = 'FACHHOCHSCHULEN'
 WHERE id = '52e9577c-732a-4f1b-ae74-de2e477c01e9';
-UPDATE ausbildungsgang
-SET ausbildungsrichtung = 'UNIVERSITAETEN_ETH'
-WHERE id = '3dac8f59-533c-4b99-9b13-210503c34595';
-UPDATE ausbildungsgang
-SET ausbildungsrichtung = 'UNIVERSITAETEN_ETH'
-WHERE id = 'c69c6712-9bd9-4533-a685-44fddefd5937';
+
+ALTER TABLE familiensituation DROP COLUMN elternteil_verstorben;
+ALTER TABLE familiensituation_aud DROP COLUMN elternteil_verstorben;
