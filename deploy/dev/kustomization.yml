@@ -9,7 +9,7 @@ resources:
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: 3614f095
+  newTag: b7781ef0
 
 configMapGenerator:
 - behavior: merge
