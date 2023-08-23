@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.benutzer.entity;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;

@@ -38,10 +38,9 @@ public class BenutzerService {
             throw new BadRequestException(); // TODO: use error handling
         }
 
-        final var benutzer = benutzerRepository
+        return benutzerRepository
                 .findByKeycloakId(keycloakId)
                 .orElseGet(this::createBenutzerFromJWT);
-        return benutzer;
     }
 
     @Transactional

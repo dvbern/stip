@@ -7,7 +7,7 @@ import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class AhvConstraintValidatorTest {
+class AhvConstraintValidatorTest {
 	@Test
 	void testAhvValidator() {
 		AhvConstraintValidator ahvConstraintValidator = new AhvConstraintValidator();

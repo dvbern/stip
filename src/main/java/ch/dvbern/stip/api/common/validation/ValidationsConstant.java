@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.common.validation;
 
 public final class ValidationsConstant {
-
+	private ValidationsConstant() {
+		throw new IllegalStateException("Validations Constant class");
+	}
 	public static final String EMAIL_VALIDATION_PATTERN = "^[a-z0-9]+[a-z0-9._-]*@[a-z0-9.-]+\\.[a-z]{2,4}$";
 
 	public static final String VALIDATION_NACHNAME_NOTBLANK_MESSAGE =

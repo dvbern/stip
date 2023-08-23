@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BenutzerResourceTest {
+class BenutzerResourceTest {
 
     private final BenutzerApiSpec api = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
 

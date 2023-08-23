@@ -42,7 +42,7 @@ import static org.hamcrest.Matchers.*;
 @QuarkusTest
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GesuchValidatorTest {
+class GesuchValidatorTest {
 
 	private final Validator validator;
 

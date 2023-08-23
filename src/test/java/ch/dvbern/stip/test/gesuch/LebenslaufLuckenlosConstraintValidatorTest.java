@@ -10,6 +10,8 @@ import ch.dvbern.stip.api.gesuch.entity.LebenslaufLuckenlosConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -41,7 +43,8 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 				, is(true));
 	}
 
-	@Test
+	@ParameterizedTest
+	@ValueSource
 	void lebenslaufLuckenlosStartZuFruehTest() {
 		GesuchFormular gesuchFormular = initFormular();
 		LebenslaufItem lebenslaufItem = new LebenslaufItem();
