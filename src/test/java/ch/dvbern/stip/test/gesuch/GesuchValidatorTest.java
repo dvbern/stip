@@ -399,7 +399,7 @@ public class GesuchValidatorTest {
 	void testGesuchEinreichenValidationEinnahmenKostenAusbildung() {
 		Ausbildung ausbildung = new Ausbildung();
 		ausbildung.setAusbildungsgang(new Ausbildungsgang());
-		ausbildung.getAusbildungsgang().setAusbildungsrichtung(Bildungsart.FACHHOCHSCHULEN);
+		ausbildung.getAusbildungsgang().setAusbildungsrichtung(Bildungsart.BERUFSMATURITAET_NACH_LEHRE);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
 		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
@@ -407,7 +407,7 @@ public class GesuchValidatorTest {
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-						.equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE)), is(true));
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE)), is(true));
 	}
 
 	private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {

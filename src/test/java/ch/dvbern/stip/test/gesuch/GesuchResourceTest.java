@@ -18,6 +18,9 @@ import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
 import static ch.dvbern.stip.test.util.DTOGenerator.*;
@@ -269,6 +272,15 @@ class GesuchResourceTest {
 		assertThat(validationReport.getValidationErrors().stream()
 				.anyMatch(validationError -> validationError.getMessageTemplate()
 						.equals(VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE)), is(true));
+		assertThat(validationReport.getValidationErrors().stream()
+				.anyMatch(validationError -> validationError.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE)), is(true));
+		assertThat(validationReport.getValidationErrors().stream()
+				.anyMatch(validationError -> validationError.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE)), is(true));
+		assertThat(validationReport.getValidationErrors().stream()
+				.anyMatch(validationError -> validationError.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE)), is(true));
 	}
 
 	@Test
