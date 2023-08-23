@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,4 +33,9 @@ public class Ausbildungsgang extends AbstractEntity {
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column
     private String bezeichnungFr;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Bildungsart ausbildungsrichtung;
 }

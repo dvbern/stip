@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.benutzer.entity;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
@@ -16,8 +15,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Table(
         indexes = {@Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
-        @Index(name = "IX_benuter_mandant", columnList = "mandant")
-})
+				   @Index(name = "IX_benuter_mandant", columnList = "mandant")}
+)
 @Audited
 @Getter
 @Setter

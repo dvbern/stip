@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.lebenslauf.type.Bildungsart;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.persistence.*;

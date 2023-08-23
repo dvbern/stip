@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -17,7 +18,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.lebenslauf.type.Bildungsart;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
@@ -41,7 +42,7 @@ import static org.hamcrest.Matchers.*;
 @QuarkusTest
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GesuchValidatorTest {
+class GesuchValidatorTest {
 
 	private final Validator validator;
 
@@ -355,6 +356,58 @@ public class GesuchValidatorTest {
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
 						.equals(VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testGesuchEinreichenValidationEinnahmenKostenEltern() {
+		Familiensituation familiensituation = new Familiensituation();
+		familiensituation.setElternteilUnbekanntVerstorben(true);
+		familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+		familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+		familiensituation.setGerichtlicheAlimentenregelung(true);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE)), is(true));
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_RENTEN_REQUIRED_MESSAGE)), is(true));
+	}
+
+	@Test
+	void testGesuchEinreichenValidationEinnahmenKostenPersonInAusbildung() {
+		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+		personInAusbildung.setKinder(true);
+		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE)), is(true));
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE)), is(true));
+	}
+
+	void testGesuchEinreichenValidationEinnahmenKostenAusbildung() {
+		Ausbildung ausbildung = new Ausbildung();
+		ausbildung.setAusbildungsgang(new Ausbildungsgang());
+		ausbildung.getAusbildungsgang().setAusbildungsrichtung(Bildungsart.BERUFSMATURITAET_NACH_LEHRE);
+		Gesuch gesuch = prepareDummyGesuch();
+		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
+		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		assertThat(violations.stream()
+				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+						.equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE)), is(true));
 	}
 
 	private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {
