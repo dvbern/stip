@@ -100,7 +100,7 @@ class GesuchValidatorTest {
 		personInAusbildung.setHeimatort("");
 		// Beim CH Nationalitatet duerfen keine Niederlassungsstatus gegeben werden
 		personInAusbildung.setNationalitaet(Land.CH);
-		personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_B);
+		personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C);
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
 		assertAllMessagesPresent(constraintMessages, gesuch);

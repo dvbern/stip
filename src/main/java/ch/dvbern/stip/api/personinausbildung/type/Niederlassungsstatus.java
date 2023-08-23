@@ -18,8 +18,7 @@
 package ch.dvbern.stip.api.personinausbildung.type;
 
 public enum Niederlassungsstatus {
-    NIEDERLASSUNGSBEWILLIGUNG_L,
-    NIEDERLASSUNGSBEWILLIGUNG_B,
     NIEDERLASSUNGSBEWILLIGUNG_C,
-    NIEDERLASSUNGSBEWILLIGUNG_G;
+    AUFENTHALTSBEWILLIGUNG_B,
+    FLUECHTLING;
 }

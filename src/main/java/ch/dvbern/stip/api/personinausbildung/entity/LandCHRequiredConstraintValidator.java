@@ -13,7 +13,7 @@ public class LandCHRequiredConstraintValidator implements ConstraintValidator<La
 	public boolean isValid(
 			PersonInAusbildung personInAusbildung,
 			ConstraintValidatorContext constraintValidatorContext) {
-		if (personInAusbildung.getAdresse().getLand() == Land.CH) {
+		if (personInAusbildung.getNationalitaet() == Land.CH) {
 			return StringUtils.isNotEmpty(personInAusbildung.getHeimatort());
 		}
 		else {
