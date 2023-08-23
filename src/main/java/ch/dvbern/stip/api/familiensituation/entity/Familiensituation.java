@@ -29,9 +29,6 @@ public class Familiensituation extends AbstractMandantEntity {
 	private Boolean elternVerheiratetZusammen;
 
 	@Column(nullable = true)
-	private Boolean elternteilVerstorben;
-
-	@Column(nullable = true)
 	private Boolean elternteilUnbekanntVerstorben;
 
 	@Column(nullable = true)

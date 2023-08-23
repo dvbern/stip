@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.common.type;
 
+import lombok.Getter;
+
+@Getter
 public enum Bildungsart {
     BERUFSVORBEREITENDES_SCHULJAHR_VORLEHRE(2),
     GYMNASIALE_MATURITAETSSCHULEN(2),

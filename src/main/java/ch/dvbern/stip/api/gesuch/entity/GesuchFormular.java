@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -40,6 +41,11 @@ import java.util.Set;
 @Audited
 @FamiliensituationElternEntityRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @LebenslaufLuckenlosConstraint(groups = GesuchEinreichenValidationGroup.class)
+@EinnahmenKostenAlimenteRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
+@EinnahmenKostenRentenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
+@EinnahmenKostenZulagenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
+@EinnahmenKostenDarlehenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
+@AusbildungskostenStufeRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
@@ -54,26 +60,32 @@ import java.util.Set;
 @Setter
 public class GesuchFormular extends AbstractMandantEntity {
 
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"), nullable = true)
     private @Valid PersonInAusbildung personInAusbildung;
 
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"), nullable = true)
     private @Valid Ausbildung ausbildung;
 
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"), nullable = true)
     private @Valid Familiensituation familiensituation;
 
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
     private Partner partner;
 
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
     private Auszahlung auszahlung;
 
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"), nullable = true)
     private @Valid EinnahmenKosten einnahmenKosten;
