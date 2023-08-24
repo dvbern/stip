@@ -61,4 +61,5 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE = "{jakarta.validation.constraints.einnahmen.kosten.darlehen.required.message}";
 	public static final String VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE = "{jakarta.validation.constraints.einnahmen.kosten.ausbildungskosten.stufe2.required.message}";
 	public static final String VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE = "{jakarta.validation.constraints.einnahmen.kosten.ausbildungskosten.stufe3.required.message}";
+	public static final String VALIDATION_LEBENSLAUF_AUSBILDUNG_UEBERSCHNEIDEN_MESSAGE = "{jakarta.validation.constraints.lebenslauf.ausbildung.ueberschneiden.message}";
 }
