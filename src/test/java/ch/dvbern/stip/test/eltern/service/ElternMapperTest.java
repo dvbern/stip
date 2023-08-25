@@ -34,7 +34,7 @@ class ElternMapperTest {
 		elternUpdateDto.setId(UUID.randomUUID());
 		elternUpdateDtos.clear();
 		elternUpdateDtos.add(elternUpdateDto);
-		neuElternSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(elternUpdateDto.getId()));
+		neuElternSet.stream().forEach(eltern -> eltern.setId(elternUpdateDto.getId()));
 		neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
 		Assertions.assertEquals(elternUpdateDto.getId(), neuElternSet.stream().findFirst().get().getId());
 		//DELETE ONE ADD A NEW ONE

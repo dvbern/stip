@@ -33,7 +33,7 @@ class GeschwisterMapperTest {
 		geschwisterUpdateDto.setId(UUID.randomUUID());
 		geschwisterUpdateDtos.clear();
 		geschwisterUpdateDtos.add(geschwisterUpdateDto);
-		neuGeschwisterSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(geschwisterUpdateDto.getId()));
+		neuGeschwisterSet.stream().forEach(geschwister -> geschwister.setId(geschwisterUpdateDto.getId()));
 		neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
 		Assertions.assertEquals(geschwisterUpdateDto.getId(), neuGeschwisterSet.stream().findFirst().get().getId());
 		//DELETE ONE ADD A NEW ONE

@@ -7,7 +7,7 @@ import jakarta.validation.ConstraintViolation;
 import lombok.Getter;
 @Getter
 public class ValidationsException extends RuntimeException{
-	private final Set<ConstraintViolation<?>> violations;
+	private final transient Set<ConstraintViolation<?>> violations;
 
 	public ValidationsException(String message, Set<? extends ConstraintViolation<?>> violations) {
 		super(message);

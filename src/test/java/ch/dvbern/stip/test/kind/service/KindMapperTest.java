@@ -34,7 +34,7 @@ class KindMapperTest {
 		kindUpdateDto.setId(UUID.randomUUID());
 		kindUpdateDtos.clear();
 		kindUpdateDtos.add(kindUpdateDto);
-		neuKindSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(kindUpdateDto.getId()));
+		neuKindSet.stream().forEach(kind -> kind.setId(kindUpdateDto.getId()));
 		neuKindSet = kindMapper.map(kindUpdateDtos, neuKindSet);
 		Assertions.assertEquals(kindUpdateDto.getId(), neuKindSet.stream().findFirst().get().getId());
 		//DELETE ONE ADD A NEW ONE
