@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -29,7 +30,20 @@ class ElternMapperTest {
 		elternUpdateDtos.add(elternUpdateDto);
 		Set<Eltern> neuElternSet = elternMapper.map(elternUpdateDtos, elternSet);
 		Assertions.assertEquals(1, neuElternSet.size());
-		elternUpdateDtos = new ArrayList<>();
+		// UPDATE
+		elternUpdateDto.setId(UUID.randomUUID());
+		elternUpdateDtos.clear();
+		elternUpdateDtos.add(elternUpdateDto);
+		neuElternSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(elternUpdateDto.getId()));
+		neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
+		Assertions.assertEquals(elternUpdateDto.getId(), neuElternSet.stream().findFirst().get().getId());
+		//DELETE ONE ADD A NEW ONE
+		elternUpdateDtos.clear();
+		elternUpdateDtos.add(prepareData());
+		neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
+		Assertions.assertEquals(1, neuElternSet.size());
+		//DELETE ALL
+		elternUpdateDtos.clear();
 		neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
 		Assertions.assertEquals(0, neuElternSet.size());
 	}

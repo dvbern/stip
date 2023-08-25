@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -24,11 +25,25 @@ class KindMapperTest {
 	void testKindMapperMapAddDelete() {
 		Set<Kind> kindSet = new LinkedHashSet<>();
 		KindUpdateDto kindUpdateDto = prepareData();
+		// ADD
 		List<KindUpdateDto> kindUpdateDtos = new ArrayList<>();
 		kindUpdateDtos.add(kindUpdateDto);
 		Set<Kind> neuKindSet = kindMapper.map(kindUpdateDtos, kindSet);
 		Assertions.assertEquals(1, neuKindSet.size());
-		kindUpdateDtos = new ArrayList<>();
+		// UPDATE
+		kindUpdateDto.setId(UUID.randomUUID());
+		kindUpdateDtos.clear();
+		kindUpdateDtos.add(kindUpdateDto);
+		neuKindSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(kindUpdateDto.getId()));
+		neuKindSet = kindMapper.map(kindUpdateDtos, neuKindSet);
+		Assertions.assertEquals(kindUpdateDto.getId(), neuKindSet.stream().findFirst().get().getId());
+		//DELETE ONE ADD A NEW ONE
+		kindUpdateDtos.clear();
+		kindUpdateDtos.add(prepareData());
+		neuKindSet = kindMapper.map(kindUpdateDtos, neuKindSet);
+		Assertions.assertEquals(1, neuKindSet.size());
+		//DELETE ALL
+		kindUpdateDtos.clear();
 		neuKindSet = kindMapper.map(kindUpdateDtos, neuKindSet);
 		Assertions.assertEquals(0, neuKindSet.size());
 	}

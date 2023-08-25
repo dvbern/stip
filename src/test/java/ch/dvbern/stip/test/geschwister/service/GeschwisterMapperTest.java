@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -24,10 +25,24 @@ class GeschwisterMapperTest {
 		Set<Geschwister> geschwisterSet = new LinkedHashSet<>();
 		GeschwisterUpdateDto geschwisterUpdateDto = prepareData();
 		List<GeschwisterUpdateDto> geschwisterUpdateDtos = new ArrayList<>();
+		// ADD
 		geschwisterUpdateDtos.add(geschwisterUpdateDto);
 		Set<Geschwister> neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, geschwisterSet);
 		Assertions.assertEquals(1, neuGeschwisterSet.size());
-		geschwisterUpdateDtos = new ArrayList<>();
+		// UPDATE
+		geschwisterUpdateDto.setId(UUID.randomUUID());
+		geschwisterUpdateDtos.clear();
+		geschwisterUpdateDtos.add(geschwisterUpdateDto);
+		neuGeschwisterSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(geschwisterUpdateDto.getId()));
+		neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
+		Assertions.assertEquals(geschwisterUpdateDto.getId(), neuGeschwisterSet.stream().findFirst().get().getId());
+		//DELETE ONE ADD A NEW ONE
+		geschwisterUpdateDtos.clear();
+		geschwisterUpdateDtos.add(prepareData());
+		neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
+		Assertions.assertEquals(1, neuGeschwisterSet.size());
+		//DELETE ALL
+		geschwisterUpdateDtos.clear();
 		neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
 		Assertions.assertEquals(0, neuGeschwisterSet.size());
 	}
