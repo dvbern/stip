@@ -29,10 +29,10 @@ class EinnahmenKostenValidatorTest {
 		GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
 		gesuchFormular.getPersonInAusbildung().setKinder(true);
 		assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(false);
+				.isFalse();
 		gesuchFormular.getEinnahmenKosten().setZulagen(BigDecimal.ONE);
 		assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(true);
+				.isTrue();
 	}
 
 	@Test
@@ -42,19 +42,19 @@ class EinnahmenKostenValidatorTest {
 		// Geburtsdatum null soll keine Validation Fehler verfen als nicht validbar
 		GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
 		assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(true);
+				.isTrue();
 		// Minderjaehrig
 		gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(17));
 		assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(true);
+				.isTrue();
 		// Volljaehrig ohne darlehen Antwort
 		gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
 		assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(false);
+				.isFalse();
 		// Volljaehrig mit Darlehen Antwort
 		gesuchFormular.getEinnahmenKosten().setWillDarlehen(false);
 		assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(true);
+				.isTrue();
 	}
 
 	@Test
@@ -67,16 +67,16 @@ class EinnahmenKostenValidatorTest {
 		ausbildung.getAusbildungsgang().setAusbildungsrichtung(Bildungsart.BERUFSMATURITAET_NACH_LEHRE);
 		gesuchFormular.setAusbildung(ausbildung);
 		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(false);
+				.isFalse();
 		gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(BigDecimal.ONE);
 		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
-				.isEqualTo(true);
+				.isTrue();
 		gesuchFormular.getAusbildung().getAusbildungsgang().setAusbildungsrichtung(Bildungsart.FACHHOCHSCHULEN);
 		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, initValidatorContext()))
-				.isEqualTo(false);
+				.isFalse();
 		gesuchFormular.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(BigDecimal.ONE);
 		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, initValidatorContext()))
-				.isEqualTo(true);
+				.isTrue();
 	}
 
 	private static GesuchFormular prepareGesuchFormularMitEinnahmenKosten() {
