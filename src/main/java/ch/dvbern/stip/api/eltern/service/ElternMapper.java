@@ -24,7 +24,7 @@ public interface ElternMapper {
         Iterator<Eltern> iterator = elternSet.iterator();
         while (iterator.hasNext()) {
             Eltern eltern = iterator.next();
-            if (!elternUpdateDtos.stream().anyMatch(elternUpdateDto -> eltern.getId().equals(elternUpdateDto.getId()))) {
+            if (elternUpdateDtos.stream().noneMatch(elternUpdateDto -> eltern.getId().equals(elternUpdateDto.getId()))) {
                 iterator.remove();
             }
         }

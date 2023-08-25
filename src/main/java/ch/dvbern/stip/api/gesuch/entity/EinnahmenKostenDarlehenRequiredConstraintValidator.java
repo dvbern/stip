@@ -23,10 +23,7 @@ public class EinnahmenKostenDarlehenRequiredConstraintValidator
 		if (geburtsdatum == null) {
 			return false;
 		}
-		LocalDate localDate = LocalDate.now();
-		return localDate.minusDays(geburtsdatum.getDayOfMonth())
-				.minusMonths(geburtsdatum.getMonthValue())
-				.minusYears(geburtsdatum.getYear())
-				.getYear() >= 18;
+		LocalDate volljaehrigCompareDate = LocalDate.now().minusYears(18);
+		return geburtsdatum.isBefore(volljaehrigCompareDate) || geburtsdatum.isEqual(volljaehrigCompareDate);
 	}
 }

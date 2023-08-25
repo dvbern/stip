@@ -45,7 +45,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 	void lebenslaufLuckenlosStartZuFruehTest() {
 		GesuchFormular gesuchFormular = initFormular();
 		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2016, 10, 1));
+		lebenslaufItem.setVon(LocalDate.of(2015, 10, 1));
 		lebenslaufItem.setBis(LocalDate.of(2023, 12, 31));
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
 		lebenslaufItemSet.add(lebenslaufItem);
@@ -56,6 +56,19 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 
 	@Test
 	void lebenslaufLuckenlosStartZuSpaetTest() {
+		GesuchFormular gesuchFormular = initFormular();
+		LebenslaufItem lebenslaufItem = new LebenslaufItem();
+		lebenslaufItem.setVon(LocalDate.of(2025, 10, 1));
+		lebenslaufItem.setBis(LocalDate.of(2027, 12, 31));
+		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
+		lebenslaufItemSet.add(lebenslaufItem);
+		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+	}
+
+	@Test
+	void lebenslaufLuckenlosEndZuSpaetTest() {
 		GesuchFormular gesuchFormular = initFormular();
 		LebenslaufItem lebenslaufItem = new LebenslaufItem();
 		lebenslaufItem.setVon(LocalDate.of(2017, 10, 1));
@@ -89,7 +102,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
 		lebenslaufItemSet.add(lebenslaufItem);
 		LebenslaufItem lebenslaufItemZwei = new LebenslaufItem();
-		lebenslaufItemZwei.setVon(LocalDate.of(2022, 8, 1));
+		lebenslaufItemZwei.setVon(LocalDate.of(2022, 7, 1));
 		lebenslaufItemZwei.setBis(LocalDate.of(2023, 11, 30));
 		lebenslaufItemSet.add(lebenslaufItemZwei);
 		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);

@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.common.util;
 
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
 
@@ -27,7 +28,7 @@ public final class FileUtil {
 			}
 		}
 		catch (IOException e) {
-			throw new RuntimeException("checkFileExtension failed: " + e.getMessage());
+			throw new ValidationsException("checkFileExtension failed: " + e.getMessage(), null);
 		}
 		return false;
 	}

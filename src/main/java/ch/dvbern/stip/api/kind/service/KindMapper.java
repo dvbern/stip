@@ -24,7 +24,7 @@ public interface KindMapper {
         Iterator<Kind> iterator = kinder.iterator();
         while (iterator.hasNext()) {
             Kind kind = iterator.next();
-            if (!kindUpdateDtos.stream().anyMatch(kindUpdateDto -> kind.getId().equals(kindUpdateDto.getId()))) {
+            if (kindUpdateDtos.stream().noneMatch(kindUpdateDto -> kind.getId().equals(kindUpdateDto.getId()))) {
                 iterator.remove();
             }
         }

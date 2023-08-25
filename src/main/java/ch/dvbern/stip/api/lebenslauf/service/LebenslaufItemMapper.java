@@ -31,7 +31,7 @@ public interface LebenslaufItemMapper {
         Iterator<LebenslaufItem> iterator = lebenslaufItemSet.iterator();
         while (iterator.hasNext()) {
             LebenslaufItem lebenslaufItem = iterator.next();
-            if (!lebenslaufItemUpdateDtos.stream().anyMatch(lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))) {
+            if (lebenslaufItemUpdateDtos.stream().noneMatch(lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))) {
                 iterator.remove();
             }
         }

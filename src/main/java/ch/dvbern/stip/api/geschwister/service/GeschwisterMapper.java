@@ -25,7 +25,7 @@ public interface GeschwisterMapper {
         Iterator<Geschwister> iterator = geschwisterSet.iterator();
         while (iterator.hasNext()) {
             Geschwister geschwister = iterator.next();
-            if (!geschwisterUpdateDtos.stream().anyMatch(geschwisterUpdateDto -> geschwister.getId().equals(geschwisterUpdateDto.getId()))) {
+            if (geschwisterUpdateDtos.stream().noneMatch(geschwisterUpdateDto -> geschwister.getId().equals(geschwisterUpdateDto.getId()))) {
                 iterator.remove();
             }
         }
