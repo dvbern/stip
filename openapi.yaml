@@ -1088,6 +1088,7 @@ components:
                 - gesuchStatus
                 - gesuchNummer
                 - id
+                - aenderungsdatum
             type: object
             properties:
                 fall:
@@ -1112,6 +1113,12 @@ components:
                 gesuch_formular_to_work_with:
                     $ref: '#/components/schemas/GesuchFormular'
                     description: ''
+                aenderungsdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: Datum wann das Gesuch zu letzt geändert wurde
+                bearbeiter:
+                    description: Zuständiger Sachbearbeiter des Gesuchs
+                    type: string
         GesuchCreate:
             required:
                 - fallId
