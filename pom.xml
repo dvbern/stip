@@ -7,7 +7,7 @@
   <artifactId>stip-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <contract.version>1.13.2</contract.version>
+    <contract.version>1.13.3</contract.version>
     <archunit.version>1.0.1</archunit.version>
     <checkerframework.version>3.19.0</checkerframework.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
