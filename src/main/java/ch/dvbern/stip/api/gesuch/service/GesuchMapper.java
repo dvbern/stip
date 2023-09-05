@@ -20,6 +20,8 @@ import org.mapstruct.*;
 public interface GesuchMapper {
     Gesuch toEntity(GesuchDto gesuchDto);
 
+    @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
+    @Mapping(target = "bearbeiter", constant = "John Doe")
     GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = "fallId", target = "fall.id")
