@@ -308,6 +308,24 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsstaetten
             summary: Returniert alle Ausbildungsstaette zur Verfuegung.
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+                required: true
+            responses:
+                '201':
+                    description: Ausbildungssaette created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createAusbildungsstaette
+            summary: creates a new Ausbildungsstaette
     '/gesuch/benutzer/{benutzerId}':
         get:
             tags:
@@ -667,9 +685,95 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsgang
             summary: return der Ausbildungsgang
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsgangUpdate'
+                required: true
+            tags:
+                - Ausbildungsgang
+            responses:
+                '200':
+                    description: |
+                        Ausbildungsgang updated
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateAusbildungsgang
+            summary: Updates a Ausbildungsgang with the given ID
+        delete:
+            responses:
+                '204':
+                    description: Ausbildungsgang deleted
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteAusbildungsgang
+            summary: delete a Ausbildungsgang
         parameters:
             -
                 name: ausbildungsgangId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+    /ausbildungsgang:
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsgangUpdate'
+                required: true
+            tags:
+                - Ausbildungsgang
+            responses:
+                '201':
+                    description: New Ausbildungsgang is created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createAusbildungsgang
+            summary: Creates a new Ausbildungsgang
+    '/ausbildungsstaette/{ausbildungsstaetteId}':
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+                required: true
+            responses:
+                '200':
+                    description: Ausbildungsstaette updated
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateAusbildungsstaette
+            summary: updates a Ausbildungsstaette
+        parameters:
+            -
+                name: ausbildungsstaetteId
                 schema:
                     $ref: '#/components/schemas/UUID'
                 in: path
@@ -763,20 +867,17 @@ components:
                 ort:
                     type: string
         Ausbildungsgang:
-            required:
-                - id
-                - bezeichnungDe
-                - ausbildungsrichtung
             type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                bezeichnungDe:
-                    type: string
-                bezeichnungFr:
-                    type: string
-                ausbildungsrichtung:
-                    $ref: '#/components/schemas/Bildungsart'
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        id:
+                            $ref: '#/components/schemas/UUID'
+                -
+                    $ref: '#/components/schemas/AusbildungsgangUpdate'
         DeploymentConfig:
             type: object
             properties:
@@ -839,44 +940,6 @@ components:
         UUID:
             format: uuid
             type: string
-        AusbildungUpdate:
-            required:
-                - ausbildungsland
-                - fachrichtung
-                - ausbildungBegin
-                - ausbildungEnd
-                - pensum
-            type: object
-            properties:
-                ausbildungsgangId:
-                    $ref: '#/components/schemas/UUID'
-                    description: |
-                        Required wenn andere ausbildungNichtGefunden = false
-                ausbildungsland:
-                    $ref: '#/components/schemas/Ausbildungsland'
-                alternativeAusbildungsgang:
-                    description: |
-                        Required wenn andere ausbildungNichtGefunden = true
-                    type: string
-                fachrichtung:
-                    type: string
-                ausbildungNichtGefunden:
-                    type: boolean
-                ausbildungBegin:
-                    description: Datum im Format mm.YYYY
-                    type: string
-                ausbildungEnd:
-                    description: Datum im Format mm.YYYY
-                    type: string
-                pensum:
-                    $ref: '#/components/schemas/AusbildungsPensum'
-                ausbildungsstaetteId:
-                    $ref: '#/components/schemas/UUID'
-                    description: |
-                        Required wenn andere ausbildungNichtGefunden = false
-                alternativeAusbildungsstaette:
-                    description: Required wenn andere ausbildungNichtGefunden = true
-                    type: string
         LebenslaufItemUpdate:
             title: Root Type for Lebenslauf
             description: ''
@@ -1202,7 +1265,6 @@ components:
         Bildungsart:
             description: ''
             enum:
-                - BERUFSVORBEREITENDES_SCHULJAHR_VORLEHRE
                 - GYMNASIALE_MATURITAETSSCHULEN
                 - SCHULEN_FUER_ALLGEMEINBILDUNG
                 - VOLLZEITBERUFSSCHULEN
@@ -1390,23 +1452,6 @@ components:
                     type: object
                 -
                     $ref: '#/components/schemas/PartnerUpdate'
-        Ausbildungsstaette:
-            required:
-                - id
-                - ausbildungsland
-                - name
-            type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                ausbildungsgaenge:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Ausbildungsgang'
-                ausbildungsland:
-                    $ref: '#/components/schemas/Ausbildungsland'
-                name:
-                    type: string
         Kontoinhaber:
             description: ''
             enum:
@@ -1721,6 +1766,120 @@ components:
                     type: object
                 -
                     $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        AusbildungUpdate:
+            required:
+                - ausbildungsland
+                - fachrichtung
+                - ausbildungBegin
+                - ausbildungEnd
+                - pensum
+            type: object
+            properties:
+                ausbildungsgangId:
+                    $ref: '#/components/schemas/UUID'
+                    description: |
+                        Required wenn andere ausbildungNichtGefunden = false
+                alternativeAusbildungsgang:
+                    description: |
+                        Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+                fachrichtung:
+                    type: string
+                ausbildungNichtGefunden:
+                    type: boolean
+                ausbildungBegin:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                ausbildungEnd:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                pensum:
+                    $ref: '#/components/schemas/AusbildungsPensum'
+                alternativeAusbildungsstaette:
+                    description: Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+        AusbildungsstaetteUpdate:
+            description: ''
+            required:
+                - nameDe
+                - nameFr
+            type: object
+            properties:
+                nameDe:
+                    description: ''
+                    type: string
+                nameFr:
+                    description: ''
+                    type: string
+        Ausbildungsstaette:
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                        - ausbildungsland
+                        - name
+                    type: object
+                    properties:
+                        id:
+                            $ref: '#/components/schemas/UUID'
+                        ausbildungsgaenge:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                -
+                    $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+        Ausbildungsort:
+            description: ''
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        id:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/AusbildungsortUpdate'
+        AusbildungsortUpdate:
+            description: ''
+            required:
+                - Ausbildungsland
+            type: object
+            properties:
+                ausbildungsland:
+                    $ref: '#/components/schemas/Ausbildungsland'
+                    description: ''
+                ort:
+                    description: required if ausbildungsland = Schweiz
+                    type: string
+        AusbildungsgangUpdate:
+            description: ''
+            required:
+                - bezeichnungDe
+                - bezeichnungFr
+                - ausbildungsrichtung
+                - ausbildungsstaette
+                - ausbildungsort
+            type: object
+            properties:
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                    description: ''
+                ausbildungsstaette:
+                    $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: ''
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+                    description: ''
     responses:
         Unauthorized:
             content:
