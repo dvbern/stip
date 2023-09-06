@@ -18,11 +18,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.*;
 import static ch.dvbern.stip.test.util.DTOGenerator.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -71,6 +67,8 @@ class GesuchResourceTest {
 		assertThat(gesuche[0].getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
 		assertThat(gesuche[0].getGesuchsperiode().getId(),
 				is(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")));
+		assertThat(gesuche[0].getAenderungsdatum(), notNullValue());
+		assertThat(gesuche[0].getBearbeiter(), is("John Doe"));
 	}
 
 	@Test
