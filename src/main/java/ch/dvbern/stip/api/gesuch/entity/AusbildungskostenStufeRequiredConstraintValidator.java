@@ -3,6 +3,8 @@ package ch.dvbern.stip.api.gesuch.entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import static ch.dvbern.stip.api.common.type.Ausbildungsstufe.SEKUNDAR_2;
+import static ch.dvbern.stip.api.common.type.Ausbildungsstufe.TERTIAER;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE;
 
 public class AusbildungskostenStufeRequiredConstraintValidator
@@ -13,9 +15,9 @@ public class AusbildungskostenStufeRequiredConstraintValidator
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (gesuchFormular.getAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
 			return true;
-		} else if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getLevel() == 2) {
+		} else if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe() == SEKUNDAR_2) {
 			return gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() != null;
-		} else if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getLevel() == 3) {
+		} else if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe() == TERTIAER) {
 			constraintValidatorContext.disableDefaultConstraintViolation();
 			constraintValidatorContext.buildConstraintViolationWithTemplate(
 							VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE)
