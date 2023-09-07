@@ -719,6 +719,8 @@ components:
             enum:
                 - OFFEN
                 - IN_BEARBEITUNG
+                - EINGEREICHT
+                - NICHT_KOMPLETT_EINGEREICHT
             type: string
         LocalDate:
             format: date
