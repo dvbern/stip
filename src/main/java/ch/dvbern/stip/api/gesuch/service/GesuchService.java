@@ -31,12 +31,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -55,12 +50,7 @@ public class GesuchService {
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
-		if (gesuch.getGesuchFormularToWorkWith() != null
-				&& gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() != null
-				&& gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung() != null
-				&& !gesuch.getGesuchFormularToWorkWith()
-				.getPersonInAusbildung()
-				.equals(gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum())) {
+		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
@@ -68,6 +58,19 @@ public class GesuchService {
 		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
 		}
+	}
+
+	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
+		 if (gesuch.getGesuchFormularToWorkWith() == null
+				 || gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
+			 return false;
+		 }
+
+
+		 return !gesuch.getGesuchFormularToWorkWith()
+				.getPersonInAusbildung()
+				.getGeburtsdatum()
+				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
 	}
 
 	public List<GesuchDto> findAll() {
