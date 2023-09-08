@@ -7,7 +7,7 @@
   <artifactId>stip-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <contract.version>1.13.3</contract.version>
+    <contract.version>1.13.4</contract.version>
     <archunit.version>1.0.1</archunit.version>
     <checkerframework.version>3.19.0</checkerframework.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
@@ -170,6 +170,11 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-oidc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.stateless4j</groupId>
+      <artifactId>stateless4j</artifactId>
+      <version>2.6.0</version>
     </dependency>
     <dependency>
       <groupId>ch.dvbern.oss.stip</groupId>
