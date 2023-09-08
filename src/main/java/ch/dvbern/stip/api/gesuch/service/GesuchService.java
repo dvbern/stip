@@ -31,11 +31,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -54,11 +50,27 @@ public class GesuchService {
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
+		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
+			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
+		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		if(!violations.isEmpty()) {
+		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
 		}
+	}
+
+	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
+		 if (gesuch.getGesuchFormularToWorkWith() == null
+				 || gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
+			 return false;
+		 }
+
+
+		 return !gesuch.getGesuchFormularToWorkWith()
+				.getPersonInAusbildung()
+				.getGeburtsdatum()
+				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
 	}
 
 	public List<GesuchDto> findAll() {
@@ -90,13 +102,18 @@ public class GesuchService {
 	public void gesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
-		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
+			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+		}
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		Set<ConstraintViolation<Gesuch>> violationsEinreichen = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-		if(!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
+		Set<ConstraintViolation<Gesuch>> violationsEinreichen =
+				validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		if (!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
 			Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
 			concatenatedViolations.addAll(violationsEinreichen);
-			throw new ValidationsException("Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
+			throw new ValidationsException(
+					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ",
+					concatenatedViolations);
 		}
 	}
 }
