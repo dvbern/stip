@@ -9,7 +9,7 @@
 3. Create a Docker volume for the database by running `docker volume create stip-database-data`
 4. Start the local infra stack using `docker compose up -d`
 5. Generate sources and build the application `./mvnw clean package`
-5. You can now start the application `./mvnw compile quarkus:dev`
+5. You can now start the application `./mvnw clean compile quarkus:dev`
 
 > **_NOTE:_**  Quarkus ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
