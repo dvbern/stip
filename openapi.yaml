@@ -674,6 +674,30 @@ paths:
                     $ref: '#/components/schemas/UUID'
                 in: path
                 required: true
+    '/gesuch/{gesuchId}/nachfrist/':
+        patch:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '201':
+                    description: Gesuch Nachfrist erfolgreich vergeben
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: gesuchNachfrist
+            summary: Einen Nachfrist von 30 Tagen beantragen fuer die Einreichung von Dokumenten
 components:
     schemas:
         Anrede:
@@ -721,6 +745,7 @@ components:
                 - IN_BEARBEITUNG
                 - EINGEREICHT
                 - NICHT_KOMPLETT_EINGEREICHT
+                - NICHT_KOMPLETT_EINGEREICHT_NACHFRIST
             type: string
         LocalDate:
             format: date
