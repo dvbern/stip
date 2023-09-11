@@ -76,4 +76,20 @@ public class GesuchStatusTest {
 						.as(GesuchDtoSpec.class);
 		assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.NICHT_KOMPLETT_EINGEREICHT);
 	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(3)
+	void testFillGesuchUndEinreichenNachfristVerlangen() {
+		gesuchApiSpec.gesuchNachfrist().gesuchIdPath(gesuchId)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Status.ACCEPTED.getStatusCode());
+		var gesuch =
+				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+						.body()
+						.as(GesuchDtoSpec.class);
+		assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+	}
 }
