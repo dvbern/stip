@@ -21,6 +21,8 @@ public class MailService {
 	@CheckedTemplate
 	static class Templates {
 		public static native MailTemplateInstance gesuchNichtKomplettEingereicht(String vorname, String name);
+		public static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist(String vorname, String name);
+
 	}
 
 	private final Mailer mailer;
@@ -31,6 +33,13 @@ public class MailService {
 		return Templates.gesuchNichtKomplettEingereicht(vorname, name)
 				.to(email)
 				.subject("Gesuch übermittelt - Fehlende Dokumente")
+				.send();
+	}
+
+	public Uni<Void> sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email) {
+		return Templates.gesuchNichtKomplettEingereichtNachfrist(vorname, name)
+				.to(email)
+				.subject("Gesuch nicht komplett eingereicht - Nachfrist")
 				.send();
 	}
 
