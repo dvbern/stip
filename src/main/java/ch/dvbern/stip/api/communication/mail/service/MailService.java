@@ -27,7 +27,7 @@ public class MailService {
 	private final ReactiveMailer reactiveMailer;
 
 
-	public Uni<Void> sendGesuchNichtKomplettEingereichtMEmail(String name, String vorname, String email) {
+	public Uni<Void> sendGesuchNichtKomplettEingereichtEmail(String name, String vorname, String email) {
 		return Templates.gesuchNichtKomplettEingereicht(vorname, name)
 				.to(email)
 				.subject("Gesuch übermittelt - Fehlende Dokumente")

@@ -32,7 +32,7 @@ public class GesuchStatusConfigProducer {
 
 		config.configure(Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT)
 				.onEntry(this::logTransition)
-				.onEntry(this::sendKlinischeMeldungFehltEmail);
+				.onEntry(this::sendGesuchNichtKomplettEingereichtEmail);
 		return config;
 	}
 
@@ -53,12 +53,12 @@ public class GesuchStatusConfigProducer {
 		return gesuch;
 	}
 
-	private void sendKlinischeMeldungFehltEmail(
+	private void sendGesuchNichtKomplettEingereichtEmail(
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
 		Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
-		mailService.sendGesuchNichtKomplettEingereichtMEmail(
+		mailService.sendGesuchNichtKomplettEingereichtEmail(
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getVorname(),
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail());
