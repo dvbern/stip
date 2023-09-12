@@ -8,11 +8,10 @@ import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
-import io.restassured.response.ValidatableResponse;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -55,18 +54,10 @@ class GesuchResourceTest {
 		response.assertThat()
 				.statusCode(Response.Status.CREATED.getStatusCode());
 
-		response.assertThat()
-				.extract()
-				.headers()
-				.hasHeaderWithName(HttpHeaders.LOCATION);
-		extractGesuchIdFromResponse(response);
+		gesuchId = TestUtil.extractIdFromResponse(response);
 	}
 
-	private void extractGesuchIdFromResponse(ValidatableResponse response) {
-		var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
-		var gesuchIdString = locationString[locationString.length-1];
-		gesuchId = UUID.fromString(gesuchIdString);
-	}
+
 
 	@Test
 	@TestAsGesuchsteller
@@ -365,8 +356,7 @@ class GesuchResourceTest {
 				.body()
 				.as(GesuchDtoSpec[].class);
 
-		gesuchId = gesuche[0].getId();
-
+		assertThat(gesuche[0].getId(), is(gesuchId));
 		assertThat(gesuche.length, is(1));
 		assertThat(gesuche[0].getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
 		assertThat(gesuche[0].getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
