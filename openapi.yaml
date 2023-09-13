@@ -308,24 +308,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsstaetten
             summary: Returniert alle Ausbildungsstaette zur Verfuegung.
-        post:
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/AusbildungsstaetteUpdate'
-                required: true
-            responses:
-                '201':
-                    description: Ausbildungssaette created
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: createAusbildungsstaette
-            summary: creates a new Ausbildungsstaette
     '/gesuch/benutzer/{benutzerId}':
         get:
             tags:
@@ -750,34 +732,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: createAusbildungsgang
             summary: Creates a new Ausbildungsgang
-    '/ausbildungsstaette/{ausbildungsstaetteId}':
-        put:
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/AusbildungsstaetteUpdate'
-                required: true
-            responses:
-                '200':
-                    description: Ausbildungsstaette updated
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '404':
-                    $ref: '#/components/responses/NotFound'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: updateAusbildungsstaette
-            summary: updates a Ausbildungsstaette
-        parameters:
-            -
-                name: ausbildungsstaetteId
-                schema:
-                    $ref: '#/components/schemas/UUID'
-                in: path
-                required: true
 components:
     schemas:
         Anrede:
@@ -789,11 +743,6 @@ components:
             enum:
                 - VOLLZEIT
                 - TEILZEIT
-            type: string
-        Ausbildungsland:
-            enum:
-                - SCHWEIZ
-                - AUSLAND
             type: string
         DokumentTyp:
             enum:
@@ -1798,63 +1747,20 @@ components:
                 alternativeAusbildungsstaette:
                     description: Required wenn andere ausbildungNichtGefunden = true
                     type: string
-        AusbildungsstaetteUpdate:
-            description: ''
-            required:
-                - nameDe
-                - nameFr
-            type: object
-            properties:
-                nameDe:
-                    description: ''
-                    type: string
-                nameFr:
-                    description: ''
-                    type: string
         Ausbildungsstaette:
-            type: object
-            allOf:
+            anyOf:
                 -
-                    required:
-                        - id
-                        - ausbildungsland
-                        - name
+                    required: []
                     type: object
                     properties:
-                        id:
-                            $ref: '#/components/schemas/UUID'
                         ausbildungsgaenge:
+                            description: ''
                             type: array
                             items:
                                 $ref: '#/components/schemas/Ausbildungsgang'
                 -
                     $ref: '#/components/schemas/AusbildungsstaetteUpdate'
-        Ausbildungsort:
-            description: ''
             type: object
-            allOf:
-                -
-                    required:
-                        - id
-                    type: object
-                    properties:
-                        id:
-                            $ref: '#/components/schemas/UUID'
-                            description: ''
-                -
-                    $ref: '#/components/schemas/AusbildungsortUpdate'
-        AusbildungsortUpdate:
-            description: ''
-            required:
-                - Ausbildungsland
-            type: object
-            properties:
-                ausbildungsland:
-                    $ref: '#/components/schemas/Ausbildungsland'
-                    description: ''
-                ort:
-                    description: required if ausbildungsland = Schweiz
-                    type: string
         AusbildungsgangUpdate:
             description: ''
             required:
@@ -1875,11 +1781,151 @@ components:
                     $ref: '#/components/schemas/Bildungsart'
                     description: ''
                 ausbildungsstaette:
-                    $ref: '#/components/schemas/Ausbildungsstaette'
+                    $ref: '#/components/schemas/AusbildungsstaetteUpdate'
                     description: ''
                 ausbildungsort:
                     $ref: '#/components/schemas/Ausbildungsort'
                     description: ''
+        Ausbildungsort:
+            description: ''
+            enum:
+                - AUSLAND
+                - BERN
+                - ILANZ
+                - SOLOTHURN
+                - AARAU
+                - ALTDORF
+                - APPENZELL
+                - ARLESHEIM
+                - BADEN
+                - BASEL
+                - BELP
+                - BEROMUENSTER
+                - BIEL
+                - BRIENZ
+                - BRIG
+                - BRUGG
+                - BURGDORF
+                - BUERGENSTOCK
+                - CHENE_BOUGERIES
+                - CHUR
+                - CORCELLES
+                - COURTETELLE
+                - DAVOS
+                - DELEMONT
+                - DICKEN
+                - DIETIKON
+                - DORNACH
+                - DUEBENDORF
+                - EBIKON
+                - ENGELBERG
+                - EPALINGES
+                - FRIBOURG
+                - FRUTIGEN
+                - GENEVE
+                - GISWIL
+                - GRENCHEN
+                - GRUYERES
+                - GSTEIGWILER
+                - HERZOGENBUCHSEE
+                - HUENENBERG
+                - HUNIBACH
+                - HUTTWIL
+                - IMMENSEE
+                - INTERLAKEN
+                - ITTIGEN
+                - KIENTAL
+                - KLOTEN
+                - KOENIZ
+                - KONOLFINGEN
+                - KOPPIGEN
+                - LA_CHAUX_DE_FONDS
+                - LA_NEUVEVILLE
+                - LANDQUART
+                - LANGENTHAL
+                - LANGNAU_IM_EMMENTAL
+                - LAUFEN
+                - LAUSANNE
+                - LE_LOCLE
+                - LIESTAL
+                - LINDAU
+                - LUGANO
+                - LUZERN
+                - LYSS
+                - MANNO
+                - MARLY
+                - MORGES
+                - MOERSCHWIL
+                - MOUTIER
+                - MUENCHENBUCHSEE
+                - MUENCHENSTEIN
+                - MUENSINGEN
+                - NEUCHATEL
+                - NOTTWIL
+                - OLTEN
+                - OSTERMUNDIGEN
+                - PASSUGG
+                - PAYERNE
+                - PETIT_LANCY
+                - PORRENTRUY
+                - POSIEUX
+                - RAPPERSWIL_SG
+                - RHEINAU
+                - RORSCHACH
+                - SAMEDAN
+                - SARNEN
+                - SAXON
+                - SCHAFFHAUSEN
+                - SCHIERS
+                - SCHUEPFHEIM
+                - SCHWADERLOCH
+                - SCHWYZ
+                - SIERRE
+                - SION
+                - SISSACH
+                - SPIEZ
+                - ST_GALLEN
+                - STEFFISBURG
+                - ST_IMIER
+                - SURSEE
+                - THUN
+                - TOLOCHENAZ
+                - TRAMELAN
+                - VADUZ
+                - VERSCIO
+                - VEVEY
+                - VILLARS_BOZON
+                - VISP
+                - WEINFELDEN
+                - WIL
+                - WINTERTHUR
+                - WISEN
+                - WORB
+                - YVERDON_LES_BAINS
+                - ZIZERS
+                - ZOFINGEN
+                - ZOLLIKOFEN
+                - ZUG
+                - ZUOZ
+                - ZUERICH
+                - ZWEISIMMEN
+                - PULLY
+                - CERNIER
+                - HONDRICH
+                - LE_SENTIER
+            type: string
+        AusbildungsstaetteUpdate:
+            required:
+                - nameFr
+                - nameDe
+            type: object
+            properties:
+                nameDe:
+                    description: ''
+                    type: string
+                nameFr:
+                    description: ''
+                    type: string
     responses:
         Unauthorized:
             content:
