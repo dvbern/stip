@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -53,6 +54,9 @@ public class GesuchService {
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
+		if (isWohnsitzOfPersonInAusbildungEigenerHaushalt(gesuch, gesuchUpdateDto)) {
+			gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		if (!violations.isEmpty()) {
@@ -71,6 +75,17 @@ public class GesuchService {
 				.getPersonInAusbildung()
 				.getGeburtsdatum()
 				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
+	}
+
+	private boolean isWohnsitzOfPersonInAusbildungEigenerHaushalt(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
+		if (gesuch.getGesuchFormularToWorkWith() == null
+				|| gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
+			return false;
+		}
+
+		return gesuchUpdate.getGesuchFormularToWorkWith()
+				.getPersonInAusbildung()
+				.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
 	}
 
 	public List<GesuchDto> findAllWithFormularToWorkWith() {
