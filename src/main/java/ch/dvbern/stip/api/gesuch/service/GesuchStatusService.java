@@ -16,7 +16,7 @@ public class GesuchStatusService {
 
 	public void triggerStateMachineEvent(Gesuch gesuch, GesuchStatusChangeEvent event) {
 		StateMachine<Gesuchstatus, GesuchStatusChangeEvent>
-				stateMachine = new StateMachine<>(gesuch.getGesuchStatus(), config);;
+				stateMachine = new StateMachine<>(gesuch.getGesuchStatus(), config);
 		stateMachine.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 		gesuch.setGesuchStatus(stateMachine.getState());
 	}
