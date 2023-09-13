@@ -53,5 +53,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 	private BigDecimal ausbildungskostenTertiaerstufe;
 	@Column
 	private Boolean willDarlehen;
+	@Column
+	private Integer auswaertigeMittagessenProWoche;
 
 }
