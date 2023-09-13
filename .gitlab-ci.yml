@@ -20,6 +20,7 @@ release:
     - npx semantic-release --verify-conditions=false --publish=false
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == 'beta'
   artifacts:
     paths:
       - package.json
@@ -35,6 +36,7 @@ npm:
     - npm publish
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == 'beta'
   needs:
     - job: release
       artifacts: true
@@ -47,6 +49,7 @@ maven:
   extends: .maven-build-base
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  
+    - if: $CI_COMMIT_BRANCH == 'beta'
   needs:
     - job: release
       artifacts: true
