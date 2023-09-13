@@ -8,6 +8,7 @@ import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -16,10 +17,12 @@ import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.*;
 import static ch.dvbern.stip.test.util.DTOGenerator.*;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -43,32 +46,30 @@ class GesuchResourceTest {
 	void testCreateEndpoint() {
 		var gesuchDTO = new GesuchCreateDtoSpec();
 		gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-		gesuchDTO.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+		gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
 
-		gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
+		var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
+				.then();
+
+		response.assertThat()
 				.statusCode(Response.Status.CREATED.getStatusCode());
+
+		gesuchId = TestUtil.extractIdFromResponse(response);
 	}
+
+
 
 	@Test
 	@TestAsGesuchsteller
 	@Order(2)
-	void testFindGesuchEndpoint() {
+	void testDontFindGesuchWithNoFormularToWorkWith() {
 		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
 				.then()
 				.extract()
 				.body()
 				.as(GesuchDtoSpec[].class);
 
-		gesuchId = gesuche[0].getId();
-
-		assertThat(gesuche.length, is(1));
-		assertThat(gesuche[0].getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
-		assertThat(gesuche[0].getGesuchsperiode().getId(),
-				is(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6")));
-		assertThat(gesuche[0].getAenderungsdatum(), notNullValue());
-		assertThat(gesuche[0].getBearbeiter(), is("John Doe"));
+		assertThat(gesuche.length, is(0));
 	}
 
 	@Test
@@ -143,8 +144,8 @@ class GesuchResourceTest {
 	void testUpdateGesuchEndpointUpdateGeschwister() {
 		var gesuch =
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-				.body()
-				.as(GesuchDtoSpec.class);
+						.body()
+						.as(GesuchDtoSpec.class);
 		var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
 		gesuchUpdatDTO.getGesuchFormularToWorkWith()
 				.getGeschwisters()
@@ -207,8 +208,8 @@ class GesuchResourceTest {
 	void testAllFormularPresent() {
 		var gesuch =
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-				.body()
-				.as(GesuchDtoSpec.class);
+						.body()
+						.as(GesuchDtoSpec.class);
 		assertThat(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getAusbildung(), is(notNullValue()));
 		assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
@@ -255,7 +256,7 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(17)
-	void testGesuchEinreichenValidationError(){
+	void testGesuchEinreichenValidationError() {
 		var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
 				.then()
@@ -282,8 +283,91 @@ class GesuchResourceTest {
 	}
 
 	@Test
-    @TestAsGesuchsteller
+	@TestAsGesuchsteller
 	@Order(18)
+	void testUpdateGeburtsdatumNotChangedPersonInAusbildung() {
+		var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(GesuchDtoSpec.class);
+
+		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
+
+		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
+		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().setId(
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().getId());
+
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.ACCEPTED.getStatusCode());
+		gesuch =
+				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+						.body()
+						.as(GesuchDtoSpec.class);
+		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(19)
+	void testUpdateChangedGeburtsdatumPersonInAusbildung() {
+		var gesuch =
+				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+						.body()
+						.as(GesuchDtoSpec.class);
+		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
+		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
+		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().setId(
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().getId());
+
+		assertThat(gesuchUpdatDTO.getGesuchFormularToWorkWith(), notNullValue());
+		assertThat(gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung(), notNullValue());
+		gesuchUpdatDTO.getGesuchFormularToWorkWith()
+				.getPersonInAusbildung()
+				.setGeburtsdatum(LocalDate.of(2000, 10, 11));
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.ACCEPTED.getStatusCode());
+		gesuch =
+				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+						.body()
+						.as(GesuchDtoSpec.class);
+		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
+		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), is(nullValue()));
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(20)
+	void testFindGesuche() {
+		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(GesuchDtoSpec[].class);
+
+		assertThat(gesuche[0].getId(), is(gesuchId));
+		assertThat(gesuche.length, is(1));
+		assertThat(gesuche[0].getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
+		assertThat(gesuche[0].getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
+		assertThat(gesuche[0].getAenderungsdatum(), notNullValue());
+		assertThat(gesuche[0].getBearbeiter(), is("John Doe"));
+	}
+
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(21)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)

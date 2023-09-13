@@ -9,7 +9,7 @@ resources:
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: "40433777"
+  newTag: 3a18b076
 
 configMapGenerator:
 - behavior: merge
@@ -34,13 +34,24 @@ replacements:
       kind: Ingress
       name: api
 - source:
-    fieldPath: data.identityHost
+    fieldPath: data.host-sb
     kind: ConfigMap
     name: ingress-config
   targets:
   - fieldPaths:
     - spec.rules.1.host
     - spec.tls.0.hosts.1
+    select:
+      kind: Ingress
+      name: api
+- source:
+    fieldPath: data.identityHost
+    kind: ConfigMap
+    name: ingress-config
+  targets:
+  - fieldPaths:
+    - spec.rules.2.host
+    - spec.tls.0.hosts.2
     select:
       kind: Ingress
       name: api
