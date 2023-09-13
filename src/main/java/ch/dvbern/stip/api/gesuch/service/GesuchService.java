@@ -89,8 +89,8 @@ public class GesuchService {
 				gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasOnePerson();
 	}
 
-	public List<GesuchDto> findAll() {
-		return gesuchRepository.findAll().stream().map(gesuchMapper::toDto).toList();
+	public List<GesuchDto> findAllWithFormularToWorkWith() {
+		return gesuchRepository.findAllWithFormularToWorkWith().map(gesuchMapper::toDto).toList();
 	}
 
 	@Transactional
