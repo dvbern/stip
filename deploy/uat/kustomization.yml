@@ -9,7 +9,7 @@ resources:
 
 images:
 - name: docker-registry.public.dvbern.ch/kibon/stip/api
-  newTag: v0.4.0
+  newTag: v0.5.1
 
 patchesStrategicMerge:
 - cluster.yml
@@ -37,13 +37,24 @@ replacements:
       kind: Ingress
       name: api
 - source:
-    fieldPath: data.identityHost
+    fieldPath: data.host-sb
     kind: ConfigMap
     name: ingress-config
   targets:
   - fieldPaths:
     - spec.rules.1.host
     - spec.tls.0.hosts.1
+    select:
+      kind: Ingress
+      name: api
+- source:
+    fieldPath: data.identityHost
+    kind: ConfigMap
+    name: ingress-config
+  targets:
+  - fieldPaths:
+    - spec.rules.2.host
+    - spec.tls.0.hosts.2
     select:
       kind: Ingress
       name: api
