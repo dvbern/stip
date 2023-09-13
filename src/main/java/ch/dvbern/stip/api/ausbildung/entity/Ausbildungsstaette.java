@@ -1,9 +1,11 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.Constants;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -22,12 +24,12 @@ public class Ausbildungsstaette extends AbstractEntity {
 	private List<Ausbildungsgang> ausbildungsgaenge;
 
 	@NotNull
-	@Enumerated(EnumType.STRING)
+	@Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
-	private Ausbildungsland ausbildungsland;
+	private String nameDe;
 
 	@NotNull
 	@Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
-	private String name;
+	private String nameFr;
 }

@@ -69,11 +69,9 @@ public class DTOGenerator {
 		var ausbildung = new AusbildungUpdateDtoSpec();
 		ausbildung.setAusbildungBegin("01.2022");
 		ausbildung.setAusbildungEnd("02.2022");
-		ausbildung.setAusbildungsland(AusbildungslandDtoSpec.SCHWEIZ);
 		ausbildung.setAusbildungNichtGefunden(false);
 		ausbildung.setPensum(AusbildungsPensumDtoSpec.VOLLZEIT);
 		ausbildung.setAusbildungsgangId(UUID.fromString("3a8c2023-f29e-4466-a2d7-411a7d032f42"));
-		ausbildung.setAusbildungsstaetteId(UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"));
 		ausbildung.setFachrichtung("test");
 		gesuchformularToWorkWith.setAusbildung(ausbildung);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
