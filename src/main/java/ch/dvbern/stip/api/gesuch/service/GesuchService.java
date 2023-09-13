@@ -50,10 +50,14 @@ public class GesuchService {
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
+		final boolean mustResetPartner = hasZivilstandChangedToOnePerson(gesuch, gesuchUpdateDto);
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+		if (mustResetPartner) {
+			gesuch.getGesuchFormularToWorkWith().setPartner(null);
+		}
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
@@ -71,6 +75,18 @@ public class GesuchService {
 				.getPersonInAusbildung()
 				.getGeburtsdatum()
 				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
+	}
+
+	private boolean hasZivilstandChangedToOnePerson(Gesuch gesuch, GesuchUpdateDto gesuchUpdateDto) {
+		if (gesuch.getGesuchFormularToWorkWith() == null
+				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand() == null
+				|| gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				|| gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand() == null) {
+			return false;
+		}
+
+		return !gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasOnePerson() &&
+				gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasOnePerson();
 	}
 
 	public List<GesuchDto> findAll() {

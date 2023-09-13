@@ -25,4 +25,9 @@ public enum Zivilstand {
     GESCHIEDEN_GERICHTLICH,
     AUFGELOESTE_PARTNERSCHAFT,
     VERWITWET;
+
+    public boolean hasOnePerson() {
+        return this == LEDIG || this == GESCHIEDEN_GERICHTLICH || this == AUFGELOESTE_PARTNERSCHAFT || this == VERWITWET;
+    }
+
 }
