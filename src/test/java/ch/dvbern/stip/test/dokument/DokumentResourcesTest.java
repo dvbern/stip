@@ -3,12 +3,12 @@ package ch.dvbern.stip.test.dokument;
 import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
 import ch.dvbern.oss.stip.contract.test.dto.DokumentDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.test.util.TestUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -50,17 +50,14 @@ class DokumentResourcesTest {
 		var gesuchDTO = new GesuchCreateDtoSpec();
 		gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
 		gesuchDTO.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
-		gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
+
+		var response = 	gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
+				.then();
+
+		response.assertThat()
 				.statusCode(Response.Status.CREATED.getStatusCode());
-		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
-				.then()
-				.extract()
-				.body()
-				.as(GesuchDtoSpec[].class);
-		gesuchId = gesuche[0].getId();
-		assertThat(gesuche.length, is(1));
+
+		gesuchId = TestUtil.extractIdFromResponse(response);
 	}
 
 	@Test
