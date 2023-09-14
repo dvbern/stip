@@ -78,6 +78,7 @@ public class GesuchStatusConfigProducer {
 		mailService.sendGesuchNichtKomplettEingereichtNachfristEmail(
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getVorname(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail());
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail(),
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
 	}
 }

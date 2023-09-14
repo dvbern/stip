@@ -28,6 +28,9 @@ public class MailService {
 
 		private static native MailTemplateInstance gesuchNichtKomplettEingereicht_fr(String vorname, String name);
 
+		public static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_de(String vorname, String name);
+		public static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_fr(String vorname, String name);
+
 		public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
 				String name,
 				String vorname,
@@ -35,6 +38,15 @@ public class MailService {
 			return language.equals("fr") ?
 					gesuchNichtKomplettEingereicht_fr(name, vorname) :
 					gesuchNichtKomplettEingereicht_de(name, vorname);
+		}
+
+		public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
+				String name,
+				String vorname,
+				String language) {
+			return language.equals("fr") ?
+					gesuchNichtKomplettEingereichtNachfrist_fr(name, vorname) :
+					gesuchNichtKomplettEingereichtNachfrist_de(name, vorname);
 		}
 	}
 
@@ -52,10 +64,10 @@ public class MailService {
 				.send().subscribe().asCompletionStage();
 	}
 
-	public Uni<Void> sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email) {
-		return Templates.gesuchNichtKomplettEingereichtNachfrist(vorname, name)
+	public Uni<Void> sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email, Locale local) {
+		return Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(vorname, name, local.getLanguage())
 				.to(email)
-				.subject("Gesuch nicht komplett eingereicht - Nachfrist")
+				.subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(), local))
 				.send();
 	}
 
