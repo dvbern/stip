@@ -674,7 +674,7 @@ paths:
                     $ref: '#/components/schemas/UUID'
                 in: path
                 required: true
-    '/gesuch/{gesuchId}/nachfrist/':
+    '/gesuch/{gesuchId}/nachfrist':
         patch:
             tags:
                 - Gesuch
@@ -696,7 +696,7 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 '500':
                     $ref: '#/components/responses/ServerError'
-            operationId: gesuchNachfrist
+            operationId: gesuchNachfristBeantragen
             summary: Einen Nachfrist von 30 Tagen beantragen fuer die Einreichung von Dokumenten
 components:
     schemas:
