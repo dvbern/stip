@@ -691,6 +691,8 @@ paths:
             operationId: updateAusbildungsgang
             summary: Updates a Ausbildungsgang with the given ID
         delete:
+            tags:
+                - Ausbildungsgang
             responses:
                 '204':
                     description: Ausbildungsgang deleted
@@ -732,6 +734,34 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: createAusbildungsgang
             summary: Creates a new Ausbildungsgang
+    '/ausbildungsstaette/{ausbildungsstaetteId}':
+        get:
+            tags:
+                - Ausbildungsstaette
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getAusbildungsstaette
+            summary: returns a Ausbildungsstaette with the given id
+        parameters:
+            -
+                name: ausbildungsstaetteId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
 components:
     schemas:
         Anrede:
@@ -815,18 +845,6 @@ components:
                     type: string
                 ort:
                     type: string
-        Ausbildungsgang:
-            type: object
-            allOf:
-                -
-                    required:
-                        - id
-                    type: object
-                    properties:
-                        id:
-                            $ref: '#/components/schemas/UUID'
-                -
-                    $ref: '#/components/schemas/AusbildungsgangUpdate'
         DeploymentConfig:
             type: object
             properties:
@@ -1926,6 +1944,33 @@ components:
                 nameFr:
                     description: ''
                     type: string
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+        Ausbildungsgang:
+            required:
+                - ausbildungsort
+                - ausbildungsrichtung
+                - id
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                    description: ''
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+                    description: ''
+                ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
     responses:
         Unauthorized:
             content:
