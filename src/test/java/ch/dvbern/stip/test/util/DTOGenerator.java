@@ -195,4 +195,22 @@ public class DTOGenerator {
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;
 	}
+
+	public static AusbildungsgangUpdateDtoSpec prepareAusbildungsgangUpdate() {
+		var ausbildungsgangUpdate = new AusbildungsgangUpdateDtoSpec();
+		ausbildungsgangUpdate.setAusbildungsort(AusbildungsortDtoSpec.BERN);
+		ausbildungsgangUpdate.setAusbildungsrichtung(BildungsartDtoSpec.UNIVERSITAETEN_ETH);
+		ausbildungsgangUpdate.setBezeichnungDe("Bachelor Informatik");
+		ausbildungsgangUpdate.setBezeichnungFr("Bachelor Informatik");
+		ausbildungsgangUpdate.setAusbildungsstaette(prepareAusbildungsstaetteUpdateDto());
+		return ausbildungsgangUpdate;
+	}
+
+	public static AusbildungsstaetteUpdateDtoSpec prepareAusbildungsstaetteUpdateDto() {
+		var	ausbidlungsstaetteUpdateDto = new AusbildungsstaetteUpdateDtoSpec();
+		ausbidlungsstaetteUpdateDto.setNameDe("Uni Bern");
+		ausbidlungsstaetteUpdateDto.setNameFr("Uni Bern");
+		return ausbidlungsstaetteUpdateDto;
+	}
+
 }
