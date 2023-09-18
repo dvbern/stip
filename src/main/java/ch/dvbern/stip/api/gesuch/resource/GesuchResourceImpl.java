@@ -120,9 +120,8 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-    @Override
-    public Response gesuchNachfrist(UUID gesuchId) {
-        gesuchService.gesuchDokumentNachfrist(gesuchId);
+    public Response gesuchNachfristBeantragen(UUID gesuchId) {
+        gesuchService.setDokumentNachfrist(gesuchId);
         return Response.accepted().build();
     }
 

@@ -127,7 +127,7 @@ public class GesuchService {
 	}
 
 	@Transactional
-	public void gesuchDokumentNachfrist(UUID gesuchId) {
+	public void setDokumentNachfrist(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
 	}

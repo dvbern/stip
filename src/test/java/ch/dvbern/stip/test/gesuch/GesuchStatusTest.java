@@ -79,7 +79,7 @@ public class GesuchStatusTest {
 	@TestAsGesuchsteller
 	@Order(3)
 	void testFillGesuchUndEinreichenNachfristVerlangen() {
-		gesuchApiSpec.gesuchNachfrist().gesuchIdPath(gesuchId)
+		gesuchApiSpec.gesuchNachfristBeantragen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
