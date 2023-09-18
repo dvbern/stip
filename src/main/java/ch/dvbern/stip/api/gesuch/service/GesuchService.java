@@ -78,8 +78,11 @@ public class GesuchService {
 				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
 	}
 
-	public List<GesuchDto> findAllWithFormularToWorkWith() {
-		return gesuchRepository.findAllWithFormularToWorkWith().map(gesuchMapper::toDto).toList();
+	public List<GesuchDto> findAllWithPersonInAusbildung() {
+		return gesuchRepository.findAllWithFormularToWorkWith()
+				.filter(gesuch -> gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() != null)
+				.map(gesuchMapper::toDto)
+				.toList();
 	}
 
 	@Transactional
