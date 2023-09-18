@@ -19,10 +19,11 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -43,6 +44,10 @@ public class GesuchService {
 	private final GesuchMapper gesuchMapper;
 
 	private final Validator validator;
+
+	private final GesuchStatusService gesuchStatusService;
+
+	private final GesuchDokumentRepository gesuchDokumentRepository;
 
 	public Optional<GesuchDto> findGesuch(UUID id) {
 		return gesuchRepository.findByIdOptional(id).map(gesuchMapper::toDto);
@@ -116,7 +121,6 @@ public class GesuchService {
 	@Transactional
 	public void gesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
 		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
 			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
 		}
@@ -127,8 +131,13 @@ public class GesuchService {
 			Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
 			concatenatedViolations.addAll(violationsEinreichen);
 			throw new ValidationsException(
-					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ",
-					concatenatedViolations);
+					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
+		}
+		if(gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0){
+			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
+		}
+		else {
+			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
 		}
 	}
 }
