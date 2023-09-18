@@ -77,7 +77,7 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"), nullable = true)
     private @Valid Familiensituation familiensituation;
 
-    @Nullable()
+    @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
     private Partner partner;
