@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.time.LocalDateTime;
+
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -19,6 +21,7 @@ public class GesuchStatusService {
 				stateMachine = new StateMachine<>(gesuch.getGesuchStatus(), config);
 		stateMachine.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 		gesuch.setGesuchStatus(stateMachine.getState());
+		gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now());
 	}
 
 }
