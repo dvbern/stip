@@ -1,5 +1,6 @@
 package ch.dvbern.stip.test.communication.mail.service;
 
+import ch.dvbern.stip.api.common.i18n.StipEmailMessages;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -13,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static ch.dvbern.stip.test.util.TestConstants.TEST_FILE_LOCATION;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 @Slf4j
@@ -116,5 +119,17 @@ class MailServiceTest {
 		Assertions.assertEquals(1, actual.getAttachment().size());
 		Assertions.assertEquals("text/plain", actual.getAttachment().get(0).getContentType());
 		Assertions.assertEquals(file.getName(), actual.getAttachment().get(0).getName());
+	}
+
+	@Test
+	void testMailWithTemplate() {
+		mailService.sendGesuchNichtKomplettEingereichtEmail("Jean", "Bat", "jean@bat.ch", Locale.GERMAN);
+		List<MailMessage> sent = mailbox.getMailMessagesSentTo("jean@bat.ch");
+		Assertions.assertEquals(1, sent.size());
+		MailMessage actual = sent.get(0);
+		actual.getSubject();
+		assertThat(actual.getSubject()).isNotBlank();
+		assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage());
+
 	}
 }
