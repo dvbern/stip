@@ -13,6 +13,8 @@ import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
 
 @Audited
+@AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint
+@AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_partner_adresse_id", columnList = "adresse_id"),

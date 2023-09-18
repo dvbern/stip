@@ -28,6 +28,10 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.wohnsitzanteil.required.null.message}";
 	public static final String VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE =
 			"{jakarta.validation.constraints.alternativeAusbildung.required.message}";
+	public static final String VALIDATION_PARTNER_KOSTEN_FIELDS_REQUIRED_MESSAGE =
+			"{jakarta.validation.constraints.partner.kostenfields.required.message}";
+	public static final String VALIDATION_PARTNER_KOSTEN_FIELDS_REQUIRED_NULL_MESSAGE =
+			"{jakarta.validation.constraints.partner.kostenfields.required.null.message}";
 	public static final String VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE =
 			"{jakarta.validation.constraints.alternativeAusbildung.required.null.message}";
 	public static final String VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE =
