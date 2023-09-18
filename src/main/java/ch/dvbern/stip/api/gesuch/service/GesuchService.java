@@ -51,13 +51,16 @@ public class GesuchService {
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
+		final boolean isPersonInAusbildungEigenerHaushalt =
+				isWohnsitzOfPersonInAusbildungEigenerHaushalt(gesuch, gesuchUpdateDto);
+
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
-		if (isWohnsitzOfPersonInAusbildungEigenerHaushalt(gesuch, gesuchUpdateDto)) {
-			gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
-		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+		if (gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten() != null && isPersonInAusbildungEigenerHaushalt) {
+			gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+		}
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
