@@ -79,6 +79,7 @@ public class GesuchService {
 
 	private boolean hasZivilstandChangedToOnePerson(Gesuch gesuch, GesuchUpdateDto gesuchUpdateDto) {
 		if (gesuch.getGesuchFormularToWorkWith() == null
+				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
 				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand() == null
 				|| gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
 				|| gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand() == null) {
