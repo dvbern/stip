@@ -1741,6 +1741,9 @@ components:
                 willDarlehen:
                     description: Required nur wenn volljährig
                     type: boolean
+                auswaertigeMittagessenProWoche:
+                    description: Required nur wenn die Person keinen eigenen Haushalt führt
+                    type: integer
         EinnahmenKosten:
             type: object
             allOf:
