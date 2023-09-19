@@ -157,7 +157,7 @@ class AusbildungsgangResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void deleteAusbildungsgangNotFound() {
         ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
                 .execute(ResponseBody::prettyPeek)
@@ -168,7 +168,7 @@ class AusbildungsgangResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(10)
     void deleteAusbildungsgang() {
         var numAusbildungsstaettenBevoreDelete = getAusbildungsstaettenFromApi().length;
 
