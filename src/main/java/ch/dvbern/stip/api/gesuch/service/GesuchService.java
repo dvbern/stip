@@ -67,10 +67,11 @@ public class GesuchService {
 
 	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
 		 if (gesuch.getGesuchFormularToWorkWith() == null
+				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum() == null
 				 || gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
 			 return false;
 		 }
-
 
 		 return !gesuch.getGesuchFormularToWorkWith()
 				.getPersonInAusbildung()
