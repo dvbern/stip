@@ -20,5 +20,7 @@ package ch.dvbern.stip.api.gesuch.type;
 public enum Gesuchstatus {
     OFFEN,
     IN_BEARBEITUNG,
-    EINGEREICHT
+    EINGEREICHT,
+    NICHT_KOMPLETT_EINGEREICHT,
+    NICHT_KOMPLETT_EINGEREICHT_NACHFRIST
 }
