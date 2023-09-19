@@ -16,6 +16,7 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -60,8 +61,10 @@ public class GesuchDokumentService {
 	}
 
 	public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
-		GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp)
-				.orElseThrow(NotFoundException::new);
+		GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElse(null);
+		if(gesuchDokument == null) {
+			return new ArrayList<>();
+		}
 		return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
 	}
 

@@ -28,6 +28,9 @@ public class MailService {
 
 		private static native MailTemplateInstance gesuchNichtKomplettEingereicht_fr(String vorname, String name);
 
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_de(String vorname, String name);
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_fr(String vorname, String name);
+
 		public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
 				String name,
 				String vorname,
@@ -35,6 +38,15 @@ public class MailService {
 			return language.equals("fr") ?
 					gesuchNichtKomplettEingereicht_fr(name, vorname) :
 					gesuchNichtKomplettEingereicht_de(name, vorname);
+		}
+
+		public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
+				String name,
+				String vorname,
+				String language) {
+			return language.equals("fr") ?
+					gesuchNichtKomplettEingereichtNachfrist_fr(name, vorname) :
+					gesuchNichtKomplettEingereichtNachfrist_de(name, vorname);
 		}
 	}
 
@@ -52,6 +64,13 @@ public class MailService {
 				.send().subscribe().asCompletionStage();
 	}
 
+	public void sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email, Locale local) {
+		Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(vorname, name, local.getLanguage())
+				.to(email)
+				.subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(), local))
+				.send().subscribe().asCompletionStage();
+	}
+
 	public Uni<Void> sendEmail(String to, String subject, String htmlContent) {
 		return reactiveMailer.send(
 				Mail.withHtml(
@@ -62,7 +81,7 @@ public class MailService {
 		);
 	}
 
-	public Void sendEmailSync(String to, String subject, String htmlContent) {
+	public void sendEmailSync(String to, String subject, String htmlContent) {
 		mailer.send(
 				Mail.withHtml(
 						to,
@@ -70,7 +89,6 @@ public class MailService {
 						htmlContent
 				)
 		);
-		return null;
 	}
 
 	public Uni<Void> sendEmailWithAttachment(String to, String subject, String htmlContent, List<File> attachments) {
@@ -83,7 +101,7 @@ public class MailService {
 		return reactiveMailer.send(mail);
 	}
 
-	public Void sendEmailWithAttachmentSync(String to, String subject, String htmlContent, List<File> attachments) {
+	public void sendEmailWithAttachmentSync(String to, String subject, String htmlContent, List<File> attachments) {
 		Mail mail = Mail.withHtml(to, subject,
 				htmlContent);
 		attachments.forEach(attachment -> mail.addAttachment(
@@ -91,7 +109,6 @@ public class MailService {
 				attachment,
 				FileUtil.getFileMimeType(attachment)));
 		mailer.send(mail);
-		return null;
 	}
 
 }
