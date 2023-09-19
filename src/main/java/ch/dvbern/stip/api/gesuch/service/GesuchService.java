@@ -67,10 +67,11 @@ public class GesuchService {
 
 	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
 		 if (gesuch.getGesuchFormularToWorkWith() == null
+				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum() == null
 				 || gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
 			 return false;
 		 }
-
 
 		 return !gesuch.getGesuchFormularToWorkWith()
 				.getPersonInAusbildung()
@@ -127,5 +128,11 @@ public class GesuchService {
 		else {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
 		}
+	}
+
+	@Transactional
+	public void setDokumentNachfrist(UUID gesuchId) {
+		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
 	}
 }

@@ -119,6 +119,12 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.accepted().build();
     }
 
+    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    public Response gesuchNachfristBeantragen(UUID gesuchId) {
+        gesuchService.setDokumentNachfrist(gesuchId);
+        return Response.accepted().build();
+    }
+
     @Override
     @Blocking
     public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
