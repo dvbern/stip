@@ -31,8 +31,13 @@ public class GesuchStatusConfigProducer {
 				.onEntry(this::logTransition);
 
 		config.configure(Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT)
+				.permit(GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT, Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST)
 				.onEntry(this::logTransition)
 				.onEntry(this::sendGesuchNichtKomplettEingereichtEmail);
+
+		config.configure(Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST)
+				.onEntry(this::logTransition)
+				.onEntry(this::sendGesuchNichtKomplettEingereichtNachfristEmail);
 		return config;
 	}
 
@@ -59,6 +64,18 @@ public class GesuchStatusConfigProducer {
 	) {
 		Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
 		mailService.sendGesuchNichtKomplettEingereichtEmail(
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getNachname(),
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getVorname(),
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail(),
+				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
+	}
+
+	private void sendGesuchNichtKomplettEingereichtNachfristEmail(
+			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
+			@NonNull Object[] args
+	) {
+		Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
+		mailService.sendGesuchNichtKomplettEingereichtNachfristEmail(
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getVorname(),
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail(),
