@@ -18,10 +18,12 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -43,6 +45,10 @@ public class GesuchService {
 
 	private final Validator validator;
 
+	private final GesuchStatusService gesuchStatusService;
+
+	private final GesuchDokumentRepository gesuchDokumentRepository;
+
 	public Optional<GesuchDto> findGesuch(UUID id) {
 		return gesuchRepository.findByIdOptional(id).map(gesuchMapper::toDto);
 	}
@@ -50,10 +56,16 @@ public class GesuchService {
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
+		final boolean isPersonInAusbildungEigenerHaushalt =
+				isWohnsitzOfPersonInAusbildungEigenerHaushalt(gesuch, gesuchUpdateDto);
+
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+		if (gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten() != null && isPersonInAusbildungEigenerHaushalt) {
+			gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+		}
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
@@ -62,15 +74,27 @@ public class GesuchService {
 
 	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
 		 if (gesuch.getGesuchFormularToWorkWith() == null
+				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum() == null
 				 || gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
 			 return false;
 		 }
-
 
 		 return !gesuch.getGesuchFormularToWorkWith()
 				.getPersonInAusbildung()
 				.getGeburtsdatum()
 				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
+	}
+
+	private boolean isWohnsitzOfPersonInAusbildungEigenerHaushalt(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
+		if (gesuch.getGesuchFormularToWorkWith() == null
+				|| gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
+			return false;
+		}
+
+		return gesuchUpdate.getGesuchFormularToWorkWith()
+				.getPersonInAusbildung()
+				.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
 	}
 
 	public List<GesuchDto> findAllWithFormularToWorkWith() {
@@ -101,7 +125,6 @@ public class GesuchService {
 	@Transactional
 	public void gesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
 		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
 			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
 		}
@@ -112,8 +135,19 @@ public class GesuchService {
 			Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
 			concatenatedViolations.addAll(violationsEinreichen);
 			throw new ValidationsException(
-					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ",
-					concatenatedViolations);
+					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
 		}
+		if(gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0){
+			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
+		}
+		else {
+			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
+		}
+	}
+
+	@Transactional
+	public void setDokumentNachfrist(UUID gesuchId) {
+		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
 	}
 }

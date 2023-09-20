@@ -48,7 +48,6 @@ public class DTOGenerator {
 		personInAusbildung.setQuellenbesteuert(false);
 		personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
 		personInAusbildung.setHeimatort("Bern");
-
 		gesuchformularToWorkWith.setPersonInAusbildung(personInAusbildung);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;
@@ -86,7 +85,7 @@ public class DTOGenerator {
 		familiensituation.setObhutMutter(new BigDecimal(50));
 		familiensituation.setObhutVater(new BigDecimal(50));
 		familiensituation.setElternVerheiratetZusammen(false);
-		familiensituation.setElternteilUnbekanntVerstorben(true);
+		familiensituation.setElternteilUnbekanntVerstorben(false);
 		familiensituation.setGerichtlicheAlimentenregelung(false);
 		familiensituation.setMutterWiederverheiratet(false);
 		familiensituation.setVaterWiederverheiratet(false);
@@ -145,6 +144,14 @@ public class DTOGenerator {
 	public static GesuchUpdateDtoSpec prepareGesuchUpdateForEltern() {
 		var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
 		var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+		var eltern = prepareElternWithElternTyp(ElternTypDtoSpec.VATER);
+		gesuchformularToWorkWith.setElterns(new ArrayList<>());
+		gesuchformularToWorkWith.getElterns().add(eltern);
+		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+		return gesuchUpdatDTO;
+	}
+
+	public static ElternUpdateDtoSpec prepareElternWithElternTyp(ElternTypDtoSpec elternTypDtoSpec) {
 		var eltern = new ElternUpdateDtoSpec();
 		eltern.setNachname("Elternnachname");
 		eltern.setVorname("Elternvorname");
@@ -152,17 +159,14 @@ public class DTOGenerator {
 		eltern.setTelefonnummer("");
 		eltern.setAusweisbFluechtling(false);
 		eltern.setAdresse(prepareAdresseUpdate());
-		eltern.setElternTyp(ElternTypDtoSpec.VATER);
+		eltern.setElternTyp(elternTypDtoSpec);
 		eltern.setErgaenzungsleistungAusbezahlt(false);
 		eltern.setIdentischerZivilrechtlicherWohnsitz(false);
 		eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
 		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
 		eltern.setSozialhilfebeitraegeAusbezahlt(false);
 		eltern.setSozialversicherungsnummer(AHV_NUMMER_VALID);
-		gesuchformularToWorkWith.setElterns(new ArrayList<>());
-		gesuchformularToWorkWith.getElterns().add(eltern);
-		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
-		return gesuchUpdatDTO;
+		return eltern;
 	}
 
 	public static GesuchUpdateDtoSpec prepareGesuchUpdateForKind() {
@@ -192,6 +196,29 @@ public class DTOGenerator {
 		einnahmenKosten.setPersonenImHaushalt(new BigDecimal(10));
 		einnahmenKosten.setVerdienstRealisiert(false);
 		gesuchformularToWorkWith.setEinnahmenKosten(einnahmenKosten);
+		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
+		return gesuchUpdatDTO;
+	}
+
+	public static GesuchUpdateDtoSpec prepareGesuchUpdateVollstaendigt() {
+		var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
+		var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
+		gesuchformularToWorkWith.setPersonInAusbildung(prepareGesuchUpdateForPersonInAusbildung().getGesuchFormularToWorkWith().getPersonInAusbildung());
+		gesuchformularToWorkWith.setAusbildung(prepareGesuchUpdateForAusbildung().getGesuchFormularToWorkWith().getAusbildung());
+		gesuchformularToWorkWith.setFamiliensituation(prepareGesuchUpdateForFamiliensituation().getGesuchFormularToWorkWith().getFamiliensituation());
+		gesuchformularToWorkWith.setEinnahmenKosten(prepareGesuchUpdateForEinnhamenKosten().getGesuchFormularToWorkWith().getEinnahmenKosten());
+		gesuchformularToWorkWith.setElterns(prepareGesuchUpdateForEltern().getGesuchFormularToWorkWith().getElterns());
+		gesuchformularToWorkWith.setAuszahlung(prepareGesuchUpdateForAuszahlung().getGesuchFormularToWorkWith().getAuszahlung());
+		gesuchformularToWorkWith.setLebenslaufItems(prepareGesuchUpdateForLebenslaufBildungsart().getGesuchFormularToWorkWith().getLebenslaufItems());
+		// Gescuh muss eingereicht werden können
+		gesuchformularToWorkWith.getEinnahmenKosten().setZulagen(new BigDecimal(1000));
+		gesuchformularToWorkWith.getEinnahmenKosten().setWillDarlehen(false);
+		gesuchformularToWorkWith.getLebenslaufItems().get(0).setVon("08.2016");
+		gesuchformularToWorkWith.getLebenslaufItems().get(0).setBis("12.2021");
+		gesuchformularToWorkWith.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(BigDecimal.TEN);
+		// add eltern TODO
+		gesuchformularToWorkWith.getElterns().add(prepareElternWithElternTyp(ElternTypDtoSpec.MUTTER));
+
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;
 	}
