@@ -13,7 +13,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EinnahmenKostenZulagenRequiredConstraintValidator.class)
+@Constraint(validatedBy = PartnerNullRequiredWhenAlleinstehendConstraintValidator.class)
 @Documented
 public @interface PartnerNullRequiredWhenAlleinstehendConstraint {
 	String message() default VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
