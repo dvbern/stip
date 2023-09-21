@@ -62,6 +62,7 @@ public class GesuchService {
 		final boolean isPersonInAusbildungEigenerHaushalt =
 				isWohnsitzOfPersonInAusbildungEigenerHaushalt(gesuch, gesuchUpdateDto);
 
+		final boolean mustResetPartner = hasZivilstandChangedToOnePerson(gesuch, gesuchUpdateDto);
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
@@ -71,6 +72,9 @@ public class GesuchService {
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		if (gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten() != null && isPersonInAusbildungEigenerHaushalt) {
 			gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+		}
+		if (mustResetPartner) {
+			gesuch.getGesuchFormularToWorkWith().setPartner(null);
 		}
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		if (!violations.isEmpty()) {
@@ -118,6 +122,19 @@ public class GesuchService {
 		return gesuchUpdate.getGesuchFormularToWorkWith()
 				.getPersonInAusbildung()
 				.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+	}
+
+	private boolean hasZivilstandChangedToOnePerson(Gesuch gesuch, GesuchUpdateDto gesuchUpdateDto) {
+		if (gesuch.getGesuchFormularToWorkWith() == null
+				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand() == null
+				|| gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				|| gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand() == null) {
+			return false;
+		}
+
+		return gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
+				!gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasPartnerschaft();
 	}
 
 	public List<GesuchDto> findAllWithPersonInAusbildung() {

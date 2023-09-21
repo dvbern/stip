@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -47,6 +48,7 @@ import java.util.Set;
 @EinnahmenKostenDarlehenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @AusbildungskostenStufeRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
+@PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
