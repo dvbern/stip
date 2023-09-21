@@ -168,7 +168,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
     @Override
     public Response getGesuche() {
-        return Response.ok(gesuchService.findAllWithFormularToWorkWith()).build();
+        return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
     }
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
