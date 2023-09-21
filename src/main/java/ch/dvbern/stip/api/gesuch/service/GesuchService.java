@@ -110,8 +110,8 @@ public class GesuchService {
 			return false;
 		}
 
-		return !gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasOnePerson() &&
-				gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasOnePerson();
+		return gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
+				!gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasPartnerschaft();
 	}
 
 	public List<GesuchDto> findAllWithFormularToWorkWith() {
