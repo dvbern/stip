@@ -811,6 +811,11 @@ components:
                     type: string
                 version:
                     type: string
+                allowedMimeTypes:
+                    description: ''
+                    type: array
+                    items:
+                        type: string
         Dokument:
             required:
                 - id
@@ -1713,7 +1718,7 @@ components:
                     description: Required nur wenn mind. ein Elternteil Alimente zahlt
                     type: number
                 zulagen:
-                    description: Required nur wenn die Person Kinder hat
+                    description: Required nur wenn mind. ein Kind gibt
                     type: number
                 renten:
                     description: Required nur wenn mind. ein Elternteil gestorben ist
