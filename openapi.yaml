@@ -1019,7 +1019,6 @@ components:
                 - nachname
                 - vorname
                 - geburtsdatum
-                - jahreseinkommen
                 - sozialversicherungsnummer
             type: object
             properties:
@@ -1030,14 +1029,23 @@ components:
                 geburtsdatum:
                     $ref: '#/components/schemas/LocalDate'
                     description: dd.MM.YYYY
-                jahreseinkommen:
-                    description: ''
-                    type: number
                 sozialversicherungsnummer:
                     description: ''
                     type: string
                 nachname:
                     type: string
+                ausbildungMitEinkommenOderErwerbstaetig:
+                    type: boolean
+                jahreseinkommen:
+                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    type: number
+                fahrkosten:
+                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    type: number
+                verpflegungskosten:
+                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    type: number
+
         KindUpdate:
             title: Root Type for Geschwister
             description: ''
