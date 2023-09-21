@@ -117,10 +117,6 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @Column(nullable = false)
-    private boolean kinder = true;
-
-    @NotNull
-    @Column(nullable = false)
     private boolean digitaleKommunikation = true;
 
     @NotNull

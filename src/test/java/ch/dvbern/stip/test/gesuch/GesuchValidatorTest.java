@@ -377,10 +377,13 @@ class GesuchValidatorTest {
 	@Test
 	void testGesuchEinreichenValidationEinnahmenKostenPersonInAusbildung() {
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
-		personInAusbildung.setKinder(true);
 		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		Kind kind = new Kind();
+		Set kindSet = new HashSet<Kind>();
+		kindSet.add(kind);
+		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
 		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
 		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);

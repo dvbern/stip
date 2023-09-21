@@ -8,9 +8,7 @@ public class EinnahmenKostenZulagenRequiredConstraintValidator implements Constr
 	public boolean isValid(
 			GesuchFormular gesuchFormular,
 			ConstraintValidatorContext constraintValidatorContext) {
-		if (gesuchFormular.getPersonInAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
-			return true;
-		} else if (gesuchFormular.getPersonInAusbildung().isKinder()) {
+		if (!gesuchFormular.getKinds().isEmpty()) {
 			return gesuchFormular.getEinnahmenKosten().getZulagen() != null;
 		}
 		return true;
