@@ -5,6 +5,7 @@ import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.test.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -75,6 +76,30 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(3)
+	void testUpdateGesuchEndpointAusbildung() {
+		var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.ACCEPTED.getStatusCode());
+	}
+
+	@Test
+	@TestAsSachbearbeiter
+	@Order(4)
+	void testDontFindGesuchWithNoPersonInAusbildung() {
+		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(GesuchDtoSpec[].class);
+
+		assertThat(gesuche.length, is(0));
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(5)
 	void testUpdateGesuchEndpointPersonInAusbildung() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -85,18 +110,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(4)
-	void testUpdateGesuchEndpointAusbildung() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
-		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.ACCEPTED.getStatusCode());
-	}
-
-	@Test
-	@TestAsGesuchsteller
-	@Order(5)
+	@Order(6)
 	void testUpdateGesuchEndpointFamiliensituation() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForFamiliensituation();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -107,7 +121,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(6)
+	@Order(7)
 	void testUpdateGesuchEndpointPartner() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForPartner();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -118,7 +132,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(7)
+	@Order(8)
 	void testUpdateGesuchEndpointAuszahlung() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForAuszahlung();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -129,7 +143,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(8)
+	@Order(9)
 	void testUpdateGesuchEndpointAddGeschwister() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -140,7 +154,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(9)
+	@Order(10)
 	void testUpdateGesuchEndpointUpdateGeschwister() {
 		var gesuch =
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
@@ -160,7 +174,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(10)
+	@Order(11)
 	void testUpdateGesuchAddLebenslaufEndpoint() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForLebenslaufBildungsart();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -171,7 +185,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(11)
+	@Order(12)
 	void testUpdateGesuchAddElternEndpoint() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForEltern();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -182,7 +196,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(12)
+	@Order(13)
 	void testUpdateGesuchEndpointAddEinnahmenKoster() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForEinnhamenKosten();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -193,7 +207,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(13)
+	@Order(14)
 	void testUpdateGesuchEndpointAddKind() {
 		var gesuchUpdatDTO = prepareGesuchUpdateForKind();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
@@ -204,7 +218,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(14)
+	@Order(15)
 	void testAllFormularPresent() {
 		var gesuch =
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
@@ -227,7 +241,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(15)
+	@Order(16)
 	void testGetGesucheForBenutzende() {
 		var gesuche = gesuchApiSpec.getGesucheForBenutzer()
 				.benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID)
@@ -241,7 +255,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(16)
+	@Order(17)
 	void test_get_gesuch_for_fall() {
 		var gesuche = gesuchApiSpec.getGesucheForFall()
 				.fallIdPath(TestConstants.FALL_TEST_ID)
@@ -255,7 +269,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(17)
+	@Order(18)
 	void testGesuchEinreichenValidationError() {
 		var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
@@ -284,7 +298,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(18)
+	@Order(19)
 	void testUpdateGeburtsdatumNotChangedPersonInAusbildung() {
 		var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
@@ -316,7 +330,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(19)
+	@Order(20)
 	void testUpdateChangedGeburtsdatumPersonInAusbildung() {
 		var gesuch =
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
@@ -348,7 +362,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(20)
+	@Order(21)
 	void testFindGesuche() {
 		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
 				.then()
@@ -367,7 +381,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(21)
+	@Order(22)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)
