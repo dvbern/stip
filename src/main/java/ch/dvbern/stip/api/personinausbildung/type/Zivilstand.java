@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.personinausbildung.type;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Zivilstand {
     LEDIG,
     VERHEIRATET,
@@ -26,8 +29,16 @@ public enum Zivilstand {
     AUFGELOESTE_PARTNERSCHAFT,
     VERWITWET;
 
-    public boolean hasOnePerson() {
-        return this == LEDIG || this == GESCHIEDEN_GERICHTLICH || this == AUFGELOESTE_PARTNERSCHAFT || this == VERWITWET;
+    public boolean hasPartnerschaft() {
+        return getZvilstandsWithPartnerschaft().contains(this);
+    }
+
+    public static List<Zivilstand> getZvilstandsNoPartnerschaft() {
+        return Arrays.asList(LEDIG, GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET);
+    }
+
+    public static List<Zivilstand> getZvilstandsWithPartnerschaft() {
+        return Arrays.asList(VERHEIRATET, KONKUBINAT, EINGETRAGENE_PARTNERSCHAFT);
     }
 
 }
