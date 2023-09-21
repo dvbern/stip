@@ -22,10 +22,12 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -63,6 +65,9 @@ public class GesuchService {
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(gesuch, gesuchUpdateDto)) {
 			gesuchUpdateDto.getGesuchFormularToWorkWith().setLebenslaufItems(new ArrayList<>());
 		}
+		if (hasAlimenteAufteilungChangedToBoth(gesuch, gesuchUpdateDto)) {
+			gesuchUpdateDto.getGesuchFormularToWorkWith().setElterns(new ArrayList<>());
+		}
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		if (gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten() != null && isPersonInAusbildungEigenerHaushalt) {
 			gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
@@ -76,15 +81,32 @@ public class GesuchService {
 		}
 	}
 
-	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
-		 if (gesuch.getGesuchFormularToWorkWith() == null
-				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
-				 || gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum() == null
-				 || gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
-			 return false;
-		 }
+	private boolean hasAlimenteAufteilungChangedToBoth(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
+		final GesuchFormular gesuchFormularToWorkWith = gesuch.getGesuchFormularToWorkWith();
+		final GesuchFormularUpdateDto gesuchUpdateFormularToWorkWith = gesuchUpdate.getGesuchFormularToWorkWith();
 
-		 return !gesuch.getGesuchFormularToWorkWith()
+		if (gesuchFormularToWorkWith == null || gesuchUpdateFormularToWorkWith == null) {
+			return false;
+		}
+
+		if (gesuchFormularToWorkWith.getFamiliensituation() == null
+				|| gesuchUpdateFormularToWorkWith.getFamiliensituation() == null) {
+			return false;
+		}
+
+		return gesuchFormularToWorkWith.getFamiliensituation().getWerZahltAlimente() != Elternschaftsteilung.GEMEINSAM &&
+				gesuchUpdateFormularToWorkWith.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
+	}
+
+	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(Gesuch gesuch, GesuchUpdateDto gesuchUpdate) {
+		if (gesuch.getGesuchFormularToWorkWith() == null
+				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() == null
+				|| gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum() == null
+				|| gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung() == null) {
+			return false;
+		}
+
+		return !gesuch.getGesuchFormularToWorkWith()
 				.getPersonInAusbildung()
 				.getGeburtsdatum()
 				.equals(gesuchUpdate.getGesuchFormularToWorkWith().getPersonInAusbildung().getGeburtsdatum());
@@ -114,8 +136,11 @@ public class GesuchService {
 				!gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().getZivilstand().hasPartnerschaft();
 	}
 
-	public List<GesuchDto> findAllWithFormularToWorkWith() {
-		return gesuchRepository.findAllWithFormularToWorkWith().map(gesuchMapper::toDto).toList();
+	public List<GesuchDto> findAllWithPersonInAusbildung() {
+		return gesuchRepository.findAllWithFormularToWorkWith()
+				.filter(gesuch -> gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() != null)
+				.map(gesuchMapper::toDto)
+				.toList();
 	}
 
 	@Transactional
@@ -154,10 +179,9 @@ public class GesuchService {
 			throw new ValidationsException(
 					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
 		}
-		if(gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0){
+		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0) {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
-		}
-		else {
+		} else {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
 		}
 	}
