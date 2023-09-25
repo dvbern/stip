@@ -36,7 +36,7 @@ public class FallRepository implements BaseRepository<Fall> {
 
 	public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
 		var queryFactory = new JPAQueryFactory(entityManager);
-		var fall = new QFall("fall");
+		var fall = QFall.fall;
 
 		var query = queryFactory
 				.select(fall)

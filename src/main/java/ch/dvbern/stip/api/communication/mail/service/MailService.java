@@ -24,20 +24,22 @@ public class MailService {
 
 	@CheckedTemplate
 	static class Templates {
-		private static native MailTemplateInstance gesuchNichtKomplettEingereicht_de(String vorname, String name);
 
-		private static native MailTemplateInstance gesuchNichtKomplettEingereicht_fr(String vorname, String name);
+		private Templates(){}
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtDe(String name, String vorname);
 
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_de(String vorname, String name);
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_fr(String vorname, String name);
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtFr(String name, String vorname);
+
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(String name, String vorname);
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(String name, String vorname);
 
 		public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
 				String name,
 				String vorname,
 				String language) {
 			return language.equals("fr") ?
-					gesuchNichtKomplettEingereicht_fr(name, vorname) :
-					gesuchNichtKomplettEingereicht_de(name, vorname);
+					gesuchNichtKomplettEingereichtFr(name, vorname) :
+					gesuchNichtKomplettEingereichtDe(name, vorname);
 		}
 
 		public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
@@ -45,8 +47,8 @@ public class MailService {
 				String vorname,
 				String language) {
 			return language.equals("fr") ?
-					gesuchNichtKomplettEingereichtNachfrist_fr(name, vorname) :
-					gesuchNichtKomplettEingereichtNachfrist_de(name, vorname);
+					gesuchNichtKomplettEingereichtNachfristFr(name, vorname) :
+					gesuchNichtKomplettEingereichtNachfristDe(name, vorname);
 		}
 	}
 

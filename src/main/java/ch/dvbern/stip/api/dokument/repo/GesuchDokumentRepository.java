@@ -21,7 +21,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
 	public Optional<GesuchDokument> findByGesuchAndDokumentType(UUID gesuchId, DokumentTyp dokumentTyp) {
 		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuchDokument = new QGesuchDokument("gesuchDokument");
+		var gesuchDokument = QGesuchDokument.gesuchDokument;
 		var query = queryFactory
 				.select(gesuchDokument)
 				.from(gesuchDokument)
@@ -32,7 +32,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
 	public Stream<GesuchDokument> findAllForGesuch(UUID gesuchId) {
 		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuchDokument = new QGesuchDokument("gesuchDokument");
+		var gesuchDokument = QGesuchDokument.gesuchDokument;
 
 		var query = queryFactory
 				.select(gesuchDokument)
