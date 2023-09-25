@@ -67,7 +67,7 @@ public class MailService {
 	}
 
 	public void sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email, Locale local) {
-		Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(vorname, name, local.getLanguage())
+		Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(name, vorname, local.getLanguage())
 				.to(email)
 				.subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(), local))
 				.send().subscribe().asCompletionStage();
