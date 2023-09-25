@@ -24,20 +24,22 @@ public class MailService {
 
 	@CheckedTemplate
 	static class Templates {
-		private static native MailTemplateInstance gesuchNichtKomplettEingereicht_de(String vorname, String name);
 
-		private static native MailTemplateInstance gesuchNichtKomplettEingereicht_fr(String vorname, String name);
+		private Templates(){}
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtDe(String name, String vorname);
 
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_de(String vorname, String name);
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfrist_fr(String vorname, String name);
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtFr(String name, String vorname);
+
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(String name, String vorname);
+		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(String name, String vorname);
 
 		public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
 				String name,
 				String vorname,
 				String language) {
 			return language.equals("fr") ?
-					gesuchNichtKomplettEingereicht_fr(name, vorname) :
-					gesuchNichtKomplettEingereicht_de(name, vorname);
+					gesuchNichtKomplettEingereichtFr(name, vorname) :
+					gesuchNichtKomplettEingereichtDe(name, vorname);
 		}
 
 		public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
@@ -45,8 +47,8 @@ public class MailService {
 				String vorname,
 				String language) {
 			return language.equals("fr") ?
-					gesuchNichtKomplettEingereichtNachfrist_fr(name, vorname) :
-					gesuchNichtKomplettEingereichtNachfrist_de(name, vorname);
+					gesuchNichtKomplettEingereichtNachfristFr(name, vorname) :
+					gesuchNichtKomplettEingereichtNachfristDe(name, vorname);
 		}
 	}
 
@@ -65,7 +67,7 @@ public class MailService {
 	}
 
 	public void sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email, Locale local) {
-		Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(vorname, name, local.getLanguage())
+		Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(name, vorname, local.getLanguage())
 				.to(email)
 				.subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(), local))
 				.send().subscribe().asCompletionStage();

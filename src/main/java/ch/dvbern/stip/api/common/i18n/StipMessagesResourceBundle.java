@@ -12,6 +12,9 @@ import static java.util.Objects.requireNonNull;
 
 public final class StipMessagesResourceBundle {
 
+	private StipMessagesResourceBundle() {
+	}
+
 	private static final String MESSAGE_BUNDLE_NAME = "messages";
 	private static final ResourceBundle BUNDLE_DE = ResourceBundle.getBundle(
 			MESSAGE_BUNDLE_NAME,
