@@ -134,7 +134,7 @@ class MailServiceTest {
 		actual.getSubject();
 		assertThat(actual.getSubject()).isNotBlank();
 		assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage());
-		assertThat(actual.getHtml().contains(TEST_EMAIL_DE_STRING)).isTrue();
+		assertThat(actual.getHtml()).contains(TEST_EMAIL_DE_STRING);
 
 		mailService.sendGesuchNichtKomplettEingereichtEmail("", "", TEST_EMAIL, Locale.FRENCH);
 		sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
@@ -143,7 +143,7 @@ class MailServiceTest {
 		actual.getSubject();
 		assertThat(actual.getSubject()).isNotBlank();
 		assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage());
-		assertThat(actual.getHtml().contains(TEST_EMAIL_DE_STRING)).isFalse();
+		assertThat(actual.getHtml()).doesNotContain(TEST_EMAIL_DE_STRING);
 	}
 
 	@Test
@@ -155,7 +155,7 @@ class MailServiceTest {
 		actual.getSubject();
 		assertThat(actual.getSubject()).isNotBlank();
 		assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage());
-		assertThat(actual.getHtml().contains(TEST_EMAIL_DE_STRING)).isTrue();
+		assertThat(actual.getHtml()).contains(TEST_EMAIL_DE_STRING);
 
 		mailService.sendGesuchNichtKomplettEingereichtNachfristEmail("", "", TEST_EMAIL, Locale.FRENCH);
 		sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
@@ -164,6 +164,6 @@ class MailServiceTest {
 		actual.getSubject();
 		assertThat(actual.getSubject()).isNotBlank();
 		assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage());
-		assertThat(actual.getHtml().contains(TEST_EMAIL_DE_STRING)).isFalse();
+		assertThat(actual.getHtml()).doesNotContain(TEST_EMAIL_DE_STRING);
 	}
 }

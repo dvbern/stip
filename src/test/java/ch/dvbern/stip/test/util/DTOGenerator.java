@@ -104,7 +104,7 @@ public class DTOGenerator {
 		partner.setNachname("Testname");
 		partner.setVorname("Testvorname");
 		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID);
-		partner.setJahreseinkommen(new BigDecimal(100000));
+		partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
 		gesuchformularToWorkWith.setPartner(partner);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;

@@ -19,7 +19,7 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
 
     public Stream<Gesuchsperiode> findAllActiveForDate(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuchsperiode = new QGesuchsperiode("gesuchsperiode");
+        var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
         var query = queryFactory
                 .select(gesuchsperiode)

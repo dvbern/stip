@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.partner.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
 
 @Audited
+@AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint
+@AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_partner_adresse_id", columnList = "adresse_id"),
@@ -32,5 +35,17 @@ public class Partner extends AbstractPerson {
 
     @NotNull
     @Column(nullable = false)
+    private boolean ausbildungMitEinkommenOderErwerbstaetig = false;
+
+    @Nullable
+    @Column(nullable = true)
     private BigDecimal jahreseinkommen;
+
+    @Nullable
+    @Column(nullable = true)
+    private BigDecimal verpflegungskosten;
+
+    @Nullable
+    @Column(nullable = true)
+    private BigDecimal fahrkosten;
 }
