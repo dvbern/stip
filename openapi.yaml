@@ -1735,7 +1735,6 @@ components:
                     $ref: '#/components/schemas/EinnahmenKostenUpdate'
         AusbildungUpdate:
             required:
-                - ausbildungsland
                 - fachrichtung
                 - ausbildungBegin
                 - ausbildungEnd
