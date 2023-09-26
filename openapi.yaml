@@ -734,10 +734,41 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: createAusbildungsgang
             summary: Creates a new Ausbildungsgang
+    '/gesuch/{gesuchId}/nachfrist':
+        patch:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '201':
+                    description: Gesuch Nachfrist erfolgreich vergeben
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: gesuchNachfristBeantragen
+            summary: Einen Nachfrist von 30 Tagen beantragen fuer die Einreichung von Dokumenten
     '/ausbildungsstaette/{ausbildungsstaetteId}':
         get:
             tags:
                 - Ausbildungsstaette
+            parameters:
+                -
+                    name: ausbildungsstaetteId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
             responses:
                 '200':
                     content:
@@ -755,13 +786,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsstaette
             summary: returns a Ausbildungsstaette with the given id
-        parameters:
-            -
-                name: ausbildungsstaetteId
-                schema:
-                    $ref: '#/components/schemas/UUID'
-                in: path
-                required: true
 components:
     schemas:
         Anrede:
@@ -802,6 +826,9 @@ components:
             enum:
                 - OFFEN
                 - IN_BEARBEITUNG
+                - EINGEREICHT
+                - NICHT_KOMPLETT_EINGEREICHT
+                - NICHT_KOMPLETT_EINGEREICHT_NACHFRIST
             type: string
         LocalDate:
             format: date
@@ -852,6 +879,11 @@ components:
                     type: string
                 version:
                     type: string
+                allowedMimeTypes:
+                    description: ''
+                    type: array
+                    items:
+                        type: string
         Dokument:
             required:
                 - id
@@ -1017,7 +1049,6 @@ components:
                 - nachname
                 - vorname
                 - geburtsdatum
-                - jahreseinkommen
                 - sozialversicherungsnummer
             type: object
             properties:
@@ -1028,14 +1059,23 @@ components:
                 geburtsdatum:
                     $ref: '#/components/schemas/LocalDate'
                     description: dd.MM.YYYY
-                jahreseinkommen:
-                    description: ''
-                    type: number
                 sozialversicherungsnummer:
                     description: ''
                     type: string
                 nachname:
                     type: string
+                ausbildungMitEinkommenOderErwerbstaetig:
+                    type: boolean
+                jahreseinkommen:
+                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    type: number
+                fahrkosten:
+                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    type: number
+                verpflegungskosten:
+                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    type: number
+
         KindUpdate:
             title: Root Type for Geschwister
             description: ''
@@ -1698,7 +1738,7 @@ components:
                     description: Required nur wenn mind. ein Elternteil Alimente zahlt
                     type: number
                 zulagen:
-                    description: Required nur wenn die Person Kinder hat
+                    description: Required nur wenn mind. ein Kind gibt
                     type: number
                 renten:
                     description: Required nur wenn mind. ein Elternteil gestorben ist
@@ -1726,6 +1766,9 @@ components:
                 willDarlehen:
                     description: Required nur wenn volljährig
                     type: boolean
+                auswaertigeMittagessenProWoche:
+                    description: Required nur wenn die Person keinen eigenen Haushalt führt
+                    type: integer
         EinnahmenKosten:
             type: object
             allOf:
