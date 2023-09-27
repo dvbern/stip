@@ -7,7 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 
 public class DTOGenerator {
 
@@ -44,7 +45,7 @@ public class DTOGenerator {
 		personInAusbildung.setKorrespondenzSprache(SpracheDtoSpec.DEUTSCH);
 		personInAusbildung.setSozialhilfebeitraege(false);
 		personInAusbildung.setZivilstand(ZivilstandDtoSpec.LEDIG);
-		personInAusbildung.setSozialversicherungsnummer(AHV_NUMMER_VALID);
+		personInAusbildung.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
 		personInAusbildung.setQuellenbesteuert(false);
 		personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
 		personInAusbildung.setHeimatort("Bern");
@@ -105,7 +106,7 @@ public class DTOGenerator {
 		partner.setGeburtsdatum(LocalDate.of(2002, 12, 1));
 		partner.setNachname("Testname");
 		partner.setVorname("Testvorname");
-		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID);
+		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
 		partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
 		gesuchformularToWorkWith.setPartner(partner);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
@@ -167,8 +168,12 @@ public class DTOGenerator {
 		eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
 		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
 		eltern.setSozialhilfebeitraegeAusbezahlt(false);
-		eltern.setSozialversicherungsnummer(AHV_NUMMER_VALID);
+		eltern.setSozialversicherungsnummer(getAHVNummerForElternTyp(elternTypDtoSpec));
 		return eltern;
+	}
+
+	private static String getAHVNummerForElternTyp(ElternTypDtoSpec elternTyp) {
+		return elternTyp == ElternTypDtoSpec.MUTTER ? TestConstants.AHV_NUMMER_VALID_MUTTER : TestConstants.AHV_NUMMER_VALID_VATTER;
 	}
 
 	public static GesuchUpdateDtoSpec prepareGesuchUpdateForKind() {
