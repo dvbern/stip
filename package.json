@@ -22,10 +22,6 @@
     "branches": [
       "main",
       {
-        "name": "beta",
-        "prerelease": true
-      },
-      {
         "name": "feature/*",
         "prerelease": "SNAPSHOT"
       }
