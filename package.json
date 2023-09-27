@@ -1,6 +1,6 @@
 {
   "name": "@kibon/stip-contract",
-  "version": "1.0.0",
+  "version": "1.19.0",
   "description": "OpenAPI Contract",
   "repository": {
     "type": "git",
@@ -45,10 +45,15 @@
         }
       ],
       [
-        "@semantic-release/git", {
-      "assets": ["package.json", "package-lock.json", "pom.xml"],
-      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-    }
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "pom.xml"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
       ]
     ]
   }
