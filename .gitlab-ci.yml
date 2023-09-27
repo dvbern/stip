@@ -41,7 +41,7 @@ include:
       registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       environment: dev
       image-names: "api"
-      version: "latest"
+      version: "$VERSION"
       review-apps-enabled: "false"
     rules:
       - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
