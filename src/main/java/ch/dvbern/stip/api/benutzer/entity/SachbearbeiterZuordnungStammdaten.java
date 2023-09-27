@@ -25,10 +25,10 @@ import org.hibernate.envers.Audited;
 public class SachbearbeiterZuordnungStammdaten extends AbstractMandantEntity {
 
 	@Column
-	private String nachname;
+	private String buchstabenDe;
 
 	@Column
-	private String vorname;
+	private String buchstabenFr;
 
 	@NotNull
 	@OneToOne(optional = false, fetch = FetchType.LAZY, orphanRemoval = false)
