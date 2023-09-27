@@ -26,11 +26,6 @@ import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 
 public final class GesuchGenerator {
 
-    public static final String AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG = "756.1111.1113.11";
-    public static final String AHV_NUMMER_VALID_MUTTER = "756.1111.1111.13";
-    public static final String AHV_NUMMER_VALID_VATTER = "756.1111.1114.10";
-    public static final String AHV_NUMMER_VALID_PARTNER = "756.1111.1112.12";
-
     private GesuchGenerator() {
     }
 
@@ -75,7 +70,7 @@ public final class GesuchGenerator {
     }
 
     private static String getAHVNummerForElternTyp(ElternTyp elternTyp) {
-        return elternTyp == ElternTyp.MUTTER ? AHV_NUMMER_VALID_MUTTER : AHV_NUMMER_VALID_VATTER;
+        return elternTyp == ElternTyp.MUTTER ? TestConstants.AHV_NUMMER_VALID_MUTTER : TestConstants.AHV_NUMMER_VALID_VATTER;
     }
 
     public static Partner createPartner() {
@@ -84,7 +79,7 @@ public final class GesuchGenerator {
                 .setAdresse(createAdresse())
                 .setJahreseinkommen(BigDecimal.valueOf(50000))
                 .setVerpflegungskosten(BigDecimal.valueOf(700))
-                .setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
+                .setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_PARTNER);
         partner.setGeburtsdatum(LocalDate.of(1999,1,1));
         partner.setNachname("Nachname");
         partner.setVorname("vorname");
@@ -102,7 +97,7 @@ public final class GesuchGenerator {
                 .setIdentischerZivilrechtlicherWohnsitz(true)
                 .setKorrespondenzSprache(DEUTSCH)
                 .setSozialhilfebeitraege(false)
-                .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG)
+                .setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG)
                 .setQuellenbesteuert(false)
                 .setHeimatort("Bern");
 
