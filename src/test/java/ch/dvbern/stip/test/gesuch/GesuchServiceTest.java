@@ -3,10 +3,10 @@ package ch.dvbern.stip.test.gesuch;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.test.mapper.GesuchTestMapper;
 import ch.dvbern.stip.test.util.GesuchGenerator;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,6 +26,9 @@ class GesuchServiceTest {
 
 	@Inject
 	GesuchService gesuchService;
+
+	@Inject
+	GesuchMapper gesuchMapper;
 
 	@InjectMock
 	GesuchRepository gesuchRepository;
@@ -179,7 +182,7 @@ class GesuchServiceTest {
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setWerZahltAlimente(from);
 
-		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		GesuchUpdateDto gesuchUpdateDto = gesuchMapper.toGesuchUpdateDto(gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setWerZahltAlimente(to);
 
 		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -190,7 +193,7 @@ class GesuchServiceTest {
 	private void updateFromZivilstandToZivilstand(Gesuch gesuch, Zivilstand from, Zivilstand to) {
 		gesuch.getGesuchFormularToWorkWith().setPartner(GesuchGenerator.createPartner());
 		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(from);
-		final GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		final GesuchUpdateDto gesuchUpdateDto = gesuchMapper.toGesuchUpdateDto(gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(to);
 		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
