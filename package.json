@@ -22,8 +22,8 @@
     "branches": [
       "main",
       {
-        "name": "feature/*",
-        "prerelease": "SNAPSHOT"
+        "name": "beta",
+        "prerelease": true
       }
     ],
     "plugins": [
