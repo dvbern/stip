@@ -1,5 +1,8 @@
 package ch.dvbern.stip.test.util;
 
+import ch.dvbern.stip.api.common.entity.DateRange;
+
+import java.time.LocalDate;
 import java.util.UUID;
 
 public final class TestConstants {
@@ -18,4 +21,7 @@ public final class TestConstants {
 	public static final String TEST_XML_FILE_LOCATION = "./src/test/resources/testUpload.xml";
 
 	public static final String AHV_NUMMER_VALID = "756.9217.0769.85";
+
+	public static final DateRange GUELTIGKEIT_PERIODE_23_24 =
+			new DateRange(LocalDate.of(2023, 8, 1), LocalDate.of(2024, 7, 31));
 }
