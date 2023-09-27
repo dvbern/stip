@@ -4,7 +4,7 @@ import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
-import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.Assertions;
@@ -49,10 +49,10 @@ class LebenslaufItemMapperTest {
 
 	private LebenslaufItemUpdateDto prepareData() {
 		var lebenslaufItem = new LebenslaufItemUpdateDto();
-		lebenslaufItem.setBeschreibung("Test");
+		lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BERUFSVORBEREITENDES_SCHULJAHR);
 		lebenslaufItem.setBis("02.2022");
 		lebenslaufItem.setVon("01.2022");
-		lebenslaufItem.setBildungsart(Bildungsart.FACHHOCHSCHULEN);
+		lebenslaufItem.setFachrichtung("Informatik");
 		lebenslaufItem.setWohnsitz(WohnsitzKanton.BE);
 		return lebenslaufItem;
 	}

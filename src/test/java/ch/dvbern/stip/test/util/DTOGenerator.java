@@ -15,10 +15,10 @@ public class DTOGenerator {
 		var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
 		var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
 		var lebenslaufItem = new LebenslaufItemUpdateDtoSpec();
-		lebenslaufItem.setBeschreibung("Test");
 		lebenslaufItem.setBis("02.2022");
 		lebenslaufItem.setVon("01.2022");
-		lebenslaufItem.setBildungsart(BildungsartDtoSpec.FACHHOCHSCHULEN);
+		lebenslaufItem.setBildungsart(LebenslaufAusbildungsArtDtoSpec.GYMNASIALE_MATURITAETSSCHULEN);
+		lebenslaufItem.setAusbildungAbgeschlossen(false);
 		lebenslaufItem.setWohnsitz(WohnsitzKantonDtoSpec.BE);
 		gesuchformularToWorkWith.setLebenslaufItems(new ArrayList<>());
 		gesuchformularToWorkWith.getLebenslaufItems().add(lebenslaufItem);
@@ -106,7 +106,6 @@ public class DTOGenerator {
 		partner.setNachname("Testname");
 		partner.setVorname("Testvorname");
 		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID);
-		partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
 		gesuchformularToWorkWith.setPartner(partner);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;

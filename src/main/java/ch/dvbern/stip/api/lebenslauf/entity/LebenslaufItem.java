@@ -1,12 +1,11 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -14,7 +13,6 @@ import org.hibernate.envers.Audited;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint
@@ -28,17 +26,7 @@ public class LebenslaufItem extends AbstractMandantEntity {
 
 	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)
-	private Bildungsart bildungsart;
-
-
-	@Column(nullable = true)
-	@Enumerated(EnumType.STRING)
-	private Taetigskeitsart taetigskeitsart;
-
-	@NotNull
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String beschreibung;
+	private LebenslaufAusbildungsArt bildungsart;
 
 	@NotNull
 	@Column(nullable = false)
@@ -47,6 +35,26 @@ public class LebenslaufItem extends AbstractMandantEntity {
 	@NotNull
 	@Column(nullable = false)
 	private LocalDate bis;
+
+
+	@Column(nullable = true)
+	@Enumerated(EnumType.STRING)
+	private Taetigskeitsart taetigskeitsart;
+
+	@Column(nullable = true)
+	private String taetigkeitsBeschreibung;
+
+	@Column(nullable = true)
+	private String berufsbezeichnung;
+
+	@Column(nullable = true)
+	private String fachrichtung;
+
+	@Column(nullable = true)
+	private String titelDesAbschlusses;
+
+	@Column(nullable = false)
+	private boolean ausbildungAbgeschlossen = false;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)

@@ -426,7 +426,8 @@
                 Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
                 Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                 Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
-                WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton
+                WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
+                LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
               </schemaMappings>
               <addCompileSourceRoot>true</addCompileSourceRoot>
               <configOptions>
