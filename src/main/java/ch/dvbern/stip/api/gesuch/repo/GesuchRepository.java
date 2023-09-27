@@ -19,7 +19,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
 	public Stream<Gesuch> findAllForBenutzer(UUID benutzerId) {
 		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuch = new QGesuch("gesuch");
+		var gesuch = QGesuch.gesuch;
 
 		var query = queryFactory
 				.select(gesuch)
@@ -30,7 +30,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
 	public Stream<Gesuch> findAllForFall(UUID fallId) {
 		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuch = new QGesuch("gesuch");
+		var gesuch = QGesuch.gesuch;
 
 		var query = queryFactory
 				.select(gesuch)
@@ -41,7 +41,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
 	public Stream<Gesuch> findAllWithFormularToWorkWith() {
 		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuch = new QGesuch("gesuch");
+		var gesuch = QGesuch.gesuch;
 
 		return queryFactory
 				.select(gesuch)

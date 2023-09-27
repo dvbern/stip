@@ -3,6 +3,7 @@ package ch.dvbern.stip.test.gesuch;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -18,10 +19,10 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.validation.ConstraintViolation;
@@ -37,7 +38,7 @@ import java.util.Set;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 @RequiredArgsConstructor
@@ -343,6 +344,7 @@ class GesuchValidatorTest {
 		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
+		personInAusbildung.setZivilstand(Zivilstand.LEDIG);
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
 		Ausbildung ausbildung = new Ausbildung();
 		ausbildung.setAusbildungBegin(LocalDate.of(2024, 01, 01));
@@ -380,6 +382,7 @@ class GesuchValidatorTest {
 		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
 		Gesuch gesuch = prepareDummyGesuch();
 		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		personInAusbildung.setZivilstand(Zivilstand.LEDIG);
 		Kind kind = new Kind();
 		Set kindSet = new HashSet<Kind>();
 		kindSet.add(kind);

@@ -54,8 +54,7 @@ public class GesuchStatusConfigProducer {
 					"State Transition args sollte einen Gesuch Objekt enthalten, es gibt einen Problem in die "
 							+ "Statemachine args");
 		}
-		Gesuch gesuch = (Gesuch) args[0];
-		return gesuch;
+		return (Gesuch) args[0];
 	}
 
 	private void sendGesuchNichtKomplettEingereichtEmail(

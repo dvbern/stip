@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StipMessagesResourceBundleTest {
+class StipMessagesResourceBundleTest {
 	@Test
 	void stipMessagesResourceBundleTest() {
 		String a = StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), Locale.GERMAN);

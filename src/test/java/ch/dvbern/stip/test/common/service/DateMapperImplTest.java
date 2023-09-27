@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.common.util;
+package ch.dvbern.stip.test.common.service;
 
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 
-class DateUtilTest {
+class DateMapperImplTest {
 
     private static final String MONTH_YEAR = "10.2023";
     DateMapperImpl dateMapperImpl = new DateMapperImpl();
