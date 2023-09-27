@@ -24,6 +24,10 @@
       {
         "name": "beta",
         "prerelease": true
+      },
+      {
+        "name": "feature/*",
+        "prerelease": "SNAPSHOT"
       }
     ],
     "plugins": [
