@@ -15,6 +15,7 @@
   "devDependencies": {
     "@dvblibs/maven-semantic-release-plugin": "^1.0.3",
     "@semantic-release/gitlab": "^12.0.4",
+    "@semantic-release/git": "^10.0.1",
     "semantic-release": "^21.0.7",
     "semantic-release-maven": "^1.1.7"
   },
