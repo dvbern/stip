@@ -27,6 +27,20 @@ release:
       - pom.xml
       - 'modules/**/pom.xml'
 
+npm:preview:
+  stage: publish
+  image: node:lts
+  tags: [ "zone:tz", "type:docker", "os:linux" ]
+  script:
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - npm version prerelease --preid ${CI_COMMIT_BRANCH_SLUG} --no-git-tag-version
+    - npm publish
+  rules:
+    - if: $CI_PIPLINE_SOURCE == "merge_request_event"
+  needs:
+    - job: release
+      artifacts: true
+
 npm:
   stage: publish
   image: node:lts
