@@ -16,6 +16,9 @@ import java.util.UUID;
 
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint
+@LebenslaufItemAusbildungBerufsbezeichnungConstraint
+@LebenslaufItemAusbildungFachrichtungConstraint
+@LebenslaufItemAusbildungTitelDesAbschlussesConstraint
 @Entity
 @Table(indexes = {
 		@Index(name = "IX_lebenslauf_item_mandant", columnList = "mandant")

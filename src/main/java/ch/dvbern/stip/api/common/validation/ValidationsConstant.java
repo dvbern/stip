@@ -52,6 +52,12 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.obhut.berechnung.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE =
 			"{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_BERUFSBEZEICHNUNG_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.berufsbezeichnung.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.titelDesAbschlusses.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE =
 			"{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
 	public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
