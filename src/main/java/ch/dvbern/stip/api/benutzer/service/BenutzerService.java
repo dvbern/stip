@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.benutzer.service;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
+import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,10 +39,24 @@ public class BenutzerService {
         if (keycloakId == null) {
             throw new BadRequestException(); // TODO: use error handling
         }
-
-        return benutzerRepository
+        Benutzer benutzer = benutzerRepository
                 .findByKeycloakId(keycloakId)
                 .orElseGet(this::createBenutzerFromJWT);
+        benutzer = updateBenutzerTypFromJWT(benutzer, jsonWebToken);
+
+        return benutzer;
+    }
+
+    @Transactional
+    public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer, JsonWebToken jsonWebToken) {
+        HashSet<String> group = jsonWebToken.getClaim(Claims.groups);
+        String groupOnly = group.iterator().next().toUpperCase();
+        if(benutzer.getBenutzerTyp().name() != groupOnly) {
+            benutzer = benutzerRepository.findById(benutzer.getId());
+            benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
+            benutzerRepository.persist(benutzer);
+        }
+        return benutzer;
     }
 
     @Transactional

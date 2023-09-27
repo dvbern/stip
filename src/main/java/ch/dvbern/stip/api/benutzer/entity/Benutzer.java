@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.benutzer.entity;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
+import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
@@ -44,4 +45,9 @@ public class Benutzer extends AbstractMandantEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BenutzerStatus benutzerStatus;
+
+    @NotNull
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BenutzerTyp benutzerTyp = BenutzerTyp.GESUCHSTELLER;
 }
