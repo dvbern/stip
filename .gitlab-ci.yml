@@ -22,7 +22,6 @@ include:
     inputs:
       sonar-scanner: maven
       sonar-project-key: kibon_stip-api_AYkrwku6SZqri_oH9Xle
-      context-dir: api
 
   - component: 'gitlab.dvbern.ch/components/buildah@v0.2.0'
     inputs:
