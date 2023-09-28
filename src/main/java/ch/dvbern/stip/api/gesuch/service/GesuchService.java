@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.gesuch.service;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
@@ -132,16 +134,43 @@ public class GesuchService {
 		if (hasGeburtsdatumOfPersonInAusbildungChanged(toUpdate, update)) {
 			update.setLebenslaufItems(new ArrayList<>());
 		}
-		if (hasAlimenteAufteilungChangedToBoth(toUpdate, update)) {
-			update.setElterns(new ArrayList<>());
-		}
 
 		if (hasZivilstandChangedToOnePerson(toUpdate, update)) {
 			toUpdate.setPartner(null);
 			update.setPartner(null);
 		}
-
 		resetAuswaertigesMittagessen(toUpdate, update);
+		resetEltern(toUpdate, update);
+	}
+
+	private void resetEltern(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+		if (update.getElterns() == null) {
+			return;
+		}
+
+		if (hasAlimenteAufteilungChangedToBoth(toUpdate, update)) {
+			update.setElterns(new ArrayList<>());
+			return;
+		}
+
+		if (isElternteilVerstorbenOrUnbekannt(update)) {
+			resetVerstorbenOrUnbekannteElternteile(update);
+		}
+	}
+
+	private boolean isElternteilVerstorbenOrUnbekannt(GesuchFormularUpdateDto update) {
+		return update.getFamiliensituation() != null
+				&& Boolean.TRUE.equals(update.getFamiliensituation().getElternteilUnbekanntVerstorben());
+	}
+
+	private void resetVerstorbenOrUnbekannteElternteile(GesuchFormularUpdateDto update) {
+		if (update.getFamiliensituation().getMutterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
+			update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER);
+		}
+
+		if (update.getFamiliensituation().getVaterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
+			update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.VATER);
+		}
 	}
 
 	private void resetAuswaertigesMittagessen(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
