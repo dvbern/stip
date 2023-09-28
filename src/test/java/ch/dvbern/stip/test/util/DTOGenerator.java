@@ -1,6 +1,8 @@
 package ch.dvbern.stip.test.util;
 
 import ch.dvbern.oss.stip.contract.test.dto.*;
+import ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator;
+import org.instancio.Instancio;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -8,7 +10,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
-import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 
 public class DTOGenerator {
 
@@ -27,32 +28,7 @@ public class DTOGenerator {
 		return gesuchUpdatDTO;
 	}
 
-	public static GesuchUpdateDtoSpec prepareGesuchUpdateForPersonInAusbildung() {
-		var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
-		var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
-		var personInAusbildung = new PersonInAusbildungUpdateDtoSpec();
-		var adresseDTO = prepareAdresseUpdate();
-		personInAusbildung.setAdresse(adresseDTO);
-		personInAusbildung.setAnrede(AnredeDtoSpec.HERR);
-		personInAusbildung.setEmail("test@test.ch");
-		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 10, 10));
-		personInAusbildung.setNachname("Tester");
-		personInAusbildung.setVorname("Prosper");
-		personInAusbildung.setNationalitaet(LandDtoSpec.CH);
-		personInAusbildung.setTelefonnummer("078 888 88 88");
-		personInAusbildung.setDigitaleKommunikation(true);
-		personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
-		personInAusbildung.setKorrespondenzSprache(SpracheDtoSpec.DEUTSCH);
-		personInAusbildung.setSozialhilfebeitraege(false);
-		personInAusbildung.setZivilstand(ZivilstandDtoSpec.LEDIG);
-		personInAusbildung.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
-		personInAusbildung.setQuellenbesteuert(false);
-		personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
-		personInAusbildung.setHeimatort("Bern");
-		gesuchformularToWorkWith.setPersonInAusbildung(personInAusbildung);
-		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
-		return gesuchUpdatDTO;
-	}
+
 
 	public static AdresseDtoSpec prepareAdresseUpdate() {
 		var adresseDTO = new AdresseDtoSpec();
@@ -210,7 +186,7 @@ public class DTOGenerator {
 	public static GesuchUpdateDtoSpec prepareGesuchUpdateVollstaendigt() {
 		var gesuchUpdatDTO = new GesuchUpdateDtoSpec();
 		var gesuchformularToWorkWith = new GesuchFormularUpdateDtoSpec();
-		gesuchformularToWorkWith.setPersonInAusbildung(prepareGesuchUpdateForPersonInAusbildung().getGesuchFormularToWorkWith().getPersonInAusbildung());
+		gesuchformularToWorkWith.setPersonInAusbildung(Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create().getGesuchFormularToWorkWith().getPersonInAusbildung());
 		gesuchformularToWorkWith.setAusbildung(prepareGesuchUpdateForAusbildung().getGesuchFormularToWorkWith().getAusbildung());
 		gesuchformularToWorkWith.setFamiliensituation(prepareGesuchUpdateForFamiliensituation().getGesuchFormularToWorkWith().getFamiliensituation());
 		gesuchformularToWorkWith.setEinnahmenKosten(prepareGesuchUpdateForEinnhamenKosten().getGesuchFormularToWorkWith().getEinnahmenKosten());

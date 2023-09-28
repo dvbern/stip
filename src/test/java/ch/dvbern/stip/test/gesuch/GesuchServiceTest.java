@@ -165,7 +165,6 @@ class GesuchServiceTest {
 		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), Matchers.is(anzahlElternBevoreUpdate));
 	}
 
-
 	@Test
 	void noResetElternDataIfChangeToEltrenschaftAufteilungNotGemeinsam() {
 		for (var elternschaftsteilung : Elternschaftsteilung.values()) {
@@ -188,7 +187,6 @@ class GesuchServiceTest {
 		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 		gesuchService.updateGesuch(any(), gesuchUpdateDto);
 	}
-
 
 	private void updateFromZivilstandToZivilstand(Gesuch gesuch, Zivilstand from, Zivilstand to) {
 		gesuch.getGesuchFormularToWorkWith().setPartner(GesuchGenerator.createPartner());

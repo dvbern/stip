@@ -6,6 +6,7 @@ import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -16,6 +17,7 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
@@ -48,7 +50,6 @@ class GesuchResourceTest {
 		var gesuchDTO = new GesuchCreateDtoSpec();
 		gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
 		gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
-
 		var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
 				.then();
 
@@ -77,7 +78,7 @@ class GesuchResourceTest {
 	@TestAsGesuchsteller
 	@Order(3)
 	void testUpdateGesuchEndpointAusbildung() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForAusbildung();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildungModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -101,7 +102,7 @@ class GesuchResourceTest {
 	@TestAsGesuchsteller
 	@Order(5)
 	void testUpdateGesuchEndpointPersonInAusbildung() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -112,7 +113,7 @@ class GesuchResourceTest {
 	@TestAsGesuchsteller
 	@Order(6)
 	void testUpdateGesuchEndpointFamiliensituation() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForFamiliensituation();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituationModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -123,7 +124,7 @@ class GesuchResourceTest {
 	@TestAsGesuchsteller
 	@Order(7)
 	void testUpdateGesuchEndpointPartner() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForPartner();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartnerModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -134,7 +135,7 @@ class GesuchResourceTest {
 	@TestAsGesuchsteller
 	@Order(8)
 	void testUpdateGesuchEndpointAuszahlung() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForAuszahlung();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlungModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -145,7 +146,7 @@ class GesuchResourceTest {
 	@TestAsGesuchsteller
 	@Order(9)
 	void testUpdateGesuchEndpointAddGeschwister() {
-		var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -160,7 +161,7 @@ class GesuchResourceTest {
 				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
 						.body()
 						.as(GesuchDtoSpec.class);
-		var gesuchUpdatDTO = prepareGesuchUpdateForGeschwister();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
 		gesuchUpdatDTO.getGesuchFormularToWorkWith()
 				.getGeschwisters()
 				.get(0)
@@ -311,9 +312,11 @@ class GesuchResourceTest {
 		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
 		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
 
-		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
+		var gesuchUpdatDTO =  Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
 		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().setId(
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().getId());
+		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().setGeburtsdatum(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung()
+				.getGeburtsdatum());
 
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
@@ -339,7 +342,7 @@ class GesuchResourceTest {
 		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
 		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
 		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
-		var gesuchUpdatDTO = prepareGesuchUpdateForPersonInAusbildung();
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
 		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().setId(
 				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().getId());
 
