@@ -3,9 +3,11 @@ package ch.dvbern.stip.test.generator.api.model;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.PartnerDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.PartnerUpdateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
+import static ch.dvbern.stip.test.generator.api.model.AdresseSpecModel.adresseSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 import static org.instancio.Select.field;
 
@@ -13,10 +15,12 @@ public final class PartnerUpdateDtoSpecModel {
 
 	public static final Model<PartnerUpdateDtoSpec> partnerUpdateDtoSpecModel =
 			Instancio.of(PartnerUpdateDtoSpec.class)
-					.set(field(PartnerDtoSpec::getSozialversicherungsnummer), AHV_NUMMER_VALID_PARTNER)
+					.set(field(PartnerUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
+					.set(field(PartnerUpdateDtoSpec::getSozialversicherungsnummer), AHV_NUMMER_VALID_PARTNER)
+					.set(field(PartnerUpdateDtoSpec::getAusbildungMitEinkommenOderErwerbstaetig), true)
 					.toModel();
 
-	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecAusbildungModel =
+	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecPartnerModel =
 			Instancio.of(
 							GesuchFormularUpdateDtoSpec.class)
 					.set(

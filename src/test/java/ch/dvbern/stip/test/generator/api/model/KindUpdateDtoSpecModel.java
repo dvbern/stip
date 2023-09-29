@@ -3,9 +3,8 @@ package ch.dvbern.stip.test.generator.api.model;
 import java.math.BigDecimal;
 import java.util.List;
 
-import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.KindUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.WohnsitzDtoSpec;
 import org.instancio.Assign;
 import org.instancio.Instancio;
@@ -13,26 +12,25 @@ import org.instancio.Model;
 
 import static org.instancio.Select.field;
 
-public final class GeschwisterUpdateDtoSpecModel {
-
-	public static final Model<List<GeschwisterUpdateDtoSpec>> geschwisterUpdateDtoSpecModel =
-			Instancio.ofList(GeschwisterUpdateDtoSpec.class).size(1)
-					.ignore(field(GeschwisterUpdateDtoSpec::getId))
-					.set(field(GeschwisterUpdateDtoSpec::getWohnsitz), WohnsitzDtoSpec.MUTTER_VATER)
+public class KindUpdateDtoSpecModel {
+	public static final Model<List<KindUpdateDtoSpec>> kinderUpdateDtoSpecModel =
+			Instancio.ofList(KindUpdateDtoSpec.class).size(1)
+					.ignore(field(KindUpdateDtoSpec::getId))
+					.set(field(KindUpdateDtoSpec::getWohnsitz), WohnsitzDtoSpec.MUTTER_VATER)
 					.generate(
-							field(GeschwisterUpdateDtoSpec::getWohnsitzAnteilMutter),
+							field(KindUpdateDtoSpec::getWohnsitzAnteilMutter),
 							gen -> gen.ints().range(0, 100).as(BigDecimal::valueOf))
-					.assign(Assign.valueOf(GeschwisterUpdateDtoSpec::getWohnsitzAnteilMutter)
-							.to(GeschwisterUpdateDtoSpec::getWohnsitzAnteilVater)
+					.assign(Assign.valueOf(KindUpdateDtoSpec::getWohnsitzAnteilMutter)
+							.to(KindUpdateDtoSpec::getWohnsitzAnteilVater)
 							.as((BigDecimal i) -> BigDecimal.valueOf(100).subtract(i)))
 					.toModel();
 
-	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecGeschwistersModel =
+	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecKinderModel =
 			Instancio.of(
 							GesuchFormularUpdateDtoSpec.class)
 					.set(
-							field(GesuchFormularUpdateDtoSpec::getGeschwisters),
-							Instancio.create(geschwisterUpdateDtoSpecModel))
+							field(GesuchFormularUpdateDtoSpec::getKinds),
+							Instancio.create(kinderUpdateDtoSpecModel))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getFamiliensituation))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getElterns))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getAuszahlung))
@@ -40,7 +38,7 @@ public final class GeschwisterUpdateDtoSpecModel {
 					.ignore(field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getAusbildung))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung))
-					.ignore(field(GesuchFormularUpdateDtoSpec::getKinds))
+					.ignore(field(GesuchFormularUpdateDtoSpec::getGeschwisters))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getPartner))
 					.toModel();
 }
