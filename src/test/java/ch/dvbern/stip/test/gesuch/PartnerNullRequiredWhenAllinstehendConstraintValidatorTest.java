@@ -5,7 +5,11 @@ import ch.dvbern.stip.api.gesuch.entity.PartnerNullRequiredWhenAlleinstehendCons
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
+import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +40,7 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 	void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNullShouldNotBeValid() {
 		Zivilstand.getZvilstandsWithPartnerschaft().forEach(zivilstand -> {
 			GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
-			assertThat(validator.isValid(gesuchFormular, null), is(false));
+			assertThat(validator.isValid(gesuchFormular, initValidatorContext()), is(false));
 		});
 	}
 
@@ -54,5 +58,10 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 				.setPartner(partner)
 				.setPersonInAusbildung(new PersonInAusbildung().setZivilstand(zivilstand));
 		return gesuchFormular;
+	}
+
+	private ConstraintValidatorContext initValidatorContext() {
+		return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(),null,null,
+				ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
 	}
 }
