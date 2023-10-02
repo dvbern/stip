@@ -1,9 +1,7 @@
 package ch.dvbern.stip.test.generator.api.model;
 
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PartnerDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.PartnerUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 

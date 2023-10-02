@@ -16,6 +16,7 @@ import ch.dvbern.stip.test.util.TestConstants;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
+import static ch.dvbern.stip.test.generator.api.model.AdresseSpecModel.adresseSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildungModel;
 import static ch.dvbern.stip.test.generator.api.model.AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpecModel;
@@ -45,6 +46,7 @@ public class GesuchTestSpecGenerator {
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung),
 					Instancio.of(personInAusbildungUpdateDtoSpecModel)
+							.set(field(PersonInAusbildungUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
 							.set(field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum), LocalDate.of(2000, 10, 10))
 							.set(field(PersonInAusbildungUpdateDtoSpec::getZivilstand), ZivilstandDtoSpec.VERHEIRATET)
 							.create())
