@@ -1,5 +1,6 @@
 package ch.dvbern.stip.test.generator.api.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
@@ -23,6 +24,10 @@ public class ElternUpdateDtoSpecModel {
 					.set(field(ElternUpdateDtoSpec::getSozialversicherungsnummer),
 							TestConstants.AHV_NUMMER_VALID_VATTER)
 					.set(field(ElternUpdateDtoSpec::getElternTyp), ElternTypDtoSpec.VATER)
+					.generate(
+							field(ElternUpdateDtoSpec::getGeburtsdatum),
+							gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1,
+									1)))
 					.assign(Assign.given(field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz), field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitzOrt))
 							.set(When.is(false), "Bern")
 							.set(When.is(true), null))

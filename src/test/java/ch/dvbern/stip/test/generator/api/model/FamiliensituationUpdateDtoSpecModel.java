@@ -16,7 +16,12 @@ public final class FamiliensituationUpdateDtoSpecModel {
 	public static final Model<FamiliensituationUpdateDtoSpec> familiensituationUpdateDtoSpecModel =
 			Instancio.of(FamiliensituationUpdateDtoSpec.class)
 					.set(field(FamiliensituationUpdateDtoSpec::getObhut), ElternschaftsteilungDtoSpec.GEMEINSAM)
-					.set(field(FamiliensituationUpdateDtoSpec::getGerichtlicheAlimentenregelung), true)
+					.set(field(FamiliensituationUpdateDtoSpec::getGerichtlicheAlimentenregelung), false)
+					.set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), false)
+					.set(field(FamiliensituationUpdateDtoSpec::getElternteilUnbekanntVerstorben), false)
+					.set(field(FamiliensituationUpdateDtoSpec::getMutterWiederverheiratet), false)
+					.set(field(FamiliensituationUpdateDtoSpec::getVaterWiederverheiratet), false)
+					.set(field(FamiliensituationUpdateDtoSpec::getWerZahltAlimente), null)
 					.generate(
 							field(FamiliensituationUpdateDtoSpec::getObhutMutter),
 							gen -> gen.ints().range(0, 100).as(BigDecimal::valueOf))

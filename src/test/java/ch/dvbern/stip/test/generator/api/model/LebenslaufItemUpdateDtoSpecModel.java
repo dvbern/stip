@@ -11,7 +11,7 @@ import static org.instancio.Select.field;
 
 public final class LebenslaufItemUpdateDtoSpecModel {
 
-	private static final Model<List<LebenslaufItemUpdateDtoSpec>> lebenslaufItemUpdateDtoSpecModel =
+	public static final Model<List<LebenslaufItemUpdateDtoSpec>> lebenslaufItemUpdateDtoSpecModel =
 			Instancio.ofList(LebenslaufItemUpdateDtoSpec.class).size(1)
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getId))
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getTaetigskeitsart))
