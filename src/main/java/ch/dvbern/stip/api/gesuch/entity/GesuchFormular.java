@@ -48,6 +48,7 @@ import java.util.Set;
 @AusbildungskostenStufeRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
 @PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
+@UniqueSvNumberConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),

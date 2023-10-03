@@ -43,7 +43,7 @@ public class ConfigService {
     List<String> allowedMimeTypes;
 
     public DeploymentConfigDto getDeploymentConfiguration() {
-        return new DeploymentConfigDto().version(version).environment(environment);
+        return new DeploymentConfigDto().version(version).environment(environment).allowedMimeTypes(allowedMimeTypes);
     }
 
     public String getBucketName() {

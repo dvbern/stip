@@ -24,6 +24,8 @@ public interface GesuchMapper {
     @Mapping(target = "bearbeiter", constant = "John Doe")
     GesuchDto toDto(Gesuch gesuch);
 
+    GesuchUpdateDto toGesuchUpdateDto(Gesuch gesuch);
+
     @Mapping(source = "fallId", target = "fall.id")
     @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
     Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
