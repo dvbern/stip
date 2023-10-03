@@ -48,6 +48,7 @@ import java.util.Set;
 @AusbildungskostenStufeRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
 @PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
+@AlimenteRequiredWhenAlimenteregelungConstraint(groups = GesuchEinreichenValidationGroup.class)
 @UniqueSvNumberConstraint
 @Entity
 @Table(indexes = {

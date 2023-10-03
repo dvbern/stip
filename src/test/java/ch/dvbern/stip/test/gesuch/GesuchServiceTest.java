@@ -191,7 +191,7 @@ class GesuchServiceTest {
 		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), Matchers.not(0));
 		var anzahlElternBevoreUpdate = gesuch.getGesuchFormularToWorkWith().getElterns().size();
 
-		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		GesuchUpdateDto gesuchUpdateDto = gesuchMapper.toGesuchUpdateDto(gesuch);
 
 		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 		gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -207,7 +207,7 @@ class GesuchServiceTest {
 		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
 		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
 
-		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		GesuchUpdateDto gesuchUpdateDto = gesuchMapper.toGesuchUpdateDto(gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternteilUnbekanntVerstorben(false);
 
@@ -317,7 +317,7 @@ class GesuchServiceTest {
 	}
 
 	private void updateElternteilUnbekanntVerstorben(Gesuch gesuch, ElternAbwesenheitsGrund grundMutter, ElternAbwesenheitsGrund grundVater) {
-		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		GesuchUpdateDto gesuchUpdateDto = gesuchMapper.toGesuchUpdateDto(gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternteilUnbekanntVerstorben(true);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setMutterUnbekanntVerstorben(grundMutter);
