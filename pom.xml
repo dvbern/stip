@@ -6,7 +6,7 @@
     <groupId>ch.dvbern.oss.stip</groupId>
     <artifactId>stip-contract</artifactId>
     <!-- package version is set by ci -->
-    <version>local</version>
+    <version>1.20.0</version>
     <packaging>pom</packaging>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
