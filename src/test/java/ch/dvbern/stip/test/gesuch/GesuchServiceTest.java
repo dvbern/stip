@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.test.util.GesuchGenerator;
 import io.quarkus.test.InjectMock;
@@ -17,8 +18,10 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -301,6 +304,98 @@ class GesuchServiceTest {
 		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
 	}
 
+	@Test
+	void resetAlimenteIfGesetzlicheAlimenteregelungFromNoFamsitToTrue() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(null);
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+
+		GesuchUpdateDto update = gesuchMapper.toGesuchUpdateDto(gesuch);
+		update.getGesuchFormularToWorkWith().setFamiliensituation(new FamiliensituationUpdateDto());
+		update.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
+		update.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(true);
+		update.getGesuchFormularToWorkWith().getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), update);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+	}
+
+	@Test
+	void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToTrue() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+
+		updateGesetzlicheAlimenteRegel(null, true, gesuch);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+	}
+
+	@Test
+	void resetAlimenteIfGesetzlicheAlimenteregelungFromFalseToTrue() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+
+		updateGesetzlicheAlimenteRegel(false, true, gesuch);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+	}
+
+	@Test
+	void noResetAlimenteIfGesetzlicheAlimenteregelungFromTrueToTrue() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		BigDecimal alimente = BigDecimal.valueOf(1000);
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(alimente);
+
+		updateGesetzlicheAlimenteRegel(true, true, gesuch);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+	}
+
+	@Test
+	void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToFalse() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+
+		updateGesetzlicheAlimenteRegel(null, false, gesuch);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+	}
+
+	@Test
+	void resetAlimenteIfGesetzlicheAlimenteregelungFromTrueToFalse() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+
+		updateGesetzlicheAlimenteRegel(true, false, gesuch);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+	}
+
+	@Test
+	void noResetAlimenteIfGesetzlicheAlimenteregelungFromFalseToFalse() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		BigDecimal alimente = BigDecimal.valueOf(1000);
+		gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(alimente);
+
+		updateGesetzlicheAlimenteRegel(false, false, gesuch);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+	}
+
+	private void updateGesetzlicheAlimenteRegel(@Nullable Boolean from, Boolean to, Gesuch gesuch) {
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(from);
+
+		GesuchUpdateDto update = gesuchMapper.toGesuchUpdateDto(gesuch);
+		update.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(to);
+		if (to) {
+			update.getGesuchFormularToWorkWith().getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
+		}
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), update);
+	}
 
 	private boolean hasMutter(Set<Eltern> elterns) {
 		return getElternFromElternsByElternTyp(elterns, ElternTyp.MUTTER).isPresent();

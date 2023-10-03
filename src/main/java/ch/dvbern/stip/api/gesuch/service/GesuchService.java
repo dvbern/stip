@@ -141,6 +141,36 @@ public class GesuchService {
 		}
 		resetAuswaertigesMittagessen(toUpdate, update);
 		resetEltern(toUpdate, update);
+		resetAlimente(toUpdate, update);
+	}
+
+	private void resetAlimente(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+		if (hasGerichtlicheAlimenteregelungChanged(toUpdate, update)) {
+			if (toUpdate.getEinnahmenKosten() != null) {
+				toUpdate.getEinnahmenKosten().setAlimente(null);
+			}
+
+			if (update.getEinnahmenKosten() != null) {
+				update.getEinnahmenKosten().setAlimente(null);
+			}
+		}
+	}
+
+	private boolean hasGerichtlicheAlimenteregelungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+		if (update.getFamiliensituation() == null) {
+			return false;
+		}
+
+		if (toUpdate.getFamiliensituation() == null) {
+			return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
+		}
+
+		if (toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung() == null) {
+			return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
+		}
+
+		return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
+				.equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
 	}
 
 	private void resetEltern(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {

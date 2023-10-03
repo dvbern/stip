@@ -1,6 +1,7 @@
 package ch.dvbern.stip.test.util;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -33,13 +34,24 @@ public final class GesuchGenerator {
         GesuchFormular gesuchFormularToWorkWith = new GesuchFormular()
                 .setPersonInAusbildung(createPersonInAusbildung())
                 .setElterns(createElterns())
-                .setFamiliensituation(createFamiliensituation());
+                .setFamiliensituation(createFamiliensituation())
+                .setEinnahmenKosten(createEinnahmeKosten());
 
         return new Gesuch()
                 .setGesuchFormularToWorkWith(gesuchFormularToWorkWith)
                 .setFall(new Fall())
                 .setGesuchsperiode(new Gesuchsperiode().setGueltigkeit(GUELTIGKEIT_PERIODE_23_24));
     }
+
+    private static EinnahmenKosten createEinnahmeKosten() {
+        return new EinnahmenKosten()
+                .setNettoerwerbseinkommen(BigDecimal.valueOf(10000))
+                .setFahrkosten(BigDecimal.valueOf(150))
+                .setWohnkosten(BigDecimal.valueOf(1500))
+                .setPersonenImHaushalt(BigDecimal.ONE)
+                .setVerdienstRealisiert(false);
+    }
+
     private static Familiensituation createFamiliensituation() {
         return new Familiensituation()
                 .setElternVerheiratetZusammen(true)
