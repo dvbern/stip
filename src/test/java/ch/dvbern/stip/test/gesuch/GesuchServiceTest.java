@@ -1,5 +1,8 @@
 package ch.dvbern.stip.test.gesuch;
 
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -15,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+import java.util.Set;
 
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -176,6 +182,149 @@ class GesuchServiceTest {
 			updateWerZahltAlimente(gesuch, elternschaftsteilung, Elternschaftsteilung.MUTTER);
 			MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), Matchers.is(anzahlElternBevoreUpdate));
 		}
+	}
+
+	@Test
+	void noResetIfElternStayZusammen() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), Matchers.not(0));
+		var anzahlElternBevoreUpdate = gesuch.getGesuchFormularToWorkWith().getElterns().size();
+
+		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), Matchers.is(anzahlElternBevoreUpdate));
+	}
+
+	@Test
+	void noResetIfNotUnbekanntOrVerstorben() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternteilUnbekanntVerstorben(false);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+	}
+
+	@Test
+	void resetMutterIfUnbekannt() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		updateElternteilUnbekanntVerstorben(gesuch, ElternAbwesenheitsGrund.UNBEKANNT, ElternAbwesenheitsGrund.WEDER_NOCH);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+	}
+
+	@Test
+	void resetMutterIfVerstorben() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		updateElternteilUnbekanntVerstorben(gesuch, ElternAbwesenheitsGrund.VERSTORBEN, ElternAbwesenheitsGrund.WEDER_NOCH);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+	}
+
+	@Test
+	void resetVaterIfUnbekannt() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		updateElternteilUnbekanntVerstorben(gesuch, ElternAbwesenheitsGrund.WEDER_NOCH, ElternAbwesenheitsGrund.UNBEKANNT);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+	}
+
+	@Test
+	void resetVaterIfVerstorben() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		updateElternteilUnbekanntVerstorben(gesuch, ElternAbwesenheitsGrund.WEDER_NOCH, ElternAbwesenheitsGrund.VERSTORBEN);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+	}
+
+	@Test
+	void resetBothIfVerstorben() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		updateElternteilUnbekanntVerstorben(gesuch, ElternAbwesenheitsGrund.VERSTORBEN, ElternAbwesenheitsGrund.VERSTORBEN);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+	}
+
+	@Test
+	void resetBothIfUnbekannt() {
+		Gesuch gesuch = GesuchGenerator.createGesuch();
+		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(true));
+
+		updateElternteilUnbekanntVerstorben(gesuch, ElternAbwesenheitsGrund.UNBEKANNT, ElternAbwesenheitsGrund.UNBEKANNT);
+
+		MatcherAssert.assertThat(hasMutter(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+		MatcherAssert.assertThat(hasVater(gesuch.getGesuchFormularToWorkWith().getElterns()), Matchers.is(false));
+	}
+
+
+	private boolean hasMutter(Set<Eltern> elterns) {
+		return getElternFromElternsByElternTyp(elterns, ElternTyp.MUTTER).isPresent();
+	}
+
+	private boolean hasVater(Set<Eltern> elterns) {
+		return getElternFromElternsByElternTyp(elterns, ElternTyp.VATER).isPresent();
+	}
+
+	private Optional<Eltern> getElternFromElternsByElternTyp(Set<Eltern> elterns, ElternTyp elternTyp) {
+		return elterns.stream()
+				.filter(eltern -> eltern.getElternTyp() == elternTyp)
+				.findFirst();
+	}
+
+	private void updateElternteilUnbekanntVerstorben(Gesuch gesuch, ElternAbwesenheitsGrund grundMutter, ElternAbwesenheitsGrund grundVater) {
+		GesuchUpdateDto gesuchUpdateDto = GesuchTestMapper.mapper.toGesuchUpdateDto(gesuch);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternteilUnbekanntVerstorben(true);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setMutterUnbekanntVerstorben(grundMutter);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setVaterUnbekanntVerstorben(grundVater);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
 	}
 
 	private void updateWerZahltAlimente(Gesuch gesuch, Elternschaftsteilung from, Elternschaftsteilung to) {
