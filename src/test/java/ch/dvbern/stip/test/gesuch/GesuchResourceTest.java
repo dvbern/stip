@@ -23,8 +23,6 @@ import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.*;
-import static ch.dvbern.stip.test.util.DTOGenerator.*;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
