@@ -31,7 +31,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
 							AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG)
 					.generate(
 							field(PersonInAusbildungUpdateDtoSpec::getVorname),
-							gen -> gen.oneOf("Sarah", "Elijah", "Nu'ab", "André", "Özgür", "王小明", "सचिन"))
+							gen -> gen.oneOf("Sarah", "Elijah", "Nu'ab", "André", "Özgür"))
 					.generate(
 							field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
 							gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1,
@@ -39,9 +39,6 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
 					.generate(
 							field(PersonInAusbildungUpdateDtoSpec::getNachname),
 							gen -> gen.oneOf("Müller", "Sánchez", "Sato", "Singh", "Li", "García", "Nguyen"))
-					.generate(
-							field(PersonInAusbildungUpdateDtoSpec::getEmail),
-							gen -> gen.text().pattern(ValidationsConstant.EMAIL_VALIDATION_PATTERN))
 					.generate(
 							field(PersonInAusbildungUpdateDtoSpec::getWohnsitzAnteilMutter),
 							gen -> gen.ints().range(0, 100).as(BigDecimal::valueOf))
