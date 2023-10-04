@@ -22,7 +22,6 @@ include:
     inputs:
       sonar-scanner: maven
       sonar-project-key: kibon_stip-api_AYkrwku6SZqri_oH9Xle
-      context-dir: api
 
   - component: 'gitlab.dvbern.ch/components/buildah@v0.2.0'
     inputs:
@@ -30,7 +29,7 @@ include:
       registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
       registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       name: api-image
-      image-name: api
+      image-name: "stip/api"
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: "$VERSION"
 
@@ -40,7 +39,7 @@ include:
       registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
       registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       environment: dev
-      image-names: "api"
+      image-names: "stip/api"
       version: "$VERSION"
       review-apps-enabled: "false"
     rules:
@@ -52,7 +51,7 @@ include:
       registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
       registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       environment: uat
-      image-names: "api"
+      image-names: "stip/api"
       version: "$VERSION"
     rules:
       - if: $CI_COMMIT_TAG
@@ -63,7 +62,7 @@ include:
       registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
       registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       environment: prod
-      image-names: "api"
+      image-names: "stip/api"
       version: "$VERSION"
     rules:
       - if: $CI_COMMIT_TAG

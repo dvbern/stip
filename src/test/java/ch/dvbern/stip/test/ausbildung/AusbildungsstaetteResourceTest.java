@@ -1,9 +1,10 @@
 package ch.dvbern.stip.test.ausbildung;
 
 import ch.dvbern.oss.stip.contract.test.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.oss.stip.contract.test.dto.AusbildungsstaetteDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
+import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -35,9 +36,19 @@ class AusbildungsstaetteResourceTest {
                 .assertThat()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract()
-                .as(Ausbildungsstaette[].class);
+                .as(AusbildungsstaetteDtoSpec[].class);
 
         assertThat(res.length, greaterThanOrEqualTo(1));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void getausbildungsstaetten() {
+        api.getAusbildungsstaette().ausbildungsstaetteIdPath(TestConstants.AUSBILDUNGSSTAETTE_ID)
+                .execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.OK.getStatusCode());
     }
 
 }
