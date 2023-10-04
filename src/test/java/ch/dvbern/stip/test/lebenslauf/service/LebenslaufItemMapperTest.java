@@ -52,7 +52,6 @@ class LebenslaufItemMapperTest {
 		lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BERUFSVORBEREITENDES_SCHULJAHR);
 		lebenslaufItem.setBis("02.2022");
 		lebenslaufItem.setVon("01.2022");
-		lebenslaufItem.setFachrichtung("Informatik");
 		lebenslaufItem.setWohnsitz(WohnsitzKanton.BE);
 		return lebenslaufItem;
 	}

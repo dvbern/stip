@@ -105,6 +105,7 @@ public class DTOGenerator {
 		partner.setNachname("Testname");
 		partner.setVorname("Testvorname");
 		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
+		partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
 		gesuchformularToWorkWith.setPartner(partner);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;
