@@ -3,6 +3,8 @@ package ch.dvbern.stip.api.gesuch.entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE;
+
 public class PartnerNullRequiredWhenAlleinstehendConstraintValidator
 		implements ConstraintValidator<PartnerNullRequiredWhenAlleinstehendConstraint, GesuchFormular> {
 	@Override
@@ -10,7 +12,15 @@ public class PartnerNullRequiredWhenAlleinstehendConstraintValidator
 		if (gesuchFormular.getPersonInAusbildung() == null) {
 			return true;
 		}
-		return !gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft() && gesuchFormular.getPartner() == null
-				|| gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft() && gesuchFormular.getPartner() != null;
+		if (gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft() && gesuchFormular.getPartner() == null) {
+			constraintValidatorContext.disableDefaultConstraintViolation();
+			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE)
+					.addConstraintViolation();
+			return false;
+		}
+		if (!gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft() && gesuchFormular.getPartner() != null) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -15,11 +15,12 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
-import static ch.dvbern.stip.test.util.DTOGenerator.prepareGesuchUpdateVollstaendigt;
+import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -57,7 +58,7 @@ class GesuchStatusTest {
 	@TestAsGesuchsteller
 	@Order(2)
 	void testFillGesuchUndEinreichenDokumentFehlt() {
-		var gesuchUpdatDTO = prepareGesuchUpdateVollstaendigt();
+		var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
