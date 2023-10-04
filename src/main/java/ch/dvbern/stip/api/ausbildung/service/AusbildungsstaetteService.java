@@ -6,6 +6,7 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -16,6 +17,11 @@ public class AusbildungsstaetteService {
 
     public Collection<AusbildungsstaetteDto> getAusbildungsstaetten() {
         return ausbildungsstaetteRepository.findAll().stream().map(ausbildungsstaetteMapper::toDto).toList();
+    }
+
+    public AusbildungsstaetteDto findById(UUID ausbildungsstetteId) {
+        var ausbildungsstaette =  ausbildungsstaetteRepository.findById(ausbildungsstetteId);
+        return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }
 
 }

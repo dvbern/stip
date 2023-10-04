@@ -7,7 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
+import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 
 public class DTOGenerator {
 
@@ -44,7 +45,7 @@ public class DTOGenerator {
 		personInAusbildung.setKorrespondenzSprache(SpracheDtoSpec.DEUTSCH);
 		personInAusbildung.setSozialhilfebeitraege(false);
 		personInAusbildung.setZivilstand(ZivilstandDtoSpec.LEDIG);
-		personInAusbildung.setSozialversicherungsnummer(AHV_NUMMER_VALID);
+		personInAusbildung.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
 		personInAusbildung.setQuellenbesteuert(false);
 		personInAusbildung.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
 		personInAusbildung.setHeimatort("Bern");
@@ -68,11 +69,9 @@ public class DTOGenerator {
 		var ausbildung = new AusbildungUpdateDtoSpec();
 		ausbildung.setAusbildungBegin("01.2022");
 		ausbildung.setAusbildungEnd("02.2022");
-		ausbildung.setAusbildungsland(AusbildungslandDtoSpec.SCHWEIZ);
 		ausbildung.setAusbildungNichtGefunden(false);
 		ausbildung.setPensum(AusbildungsPensumDtoSpec.VOLLZEIT);
 		ausbildung.setAusbildungsgangId(UUID.fromString("3a8c2023-f29e-4466-a2d7-411a7d032f42"));
-		ausbildung.setAusbildungsstaetteId(UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"));
 		ausbildung.setFachrichtung("test");
 		gesuchformularToWorkWith.setAusbildung(ausbildung);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
@@ -105,7 +104,7 @@ public class DTOGenerator {
 		partner.setGeburtsdatum(LocalDate.of(2002, 12, 1));
 		partner.setNachname("Testname");
 		partner.setVorname("Testvorname");
-		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID);
+		partner.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
 		partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
 		gesuchformularToWorkWith.setPartner(partner);
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
@@ -167,8 +166,12 @@ public class DTOGenerator {
 		eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
 		eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
 		eltern.setSozialhilfebeitraegeAusbezahlt(false);
-		eltern.setSozialversicherungsnummer(AHV_NUMMER_VALID);
+		eltern.setSozialversicherungsnummer(getAHVNummerForElternTyp(elternTypDtoSpec));
 		return eltern;
+	}
+
+	private static String getAHVNummerForElternTyp(ElternTypDtoSpec elternTyp) {
+		return elternTyp == ElternTypDtoSpec.MUTTER ? TestConstants.AHV_NUMMER_VALID_MUTTER : TestConstants.AHV_NUMMER_VALID_VATTER;
 	}
 
 	public static GesuchUpdateDtoSpec prepareGesuchUpdateForKind() {
@@ -224,4 +227,22 @@ public class DTOGenerator {
 		gesuchUpdatDTO.setGesuchFormularToWorkWith(gesuchformularToWorkWith);
 		return gesuchUpdatDTO;
 	}
+
+	public static AusbildungsgangUpdateDtoSpec prepareAusbildungsgangUpdate() {
+		var ausbildungsgangUpdate = new AusbildungsgangUpdateDtoSpec();
+		ausbildungsgangUpdate.setAusbildungsort(AusbildungsortDtoSpec.BERN);
+		ausbildungsgangUpdate.setAusbildungsrichtung(BildungsartDtoSpec.UNIVERSITAETEN_ETH);
+		ausbildungsgangUpdate.setBezeichnungDe("Bachelor Informatik");
+		ausbildungsgangUpdate.setBezeichnungFr("Bachelor Informatik");
+		ausbildungsgangUpdate.setAusbildungsstaette(prepareAusbildungsstaetteUpdateDto());
+		return ausbildungsgangUpdate;
+	}
+
+	public static AusbildungsstaetteUpdateDtoSpec prepareAusbildungsstaetteUpdateDto() {
+		var	ausbidlungsstaetteUpdateDto = new AusbildungsstaetteUpdateDtoSpec();
+		ausbidlungsstaetteUpdateDto.setNameDe("Uni Bern");
+		ausbidlungsstaetteUpdateDto.setNameFr("Uni Bern");
+		return ausbidlungsstaetteUpdateDto;
+	}
+
 }

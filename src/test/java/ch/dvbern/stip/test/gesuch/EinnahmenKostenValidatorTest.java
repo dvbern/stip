@@ -2,6 +2,8 @@ package ch.dvbern.stip.test.gesuch;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -11,6 +13,7 @@ import ch.dvbern.stip.api.gesuch.entity.AusbildungskostenStufeRequiredConstraint
 import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenDarlehenRequiredConstraintValidator;
 import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenZulagenRequiredConstraintValidator;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import jakarta.validation.ConstraintValidatorContext;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
@@ -27,7 +30,6 @@ class EinnahmenKostenValidatorTest {
 		EinnahmenKostenZulagenRequiredConstraintValidator einnahmenKostenZulagenRequiredConstraintValidator =
 				new EinnahmenKostenZulagenRequiredConstraintValidator();
 		GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
-		gesuchFormular.getPersonInAusbildung().setKinder(true);
 		assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
 				.isFalse();
 		gesuchFormular.getEinnahmenKosten().setZulagen(BigDecimal.ONE);
@@ -84,6 +86,10 @@ class EinnahmenKostenValidatorTest {
 		gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		gesuchFormular.setPersonInAusbildung(personInAusbildung);
+		Kind kind = new Kind();
+		Set kindSet = new HashSet<Kind>();
+		kindSet.add(kind);
+		gesuchFormular.setKinds(kindSet);
 		return gesuchFormular;
 	}
 
