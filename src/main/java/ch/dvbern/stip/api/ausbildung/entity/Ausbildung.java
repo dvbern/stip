@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
-import ch.dvbern.stip.api.ausbildung.type.Ausbildungsland;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +19,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Entity
 @Table(indexes = {
 		@Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
-		@Index(name = "IX_ausbildung_ausbildungsstaette_id", columnList = "ausbildungsstaette_id"),
 		@Index(name = "IX_ausbildung_mandant", columnList = "mandant")
 })
 @Getter
@@ -30,15 +28,6 @@ public class Ausbildung extends AbstractMandantEntity {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
 	private Ausbildungsgang ausbildungsgang;
-
-	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsstaette_id"))
-	private Ausbildungsstaette ausbildungsstaette;
-
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Ausbildungsland ausbildungsland;
 
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column

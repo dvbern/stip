@@ -13,13 +13,13 @@ public class AusbildungNichtGefundenRequiredFieldsConstraintValidator implements
 			Ausbildung ausbildung,
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (ausbildung.isAusbildungNichtGefunden()) {
-			return StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsgang()) && StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsstaette());
+			return StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsgang())
+					&& StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsstaette());
 		}
-		else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)
-					.addConstraintViolation();
-			return  ausbildung.getAusbildungsgang() != null && ausbildung.getAusbildungsstaette() != null;
-		}
+
+		constraintValidatorContext.disableDefaultConstraintViolation();
+		constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)
+				.addConstraintViolation();
+		return ausbildung.getAusbildungsgang() != null;
 	}
 }
