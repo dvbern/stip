@@ -19,7 +19,6 @@ public final class AusbildungUpdateDtoSpecModel {
 					.ignore(field(AusbildungUpdateDtoSpec::getAlternativeAusbildungsgang))
 					.ignore(field(AusbildungUpdateDtoSpec::getAlternativeAusbildungsstaette))
 					.set(field(AusbildungUpdateDtoSpec::getAusbildungsgangId), UUID.fromString("3a8c2023-f29e-4466-a2d7-411a7d032f42"))
-					.set(field(AusbildungUpdateDtoSpec::getAusbildungsstaetteId), UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"))
 					.toModel();
 
 	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecAusbildungModel =
