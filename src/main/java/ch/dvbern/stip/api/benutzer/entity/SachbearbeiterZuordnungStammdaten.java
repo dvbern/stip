@@ -25,9 +25,11 @@ import org.hibernate.envers.Audited;
 public class SachbearbeiterZuordnungStammdaten extends AbstractMandantEntity {
 
 	@Column
+	@BuchstabenRangeConstraint
 	private String buchstabenDe;
 
 	@Column
+	@BuchstabenRangeConstraint
 	private String buchstabenFr;
 
 	@NotNull
