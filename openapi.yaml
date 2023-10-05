@@ -667,6 +667,45 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsgang
             summary: return der Ausbildungsgang
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsgangUpdate'
+                required: true
+            tags:
+                - Ausbildungsgang
+            responses:
+                '200':
+                    description: |
+                        Ausbildungsgang updated
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateAusbildungsgang
+            summary: Updates a Ausbildungsgang with the given ID
+        delete:
+            tags:
+                - Ausbildungsgang
+            responses:
+                '204':
+                    description: Ausbildungsgang deleted
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteAusbildungsgang
+            summary: delete a Ausbildungsgang
         parameters:
             -
                 name: ausbildungsgangId
@@ -674,6 +713,27 @@ paths:
                     $ref: '#/components/schemas/UUID'
                 in: path
                 required: true
+    /ausbildungsgang:
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsgangUpdate'
+                required: true
+            tags:
+                - Ausbildungsgang
+            responses:
+                '201':
+                    description: New Ausbildungsgang is created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createAusbildungsgang
+            summary: Creates a new Ausbildungsgang
     '/gesuch/{gesuchId}/nachfrist':
         patch:
             tags:
@@ -698,6 +758,34 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: gesuchNachfristBeantragen
             summary: Einen Nachfrist von 30 Tagen beantragen fuer die Einreichung von Dokumenten
+    '/ausbildungsstaette/{ausbildungsstaetteId}':
+        get:
+            tags:
+                - Ausbildungsstaette
+            parameters:
+                -
+                    name: ausbildungsstaetteId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getAusbildungsstaette
+            summary: returns a Ausbildungsstaette with the given id
 components:
     schemas:
         Anrede:
@@ -709,11 +797,6 @@ components:
             enum:
                 - VOLLZEIT
                 - TEILZEIT
-            type: string
-        Ausbildungsland:
-            enum:
-                - SCHWEIZ
-                - AUSLAND
             type: string
         DokumentTyp:
             enum:
@@ -789,21 +872,6 @@ components:
                     type: string
                 ort:
                     type: string
-        Ausbildungsgang:
-            required:
-                - id
-                - bezeichnungDe
-                - ausbildungsrichtung
-            type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                bezeichnungDe:
-                    type: string
-                bezeichnungFr:
-                    type: string
-                ausbildungsrichtung:
-                    $ref: '#/components/schemas/Bildungsart'
         DeploymentConfig:
             type: object
             properties:
@@ -871,44 +939,6 @@ components:
         UUID:
             format: uuid
             type: string
-        AusbildungUpdate:
-            required:
-                - ausbildungsland
-                - fachrichtung
-                - ausbildungBegin
-                - ausbildungEnd
-                - pensum
-            type: object
-            properties:
-                ausbildungsgangId:
-                    $ref: '#/components/schemas/UUID'
-                    description: |
-                        Required wenn andere ausbildungNichtGefunden = false
-                ausbildungsland:
-                    $ref: '#/components/schemas/Ausbildungsland'
-                alternativeAusbildungsgang:
-                    description: |
-                        Required wenn andere ausbildungNichtGefunden = true
-                    type: string
-                fachrichtung:
-                    type: string
-                ausbildungNichtGefunden:
-                    type: boolean
-                ausbildungBegin:
-                    description: Datum im Format mm.YYYY
-                    type: string
-                ausbildungEnd:
-                    description: Datum im Format mm.YYYY
-                    type: string
-                pensum:
-                    $ref: '#/components/schemas/AusbildungsPensum'
-                ausbildungsstaetteId:
-                    $ref: '#/components/schemas/UUID'
-                    description: |
-                        Required wenn andere ausbildungNichtGefunden = false
-                alternativeAusbildungsstaette:
-                    description: Required wenn andere ausbildungNichtGefunden = true
-                    type: string
         LebenslaufItemUpdate:
             title: Root Type for Lebenslauf
             description: ''
@@ -1255,7 +1285,6 @@ components:
         Bildungsart:
             description: ''
             enum:
-                - BERUFSVORBEREITENDES_SCHULJAHR_VORLEHRE
                 - GYMNASIALE_MATURITAETSSCHULEN
                 - SCHULEN_FUER_ALLGEMEINBILDUNG
                 - VOLLZEITBERUFSSCHULEN
@@ -1462,23 +1491,6 @@ components:
                     type: object
                 -
                     $ref: '#/components/schemas/PartnerUpdate'
-        Ausbildungsstaette:
-            required:
-                - id
-                - ausbildungsland
-                - name
-            type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                ausbildungsgaenge:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Ausbildungsgang'
-                ausbildungsland:
-                    $ref: '#/components/schemas/Ausbildungsland'
-                name:
-                    type: string
         Kontoinhaber:
             description: ''
             enum:
@@ -1796,6 +1808,243 @@ components:
                     type: object
                 -
                     $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        AusbildungUpdate:
+            required:
+                - fachrichtung
+                - ausbildungBegin
+                - ausbildungEnd
+                - pensum
+            type: object
+            properties:
+                ausbildungsgangId:
+                    $ref: '#/components/schemas/UUID'
+                    description: |
+                        Required wenn andere ausbildungNichtGefunden = false
+                alternativeAusbildungsgang:
+                    description: |
+                        Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+                fachrichtung:
+                    type: string
+                ausbildungNichtGefunden:
+                    type: boolean
+                ausbildungBegin:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                ausbildungEnd:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                pensum:
+                    $ref: '#/components/schemas/AusbildungsPensum'
+                alternativeAusbildungsstaette:
+                    description: Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+        Ausbildungsstaette:
+            anyOf:
+                -
+                    required: []
+                    type: object
+                    properties:
+                        ausbildungsgaenge:
+                            description: ''
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                -
+                    $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+            type: object
+        AusbildungsgangUpdate:
+            description: ''
+            required:
+                - bezeichnungDe
+                - bezeichnungFr
+                - ausbildungsrichtung
+                - ausbildungsstaette
+                - ausbildungsort
+            type: object
+            properties:
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                    description: ''
+                ausbildungsstaette:
+                    $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+                    description: ''
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+                    description: ''
+        Ausbildungsort:
+            description: ''
+            enum:
+                - AUSLAND
+                - BERN
+                - ILANZ
+                - SOLOTHURN
+                - AARAU
+                - ALTDORF
+                - APPENZELL
+                - ARLESHEIM
+                - BADEN
+                - BASEL
+                - BELP
+                - BEROMUENSTER
+                - BIEL
+                - BRIENZ
+                - BRIG
+                - BRUGG
+                - BURGDORF
+                - BUERGENSTOCK
+                - CHENE_BOUGERIES
+                - CHUR
+                - CORCELLES
+                - COURTETELLE
+                - DAVOS
+                - DELEMONT
+                - DICKEN
+                - DIETIKON
+                - DORNACH
+                - DUEBENDORF
+                - EBIKON
+                - ENGELBERG
+                - EPALINGES
+                - FRIBOURG
+                - FRUTIGEN
+                - GENEVE
+                - GISWIL
+                - GRENCHEN
+                - GRUYERES
+                - GSTEIGWILER
+                - HERZOGENBUCHSEE
+                - HUENENBERG
+                - HUNIBACH
+                - HUTTWIL
+                - IMMENSEE
+                - INTERLAKEN
+                - ITTIGEN
+                - KIENTAL
+                - KLOTEN
+                - KOENIZ
+                - KONOLFINGEN
+                - KOPPIGEN
+                - LA_CHAUX_DE_FONDS
+                - LA_NEUVEVILLE
+                - LANDQUART
+                - LANGENTHAL
+                - LANGNAU_IM_EMMENTAL
+                - LAUFEN
+                - LAUSANNE
+                - LE_LOCLE
+                - LIESTAL
+                - LINDAU
+                - LUGANO
+                - LUZERN
+                - LYSS
+                - MANNO
+                - MARLY
+                - MORGES
+                - MOERSCHWIL
+                - MOUTIER
+                - MUENCHENBUCHSEE
+                - MUENCHENSTEIN
+                - MUENSINGEN
+                - NEUCHATEL
+                - NOTTWIL
+                - OLTEN
+                - OSTERMUNDIGEN
+                - PASSUGG
+                - PAYERNE
+                - PETIT_LANCY
+                - PORRENTRUY
+                - POSIEUX
+                - RAPPERSWIL_SG
+                - RHEINAU
+                - RORSCHACH
+                - SAMEDAN
+                - SARNEN
+                - SAXON
+                - SCHAFFHAUSEN
+                - SCHIERS
+                - SCHUEPFHEIM
+                - SCHWADERLOCH
+                - SCHWYZ
+                - SIERRE
+                - SION
+                - SISSACH
+                - SPIEZ
+                - ST_GALLEN
+                - STEFFISBURG
+                - ST_IMIER
+                - SURSEE
+                - THUN
+                - TOLOCHENAZ
+                - TRAMELAN
+                - VADUZ
+                - VERSCIO
+                - VEVEY
+                - VILLARS_BOZON
+                - VISP
+                - WEINFELDEN
+                - WIL
+                - WINTERTHUR
+                - WISEN
+                - WORB
+                - YVERDON_LES_BAINS
+                - ZIZERS
+                - ZOFINGEN
+                - ZOLLIKOFEN
+                - ZUG
+                - ZUOZ
+                - ZUERICH
+                - ZWEISIMMEN
+                - PULLY
+                - CERNIER
+                - HONDRICH
+                - LE_SENTIER
+            type: string
+        AusbildungsstaetteUpdate:
+            required:
+                - nameFr
+                - nameDe
+            type: object
+            properties:
+                nameDe:
+                    description: ''
+                    type: string
+                nameFr:
+                    description: ''
+                    type: string
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+        Ausbildungsgang:
+            required:
+                - ausbildungsort
+                - ausbildungsrichtung
+                - id
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                    description: ''
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+                    description: ''
+                ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
     responses:
         Unauthorized:
             content:

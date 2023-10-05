@@ -20,12 +20,22 @@ release:
     - npx semantic-release --verify-conditions=false --publish=false
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH == 'beta'
   artifacts:
     paths:
       - package.json
       - pom.xml
       - 'modules/**/pom.xml'
+
+npm:preview:
+  stage: publish
+  image: node:lts
+  tags: [ "zone:tz", "type:docker", "os:linux" ]
+  script:
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - npm version prerelease --preid ${CI_COMMIT_REF_SLUG} --no-git-tag-version
+    - npm publish
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event'"
 
 npm:
   stage: publish
@@ -36,7 +46,6 @@ npm:
     - npm publish
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH == 'beta'
   needs:
     - job: release
       artifacts: true
@@ -48,8 +57,7 @@ maven:
     MAVEN_GOAL: deploy
   extends: .maven-build-base
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  
-    - if: $CI_COMMIT_BRANCH == 'beta'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   needs:
     - job: release
       artifacts: true
