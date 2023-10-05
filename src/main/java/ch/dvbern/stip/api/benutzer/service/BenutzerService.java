@@ -1,12 +1,15 @@
 package ch.dvbern.stip.api.benutzer.service;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -23,67 +26,94 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BenutzerService {
 
-    private final JsonWebToken jsonWebToken;
+	private final JsonWebToken jsonWebToken;
 
-    private final BenutzerMapper benutzerMapper;
-    private final BenutzerRepository benutzerRepository;
+	private final BenutzerMapper benutzerMapper;
 
+	private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
+	private final BenutzerRepository benutzerRepository;
 
-    public BenutzerDto getCurrentBenutzer() {
-        return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
-    }
+	private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
 
-    public Benutzer getOrCreateCurrentBenutzer() {
-        final var keycloakId = jsonWebToken.getSubject();
+	public BenutzerDto getCurrentBenutzer() {
+		return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
+	}
 
-        if (keycloakId == null) {
-            throw new BadRequestException(); // TODO: use error handling
-        }
-        Benutzer benutzer = benutzerRepository
-                .findByKeycloakId(keycloakId)
-                .orElseGet(this::createBenutzerFromJWT);
-        benutzer = updateBenutzerTypFromJWT(benutzer, jsonWebToken);
+	public Benutzer getOrCreateCurrentBenutzer() {
+		final var keycloakId = jsonWebToken.getSubject();
 
-        return benutzer;
-    }
+		if (keycloakId == null) {
+			throw new BadRequestException(); // TODO: use error handling
+		}
+		Benutzer benutzer = benutzerRepository
+				.findByKeycloakId(keycloakId)
+				.orElseGet(this::createBenutzerFromJWT);
+		benutzer = updateBenutzerTypFromJWT(benutzer, jsonWebToken);
 
-    @Transactional
-    public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer, JsonWebToken jsonWebToken) {
-        HashSet<String> group = jsonWebToken.getClaim(Claims.groups);
-        String groupOnly = group.iterator().next().toUpperCase();
-        if(benutzer.getBenutzerTyp().name() != groupOnly) {
-            benutzer = benutzerRepository.findById(benutzer.getId());
-            benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
-            benutzerRepository.persist(benutzer);
-        }
-        return benutzer;
-    }
+		return benutzer;
+	}
 
-    @Transactional
-    public Benutzer createBenutzerFromJWT() {
-        Benutzer newBenutzer = new Benutzer();
-        newBenutzer.setKeycloakId(jsonWebToken.getSubject());
-        newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
-        newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
-        newBenutzer.setSozialversicherungsnummer(jsonWebToken.getClaim(OidcConstants.CLAIM_AHV_NUMMER));
-        newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
+	@Transactional
+	public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer, JsonWebToken jsonWebToken) {
+		HashSet<String> group = jsonWebToken.getClaim(Claims.groups);
+		String groupOnly = group.iterator().next().toUpperCase();
+		if (benutzer.getBenutzerTyp().name() != groupOnly) {
+			benutzer = benutzerRepository.findById(benutzer.getId());
+			benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
+			benutzerRepository.persist(benutzer);
+		}
+		return benutzer;
+	}
 
-        benutzerRepository.persist(newBenutzer);
-        return newBenutzer;
-    }
+	@Transactional
+	public Benutzer createBenutzerFromJWT() {
+		Benutzer newBenutzer = new Benutzer();
+		newBenutzer.setKeycloakId(jsonWebToken.getSubject());
+		newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
+		newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
+		newBenutzer.setSozialversicherungsnummer(jsonWebToken.getClaim(OidcConstants.CLAIM_AHV_NUMMER));
+		newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
 
-    public Optional<BenutzerDto> getBenutzer(UUID id) {
-        var optionalFall = benutzerRepository.findByIdOptional(id);
-        return optionalFall.map(benutzerMapper::toDto);
-    }
+		benutzerRepository.persist(newBenutzer);
+		return newBenutzer;
+	}
 
-    public List<BenutzerDto> getAllBenutzer() {
-        return benutzerRepository.findAll().stream().map(benutzerMapper::toDto).toList();
-    }
+	public Optional<BenutzerDto> getBenutzer(UUID id) {
+		var optionalFall = benutzerRepository.findByIdOptional(id);
+		return optionalFall.map(benutzerMapper::toDto);
+	}
 
-    @Transactional
-    public void updateCurrentBenutzer(BenutzerUpdateDto benutzerUpdateDto) {
-        final var benutzer = getOrCreateCurrentBenutzer();
-        benutzerMapper.partialUpdate(benutzerUpdateDto, benutzer);
-    }
+	public List<BenutzerDto> getAllBenutzer() {
+		return benutzerRepository.findAll().stream().map(benutzerMapper::toDto).toList();
+	}
+
+	public List<BenutzerDto> getAllSachbearbeitendeMitZuordnungStammdaten() {
+		List<BenutzerDto> benutzerDtoList =
+				benutzerRepository.findByBenutzerTyp(BenutzerTyp.SACHBEARBEITER).map(benutzerMapper::toDto).toList();
+		benutzerDtoList.forEach(benutzerDto -> {
+			sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerDto.getId())
+					.ifPresent(sachbearbeiterZuordnungStammdaten -> benutzerDto.setSachbearbeiterZuordnungStammdaten(
+							sachbearbeiterZuordnungStammdatenMapper.toDto(sachbearbeiterZuordnungStammdaten)));
+		});
+		return benutzerDtoList;
+	}
+
+	@Transactional
+	public void updateCurrentBenutzer(BenutzerUpdateDto benutzerUpdateDto) {
+		final var benutzer = getOrCreateCurrentBenutzer();
+		benutzerMapper.partialUpdate(benutzerUpdateDto, benutzer);
+	}
+
+	public Optional<SachbearbeiterZuordnungStammdatenDto> findSachbearbeiterZuordnungStammdatenWithBenutzerId(UUID id){
+		return sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(id).map(sachbearbeiterZuordnungStammdatenMapper::toDto);
+	}
+
+	@Transactional
+	public void createOrUpdateSachbearbeiterStammdaten( UUID benutzerId,
+			SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
+		Benutzer benutzer = benutzerRepository.requireById(benutzerId);
+		SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerId).orElse(new SachbearbeiterZuordnungStammdaten());
+		sachbearbeiterZuordnungStammdaten.setBenutzer(benutzer);
+		sachbearbeiterZuordnungStammdatenMapper.partialUpdate(sachbearbeiterZuordnungStammdatenDto, sachbearbeiterZuordnungStammdaten);
+	}
 }
