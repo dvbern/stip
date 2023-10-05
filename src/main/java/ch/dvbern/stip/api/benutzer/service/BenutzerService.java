@@ -115,5 +115,6 @@ public class BenutzerService {
 		SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerId).orElse(new SachbearbeiterZuordnungStammdaten());
 		sachbearbeiterZuordnungStammdaten.setBenutzer(benutzer);
 		sachbearbeiterZuordnungStammdatenMapper.partialUpdate(sachbearbeiterZuordnungStammdatenDto, sachbearbeiterZuordnungStammdaten);
+		sachbearbeiterZuordnungStammdatenRepository.persist(sachbearbeiterZuordnungStammdaten);
 	}
 }
