@@ -1,13 +1,14 @@
 package ch.dvbern.stip.test.lebenslauf.entity;
 
-import java.util.Arrays;
-import java.util.function.Predicate;
-
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemAusbildungBerufsbezeichnungConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -28,63 +29,57 @@ public class LebenslaufItemAusbildungBerufsbezeichnungConstraintValidatorTest {
 
 	@Test
 	void shouldNotBeValidIfBildungsartEidgBerufsattestOrEidgFaehigkeitszeugnisAndBerufsbezeichnungNull() {
-		for (LebenslaufAusbildungsArt bildungsart : getLebenslaufAusbildungsArtsOfBerufbezeichnung()) {
+		getLebenslaufAusbildungsArtsOfBerufbezeichnung().forEach(bildungsart -> {
 			LebenslaufItem lebenslaufItem = new LebenslaufItem()
 					.setBildungsart(bildungsart)
 					.setBerufsbezeichnung(null);
 			assertThat(validator.isValid(lebenslaufItem, null), is(false));
-		}
+		});
 	}
 
 	@Test
 	void shouldBeValidIfBildungsartEidgBerufsattestOrEidgFaehigkeitszeugnisAndBerufsbezeichnungNotNull() {
-		for (LebenslaufAusbildungsArt bildungsart : getLebenslaufAusbildungsArtsOfBerufbezeichnung()) {
+		getLebenslaufAusbildungsArtsOfBerufbezeichnung().forEach(bildungsart -> {
 			LebenslaufItem lebenslaufItem = new LebenslaufItem()
 					.setBildungsart(bildungsart)
 					.setBerufsbezeichnung("Berufsbezeichnung");
 			assertThat(validator.isValid(lebenslaufItem, null), is(true));
-		}
+		});
 	}
 
 	@Test
 	void shouldNotBeValidIfBildungsartOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnisAndBerufsbezeichnungNotNull() {
-		var bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis = Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtOfBerufsbezeichnung())
-				.toArray(LebenslaufAusbildungsArt[]::new);
-
-		for (LebenslaufAusbildungsArt bildungsart : bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis) {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setBerufsbezeichnung("Berufsbezeichnung");
-			assertThat(validator.isValid(lebenslaufItem, null), is(false));
-		}
+		Arrays.stream(LebenslaufAusbildungsArt.values())
+				.filter(isLebenslaufAusbildungsArtOfBerufsbezeichnung().negate())
+				.forEach(bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis -> {
+					LebenslaufItem lebenslaufItem = new LebenslaufItem()
+							.setBildungsart(bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis)
+							.setBerufsbezeichnung("Berufsbezeichnung");
+					assertThat(validator.isValid(lebenslaufItem, null), is(false));
+				});
 	}
 
 	@Test
 	void shouldBeValidIfBildungsartOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnisAndBerufsbezeichnungNull() {
-		var bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis = Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtOfBerufsbezeichnung())
-				.toArray(LebenslaufAusbildungsArt[]::new);
-
-		for (LebenslaufAusbildungsArt bildungsart : bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis) {
+		Arrays.stream(LebenslaufAusbildungsArt.values())
+				.filter(isLebenslaufAusbildungsArtOfBerufsbezeichnung().negate())
+				.forEach(bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis -> {
 			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
+					.setBildungsart(bildungsartenOtherThanEidgBerufsattestOrEidgFaehigkeitszeugnis)
 					.setBerufsbezeichnung(null);
 			assertThat(validator.isValid(lebenslaufItem, null), is(true));
-		}
+		});
 	}
 
 	@NotNull
-	private static LebenslaufAusbildungsArt[] getLebenslaufAusbildungsArtsOfBerufbezeichnung() {
-		return new LebenslaufAusbildungsArt[] {
+	private static List<LebenslaufAusbildungsArt> getLebenslaufAusbildungsArtsOfBerufbezeichnung() {
+		return List.of(
 				LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
-				LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS };
+				LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS);
 	}
 
 	@NotNull
 	private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtOfBerufsbezeichnung() {
-		return lebenslaufAusbildungsArt ->
-				lebenslaufAusbildungsArt != LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST
-						&& lebenslaufAusbildungsArt != LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS;
+		return lebenslaufAusbildungsArt -> getLebenslaufAusbildungsArtsOfBerufbezeichnung().contains(lebenslaufAusbildungsArt);
 	}
 }

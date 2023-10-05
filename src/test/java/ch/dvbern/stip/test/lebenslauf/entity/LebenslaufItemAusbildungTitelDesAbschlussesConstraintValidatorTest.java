@@ -1,15 +1,13 @@
 package ch.dvbern.stip.test.lebenslauf.entity;
 
-import java.util.Arrays;
-import java.util.function.Predicate;
-
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemAusbildungBerufsbezeichnungConstraintValidator;
-import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemAusbildungFachrichtungConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -30,61 +28,46 @@ public class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest 
 
 	@Test
 	void shouldNotBeValidIfBildungsartAndererAusbildungsabschlussAndTitelDesAbschlussesNull() {
-		for (LebenslaufAusbildungsArt bildungsart : getLebenslaufAusbildungsArtsForFachrichtung()) {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setTitelDesAbschlusses(null);
-			assertThat(validator.isValid(lebenslaufItem, null), is(false));
-		}
+		LebenslaufItem lebenslaufItem = new LebenslaufItem()
+				.setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
+				.setTitelDesAbschlusses(null);
+		assertThat(validator.isValid(lebenslaufItem, null), is(false));
 	}
 
 	@Test
 	void shouldBeValidIfBildungsartAndererAusbildungsabschlussAndTitelDesAbschlussesNotNull() {
-		for (LebenslaufAusbildungsArt bildungsart : getLebenslaufAusbildungsArtsForFachrichtung()) {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setTitelDesAbschlusses("Fachrichtung");
-			assertThat(validator.isValid(lebenslaufItem, null), is(true));
-		}
+		LebenslaufItem lebenslaufItem = new LebenslaufItem()
+				.setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
+				.setTitelDesAbschlusses("Fachrichtung");
+		assertThat(validator.isValid(lebenslaufItem, null), is(true));
 	}
 
 	@Test
 	void shouldNotBeValidIfBildungsartOtherThanAndererAusbildungsabschlussAndTitelDesAbschlussesNotNull() {
-		var bildungsartenOtherThanAndererAusbildungsabschluss = Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtOfFachrichtung())
-				.toArray(LebenslaufAusbildungsArt[]::new);
-
-		for (LebenslaufAusbildungsArt bildungsart : bildungsartenOtherThanAndererAusbildungsabschluss) {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setTitelDesAbschlusses("Fachrichtung");
-			assertThat(validator.isValid(lebenslaufItem, null), is(false));
-		}
+		Arrays.stream(LebenslaufAusbildungsArt.values())
+				.filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
+				.forEach(bildungsart -> {
+						LebenslaufItem lebenslaufItem = new LebenslaufItem()
+							.setBildungsart(bildungsart)
+							.setTitelDesAbschlusses("Fachrichtung");
+						assertThat(validator.isValid(lebenslaufItem, null), is(false));
+				});
 	}
 
 	@Test
 	void shouldBeValidIfBildungsartOtherThanAndererAusbildungsabschlussAndTitelDesAbschlussesNull() {
-		var bildungsartenOtherThanAndererAusbildungsabschluss = Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtOfFachrichtung())
-				.toArray(LebenslaufAusbildungsArt[]::new);
-
-		for (LebenslaufAusbildungsArt bildungsart : bildungsartenOtherThanAndererAusbildungsabschluss) {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setTitelDesAbschlusses(null);
-			assertThat(validator.isValid(lebenslaufItem, null), is(true));
-		}
+		Arrays.stream(LebenslaufAusbildungsArt.values())
+				.filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
+				.forEach(bildungsart -> {
+					LebenslaufItem lebenslaufItem = new LebenslaufItem()
+							.setBildungsart(bildungsart)
+							.setTitelDesAbschlusses(null);
+					assertThat(validator.isValid(lebenslaufItem, null), is(true));
+				});
 	}
 
 	@NotNull
-	private static LebenslaufAusbildungsArt[] getLebenslaufAusbildungsArtsForFachrichtung() {
-		return new LebenslaufAusbildungsArt[] {
-				LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
-		};
-	}
-
-	@NotNull
-	private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtOfFachrichtung() {
+	private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtNotAndererBildungsabschluss() {
 		return lebenslaufAusbildungsArt ->
 				lebenslaufAusbildungsArt != LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS;
 	}
