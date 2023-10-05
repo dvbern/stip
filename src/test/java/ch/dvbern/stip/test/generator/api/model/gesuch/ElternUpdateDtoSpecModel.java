@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.generator.api.model;
+package ch.dvbern.stip.test.generator.api.model.gesuch;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.instancio.Instancio;
 import org.instancio.Model;
 import org.instancio.When;
 
-import static ch.dvbern.stip.test.generator.api.model.AdresseSpecModel.adresseSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
 import static org.instancio.Select.field;
 
 public class ElternUpdateDtoSpecModel {

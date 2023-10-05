@@ -9,6 +9,7 @@ import ch.dvbern.oss.stip.contract.test.dto.SachbearbeiterZuordnungStammdatenDto
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.test.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.test.generator.api.model.benutzer.BenutzerUpdateDtoSpecModel;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -17,16 +18,20 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.hamcrest.MatcherAssert;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ch.dvbern.stip.test.generator.api.model.benutzer.BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.instancio.Select.field;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -77,10 +82,7 @@ class BenutzerResourceTest {
     @Order(3)
     void test_update_me() {
 
-        final var updateDto = new BenutzerUpdateDtoSpec();
-        updateDto.setVorname("Fritz");
-        updateDto.setNachname("Tester");
-        updateDto.setSozialversicherungsnummer("756.1234.5678.97");
+        final var updateDto = Instancio.of(benutzerUpdateDtoSpecModel).create();
 
         api.updateCurrentBenutzer()
                 .body(updateDto)
@@ -107,10 +109,8 @@ class BenutzerResourceTest {
     @Order(4)
     @TestAsSachbearbeiter
     void createAndFindSachbearbeitenden() {
-        final var updateDto = new BenutzerUpdateDtoSpec();
-        updateDto.setVorname("Fritz");
-        updateDto.setNachname("Sachbearbeiter");
-        updateDto.setSozialversicherungsnummer("756.1234.5678.97");
+        final var updateDto = Instancio.of(benutzerUpdateDtoSpecModel)
+                .set(field(BenutzerUpdateDtoSpec::getNachname), "Sachbearbeiter").create();
         api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
@@ -128,9 +128,7 @@ class BenutzerResourceTest {
     @Order(5)
     @TestAsSachbearbeiter
     void createSachbearbeiterZuordnungStammdaten() {
-        final var updateDto = new SachbearbeiterZuordnungStammdatenDtoSpec();
-        updateDto.setBuchstabenDe("A-D");
-        updateDto.setBuchstabenFr("A-C,E");
+        final var updateDto = Instancio.of(sachbearbeiterZuordnungStammdatenDtoSpecModel).create();
         api.createOrUpdateSachbearbeiterStammdaten().benutzerIdPath(sachbearbeiterUUID).body(updateDto).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
