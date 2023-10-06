@@ -13,6 +13,14 @@
 
 > **_NOTE:_**  Quarkus ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
+### How to debug
+* Per default Quarkus open in development mode a debug port (5005) that you can attach in a remote JVM debug configuration
+* When you're building the project with ./mvnw clean install the Quarkus tests are executed in a shared environment
+* You can debug a maven build like this:
+  * ./mvnw clean install -Dmaven.surefire.debug
+  * maven will wait by the test phase that you connect a remote jvm debugger
+  * Once the remote jvm debugger is connected the tests are executed and breakpoints can be accessed
+
 ## Contributing Guidelines
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the process for submitting pull requests to us.

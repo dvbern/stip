@@ -80,4 +80,7 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE = "{jakarta.validation.constraints.einnahmen.kosten.ausbildungskosten.stufe3.required.message}";
 	public static final String VALIDATION_LEBENSLAUF_AUSBILDUNG_UEBERSCHNEIDEN_MESSAGE = "{jakarta.validation.constraints.lebenslauf.ausbildung.ueberschneiden.message}";
 	public static final String VALIDATION_PERSONS_AHV_NUMBER_UNIQUENESS_MESSAGE = "{jakarta.validation.constraints.sv.uniqueness.message}";
+	public static final String VALIDATION_PARTNER_NULL_REQUIRED_MESSAGE = "{jakarta.validation.constraints.partner.null.required.message}";
+	public static final String VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE = "{jakarta.validation.constraints.partner.not.null.required.message}";
+
 }
