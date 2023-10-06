@@ -8,7 +8,6 @@ import ch.dvbern.stip.test.util.TestUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.core.Response;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
@@ -53,7 +52,6 @@ public class GesuchEinreichenUniqueSVNummerTest {
                 .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 
-    @NotNull
     private UUID createFullGesuch() {
         var response = gesuchApiSpec.createGesuch()
                 .body(TestUtil.initGesuchCreateDto())
