@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenZulagenRequiredConstraint
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.test.util.TestUtil;
 import jakarta.validation.ConstraintValidatorContext;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
@@ -74,10 +75,10 @@ class EinnahmenKostenValidatorTest {
 		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
 				.isTrue();
 		gesuchFormular.getAusbildung().getAusbildungsgang().setAusbildungsrichtung(Bildungsart.FACHHOCHSCHULEN);
-		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, initValidatorContext()))
+		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, TestUtil.initValidatorContext()))
 				.isFalse();
 		gesuchFormular.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(BigDecimal.ONE);
-		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, initValidatorContext()))
+		assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, TestUtil.initValidatorContext()))
 				.isTrue();
 	}
 
@@ -92,10 +93,4 @@ class EinnahmenKostenValidatorTest {
 		gesuchFormular.setKinds(kindSet);
 		return gesuchFormular;
 	}
-
-	private ConstraintValidatorContext initValidatorContext() {
-		return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(),null,null,
-				ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
 	}
-
-}

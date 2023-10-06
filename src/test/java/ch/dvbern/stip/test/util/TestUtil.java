@@ -1,6 +1,7 @@
 package ch.dvbern.stip.test.util;
 
 import io.restassured.response.ValidatableResponse;
+import jakarta.validation.ConstraintValidatorContext;
 import jakarta.ws.rs.core.HttpHeaders;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
@@ -17,8 +18,7 @@ public class TestUtil {
     }
 
     public static ConstraintValidatorContextImpl initValidatorContext() {
-        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(),
-                null,null,
+        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null,null,
                 ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
     }
 }

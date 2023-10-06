@@ -1,5 +1,6 @@
 package ch.dvbern.stip.test.generator.entities;
 
+import ch.dvbern.oss.stip.contract.test.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ElternUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
@@ -10,6 +11,7 @@ import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.test.generator.entities.service.GesuchUpdateDtoMapper;
 import ch.dvbern.stip.test.generator.entities.service.GesuchUpdateDtoMapperImpl;
@@ -19,6 +21,7 @@ import org.instancio.Instancio;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.dvbern.stip.test.generator.api.model.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
@@ -36,6 +39,7 @@ public final class GesuchGenerator {
 		gesuchFormularToWorkWith.setPersonInAusbildung(createPersonInAusbildung());
 		gesuchFormularToWorkWith.setElterns(createElterns());
 		gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
+		gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
 		GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
 		gesuchUpdateDtoSpec.setGesuchFormularToWorkWith(gesuchFormularToWorkWith);
 		GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
@@ -76,5 +80,11 @@ public final class GesuchGenerator {
 		PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
 				Instancio.of(personInAusbildungUpdateDtoSpecModel).create();
 		return personInAusbildungUpdateDtoSpec;
+	}
+
+	private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
+		EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
+				.set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
+		return einnahmenKostenUpdateDto;
 	}
 }
