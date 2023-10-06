@@ -7,6 +7,8 @@ import java.util.Arrays;
 import ch.dvbern.oss.stip.contract.test.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ElternUpdateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.ElternschaftsteilungDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.LebenslaufItemUpdateDtoSpec;
@@ -52,7 +54,11 @@ public class GesuchTestSpecGenerator {
 							.create())
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getFamiliensituation),
-					Instancio.create(familiensituationUpdateDtoSpecModel))
+					Instancio.of(familiensituationUpdateDtoSpecModel)
+							.set(field(FamiliensituationUpdateDtoSpec::getGerichtlicheAlimentenregelung), true)
+							.set(field(FamiliensituationUpdateDtoSpec::getWerZahltAlimente),
+									ElternschaftsteilungDtoSpec.GEMEINSAM).create()
+			)
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getAusbildung),
 					Instancio.create(ausbildungUpdateDtoSpecModel))
@@ -92,9 +98,8 @@ public class GesuchTestSpecGenerator {
 			)
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten),
-					Instancio.of(einnahmenKostenUpdateDtoSpecModel).set(
-							field(EinnahmenKostenUpdateDtoSpec::getZulagen),
-							BigDecimal.TEN).create()
+					Instancio.of(einnahmenKostenUpdateDtoSpecModel)
+							.set(field(EinnahmenKostenUpdateDtoSpec::getZulagen), BigDecimal.TEN).create()
 			)
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getKinds),
