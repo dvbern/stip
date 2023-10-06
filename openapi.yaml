@@ -943,31 +943,44 @@ components:
             title: Root Type for Lebenslauf
             description: ''
             required:
-                - beschreibung
                 - bis
                 - von
                 - wohnsitz
             type: object
             properties:
-                wohnsitz:
-                    $ref: '#/components/schemas/WohnsitzKanton'
                 id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
-                beschreibung:
-                    type: string
                 bildungsart:
-                    $ref: '#/components/schemas/Bildungsart'
+                    $ref: '#/components/schemas/LebenslaufAusbildungsArt'
                     description: Required wenn taetigkeitsart = null
-                taetigskeitsart:
-                    $ref: '#/components/schemas/Taetigskeitsart'
-                    description: Required wenn bildungsart = null
                 von:
                     description: Datum im Format mm.YYYY
                     type: string
                 bis:
                     description: Datum im Format mm.YYYY
                     type: string
+                wohnsitz:
+                    $ref: '#/components/schemas/WohnsitzKanton'
+                    description: ''
+                ausbildungAbgeschlossen:
+                    type: boolean
+                    description: ''
+                berufsbezeichnung:
+                    type: string
+                    description: "Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder 'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'"
+                fachrichtung:
+                    type: string
+                    description: Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE" oder "MASTER"
+                titelDesAbschlusses:
+                    type: string
+                    description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
+                taetigskeitsart:
+                    $ref: '#/components/schemas/Taetigskeitsart'
+                    description: Required wenn bildungsart = null
+                taetigkeitsBeschreibung:
+                    type: string
+                    description: Required wenn taetigkeitsart != null
         FamiliensituationUpdate:
             required:
                 - elternVerheiratetZusammen
@@ -1280,6 +1293,25 @@ components:
                 - HOEHERE_BERUFSBILDUNG
                 - FACHHOCHSCHULEN
                 - UNIVERSITAETEN_ETH
+            type: string
+        LebenslaufAusbildungsArt:
+            description: ''
+            enum:
+                - BERUFSVORBEREITENDES_SCHULJAHR
+                - VORLEHRE
+                - GESTALTERISCHE_VORKURSE
+                - EIDGENOESSISCHES_BERUFSATTEST
+                - EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS
+                - BERUFSMATURITAET_NACH_LEHRE
+                - FACHMATURITAET
+                - GYMNASIALE_MATURITAETSSCHULEN
+                - EIDGENOESSISCHES_DIPLOM
+                - EIDGENOESSISCHER_FACHAUSWEIS
+                - DIPLOM_HOEHERE_FACHSCHULE
+                - BACHELOR_HOCHSCHULE_UNI
+                - BACHELOR_FACHHOCHSCHULE
+                - MASTER
+                - ANDERER_BILDUNGSABSCHLUSS
             type: string
         PersonInAusbildung:
             type: object
