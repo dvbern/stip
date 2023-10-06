@@ -22,5 +22,11 @@ public enum Gesuchstatus {
     IN_BEARBEITUNG,
     EINGEREICHT,
     NICHT_KOMPLETT_EINGEREICHT,
-    NICHT_KOMPLETT_EINGEREICHT_NACHFRIST
+    NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+
+    public boolean isEingereicht() {
+        return this == EINGEREICHT ||
+                this == NICHT_KOMPLETT_EINGEREICHT ||
+                this == NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+    }
 }
