@@ -12,13 +12,13 @@ public class AusbildungNichtGefundenRequiredNullFieldsConstraintValidator  imple
 			Ausbildung ausbildung,
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (ausbildung.isAusbildungNichtGefunden()) {
-			return ausbildung.getAusbildungsgang() == null && ausbildung.getAusbildungsstaette() == null;
+			return ausbildung.getAusbildungsgang() == null;
 		}
-		else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return  ausbildung.getAlternativeAusbildungsstaette() == null && ausbildung.getAlternativeAusbildungsgang() == null;
-		}
+
+		constraintValidatorContext.disableDefaultConstraintViolation();
+		constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)
+				.addConstraintViolation();
+		return  ausbildung.getAlternativeAusbildungsstaette() == null && ausbildung.getAlternativeAusbildungsgang() == null;
+
 	}
 }
