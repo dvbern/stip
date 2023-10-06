@@ -3,6 +3,7 @@ package ch.dvbern.stip.test.lebenslauf.entity;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemAusbildungFachrichtungConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
+import ch.dvbern.stip.test.util.TestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -24,7 +26,7 @@ public class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 				.setBildungsart(null)
 				.setFachrichtung(null);
 
-		assertThat(validator.isValid(lebenslaufItem, null), is(true));
+		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
 	}
 
 	@Test
@@ -33,7 +35,7 @@ public class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 			LebenslaufItem lebenslaufItem = new LebenslaufItem()
 					.setBildungsart(bildungsart)
 					.setFachrichtung(null);
-			assertThat(validator.isValid(lebenslaufItem, null), is(false));
+			assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
 		});
 	}
 
@@ -43,7 +45,7 @@ public class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 			LebenslaufItem lebenslaufItem = new LebenslaufItem()
 					.setBildungsart(bildungsart)
 					.setFachrichtung("Fachrichtung");
-			assertThat(validator.isValid(lebenslaufItem, null), is(true));
+			assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
 		});
 	}
 
@@ -52,10 +54,14 @@ public class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 		Arrays.stream(LebenslaufAusbildungsArt.values())
 				.filter(isLebenslaufAusbildungsArtOfFachrichtung().negate())
 				.forEach(bildungsarteOtherThanBachelorOrMaster -> {
+					var context = TestUtil.initValidatorContext();
 					LebenslaufItem lebenslaufItem = new LebenslaufItem()
 							.setBildungsart(bildungsarteOtherThanBachelorOrMaster)
 							.setFachrichtung("Fachrichtung");
-					assertThat(validator.isValid(lebenslaufItem, null), is(false));
+					assertThat(validator.isValid(lebenslaufItem, context), is(false));
+					assertThat(context.getConstraintViolationCreationContexts().size(), is(1));
+					assertThat(context.getConstraintViolationCreationContexts().get(0).getMessage(),
+							is(VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE));
 				});
 	}
 
@@ -69,7 +75,7 @@ public class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 			LebenslaufItem lebenslaufItem = new LebenslaufItem()
 					.setBildungsart(bildungsart)
 					.setFachrichtung(null);
-			assertThat(validator.isValid(lebenslaufItem, null), is(true));
+			assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
 		}
 	}
 

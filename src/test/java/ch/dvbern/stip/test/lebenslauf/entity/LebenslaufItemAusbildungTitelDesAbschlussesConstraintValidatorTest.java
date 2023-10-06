@@ -3,12 +3,14 @@ package ch.dvbern.stip.test.lebenslauf.entity;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
+import ch.dvbern.stip.test.util.TestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -23,7 +25,7 @@ public class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest 
 				.setBildungsart(null)
 				.setTitelDesAbschlusses(null);
 
-		assertThat(validator.isValid(lebenslaufItem, null), is(true));
+		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
 	}
 
 	@Test
@@ -31,7 +33,7 @@ public class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest 
 		LebenslaufItem lebenslaufItem = new LebenslaufItem()
 				.setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
 				.setTitelDesAbschlusses(null);
-		assertThat(validator.isValid(lebenslaufItem, null), is(false));
+		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
 	}
 
 	@Test
@@ -39,7 +41,7 @@ public class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest 
 		LebenslaufItem lebenslaufItem = new LebenslaufItem()
 				.setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
 				.setTitelDesAbschlusses("Fachrichtung");
-		assertThat(validator.isValid(lebenslaufItem, null), is(true));
+		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
 	}
 
 	@Test
@@ -47,10 +49,14 @@ public class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest 
 		Arrays.stream(LebenslaufAusbildungsArt.values())
 				.filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
 				.forEach(bildungsart -> {
+						var context = TestUtil.initValidatorContext();
 						LebenslaufItem lebenslaufItem = new LebenslaufItem()
 							.setBildungsart(bildungsart)
 							.setTitelDesAbschlusses("Fachrichtung");
-						assertThat(validator.isValid(lebenslaufItem, null), is(false));
+						assertThat(validator.isValid(lebenslaufItem, context), is(false));
+						assertThat(context.getConstraintViolationCreationContexts().size(), is(1));
+						assertThat(context.getConstraintViolationCreationContexts().get(0).getMessage(),
+								is(VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE));
 				});
 	}
 
@@ -62,7 +68,7 @@ public class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest 
 					LebenslaufItem lebenslaufItem = new LebenslaufItem()
 							.setBildungsart(bildungsart)
 							.setTitelDesAbschlusses(null);
-					assertThat(validator.isValid(lebenslaufItem, null), is(true));
+					assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
 				});
 	}
 
