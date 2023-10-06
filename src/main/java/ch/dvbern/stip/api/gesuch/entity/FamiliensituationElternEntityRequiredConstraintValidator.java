@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -50,13 +51,17 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 	}
 
 	private boolean isElternTeilRequired(Anrede geschlecht, Familiensituation familiensituation) {
+		boolean elternteilLebt = true;
 		if (familiensituation.getElternteilUnbekanntVerstorben()) {
-			return geschlecht == Anrede.HERR
-					? familiensituation.getVaterUnbekanntVerstorben() ==
-					ElternAbwesenheitsGrund.WEDER_NOCH
-					: familiensituation.getMutterUnbekanntVerstorben() ==
-					ElternAbwesenheitsGrund.WEDER_NOCH;
+			elternteilLebt = geschlecht == Anrede.HERR ?
+					familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH
+					: familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH;
 		}
-		return true;
+		boolean elternteilKeineAlimente = true;
+		if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER && geschlecht == Anrede.HERR
+				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.MUTTER && geschlecht == Anrede.FRAU) {
+			elternteilKeineAlimente = false;
+		}
+		return elternteilLebt && elternteilKeineAlimente;
 	}
 }
