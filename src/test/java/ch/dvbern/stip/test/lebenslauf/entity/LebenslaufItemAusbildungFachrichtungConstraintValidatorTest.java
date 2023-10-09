@@ -15,7 +15,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
+class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 
 	LebenslaufItemAusbildungFachrichtungConstraintValidator validator =
 			new LebenslaufItemAusbildungFachrichtungConstraintValidator();
