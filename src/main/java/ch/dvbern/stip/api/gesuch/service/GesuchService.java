@@ -239,7 +239,7 @@ public class GesuchService {
 	}
 
 	private boolean isUpdateToEigenerHaushalt(GesuchFormularUpdateDto update) {
-		if (update.getAusbildung() == null) {
+		if (update.getPersonInAusbildung() == null) {
 			return false;
 		}
 
