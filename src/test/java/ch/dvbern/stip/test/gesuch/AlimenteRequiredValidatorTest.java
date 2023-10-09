@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
-public class AlimenteRequiredValidatorTest {
+class AlimenteRequiredValidatorTest {
 
     @Inject
     GesuchFormularMapper gesuchFormularMapper;
