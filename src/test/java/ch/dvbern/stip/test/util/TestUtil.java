@@ -18,8 +18,8 @@ public class TestUtil {
         return UUID.fromString(idString);
     }
 
-    public static ConstraintValidatorContext initValidatorContext() {
-        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(),null,null,
+    public static ConstraintValidatorContextImpl initValidatorContext() {
+        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null,null,
                 ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
     }
 

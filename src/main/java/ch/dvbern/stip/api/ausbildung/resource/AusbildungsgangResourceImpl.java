@@ -45,7 +45,7 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
 	@Override
 	@RolesAllowed(ROLE_SACHBEARBEITER)
 	public Response updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
-		AusbildungsgangDto updated = ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
+		ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
 		return Response.accepted().build();
 	}
 }
