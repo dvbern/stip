@@ -1,12 +1,10 @@
 package ch.dvbern.stip.test.gesuch;
 
-import ch.dvbern.stip.api.eltern.entity.Eltern;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
-import java.util.UUID;
-
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -30,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.*;
 import static ch.dvbern.stip.test.generator.entities.GesuchGenerator.initGesuch;
@@ -381,6 +380,115 @@ class GesuchServiceTest {
 		Gesuch gesuch = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
 
 		MatcherAssert.assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+	}
+
+	@Test
+	void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNullAfterUpdate() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().setPersonInAusbildung(null);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
+				Matchers.is(1));
+	}
+
+	@Test
+	void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNull() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		gesuchUpdateDto.getGesuchFormularToWorkWith().setPersonInAusbildung(null);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
+				Matchers.is(1));
+	}
+
+	@Test
+	void noResetAuswertigesMittagessenIfWohnsitzFamilie() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilMutter(null);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(null);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
+				Matchers.is(1));
+	}
+
+	@Test
+	void noResetAuswertigesMittagessenIfWohnsitzMutterVater() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
+				Matchers.is(1));
+	}
+
+	@Test
+	void resetAuswertigesMittagessenIfWohnsitzEigenerHaushalt() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilMutter(null);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(null);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
+				Matchers.nullValue());
+	}
+
+	@Test
+	void einnahmenKostenNullResetAuswertigesMittagessen() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		gesuchUpdateDto.getGesuchFormularToWorkWith().setEinnahmenKosten(null);
+
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilMutter(null);
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(null);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten(),
+				Matchers.nullValue());
+	}
+
+	private Gesuch initGesuchFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
+		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		return gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 	}
 
 	private Gesuch updateGesetzlicheAlimenteRegel(@Nullable Boolean from, Boolean to, GesuchUpdateDto gesuchUpdateDto) {
