@@ -11,6 +11,8 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -47,6 +50,9 @@ class GesuchServiceTest {
 
 	@Inject
 	ElternMapper elternMapper;
+
+	@Inject
+	LebenslaufItemMapper lebenslaufItemMapper;
 
 	@InjectMock
 	GesuchRepository gesuchRepository;
@@ -211,7 +217,7 @@ class GesuchServiceTest {
 		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
 		var anzahlElternBevoreUpdate = gesuchUpdateDto.getGesuchFormularToWorkWith().getElterns().size();
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
 		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -223,7 +229,7 @@ class GesuchServiceTest {
 	@Test
 	void noResetIfNotUnbekanntOrVerstorben() {
 		GesuchUpdateDto gesuchUpdateDto =  GesuchGenerator.createGesuch();
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(true);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
@@ -307,7 +313,7 @@ class GesuchServiceTest {
 
 		gesuchUpdateDto.getGesuchFormularToWorkWith().setFamiliensituation(null);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().setFamiliensituation(new FamiliensituationUpdateDto());
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
@@ -486,14 +492,66 @@ class GesuchServiceTest {
 				Matchers.nullValue());
 	}
 
+	@Test
+	void noResetLebenslaufIfGebrutsdatumNotChanged() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(),
+				Matchers.is(1));
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(),
+				Matchers.is(1));
+	}
+
+	@Test
+	void resetLebenslaufIfGebrutsdatumChanged() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(),
+				Matchers.is(1));
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setGeburtsdatum(LocalDate.of(2000, 10, 11));
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(),
+				Matchers.is(0));
+	}
+
+	@Test
+	void noResetLebenslaufIfNoUpdateOfPersonInAusbildung() {
+		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+		Gesuch gesuch = initGesuchFromGesuchUpdate(gesuchUpdateDto);
+
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(),
+				Matchers.is(1));
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().setPersonInAusbildung(null);
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		gesuchService.updateGesuch(any(), gesuchUpdateDto);
+		MatcherAssert.assertThat(
+				gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(),
+				Matchers.is(1));
+	}
+
+
+
 	private Gesuch initGesuchFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		return gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 	}
 
 	private Gesuch updateGesetzlicheAlimenteRegel(@Nullable Boolean from, Boolean to, GesuchUpdateDto gesuchUpdateDto) {
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(from);
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(to);
 		if (to) {
@@ -520,7 +578,7 @@ class GesuchServiceTest {
 	}
 
 	private Gesuch updateElternteilUnbekanntVerstorben(GesuchUpdateDto gesuchUpdateDto, ElternAbwesenheitsGrund grundMutter, ElternAbwesenheitsGrund grundVater) {
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternVerheiratetZusammen(false);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setElternteilUnbekanntVerstorben(true);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setMutterUnbekanntVerstorben(grundMutter);
@@ -535,7 +593,7 @@ class GesuchServiceTest {
 			GesuchUpdateDto gesuchUpdateDto,
 			Elternschaftsteilung from,
 			Elternschaftsteilung to) {
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getFamiliensituation().setWerZahltAlimente(from);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
@@ -547,7 +605,7 @@ class GesuchServiceTest {
 	}
 
 	private Gesuch updateFromZivilstandToZivilstand(GesuchUpdateDto gesuchUpdateDto, Zivilstand from, Zivilstand to) {
-		Gesuch gesuch = prepareGesuchsformularMitElternId(gesuchUpdateDto);
+		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().setPartner(new PartnerUpdateDto());
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(from);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
@@ -557,12 +615,20 @@ class GesuchServiceTest {
 		return gesuch;
 	}
 
-	private Gesuch prepareGesuchsformularMitElternId(GesuchUpdateDto gesuchUpdateDto){
+	private Gesuch prepareGesuchWithIds(GesuchUpdateDto gesuchUpdateDto){
 		Gesuch gesuch = initGesuch();
 		GesuchFormular gesuchFormular = new GesuchFormular();
-		gesuchUpdateDto.getGesuchFormularToWorkWith().setPartner(new PartnerUpdateDto());
-		gesuchUpdateDto.getGesuchFormularToWorkWith().getElterns().stream().forEach(elternUpdateDto -> elternUpdateDto.setId(UUID.randomUUID()));
-		gesuchUpdateDto.getGesuchFormularToWorkWith().getElterns().stream().forEach(elternUpdateDto -> gesuchFormular.getElterns().add(elternMapper.partialUpdate(elternUpdateDto, new Eltern())));
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getElterns().forEach(elternUpdateDto -> {
+			elternUpdateDto.setId(UUID.randomUUID());
+			gesuchFormular.getElterns().add(elternMapper.partialUpdate(elternUpdateDto, new Eltern()));
+		});
+
+		gesuchUpdateDto.getGesuchFormularToWorkWith().getLebenslaufItems().forEach(item -> {
+			item.setId(UUID.randomUUID());
+			gesuchFormular.getLebenslaufItems().add(lebenslaufItemMapper.partialUpdate(item, new LebenslaufItem()));
+		});
+
 		gesuch.setGesuchFormularToWorkWith(gesuchFormular);
 		return gesuch;
 	}

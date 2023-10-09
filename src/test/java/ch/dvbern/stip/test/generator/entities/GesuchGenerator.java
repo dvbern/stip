@@ -1,17 +1,9 @@
 package ch.dvbern.stip.test.generator.entities;
 
-import ch.dvbern.oss.stip.contract.test.dto.EinnahmenKostenUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PartnerUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.oss.stip.contract.test.dto.*;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.test.generator.entities.service.GesuchUpdateDtoMapper;
 import ch.dvbern.stip.test.generator.entities.service.GesuchUpdateDtoMapperImpl;
@@ -24,6 +16,7 @@ import java.util.List;
 import static ch.dvbern.stip.test.generator.api.model.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
@@ -40,10 +33,15 @@ public final class GesuchGenerator {
 		gesuchFormularToWorkWith.setElterns(createElterns());
 		gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
 		gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
+		gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
 		GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
 		gesuchUpdateDtoSpec.setGesuchFormularToWorkWith(gesuchFormularToWorkWith);
 		GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
 		return gesuchUpdateDtoMapper.toEntity(gesuchUpdateDtoSpec);
+	}
+
+	private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
+		return Instancio.of(lebenslaufItemUpdateDtoSpecModel).create();
 	}
 
 	public static Gesuch initGesuch() {
