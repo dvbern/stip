@@ -1,6 +1,7 @@
 package ch.dvbern.stip.test.gesuch;
 
 import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -9,6 +10,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -17,11 +19,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.UUID;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@RequiredArgsConstructor
 public class GesuchEinreichenUniqueSVNummerTest {
 
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
@@ -51,7 +57,12 @@ public class GesuchEinreichenUniqueSVNummerTest {
                 .execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .extract()
+                .as(ValidationReportDtoSpec.class);
+
+        assertThat(response.getValidationErrors().get(0).getMessageTemplate(), is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
+
     }
 
     private UUID createFullGesuch() {
