@@ -26,6 +26,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
+    private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
+
     @Test
     @Order(1)
     @TestAsGesuchsteller
@@ -62,6 +64,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
         var gesuchId = TestUtil.extractIdFromResponse(response);
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+        gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
 
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()

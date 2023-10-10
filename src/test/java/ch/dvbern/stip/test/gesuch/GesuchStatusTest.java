@@ -30,6 +30,8 @@ class GesuchStatusTest {
 
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 	private UUID gesuchId;
+
+	private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.3333.3333.35";
 	@Test
 	@TestAsGesuchsteller
 	@Order(1)
@@ -55,6 +57,7 @@ class GesuchStatusTest {
 	@Order(2)
 	void testFillGesuchUndEinreichenDokumentFehlt() {
 		var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
