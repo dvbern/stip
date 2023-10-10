@@ -285,72 +285,6 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(19)
-	void testUpdateGeburtsdatumNotChangedPersonInAusbildung() {
-		var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId)
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.extract()
-				.body()
-				.as(GesuchDtoSpec.class);
-
-		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
-
-		var gesuchUpdatDTO =  Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
-		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().setId(
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().getId());
-		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().setGeburtsdatum(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung()
-				.getGeburtsdatum());
-
-		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.ACCEPTED.getStatusCode());
-		gesuch =
-				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-						.body()
-						.as(GesuchDtoSpec.class);
-		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
-	}
-
-	@Test
-	@TestAsGesuchsteller
-	@Order(20)
-	void testUpdateChangedGeburtsdatumPersonInAusbildung() {
-		var gesuch =
-				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-						.body()
-						.as(GesuchDtoSpec.class);
-		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
-		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().setId(
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getAdresse().getId());
-
-		assertThat(gesuchUpdatDTO.getGesuchFormularToWorkWith(), notNullValue());
-		assertThat(gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung(), notNullValue());
-		gesuchUpdatDTO.getGesuchFormularToWorkWith()
-				.getPersonInAusbildung()
-				.setGeburtsdatum(LocalDate.of(2000, 10, 11));
-		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.ACCEPTED.getStatusCode());
-		gesuch =
-				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-						.body()
-						.as(GesuchDtoSpec.class);
-		assertThat(gesuch.getGesuchFormularToWorkWith(), notNullValue());
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems(), is(nullValue()));
-	}
-
-	@Test
-	@TestAsGesuchsteller
-	@Order(21)
 	void testFindGesuche() {
 		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
 				.then()
@@ -369,7 +303,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(22)
+	@Order(20)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)

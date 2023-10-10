@@ -1,15 +1,16 @@
 package ch.dvbern.stip.test.gesuch;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.LebenslaufLuckenlosConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,110 +22,99 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 	@Test
 	void isLebenslaufLuckenlosOkTest() {
 		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2016, 8, 1));
-		lebenslaufItem.setBis(LocalDate.of(2023, 12, 31));
+		LebenslaufItem lebenslaufItem = createLebenslaufItem(
+				LocalDate.of(2016, 8, 1),
+				LocalDate.of(2023, 12, 31));
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
 		lebenslaufItemSet.add(lebenslaufItem);
 		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
 		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
 				, is(true));
 		lebenslaufItem.setBis(LocalDate.of(2022, 11, 30));
-		LebenslaufItem lebenslaufItemZwei = new LebenslaufItem();
-		lebenslaufItemZwei.setVon(LocalDate.of(2022, 8, 1));
-		lebenslaufItemZwei.setBis(LocalDate.of(2023, 12, 31));
+		LebenslaufItem lebenslaufItemZwei = createLebenslaufItem(
+				LocalDate.of(2022, 8, 1),
+				LocalDate.of(2023, 12, 31));
 		lebenslaufItemSet.clear();
 		lebenslaufItemSet.add(lebenslaufItem);
 		lebenslaufItemSet.add(lebenslaufItemZwei);
 		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(true));
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
 	}
 
 	@Test
 	void lebenslaufLuckenlosStartZuFruehTest() {
-		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2015, 10, 1));
-		lebenslaufItem.setBis(LocalDate.of(2023, 12, 31));
-		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
-		lebenslaufItemSet.add(lebenslaufItem);
-		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
+				LocalDate.of(2015, 10, 1),
+				LocalDate.of(2023, 12, 31));
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 	}
 
 	@Test
 	void lebenslaufLuckenlosStartZuSpaetTest() {
-		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2025, 10, 1));
-		lebenslaufItem.setBis(LocalDate.of(2027, 12, 31));
-		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
-		lebenslaufItemSet.add(lebenslaufItem);
-		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
+				LocalDate.of(2025, 10, 1),
+				LocalDate.of(2027, 12, 31));
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 	}
 
 	@Test
 	void lebenslaufLuckenlosEndZuSpaetTest() {
-		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2017, 10, 1));
-		lebenslaufItem.setBis(LocalDate.of(2023, 12, 31));
-		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
-		lebenslaufItemSet.add(lebenslaufItem);
-		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
+				LocalDate.of(2017, 10, 1),
+				LocalDate.of(2023, 12, 31));
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 	}
 
 	@Test
 	void lebenslaufLuckenlosStopZuSpaetTest() {
-		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2016, 8, 1));
-		lebenslaufItem.setBis(LocalDate.of(2024, 12, 31));
-		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
-		lebenslaufItemSet.add(lebenslaufItem);
-		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
+				LocalDate.of(2016, 8, 1),
+				LocalDate.of(2024, 12, 31));
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 	}
 
 	@Test
 	void lebenslaufItemStopZuFruehTest() {
-		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2016, 8, 1));
-		lebenslaufItem.setBis(LocalDate.of(2022, 6, 30));
-		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
-		lebenslaufItemSet.add(lebenslaufItem);
-		LebenslaufItem lebenslaufItemZwei = new LebenslaufItem();
-		lebenslaufItemZwei.setVon(LocalDate.of(2022, 7, 1));
-		lebenslaufItemZwei.setBis(LocalDate.of(2023, 11, 30));
-		lebenslaufItemSet.add(lebenslaufItemZwei);
-		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
+				LocalDate.of(2016, 8, 1),
+				LocalDate.of(2022, 6, 30));
+
+		LebenslaufItem lebenslaufItemZwei = createLebenslaufItem(
+				LocalDate.of(2022, 7, 1),
+				LocalDate.of(2023, 11, 30));
+		gesuchFormular.getLebenslaufItems().add(lebenslaufItemZwei);
+
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 	}
 
 	@Test
 	void isLebenslaufLuckenlosKoTest() {
-		GesuchFormular gesuchFormular = initFormular();
-		LebenslaufItem lebenslaufItem = new LebenslaufItem();
-		lebenslaufItem.setVon(LocalDate.of(2016, 8, 1));
-		lebenslaufItem.setBis(LocalDate.of(2022, 6, 30));
+		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
+				LocalDate.of(2016, 8, 1),
+				LocalDate.of(2022, 6, 30));
+
+		LebenslaufItem lebenslaufItemZwei =
+				createLebenslaufItem(
+					LocalDate.of(2022, 8, 1),
+					LocalDate.of(2023, 12, 31));
+		gesuchFormular.getLebenslaufItems().add(lebenslaufItemZwei);
+
+		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
+	}
+
+	@NotNull
+	private GesuchFormular initFormularWithLebenslaufItem(LocalDate von, LocalDate bis) {
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
-		lebenslaufItemSet.add(lebenslaufItem);
-		LebenslaufItem lebenslaufItemZwei = new LebenslaufItem();
-		lebenslaufItemZwei.setVon(LocalDate.of(2022, 8, 1));
-		lebenslaufItemZwei.setBis(LocalDate.of(2023, 12, 31));
-		lebenslaufItemSet.add(lebenslaufItemZwei);
-		gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+		lebenslaufItemSet.add(createLebenslaufItem(von, bis));
+
+		return initFormular().setLebenslaufItems(lebenslaufItemSet);
+	}
+
+	@NotNull
+	private static LebenslaufItem createLebenslaufItem(LocalDate von, LocalDate bis) {
+		return new LebenslaufItem()
+				.setVon(von)
+				.setBis(bis);
 	}
 
 	private GesuchFormular initFormular() {

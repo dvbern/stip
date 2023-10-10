@@ -18,9 +18,8 @@ public class PartnerNullRequiredWhenAlleinstehendConstraintValidator
 					.addConstraintViolation();
 			return false;
 		}
-		if (!gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft() && gesuchFormular.getPartner() != null) {
-			return false;
-		}
-		return true;
+
+		return gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft()
+				|| gesuchFormular.getPartner() == null;
 	}
 }
