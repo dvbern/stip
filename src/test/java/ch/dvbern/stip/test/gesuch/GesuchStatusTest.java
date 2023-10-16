@@ -21,6 +21,7 @@ import org.junit.jupiter.api.*;
 import java.util.UUID;
 
 import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
+import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinderModel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -79,7 +80,18 @@ class GesuchStatusTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(3)
-	void testFillGesuchUndEinreichenNachfristVerlangen() {
+	void testGesuchEinreichenDokumentFehltUpdateFailed() {
+		var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecKinderModel).create();
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(4)
+	void testGesuchEinreichenNachfristVerlangen() {
 		gesuchApiSpec.gesuchNachfristBeantragen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
 				.then()
@@ -90,5 +102,16 @@ class GesuchStatusTest {
 						.body()
 						.as(GesuchDtoSpec.class);
 		assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(5)
+	void testGesuchEinreichenDokumentNachfristVerlangenUpdateFailed() {
+		var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecKinderModel).create();
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
 	}
 }

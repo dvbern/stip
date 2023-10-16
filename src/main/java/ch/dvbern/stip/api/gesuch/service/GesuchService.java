@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -63,7 +64,7 @@ public class GesuchService {
 		var gesuch = gesuchRepository.requireById(gesuchId);
 		resetFieldsOnUpdate(gesuch.getGesuchFormularToWorkWith(), gesuchUpdateDto.getGesuchFormularToWorkWith());
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
-
+		preventUpdateVonGesuchIfReadOnyl(gesuch);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
@@ -95,6 +96,7 @@ public class GesuchService {
 	@Transactional
 	public void deleteGesuch(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+		preventUpdateVonGesuchIfReadOnyl(gesuch);
 		gesuchRepository.delete(gesuch);
 	}
 
@@ -226,7 +228,9 @@ public class GesuchService {
 				update.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
 	}
 
-	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(
+			GesuchFormular toUpdate,
+			GesuchFormularUpdateDto update) {
 		if (toUpdate.getPersonInAusbildung() == null
 				|| toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
 				|| update.getPersonInAusbildung() == null) {
@@ -256,5 +260,12 @@ public class GesuchService {
 
 		return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
 				!update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
+	}
+
+	private void preventUpdateVonGesuchIfReadOnyl(Gesuch gesuch) {
+		if (Gesuchstatus.readonlyGesuchStatusList.contains(gesuch.getGesuchStatus())) {
+			throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
+					+ gesuch.getGesuchStatus());
+		}
 	}
 }

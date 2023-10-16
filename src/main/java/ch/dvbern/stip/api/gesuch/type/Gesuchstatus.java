@@ -17,10 +17,16 @@
 
 package ch.dvbern.stip.api.gesuch.type;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum Gesuchstatus {
-    OFFEN,
-    IN_BEARBEITUNG,
-    EINGEREICHT,
-    NICHT_KOMPLETT_EINGEREICHT,
-    NICHT_KOMPLETT_EINGEREICHT_NACHFRIST
-}
+	OFFEN,
+	IN_BEARBEITUNG,
+	EINGEREICHT,
+	NICHT_KOMPLETT_EINGEREICHT,
+	NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+
+	public static Set<Gesuchstatus> readonlyGesuchStatusList =
+			EnumSet.of(EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+	}
