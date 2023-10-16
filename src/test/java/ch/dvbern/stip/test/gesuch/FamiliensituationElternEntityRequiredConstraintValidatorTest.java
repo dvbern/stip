@@ -104,7 +104,7 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
 		familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
 		gesuchFormular.setFamiliensituation(familiensituation);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
-				, is(false));
+				, is(true));
 		// Add Mutter
 		Eltern mutter = new Eltern();
 		mutter.setElternTyp(ElternTyp.MUTTER);
@@ -120,7 +120,7 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
 		elternSet.add(vater);
 		gesuchFormular.setElterns(elternSet);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
-				, is(true));
+				, is(false));
 
 		// Mutter Zahl alimente - false
 		gesuchFormular.getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.MUTTER);
@@ -132,17 +132,29 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
 		gesuchFormular.setElterns(elternSet);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
 				, is(true));
-		// Mutter erneu addieren, Vater Zahl alimente - false
-		elternSet.add(mutter);
+		// Mutter Vater wegnehmen - false
+		elternSet = new HashSet<>();
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+
+		// Vater Zahl alimente - false
 		gesuchFormular.setElterns(elternSet);
 		gesuchFormular.getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.VATER);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
 				, is(false));
-		// Vater wegnehmen - true
+		// Mutter addieren- true
 		elternSet = new HashSet<>();
 		elternSet.add(mutter);
 		gesuchFormular.setElterns(elternSet);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
 				, is(true));
+
+		// Vater addieren - false
+		elternSet = new HashSet<>();
+		elternSet.add(vater);
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
 	}
 }

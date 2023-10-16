@@ -54,10 +54,7 @@ public class GesuchTestSpecGenerator {
 							.create())
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getFamiliensituation),
-					Instancio.of(familiensituationUpdateDtoSpecModel)
-							.set(field(FamiliensituationUpdateDtoSpec::getGerichtlicheAlimentenregelung), true)
-							.set(field(FamiliensituationUpdateDtoSpec::getWerZahltAlimente),
-									ElternschaftsteilungDtoSpec.GEMEINSAM).create()
+					Instancio.create(familiensituationUpdateDtoSpecModel)
 			)
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getAusbildung),
@@ -99,7 +96,8 @@ public class GesuchTestSpecGenerator {
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten),
 					Instancio.of(einnahmenKostenUpdateDtoSpecModel)
-							.set(field(EinnahmenKostenUpdateDtoSpec::getZulagen), BigDecimal.TEN).create()
+							.set(field(EinnahmenKostenUpdateDtoSpec::getZulagen), BigDecimal.TEN)
+							.set(field(EinnahmenKostenUpdateDtoSpec::getAlimente), null).create()
 			)
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getKinds),
