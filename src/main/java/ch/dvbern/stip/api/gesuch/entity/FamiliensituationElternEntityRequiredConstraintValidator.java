@@ -58,7 +58,8 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 		}
 		boolean elternteilKeineAlimente = true;
 		if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER && elternTyp == ElternTyp.VATER
-				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.MUTTER && elternTyp == ElternTyp.MUTTER) {
+				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.MUTTER && elternTyp == ElternTyp.MUTTER
+				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM) {
 			elternteilKeineAlimente = false;
 		}
 		return elternteilLebt && elternteilKeineAlimente;
