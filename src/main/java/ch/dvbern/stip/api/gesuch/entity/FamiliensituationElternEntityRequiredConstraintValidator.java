@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -16,7 +16,7 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 		if (gesuchFormular.getFamiliensituation() == null) {
 			return false;
 		}
-		if (isElternTeilRequired(Anrede.FRAU, gesuchFormular.getFamiliensituation())) {
+		if (isElternTeilRequired(ElternTyp.MUTTER, gesuchFormular.getFamiliensituation())) {
 			if (gesuchFormular.getElterns()
 					.stream()
 					.filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
@@ -31,7 +31,7 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 				.isPresent()) {
 			return false;
 		}
-		if (isElternTeilRequired(Anrede.HERR, gesuchFormular.getFamiliensituation())) {
+		if (isElternTeilRequired(ElternTyp.VATER, gesuchFormular.getFamiliensituation())) {
 			if (gesuchFormular.getElterns()
 					.stream()
 					.filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
@@ -49,14 +49,18 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 		return true;
 	}
 
-	private boolean isElternTeilRequired(Anrede geschlecht, Familiensituation familiensituation) {
+	private boolean isElternTeilRequired(ElternTyp elternTyp, Familiensituation familiensituation) {
+		boolean elternteilLebt = true;
 		if (familiensituation.getElternteilUnbekanntVerstorben()) {
-			return geschlecht == Anrede.HERR
-					? familiensituation.getVaterUnbekanntVerstorben() ==
-					ElternAbwesenheitsGrund.WEDER_NOCH
-					: familiensituation.getMutterUnbekanntVerstorben() ==
-					ElternAbwesenheitsGrund.WEDER_NOCH;
+			elternteilLebt = elternTyp == ElternTyp.VATER ?
+					familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH
+					: familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH;
 		}
-		return true;
+		boolean elternteilKeineAlimente = true;
+		if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER && elternTyp == ElternTyp.VATER
+				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.MUTTER && elternTyp == ElternTyp.MUTTER) {
+			elternteilKeineAlimente = false;
+		}
+		return elternteilLebt && elternteilKeineAlimente;
 	}
 }
