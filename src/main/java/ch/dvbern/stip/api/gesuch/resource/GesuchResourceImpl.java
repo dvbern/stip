@@ -119,6 +119,11 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.accepted().build();
     }
 
+    @Override
+    public Response gesuchEinreichenValidieren(UUID gesuchId) {
+        return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
+    }
+
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
     public Response gesuchNachfristBeantragen(UUID gesuchId) {
         gesuchService.setDokumentNachfrist(gesuchId);

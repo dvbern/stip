@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -104,14 +106,10 @@ public class GesuchService {
 		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
 			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
 		}
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		Set<ConstraintViolation<Gesuch>> violationsEinreichen =
-				validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-		if (!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
-			Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
-			concatenatedViolations.addAll(violationsEinreichen);
+		Set<ConstraintViolation<Gesuch>> violations = validateGesuchEinreichen(gesuch);
+		if (!violations.isEmpty()) {
 			throw new ValidationsException(
-					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
+					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", violations);
 		}
 		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0) {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
@@ -124,6 +122,23 @@ public class GesuchService {
 	public void setDokumentNachfrist(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
+	}
+
+	public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
+		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+		return ValidationsExceptionMapper.constraintViolationstoDto(validateGesuchEinreichen(gesuch));
+	}
+
+	private Set<ConstraintViolation<Gesuch>> validateGesuchEinreichen(Gesuch gesuch) {
+		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
+			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+		}
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		Set<ConstraintViolation<Gesuch>> violationsEinreichen =
+				validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+		Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
+		concatenatedViolations.addAll(violationsEinreichen);
+		return concatenatedViolations;
 	}
 
 	private void resetFieldsOnUpdate(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
@@ -226,7 +241,9 @@ public class GesuchService {
 				update.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
 	}
 
-	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(
+			GesuchFormular toUpdate,
+			GesuchFormularUpdateDto update) {
 		if (toUpdate.getPersonInAusbildung() == null
 				|| toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
 				|| update.getPersonInAusbildung() == null) {
