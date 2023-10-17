@@ -57,7 +57,7 @@ public class BenutzerService {
 	public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer, JsonWebToken jsonWebToken) {
 		HashSet<String> group = jsonWebToken.getClaim(Claims.groups);
 		String groupOnly = group.iterator().next().toUpperCase();
-		if (benutzer.getBenutzerTyp().name() != groupOnly) {
+		if (!groupOnly.equals(benutzer.getBenutzerTyp().name())) {
 			benutzer = benutzerRepository.findById(benutzer.getId());
 			benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
 			benutzerRepository.persist(benutzer);

@@ -109,8 +109,9 @@ class BenutzerResourceTest {
     @Order(4)
     @TestAsSachbearbeiter
     void createAndFindSachbearbeitenden() {
+        String nachname = UUID.randomUUID().toString();
         final var updateDto = Instancio.of(benutzerUpdateDtoSpecModel)
-                .set(field(BenutzerUpdateDtoSpec::getNachname), "Sachbearbeiter").create();
+                .set(field(BenutzerUpdateDtoSpec::getNachname), nachname).create();
         api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
@@ -121,7 +122,7 @@ class BenutzerResourceTest {
                 .body()
                 .as(BenutzerDtoSpec[].class);
         sachbearbeiterUUID = sachbearbeiterListe[0].getId();
-        MatcherAssert.assertThat(sachbearbeiterListe.length, is(1));
+        assertThat(sachbearbeiterListe).extracting(BenutzerDtoSpec::getNachname).contains(nachname);
     }
 
     @Test
