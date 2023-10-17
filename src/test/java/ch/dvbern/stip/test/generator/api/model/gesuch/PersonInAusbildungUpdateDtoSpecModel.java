@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.generator.api.model;
+package ch.dvbern.stip.test.generator.api.model.gesuch;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -7,12 +7,11 @@ import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.LandDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.WohnsitzDtoSpec;
-import ch.dvbern.stip.api.common.validation.ValidationsConstant;
 import org.instancio.Assign;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
-import static ch.dvbern.stip.test.generator.api.model.AdresseSpecModel.adresseSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 import static org.instancio.Select.field;
 
