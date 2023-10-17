@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.gesuch.entity.PartnerNullRequiredWhenAlleinstehendCons
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.test.util.TestUtil;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
@@ -40,7 +41,7 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 	void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNullShouldNotBeValid() {
 		Zivilstand.getZvilstandsWithPartnerschaft().forEach(zivilstand -> {
 			GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
-			assertThat(validator.isValid(gesuchFormular, initValidatorContext()), is(false));
+			assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext()), is(false));
 		});
 	}
 
@@ -60,8 +61,4 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 		return gesuchFormular;
 	}
 
-	private ConstraintValidatorContext initValidatorContext() {
-		return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(),null,null,
-				ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
-	}
 }

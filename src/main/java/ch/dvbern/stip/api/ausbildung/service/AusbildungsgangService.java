@@ -29,13 +29,15 @@ public class AusbildungsgangService {
 
 	@Transactional
 	public AusbildungsgangDto createAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangDto) {
-		return persistsAusbildungsgang(ausbildungsgangDto, new Ausbildungsgang());
+		Ausbildungsgang ausbildungsgang = new Ausbildungsgang();
+		persistsAusbildungsgang(ausbildungsgangDto, ausbildungsgang);
+		return ausbildungsgangMapper.toDto(ausbildungsgang);
 	}
 
 	@Transactional
-	public AusbildungsgangDto updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
+	public void updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
 		var ausbildungsgangToUpdate = ausbildungsgangRepository.requireById(ausbildungsgangId);
-		return persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
+		persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
 	}
 
 	@Transactional
@@ -44,11 +46,10 @@ public class AusbildungsgangService {
 		ausbildungsgangRepository.delete(ausbildungsgang);
 	}
 
-	private AusbildungsgangDto persistsAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangUpdate, Ausbildungsgang ausbildungsgangToUpdate) {
+	private void persistsAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangUpdate, Ausbildungsgang ausbildungsgangToUpdate) {
 		ausbildungsgangToUpdate.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaette()));
 		ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
 		ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
-		return ausbildungsgangMapper.toDto(ausbildungsgangToUpdate);
 	}
 
 	private Ausbildungsstaette loadAusbildungsstaetteIfExists(AusbildungsstaetteUpdateDto ausbildungsstaette) {

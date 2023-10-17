@@ -1,11 +1,12 @@
 package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import java.util.List;
-
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.LebenslaufAusbildungsArtDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.LebenslaufItemUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
+
+import java.util.List;
 
 import static org.instancio.Select.field;
 
@@ -17,6 +18,9 @@ public final class LebenslaufItemUpdateDtoSpecModel {
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getTaetigskeitsart))
 					.set(field(LebenslaufItemUpdateDtoSpec::getVon), "01.2022")
 					.set(field(LebenslaufItemUpdateDtoSpec::getBis), "02.2022")
+					.set(field(LebenslaufItemUpdateDtoSpec::getBildungsart), LebenslaufAusbildungsArtDtoSpec.MASTER)
+					.ignore(field(LebenslaufItemUpdateDtoSpec::getBerufsbezeichnung))
+					.ignore(field(LebenslaufItemUpdateDtoSpec::getTitelDesAbschlusses))
 					.toModel();
 
 	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecLebenslaufModel =

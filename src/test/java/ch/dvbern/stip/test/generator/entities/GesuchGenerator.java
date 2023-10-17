@@ -1,14 +1,8 @@
 package ch.dvbern.stip.test.generator.entities;
 
-import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PartnerUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.oss.stip.contract.test.dto.*;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.test.generator.entities.service.GesuchUpdateDtoMapper;
@@ -19,10 +13,12 @@ import org.instancio.Instancio;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.dvbern.stip.test.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.instancio.Select.field;
 
@@ -36,10 +32,16 @@ public final class GesuchGenerator {
 		gesuchFormularToWorkWith.setPersonInAusbildung(createPersonInAusbildung());
 		gesuchFormularToWorkWith.setElterns(createElterns());
 		gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
+		gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
+		gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
 		GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
 		gesuchUpdateDtoSpec.setGesuchFormularToWorkWith(gesuchFormularToWorkWith);
 		GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
 		return gesuchUpdateDtoMapper.toEntity(gesuchUpdateDtoSpec);
+	}
+
+	private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
+		return Instancio.of(lebenslaufItemUpdateDtoSpecModel).create();
 	}
 
 	public static Gesuch initGesuch() {
@@ -76,5 +78,11 @@ public final class GesuchGenerator {
 		PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
 				Instancio.of(personInAusbildungUpdateDtoSpecModel).create();
 		return personInAusbildungUpdateDtoSpec;
+	}
+
+	private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
+		EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
+				.set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
+		return einnahmenKostenUpdateDto;
 	}
 }

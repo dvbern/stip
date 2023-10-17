@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.FamiliensituationElternEntityRequiredConstraintValidator;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import org.junit.jupiter.api.Test;
@@ -88,5 +89,72 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
 		gesuchFormular.setElterns(elternSet);
 		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
 				, is(true));
+	}
+
+	@Test
+	void werZahltAlimenteTest() {
+		FamiliensituationElternEntityRequiredConstraintValidator
+				familiensituationElternEntityRequiredConstraintValidator =
+				new FamiliensituationElternEntityRequiredConstraintValidator();
+
+		// Beide Eltern sollten vorhanden sein:
+		GesuchFormular gesuchFormular = new GesuchFormular();
+		Familiensituation familiensituation = new Familiensituation();
+		familiensituation.setElternteilUnbekanntVerstorben(false);
+		familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
+		gesuchFormular.setFamiliensituation(familiensituation);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(true));
+		// Add Mutter
+		Eltern mutter = new Eltern();
+		mutter.setElternTyp(ElternTyp.MUTTER);
+		Set<Eltern> elternSet = new HashSet<>();
+		elternSet.add(mutter);
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+		// Add Vater
+		Eltern vater = new Eltern();
+		vater.setElternTyp(ElternTyp.VATER);
+		elternSet.add(mutter);
+		elternSet.add(vater);
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+
+		// Mutter Zahl alimente - false
+		gesuchFormular.getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.MUTTER);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+		// Mutter wegnehmen - true
+		elternSet = new HashSet<>();
+		elternSet.add(vater);
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(true));
+		// Mutter Vater wegnehmen - false
+		elternSet = new HashSet<>();
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+
+		// Vater Zahl alimente - false
+		gesuchFormular.setElterns(elternSet);
+		gesuchFormular.getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.VATER);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
+		// Mutter addieren- true
+		elternSet = new HashSet<>();
+		elternSet.add(mutter);
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(true));
+
+		// Vater addieren - false
+		elternSet = new HashSet<>();
+		elternSet.add(vater);
+		gesuchFormular.setElterns(elternSet);
+		assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+				, is(false));
 	}
 }

@@ -54,6 +54,19 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.obhut.berechnung.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE =
 			"{jakarta.validation.constraints.lebenslaufitem.art.required.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_BERUFSBEZEICHNUNG_NOTNULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.berufsbezeichnung.notnull.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.berufsbezeichnung.null.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NOTNULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.notnull.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtung.null.message}";
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NOTNULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.titelDesAbschlusses.notnull.message}";
+
+	public static final String VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE =
+			"{jakarta.validation.constraints.lebenslaufitem.ausbildung.titelDesAbschlusses.null.message}";
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE =
 			"{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
 	public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
@@ -72,5 +85,6 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_PERSONS_AHV_NUMBER_UNIQUENESS_MESSAGE = "{jakarta.validation.constraints.sv.uniqueness.message}";
 	public static final String VALIDATION_PARTNER_NULL_REQUIRED_MESSAGE = "{jakarta.validation.constraints.partner.null.required.message}";
 	public static final String VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE = "{jakarta.validation.constraints.partner.not.null.required.message}";
-
+	public static final String VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG = "{jakarta.validation.constraints.alimente.alimenteregelung.required.message}";
+	public static final String VALIDATION_ALIMENTE_NULL_WHEN_NO_ALIMENTEREGELUNG = "{jakarta.validation.constraints.alimente.no.alimenteregelung.null.message}";
 }
