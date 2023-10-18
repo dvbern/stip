@@ -1,11 +1,11 @@
-package ch.dvbern.stip.test.generator.api.model;
+package ch.dvbern.stip.test.generator.api.model.gesuch;
 
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.PartnerUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
-import static ch.dvbern.stip.test.generator.api.model.AdresseSpecModel.adresseSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 import static org.instancio.Select.field;
 

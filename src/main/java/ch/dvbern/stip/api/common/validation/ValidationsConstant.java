@@ -6,6 +6,8 @@ public final class ValidationsConstant {
 	}
 	public static final String EMAIL_VALIDATION_PATTERN = "^[a-z0-9]+[a-z0-9._-]*@[a-z0-9.-]+\\.[a-z]{2,4}$";
 
+	public static final String BUCHSTABEN_RANGE_VALIDATION_PATTERN = "([A-Z]-[A-Z]|[A-Z])(,([A-Z]-[A-Z]|[A-Z]))*";
+
 	public static final String VALIDATION_NACHNAME_NOTBLANK_MESSAGE =
 			"{jakarta.validation.constraints.nachname.NotBlank.message}";
 	public static final String VALIDATION_VORNAME_NOTBLANK_MESSAGE =
@@ -69,6 +71,7 @@ public final class ValidationsConstant {
 			"{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
 	public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
 	public static final String VALIDATION_EMAIL_MESSAGE = "{jakarta.validation.constraints.email.message}";
+	public static final String VALIDATION_BUCHSTABEN_RANGE_MESSAGE = "{jakarta.validation.constraints.buchstaben.range.message}";
 	public static final String VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE =
 			"{jakarta.validation.constraints.familiensituation.eltern.entity.message}";
 	public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE = "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
@@ -84,4 +87,5 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE = "{jakarta.validation.constraints.partner.not.null.required.message}";
 	public static final String VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG = "{jakarta.validation.constraints.alimente.alimenteregelung.required.message}";
 	public static final String VALIDATION_ALIMENTE_NULL_WHEN_NO_ALIMENTEREGELUNG = "{jakarta.validation.constraints.alimente.no.alimenteregelung.null.message}";
+	public static final String VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE = "dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message";
 }

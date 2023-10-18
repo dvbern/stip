@@ -1,5 +1,6 @@
 package ch.dvbern.stip.test.util;
 
+import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -20,5 +21,12 @@ public class TestUtil {
     public static ConstraintValidatorContextImpl initValidatorContext() {
         return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null,null,
                 ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
+    }
+
+    public static GesuchCreateDtoSpec initGesuchCreateDto() {
+        var gesuchDTO = new GesuchCreateDtoSpec();
+        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
+        gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
+        return gesuchDTO;
     }
 }

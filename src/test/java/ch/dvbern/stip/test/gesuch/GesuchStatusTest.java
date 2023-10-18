@@ -1,12 +1,10 @@
 package ch.dvbern.stip.test.gesuch;
 
 import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
-import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.test.util.TestUtil;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -33,13 +31,13 @@ class GesuchStatusTest {
 
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 	private UUID gesuchId;
+
+	private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.3333.3333.35";
 	@Test
 	@TestAsGesuchsteller
 	@Order(1)
 	void testCreateGesuchStatusNeu() {
-		var gesuchDTO = new GesuchCreateDtoSpec();
-		gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-		gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
+		var gesuchDTO = TestUtil.initGesuchCreateDto();
 
 		var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek).then();
 		response.assertThat()
@@ -60,6 +58,7 @@ class GesuchStatusTest {
 	@Order(2)
 	void testFillGesuchUndEinreichenDokumentFehlt() {
 		var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+		gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()

@@ -20,7 +20,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
-import static ch.dvbern.stip.test.generator.api.model.AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpecModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

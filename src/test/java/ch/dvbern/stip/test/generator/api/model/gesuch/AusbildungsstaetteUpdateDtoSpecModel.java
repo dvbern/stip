@@ -1,4 +1,4 @@
-package ch.dvbern.stip.test.generator.api.model;
+package ch.dvbern.stip.test.generator.api.model.gesuch;
 
 import ch.dvbern.oss.stip.contract.test.dto.AusbildungsstaetteUpdateDtoSpec;
 import org.instancio.Instancio;

@@ -1,31 +1,29 @@
-package ch.dvbern.stip.test.generator.api.model;
+package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import ch.dvbern.oss.stip.contract.test.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
-import static ch.dvbern.stip.test.generator.api.model.AdresseSpecModel.adresseSpecModel;
 import static org.instancio.Select.field;
 
-public final class AuszahlungUpdateDtoSpecModel {
+public class EinnahmenKostenUpdateDtoSpecModel {
 
-	public static final Model<AuszahlungUpdateDtoSpec> auszahlungUpdateDtoSpecModel =
-			Instancio.of(AuszahlungUpdateDtoSpec.class)
-					.set(field(AuszahlungUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
+	public static final Model<EinnahmenKostenUpdateDtoSpec> einnahmenKostenUpdateDtoSpecModel =
+			Instancio.of(EinnahmenKostenUpdateDtoSpec.class)
 					.toModel();
 
-	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecAuszahlungModel =
+	public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecEinnahmenKostenModel =
 			Instancio.of(
 							GesuchFormularUpdateDtoSpec.class)
 					.set(
-							field(GesuchFormularUpdateDtoSpec::getAuszahlung),
-							Instancio.create(auszahlungUpdateDtoSpecModel))
+							field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten),
+							Instancio.create(einnahmenKostenUpdateDtoSpecModel))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getFamiliensituation))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getElterns))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getGeschwisters))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getLebenslaufItems))
-					.ignore(field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten))
+					.ignore(field(GesuchFormularUpdateDtoSpec::getAuszahlung))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getAusbildung))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung))
 					.ignore(field(GesuchFormularUpdateDtoSpec::getKinds))
