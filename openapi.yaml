@@ -786,6 +786,85 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getAusbildungsstaette
             summary: returns a Ausbildungsstaette with the given id
+    /benutzer/stammdaten/sachbearbeiter:
+        get:
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Benutzer'
+                    description: >-
+                        Return a list of all Sachbearbeiter with their Sachbearbeiter Zuordnung Stammdaten
+                        when exist
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getSachbearbeitende
+    '/benutzer/stammdaten/sachbearbeiter/{benutzerId}':
+        get:
+            tags:
+                - Benutzer
+            parameters:
+                -
+                    name: benutzerId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                    description: Return the Stammdaten for the given Benutzer when exist
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getSachbearbeiterStammdaten
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                required: true
+            tags:
+                - Benutzer
+            parameters:
+                -
+                    name: benutzerId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    description: Sachbearbeiter Stammdaten created / updated
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createOrUpdateSachbearbeiterStammdaten
 components:
     schemas:
         Anrede:
@@ -1200,9 +1279,6 @@ components:
                 bearbeiter:
                     description: Zuständiger Sachbearbeiter des Gesuchs
                     type: string
-                gesuchTrancheToWorkWith:
-                    $ref: '#/components/schemas/GesuchTranche'
-                    description: ''
         GesuchCreate:
             required:
                 - fallId
@@ -1627,6 +1703,9 @@ components:
                     properties:
                         id:
                             $ref: '#/components/schemas/UUID'
+                            description: ''
+                        sachbearbeiterZuordnungStammdaten:
+                            $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
                             description: ''
                 -
                     $ref: '#/components/schemas/BenutzerUpdate'
@@ -2081,6 +2160,16 @@ components:
                 id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
+        SachbearbeiterZuordnungStammdaten:
+            description: ''
+            type: object
+            properties:
+                buchstabenDe:
+                    description: ''
+                    type: string
+                buchstabenFr:
+                    description: ''
+                    type: string
     responses:
         Unauthorized:
             content:
