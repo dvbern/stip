@@ -967,20 +967,24 @@ components:
                     type: boolean
                     description: ''
                 berufsbezeichnung:
+                    description: >-
+                        Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder
+                        'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
                     type: string
-                    description: "Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder 'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'"
                 fachrichtung:
+                    description: >-
+                        Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE"
+                        oder "MASTER"
                     type: string
-                    description: Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE" oder "MASTER"
                 titelDesAbschlusses:
-                    type: string
                     description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
+                    type: string
                 taetigskeitsart:
                     $ref: '#/components/schemas/Taetigskeitsart'
                     description: Required wenn bildungsart = null
                 taetigkeitsBeschreibung:
-                    type: string
                     description: Required wenn taetigkeitsart != null
+                    type: string
         FamiliensituationUpdate:
             required:
                 - elternVerheiratetZusammen
@@ -1080,15 +1084,14 @@ components:
                 ausbildungMitEinkommenOderErwerbstaetig:
                     type: boolean
                 jahreseinkommen:
-                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
                     type: number
                 fahrkosten:
-                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
                     type: number
                 verpflegungskosten:
-                    description: 'Required falls ausbildungMitEinkommenOderErwerbstaetig true ist'
+                    description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
                     type: number
-
         KindUpdate:
             title: Root Type for Geschwister
             description: ''
@@ -1172,6 +1175,7 @@ components:
                 - gesuchNummer
                 - id
                 - aenderungsdatum
+                - gesuchTrancheToWorkWith
             type: object
             properties:
                 fall:
@@ -1190,18 +1194,15 @@ components:
                 id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
-                gesuch_formular_freigabe_copy:
-                    $ref: '#/components/schemas/GesuchFormular'
-                    description: ''
-                gesuch_formular_to_work_with:
-                    $ref: '#/components/schemas/GesuchFormular'
-                    description: ''
                 aenderungsdatum:
                     $ref: '#/components/schemas/LocalDate'
                     description: Datum wann das Gesuch zu letzt geändert wurde
                 bearbeiter:
                     description: Zuständiger Sachbearbeiter des Gesuchs
                     type: string
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTranche'
+                    description: ''
         GesuchCreate:
             required:
                 - fallId
@@ -1214,10 +1215,12 @@ components:
                     $ref: '#/components/schemas/UUID'
         GesuchUpdate:
             description: ''
+            required:
+                - gesuchTrancheToWorkWith
             type: object
             properties:
-                gesuch_formular_to_work_with:
-                    $ref: '#/components/schemas/GesuchFormularUpdate'
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTrancheUpdate'
                     description: ''
         Land:
             enum:
@@ -2043,6 +2046,39 @@ components:
                     $ref: '#/components/schemas/Ausbildungsort'
                     description: ''
                 ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+        GesuchTranche:
+            description: ''
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: ''
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: ''
+                gesuchFormular:
+                    $ref: '#/components/schemas/GesuchFormular'
+                    description: ''
+        GesuchTrancheUpdate:
+            description: ''
+            required:
+                - gesuchFormular
+                - id
+            type: object
+            properties:
+                gesuchFormular:
+                    $ref: '#/components/schemas/GesuchFormularUpdate'
+                    description: ''
+                id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
     responses:
