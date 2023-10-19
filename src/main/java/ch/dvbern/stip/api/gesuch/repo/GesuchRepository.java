@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,25 +42,29 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 		return query.stream();
 	}
 
-	public Stream<Gesuch> findAllWithFormularToWorkWith() {
+	public Stream<Gesuch> findAllWithFormular() {
 		var queryFactory = new JPAQueryFactory(entityManager);
 		var gesuch = QGesuch.gesuch;
+		var gesuchTranche = QGesuchTranche.gesuchTranche;
 
 		return queryFactory
 				.select(gesuch)
-				.from(gesuch)
-				.where(gesuch.gesuchFormularToWorkWith.isNotNull())
+				.from(gesuchTranche)
+				.where(gesuchTranche.gesuchFormular.isNotNull())
 				.stream();
 	}
 
 	public Stream<Gesuch> findGesucheBySvNummer(String svNummer) {
 		var queryFactory = new JPAQueryFactory(entityManager);
 		var gesuch = QGesuch.gesuch;
+		var gesuchTranche = QGesuchTranche.gesuchTranche;
 		var gesuchFormular = QGesuchFormular.gesuchFormular;
 		var personInAubsilung = QPersonInAusbildung.personInAusbildung;
 
-		return queryFactory.selectFrom(gesuch)
-				.join(gesuch.gesuchFormularToWorkWith, gesuchFormular)
+		return queryFactory.select(gesuch)
+				.distinct()
+				.from(gesuchTranche)
+				.join(gesuchTranche.gesuchFormular, gesuchFormular)
 				.join(gesuchFormular.personInAusbildung, personInAubsilung)
 				.where(personInAubsilung.sozialversicherungsnummer.eq(svNummer))
 				.stream();

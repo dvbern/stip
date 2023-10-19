@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import ch.dvbern.stip.api.common.entity.DateRange;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -28,18 +29,19 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -52,6 +54,7 @@ public class GesuchService {
 	private final GesuchRepository gesuchRepository;
 
 	private final GesuchMapper gesuchMapper;
+	private final GesuchTrancheMapper gesuchTrancheMapper;
 
 	private final Validator validator;
 
@@ -59,42 +62,62 @@ public class GesuchService {
 
 	private final GesuchDokumentRepository gesuchDokumentRepository;
 
-	public Optional<GesuchDto> findGesuch(UUID id) {
-		return gesuchRepository.findByIdOptional(id).map(gesuchMapper::toDto);
-	}
+	private final GesuchsperiodenService gesuchsperiodeService;
 
+	public Optional<GesuchDto> findGesuch(UUID id) {
+		return gesuchRepository.findByIdOptional(id).map(this::mapWithTrancheToWorkWith);
+	}
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
-		resetFieldsOnUpdate(gesuch.getGesuchFormularToWorkWith(), gesuchUpdateDto.getGesuchFormularToWorkWith());
-		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
+		var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
+				.orElseThrow(NotFoundException::new);
+		updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
+	}
 
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+	private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
+		resetFieldsOnUpdate(trancheToUpdate.getGesuchFormular(), trancheUpdate.getGesuchFormular());
+		gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
+
+		Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
 		if (!violations.isEmpty()) {
 			throw new ValidationsException("Die Entität ist nicht valid", violations);
 		}
 	}
 
 	public List<GesuchDto> findAllWithPersonInAusbildung() {
-		return gesuchRepository.findAllWithFormularToWorkWith()
-				.filter(gesuch -> gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung() != null)
-				.map(gesuchMapper::toDto)
+		return gesuchRepository.findAllWithFormular()
+				.filter(gesuch -> this.getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null)
+				.map(this::mapWithTrancheToWorkWith)
 				.toList();
 	}
 
 	@Transactional
 	public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
 		Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+		createInitalGesuchTranche(gesuch);
 		gesuchRepository.persist(gesuch);
-		return gesuchMapper.toDto(gesuch);
+		return mapWithTrancheToWorkWith(gesuch);
+	}
+
+	private void createInitalGesuchTranche(Gesuch gesuch) {
+		var periode = gesuchsperiodeService
+				.getGesuchsperiode(gesuch.getGesuchsperiode().getId())
+				.orElseThrow(NotFoundException::new);
+
+		var tranche =  new GesuchTranche()
+				.setGueltigkeit(new DateRange(periode.getGueltigAb(), periode.getGueltigBis()))
+				.setGesuch(gesuch);
+
+		gesuch.getGesuchTranchen().add(tranche);
 	}
 
 	public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
-		return gesuchRepository.findAllForBenutzer(benutzerId).map(gesuchMapper::toDto).toList();
+		return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
 	}
 
 	public List<GesuchDto> findAllForFall(UUID fallId) {
-		return gesuchRepository.findAllForFall(fallId).map(gesuchMapper::toDto).toList();
+		return gesuchRepository.findAllForFall(fallId).map(this::mapWithTrancheToWorkWith).toList();
 	}
 
 	@Transactional
@@ -121,8 +144,20 @@ public class GesuchService {
 		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
 	}
 
+	private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
+		GesuchTrancheDto tranche = getCurrentGesuchTranche(gesuch);
+		GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
+		gesuchDto.setGesuchTrancheToWorkWith(tranche);
+		return gesuchDto;
+	}
+
+	private GesuchTrancheDto getCurrentGesuchTranche(Gesuch gesuch) {
+		return gesuchTrancheMapper.toDto(gesuch.getGesuchTrancheValidOnDate(LocalDate.now()));
+	}
+
+
 	private void validateGesuchForEinreichung(Gesuch gesuch) {
-		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
+		if (gesuch.getGesuchTranchen().get(0).getGesuchFormular().getFamiliensituation() == null) {
 			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
 		}
 
@@ -140,7 +175,7 @@ public class GesuchService {
 
 	private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
 		Stream<Gesuch> gesuchStream = gesuchRepository
-				.findGesucheBySvNummer(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getSozialversicherungsnummer());
+				.findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer());
 
 		if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
 			throw new CustomValidationsException(

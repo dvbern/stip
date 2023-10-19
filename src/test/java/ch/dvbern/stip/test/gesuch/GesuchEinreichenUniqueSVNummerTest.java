@@ -1,6 +1,7 @@
 package ch.dvbern.stip.test.gesuch;
 
 import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
+import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
 import ch.dvbern.oss.stip.contract.test.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
@@ -74,8 +75,15 @@ public class GesuchEinreichenUniqueSVNummerTest {
                 .statusCode(Response.Status.CREATED.getStatusCode());
 
         var gesuchId = TestUtil.extractIdFromResponse(response);
+        var gesuchTrancheId = gesuchApiSpec.getGesuch()
+                .gesuchIdPath(gesuchId)
+                .execute(ResponseBody::prettyPeek).then().extract()
+                .body()
+                .as(GesuchDtoSpec.class)
+                .getGesuchTrancheToWorkWith().getId();
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
-        gesuchUpdatDTO.getGesuchFormularToWorkWith().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
 
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()

@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.common.statemachines;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachineConfig;
@@ -61,23 +62,23 @@ public class GesuchStatusConfigProducer {
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
-		Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
+		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO
 		mailService.sendGesuchNichtKomplettEingereichtEmail(
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getNachname(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getVorname(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
+				gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
+				gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
+				gesuch.getGesuchFormular().getPersonInAusbildung().getEmail(),
+				gesuch.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
 	}
 
 	private void sendGesuchNichtKomplettEingereichtNachfristEmail(
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
-		Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
+		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO
 		mailService.sendGesuchNichtKomplettEingereichtNachfristEmail(
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getNachname(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getVorname(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getEmail(),
-				gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
+				gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
+				gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
+				gesuch.getGesuchFormular().getPersonInAusbildung().getEmail(),
+				gesuch.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
 	}
 }

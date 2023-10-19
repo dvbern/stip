@@ -3,6 +3,7 @@ package ch.dvbern.stip.test.generator.entities;
 import ch.dvbern.oss.stip.contract.test.dto.*;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.test.generator.entities.service.GesuchUpdateDtoMapper;
@@ -12,7 +13,9 @@ import org.instancio.Instancio;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchTrancheDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
@@ -34,8 +37,12 @@ public final class GesuchGenerator {
 		gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
 		gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
 		gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
+
+		GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
+		gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);
+
 		GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
-		gesuchUpdateDtoSpec.setGesuchFormularToWorkWith(gesuchFormularToWorkWith);
+		gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec);
 		GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
 		return gesuchUpdateDtoMapper.toEntity(gesuchUpdateDtoSpec);
 	}
@@ -45,9 +52,18 @@ public final class GesuchGenerator {
 	}
 
 	public static Gesuch initGesuch() {
-		return new Gesuch()
+		var gesuch =  new Gesuch()
 				.setFall(new Fall())
 				.setGesuchsperiode(new Gesuchsperiode().setGueltigkeit(GUELTIGKEIT_PERIODE_23_24));
+		gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
+				.setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
+				.setGesuch(gesuch)
+				.setId(UUID.randomUUID()));
+		return gesuch;
+	}
+
+	public static GesuchTranche initGesuchTranche() {
+		return initGesuch().getGesuchTranchen().get(0);
 	}
 
 	private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
@@ -84,5 +100,9 @@ public final class GesuchGenerator {
 		EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
 				.set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
 		return einnahmenKostenUpdateDto;
+	}
+
+	private static GesuchTrancheUpdateDtoSpec createGesuchTranche() {
+		return Instancio.of(gesuchTrancheDtoSpecModel).create();
 	}
 }

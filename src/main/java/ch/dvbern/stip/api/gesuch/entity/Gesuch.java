@@ -12,15 +12,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Audited
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
-        @Index(name = "IX_gesuch_gesuch_formular_freigabe_copy_id", columnList = "gesuch_formular_freigabe_copy_id"),
-        @Index(name = "IX_gesuch_gesuch_forumular_to_work_with_id", columnList = "gesuch_formular_to_work_with_id"),
         @Index(name = "IX_gesuch_mandant", columnList = "mandant")
 })
 @Getter
@@ -50,11 +53,17 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(nullable = false)
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuch_formular_freigabe_copy_id"), nullable = true)
-    private @Valid GesuchFormular gesuchFormularFreigabeCopy;
+    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuch_forumular_to_work_with_id"), nullable = true)
-    private @Valid GesuchFormular gesuchFormularToWorkWith;
+    public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
+        return gesuchTranchen.stream()
+                .filter(t -> t.getId().equals(id))
+                .findFirst();
+    }
+
+    public GesuchTranche getGesuchTrancheValidOnDate(LocalDate date) {
+        return gesuchTranchen.get(0);
+    }
 }
