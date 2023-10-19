@@ -1043,8 +1043,8 @@ components:
                     $ref: '#/components/schemas/WohnsitzKanton'
                     description: ''
                 ausbildungAbgeschlossen:
-                    type: boolean
                     description: ''
+                    type: boolean
                 berufsbezeichnung:
                     description: >-
                         Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder
@@ -1255,6 +1255,7 @@ components:
                 - id
                 - aenderungsdatum
                 - gesuchTrancheToWorkWith
+                - gesuchTrancheToWorkWith
             type: object
             properties:
                 fall:
@@ -1279,6 +1280,9 @@ components:
                 bearbeiter:
                     description: Zuständiger Sachbearbeiter des Gesuchs
                     type: string
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTranche'
+                    description: ''
         GesuchCreate:
             required:
                 - fallId
