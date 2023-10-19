@@ -54,6 +54,7 @@ public class Gesuch extends AbstractMandantEntity {
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
 
     @NotNull
+    @Min(1)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
