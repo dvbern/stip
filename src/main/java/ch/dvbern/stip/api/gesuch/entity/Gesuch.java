@@ -63,7 +63,9 @@ public class Gesuch extends AbstractMandantEntity {
                 .findFirst();
     }
 
-    public GesuchTranche getGesuchTrancheValidOnDate(LocalDate date) {
-        return gesuchTranchen.get(0);
+    public Optional<GesuchTranche> getGesuchTrancheValidOnDate(LocalDate date) {
+       return gesuchTranchen.stream()
+                .filter(t -> t.getGueltigkeit().contains(date))
+                .findFirst();
     }
 }

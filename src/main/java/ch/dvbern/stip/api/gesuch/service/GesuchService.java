@@ -152,7 +152,9 @@ public class GesuchService {
 	}
 
 	private GesuchTrancheDto getCurrentGesuchTranche(Gesuch gesuch) {
-		return gesuchTrancheMapper.toDto(gesuch.getGesuchTrancheValidOnDate(LocalDate.now()));
+		return gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+				.map(gesuchTrancheMapper::toDto)
+				.orElseThrow();
 	}
 
 
