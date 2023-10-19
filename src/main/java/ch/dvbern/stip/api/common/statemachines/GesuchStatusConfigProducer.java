@@ -62,7 +62,7 @@ public class GesuchStatusConfigProducer {
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
-		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO
+		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO in KSTIP-530
 		mailService.sendGesuchNichtKomplettEingereichtEmail(
 				gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
@@ -74,7 +74,7 @@ public class GesuchStatusConfigProducer {
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
-		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO
+		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO in KSTIP-530
 		mailService.sendGesuchNichtKomplettEingereichtNachfristEmail(
 				gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),

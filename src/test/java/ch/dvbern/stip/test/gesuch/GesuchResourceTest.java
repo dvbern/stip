@@ -20,12 +20,10 @@ import lombok.RequiredArgsConstructor;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.*;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.nullValue;
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

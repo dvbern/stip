@@ -159,9 +159,11 @@ public class GesuchService {
 
 
 	private void validateGesuchForEinreichung(Gesuch gesuch) {
-		if (gesuch.getGesuchTranchen().get(0).getGesuchFormular().getFamiliensituation() == null) {
-			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
-		}
+		gesuch.getGesuchTranchen().forEach(tranche -> {
+				if (tranche.getGesuchFormular().getFamiliensituation() == null) {
+					throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+				}
+		});
 
 		validateNoOtherGesuchEingereichtWithSameSvNumber(gesuch);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
