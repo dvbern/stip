@@ -31,11 +31,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -108,14 +104,8 @@ public class GesuchService {
 	@Transactional
 	public void gesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
-			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
-		}
-		Set<ConstraintViolation<Gesuch>> violations = validateGesuchEinreichen(gesuch);
-		if (!violations.isEmpty()) {
-			throw new ValidationsException(
-					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", violations);
-		}
+
+		validateGesuchEinreichen(gesuch);
 		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0) {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
 		} else {
@@ -131,9 +121,34 @@ public class GesuchService {
 
 	public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		return ValidationsExceptionMapper.constraintViolationstoDto(validateGesuchEinreichen(gesuch));
+
+		try {
+			validateGesuchEinreichen(gesuch);
+		} catch (ValidationsException exception) {
+			return ValidationsExceptionMapper.toDto(exception);
+		}
+
+		return new ValidationReportDto();
 	}
 
+	private void validateGesuchEinreichen(Gesuch gesuch) {
+		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
+			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+		}
+
+		validateNoOtherGesuchEingereichtWithSameSvNumber(gesuch);
+
+		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+		Set<ConstraintViolation<Gesuch>> violationsEinreichen =
+				validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+
+		if (!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
+			Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
+			concatenatedViolations.addAll(violationsEinreichen);
+			throw new ValidationsException(
+					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
+		}
+	}
 
 	private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
 		Stream<Gesuch> gesuchStream = gesuchRepository
@@ -144,19 +159,6 @@ public class GesuchService {
 					"Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) eingereicht werden",
 					new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
 		}
-	}
-
-
-	private Set<ConstraintViolation<Gesuch>> validateGesuchEinreichen(Gesuch gesuch) {
-		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
-			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
-		}
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		Set<ConstraintViolation<Gesuch>> violationsEinreichen =
-				validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-		Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
-		concatenatedViolations.addAll(violationsEinreichen);
-		return concatenatedViolations;
 	}
 
 	private void resetFieldsOnUpdate(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
