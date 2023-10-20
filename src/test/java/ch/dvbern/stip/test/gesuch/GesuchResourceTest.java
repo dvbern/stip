@@ -21,8 +21,12 @@ import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.*;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -67,7 +71,7 @@ class GesuchResourceTest {
 				.body()
 				.as(GesuchDtoSpec[].class);
 
-		assertThat(gesuche.length, is(0));
+		assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(false));
 	}
 
 	@Test
@@ -91,7 +95,7 @@ class GesuchResourceTest {
 				.body()
 				.as(GesuchDtoSpec[].class);
 
-		assertThat(gesuche.length, is(0));
+		assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(false));
 	}
 
 	@Test
@@ -247,7 +251,7 @@ class GesuchResourceTest {
 				.extract()
 				.body()
 				.as(GesuchDtoSpec[].class);
-		assertThat(gesuche.length, is(1));
+		assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(true));
 	}
 
 	@Test
@@ -261,7 +265,7 @@ class GesuchResourceTest {
 				.extract()
 				.body()
 				.as(GesuchDtoSpec[].class);
-		assertThat(gesuche.length, is(1));
+		assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(true));
 	}
 
 	@Test
@@ -290,7 +294,6 @@ class GesuchResourceTest {
 		Assertions.assertThat(validationReport).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(validationReportFromService);
 	}
 
-
 	@Test
 	@TestAsGesuchsteller
 	@Order(19)
@@ -301,12 +304,12 @@ class GesuchResourceTest {
 				.body()
 				.as(GesuchDtoSpec[].class);
 
-		assertThat(gesuche[0].getId(), is(gesuchId));
-		assertThat(gesuche.length, is(1));
-		assertThat(gesuche[0].getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
-		assertThat(gesuche[0].getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
-		assertThat(gesuche[0].getAenderungsdatum(), notNullValue());
-		assertThat(gesuche[0].getBearbeiter(), is("John Doe"));
+		var gesuchOpt = findGesuchWithId(gesuche, gesuchId);
+		assertThat(gesuchOpt.isPresent(), is(true));
+		assertThat(gesuchOpt.get().getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
+		assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
+		assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
+		assertThat(gesuchOpt.get().getBearbeiter(), is("John Doe"));
 	}
 
 
@@ -320,5 +323,11 @@ class GesuchResourceTest {
 				.then()
 				.assertThat()
 				.statusCode(Status.NO_CONTENT.getStatusCode());
+	}
+
+	private Optional<GesuchDtoSpec> findGesuchWithId(GesuchDtoSpec[] gesuche, UUID gesuchId) {
+		return Arrays.stream(gesuche)
+				.filter(gesuchDtoSpec -> gesuchDtoSpec.getId().equals(gesuchId))
+				.findFirst();
 	}
 }

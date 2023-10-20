@@ -3,6 +3,8 @@ package ch.dvbern.stip.api.gesuch.repo;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
+import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
+import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -47,6 +49,19 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 				.select(gesuch)
 				.from(gesuch)
 				.where(gesuch.gesuchFormularToWorkWith.isNotNull())
+				.stream();
+	}
+
+	public Stream<Gesuch> findGesucheBySvNummer(String svNummer) {
+		var queryFactory = new JPAQueryFactory(entityManager);
+		var gesuch = QGesuch.gesuch;
+		var gesuchFormular = QGesuchFormular.gesuchFormular;
+		var personInAubsilung = QPersonInAusbildung.personInAusbildung;
+
+		return queryFactory.selectFrom(gesuch)
+				.join(gesuch.gesuchFormularToWorkWith, gesuchFormular)
+				.join(gesuchFormular.personInAusbildung, personInAubsilung)
+				.where(personInAubsilung.sozialversicherungsnummer.eq(svNummer))
 				.stream();
 	}
 }
