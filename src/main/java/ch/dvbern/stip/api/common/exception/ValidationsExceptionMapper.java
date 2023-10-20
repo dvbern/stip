@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.common.exception;
 
-import java.util.Set;
-
 import ch.dvbern.stip.generated.dto.ValidationErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.validation.ConstraintViolation;
+
+import java.util.Set;
 
 public final class ValidationsExceptionMapper {
 
@@ -20,7 +20,7 @@ public final class ValidationsExceptionMapper {
 
 	public static ValidationReportDto constraintViolationstoDto(Set<? extends ConstraintViolation<?>> constraintViolations) {
 		ValidationReportDto validationsReportDto = new ValidationReportDto();
-		constraintViolations.stream().forEach(constraintViolation -> {
+		constraintViolations.forEach(constraintViolation -> {
 					ValidationErrorDto validationErrorDto = new ValidationErrorDto();
 					validationErrorDto.setMessage(constraintViolation.getMessage());
 					validationErrorDto.setMessageTemplate(constraintViolation.getMessageTemplate());
