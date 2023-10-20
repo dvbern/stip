@@ -13,6 +13,7 @@ import org.instancio.Instancio;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
@@ -25,6 +26,11 @@ import static org.instancio.Select.field;
 
 public final class GesuchGenerator {
 	private GesuchGenerator() {
+	}
+
+	public static GesuchUpdateDto createFullGesuch() {
+		GesuchUpdateDtoSpec gesuchFormular = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+		return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
 	}
 
 	public static GesuchUpdateDto createGesuch() {

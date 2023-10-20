@@ -1,5 +1,7 @@
 package ch.dvbern.stip.test.gesuch;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -562,7 +564,10 @@ class GesuchServiceTest {
 
 	@Test
 	void validateEinreichenValid() {
-		Gesuch gesuch = initGesuchFromGesuchUpdate(GesuchGenerator.createGesuch());
+		Gesuch gesuch = initGesuchFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+		gesuch.getGesuchFormularToWorkWith()
+				.getAusbildung()
+				.setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
 
 		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(gesuch));
