@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -126,6 +127,8 @@ public class GesuchService {
 			validateGesuchEinreichen(gesuch);
 		} catch (ValidationsException exception) {
 			return ValidationsExceptionMapper.toDto(exception);
+		} catch (CustomValidationsException exception) {
+			return CustomValidationsExceptionMapper.toDto(exception);
 		}
 
 		return new ValidationReportDto();
