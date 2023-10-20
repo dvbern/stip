@@ -81,12 +81,12 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
-    private Partner partner;
+    private @Valid Partner partner;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
-    private Auszahlung auszahlung;
+    private @Valid Auszahlung auszahlung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
