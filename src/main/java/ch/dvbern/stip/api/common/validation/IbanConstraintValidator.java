@@ -9,9 +9,7 @@ public class IbanConstraintValidator implements ConstraintValidator<IbanConstrai
 
     public IbanConstraintValidator() {
         var ch = IBANValidator.DEFAULT_IBAN_VALIDATOR.getValidator("CH");
-        var li = IBANValidator.DEFAULT_IBAN_VALIDATOR.getValidator("LI");
-
-        validator = new IBANValidator(new IBANValidator.Validator[]{ ch, li });
+        validator = new IBANValidator(new IBANValidator.Validator[]{ ch });
     }
 
     @Override
