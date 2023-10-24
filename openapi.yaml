@@ -1872,8 +1872,6 @@ components:
             required:
                 - nettoerwerbseinkommen
                 - fahrkosten
-                - wohnkosten
-                - personenImHaushalt
                 - verdienstRealisiert
             type: object
             properties:
