@@ -13,12 +13,13 @@ import org.instancio.Instancio;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
-import static ch.dvbern.stip.test.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.instancio.Select.field;
@@ -26,6 +27,11 @@ import static org.instancio.Select.field;
 
 public final class GesuchGenerator {
 	private GesuchGenerator() {
+	}
+
+	public static GesuchUpdateDto createFullGesuch() {
+		GesuchUpdateDtoSpec gesuchFormular = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+		return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
 	}
 
 	public static GesuchUpdateDto createGesuch() {
