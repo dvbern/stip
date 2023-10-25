@@ -20,6 +20,7 @@ import static ch.dvbern.stip.test.generator.api.model.gesuch.FamiliensituationUp
 import static ch.dvbern.stip.test.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
+import static ch.dvbern.stip.test.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.instancio.Select.field;
 
@@ -40,6 +41,8 @@ public final class GesuchGenerator {
 		gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
 		gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
 		gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
+		gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
+		gesuchFormularToWorkWith.setPartner(createPartner());
 		GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
 		gesuchUpdateDtoSpec.setGesuchFormularToWorkWith(gesuchFormularToWorkWith);
 		GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
@@ -90,5 +93,15 @@ public final class GesuchGenerator {
 		EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
 				.set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
 		return einnahmenKostenUpdateDto;
+	}
+
+	private static AuszahlungUpdateDtoSpec createAuszahlung() {
+		AuszahlungUpdateDtoSpec auszahlungUpdateDto = Instancio.of(auszahlungUpdateDtoSpecModel)
+				.set(
+						field(AuszahlungUpdateDtoSpec::getIban),
+						TestConstants.IBAN_CH_NUMMER_VALID
+				)
+				.create();
+		return auszahlungUpdateDto;
 	}
 }

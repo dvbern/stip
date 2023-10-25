@@ -643,7 +643,6 @@ class GesuchServiceTest {
 
 	private Gesuch updateFromZivilstandToZivilstand(GesuchUpdateDto gesuchUpdateDto, Zivilstand from, Zivilstand to) {
 		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
-		gesuchUpdateDto.getGesuchFormularToWorkWith().setPartner(new PartnerUpdateDto());
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(from);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(to);
