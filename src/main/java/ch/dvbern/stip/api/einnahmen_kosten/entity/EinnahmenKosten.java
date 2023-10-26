@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.einnahmen_kosten.entity;
 import java.math.BigDecimal;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -26,11 +27,11 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 	@NotNull
 	@Column(nullable = false)
 	private BigDecimal fahrkosten;
-	@NotNull
-	@Column(nullable = false)
+	@Nullable
+	@Column(nullable = true)
 	private BigDecimal wohnkosten;
-	@NotNull
-	@Column(nullable = false)
+	@Nullable
+	@Column(nullable = true)
 	private BigDecimal personenImHaushalt;
 	@NotNull
 	@Column(nullable = false)
