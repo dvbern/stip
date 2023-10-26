@@ -21,7 +21,7 @@ spec:
       containers:
         - name: api
           imagePullPolicy: Always
-          image: api:latest
+          image: stip/api:latest
           ports:
             - name: http
               protocol: TCP

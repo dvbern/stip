@@ -49,7 +49,7 @@ import java.util.Set;
 @LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
 @PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
 @AlimenteRequiredWhenAlimenteregelungConstraint(groups = GesuchEinreichenValidationGroup.class)
-//@UniqueSvNumberConstraint Constraint dekativiert bis Frontend Task dazu implemntiert wird
+@UniqueSvNumberConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
@@ -81,12 +81,12 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
-    private Partner partner;
+    private @Valid Partner partner;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
-    private Auszahlung auszahlung;
+    private @Valid Auszahlung auszahlung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

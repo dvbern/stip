@@ -1,5 +1,7 @@
 package ch.dvbern.stip.test.gesuch;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -11,12 +13,14 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.test.generator.entities.GesuchGenerator;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -32,6 +36,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.*;
 import static ch.dvbern.stip.test.generator.entities.GesuchGenerator.initGesuch;
@@ -542,6 +547,38 @@ class GesuchServiceTest {
 				Matchers.is(1));
 	}
 
+	@Test
+	void validateEinreichenInvalid() {
+		Gesuch gesuch = initGesuchFromGesuchUpdate(GesuchGenerator.createGesuch());
+		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(gesuch));
+
+		ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(gesuch.getId());
+
+		MatcherAssert.assertThat(
+				reportDto.getValidationErrors().size(),
+				Matchers.is(1));
+	}
+
+	@Test
+	void validateEinreichenValid() {
+		Gesuch gesuch = initGesuchFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+		gesuch.getGesuchFormularToWorkWith()
+				.getAusbildung()
+				.setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+
+		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(gesuch));
+
+		ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(gesuch.getId());
+
+		MatcherAssert.assertThat(
+				reportDto.getValidationErrors().size(),
+				Matchers.is(0));
+	}
+
 
 
 	private Gesuch initGesuchFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
@@ -606,7 +643,6 @@ class GesuchServiceTest {
 
 	private Gesuch updateFromZivilstandToZivilstand(GesuchUpdateDto gesuchUpdateDto, Zivilstand from, Zivilstand to) {
 		Gesuch gesuch = prepareGesuchWithIds(gesuchUpdateDto);
-		gesuchUpdateDto.getGesuchFormularToWorkWith().setPartner(new PartnerUpdateDto());
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(from);
 		gesuchMapper.partialUpdate(gesuchUpdateDto, gesuch);
 		gesuchUpdateDto.getGesuchFormularToWorkWith().getPersonInAusbildung().setZivilstand(to);
