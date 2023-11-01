@@ -865,6 +865,34 @@ paths:
                 '500':
                     $ref: '#/components/responses/ServerError'
             operationId: createOrUpdateSachbearbeiterStammdaten
+    '/gesuch/{gesuchId}/einreichen/validieren':
+        get:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationReport'
+                    description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: gesuchEinreichenValidieren
+            summary: Das Gesuch Einreichen Validation Report generieren
 components:
     schemas:
         Anrede:
@@ -1845,8 +1873,6 @@ components:
             required:
                 - nettoerwerbseinkommen
                 - fahrkosten
-                - wohnkosten
-                - personenImHaushalt
                 - verdienstRealisiert
             type: object
             properties:
