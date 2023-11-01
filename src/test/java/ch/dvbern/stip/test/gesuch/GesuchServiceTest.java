@@ -20,7 +20,6 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.test.generator.entities.GesuchGenerator;
 import io.quarkus.test.InjectMock;
@@ -547,13 +546,13 @@ class GesuchServiceTest {
 
 	@Test
 	void validateEinreichenInvalid() {
-		Gesuch gesuch = initGesuchFromGesuchUpdate(GesuchGenerator.createGesuch());
-		gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
+		GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
+		tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
 
-		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(gesuch));
+		when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
 
-		ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(gesuch.getId());
+		ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
 		MatcherAssert.assertThat(
 				reportDto.getValidationErrors().size(),
@@ -562,15 +561,15 @@ class GesuchServiceTest {
 
 	@Test
 	void validateEinreichenValid() {
-		Gesuch gesuch = initGesuchFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-		gesuch.getGesuchFormularToWorkWith()
+		GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+		tranche.getGesuchFormular()
 				.getAusbildung()
 				.setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
 
-		when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(gesuch));
+		when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+		when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
 
-		ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(gesuch.getId());
+		ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
 		MatcherAssert.assertThat(
 				reportDto.getValidationErrors().size(),
@@ -643,7 +642,6 @@ class GesuchServiceTest {
 
 	private GesuchTranche updateFromZivilstandToZivilstand(GesuchUpdateDto gesuchUpdateDto, Zivilstand from, Zivilstand to) {
 		GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
-		gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(new PartnerUpdateDto());
 		gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setZivilstand(from);
 		gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
 		gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setZivilstand(to);

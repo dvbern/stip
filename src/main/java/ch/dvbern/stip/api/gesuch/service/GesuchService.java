@@ -34,14 +34,9 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.*;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -168,10 +163,6 @@ public class GesuchService {
 		return new ValidationReportDto();
 	}
 
-	private void validateGesuchEinreichen(Gesuch gesuch) {
-		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
-			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
-		}
 	private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
 		GesuchTrancheDto tranche = getCurrentGesuchTranche(gesuch);
 		GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
@@ -186,7 +177,7 @@ public class GesuchService {
 	}
 
 
-	private void validateGesuchForEinreichung(Gesuch gesuch) {
+	private void validateGesuchEinreichen(Gesuch gesuch) {
 		gesuch.getGesuchTranchen().forEach(tranche -> {
 				if (tranche.getGesuchFormular().getFamiliensituation() == null) {
 					throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
