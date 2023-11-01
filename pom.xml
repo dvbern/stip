@@ -7,7 +7,7 @@
   <artifactId>stip-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <contract.version>1.22.0</contract.version>
+    <contract.version>1.23.1</contract.version>
     <archunit.version>1.0.1</archunit.version>
     <checkerframework.version>3.19.0</checkerframework.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
@@ -255,6 +255,11 @@
       <artifactId>instancio-junit</artifactId>
       <version>3.3.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.7</version>
     </dependency>
   </dependencies>
   <build>

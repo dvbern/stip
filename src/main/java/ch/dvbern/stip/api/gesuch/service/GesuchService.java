@@ -19,7 +19,9 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.entity.DateRange;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -34,6 +36,12 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -70,6 +78,7 @@ public class GesuchService {
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
+		preventUpdateVonGesuchIfReadOnyl(gesuch);
 		var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
 				.orElseThrow(NotFoundException::new);
 		updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
@@ -123,6 +132,7 @@ public class GesuchService {
 	@Transactional
 	public void deleteGesuch(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+		preventUpdateVonGesuchIfReadOnyl(gesuch);
 		gesuchRepository.delete(gesuch);
 	}
 
@@ -130,7 +140,7 @@ public class GesuchService {
 	public void gesuchEinreichen(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
-		validateGesuchForEinreichung(gesuch);
+		validateGesuchEinreichen(gesuch);
 		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0) {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
 		} else {
@@ -144,6 +154,24 @@ public class GesuchService {
 		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
 	}
 
+	public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
+		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+
+		try {
+			validateGesuchEinreichen(gesuch);
+		} catch (ValidationsException exception) {
+			return ValidationsExceptionMapper.toDto(exception);
+		} catch (CustomValidationsException exception) {
+			return CustomValidationsExceptionMapper.toDto(exception);
+		}
+
+		return new ValidationReportDto();
+	}
+
+	private void validateGesuchEinreichen(Gesuch gesuch) {
+		if (gesuch.getGesuchFormularToWorkWith().getFamiliensituation() == null) {
+			throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+		}
 	private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
 		GesuchTrancheDto tranche = getCurrentGesuchTranche(gesuch);
 		GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
@@ -288,7 +316,9 @@ public class GesuchService {
 				update.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
 	}
 
-	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(
+			GesuchFormular toUpdate,
+			GesuchFormularUpdateDto update) {
 		if (toUpdate.getPersonInAusbildung() == null
 				|| toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
 				|| update.getPersonInAusbildung() == null) {
@@ -318,5 +348,12 @@ public class GesuchService {
 
 		return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
 				!update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
+	}
+
+	private void preventUpdateVonGesuchIfReadOnyl(Gesuch gesuch) {
+		if (Gesuchstatus.readonlyGesuchStatusList.contains(gesuch.getGesuchStatus())) {
+			throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
+					+ gesuch.getGesuchStatus());
+		}
 	}
 }

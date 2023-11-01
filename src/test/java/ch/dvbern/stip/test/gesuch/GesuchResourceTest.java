@@ -17,6 +17,7 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.*;
 
@@ -319,6 +320,17 @@ class GesuchResourceTest {
 				.body()
 				.as(ValidationReportDtoSpec.class);
 		assertThat(validationReport.getValidationErrors().size(), greaterThan(0));
+
+		var validationReportFromService = gesuchApiSpec.gesuchEinreichenValidieren().gesuchIdPath(gesuchId)
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Status.OK.getStatusCode())
+				.extract()
+				.body()
+				.as(ValidationReportDtoSpec.class);
+
+		Assertions.assertThat(validationReport).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(validationReportFromService);
 	}
 
 	@Test

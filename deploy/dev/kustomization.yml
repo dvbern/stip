@@ -8,7 +8,7 @@ resources:
   - api-secrets.yml
 
 images:
-  - name: api
+  - name: stip/api
     newName: docker-registry.public.dvbern.ch/kibon/stip/api
 
 configMapGenerator:

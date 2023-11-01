@@ -35,6 +35,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
     private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
 
+    public static final String VALID_IBAN = "CH5604835012345678009";
+
     @Test
     @Order(1)
     @TestAsGesuchsteller
@@ -84,6 +86,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
 
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
                 .then()

@@ -1,5 +1,10 @@
 package ch.dvbern.stip.api.benutzer.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -10,21 +15,20 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import org.jboss.logging.Logger;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class BenutzerService {
+
+	private static final Logger LOG = Logger.getLogger(BenutzerService.class);
 
 	private final JsonWebToken jsonWebToken;
 
@@ -56,11 +60,16 @@ public class BenutzerService {
 	@Transactional
 	public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer, JsonWebToken jsonWebToken) {
 		HashSet<String> group = jsonWebToken.getClaim(Claims.groups);
-		String groupOnly = group.iterator().next().toUpperCase();
-		if (!groupOnly.equals(benutzer.getBenutzerTyp().name())) {
-			benutzer = benutzerRepository.findById(benutzer.getId());
-			benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
-			benutzerRepository.persist(benutzer);
+		if(!group.isEmpty()) {
+			String groupOnly = group.iterator().next().toUpperCase();
+			if (!groupOnly.equals(benutzer.getBenutzerTyp().name())) {
+				benutzer = benutzerRepository.findById(benutzer.getId());
+				benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
+				benutzerRepository.persist(benutzer);
+			}
+		}
+		else {
+			LOG.warn("Einen Benutzer ohne Rollen wuerde angemeldet, er ist per default als Gesuchsteller erlaubt");
 		}
 		return benutzer;
 	}
@@ -104,17 +113,23 @@ public class BenutzerService {
 		benutzerMapper.partialUpdate(benutzerUpdateDto, benutzer);
 	}
 
-	public Optional<SachbearbeiterZuordnungStammdatenDto> findSachbearbeiterZuordnungStammdatenWithBenutzerId(UUID id){
-		return sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(id).map(sachbearbeiterZuordnungStammdatenMapper::toDto);
+	public Optional<SachbearbeiterZuordnungStammdatenDto> findSachbearbeiterZuordnungStammdatenWithBenutzerId(UUID id) {
+		return sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(id)
+				.map(sachbearbeiterZuordnungStammdatenMapper::toDto);
 	}
 
 	@Transactional
-	public void createOrUpdateSachbearbeiterStammdaten( UUID benutzerId,
+	public void createOrUpdateSachbearbeiterStammdaten(
+			UUID benutzerId,
 			SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
 		Benutzer benutzer = benutzerRepository.requireById(benutzerId);
-		SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerId).orElse(new SachbearbeiterZuordnungStammdaten());
+		SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten =
+				sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerId)
+						.orElse(new SachbearbeiterZuordnungStammdaten());
 		sachbearbeiterZuordnungStammdaten.setBenutzer(benutzer);
-		sachbearbeiterZuordnungStammdatenMapper.partialUpdate(sachbearbeiterZuordnungStammdatenDto, sachbearbeiterZuordnungStammdaten);
+		sachbearbeiterZuordnungStammdatenMapper.partialUpdate(
+				sachbearbeiterZuordnungStammdatenDto,
+				sachbearbeiterZuordnungStammdaten);
 		sachbearbeiterZuordnungStammdatenRepository.persist(sachbearbeiterZuordnungStammdaten);
 	}
 }

@@ -26,6 +26,11 @@ public final class TestConstants {
 	public static final String AHV_NUMMER_VALID_MUTTER = "756.1111.1111.13";
 	public static final String AHV_NUMMER_VALID_VATTER = "756.1111.1114.10";
 	public static final String AHV_NUMMER_VALID_PARTNER = "756.1111.1112.12";
+	public static final String IBAN_CH_NUMMER_VALID = "CH5604835012345678009";
+	public static final String IBAN_CH_NUMMER_INVALID = "CH5004835012345678009";
+	public static final String IBAN_LI_NUMMER_VALID = "LI7408806123456789012";
+	public static final String IBAN_AT_NUMMER_VALID = "AT483200000012345864";
+
 
 	public static final DateRange GUELTIGKEIT_PERIODE_23_24 =
 			new DateRange(LocalDate.of(2023, 8, 1), LocalDate.of(2024, 7, 31));
