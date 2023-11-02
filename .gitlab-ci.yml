@@ -43,7 +43,7 @@ include:
       version: '$VERSION'
       review-apps-enabled: 'false'
     rules:
-      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
   - component: 'gitlab.dvbern.ch/components/flux@v0.2.1'
     inputs:
