@@ -6,7 +6,7 @@ INSERT INTO fall (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user
 INSERT INTO gesuchsperiode (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version,
                             gueltig_ab, gueltig_bis, einreichfrist, aufschaltdatum, mandant)
 VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6', '2023-05-31 08:35:52', '2023-05-30 08:35:43', 'Admin', 'Admin', 0,
-        '2023-08-01', '2024-06-30', '2023-12-31', '2023-06-01', 'bern');
+        '2023-08-01', '2024-07-31', '2023-12-31', '2023-06-01', 'bern');
 
 INSERT INTO ausbildungsstaette (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, name_de, name_fr)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae5', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin', 'Admin', 0, 'Universtität Bern', 'Université de Berne');

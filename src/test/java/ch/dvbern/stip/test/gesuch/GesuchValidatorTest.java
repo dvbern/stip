@@ -16,6 +16,7 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -66,18 +67,19 @@ class GesuchValidatorTest {
 		// Beim Wohnsitz MUTTER_VATER muessen die Anteile Feldern nicht null sein
 		personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
+		gesuchTranche.getGesuchFormular().setPersonInAusbildung(personInAusbildung);
 		assertAllMessagesPresent(constraintMessages, gesuch);
 
 		// Die Anteil muessen wenn gegeben einen 100% Pensum im Total entsprechend, groessere oder kleiner Angaben
 		// sind rejektiert
-		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal(40.00));
-		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(50.00));
+		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal(40.00));
+		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(50.00));
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
 						.equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
-		gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(60.00));
+		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(60.00));
 		violations = validator.validate(gesuch);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
@@ -100,7 +102,7 @@ class GesuchValidatorTest {
 		personInAusbildung.setNationalitaet(Land.FR);
 		personInAusbildung.setHeimatort("");
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
 		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
@@ -108,12 +110,13 @@ class GesuchValidatorTest {
 	void testNullFieldValidationErrorForAusbildung() {
 		Ausbildung ausbildung = new Ausbildung();
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
+		GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
+		gesuchTranche.getGesuchFormular().setAusbildung(ausbildung);
 		// Die Ausbildungsgang und Staette muessen bei keine alternative Ausbildung gegeben werden
 		assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
 		assertAllMessagesNotPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
 		// Die alternative Ausbildungsgang und Staette muessen bei alternative Ausbildung gegeben werden
-		gesuch.getGesuchFormularToWorkWith().getAusbildung().setAusbildungNichtGefunden(true);
+		gesuchTranche.getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
 		assertAllMessagesPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
 		assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
 	}
@@ -123,15 +126,15 @@ class GesuchValidatorTest {
 		Ausbildung ausbildung = new Ausbildung();
 		ausbildung.setAlternativeAusbildungsgang("ausbildungsgang alt");
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
 		// Die alternative Ausbildungsgang und Staette muessen bei keine alternative Ausbildung null sein
 		assertAllMessagesPresent(
 				new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
 				gesuch);
 		assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 		// Die Ausbildungsgang und Staette muessen bei alternative Ausbildung null sein
-		gesuch.getGesuchFormularToWorkWith().getAusbildung().setAusbildungNichtGefunden(true);
-		gesuch.getGesuchFormularToWorkWith().getAusbildung().setAusbildungsgang(new Ausbildungsgang());
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungsgang(new Ausbildungsgang());
 		assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 		assertAllMessagesNotPresent(
 				new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
@@ -149,15 +152,15 @@ class GesuchValidatorTest {
 		// beim gerichtliche Alimentregelung muesst die Wer Zahlt Alimente ausgewaehlt werden
 		familiensituation.setGerichtlicheAlimentenregelung(true);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
 		assertAllMessagesPresent(constraintMessages, gesuch);
 
 		// Test die Obhut Berechnung:
-		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutVater(new BigDecimal(40.00));
-		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutMutter(new BigDecimal(50.00));
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutVater(new BigDecimal(40.00));
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal(50.00));
 		assertAllMessagesPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
 		// korrekte Werten Meldung soll weg
-		gesuch.getGesuchFormularToWorkWith().getFamiliensituation().setObhutMutter(new BigDecimal(60.00));
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal(60.00));
 		assertAllMessagesNotPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
@@ -175,7 +178,7 @@ class GesuchValidatorTest {
 		familiensituation.setGerichtlicheAlimentenregelung(false);
 		familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
 		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
@@ -190,7 +193,7 @@ class GesuchValidatorTest {
 		Gesuch gesuch = prepareDummyGesuch();
 		Set<Eltern> elternSet = new HashSet<>();
 		elternSet.add(eltern);
-		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
 		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
@@ -205,7 +208,7 @@ class GesuchValidatorTest {
 		Gesuch gesuch = prepareDummyGesuch();
 		Set<Eltern> elternSet = new HashSet<>();
 		elternSet.add(eltern);
-		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
 		assertAllMessagesPresent(constraintMessages, gesuch);
 	}
 
@@ -217,7 +220,7 @@ class GesuchValidatorTest {
 		Set<Geschwister> geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 
 		// Test die Wohnsitzanteil Berechnung:
@@ -225,13 +228,13 @@ class GesuchValidatorTest {
 		geschwister.setWohnsitzAnteilMutter(new BigDecimal(55.00));
 		geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
-		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 
 		geschwister.setWohnsitzAnteilMutter(new BigDecimal(45.00));
 		geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
-		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
 		assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
@@ -244,7 +247,7 @@ class GesuchValidatorTest {
 		Set<Geschwister> geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setGeschwisters(geschwisterSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 	}
 
@@ -256,19 +259,19 @@ class GesuchValidatorTest {
 		Set<Kind> kindSet = new HashSet<>();
 		kindSet.add(kind);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 		// Test die Wohnsitzanteil Berechnung:
 		kind.setWohnsitzAnteilVater(new BigDecimal(55.00));
 		kind.setWohnsitzAnteilMutter(new BigDecimal(55.00));
 		kindSet = new HashSet<>();
 		kindSet.add(kind);
-		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 		kind.setWohnsitzAnteilMutter(new BigDecimal(45.00));
 		kindSet = new HashSet<>();
 		kindSet.add(kind);
-		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
@@ -281,7 +284,7 @@ class GesuchValidatorTest {
 		Set<Kind> kindSet = new HashSet<>();
 		kindSet.add(kind);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 	}
 
@@ -291,7 +294,7 @@ class GesuchValidatorTest {
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
 		lebenslaufItemSet.add(lebenslaufItem);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setLebenslaufItems(lebenslaufItemSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE }, gesuch);
 	}
 
@@ -304,7 +307,7 @@ class GesuchValidatorTest {
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
 		lebenslaufItemSet.add(lebenslaufItem);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setLebenslaufItems(lebenslaufItemSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
 	}
 
@@ -315,7 +318,7 @@ class GesuchValidatorTest {
 		familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
 		familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch,
 				GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
@@ -325,7 +328,7 @@ class GesuchValidatorTest {
 		eltern.setElternTyp(ElternTyp.MUTTER);
 		Set<Eltern> elternSet = new HashSet<>();
 		elternSet.add(eltern);
-		gesuch.getGesuchFormularToWorkWith().setElterns(elternSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
 		violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
@@ -342,14 +345,14 @@ class GesuchValidatorTest {
 		Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
 		lebenslaufItemSet.add(lebenslaufItem);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setLebenslaufItems(lebenslaufItemSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setLebenslaufItems(lebenslaufItemSet);
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
 		personInAusbildung.setZivilstand(Zivilstand.LEDIG);
-		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
 		Ausbildung ausbildung = new Ausbildung();
 		ausbildung.setAusbildungBegin(LocalDate.of(2024, 01, 01));
-		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch,
 				GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
@@ -365,9 +368,9 @@ class GesuchValidatorTest {
 		familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
 		familiensituation.setGerichtlicheAlimentenregelung(true);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setFamiliensituation(familiensituation);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
 		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
@@ -382,14 +385,14 @@ class GesuchValidatorTest {
 		PersonInAusbildung personInAusbildung = new PersonInAusbildung();
 		personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setPersonInAusbildung(personInAusbildung);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
 		personInAusbildung.setZivilstand(Zivilstand.LEDIG);
 		Kind kind = new Kind();
 		Set kindSet = new HashSet<Kind>();
 		kindSet.add(kind);
-		gesuch.getGesuchFormularToWorkWith().setKinds(kindSet);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
@@ -404,9 +407,9 @@ class GesuchValidatorTest {
 		ausbildung.setAusbildungsgang(new Ausbildungsgang());
 		ausbildung.getAusbildungsgang().setAusbildungsrichtung(Bildungsart.BERUFSMATURITAET_NACH_LEHRE);
 		Gesuch gesuch = prepareDummyGesuch();
-		gesuch.getGesuchFormularToWorkWith().setAusbildung(ausbildung);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
 		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-		gesuch.getGesuchFormularToWorkWith().setEinnahmenKosten(einnahmenKosten);
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
@@ -435,9 +438,14 @@ class GesuchValidatorTest {
 
 	private Gesuch prepareDummyGesuch() {
 		Gesuch gesuch = new Gesuch();
-		gesuch.setGesuchFormularToWorkWith(new GesuchFormular());
+		gesuch.getGesuchTranchen()
+				.add(new GesuchTranche().setGesuchFormular(new GesuchFormular()));
 		gesuch.setFall(new Fall());
 		gesuch.setGesuchsperiode(new Gesuchsperiode());
 		return gesuch;
+	}
+
+	private GesuchTranche getGesuchTrancheFromGesuch(Gesuch gesuch) {
+		return gesuch.getGesuchTranchen().get(0);
 	}
 }

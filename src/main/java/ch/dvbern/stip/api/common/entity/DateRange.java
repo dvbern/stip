@@ -86,4 +86,8 @@ public class DateRange implements Serializable, Comparable<DateRange> {
         }
         return cmp;
     }
+
+    public boolean contains(LocalDate d) {
+        return !d.isAfter(gueltigBis) && !d.isBefore(gueltigAb);
+    }
 }

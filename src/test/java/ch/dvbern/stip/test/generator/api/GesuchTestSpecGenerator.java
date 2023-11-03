@@ -1,22 +1,13 @@
 package ch.dvbern.stip.test.generator.api;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
-
-import ch.dvbern.oss.stip.contract.test.dto.EinnahmenKostenUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternschaftsteilungDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.LebenslaufItemUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ZivilstandDtoSpec;
+import ch.dvbern.oss.stip.contract.test.dto.*;
 import ch.dvbern.stip.test.util.TestConstants;
 import org.instancio.Instancio;
 import org.instancio.Model;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Arrays;
 
 import static ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpecModel;
@@ -104,88 +95,113 @@ public class GesuchTestSpecGenerator {
 					Instancio.create(kinderUpdateDtoSpecModel)
 			)
 			.toModel();
+
+	public static final Model<GesuchTrancheUpdateDtoSpec> gesuchTrancheDtoSpecModel =
+			Instancio.of(GesuchTrancheUpdateDtoSpec.class).toModel();
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecFullModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecModelFull)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecModelFull))
+									.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecPersonInAusbildungModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecPersonInAusbildungModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecPersonInAusbildungModel))
+									.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecFamiliensituationModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecFamiliensituationModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecFamiliensituationModel))
+									.create()
 					)
 					.toModel();
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecPartnerModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecPartnerModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecPartnerModel))
+									.create()
 					)
 					.toModel();
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecAusbildungModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecAusbildungModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecAusbildungModel))
+									.create()
 					)
 					.toModel();
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecAuszahlungModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecAuszahlungModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecAuszahlungModel))
+									.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecGeschwisterModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecGeschwistersModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecGeschwistersModel))
+									.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecLebenslaufModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecLebenslaufModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecLebenslaufModel))
+									.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecElternsModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecElternsModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecElternsModel))
+									.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecEinnahmenKostenModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecEinnahmenKostenModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+								Instancio.of(gesuchTrancheDtoSpecModel)
+										.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecEinnahmenKostenModel))
+										.create()
 					)
 					.toModel();
 
 	public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecKinderModel =
 			Instancio.of(GesuchUpdateDtoSpec.class)
 					.set(
-							field(GesuchUpdateDtoSpec::getGesuchFormularToWorkWith),
-							Instancio.create(gesuchFormularUpdateDtoSpecKinderModel)
+							field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
+							Instancio.of(gesuchTrancheDtoSpecModel)
+									.set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecKinderModel))
+									.create()
 					)
 					.toModel();
 }

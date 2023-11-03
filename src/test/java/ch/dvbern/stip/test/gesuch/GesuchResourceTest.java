@@ -21,12 +21,11 @@ import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.*;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.nullValue;
+import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -40,6 +39,8 @@ class GesuchResourceTest {
 	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
 	private UUID gesuchId;
+
+	private GesuchDtoSpec gesuch;
 
 	private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
 
@@ -77,9 +78,37 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(3)
+	void gesuchTrancheCreated() {
+		gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+				.then()
+				.extract()
+				.body()
+				.as(GesuchDtoSpec.class);
+
+		assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(4)
+	void updateWithNotExistingGesuchTranche() {
+		var gesuchUpdateDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildungModel).create();
+		gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Status.NOT_FOUND.getStatusCode());
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(5)
 	void testUpdateGesuchEndpointAusbildung() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildungModel).create();
-		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+		var gesuchUpdateDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildungModel).create();
+		gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
 				.statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -87,7 +116,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsSachbearbeiter
-	@Order(4)
+	@Order(6)
 	void testDontFindGesuchWithNoPersonInAusbildung() {
 		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
 				.then()
@@ -100,31 +129,10 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(5)
+	@Order(7)
 	void testUpdateGesuchEndpointPersonInAusbildung() {
 		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
-		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.ACCEPTED.getStatusCode());
-	}
-
-	@Test
-	@TestAsGesuchsteller
-	@Order(6)
-	void testUpdateGesuchEndpointFamiliensituation() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituationModel).create();
-		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.ACCEPTED.getStatusCode());
-	}
-
-	@Test
-	@TestAsGesuchsteller
-	@Order(7)
-	void testUpdateGesuchEndpointPartner() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartnerModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -134,8 +142,9 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(8)
-	void testUpdateGesuchEndpointAuszahlung() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlungModel).create();
+	void testUpdateGesuchEndpointFamiliensituation() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituationModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -145,8 +154,9 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(9)
-	void testUpdateGesuchEndpointAddGeschwister() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
+	void testUpdateGesuchEndpointPartner() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartnerModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -156,17 +166,9 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(10)
-	void testUpdateGesuchEndpointUpdateGeschwister() {
-		var gesuch =
-				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-						.body()
-						.as(GesuchDtoSpec.class);
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
-		gesuchUpdatDTO.getGesuchFormularToWorkWith()
-				.getGeschwisters()
-				.get(0)
-				.setId(gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getId());
-		gesuchUpdatDTO.getGesuchFormularToWorkWith().getGeschwisters().get(0).setNachname(geschwisterNameUpdateTest);
+	void testUpdateGesuchEndpointAuszahlung() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlungModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -176,8 +178,9 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(11)
-	void testUpdateGesuchAddLebenslaufEndpoint() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecLebenslaufModel).create();
+	void testUpdateGesuchEndpointAddGeschwister() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -187,8 +190,18 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(12)
-	void testUpdateGesuchAddElternEndpoint() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecElternsModel).create();
+	void testUpdateGesuchEndpointUpdateGeschwister() {
+		var gesuch =
+				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+						.body()
+						.as(GesuchDtoSpec.class);
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular()
+				.getGeschwisters()
+				.get(0)
+				.setId(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).getId());
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).setNachname(geschwisterNameUpdateTest);
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -198,8 +211,9 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(13)
-	void testUpdateGesuchEndpointAddEinnahmenKoster() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKostenModel).create();
+	void testUpdateGesuchAddLebenslaufEndpoint() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecLebenslaufModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -209,8 +223,9 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(14)
-	void testUpdateGesuchEndpointAddKind() {
-		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinderModel).create();
+	void testUpdateGesuchAddElternEndpoint() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecElternsModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -220,29 +235,53 @@ class GesuchResourceTest {
 	@Test
 	@TestAsGesuchsteller
 	@Order(15)
-	void testAllFormularPresent() {
-		var gesuch =
-				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-						.body()
-						.as(GesuchDtoSpec.class);
-		assertThat(gesuch.getGesuchFormularToWorkWith().getPersonInAusbildung(), is(notNullValue()));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getAusbildung(), is(notNullValue()));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getFamiliensituation(), is(notNullValue()));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getPartner(), is(notNullValue()));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getAuszahlung(), is(notNullValue()));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getEinnahmenKosten(), is(notNullValue()));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getGeschwisters().size(), is(1));
-		assertThat(
-				gesuch.getGesuchFormularToWorkWith().getGeschwisters().get(0).getNachname(),
-				is(geschwisterNameUpdateTest));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getLebenslaufItems().size(), is(1));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getElterns().size(), is(1));
-		assertThat(gesuch.getGesuchFormularToWorkWith().getKinds().size(), is(1));
+	void testUpdateGesuchEndpointAddEinnahmenKoster() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKostenModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.ACCEPTED.getStatusCode());
 	}
 
 	@Test
 	@TestAsGesuchsteller
 	@Order(16)
+	void testUpdateGesuchEndpointAddKind() {
+		var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinderModel).create();
+		gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+		gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Response.Status.ACCEPTED.getStatusCode());
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(17)
+	void testAllFormularPresent() {
+		var gesuch =
+				gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+						.body()
+						.as(GesuchDtoSpec.class);
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung(), is(notNullValue()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung(), is(notNullValue()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation(), is(notNullValue()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner(), is(notNullValue()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung(), is(notNullValue()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten(), is(notNullValue()));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().size(), is(1));
+		assertThat(
+				gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).getNachname(),
+				is(geschwisterNameUpdateTest));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems().size(), is(1));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), is(1));
+		assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getKinds().size(), is(1));
+	}
+
+	@Test
+	@TestAsGesuchsteller
+	@Order(18)
 	void testGetGesucheForBenutzende() {
 		var gesuche = gesuchApiSpec.getGesucheForBenutzer()
 				.benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID)
@@ -256,7 +295,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(17)
+	@Order(19)
 	void test_get_gesuch_for_fall() {
 		var gesuche = gesuchApiSpec.getGesucheForFall()
 				.fallIdPath(TestConstants.FALL_TEST_ID)
@@ -270,7 +309,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(18)
+	@Order(20)
 	void testGesuchEinreichenValidationError() {
 		var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
 				.execute(ResponseBody::prettyPeek)
@@ -296,7 +335,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(19)
+	@Order(21)
 	void testFindGesuche() {
 		var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
 				.then()
@@ -315,7 +354,7 @@ class GesuchResourceTest {
 
 	@Test
 	@TestAsGesuchsteller
-	@Order(20)
+	@Order(22)
 	void testDeleteGesuch() {
 		gesuchApiSpec.deleteGesuch()
 				.gesuchIdPath(gesuchId)

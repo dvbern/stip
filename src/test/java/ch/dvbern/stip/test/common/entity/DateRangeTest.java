@@ -1,10 +1,10 @@
 package ch.dvbern.stip.test.common.entity;
 
-import java.time.LocalDate;
-
 import ch.dvbern.stip.api.common.entity.DateRange;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 
 class DateRangeTest {
 	private LocalDate von = LocalDate.of(2022,12,1);
@@ -29,5 +29,31 @@ class DateRangeTest {
 	void testDateRangeEqualitySameHashCodeEquality(){
 		Assertions.assertEquals(dateRange.equals(otherDateRange), dateRange.hashCode() == otherDateRange.hashCode());
 		Assertions.assertEquals(otherDateRange.equals(sameOtherDateRange), otherDateRange.hashCode() == sameOtherDateRange.hashCode());
+	}
+
+	@Test
+	void containsOneDayBevorRange() {
+		LocalDate dateToTest = bis.plusDays(1);
+		DateRange range = new DateRange(von, bis);
+		Assertions.assertFalse(range.contains(dateToTest));
+	}
+
+	@Test
+	void containsOneDayAfterRange() {
+		LocalDate dateToTest = von.minusDays(1);
+		DateRange range = new DateRange(von, bis);
+		Assertions.assertFalse(range.contains(dateToTest));
+	}
+
+	@Test
+	void containsFirstDayOfRange() {
+		DateRange range = new DateRange(von, bis);
+		Assertions.assertTrue(range.contains(von));
+	}
+
+	@Test
+	void containsLastDayOfRange() {
+		DateRange range = new DateRange(von, bis);
+		Assertions.assertTrue(range.contains(bis));
 	}
 }
