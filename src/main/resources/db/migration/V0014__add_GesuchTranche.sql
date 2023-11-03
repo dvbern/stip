@@ -48,16 +48,47 @@ ALTER TABLE gesuch_tranche_aud
             REFERENCES revinfo(rev);
 
 
-alter table gesuch
-    drop column gesuch_formular_freigabe_copy_id;
+ALTER TABLE gesuch
+    DROP COLUMN gesuch_formular_freigabe_copy_id;
 
-alter table gesuch
-    drop column gesuch_formular_to_work_with_id;
+ALTER TABLE gesuch
+    DROP COLUMN gesuch_formular_to_work_with_id;
 
-alter table gesuch_aud
-    drop column gesuch_formular_freigabe_copy_id;
+ALTER TABLE gesuch_aud
+    DROP COLUMN gesuch_formular_freigabe_copy_id;
 
-alter table gesuch_aud
-    drop column gesuch_formular_to_work_with_id;
+ALTER TABLE gesuch_aud
+    DROP COLUMN gesuch_formular_to_work_with_id;
+
+DELETE FROM gesuch_dokument;
+DELETE FROM gesuch_dokument_aud;
+DELETE FROM dokument;
+DELETE FROM dokument_aud;
+DELETE FROM lebenslauf_item;
+DELETE FROM lebenslauf_item_aud;
+DELETE FROM geschwister;
+DELETE FROM geschwister_aud;
+DELETE FROM eltern;
+DELETE FROM eltern_aud;
+DELETE FROM kind;
+DELETE FROM kind_aud;
+DELETE FROM gesuch;
+DELETE FROM gesuch_aud;
+DELETE FROM gesuch_formular;
+DELETE FROM gesuch_formular_aud;
+DELETE FROM person_in_ausbildung;
+DELETE FROM person_in_ausbildung_aud;
+DELETE FROM partner;
+DELETE FROM partner_aud;
+DELETE FROM familiensituation;
+DELETE FROM familiensituation_aud;
+DELETE FROM einnahmen_kosten;
+DELETE FROM einnahmen_kosten_aud;
+DELETE FROM auszahlung;
+DELETE FROM auszahlung_aud;
+DELETE FROM ausbildung;
+DELETE FROM ausbildung_aud;
+DELETE FROM adresse;
+DELETE FROM adresse_aud;
 
 

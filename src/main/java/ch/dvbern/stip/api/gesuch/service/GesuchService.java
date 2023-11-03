@@ -179,8 +179,8 @@ public class GesuchService {
 
 	private void validateGesuchEinreichen(Gesuch gesuch) {
 		gesuch.getGesuchTranchen().forEach(tranche -> {
-				if (tranche.getGesuchFormular().getFamiliensituation() == null) {
-					throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", null);
+				if (tranche.getGesuchFormular() == null || tranche.getGesuchFormular().getFamiliensituation() == null) {
+					throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", new HashSet<>());
 				}
 		});
 
@@ -197,13 +197,15 @@ public class GesuchService {
 	}
 
 	private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
-		Stream<Gesuch> gesuchStream = gesuchRepository
-				.findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer());
+		if(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null) {
+			Stream<Gesuch> gesuchStream = gesuchRepository
+					.findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer());
 
-		if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
-			throw new CustomValidationsException(
-					"Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) eingereicht werden",
-					new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
+			if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
+				throw new CustomValidationsException(
+						"Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) eingereicht werden",
+						new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
+			}
 		}
 	}
 

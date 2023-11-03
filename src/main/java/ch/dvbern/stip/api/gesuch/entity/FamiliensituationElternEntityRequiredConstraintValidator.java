@@ -51,7 +51,7 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 
 	private boolean isElternTeilRequired(ElternTyp elternTyp, Familiensituation familiensituation) {
 		boolean elternteilLebt = true;
-		if (familiensituation.getElternteilUnbekanntVerstorben()) {
+		if (familiensituation.getElternteilUnbekanntVerstorben() != null && familiensituation.getElternteilUnbekanntVerstorben()) {
 			elternteilLebt = elternTyp == ElternTyp.VATER ?
 					familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH
 					: familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH;
