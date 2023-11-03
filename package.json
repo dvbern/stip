@@ -1,6 +1,6 @@
 {
   "name": "@kibon/stip-contract",
-  "version": "1.23.1",
+  "version": "1.24.0",
   "description": "OpenAPI Contract",
   "repository": {
     "type": "git",
