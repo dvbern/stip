@@ -39,7 +39,7 @@ CREATE TABLE gesuch_tranche_aud (
      gueltig_bis                          DATE,
      gesuch_id                            UUID,
      gesuch_formular_id                   UUID,
-     CONSTRAINT gesuch_tranche_aud_pk PRIMARY KEY (id)
+     CONSTRAINT gesuch_tranche_aud_pk PRIMARY KEY (id, rev)
 );
 
 ALTER TABLE gesuch_tranche_aud
