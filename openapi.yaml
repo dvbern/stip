@@ -1282,6 +1282,8 @@ components:
                 - gesuchNummer
                 - id
                 - aenderungsdatum
+                - gesuchTrancheToWorkWith
+                - gesuchTrancheToWorkWith
             type: object
             properties:
                 fall:
@@ -1300,18 +1302,15 @@ components:
                 id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
-                gesuch_formular_freigabe_copy:
-                    $ref: '#/components/schemas/GesuchFormular'
-                    description: ''
-                gesuch_formular_to_work_with:
-                    $ref: '#/components/schemas/GesuchFormular'
-                    description: ''
                 aenderungsdatum:
                     $ref: '#/components/schemas/LocalDate'
                     description: Datum wann das Gesuch zu letzt geändert wurde
                 bearbeiter:
                     description: Zuständiger Sachbearbeiter des Gesuchs
                     type: string
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTranche'
+                    description: ''
         GesuchCreate:
             required:
                 - fallId
@@ -1324,10 +1323,12 @@ components:
                     $ref: '#/components/schemas/UUID'
         GesuchUpdate:
             description: ''
+            required:
+                - gesuchTrancheToWorkWith
             type: object
             properties:
-                gesuch_formular_to_work_with:
-                    $ref: '#/components/schemas/GesuchFormularUpdate'
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTrancheUpdate'
                     description: ''
         Land:
             enum:
@@ -2154,6 +2155,39 @@ components:
                     $ref: '#/components/schemas/Ausbildungsort'
                     description: ''
                 ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+        GesuchTranche:
+            description: ''
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: ''
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: ''
+                gesuchFormular:
+                    $ref: '#/components/schemas/GesuchFormular'
+                    description: ''
+        GesuchTrancheUpdate:
+            description: ''
+            required:
+                - gesuchFormular
+                - id
+            type: object
+            properties:
+                gesuchFormular:
+                    $ref: '#/components/schemas/GesuchFormularUpdate'
+                    description: ''
+                id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
         SachbearbeiterZuordnungStammdaten:
