@@ -23,7 +23,7 @@ public class TenantService {
         tenantInfoDto.identifier(tenantId);
 
         final TenantAuthConfigDto tenantAuthConfig = new TenantAuthConfigDto();
-        tenantAuthConfig.setAuthServerUrl(oidcConfigResolver.getAuthServerUrl());
+        tenantAuthConfig.setAuthServerUrl(oidcConfigResolver.getAuthServerFrontendUrl());
         tenantAuthConfig.setRealm(tenantId);
         tenantInfoDto.setClientAuth(tenantAuthConfig);
 
