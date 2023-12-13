@@ -12,7 +12,7 @@ include:
   - component: 'gitlab.dvbern.ch/components/sonarqube@v0.2.0'
     inputs:
       sonar-scanner: maven
-      sonar-project-key: kibon_stip-api_AYkrwku6SZqri_oH9Xle
+      sonar-project-key: kibon_stip-api
 
   - component: 'gitlab.dvbern.ch/components/buildah@v0.2.1'
     inputs:
