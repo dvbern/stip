@@ -24,7 +24,7 @@ include:
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@f2c0a218'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@3e4b756e'
     inputs:
       name: "deploy:dev"
       deployment-overlay-path: "manifests/stip/overlays/dev"
@@ -33,7 +33,7 @@ include:
       deployment-image-names: "api"
       deployment-on: "default"
       deployment-mode: "always"
-      argocd-server: "$ARGOCD_SERVER_URL"
+      argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "stip"
 
