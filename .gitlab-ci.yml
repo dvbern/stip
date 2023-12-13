@@ -24,7 +24,7 @@ include:
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@206cf69a'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@c32108b6'
     inputs:
       name: "deploy:dev"
       deployment-overlay-path: "manifests/stip/overlays/dev"
@@ -32,6 +32,7 @@ include:
       deployment-environment-url: "https://dev-stip-auth.apps.apollo.ocp.dvbern.ch/"
       deployment-image-names: "api"
       deployment-on: "default"
+      deployment-mode: "always"
 
 .default-clone: &default-clone
   before_script:
