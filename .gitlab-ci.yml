@@ -13,6 +13,9 @@ workflow:
         VERSION: $CI_COMMIT_TAG
 
 include:
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@b7dc4b95'
+
+
   - component: 'gitlab.dvbern.ch/components/maven@v0.0.2'
     inputs:
       name: build-api
