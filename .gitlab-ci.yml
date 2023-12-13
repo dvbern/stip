@@ -18,7 +18,7 @@ include:
       name: build-api
       maven-args: -Pcoverage
 
-  - component: 'gitlab.dvbern.ch/components/sonarqube@v0.1.0'
+  - component: 'gitlab.dvbern.ch/components/sonarqube@v0.2.0'
     inputs:
       sonar-scanner: maven
       sonar-project-key: kibon_stip-api_AYkrwku6SZqri_oH9Xle
@@ -32,6 +32,16 @@ include:
       image-name: 'stip/api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@b7dc4b95'
+    inputs:
+      name: "deploy:dev"
+      deployment-overlay-path: "manifests/stip/overlays/dev"
+      deployment-environment: "dev"
+      deployment-environment-url: "https://dev-stip-auth.apps.apollo.ocp.dvbern.ch/"
+      deployment-image-names: "api"
+      deployment-on: "default"
+
 
   - component: 'gitlab.dvbern.ch/components/flux@v0.2.1'
     inputs:
