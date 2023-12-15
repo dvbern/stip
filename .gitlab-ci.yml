@@ -1,27 +1,18 @@
 stages: [build, validate, test, analyze, package, deploy, mirror]
 
-workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      variables:
-        VERSION: $CI_COMMIT_SHA
-    - if: $CI_MERGE_REQUEST_ID || '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      variables:
-        VERSION: $CI_COMMIT_REF_SLUG
-    - if: $CI_COMMIT_TAG
-      variables:
-        VERSION: $CI_COMMIT_TAG
 
 include:
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@83453c27'
+
   - component: 'gitlab.dvbern.ch/components/maven@v0.0.2'
     inputs:
       name: build-api
       maven-args: -Pcoverage
 
-  - component: 'gitlab.dvbern.ch/components/sonarqube@v0.1.0'
+  - component: 'gitlab.dvbern.ch/components/sonarqube@v0.2.0'
     inputs:
       sonar-scanner: maven
-      sonar-project-key: kibon_stip-api_AYkrwku6SZqri_oH9Xle
+      sonar-project-key: kibon_stip-api
 
   - component: 'gitlab.dvbern.ch/components/buildah@v0.2.1'
     inputs:
@@ -29,6 +20,19 @@ include:
       image-name: 'stip/api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@a844605a'
+    inputs:
+      name: "deploy:dev"
+      deployment-overlay-path: "manifests/stip/overlays/dev"
+      deployment-environment: "dev"
+      deployment-environment-url: "https://dev-stip-auth.apps.apollo.ocp.dvbern.ch"
+      deployment-image-names: "api"
+      deployment-on: "default"
+      deployment-mode: "always"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "stip"
 
 .default-clone: &default-clone
   before_script:
