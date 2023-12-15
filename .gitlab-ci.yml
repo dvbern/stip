@@ -21,7 +21,7 @@ include:
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@a844605a'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.3'
     inputs:
       name: "deploy:dev"
       deployment-overlay-path: "manifests/stip/overlays/dev"
