@@ -21,7 +21,7 @@ include:
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.3'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.4'
     inputs:
       name: "deploy:dev"
       deployment-overlay-path: "manifests/stip/overlays/dev"
@@ -34,7 +34,7 @@ include:
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "stip"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.3'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.4'
     inputs:
       name: "deploy:uat"
       deployment-overlay-path: "manifests/stip/overlays/uat"
@@ -47,11 +47,11 @@ include:
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "stip"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.3'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.4'
     inputs:
       name: "deploy:prod"
       deployment-overlay-path: "manifests/stip/overlays/prod"
-      deployment-environment: "uat"
+      deployment-environment: "prod"
       deployment-environment-url: "https://stip.apps.apollo.ocp.dvbern.ch"
       deployment-image-names: "api"
       deployment-on: "tag"
