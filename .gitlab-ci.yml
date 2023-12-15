@@ -16,9 +16,6 @@ include:
 
   - component: 'gitlab.dvbern.ch/components/buildah@v0.2.1'
     inputs:
-      registry: $DVB_PUBLIC_DOCKER_REGISTRY
-      registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
-      registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       name: api-image
       image-name: 'stip/api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm

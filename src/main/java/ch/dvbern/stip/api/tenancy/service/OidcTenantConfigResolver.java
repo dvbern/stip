@@ -21,6 +21,9 @@ public class OidcTenantConfigResolver implements TenantConfigResolver {
     @ConfigProperty(name = "keycloak.url")
     String keycloakUrl;
 
+    @ConfigProperty(name = "keycloak.frontend-url")
+    String keycloakFrontendUrl;
+
     @ConfigProperty(name = "keycloak.client-id")
     String keycloakClientId;
 
@@ -44,11 +47,11 @@ public class OidcTenantConfigResolver implements TenantConfigResolver {
 
     }
 
-    public String getTenantAuthServer(String tenantId) {
-        return getAuthServerUrl() + "/realms/" + tenantId;
+    public String getAuthServerFrontendUrl() {
+        return keycloakFrontendUrl;
     }
 
-    public String getAuthServerUrl() {
-        return keycloakUrl;
+    private String getTenantAuthServer(String tenantId) {
+        return keycloakUrl + "/realms/" + tenantId;
     }
 }
