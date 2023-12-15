@@ -2,7 +2,7 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@83453c27'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.3'
 
   - component: 'gitlab.dvbern.ch/components/maven@v0.0.2'
     inputs:
@@ -26,10 +26,36 @@ include:
       name: "deploy:dev"
       deployment-overlay-path: "manifests/stip/overlays/dev"
       deployment-environment: "dev"
-      deployment-environment-url: "https://dev-stip-auth.apps.apollo.ocp.dvbern.ch"
+      deployment-environment-url: "https://dev-stip.apps.apollo.ocp.dvbern.ch"
       deployment-image-names: "api"
       deployment-on: "default"
       deployment-mode: "always"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "stip"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.3'
+    inputs:
+      name: "deploy:uat"
+      deployment-overlay-path: "manifests/stip/overlays/uat"
+      deployment-environment: "uat"
+      deployment-environment-url: "https://uat-stip.apps.apollo.ocp.dvbern.ch"
+      deployment-image-names: "api"
+      deployment-on: "tag"
+      deployment-mode: "manual"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "stip"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.3'
+    inputs:
+      name: "deploy:prod"
+      deployment-overlay-path: "manifests/stip/overlays/prod"
+      deployment-environment: "uat"
+      deployment-environment-url: "https://stip.apps.apollo.ocp.dvbern.ch"
+      deployment-image-names: "api"
+      deployment-on: "tag"
+      deployment-mode: "manual"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "stip"
