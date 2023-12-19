@@ -1,0 +1,87 @@
+<dv-gesuch-app-pattern-main-layout [closeMenu]="navClicked | async">
+  <div class="d-flex h-100">
+    <!-- left step nav (Desktop) -->
+    <div class="d-none d-lg-block border-end bg-white">
+      <p class="m-4">
+        <span class="small">in Bearbeitung durch</span><br />
+        <span class="fw-medium">Eva Mendes</span>
+      </p>
+
+      <dv-shared-pattern-gesuch-step-nav
+        class="sidenav p-4"
+        [steps]="stepsSig()"
+      />
+    </div>
+
+    <div class="container mb-5 pt-lg-4 px-lg-4" *ngIf="step">
+      <!-- step header (mobile) -->
+      <div
+        class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
+      >
+        <dv-shared-ui-progress-bar
+          [current]="step.currentStepNumber"
+          [total]="stepManager.getTotalSteps(viewSig().gesuchFormular)"
+        ></dv-shared-ui-progress-bar>
+        <div class="text-end">
+          <h5 class="step-title">
+            {{ step.translationKey | translate }}
+          </h5>
+          <p
+            class="fst-italic mb-0"
+            *ngIf="stepManager.getNext(step).translationKey"
+          >
+            {{ 'shared.form.next' | translate }}:
+            {{ stepManager.getNext(step).translationKey | translate }}
+          </p>
+        </div>
+      </div>
+
+      <!-- title (desktop) -->
+      <div class="d-none d-lg-flex justify-content-start">
+        <dv-shared-ui-icon-chip class="step-icon me-3">
+          <i class="material-symbols-rounded title-icon">{{
+            step.iconSymbolName
+          }}</i>
+        </dv-shared-ui-icon-chip>
+
+        <h2 class="fw-bold" data-testid="step-title">
+          {{ step.translationKey | translate }}
+        </h2>
+      </div>
+
+      <div>
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-mobile-addons">
+    <a
+      routerLink="/"
+      class="dv-button-icon"
+      [attr.aria-label]="'shared.home' | translate"
+    >
+      <span class="material-symbols-rounded text-black">home</span>
+    </a>
+  </div>
+
+  <div class="mobile-nav-content">
+    <dv-shared-pattern-gesuch-step-nav
+      [steps]="stepsSig()"
+      (navClicked)="navClicked.emit()"
+    ></dv-shared-pattern-gesuch-step-nav>
+  </div>
+
+  <div class="header-desktop-left d-flex gap-3 align-items-center">
+    <a
+      routerLink="/"
+      class="btn btn-warning fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-step-nav-dashboard"
+    >
+      <i class="material-symbols-rounded text-white me-2">dashboard</i>
+      <span>Dashboard</span>
+    </a>
+  </div>
+
+  <div class="header-desktop-right d-flex gap-4 align-items-center"></div>
+</dv-gesuch-app-pattern-main-layout>

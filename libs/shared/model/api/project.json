@@ -1,0 +1,16 @@
+{
+  "name": "shared-model-api",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/model/api/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/model/api/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["type:model", "scope:shared"]
+}

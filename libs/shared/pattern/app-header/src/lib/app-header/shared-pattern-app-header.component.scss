@@ -1,0 +1,13 @@
+:host {
+  display: block;
+
+  header {
+    background-color: var(--dv-body-bg);
+    position: fixed;
+    max-width: var(--content-max-width);
+
+    .first-entry {
+      width: 135px;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<dv-shared-pattern-app-header [closeMenu]="closeMenu">
+  <ng-content
+    select=".header-mobile-addons"
+    ngProjectAs=".header-mobile-addons"
+  ></ng-content>
+  <ng-content
+    select=".header-desktop-left"
+    ngProjectAs=".header-desktop-left"
+  ></ng-content>
+  <ng-content
+    select=".header-desktop-right"
+    ngProjectAs=".header-desktop-right"
+  ></ng-content>
+  <ng-content
+    select=".mobile-nav-header"
+    ngProjectAs=".mobile-nav-header"
+  ></ng-content>
+  <ng-content
+    select=".mobile-nav-content"
+    ngProjectAs=".mobile-nav-content"
+  ></ng-content>
+</dv-shared-pattern-app-header>
+
+<!-- MAIN CONTENT -->
+<main class="page-body">
+  <ng-content></ng-content>
+
+  <!-- notifications/errors -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <dv-global-notifications></dv-global-notifications>
+  </div>
+</main>

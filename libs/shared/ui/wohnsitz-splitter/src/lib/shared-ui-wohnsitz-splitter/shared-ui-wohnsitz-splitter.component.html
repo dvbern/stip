@@ -1,0 +1,13 @@
+<dv-shared-ui-percentage-splitter
+  [updateValidity]="updateValidity"
+  [controlA]="controls.wohnsitzAnteilMutter"
+  [controlB]="controls.wohnsitzAnteilVater"
+>
+  <label>{{ 'shared.form.shared.wohnsitzanteil.label' | translate }}</label>
+  <span class="label-a">{{
+    'shared.form.shared.wohnsitzanteil.mutter' | translate
+  }}</span>
+  <span class="label-b">{{
+    'shared.form.shared.wohnsitzanteil.vater' | translate
+  }}</span>
+</dv-shared-ui-percentage-splitter>
