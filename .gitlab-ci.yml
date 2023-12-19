@@ -12,6 +12,7 @@ backend:
     strategy: depend
 
 include:
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.7'
     inputs:
       name: "deploy:dev"
