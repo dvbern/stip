@@ -20,7 +20,7 @@ include:
       deployment-environment-url: "https://dev-stip.apps.apollo.ocp.dvbern.ch"
       deployment-image-names: "$ARGOCD_IMAGES"
       deployment-on: "default"
-      deployment-mode: "always"
+      deployment-mode: "on_success"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
