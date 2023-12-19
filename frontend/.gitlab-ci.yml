@@ -86,7 +86,7 @@ component-test:
       - './libs/**/coverage'
     expire_in: 1 day
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 mirror:
   stage: mirror
@@ -108,11 +108,33 @@ mirror:
 
 review-app:start:
   stage: deploy
+  tags: ['os:linux', 'type:docker', 'zone:tz']  
   image:
     name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
     entrypoint: ['']
   script:
-    - 'curl -X PUT -H "JOB-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?add_labels=review'
+    - 'curl -X PUT -H "PRIVATE-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?add_labels=preview'
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://${CI_COMMIT_REF_SLUG}-stip.apps.apollo.ocp.dvbern.ch
+    action: start
+    on_stop: review-app:stop
+    auto_stop_in: 3 days
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+      when: manual
+
+review-app:stop:
+  stage: deploy
+  tags: ['os:linux', 'type:docker', 'zone:tz']  
+  image:
+    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
+    entrypoint: ['']
+  script:
+    - 'curl -X PUT -H "PRIVATE-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?remove_labels=preview'
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    action: stop
   rules:
     - if: $CI_MERGE_REQUEST_IID
       when: manual
