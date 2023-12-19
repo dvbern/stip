@@ -5,5 +5,5 @@ backend:
     include: backend/.gitlab-ci.yml
     strategy: depend
   rules:
-    - if: $PIPELINE_TYPE = "tag"
+    - if: $PIPELINE_TYPE == "tag"
     - changes: [backend/*]
