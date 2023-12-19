@@ -4,6 +4,4 @@ backend:
   trigger:
     include: backend/.gitlab-ci.yml
     strategy: depend
-  rules:
-    - if: $PIPELINE_TYPE == "default"
-    - changes: [backend/*]
+
