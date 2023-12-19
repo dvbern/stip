@@ -1,8 +1,52 @@
 stages: [build, deploy, mirror]
 
+variables:
+  ARGOCD_APP: stip
+  ARGOCD_IMAGES: api
+  STIP_OVERLAYS_DIR: manifests/stip/overlays 
+
 backend:
   stage: build
   trigger:
     include: backend/.gitlab-ci.yml
     strategy: depend
 
+include:
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.7'
+    inputs:
+      name: "deploy:dev"
+      deployment-overlay-path: "$STIP_OVERLAYS_DIR/dev"
+      deployment-environment: "dev"
+      deployment-environment-url: "https://dev-stip.apps.apollo.ocp.dvbern.ch"
+      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-on: "default"
+      deployment-mode: "always"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "$ARGOCD_APP"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.7'
+    inputs:
+      name: "deploy:uat"
+      deployment-overlay-path: "$STIP_OVERLAYS_DIR/uat"
+      deployment-environment: "uat"
+      deployment-environment-url: "https://uat-stip.apps.apollo.ocp.dvbern.ch"
+      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-on: "tag"
+      deployment-mode: "manual"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "$ARGOCD_APP"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.7'
+    inputs:
+      name: "deploy:prod"
+      deployment-overlay-path: "$STIP_OVERLAYS_DIR/prod"
+      deployment-environment: "prod"
+      deployment-environment-url: "https://stip.apps.apollo.ocp.dvbern.ch"
+      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-on: "tag"
+      deployment-mode: "manual"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "$ARGOCD_APP"
