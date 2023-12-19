@@ -1,0 +1,9 @@
+stages: [build, validate, test, analyze, package, deploy, mirror]
+
+backend:
+  trigger:
+    include: backend/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $PIPELINE_TYPE = "tag"
+    - changes: [backend/*]

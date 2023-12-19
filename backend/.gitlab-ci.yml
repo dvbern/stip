@@ -2,21 +2,25 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.3'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
 
-  - component: 'gitlab.dvbern.ch/components/maven@v0.0.2'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@v0.0.7'
     inputs:
       name: build-api
-      maven-args: -Pcoverage
+      context-dir: backend
+      java-image-version: 17-jdk-alpine
+      maven-goal: -Pcoverage install
 
-  - component: 'gitlab.dvbern.ch/components/sonarqube@v0.2.0'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@2de39183'
     inputs:
       sonar-scanner: maven
+      context-dir: backend
       sonar-project-key: kibon_stip-api
 
-  - component: 'gitlab.dvbern.ch/components/buildah@v0.2.1'
+  - component: 'itlab.dvbern.ch/devops/gitlab/components/buildah@91f6083e'
     inputs:
       name: api-image
+      context-dir: backend
       image-name: 'stip/api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
@@ -59,24 +63,3 @@ include:
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "stip"
-
-.default-clone: &default-clone
-  before_script:
-    - rm -rf ./*
-    - git clone --branch $CI_DEFAULT_BRANCH --single-branch https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git .
-    - git checkout $CI_DEFAULT_BRANCH
-
-mirror:
-  stage: mirror
-  image:
-    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/git:2.40.1'
-    entrypoint: ['']
-  tags: ['os:linux', 'type:docker', 'zone:tz']
-  variables:
-    GIT_STRATEGY: none
-  <<: *default-clone
-  script:
-    - git push -u https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-api.git $CI_DEFAULT_BRANCH
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_TAG
