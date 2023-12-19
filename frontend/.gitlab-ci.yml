@@ -3,7 +3,7 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@a0c565c37e51d1678500741485eb69d192d8fa28'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@6357835c284bd240eb50ff709dd34c607356249c'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
