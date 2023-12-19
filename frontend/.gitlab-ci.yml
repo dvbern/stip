@@ -1,140 +1,35 @@
 stages: [build, validate, test, analyze, package, deploy, mirror]
 
-workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      variables:
-        VERSION: $CI_COMMIT_SHA
-    - if: $CI_MERGE_REQUEST_ID || '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      variables:
-        VERSION: $CI_COMMIT_REF_SLUG
-    - if: $CI_COMMIT_TAG
-      variables:
-        VERSION: $CI_COMMIT_TAG
-
 include:
-  - component: 'gitlab.dvbern.ch/components/nx@v0.0.3'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@fb830e5144ae173bcafc5d68114c04ba554bda29'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
+      context-dir: 'frontend'
 
-  - component: 'gitlab.dvbern.ch/components/sonarqube@v0.1.0'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@fb830e5144ae173bcafc5d68114c04ba554bda29'
     inputs:
       sonar-scanner: cli
       sonar-project-key: kibon_stip-frontend_AYkrwt88SZqri_oH9Xlq
+      context-dir: 'frontend'
+      sonar-token: "$SONAR_TOKEN_FRONTEND"
 
-  - component: 'gitlab.dvbern.ch/components/buildah@v0.2.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@fb830e5144ae173bcafc5d68114c04ba554bda29'
     inputs:
-      registry: $DVB_PUBLIC_DOCKER_REGISTRY
-      registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
-      registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
       name: package:sachbearbeitung-app
+      context-dir: frontend
       image-name: 'stip/sachbearbeitung-app'
       version: '$VERSION'
       build-args: |
         APP=sachbearbeitung-app
 
-  - component: 'gitlab.dvbern.ch/components/buildah@v0.2.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@fb830e5144ae173bcafc5d68114c04ba554bda29'
     inputs:
-      registry: $DVB_PUBLIC_DOCKER_REGISTRY
-      registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
-      registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
-      name: package:gesuch-app
-      image-name: 'stip/gesuch-app'
+      name: package:sachbearbeitung-app
+      context-dir: frontend
+      image-name: 'stip/sachbearbeitung-app'
       version: '$VERSION'
       build-args: |
         APP=gesuch-app
-
-  - component: 'gitlab.dvbern.ch/components/flux@v0.2.0'
-    inputs:
-      registry: $DVB_PUBLIC_DOCKER_REGISTRY
-      registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
-      registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
-      environment: dev
-      image-names: 'stip/sachbearbeitung-app,stip/gesuch-app'
-      version: '$VERSION'
-      review-apps-enabled: 'false'
-    rules:
-      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_ID
-
-  - component: 'gitlab.dvbern.ch/components/flux@v0.2.0'
-    inputs:
-      registry: $DVB_PUBLIC_DOCKER_REGISTRY
-      registry-user: $DVB_PUBLIC_DOCKER_REGISTRY_USER
-      registry-token: $DVB_PUBLIC_DOCKER_REGISTRY_TOKEN
-      environment: uat
-      image-names: 'stip/sachbearbeitung-app,stip/gesuch-app'
-      version: '$VERSION'
-    rules:
-      - if: $CI_COMMIT_TAG
-
-component-test:
-  stage: test
-  image: cypress/browsers:node-18.16.1-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
-  script:
-    - cd $CI_PROJECT_DIR/
-    - echo "//gitlab.dvbern.ch/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-    - '[ ! -d node_modules ] && npm ci --legacy-peer-deps --cache=".npm" --ignore-scripts ||
-      echo "Skipping npm ci because a cached version is available"'
-    - npm install -g cypress@12.16.0
-    - npx nx run-many -t component-test --parallel=1
-  allow_failure: true
-  tags: ['os:linux', 'zone:tz', 'type:docker']
-  artifacts:
-    when: always
-    paths:
-      - './libs/**/coverage'
-    expire_in: 1 day
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-mirror:
-  stage: mirror
-  image:
-    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/git:2.40.1'
-    entrypoint: ['']
-  tags: ['os:linux', 'type:docker', 'zone:tz']
-  variables:
-    GIT_STRATEGY: none
-  before_script:
-    - rm -rf ./*
-    - git clone --branch $CI_DEFAULT_BRANCH --single-branch https://deploy:$DEPLOYMENT_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git .
-    - git checkout $CI_DEFAULT_BRANCH
-  script:
-    - git push -u https://token:${GITHUB_MIRROR_TOKEN}@github.com/dvbern/stip-frontend.git $CI_DEFAULT_BRANCH
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_TAG
-
-review-app:start:
-  stage: deploy
-  tags: ['os:linux', 'type:docker', 'zone:tz']  
-  image:
-    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
-    entrypoint: ['']
-  script:
-    - 'curl -X PUT -H "PRIVATE-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?add_labels=preview'
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: https://${CI_COMMIT_REF_SLUG}-stip.apps.apollo.ocp.dvbern.ch
-    action: start
-    on_stop: review-app:stop
-    auto_stop_in: 3 days
-  rules:
-    - if: $CI_MERGE_REQUEST_IID
-      when: manual
-
-review-app:stop:
-  stage: deploy
-  tags: ['os:linux', 'type:docker', 'zone:tz']  
-  image:
-    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
-    entrypoint: ['']
-  script:
-    - 'curl -X PUT -H "PRIVATE-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?remove_labels=preview'
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    action: stop
-  rules:
-    - if: $CI_MERGE_REQUEST_IID
-      when: manual

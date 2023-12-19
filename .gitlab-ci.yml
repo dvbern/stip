@@ -11,6 +11,14 @@ backend:
     include: backend/.gitlab-ci.yml
     strategy: depend
 
+frontend:
+  stage: build
+  trigger:
+    include: frontend/.gitlab-ci.yml
+    strategy: depend
+
+# TODO: Mirror job
+
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.0.7'
@@ -51,3 +59,36 @@ include:
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
+
+review-app:start:
+  stage: deploy
+  tags: ['os:linux', 'type:docker', 'zone:tz']  
+  image:
+    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
+    entrypoint: ['']
+  script:
+    - 'curl -X PUT -H "PRIVATE-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?add_labels=preview'
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://${CI_COMMIT_REF_SLUG}-stip.apps.apollo.ocp.dvbern.ch
+    action: start
+    on_stop: review-app:stop
+    auto_stop_in: 3 days
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+      when: manual
+
+review-app:stop:
+  stage: deploy
+  tags: ['os:linux', 'type:docker', 'zone:tz']  
+  image:
+    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
+    entrypoint: ['']
+  script:
+    - 'curl -X PUT -H "PRIVATE-TOKEN: ${REVIEW_APPS_TOKEN}" ${CI_API_V4_URL}/projects/{$CI_PROJECT_ID}/merge_requests/$CI_MERGE_REQUEST_IID?remove_labels=preview'
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    action: stop
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+      when: manual
