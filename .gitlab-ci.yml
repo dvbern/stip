@@ -1,0 +1,63 @@
+include:
+  - project: 'devops/gitlab/templates'
+    file: 'maven/maven-base.gitlab-ci.yml'
+
+stages:
+  - release
+  - publish
+
+release:
+  stage: release
+  image:
+    name: ${DVB_DOCKER_REGISTRY}/devops/gitlab/semantic-release-helper:19.0.2
+    entrypoint: [""]
+  tags: [ "zone:tz", "type:docker", "os:linux" ]
+  variables:
+    NPM_TOKEN: $CI_JOB_TOKEN
+    MAVEN_CLI_OPTS: -B
+  script:
+    - npm install --legacy-peer-deps
+    - npx semantic-release --verify-conditions=false --publish=false
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  artifacts:
+    paths:
+      - package.json
+      - pom.xml
+      - 'modules/**/pom.xml'
+
+npm:preview:
+  stage: publish
+  image: node:lts
+  tags: [ "zone:tz", "type:docker", "os:linux" ]
+  script:
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - npm version prerelease --preid ${CI_COMMIT_REF_SLUG} --no-git-tag-version
+    - npm publish
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event'"
+
+npm:
+  stage: publish
+  image: node:lts
+  tags: [ "zone:tz", "type:docker", "os:linux" ]
+  script:
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - npm publish
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  needs:
+    - job: release
+      artifacts: true
+
+maven:
+  stage: publish
+  variables:
+    MAVEN_IMAGE_TAG: 3.8-eclipse-temurin-17
+    MAVEN_GOAL: deploy
+  extends: .maven-build-base
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  needs:
+    - job: release
+      artifacts: true

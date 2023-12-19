@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ch.dvbern.oss.stip</groupId>
+    <artifactId>stip-contract</artifactId>
+    <!-- package version is set by ci -->
+    <version>local</version>
+    <packaging>pom</packaging>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <openapi-generator.version>6.6.0</openapi-generator.version>
+        <package.contract>ch.dvbern.oss.stip.contract</package.contract>
+        <package.test>ch.dvbern.oss.stip.contract.test</package.test>
+    </properties>
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>maven</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <attach>true</attach>
+                            <descriptors>
+                                ${basedir}/src/assembly/openapi.xml
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <!-- properties set by CI -->
+        <repository>
+            <id>dvb</id>
+            <name>DV Bern Release Repository</name>
+            <url>${maven.repo.releases.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>dvb.snapshots</id>
+            <name>DV Bern Snapshots Repository</name>
+            <layout>default</layout>
+            <url>${maven.repo.snapshots.url}</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <modules>
+        <module>modules/rest-test-client</module>
+    </modules>
+
+</project>
