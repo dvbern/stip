@@ -17,7 +17,7 @@ include:
       context-dir: backend
       sonar-project-key: kibon_stip-api
 
-  - component: 'itlab.dvbern.ch/devops/gitlab/components/buildah@91f6083e'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@91f6083e'
     inputs:
       name: api-image
       context-dir: backend
