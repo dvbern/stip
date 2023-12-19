@@ -1,6 +1,7 @@
-stages: [build, validate, test, analyze, package, deploy, mirror]
+stages: [build, deploy, mirror]
 
 backend:
+  stage: build
   trigger:
     include: backend/.gitlab-ci.yml
     strategy: depend
