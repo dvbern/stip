@@ -12,8 +12,8 @@ include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@cf0406e37c5f431b925b1dcebde5153a3fd5e9e7'
     inputs:
       sonar-scanner: cli
-      sonar-project-key: kibon_stip-frontend_AYkrwt88SZqri_oH9Xlq
       context-dir: 'frontend'
+      sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
       sonar-token: "$SONAR_TOKEN_FRONTEND"
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@cf0406e37c5f431b925b1dcebde5153a3fd5e9e7'
@@ -27,9 +27,9 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@cf0406e37c5f431b925b1dcebde5153a3fd5e9e7'
     inputs:
-      name: package:sachbearbeitung-app
+      name: package:gesuch-app
       context-dir: frontend
-      image-name: 'stip/sachbearbeitung-app'
+      image-name: 'stip/gesuch-app'
       version: '$VERSION'
       build-args: |
         APP=gesuch-app
