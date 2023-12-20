@@ -154,7 +154,7 @@ export function provideSharedPatternCore(
       sharedDataAccessStammdatenEffects
     ),
     provideRouterStore(),
-    ...(isDevMode() ? [provideStoreDevtools({})] : []),
+    ...(isDevMode() ? [provideStoreDevtools({connectInZone: true})] : []),
 
     // modules which don't support Angular Standalone APIs yet
     importProvidersFrom([

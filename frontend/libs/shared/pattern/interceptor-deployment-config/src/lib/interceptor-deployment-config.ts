@@ -9,14 +9,14 @@ import { KeycloakService } from 'keycloak-angular';
 
 export function SharedPatternInterceptorDeploymentConfig(
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ) {
   const keyCloakService = inject(KeycloakService);
   const store = inject(Store);
 
   if (
     ['/assets/', SHARED_MODEL_CONFIG_RESOURCE].some((url) =>
-      req.url.includes(url)
+      req.url.includes(url),
     )
   ) {
     return next(req);
@@ -25,14 +25,12 @@ export function SharedPatternInterceptorDeploymentConfig(
   return combineLatest([
     store.select(selectDeploymentConfig).pipe(
       filter((deploymentConfig) => deploymentConfig !== undefined),
-      take(1)
+      take(1),
     ),
-    from(keyCloakService.isLoggedIn()).pipe(
-      switchMap((isLoggedIn) =>
-        isLoggedIn
-          ? keyCloakService.addTokenToHeader(req.headers)
-          : [req.headers]
-      )
+    from(
+      keyCloakService.isLoggedIn()
+        ? keyCloakService.addTokenToHeader(req.headers)
+        : [req.headers],
     ),
   ]).pipe(
     concatMap(([deploymentConfig, headers]) => {
@@ -42,8 +40,8 @@ export function SharedPatternInterceptorDeploymentConfig(
           headers: headers
             .append('environment', environment)
             .append('version', version),
-        })
+        }),
       );
-    })
+    }),
   );
 }
