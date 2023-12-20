@@ -22,6 +22,6 @@ include:
     inputs:
       name: api-image
       context-dir: backend
-      image-name: 'stip/api'
+      image-name: 'api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'

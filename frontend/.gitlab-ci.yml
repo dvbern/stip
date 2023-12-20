@@ -20,7 +20,7 @@ include:
     inputs:
       name: package:sachbearbeitung-app
       context-dir: frontend
-      image-name: 'stip/sachbearbeitung-app'
+      image-name: 'sachbearbeitung-app'
       version: '$VERSION'
       build-args: |
         APP=sachbearbeitung-app
@@ -29,7 +29,7 @@ include:
     inputs:
       name: package:gesuch-app
       context-dir: frontend
-      image-name: 'stip/gesuch-app'
+      image-name: 'gesuch-app'
       version: '$VERSION'
       build-args: |
         APP=gesuch-app

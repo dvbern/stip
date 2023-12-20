@@ -2,7 +2,7 @@ stages: [build, deploy, mirror]
 
 variables:
   ARGOCD_APP: stip
-  ARGOCD_IMAGES: api
+  ARGOCD_IMAGES: api,gesuch-app,sachbearbeitung-app
   STIP_OVERLAYS_DIR: manifests/stip/overlays 
 
 backend:
