@@ -29,7 +29,7 @@
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
     <assertj.version>3.24.2</assertj.version>
-    <contract.path>${project.basedir}/src/main/resources/META-INF/openapi.yaml</contract.path>
+    <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -265,36 +265,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>ch.dvbern.oss.stip</groupId>
-                  <artifactId>stip-contract</artifactId>
-                  <version>${contract.version}</version>
-                  <classifier>openapi</classifier>
-                  <type>zip</type>
-                  <overWrite>true</overWrite>
-                  <includes>**/*.yaml</includes>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.basedir}/src/main/resources/META-INF</outputDirectory>
-              <overWriteReleases>true</overWriteReleases>
-              <overWriteSnapshots>false</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
         <version>${quarkus.platform.version}</version>
@@ -320,7 +290,7 @@
               <goal>process</goal>
             </goals>
             <configuration>
-              <outputDirectory>target/generated-sources</outputDirectory>
+              <outputDirectory>target/generated-sources/querydsl</outputDirectory>
               <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
             </configuration>
           </execution>
@@ -335,13 +305,6 @@
           </compilerArgs>
           <annotationProcessorPaths>
             <path>
-              <groupId>com.querydsl</groupId>
-              <artifactId>querydsl-apt</artifactId>
-              <classifier>jpa</classifier>
-              <classifier>jakarta</classifier>
-              <version>${querydsl.version}</version>
-            </path>
-            <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
               <version>${lombok.version}</version>
@@ -350,6 +313,13 @@
               <groupId>org.mapstruct</groupId>
               <artifactId>mapstruct-processor</artifactId>
               <version>${mapstruct.version}</version>
+            </path>
+            <path>
+              <groupId>com.querydsl</groupId>
+              <artifactId>querydsl-apt</artifactId>
+              <classifier>jpa</classifier>
+              <classifier>jakarta</classifier>
+              <version>${querydsl.version}</version>
             </path>
             <path>
               <groupId>org.checkerframework</groupId>
@@ -394,71 +364,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.openapitools</groupId>
-        <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>6.3.0</version>
-        <executions>
-          <execution>
-            <id>generate-stubs</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <inputSpec>${contract.path}</inputSpec>
-              <generatorName>jaxrs-spec</generatorName>
-              <library>quarkus</library>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>${project.artifactId}</artifactId>
-              <artifactVersion>${project.version}</artifactVersion>
-              <output>${project.basedir}</output>
-              <skipOverwrite>false</skipOverwrite>
-              <templateDirectory>${project.basedir}/templates</templateDirectory>
-              <modelNameSuffix>Dto</modelNameSuffix>
-              <apiNameSuffix>Resource</apiNameSuffix>
-              <generateSupportingFiles>false</generateSupportingFiles>
-              <schemaMappings>
-                FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
-                Anrede=ch.dvbern.stip.api.common.type.Anrede,
-                Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
-                Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
-                Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
-                ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
-                ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
-                Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
-                ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
-                Land=ch.dvbern.stip.api.stammdaten.type.Land,
-                DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
-                Ausbildungsland=ch.dvbern.stip.api.ausbildung.type.Ausbildungsland,
-                Bildungsart=ch.dvbern.stip.api.common.type.Bildungsart,
-                Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
-                Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
-                Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
-                Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
-                WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
-              </schemaMappings>
-              <addCompileSourceRoot>true</addCompileSourceRoot>
-              <configOptions>
-                <sourceFolder>target/generated-sources</sourceFolder>
-                <dateLibrary>java8</dateLibrary>
-                <modelPackage>${package.generated}.dto</modelPackage>
-                <invokerPackage>${package.generated}</invokerPackage>
-                <apiPackage>${package.generated}.api</apiPackage>
-                <serializableModel>true</serializableModel>
-                <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
-                <useJakartaEe>true</useJakartaEe>
-                <useSwaggerAnnotations>false</useSwaggerAnnotations>
-                <interfaceOnly>true</interfaceOnly>
-                <returnResponse>true</returnResponse>
-                <templateDirectory>${project.basedir}/templates</templateDirectory>
-              </configOptions>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
   <profiles>
@@ -497,6 +402,88 @@
                   <exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
                   <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
                   <append>true</append>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>generate-stubs-from-contract</id>
+      <build>
+        <defaultGoal>generate-sources</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>7.0.1</version>
+            <executions>
+              <execution>
+                <id>generate-stubs</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <configuration>
+                  <inputSpec>${contract.path}</inputSpec>
+                  <generatorName>jaxrs-spec</generatorName>
+                  <library>quarkus</library>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <artifactVersion>${project.version}</artifactVersion>
+                  <output>${project.basedir}</output>
+                  <skipOverwrite>false</skipOverwrite>
+                  <templateDirectory>${project.basedir}/templates</templateDirectory>
+                  <modelNameSuffix>Dto</modelNameSuffix>
+                  <apiNameSuffix>Resource</apiNameSuffix>
+                  <generateSupportingFiles>false</generateSupportingFiles>
+                  <schemaMappings>
+                    FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
+                    Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
+                    Anrede=ch.dvbern.stip.api.common.type.Anrede,
+                    Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
+                    Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
+                    Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
+                    ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
+                    ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
+                    Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
+                    ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
+                    Land=ch.dvbern.stip.api.stammdaten.type.Land,
+                    DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
+                    Ausbildungsland=ch.dvbern.stip.api.ausbildung.type.Ausbildungsland,
+                    Bildungsart=ch.dvbern.stip.api.common.type.Bildungsart,
+                    Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
+                    Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
+                    Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
+                    Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
+                    WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
+                  </schemaMappings>
+                  <addCompileSourceRoot>true</addCompileSourceRoot>
+                  <templateDirectory>${project.basedir}/templates</templateDirectory>
+                  <configOptions>
+                    <sourceFolder>src/main/java</sourceFolder>
+                    <dateLibrary>java8</dateLibrary>
+                    <modelPackage>${package.generated}.dto</modelPackage>
+                    <invokerPackage>${package.generated}</invokerPackage>
+                    <apiPackage>${package.generated}.api</apiPackage>
+                    <serializableModel>true</serializableModel>
+                    <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
+                    <useJakartaEe>true</useJakartaEe>
+                    <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                    <interfaceOnly>true</interfaceOnly>
+                    <returnResponse>true</returnResponse>
+                    <additionalModelTypeAnnotations>
+                      @lombok.NoArgsConstructor
+                      @lombok.AllArgsConstructor
+                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+                    </additionalModelTypeAnnotations>
+                    <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                  </configOptions>
+                  <typeMappings>
+                    <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
+                  </typeMappings>
                 </configuration>
               </execution>
             </executions>

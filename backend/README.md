@@ -9,9 +9,18 @@
 3. Create a Docker volume for the database by running `docker volume create stip-database-data`
 4. Start the local infra stack using `docker compose up -d`
 5. Generate sources and build the application `./mvnw clean package`
-5. You can now start the application `./mvnw clean compile quarkus:dev`
+6. You can now start the application `./mvnw compile quarkus:dev`
 
 > **_NOTE:_**  Quarkus ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+
+### Generate stubs from contract
+
+Whenever there is a changes to the contract you need to regenerate the JaxRS stubs for Quarkus. The regeneration is
+triggered by enabling the `generate-stubs-from-contract` Maven profile. One might run the following command to regenerate the stubs:
+
+```shell
+./mvnw clean package -Pgenerate-stubs-from-contract
+```
 
 ### How to debug
 * Per default Quarkus open in development mode a debug port (5005) that you can attach in a remote JVM debug configuration
