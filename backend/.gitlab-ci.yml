@@ -11,14 +11,14 @@ include:
       java-image-version: 17-jdk-alpine
       maven-goal: -Pcoverage install
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.1.1'
     inputs:
       sonar-scanner: maven
       context-dir: backend
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.1.1'
     inputs:
       name: api-image
       context-dir: backend

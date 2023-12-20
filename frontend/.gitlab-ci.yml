@@ -3,20 +3,20 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@v0.1.1'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
       context-dir: 'frontend'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.1.1'
     inputs:
       sonar-scanner: cli
       context-dir: 'frontend'
       sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
       sonar-token: "$SONAR_TOKEN_FRONTEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.1.1'
     inputs:
       name: package:sachbearbeitung-app
       context-dir: frontend
@@ -25,7 +25,7 @@ include:
       build-args: |
         APP=sachbearbeitung-app
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.1.1'
     inputs:
       name: package:gesuch-app
       context-dir: frontend
