@@ -388,7 +388,7 @@ class GesuchValidatorTest {
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
 		personInAusbildung.setZivilstand(Zivilstand.LEDIG);
 		Kind kind = new Kind();
-		Set kindSet = new HashSet<Kind>();
+		Set<Kind> kindSet = new HashSet<Kind>();
 		kindSet.add(kind);
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
