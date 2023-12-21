@@ -3,6 +3,6 @@
 
 cd frontend
 
-npx pretty-quick --staged
+npx lint-staged
 npm run validate
 npm run lint
