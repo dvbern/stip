@@ -1,19 +1,14 @@
+@if (view().loading) {
 <div
   data-testid="form-person-loading"
-  *ngIf="view().loading"
   class="my-2 p-2 py-4 d-flex rounded shadow-sm border"
 >
   <div class="dv-progress-bar-indeterminate">
     <div></div>
   </div>
 </div>
-<form
-  [formGroup]="form"
-  novalidate
-  class="mt-4"
-  *ngIf="!view().loading"
-  (ngSubmit)="handleSave()"
->
+} @else {
+<form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
   <div class="col-12 col-xl-6 col-md-9">
     <dv-shared-ui-stepper-navigation
       [nextStepVisible]="hasNextStep()"
@@ -81,10 +76,8 @@
             </mat-error>
           </mat-radio-group>
         </div>
-        <div
-          *ngIf="form.controls.werZahltAlimente.enabled"
-          class="row g-4 mt-3 col-xl-8"
-        >
+        @if (form.controls.werZahltAlimente.enabled) {
+        <div class="row g-4 mt-3 col-xl-8">
           <mat-form-field dvSharedUiFormField>
             <mat-label>{{
               'shared.form.familiensituation.wer-zahlt-alimente.label'
@@ -110,20 +103,17 @@
             </mat-error>
           </mat-form-field>
         </div>
+        } @if ( form.controls.mutterWiederverheiratet.enabled &&
+        form.value.gerichtlicheAlimentenregelung ) {
         <ng-container
-          *ngIf="
-            form.controls.mutterWiederverheiratet.enabled &&
-            form.value.gerichtlicheAlimentenregelung
-          "
           [ngTemplateOutlet]="mutterWiederverheiratet"
         ></ng-container>
+        } @if ( form.controls.vaterWiederverheiratet.enabled &&
+        form.value.gerichtlicheAlimentenregelung ) {
         <ng-container
-          *ngIf="
-            form.controls.vaterWiederverheiratet.enabled &&
-            form.value.gerichtlicheAlimentenregelung
-          "
           [ngTemplateOutlet]="vaterWiederverheiratet"
         ></ng-container>
+        }
       </div>
       <div
         (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
@@ -155,10 +145,8 @@
             </mat-error>
           </mat-radio-group>
         </div>
-        <div
-          *ngIf="form.controls.mutterUnbekanntVerstorben.enabled"
-          class="row g-4 mt-3"
-        >
+        @if (form.controls.mutterUnbekanntVerstorben.enabled) {
+        <div class="row g-4 mt-3">
           <span>{{
             'shared.form.familiensituation.elternteil-verstorben.label'
               | translate
@@ -192,10 +180,8 @@
             </mat-error>
           </mat-radio-group>
         </div>
-        <div
-          *ngIf="form.controls.mutterUnbekanntGrund.enabled"
-          class="row g-4 mt-3"
-        >
+        } @if (form.controls.mutterUnbekanntGrund.enabled) {
+        <div class="row g-4 mt-3">
           <mat-radio-group
             formControlName="mutterUnbekanntGrund"
             dvSharedUiFormField
@@ -227,19 +213,14 @@
             </mat-error>
           </mat-radio-group>
         </div>
+        } @if ( !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet)
+        && form.value.elternteilUnbekanntVerstorben ) {
         <ng-container
-          *ngIf="
-            !hiddenFieldsSetSig()?.has(form.controls.mutterWiederverheiratet) &&
-            form.value.elternteilUnbekanntVerstorben
-          "
           [ngTemplateOutlet]="mutterWiederverheiratet"
         ></ng-container>
-        <div
-          *ngIf="
-            !hiddenFieldsSetSig()?.has(form.controls.vaterUnbekanntVerstorben)
-          "
-          class="row g-4 mt-3"
-        >
+        } @if (
+        !hiddenFieldsSetSig().has(form.controls.vaterUnbekanntVerstorben) ) {
+        <div class="row g-4 mt-3">
           <mat-radio-group
             formControlName="vaterUnbekanntVerstorben"
             dvSharedUiFormField
@@ -269,12 +250,9 @@
             </mat-error>
           </mat-radio-group>
         </div>
-        <div
-          *ngIf="
-            !hiddenFieldsSetSig()?.has(this.form.controls.vaterUnbekanntGrund)
-          "
-          class="row g-4 mt-3"
-        >
+        } @if (
+        !hiddenFieldsSetSig().has(this.form.controls.vaterUnbekanntGrund) ) {
+        <div class="row g-4 mt-3">
           <mat-radio-group
             formControlName="vaterUnbekanntGrund"
             dvSharedUiFormField
@@ -306,14 +284,13 @@
             </mat-error>
           </mat-radio-group>
         </div>
+        } @if ( !hiddenFieldsSetSig().has(
+        this.form.controls.vaterWiederverheiratet ) &&
+        form.value.elternteilUnbekanntVerstorben ) {
         <ng-container
-          *ngIf="
-            !hiddenFieldsSetSig()?.has(
-              this.form.controls.vaterWiederverheiratet
-            ) && form.value.elternteilUnbekanntVerstorben
-          "
           [ngTemplateOutlet]="vaterWiederverheiratet"
         ></ng-container>
+        }
       </div>
 
       <div
@@ -321,18 +298,17 @@
         (@inOutPaneAnimation.done)="duringAnimation = 'show'"
         [@inOutPaneAnimation]="stateSig()['ZWEI_FAMILIENBUDGET'] ?? 'hidden'"
       >
+        @if ( !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) )
+        {
         <ng-container
-          *ngIf="
-            !hiddenFieldsSetSig()?.has(form.controls.mutterWiederverheiratet)
-          "
           [ngTemplateOutlet]="mutterWiederverheiratet"
         ></ng-container>
+        } @if ( !hiddenFieldsSetSig().has(form.controls.vaterWiederverheiratet)
+        ) {
         <ng-container
-          *ngIf="
-            !hiddenFieldsSetSig()?.has(form.controls.vaterWiederverheiratet)
-          "
           [ngTemplateOutlet]="vaterWiederverheiratet"
         ></ng-container>
+        }
         <div class="row g-4 mt-3 col-xl-8">
           <mat-form-field dvSharedUiFormField>
             <mat-label>{{
@@ -387,8 +363,8 @@
 
         <div class="row g-4 mt-3 col-xl-8">
           <!-- OBHUT AUFTEILUNG -->
+          @if (!hiddenFieldsSetSig().has(form.controls.obhutMutter)) {
           <dv-shared-ui-percentage-splitter
-            *ngIf="!hiddenFieldsSetSig()?.has(form.controls.obhutMutter)"
             [updateValidity]="updateValidity$ | async"
             [controlA]="form.controls.obhutMutter"
             [controlB]="form.controls.obhutVater"
@@ -404,23 +380,22 @@
               'shared.form.familiensituation.obhutsaufteilung.vater' | translate
             }}</span>
           </dv-shared-ui-percentage-splitter>
+          }
         </div>
       </div>
     </div>
   </div>
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
-    <button *ngIf="!view().readonly" type="submit" class="btn btn-primary">
+    @if (!view().readonly) {
+    <button type="submit" class="btn btn-primary">
       {{ 'shared.form.save-and-continue' | translate }}
     </button>
-    <button
-      *ngIf="view().readonly"
-      type="button"
-      class="btn btn-primary"
-      (click)="handleContinue()"
-    >
+    } @else {
+    <button type="button" class="btn btn-primary" (click)="handleContinue()">
       {{ 'shared.form.gonext' | translate }}
     </button>
+    }
   </dv-shared-ui-step-form-buttons>
 
   <ng-template #mutterWiederverheiratet>
@@ -477,3 +452,4 @@
     </div>
   </ng-template>
 </form>
+}

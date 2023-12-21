@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
 
@@ -10,7 +9,6 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   selector: 'dv-sachbearbeitung-app-pattern-overview-layout',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     SharedPatternAppHeaderComponent,
     SharedUiSearchComponent,

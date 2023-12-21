@@ -8,7 +8,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -50,14 +49,12 @@ import {
   getDateDifference,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
-import { BehaviorSubject } from 'rxjs';
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,

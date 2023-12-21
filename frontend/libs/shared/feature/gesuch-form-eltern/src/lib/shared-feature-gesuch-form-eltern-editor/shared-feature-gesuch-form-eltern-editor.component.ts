@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -65,7 +64,6 @@ const MEDIUM_AGE_ADULT = 40;
   selector: 'dv-shared-feature-gesuch-form-eltern-editor',
   standalone: true,
   imports: [
-    CommonModule,
     MaskitoModule,
     TranslateModule,
     NgbInputDatepicker,

@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'dv-shared-ui-step-form-buttons',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './shared-ui-step-form-buttons.component.html',
   styleUrls: ['./shared-ui-step-form-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

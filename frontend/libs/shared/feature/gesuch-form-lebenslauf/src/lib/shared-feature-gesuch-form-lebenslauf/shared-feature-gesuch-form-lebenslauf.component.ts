@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -34,7 +33,6 @@ const AUSBILDUNGS_MONTH = 8; // August
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
   standalone: true,
   imports: [
-    CommonModule,
     SharedFeatureGesuchFormLebenslaufEditorComponent,
     NgbAlert,
     TranslateModule,

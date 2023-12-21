@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,7 +18,6 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
   selector: 'dv-shared-pattern-gesuch-step-nav',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     TranslateModule,
     SharedUiIconChipComponent,

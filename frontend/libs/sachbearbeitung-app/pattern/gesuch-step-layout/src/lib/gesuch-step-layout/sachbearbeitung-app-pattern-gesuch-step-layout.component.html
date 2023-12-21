@@ -46,7 +46,8 @@
         [steps]="stepsSig()"
       />
     </div>
-    <div class="container mb-5 pt-lg-4 px-lg-4" *ngIf="step">
+    @if (step) {
+    <div class="container mb-5 pt-lg-4 px-lg-4">
       <!-- step header (mobile) -->
       <div
         class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
@@ -59,13 +60,12 @@
           <h5 class="step-title">
             {{ step.translationKey | translate }}
           </h5>
-          <p
-            class="fst-italic mb-0"
-            *ngIf="stepManager.getNext(step).translationKey"
-          >
+          @if (stepManager.getNext(step).translationKey) {
+          <p class="fst-italic mb-0">
             {{ 'shared.form.next' | translate }}:
             {{ stepManager.getNext(step).translationKey | translate }}
           </p>
+          }
         </div>
       </div>
 
@@ -86,5 +86,6 @@
         <ng-content></ng-content>
       </div>
     </div>
+    }
   </div>
 </main>

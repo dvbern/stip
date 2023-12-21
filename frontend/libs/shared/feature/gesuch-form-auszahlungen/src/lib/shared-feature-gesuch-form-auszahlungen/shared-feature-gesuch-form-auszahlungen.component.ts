@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -54,7 +53,6 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
   selector: 'dv-shared-feature-gesuch-form-auszahlungen',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,

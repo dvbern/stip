@@ -15,20 +15,21 @@
       <!-- main column -->
       <div class="col-lg-8 mb-lg-5">
         <!-- progress -->
-        <div *ngIf="cockpitView().loading" class="my-4">
+        @if (cockpitView().loading) {
+        <div class="my-4">
           <div class="dv-progress-bar-indeterminate bg-dark">
             <div class="bg-light"></div>
           </div>
         </div>
+        }
 
         <!-- period 1-2 -->
-        <div *ngIf="fall$ | async; let fall">
+        @if (fall$ | async; as fall) {
+        <div>
+          @for ( periode of cockpitView().gesuchsperiodes; track
+          trackByPerioden($index, periode) ) {
           <div
             class="card mb-5 shadow-lg"
-            *ngFor="
-              let periode of cockpitView().gesuchsperiodes;
-              trackBy: trackByPerioden
-            "
             [class.col-md-6]="!periode.gesuchId"
             [class.col-md-12]="periode.gesuchId"
           >
@@ -37,21 +38,21 @@
                 <div class="col-md">
                   <!-- Periode titel -->
                   <div class="card-title d-flex">
+                    @if (periode.semester === 'HERBST') {
                     <dv-shared-ui-icon-chip
-                      *ngIf="periode.semester === 'HERBST'"
                       style="background-color: #feefea; color: #fe7e55"
                       class="me-2"
                     >
                       <i class="material-symbols-rounded fs-5">eco</i>
                     </dv-shared-ui-icon-chip>
+                    } @else if (periode.semester === 'FRUEHLING') {
                     <dv-shared-ui-icon-chip
-                      *ngIf="periode.semester === 'FRUEHLING'"
                       style="background-color: #eff7e0; color: #81be06"
                       class="me-2"
                     >
                       <i class="material-symbols-rounded fs-5">deceased</i>
                     </dv-shared-ui-icon-chip>
-
+                    }
                     <div>
                       <div class="mt-1">
                         <h3 data-testid="cockpit-periode-title">
@@ -74,21 +75,15 @@
                       </h6>
                     </div>
                   </div>
-
                   <!-- loading Gesuch -->
-                  <div
-                    class="spinner-border text-primary my-4"
-                    role="status"
-                    *ngIf="periode.gesuchLoading"
-                  >
+                  @if (periode.gesuchLoading) {
+                  <div class="spinner-border text-primary my-4" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div>
-
+                  }
                   <!-- existing Gesuch (left) -->
-                  <div
-                    class="d-flex flex-column align-items-start"
-                    *ngIf="periode.gesuchId"
-                  >
+                  @if (periode.gesuchId) {
+                  <div class="d-flex flex-column align-items-start">
                     <span class="mt-4 fw-normal small">{{
                       'gesuch-app.cockpit.periode.status.titel' | translate
                     }}</span>
@@ -96,7 +91,6 @@
                       'gesuch-app.cockpit.periode.status.nicht_komplett'
                         | translate
                     }}</span>
-
                     <ng-container
                       *ngTemplateOutlet="
                         einreichefrist;
@@ -104,10 +98,11 @@
                       "
                     ></ng-container>
                   </div>
+                  }
                 </div>
-
                 <!-- existing Gesuch (right pic) -->
-                <div *ngIf="periode.gesuchId" class="col-md p-4">
+                @if (periode.gesuchId) {
+                <div class="col-md p-4">
                   <img
                     src="/assets/images/undraw_exams_re_4ios.svg"
                     [alt]="'gesuch-app.cockpit.gesuch.img.alt' | translate"
@@ -115,10 +110,11 @@
                     style="max-width: 300px"
                   />
                 </div>
+                }
               </div>
-
               <!-- existing Gesuch buttons -->
-              <div class="row" *ngIf="periode.gesuchId">
+              @if (periode.gesuchId) {
+              <div class="row">
                 <div class="col-md">
                   <a
                     class="btn btn-primary mt-3 w-100"
@@ -128,7 +124,6 @@
                     {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
                   </a>
                 </div>
-
                 <div class="col-md">
                   <a
                     class="btn btn-outline-primary mt-3 w-100"
@@ -138,12 +133,10 @@
                   </a>
                 </div>
               </div>
-
+              }
               <!-- no Gesuch yet -->
-              <div
-                *ngIf="!periode.gesuchId && !periode.gesuchLoading"
-                class="d-flex flex-column align-items-start"
-              >
+              @if (!periode.gesuchId && !periode.gesuchLoading) {
+              <div class="d-flex flex-column align-items-start">
                 <ng-container
                   *ngTemplateOutlet="
                     einreichefrist;
@@ -151,7 +144,6 @@
                   "
                 ></ng-container>
                 <div class="mb-3"></div>
-
                 <button
                   type="button"
                   class="btn btn-primary mt-4 w-100"
@@ -160,21 +152,26 @@
                   {{ 'gesuch-app.cockpit.gesuch.new' | translate }}
                 </button>
               </div>
+              }
             </div>
           </div>
+          }
         </div>
+        }
       </div>
 
       <ng-template #einreichefrist let-periode="periode">
         <span class="mt-4 fw-normal small">{{
           'gesuch-app.cockpit.periode.einreichfrist.titel' | translate
         }}</span>
-        <span class="fw-medium" *ngIf="periode.einreichfrist">
+        @if (periode.einreichfrist) {
+        <span class="fw-medium">
           {{
             'gesuch-app.cockpit.periode.einreichfrist.spaetestens' | translate
           }}
           {{ periode.einreichfrist | date : 'dd.MM.yyyy' }}
         </span>
+        }
       </ng-template>
 
       <!-- side column -->

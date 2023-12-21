@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +23,6 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,

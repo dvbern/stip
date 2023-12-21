@@ -5,11 +5,10 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   ElternTyp,
   ElternUpdate,
@@ -29,7 +28,6 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
   selector: 'dv-shared-feature-gesuch-form-eltern',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,

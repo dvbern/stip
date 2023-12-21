@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiIconChipComponent],
+  imports: [TranslateModule, SharedUiIconChipComponent],
   templateUrl: './elternteil-card.component.html',
   styleUrls: ['./elternteil-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

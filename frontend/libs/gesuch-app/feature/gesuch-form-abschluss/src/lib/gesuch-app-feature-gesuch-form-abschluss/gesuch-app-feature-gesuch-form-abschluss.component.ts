@@ -4,7 +4,6 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -18,7 +17,7 @@ import {
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
   styleUrls: ['./gesuch-app-feature-gesuch-form-abschluss.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,12 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  EventEmitter,
   inject,
   Input,
   OnChanges,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -20,12 +18,7 @@ import { DocumentOptions } from './shared-pattern-document-upload.model';
 @Component({
   selector: 'dv-shared-pattern-document-upload',
   standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    MatFormFieldModule,
-    SharedUiDropFileComponent,
-  ],
+  imports: [TranslateModule, MatFormFieldModule, SharedUiDropFileComponent],
   templateUrl: './shared-pattern-document-upload.component.html',
   styleUrls: ['./shared-pattern-document-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

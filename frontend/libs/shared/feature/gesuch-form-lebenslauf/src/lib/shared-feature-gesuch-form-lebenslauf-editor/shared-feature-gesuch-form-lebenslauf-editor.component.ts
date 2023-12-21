@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -60,7 +59,6 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     NgbInputDatepicker,
     ReactiveFormsModule,

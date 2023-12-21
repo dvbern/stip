@@ -8,7 +8,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import {
   BlockScrollStrategy,
   CdkConnectedOverlay,
@@ -30,7 +30,7 @@ import {
 @Component({
   selector: 'dv-shared-ui-info-overlay',
   standalone: true,
-  imports: [CommonModule, OverlayModule, TranslateModule],
+  imports: [OverlayModule, TranslateModule],
   templateUrl: './shared-ui-info-overlay.component.html',
   styleUrls: ['./shared-ui-info-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

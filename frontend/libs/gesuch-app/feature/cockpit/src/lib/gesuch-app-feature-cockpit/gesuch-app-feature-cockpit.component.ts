@@ -1,4 +1,4 @@
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -42,7 +42,6 @@ import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
   imports: [
     CommonModule,
     RouterLink,
-    NgFor,
     TranslateModule,
     GesuchAppPatternMainLayoutComponent,
     SharedUiLanguageSelectorComponent,

@@ -72,10 +72,8 @@
     </div>
   </div>
   <!-- alternative civil residence -->
-  <div
-    class="row g-4 mt-1"
-    *ngIf="!form.value.identischerZivilrechtlicherWohnsitz"
-  >
+  @if (!form.value.identischerZivilrechtlicherWohnsitz) {
+  <div class="row g-4 mt-1">
     <div class="col-12 col-xl-8">
       <label class="mb-2">{{
         'shared.form.shared.alternative-civil-residence.title' | translate
@@ -113,6 +111,7 @@
       </div>
     </div>
   </div>
+  }
 
   <h3 class="pt-5">{{ 'shared.weiterangaben' | translate }}</h3>
 
@@ -224,8 +223,8 @@
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons>
+    @if (elternteil.id && !view$().readonly) {
     <button
-      *ngIf="elternteil.id && !view$().readonly"
       type="button"
       class="btn btn-outline-primary d-flex align-items-center justify-content-center"
       (click)="handleDelete()"
@@ -234,6 +233,7 @@
       <i class="material-symbols-rounded me-2">delete</i>
       {{ 'shared.form.delete' | translate }}
     </button>
+    }
 
     <button
       type="button"
@@ -242,8 +242,10 @@
     >
       {{ 'shared.form.back' | translate }}
     </button>
-    <button type="submit" class="btn btn-primary" *ngIf="!view$().readonly">
+    @if (!view$().readonly) {
+    <button type="submit" class="btn btn-primary">
       {{ 'shared.form.save-and-back' | translate }}
     </button>
+    }
   </dv-shared-ui-step-form-buttons>
 </form>

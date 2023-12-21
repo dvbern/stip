@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,7 +25,6 @@ import { percentStringToNumber } from '../utils/form';
   selector: 'dv-shared-ui-percentage-splitter',
   standalone: true,
   imports: [
-    CommonModule,
     MaskitoModule,
     MatFormFieldModule,
     MatInputModule,

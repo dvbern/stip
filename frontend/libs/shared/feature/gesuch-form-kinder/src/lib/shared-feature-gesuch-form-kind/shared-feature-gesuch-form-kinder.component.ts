@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +23,6 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
   selector: 'dv-shared-feature-gesuch-form-kinder',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     NgbAlert,
     SharedFeatureGesuchFormKinderEditorComponent,

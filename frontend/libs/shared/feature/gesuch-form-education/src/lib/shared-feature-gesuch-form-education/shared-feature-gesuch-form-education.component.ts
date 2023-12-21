@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -61,7 +60,6 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
   selector: 'dv-shared-feature-gesuch-form-education',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     NgbInputDatepicker,

@@ -1,6 +1,6 @@
+@if (timeline.items) {
 <div
   class="wrapper"
-  *ngIf="timeline.items"
   data-testid="two-columns-timeline-wrapper"
   [style]="
     'grid-template-rows: repeat(' +
@@ -11,9 +11,9 @@
     ', minmax(0, 1fr))'
   "
 >
+  @for (item of timeline.items; track trackByIndex($index)) {
   <div
     class="box"
-    *ngFor="let item of timeline.items; trackBy: trackByIndex"
     [class.left]="item.col === 'LEFT'"
     [class.right]="item.col === 'RIGHT'"
     [class.both]="item.col === 'BOTH'"
@@ -31,53 +31,46 @@
       ';'
     "
   >
+    @if (isTimelineBusyBlock(item)) {
     <!-- busy block -->
-    <ng-container *ngIf="isTimelineBusyBlock(item)">
-      <ng-container *ngIf="asBusyBlock(item) as busyItem">
-        <div
-          class="d-flex flex-column gap-3"
-          *ngIf="busyItem.children as children"
-        >
-          <div *ngFor="let child of children; trackBy: trackByIndex">
-            <ng-template #content>
-              <h5 data-testid="two-column-timeline-label">
-                {{ child.label.title | translate }}
-              </h5>
-              <div *ngIf="child.label.subTitle; let subTitle">
-                <small
-                  class="d-inline-block"
-                  data-testid="two-column-timeline-sub-label"
-                >
-                  {{ subTitle.key | translate }}: {{ subTitle.value }}
-                </small>
-              </div>
-              <small class="d-inline-block">{{
-                printDateAsMonthYear(child.von) +
-                  ' - ' +
-                  printDateAsMonthYear(child.bis)
-              }}</small>
-            </ng-template>
-            <a
-              *ngIf="child.editable"
-              class="w-100 d-block"
-              (click)="handleEditItem(child)"
+    @if (asBusyBlock(item); as busyItem) { @if (busyItem.children; as children)
+    {
+    <div class="d-flex flex-column gap-3">
+      @for (child of children; track trackByIndex($index)) {
+      <div>
+        <ng-template #content>
+          <h5 data-testid="two-column-timeline-label">
+            {{ child.label.title | translate }}
+          </h5>
+          @if (child.label.subTitle; as subTitle) {
+          <div>
+            <small
+              class="d-inline-block"
+              data-testid="two-column-timeline-sub-label"
             >
-              <ng-container *ngTemplateOutlet="content"></ng-container>
-            </a>
-            <ng-container *ngIf="!child.editable">
-              <ng-container *ngTemplateOutlet="content"></ng-container>
-            </ng-container>
+              {{ subTitle.key | translate }}: {{ subTitle.value }}
+            </small>
           </div>
-        </div>
-      </ng-container>
-    </ng-container>
-
+          }
+          <small class="d-inline-block">{{
+            printDateAsMonthYear(child.von) +
+              ' - ' +
+              printDateAsMonthYear(child.bis)
+          }}</small>
+        </ng-template>
+        @if (child.editable) {
+        <a class="w-100 d-block" (click)="handleEditItem(child)">
+          <ng-container *ngTemplateOutlet="content"></ng-container>
+        </a>
+        } @if (!child.editable) {
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+        }
+      </div>
+      }
+    </div>
+    } } } @else if (isTimelineGapBlock(item)) {
     <!-- gap -->
-    <div
-      *ngIf="isTimelineGapBlock(item)"
-      class="position-relative"
-      data-testid="timeline-gap-block"
-    >
+    <div class="position-relative" data-testid="timeline-gap-block">
       <div class="hide-on-hover">
         <h5>{{ 'shared.form.lebenslauf.missingEntries' | translate }}</h5>
         <small>{{
@@ -121,5 +114,8 @@
         </button>
       </div>
     </div>
+    }
   </div>
+  }
 </div>
+}

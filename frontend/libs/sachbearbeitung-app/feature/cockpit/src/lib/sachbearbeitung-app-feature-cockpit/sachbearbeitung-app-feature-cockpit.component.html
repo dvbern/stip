@@ -1,10 +1,8 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container pt-4 mt-2">
     <div class="row g-4">
-      <div
-        class="col-12 col-md-6 col-lg-4"
-        *ngFor="let group of groupsSig(); trackBy: trackByIndex"
-      >
+      @for (group of groupsSig(); track trackByIndex($index)) {
+      <div class="col-12 col-md-6 col-lg-4">
         <article class="card shadow-lg">
           <div class="card-body d-flex align-items-center">
             <dv-shared-ui-icon-chip
@@ -26,6 +24,7 @@
           </div>
         </article>
       </div>
+      }
     </div>
     <div class="row my-4">
       <div class="col-12">

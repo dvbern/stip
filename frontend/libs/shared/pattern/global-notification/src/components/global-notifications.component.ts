@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,7 +17,7 @@ import { NotificationComponent } from './notification/notification.component';
 @Component({
   selector: 'dv-global-notifications',
   standalone: true,
-  imports: [CommonModule, NotificationComponent],
+  imports: [NotificationComponent],
   templateUrl: './global-notifications.component.html',
   styleUrls: ['./global-notifications.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
