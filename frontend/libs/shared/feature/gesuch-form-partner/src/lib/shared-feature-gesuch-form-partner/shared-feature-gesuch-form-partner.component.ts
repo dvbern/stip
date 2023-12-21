@@ -275,7 +275,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     return index;
   }
 
-  onGeburtsdatumBlur(_: any) {
+  onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE_ADULT),

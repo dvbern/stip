@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 
 import { SharedFeatureGesuchFormElternComponent } from './shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.component';
-import { SharedFeatureGesuchFormElternEditorComponent } from './shared-feature-gesuch-form-eltern-editor/shared-feature-gesuch-form-eltern-editor.component';
 
 export const gesuchAppFeatureGesuchFormElternRoutes: Route[] = [
   {

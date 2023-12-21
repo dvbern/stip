@@ -7,7 +7,6 @@ import {
   Input,
   OnInit,
   runInInjectionContext,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';

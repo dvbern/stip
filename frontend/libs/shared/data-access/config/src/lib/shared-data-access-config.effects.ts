@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { catchError, switchMap, map, of } from 'rxjs';
+import { catchError, switchMap, map } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';

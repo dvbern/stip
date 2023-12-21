@@ -192,7 +192,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.closeTriggered.emit();
   }
 
-  onGeburtsdatumBlur(_: any) {
+  onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE),

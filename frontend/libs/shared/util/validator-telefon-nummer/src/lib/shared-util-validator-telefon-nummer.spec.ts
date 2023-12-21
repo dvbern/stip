@@ -1,5 +1,3 @@
-import { TestBed } from '@angular/core/testing';
-
 import { sharedUtilIsValidTelefonNummer } from './shared-util-validator-telefon-nummer';
 
 describe('sharedUtilIsValidAhv', () => {

@@ -1,7 +1,7 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, interval, merge, Observable, of, Subject } from 'rxjs';
+import { combineLatest, interval, merge, Observable, Subject } from 'rxjs';
 import {
   concatMap,
   mergeMap,

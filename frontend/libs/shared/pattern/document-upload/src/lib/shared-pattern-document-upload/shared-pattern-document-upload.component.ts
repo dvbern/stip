@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
 
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 

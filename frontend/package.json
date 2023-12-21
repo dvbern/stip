@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install frontend/.husky",
     "g": "nx generate @dv/tooling/nx-plugin:lib",
     "g:dry": "nx generate @dv/tooling/nx-plugin:lib --dry-run",
     "g:app": "nx generate @dv/tooling/nx-plugin:app",
@@ -102,8 +102,8 @@
     "@nx/angular": "17.2.6",
     "@nx/cypress": "17.2.6",
     "@nx/devkit": "17.2.6",
-    "@nx/eslint-plugin": "17.2.6",
     "@nx/eslint": "17.2.6",
+    "@nx/eslint-plugin": "17.2.6",
     "@nx/jest": "17.2.6",
     "@nx/js": "17.2.6",
     "@nx/plugin": "17.2.6",
@@ -145,5 +145,10 @@
     "ts-node": "10.9.2",
     "typescript": "5.2.2",
     "zod": "^3.22.4"
+  },
+  "lint-staged": {
+    "**/*.{ts,html}": [
+      "npx prettier -w"
+    ]
   }
 }
