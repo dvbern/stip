@@ -1,4 +1,4 @@
-FROM docker-registry.dvbern.ch/dockerhub/library/caddy:2.6-alpine
+FROM docker-registry.dvbern.ch/devops/docker/caddy:2.7
 
 ARG APP="gesuch-app"
 
