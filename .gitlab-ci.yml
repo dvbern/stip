@@ -26,7 +26,7 @@ include:
       name: "deploy:dev"
       deployment-overlay-path: "$STIP_OVERLAYS_DIR/dev"
       deployment-environment: "dev"
-      deployment-environment-url: "https://dev-stip.apps.apollo.ocp.dvbern.ch"
+      deployment-environment-url: "https://dev-stip.$DVB_OCP_MERCURY_ROUTER"
       deployment-image-names: "$ARGOCD_IMAGES"
       deployment-on: "default"
       deployment-mode: "on_success"
@@ -39,7 +39,7 @@ include:
       name: "deploy:uat"
       deployment-overlay-path: "$STIP_OVERLAYS_DIR/uat"
       deployment-environment: "uat"
-      deployment-environment-url: "https://uat-stip.apps.apollo.ocp.dvbern.ch"
+      deployment-environment-url: "https://uat-stip.$DVB_OCP_APOLLO_ROUTER"
       deployment-image-names: "$ARGOCD_IMAGES"
       deployment-on: "tag"
       deployment-mode: "manual"
@@ -52,7 +52,7 @@ include:
       name: "deploy:prod"
       deployment-overlay-path: "$STIP_OVERLAYS_DIR/prod"
       deployment-environment: "prod"
-      deployment-environment-url: "https://stip.apps.apollo.ocp.dvbern.ch"
+      deployment-environment-url: "https://stip.$DVB_OCP_APOLLO_ROUTER"
       deployment-image-names: "$ARGOCD_IMAGES"
       deployment-on: "tag"
       deployment-mode: "manual"
@@ -62,4 +62,4 @@ include:
   
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.3'
     inputs:
-      review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.apps.apollo.ocp.dvbern.ch"
+      review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
