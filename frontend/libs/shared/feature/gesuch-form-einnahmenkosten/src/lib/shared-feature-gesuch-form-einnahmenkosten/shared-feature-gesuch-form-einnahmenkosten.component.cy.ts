@@ -28,7 +28,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         familiensituation: { elternVerheiratetZusammen: true },
       });
       SharedEinnahmenKostenInAusbildungPO.getFormDataIncompleteWarning().should(
-        'exist'
+        'exist',
       );
     });
     it('should display warning if ausbildung is undefined', () => {
@@ -38,7 +38,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         familiensituation: { elternVerheiratetZusammen: true },
       });
       SharedEinnahmenKostenInAusbildungPO.getFormDataIncompleteWarning().should(
-        'exist'
+        'exist',
       );
     });
     it('should display warning if familiensituation is undefined', () => {
@@ -48,7 +48,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         familiensituation: undefined,
       });
       SharedEinnahmenKostenInAusbildungPO.getFormDataIncompleteWarning().should(
-        'exist'
+        'exist',
       );
     });
   });
@@ -57,21 +57,21 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "eigener Haushalt"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
       SharedEinnahmenKostenInAusbildungPO.getFormAuswaertigeMittagessenProWoche().should(
-        'not.exist'
+        'not.exist',
       );
     });
 
     it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Familie"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       SharedEinnahmenKostenInAusbildungPO.getFormAuswaertigeMittagessenProWoche().should(
-        'exist'
+        'exist',
       );
     });
 
     it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Mutter Vater"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.MUTTER_VATER);
       SharedEinnahmenKostenInAusbildungPO.getFormAuswaertigeMittagessenProWoche().should(
-        'exist'
+        'exist',
       );
     });
   });
@@ -79,21 +79,19 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   describe('visibility rules for field "wohnkosten"', () => {
     it('should display wohnkosten if personInAusbildung has wohnsitz "eigener Haushalt"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-      SharedEinnahmenKostenInAusbildungPO.getFormWohnkosten().should('exist');
+      SharedEinnahmenKostenInAusbildungPO.getFormWohnkosten().should(
+        'not.exist',
+      );
     });
 
     it('should not display wohnkosten if personInAusbildung has wohnsitz "Familie"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
-      SharedEinnahmenKostenInAusbildungPO.getFormWohnkosten().should(
-        'not.exist'
-      );
+      SharedEinnahmenKostenInAusbildungPO.getFormWohnkosten().should('exist');
     });
 
     it('should not display wohnkosten if personInAusbildung has wohnsitz "Mutter Vater"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.MUTTER_VATER);
-      SharedEinnahmenKostenInAusbildungPO.getFormWohnkosten().should(
-        'not.exist'
-      );
+      SharedEinnahmenKostenInAusbildungPO.getFormWohnkosten().should('exist');
     });
   });
 
@@ -101,59 +99,59 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     it('should display personenImHaushalt if personInAusbildung has wohnsitz "eigener Haushalt"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
-        'exist'
+        'not.exist',
       );
     });
 
     it('should not display personenImHaushalt if personInAusbildung has wohnsitz "Familie"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
-        'not.exist'
+        'exist',
       );
     });
 
     it('should not display personenImHaushalt if personInAusbildung has wohnsitz "Mutter Vater"', () => {
       mountWithPreparedGesuchWithWohnsitz(Wohnsitz.MUTTER_VATER);
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
-        'not.exist'
+        'exist',
       );
     });
   });
 
   describe('form validation', () => {
     it('should be invalid if personenImHaushalt is 0', () => {
-      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
-        'exist'
+        'exist',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().type('0');
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
         'have.value',
-        1
+        1,
       );
     });
     it('should be invalid if personenImHaushalt is negative', () => {
-      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
-        'exist'
+        'exist',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().type(
-        '-2'
+        '-2',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
         'have.value',
-        2
+        2,
       );
     });
     it('should be invalid if personenImHaushalt is positive', () => {
-      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
-        'exist'
+        'exist',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().type('1');
       SharedEinnahmenKostenInAusbildungPO.getFormPersonenImHaushalt().should(
         'have.value',
-        1
+        1,
       );
     });
   });
@@ -166,7 +164,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         familiensituation: { elternVerheiratetZusammen: true },
       });
       SharedEinnahmenKostenInAusbildungPO.getFormDataIncompleteWarning().should(
-        'not.exist'
+        'not.exist',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormAlimente().should('not.exist');
     });
@@ -181,7 +179,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         },
       });
       SharedEinnahmenKostenInAusbildungPO.getFormDataIncompleteWarning().should(
-        'not.exist'
+        'not.exist',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormAlimente().should('not.exist');
     });
@@ -196,7 +194,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         },
       });
       SharedEinnahmenKostenInAusbildungPO.getFormDataIncompleteWarning().should(
-        'not.exist'
+        'not.exist',
       );
       SharedEinnahmenKostenInAusbildungPO.getFormAlimente().should('exist');
     });

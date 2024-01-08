@@ -1,7 +1,8 @@
 import { nxComponentTestingPreset } from '@nx/angular/plugins/component-testing';
-import task from '@cypress/code-coverage/task';
 import { defineConfig } from 'cypress';
 import * as path from 'path';
+
+import { dvCypressConfigs } from '@dv/shared/util-fn/cypress-config';
 
 import { setupCoverageWebpack } from './coverage.webpack';
 
@@ -14,10 +15,7 @@ export default defineConfig({
       ...nxPreset.devServer,
       webpackConfig: setupCoverageWebpack([path.join(__dirname, 'src')]),
     },
-    setupNodeEvents(on, config) {
-      task(on, config);
-      return config;
-    },
+    ...dvCypressConfigs.component,
   },
   scrollBehavior: 'nearest',
 });
