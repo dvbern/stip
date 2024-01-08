@@ -9,7 +9,7 @@
       "smulyono.reveal",
       "nrwl.angular-console",
       "esbenp.prettier-vscode",
-      "firsttris.vscode-jest-runner",
+      "Orta.vscode-jest",
       "dbaeumer.vscode-eslint"
     ]
   },
