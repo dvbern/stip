@@ -12,6 +12,7 @@ export default defineConfig({
       task(on, config);
       return config;
     },
+    baseUrl: process.env['E2E_BASEURL_GS'],
   },
   env: {
     E2E_USERNAME: process.env['E2E_USERNAME'],
