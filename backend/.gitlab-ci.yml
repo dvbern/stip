@@ -25,4 +25,4 @@ include:
       image-name: 'api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
-      build-latest: false
+      build-latest: 'false'
