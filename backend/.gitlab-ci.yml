@@ -18,7 +18,7 @@ include:
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@a1dfcd7b8b0a671459a90e2e4f41fcb9f9b603ab'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@6120775a65b6bb2eb2634da545a84a2cd62a3518'
     inputs:
       name: api-image
       context-dir: backend

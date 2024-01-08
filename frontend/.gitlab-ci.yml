@@ -16,7 +16,7 @@ include:
       sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
       sonar-token: "$SONAR_TOKEN_FRONTEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@a1dfcd7b8b0a671459a90e2e4f41fcb9f9b603ab'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@6120775a65b6bb2eb2634da545a84a2cd62a3518'
     inputs:
       name: package:sachbearbeitung-app
       context-dir: frontend
@@ -26,7 +26,7 @@ include:
       build-args: |
         APP=sachbearbeitung-app
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@a1dfcd7b8b0a671459a90e2e4f41fcb9f9b603ab'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@6120775a65b6bb2eb2634da545a84a2cd62a3518'
     inputs:
       name: package:gesuch-app
       context-dir: frontend
