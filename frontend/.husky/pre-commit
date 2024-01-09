@@ -6,3 +6,4 @@ cd frontend
 npx lint-staged
 npm run validate
 npm run lint
+npm run test
