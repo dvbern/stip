@@ -26,6 +26,11 @@ quarkus.flyway.locations=db/migration
 keycloak.url=${STIP_OIDC_AUTH_SERVER}
 keycloak.frontend-url=${STIP_OIDC_AUTH_SERVER_FRONTEND:${keycloak.url}}
 
+%dev.quarkus.oidc.bern.tls.trust-store-file-type=jks
+%dev.quarkus.oidc.bern.tls.trust-store-file=src/main/resources/development.jks
+%dev.quarkus.oidc.bern.tls.trust-store-password=changeit
+%dev.quarkus.oidc.bern.tls.trust-store-cert-alias=dv_bern_ag
+
 %test.keycloak.url=http://dummy.keycloak
 keycloak.client-id=stip-api
 

@@ -1,2 +1,0 @@
-# Deployment and Operation Notes
-
