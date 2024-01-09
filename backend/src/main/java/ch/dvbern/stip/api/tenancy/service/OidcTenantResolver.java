@@ -18,7 +18,7 @@ public class OidcTenantResolver implements TenantResolver {
 
         final var tenant = DEFAULT_TENANT_IDENTIFIER;
 
-        // TODO: resolve tenant based on request
+        // TODO: resolve tenant based on request and implement a test for it
         context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant);
 
         return tenant;
