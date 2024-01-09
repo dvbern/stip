@@ -6,6 +6,7 @@ import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
@@ -14,19 +15,19 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 public class TenantService {
 
     private final RoutingContext context;
-    private final OidcTenantConfigResolver oidcConfigResolver;
+
+    @ConfigProperty(name = "keycloak.frontend-url")
+    String keycloakFrontendUrl;
 
     public TenantInfoDto getCurrentTenant() {
         final String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
 
-        final TenantInfoDto tenantInfoDto = new TenantInfoDto();
-        tenantInfoDto.identifier(tenantId);
-
         final TenantAuthConfigDto tenantAuthConfig = new TenantAuthConfigDto();
-        tenantAuthConfig.setAuthServerUrl(oidcConfigResolver.getAuthServerFrontendUrl());
+        tenantAuthConfig.setAuthServerUrl(keycloakFrontendUrl);
         tenantAuthConfig.setRealm(tenantId);
-        tenantInfoDto.setClientAuth(tenantAuthConfig);
 
-        return tenantInfoDto;
+        return new TenantInfoDto()
+            .identifier(tenantId)
+            .clientAuth(tenantAuthConfig);
     }
 }

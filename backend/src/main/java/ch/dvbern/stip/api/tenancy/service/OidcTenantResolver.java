@@ -15,7 +15,12 @@ public class OidcTenantResolver implements TenantResolver {
 
     @Override
     public String resolve(RoutingContext context) {
-        String tenantId = context != null ? context.get(TENANT_IDENTIFIER_CONTEXT_NAME) : null;
-        return Objects.requireNonNullElse(tenantId, DEFAULT_TENANT_IDENTIFIER);
+
+        final var tenant = DEFAULT_TENANT_IDENTIFIER;
+
+        // TODO: resolve tenant based on request
+        context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant);
+
+        return tenant;
     }
 }

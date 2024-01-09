@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <contract.version>1.24.0</contract.version>
     <archunit.version>1.0.1</archunit.version>
+    <assertj.version>3.24.2</assertj.version>
     <checkerframework.version>3.19.0</checkerframework.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
+    <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
+    <contract.version>1.24.0</contract.version>
     <lombok.version>1.18.28</lombok.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -19,17 +20,15 @@
     <package.generated.test>${package.generated}.test</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.2.3.Final</quarkus.platform.version>
     <querydsl.version>5.0.0</querydsl.version>
     <skipITs>true</skipITs>
+    <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
-    <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-    <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
-    <assertj.version>3.24.2</assertj.version>
-    <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -181,6 +180,10 @@
       <version>2.6.0</version>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+    <dependency>
       <groupId>ch.dvbern.oss.stip</groupId>
       <artifactId>stip-contract-test-client</artifactId>
       <version>${contract.version}</version>
@@ -244,7 +247,6 @@
       <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-test-security-oidc</artifactId>
@@ -328,8 +330,7 @@
             </path>
           </annotationProcessorPaths>
           <annotationProcessors>
-            <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor
-            </annotationProcessor>
+            <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
             <annotationProcessor>org.mapstruct.ap.MappingProcessor</annotationProcessor>
           </annotationProcessors>
         </configuration>
@@ -355,8 +356,7 @@
             </goals>
             <configuration>
               <systemPropertyVariables>
-                <native.image.path>${project.build.directory}/${project.build.finalName}-runner
-                </native.image.path>
+                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                 <maven.home>${maven.home}</maven.home>
               </systemPropertyVariables>
@@ -387,11 +387,6 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.7</version>
-            <configuration>
-              <excludes>
-                <exclude>ch/dvbern/stip/generated/dto/PersonInAusbildungDto.java</exclude>
-              </excludes>
-            </configuration>
             <executions>
               <execution>
                 <id>default-prepare-agent</id>
@@ -405,6 +400,11 @@
                 </configuration>
               </execution>
             </executions>
+            <configuration>
+              <excludes>
+                <exclude>ch/dvbern/stip/generated/dto/PersonInAusbildungDto.java</exclude>
+              </excludes>
+            </configuration>
           </plugin>
         </plugins>
       </build>
@@ -438,8 +438,7 @@
                   <modelNameSuffix>Dto</modelNameSuffix>
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
-                  <schemaMappings>
-                    FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
+                  <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
                     Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
@@ -458,8 +457,7 @@
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
-                  </schemaMappings>
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt</schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -474,11 +472,9 @@
                     <useSwaggerAnnotations>false</useSwaggerAnnotations>
                     <interfaceOnly>true</interfaceOnly>
                     <returnResponse>true</returnResponse>
-                    <additionalModelTypeAnnotations>
-                      @lombok.NoArgsConstructor
+                    <additionalModelTypeAnnotations>@lombok.NoArgsConstructor
                       @lombok.AllArgsConstructor
-                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
-                    </additionalModelTypeAnnotations>
+                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)</additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                   </configOptions>
                   <typeMappings>
