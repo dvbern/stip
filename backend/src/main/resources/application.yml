@@ -71,8 +71,8 @@ quarkus:
       bern:
         tls:
           trust-store-file-type: "jks"
-          trust-store-cert-alias: "dv_bern_ag"
-          trust-store-file: "src/main/resources/development.jks"
+          trust-store-cert-alias: "apps-mercury-ocp-dvbern-ch"
+          trust-store-file: "./src/main/resources/development.jks"
           trust-store-password: "changeit"
     smallrye-openapi:
       security-scheme: "oauth2-implicit"
