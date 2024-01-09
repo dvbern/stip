@@ -33,7 +33,7 @@
     "analyze:sb": "nx build sachbearbeitung-app --output-hashing=none --named-chunks --source-map && source-map-explorer dist/apps/sachbearbeitung-app/*.js --html dist/apps/sachbearbeitung-app/sme/index.html && http-server ./dist/apps/sachbearbeitung-app/sme/",
     "test:tooling-nx-plugin": "nx run tooling-nx-plugin:test",
     "lint": "nx run-many --target=lint --parallel=10",
-    "test": "nx run-many --target=test --parallel=7",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx run-many --target=test --parallel=7",
     "unit-test": "nx run-many --target=test",
     "component-test": "nx run-many --target=component-test --parallel=7",
     "test:ci": "nx run-many --target=test --coverage --ci --reporters=jest-junit",
