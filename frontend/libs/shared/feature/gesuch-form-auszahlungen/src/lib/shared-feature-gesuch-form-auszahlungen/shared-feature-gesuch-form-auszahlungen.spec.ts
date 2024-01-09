@@ -58,7 +58,7 @@ describe('gesuch util', () => {
       label: string,
       expectVater: boolean,
       expectMutter: boolean,
-      expectedList: Kontoinhaber[]
+      expectedList: Kontoinhaber[],
     ) => {
       const list = calculateKontoinhaberValues({
         expectVater,
@@ -68,7 +68,7 @@ describe('gesuch util', () => {
       });
 
       expect(list).toEqual(expectedList);
-    }
+    },
   );
 
   it.each([
@@ -87,7 +87,7 @@ describe('gesuch util', () => {
       expectMutter: boolean,
       vater: any,
       mutter: any,
-      expectedOk: boolean
+      expectedOk: boolean,
     ) => {
       const ok = calculateHasNecessaryPreSteps({
         expectVater,
@@ -97,6 +97,6 @@ describe('gesuch util', () => {
       });
 
       expect(ok).toEqual(expectedOk);
-    }
+    },
   );
 });

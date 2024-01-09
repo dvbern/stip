@@ -65,11 +65,11 @@ export class SharedFeatureGesuchFormElternComponent {
             SharedEventGesuchFormEltern.nextTriggered({
               id: gesuch?.id,
               origin: ELTERN,
-            })
+            }),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -96,7 +96,7 @@ export class SharedFeatureGesuchFormElternComponent {
           trancheId,
           gesuchFormular,
           origin: ELTERN,
-        })
+        }),
       );
       this.editedElternteil = undefined;
     }
@@ -112,7 +112,7 @@ export class SharedFeatureGesuchFormElternComponent {
           trancheId,
           gesuchFormular,
           origin: ELTERN,
-        })
+        }),
       );
       this.editedElternteil = undefined;
     }
@@ -125,7 +125,7 @@ export class SharedFeatureGesuchFormElternComponent {
         SharedEventGesuchFormEltern.nextTriggered({
           id: gesuch.id,
           origin: ELTERN,
-        })
+        }),
       );
     }
   }
@@ -139,7 +139,7 @@ export class SharedFeatureGesuchFormElternComponent {
     const updatedElterns = gesuchFormular?.elterns?.filter(
       (entry) =>
         entry.id !== id &&
-        isElternTypeExpected(entry, { expectMutter, expectVater })
+        isElternTypeExpected(entry, { expectMutter, expectVater }),
     );
 
     return {
@@ -165,7 +165,7 @@ export class SharedFeatureGesuchFormElternComponent {
           }
         })
         .filter((entry) =>
-          isElternTypeExpected(entry, { expectMutter, expectVater })
+          isElternTypeExpected(entry, { expectMutter, expectVater }),
         ) ?? [];
     // add new elternteil if not found
     if (!elternteil.id) {
@@ -186,7 +186,7 @@ export class SharedFeatureGesuchFormElternComponent {
 
 export const setupElternTeil = (
   elternTyp: ElternTyp,
-  gesuchFormular: GesuchFormularUpdate | null
+  gesuchFormular: GesuchFormularUpdate | null,
 ) => {
   const adresse = gesuchFormular?.personInAusbildung?.adresse;
   const lebtBeiEltern =
@@ -201,7 +201,7 @@ export const setupElternTeil = (
 
 const isElternTypeExpected = (
   eltern: ElternUpdate,
-  expected: { expectVater: boolean; expectMutter: boolean }
+  expected: { expectVater: boolean; expectMutter: boolean },
 ) => {
   return expected[`expect${capitalized(eltern.elternTyp)}`];
 };

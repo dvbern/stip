@@ -8,7 +8,7 @@ export const appRoutes: Route[] = [
     canActivate: [hasBenutzer],
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/cockpit').then(
-        (m) => m.sachbearbeitungAppFeatureCockpitRoutes
+        (m) => m.sachbearbeitungAppFeatureCockpitRoutes,
       ),
   },
   {
@@ -16,11 +16,11 @@ export const appRoutes: Route[] = [
     canActivate: [hasBenutzer],
     loadComponent: () =>
       import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
-        (m) => m.SachbearbeitungAppFeatureGesuchFormComponent
+        (m) => m.SachbearbeitungAppFeatureGesuchFormComponent,
       ),
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
-        (m) => m.sachbearbeitungAppFeatureGesuchFormRoutes
+        (m) => m.sachbearbeitungAppFeatureGesuchFormRoutes,
       ),
   },
 ];

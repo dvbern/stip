@@ -4,7 +4,7 @@ import { Tree, updateJson } from '@nx/devkit';
 export function extendEslintJson(
   tree: Tree,
   type: 'angular' | 'ngrx',
-  options: { projectRoot: string; nameDasherized: string }
+  options: { projectRoot: string; nameDasherized: string },
 ) {
   updateJson(
     tree,
@@ -15,6 +15,6 @@ export function extendEslintJson(
         json.extends[0].replace('.eslintrc', `.eslintrc-${type}`),
       ];
       return json;
-    }
+    },
   );
 }

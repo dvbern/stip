@@ -7,7 +7,7 @@ import {
 
 export function sharedUtilValidatorRange(
   min: number,
-  max: number
+  max: number,
 ): ValidatorFn {
   return (control: AbstractControl<number | null>): ValidationErrors | null => {
     if (!control?.value) {

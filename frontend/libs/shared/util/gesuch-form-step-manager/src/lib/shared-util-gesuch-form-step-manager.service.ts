@@ -64,10 +64,10 @@ export class SharedUtilGesuchFormStepManagerService {
   }
   getNext(origin?: SharedModelGesuchFormStep): SharedModelGesuchFormStep {
     const steps = [...StepFlow[this.compiletimeConfig.appType]].sort(
-      (s1, s2) => s1.currentStepNumber - s2.currentStepNumber
+      (s1, s2) => s1.currentStepNumber - s2.currentStepNumber,
     );
     const currentIndex = steps.findIndex(
-      (step) => step.currentStepNumber === origin?.currentStepNumber
+      (step) => step.currentStepNumber === origin?.currentStepNumber,
     );
     if (
       currentIndex === -1 ||

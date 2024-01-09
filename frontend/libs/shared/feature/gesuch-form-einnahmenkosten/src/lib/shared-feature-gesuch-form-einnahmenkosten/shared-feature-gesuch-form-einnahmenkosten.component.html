@@ -1,384 +1,281 @@
 <!-- loading -->
 @if (viewSig().loading) {
-<div
-  data-testid="form-einnahmen-kosten-loading"
-  class="my-2 p-2 py-4 d-flex rounded shadow-sm border"
->
-  <div class="dv-progress-bar-indeterminate">
-    <div></div>
-  </div>
-</div>
-} @else {
-<!-- form -->
-@if (formStateSig().hasData) {
-<form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
-  <h3 class="pt-5 mb-4">
-    {{ 'shared.form.einnahmenkosten.einnahmen.title' | translate }}
-  </h3>
-
-  <div class="row g-4">
-    <!-- NETTOERWERBSEINKOMMEN -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.nettoerwerbseinkommen.label' | translate
-      }}</mat-label>
-      <input
-        data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
-        formControlName="nettoerwerbseinkommen"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-hint translate
-        >shared.form.einnahmenkosten.nettoerwerbseinkommen.info</mat-hint
-      >
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="row g-4 mt-1">
-    <!-- ALIMENTE -->
-    @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.alimente.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="alimente"
-        data-testid="form-einnahmen-kosten-alimente"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-    }
-  </div>
-  <div class="row g-4 mt-1">
-    <!-- ZULAGEN -->
-    @if (!hiddenFieldsSetSig().has(form.controls.zulagen)) {
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.zulagen.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="zulagen"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-    }
-  </div>
-  <div class="row g-4 mt-1">
-    <!-- RENTEN -->
-    @if (!hiddenFieldsSetSig().has(form.controls.renten)) {
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.renten.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="renten"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-hint translate>shared.form.einnahmenkosten.renten.info</mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-    }
-  </div>
-  <div class="row g-4 mt-1">
-    <!-- EO_LEISTUNGEN -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.eoLeistungen.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="eoLeistungen"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-hint translate
-        >shared.form.einnahmenkosten.eoLeistungen.info</mat-hint
-      >
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="row g-4 mt-1">
-    <!-- ERGAENZUNGSLEISTUNGEN -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.ergaenzungsleistungen.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="ergaenzungsleistungen"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <div class="row g-4 mt-1">
-    <!-- BEITRAEGE -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.beitraege.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="beitraege"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-hint translate>shared.form.einnahmenkosten.beitraege.info</mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <!-- KOSTEN -->
-  <h3 class="pt-5 mb-4">
-    {{ 'shared.form.einnahmenkosten.kosten.title' | translate }}
-  </h3>
-  @if ( !hiddenFieldsSetSig().has(
-  form.controls.ausbildungskostenSekundarstufeZwei ) ||
-  !hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe) ) {
-  <div class="row g-4">
-    <!-- AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI -->
-    @if (!form.controls.ausbildungskostenSekundarstufeZwei.disabled) {
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.label'
-          | translate
-      }}</mat-label>
-      <input
-        formControlName="ausbildungskostenSekundarstufeZwei"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-hint translate
-        >shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info</mat-hint
-      >
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-    }
-  </div>
-  }
-  <div class="row g-4 mt-1">
-    <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
-    @if ( !hiddenFieldsSetSig().has(
-    form.controls.ausbildungskostenTertiaerstufe ) ) {
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label'
-          | translate
-      }}</mat-label>
-      <input
-        formControlName="ausbildungskostenTertiaerstufe"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-hint translate
-        >shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.info</mat-hint
-      >
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-    }
-  </div>
-
-  <div class="row g-4 mt-1">
-    <!-- FAHRKOSTEN -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.fahrkosten.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="fahrkosten"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
-  <div class="row g-4 mt-1">
-    <!-- WOHNKOSTEN -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.wohnkosten.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="wohnkosten"
-        data-testid="form-einnahmen-kosten-wohnkosten"
-        matInput
-        type="text"
-        [maskito]="maskitoNumber"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  } @if (
-  !hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche) ) {
-  <div class="row g-4 mt-1">
-    <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label'
-          | translate
-      }}</mat-label>
-      <input
-        formControlName="auswaertigeMittagessenProWoche"
-        data-testid="form-einnahmen-kosten-auswaertigeMittagessenProWoche"
-        matInput
-        type="number"
-        min="0"
-        max="5"
-      />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'range'">
-        {{ 'shared.form.error.range' | translate : { min: 0, max: 5 } }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  } @if (!hiddenFieldsSetSig().has(form.controls.personenImHaushalt)) {
-  <div class="row g-4 mt-1">
-    <!-- PERSONEN_IM_HAUSHALT -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-      <mat-label>{{
-        'shared.form.einnahmenkosten.personenImHaushalt.label' | translate
-      }}</mat-label>
-      <input
-        formControlName="personenImHaushalt"
-        data-testid="form-einnahmen-kosten-personenImHaushalt"
-        matInput
-        type="text"
-        [maskito]="maskitoPositiveNumber"
-      />
-      <mat-hint translate
-        >shared.form.einnahmenkosten.personenImHaushalt.info</mat-hint
-      >
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  }
-  <h3 class="pt-5 mb-4">
-    {{ 'shared.form.einnahmenkosten.general.title' | translate }}
-  </h3>
-  <div class="row g-4">
-    <!-- VERDIENST_REALISIERT -->
-    @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
-    <div class="col-12 col-md-9 col-xl-6">
-      <mat-radio-group
-        class="d-flex flex-column"
-        formControlName="verdienstRealisiert"
-        dvSharedUiFormField
-      >
-        <mat-label>{{
-          'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate
-        }}</mat-label>
-        <mat-radio-button [value]="true">
-          {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
-        >
-        <mat-radio-button [value]="false">{{
-          'shared.form.radio.no' | translate
-        }}</mat-radio-button>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-radio-group>
+  <div data-testid="form-einnahmen-kosten-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
+    <div class="dv-progress-bar-indeterminate">
+      <div></div>
     </div>
-    }
   </div>
-  <div class="row g-4 mt-1">
-    <!-- WILL_DARLEHEN -->
-    @if (!hiddenFieldsSetSig().has(form.controls.willDarlehen)) {
-    <div class="col-12 col-md-9 col-xl-6">
-      <mat-radio-group
-        class="d-flex flex-column"
-        formControlName="willDarlehen"
-        dvSharedUiFormField
-      >
-        <mat-label>{{
-          'shared.form.einnahmenkosten.willDarlehen.label' | translate
-        }}</mat-label>
-        <mat-radio-button [value]="true">
-          {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
-        >
-        <mat-radio-button [value]="false">{{
-          'shared.form.radio.no' | translate
-        }}</mat-radio-button>
-
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-radio-group>
-    </div>
-    }
-  </div>
-
-  <!-- Buttons -->
-  <dv-shared-ui-step-form-buttons>
-    @if (!view$().readonly) {
-    <button type="submit" class="btn btn-primary">
-      {{ 'shared.form.save-and-continue' | translate }}
-    </button>
-    } @else {
-    <button type="button" class="btn btn-primary" (click)="handleContinue()">
-      {{ 'shared.form.gonext' | translate }}
-    </button>
-    }
-  </dv-shared-ui-step-form-buttons>
-</form>
 } @else {
-<div class="row">
-  <div class="col-12 col-xl-8 my-3">
-    <ngb-alert
-      type="info"
-      [dismissible]="false"
-      data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
-      >{{ 'shared.form.einnahmenkosten.top.incomplete' | translate }}
-      @for ( schritt of formStateSig().schritte; track trackByIndex($index); let
-      last = $last; let first = $first ) {
-      <span
-        >{{
-          (last && !first ? ' und ' : !first ? ', ' : '') +
-            '"' +
-            (schritt | translate)
-        }}"</span
-      >
+  <!-- form -->
+  @if (formStateSig().hasData) {
+    <form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+      <h3 class="pt-5 mb-4">
+        {{ 'shared.form.einnahmenkosten.einnahmen.title' | translate }}
+      </h3>
+
+      <div class="row g-4">
+        <!-- NETTOERWERBSEINKOMMEN -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-label>{{ 'shared.form.einnahmenkosten.nettoerwerbseinkommen.label' | translate }}</mat-label>
+          <input
+            data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
+            formControlName="nettoerwerbseinkommen"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-hint translate>shared.form.einnahmenkosten.nettoerwerbseinkommen.info</mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row g-4 mt-1">
+        <!-- ALIMENTE -->
+        @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.alimente.label' | translate }}</mat-label>
+            <input
+              formControlName="alimente"
+              data-testid="form-einnahmen-kosten-alimente"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+      <div class="row g-4 mt-1">
+        <!-- ZULAGEN -->
+        @if (!hiddenFieldsSetSig().has(form.controls.zulagen)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.zulagen.label' | translate }}</mat-label>
+            <input formControlName="zulagen" matInput type="text" [maskito]="maskitoNumber" />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+      <div class="row g-4 mt-1">
+        <!-- RENTEN -->
+        @if (!hiddenFieldsSetSig().has(form.controls.renten)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.renten.label' | translate }}</mat-label>
+            <input formControlName="renten" matInput type="text" [maskito]="maskitoNumber" />
+            <mat-hint translate>shared.form.einnahmenkosten.renten.info</mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+      <div class="row g-4 mt-1">
+        <!-- EO_LEISTUNGEN -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-label>{{ 'shared.form.einnahmenkosten.eoLeistungen.label' | translate }}</mat-label>
+          <input formControlName="eoLeistungen" matInput type="text" [maskito]="maskitoNumber" />
+          <mat-hint translate>shared.form.einnahmenkosten.eoLeistungen.info</mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row g-4 mt-1">
+        <!-- ERGAENZUNGSLEISTUNGEN -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-label>{{ 'shared.form.einnahmenkosten.ergaenzungsleistungen.label' | translate }}</mat-label>
+          <input formControlName="ergaenzungsleistungen" matInput type="text" [maskito]="maskitoNumber" />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <!-- BEITRAEGE -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-label>{{ 'shared.form.einnahmenkosten.beitraege.label' | translate }}</mat-label>
+          <input formControlName="beitraege" matInput type="text" [maskito]="maskitoNumber" />
+          <mat-hint translate>shared.form.einnahmenkosten.beitraege.info</mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- KOSTEN -->
+      <h3 class="pt-5 mb-4">
+        {{ 'shared.form.einnahmenkosten.kosten.title' | translate }}
+      </h3>
+      @if (
+        !hiddenFieldsSetSig().has(form.controls.ausbildungskostenSekundarstufeZwei) ||
+        !hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)
+      ) {
+        <div class="row g-4">
+          <!-- AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI -->
+          @if (!form.controls.ausbildungskostenSekundarstufeZwei.disabled) {
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+              <mat-label>{{
+                'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.label' | translate
+              }}</mat-label>
+              <input
+                formControlName="ausbildungskostenSekundarstufeZwei"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info</mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          }
+        </div>
       }
-    </ngb-alert>
-  </div>
-</div>
-} }
+      <div class="row g-4 mt-1">
+        <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
+        @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label' | translate }}</mat-label>
+            <input formControlName="ausbildungskostenTertiaerstufe" matInput type="text" [maskito]="maskitoNumber" />
+            <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.info</mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+
+      <div class="row g-4 mt-1">
+        <!-- FAHRKOSTEN -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-label>{{ 'shared.form.einnahmenkosten.fahrkosten.label' | translate }}</mat-label>
+          <input formControlName="fahrkosten" matInput type="text" [maskito]="maskitoNumber" />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
+        <div class="row g-4 mt-1">
+          <!-- WOHNKOSTEN -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.wohnkosten.label' | translate }}</mat-label>
+            <input
+              formControlName="wohnkosten"
+              data-testid="form-einnahmen-kosten-wohnkosten"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      }
+      @if (!hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche)) {
+        <div class="row g-4 mt-1">
+          <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label' | translate }}</mat-label>
+            <input
+              formControlName="auswaertigeMittagessenProWoche"
+              data-testid="form-einnahmen-kosten-auswaertigeMittagessenProWoche"
+              matInput
+              type="number"
+              min="0"
+              max="5"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'range'">
+              {{ 'shared.form.error.range' | translate: { min: 0, max: 5 } }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      }
+      @if (!hiddenFieldsSetSig().has(form.controls.personenImHaushalt)) {
+        <div class="row g-4 mt-1">
+          <!-- PERSONEN_IM_HAUSHALT -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.personenImHaushalt.label' | translate }}</mat-label>
+            <input
+              formControlName="personenImHaushalt"
+              data-testid="form-einnahmen-kosten-personenImHaushalt"
+              matInput
+              type="text"
+              [maskito]="maskitoPositiveNumber"
+            />
+            <mat-hint translate>shared.form.einnahmenkosten.personenImHaushalt.info</mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      }
+      <h3 class="pt-5 mb-4">
+        {{ 'shared.form.einnahmenkosten.general.title' | translate }}
+      </h3>
+      <div class="row g-4">
+        <!-- VERDIENST_REALISIERT -->
+        @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
+          <div class="col-12 col-md-9 col-xl-6">
+            <mat-radio-group class="d-flex flex-column" formControlName="verdienstRealisiert" dvSharedUiFormField>
+              <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
+              <mat-radio-button [value]="true"> {{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+              <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-radio-group>
+          </div>
+        }
+      </div>
+      <div class="row g-4 mt-1">
+        <!-- WILL_DARLEHEN -->
+        @if (!hiddenFieldsSetSig().has(form.controls.willDarlehen)) {
+          <div class="col-12 col-md-9 col-xl-6">
+            <mat-radio-group class="d-flex flex-column" formControlName="willDarlehen" dvSharedUiFormField>
+              <mat-label>{{ 'shared.form.einnahmenkosten.willDarlehen.label' | translate }}</mat-label>
+              <mat-radio-button [value]="true"> {{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+              <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-radio-group>
+          </div>
+        }
+      </div>
+
+      <!-- Buttons -->
+      <dv-shared-ui-step-form-buttons>
+        @if (!view$().readonly) {
+          <button type="submit" class="btn btn-primary">
+            {{ 'shared.form.save-and-continue' | translate }}
+          </button>
+        } @else {
+          <button type="button" class="btn btn-primary" (click)="handleContinue()">
+            {{ 'shared.form.gonext' | translate }}
+          </button>
+        }
+      </dv-shared-ui-step-form-buttons>
+    </form>
+  } @else {
+    <div class="row">
+      <div class="col-12 col-xl-8 my-3">
+        <ngb-alert type="info" [dismissible]="false" data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
+          >{{ 'shared.form.einnahmenkosten.top.incomplete' | translate }}
+          @for (schritt of formStateSig().schritte; track trackByIndex($index); let last = $last; let first = $first) {
+            <span>{{ (last && !first ? ' und ' : !first ? ', ' : '') + '"' + (schritt | translate) }}"</span>
+          }
+        </ngb-alert>
+      </div>
+    </div>
+  }
+}

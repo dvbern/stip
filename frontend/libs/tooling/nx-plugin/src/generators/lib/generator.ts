@@ -40,7 +40,7 @@ const LIB_TYPE_GENERATOR_MAP: LibTypeGeneratorMap = {
 
 function normalizeOptions(
   tree: Tree,
-  options: LibGeneratorSchema
+  options: LibGeneratorSchema,
 ): NormalizedSchema {
   const projectDirectory = `/${options.scope}/${options.type}`;
   const nameDasherized = dasherize(options.name);
@@ -87,10 +87,10 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
   return async () => {
     console['log'](`\nProject: --project ${normalizedOptions.projectName}\n`);
     console['log'](
-      `Can be used to generate additional components, service or perform other commands like`
+      `Can be used to generate additional components, service or perform other commands like`,
     );
     console['log'](
-      `eg "nx g remove --project ${normalizedOptions.projectName}"\n`
+      `eg "nx g remove --project ${normalizedOptions.projectName}"\n`,
     );
   };
 }
@@ -114,6 +114,6 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
     tree,
     tplPath,
     path.join(options.projectRoot, options.nameDasherized, 'src'),
-    templateOptions
+    templateOptions,
   );
 }

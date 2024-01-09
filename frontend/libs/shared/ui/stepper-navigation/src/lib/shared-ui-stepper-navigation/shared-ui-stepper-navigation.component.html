@@ -1,27 +1,25 @@
 <div class="stepper-navigation">
   @if (prevStepVisible) {
-  <button
-    type="button"
-    class="navigation-button d-flex justify-content-start align-items-center"
-    (click)="prevStep.emit()"
-    data-testid="stepper-previous"
-  >
-    <i class="material-symbols-rounded title-icon" aria-hidden="true">west</i>
-    <span class="visually-hidden">{{
-      'shared.form.previous' | translate
-    }}</span>
-  </button>
+    <button
+      type="button"
+      class="navigation-button d-flex justify-content-start align-items-center"
+      (click)="prevStep.emit()"
+      data-testid="stepper-previous"
+    >
+      <i class="material-symbols-rounded title-icon" aria-hidden="true">west</i>
+      <span class="visually-hidden">{{ 'shared.form.previous' | translate }}</span>
+    </button>
   }
   <div class="flex-grow-1"></div>
   @if (nextStepVisible) {
-  <button
-    type="button"
-    class="navigation-button d-flex justify-content-start align-items-center"
-    (click)="nextStep.emit()"
-    data-testid="stepper-next"
-  >
-    <i class="material-symbols-rounded title-icon" aria-hidden="true">east</i>
-    <span class="visually-hidden">{{ 'shared.form.next' | translate }}</span>
-  </button>
+    <button
+      type="button"
+      class="navigation-button d-flex justify-content-start align-items-center"
+      (click)="nextStep.emit()"
+      data-testid="stepper-next"
+    >
+      <i class="material-symbols-rounded title-icon" aria-hidden="true">east</i>
+      <span class="visually-hidden">{{ 'shared.form.next' | translate }}</span>
+    </button>
   }
 </div>

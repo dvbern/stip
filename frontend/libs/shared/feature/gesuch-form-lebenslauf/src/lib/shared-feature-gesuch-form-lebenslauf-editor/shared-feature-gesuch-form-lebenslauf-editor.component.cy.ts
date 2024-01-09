@@ -17,7 +17,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           imports: [],
           providers: [],
         },
-      }
+      },
     );
   });
 
@@ -42,10 +42,10 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS,
       ];
       const bildsartenWhichDontNeedBerufsbezeichnung = Object.values(
-        LebenslaufAusbildungsArt
+        LebenslaufAusbildungsArt,
       ).filter(
         (ausbildungsart) =>
-          !bildungsartenWhichNeedBerufsbezeichnung.includes(ausbildungsart)
+          !bildungsartenWhichNeedBerufsbezeichnung.includes(ausbildungsart),
       );
 
       for (const bildungsart of bildungsartenWhichNeedBerufsbezeichnung) {
@@ -64,7 +64,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       const value = 'Mein Beruf';
       LebenslaufEditorPO.getBerufsbezeichnungField().should('not.exist');
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST
+        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
       );
       LebenslaufEditorPO.getBerufsbezeichnungField().should('exist');
       LebenslaufEditorPO.getBerufsbezeichnungField().click().type(value);
@@ -72,11 +72,11 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         .find('input')
         .should('have.value', value);
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.FACHMATURITAET
+        LebenslaufAusbildungsArt.FACHMATURITAET,
       );
       LebenslaufEditorPO.getBerufsbezeichnungField().should('not.exist');
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST
+        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
       );
       LebenslaufEditorPO.getBerufsbezeichnungField().should('exist');
       LebenslaufEditorPO.getBerufsbezeichnungField()
@@ -89,7 +89,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       const value = 'Meine Fachrichtung';
       LebenslaufEditorPO.getFachrichtungField().should('not.exist');
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE
+        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
       );
       LebenslaufEditorPO.getFachrichtungField().should('exist');
       LebenslaufEditorPO.getFachrichtungField().click().type(value);
@@ -97,11 +97,11 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         .find('input')
         .should('have.value', value);
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.FACHMATURITAET
+        LebenslaufAusbildungsArt.FACHMATURITAET,
       );
       LebenslaufEditorPO.getFachrichtungField().should('not.exist');
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE
+        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
       );
       LebenslaufEditorPO.getFachrichtungField().should('exist');
       LebenslaufEditorPO.getFachrichtungField()
@@ -114,7 +114,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       const value = 'Mein Beruf';
       LebenslaufEditorPO.getTitelDesAbschlussesField().should('not.exist');
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS
+        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
       );
       LebenslaufEditorPO.getTitelDesAbschlussesField().should('exist');
       LebenslaufEditorPO.getTitelDesAbschlussesField().click().type(value);
@@ -122,11 +122,11 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         .find('input')
         .should('have.value', value);
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.FACHMATURITAET
+        LebenslaufAusbildungsArt.FACHMATURITAET,
       );
       LebenslaufEditorPO.getTitelDesAbschlussesField().should('not.exist');
       LebenslaufEditorPageActions.selectBildungsart(
-        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS
+        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
       );
       LebenslaufEditorPO.getTitelDesAbschlussesField().should('exist');
       LebenslaufEditorPO.getTitelDesAbschlussesField()
@@ -142,10 +142,10 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.MASTER,
       ];
       const bildungsartenWhichDontNeedFachrichtung = Object.values(
-        LebenslaufAusbildungsArt
+        LebenslaufAusbildungsArt,
       ).filter(
         (ausbildungsart) =>
-          !bildungsartenWhichNeedFachrichtung.includes(ausbildungsart)
+          !bildungsartenWhichNeedFachrichtung.includes(ausbildungsart),
       );
 
       for (const bildungsart of bildungsartenWhichNeedFachrichtung) {
@@ -165,10 +165,10 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
       ];
       const bildungsartenWhichDontNeedTitelDesAbschlusses = Object.values(
-        LebenslaufAusbildungsArt
+        LebenslaufAusbildungsArt,
       ).filter(
         (ausbildungsart) =>
-          !bildungsartenWhichNeedTitelDesAbschlusses.includes(ausbildungsart)
+          !bildungsartenWhichNeedTitelDesAbschlusses.includes(ausbildungsart),
       );
 
       for (const bildungsart of bildungsartenWhichNeedTitelDesAbschlusses) {

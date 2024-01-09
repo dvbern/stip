@@ -6,7 +6,7 @@ import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
 import { extendEslintJson } from './helpers/eslint';
 
 export function featureTypeFactory(
-  options: NormalizedSchema
+  options: NormalizedSchema,
 ): LibTypeGenerator {
   const { scope } = options;
   return {
@@ -32,7 +32,7 @@ export function featureTypeFactory(
 function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
   tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md')
+    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );
   tree.delete(
     path.join(
@@ -40,15 +40,15 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       options.nameDasherized,
       'src',
       'lib',
-      'lib.routes.ts'
-    )
+      'lib.routes.ts',
+    ),
   );
 
   const pathToIndex = path.join(
     options.projectRoot,
     options.nameDasherized,
     'src',
-    'index.ts'
+    'index.ts',
   );
   const indexTsContent = tree.read(pathToIndex)?.toString();
   if (indexTsContent) {
@@ -56,8 +56,8 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       pathToIndex,
       indexTsContent.replace(
         'lib/lib.routes',
-        `lib/${options.projectName}.routes`
-      )
+        `lib/${options.projectName}.routes`,
+      ),
     );
   }
 }

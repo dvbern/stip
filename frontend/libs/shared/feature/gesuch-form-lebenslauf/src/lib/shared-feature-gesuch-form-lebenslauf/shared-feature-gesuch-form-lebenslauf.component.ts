@@ -55,12 +55,12 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
     if (geburtsdatum) {
       const sixteenthBirthdate = setMonth(
         addYears(Date.parse(geburtsdatum), 16),
-        AUSBILDUNGS_MONTH - 1
+        AUSBILDUNGS_MONTH - 1,
       );
       return new Date(
         sixteenthBirthdate.getFullYear(),
         sixteenthBirthdate.getMonth(),
-        1
+        1,
       );
     }
     return null;
@@ -120,7 +120,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: LEBENSLAUF,
-        })
+        }),
       );
       this.editedItem = undefined;
     }
@@ -136,7 +136,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: LEBENSLAUF,
-        })
+        }),
       );
       this.editedItem = undefined;
     }
@@ -148,7 +148,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
       SharedEventGesuchFormLebenslauf.nextTriggered({
         id: gesuch!.id!,
         origin: LEBENSLAUF,
-      })
+      }),
     );
   }
 
@@ -159,7 +159,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private buildUpdatedGesuchWithDeletedItem(itemId: string) {
     const { gesuch, gesuchFormular } = this.view$();
     const updatedItems = gesuchFormular?.lebenslaufItems?.filter(
-      (item) => item.id !== itemId
+      (item) => item.id !== itemId,
     );
 
     return {

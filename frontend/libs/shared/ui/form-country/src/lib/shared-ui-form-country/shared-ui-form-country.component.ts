@@ -55,7 +55,7 @@ export class SharedUiFormCountryComponent
     this.translate.onLangChange.pipe(
       startWith({
         translations: this.translate.translations[this.translate.currentLang],
-      })
+      }),
     ),
     this.laender$,
   ]).pipe(
@@ -69,13 +69,13 @@ export class SharedUiFormCountryComponent
       translated.sort(({ text: a }, { text: b }) =>
         a.localeCompare(b, this.translate.currentLang, {
           ignorePunctuation: true,
-        })
+        }),
       );
       return [
         { code: 'CH', text: translations['gesuch-app.shared.country.CH'] },
         ...translated,
       ];
-    })
+    }),
   );
 
   trackByIndex(index: number) {

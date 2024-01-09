@@ -5,5 +5,5 @@ import { AppComponent } from './app/app.component';
 
 // TODO: cleanup, used to build affected +1
 bootstrapApplication(AppComponent, appConfig).catch((err) =>
-  console.error(err)
+  console.error(err),
 );

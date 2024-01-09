@@ -86,7 +86,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
 
   cockpitViewSig = this.store.selectSignal(
-    selectSachbearbeitungAppFeatureCockpitView
+    selectSachbearbeitungAppFeatureCockpitView,
   );
 
   gesucheDataSourceSig = computed(() => {

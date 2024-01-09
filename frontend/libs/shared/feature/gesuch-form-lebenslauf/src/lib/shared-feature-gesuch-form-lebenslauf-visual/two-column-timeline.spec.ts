@@ -91,7 +91,7 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 1,
         positionStartCol: 1,
         positionColSpan: 2,
-      } as TimelineGapBlock
+      } as TimelineGapBlock,
     );
     leftIndex += 1;
     rightIndex += 1;
@@ -110,7 +110,7 @@ describe('TwoColumnTimeline', () => {
         positionStartCol: 2,
         positionColSpan: 1,
         children: [testItems.JobA],
-      } as TimelineBusyBlock
+      } as TimelineBusyBlock,
     );
     rightIndex += 1;
 
@@ -128,7 +128,7 @@ describe('TwoColumnTimeline', () => {
         positionStartCol: 1,
         positionColSpan: 1,
         children: [testItems.EFZ],
-      } as TimelineBusyBlock
+      } as TimelineBusyBlock,
     );
     rightIndex += 1;
 
@@ -146,7 +146,7 @@ describe('TwoColumnTimeline', () => {
         positionStartCol: 2,
         positionColSpan: 1,
         children: [testItems.JobB, testItems.JobC],
-      } as TimelineBusyBlock
+      } as TimelineBusyBlock,
     );
     rightIndex += 1;
 
@@ -164,7 +164,7 @@ describe('TwoColumnTimeline', () => {
         positionStartCol: 2,
         positionColSpan: 1,
         children: [testItems.JobD],
-      } as TimelineBusyBlock
+      } as TimelineBusyBlock,
     );
 
     return items;

@@ -66,7 +66,7 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
             this.controlB.setErrors(null);
           }
         },
-        { allowSignalWrites: true }
+        { allowSignalWrites: true },
       );
 
       effect(
@@ -77,7 +77,7 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
             this.controlA.setErrors(null);
           }
         },
-        { allowSignalWrites: true }
+        { allowSignalWrites: true },
       );
     });
   }

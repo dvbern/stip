@@ -13,7 +13,7 @@ export function provideSharedPatternJestTestSetup(
   compileTimeConfig: CompiletimeConfig = {
     appType: 'gesuch-app',
     authClientId: 'stip-gesuch-app',
-  }
+  },
 ) {
   return [
     importProvidersFrom([

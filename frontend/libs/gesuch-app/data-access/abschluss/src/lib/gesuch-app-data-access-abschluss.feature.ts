@@ -25,7 +25,7 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
         ...state,
         loading: true,
         error: undefined,
-      })
+      }),
     ),
     on(
       SharedEventGesuchFormAbschluss.init,
@@ -34,7 +34,7 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
         ...state,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
     on(
       GesuchAppDataAccessAbschlussApiEvents.abschlussFailure,
@@ -42,8 +42,8 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
         ...state,
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 

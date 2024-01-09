@@ -9,7 +9,7 @@ describe('SharedDataAccessLanguage Effects', () => {
 
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) =>
-      expect(actual).toEqual(expected)
+      expect(actual).toEqual(expected),
     );
   });
 
@@ -26,7 +26,7 @@ describe('SharedDataAccessLanguage Effects', () => {
 
       const effectStream$ = resolveLanguageOnInit(
         actionsMock$,
-        sharedDataAccessTranslationServiceMock
+        sharedDataAccessTranslationServiceMock,
       );
       expectObservable(effectStream$).toBe('a', {
         a: SharedDataAccessLanguageEvents.resolvedDefault({
@@ -49,7 +49,7 @@ describe('SharedDataAccessLanguage Effects', () => {
 
       const effectStream$ = resolveLanguageOnInit(
         actionsMock$,
-        sharedDataAccessTranslationServiceMock
+        sharedDataAccessTranslationServiceMock,
       );
       expectObservable(effectStream$).toBe('a', {
         a: SharedDataAccessLanguageEvents.resolvedFromBrowser({
@@ -72,7 +72,7 @@ describe('SharedDataAccessLanguage Effects', () => {
 
       const effectStream$ = resolveLanguageOnInit(
         actionsMock$,
-        sharedDataAccessTranslationServiceMock
+        sharedDataAccessTranslationServiceMock,
       );
       expectObservable(effectStream$).toBe('a', {
         a: SharedDataAccessLanguageEvents.resolvedFromLocalStorage({

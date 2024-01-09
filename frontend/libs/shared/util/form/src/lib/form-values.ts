@@ -10,12 +10,12 @@ type NonNullableRecord<T extends Record<string, unknown>> = {
 const fromRequired = <
   T extends { [k: string]: unknown },
   K extends keyof T,
-  Keys extends K[] = K[]
+  Keys extends K[] = K[],
 >(
   values: T,
   // Keys are only used for the type information during design time
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _keys: Keys
+  _keys: Keys,
 ) => {
   return values as unknown as Omit<T, Keys[number]> &
     NonNullableRecord<Pick<T, Keys[number]>>;
@@ -41,16 +41,16 @@ export function convertTempFormToRealValues<
   T extends {
     [K: string]: AbstractControl<unknown>;
   },
-  K extends keyof T
+  K extends keyof T,
 >(form: FormGroup<T>, required: OnlyString<K>[]) {
   const values = form.getRawValue();
 
   const invalidFieldConfig = required.find(
-    (f) => !form.get(f)?.hasValidator(Validators.required)
+    (f) => !form.get(f)?.hasValidator(Validators.required),
   );
   if (invalidFieldConfig) {
     throw new Error(
-      `Form control '${invalidFieldConfig}' has no Validators.required`
+      `Form control '${invalidFieldConfig}' has no Validators.required`,
     );
   }
 

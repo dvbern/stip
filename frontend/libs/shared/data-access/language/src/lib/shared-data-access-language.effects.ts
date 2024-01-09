@@ -11,7 +11,7 @@ import { SharedDataAccessLanguageEvents } from './shared-data-access-language.ev
 export const resolveLanguageOnInit = createEffect(
   (
     actions$ = inject(Actions),
-    languageService = inject(SharedDataAccessLanguageService)
+    languageService = inject(SharedDataAccessLanguageService),
   ) => {
     return actions$.pipe(
       ofType(SharedDataAccessLanguageEvents.appInit),
@@ -32,16 +32,16 @@ export const resolveLanguageOnInit = createEffect(
         return SharedDataAccessLanguageEvents.resolvedDefault({
           language: DEFAULT_LANGUAGE,
         });
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const syncLanguageToNgxTranslate = createEffect(
   (
     actions$ = inject(Actions),
-    ngxTranslateService = inject(TranslateService)
+    ngxTranslateService = inject(TranslateService),
   ) => {
     return actions$.pipe(
       ofType(
@@ -49,32 +49,32 @@ export const syncLanguageToNgxTranslate = createEffect(
         SharedDataAccessLanguageEvents.resolvedFromBrowser,
         SharedDataAccessLanguageEvents.resolvedFromLocalStorage,
         SharedDataAccessLanguageEvents.headerMenuSelectorChange,
-        SharedDataAccessLanguageEvents.footerSelectorChange
+        SharedDataAccessLanguageEvents.footerSelectorChange,
       ),
       tap(({ language }) => {
         ngxTranslateService.use(language);
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const persistLanguageIntoLocalStorage = createEffect(
   (
     actions$ = inject(Actions),
-    languageService = inject(SharedDataAccessLanguageService)
+    languageService = inject(SharedDataAccessLanguageService),
   ) => {
     return actions$.pipe(
       ofType(
         SharedDataAccessLanguageEvents.headerMenuSelectorChange,
-        SharedDataAccessLanguageEvents.footerSelectorChange
+        SharedDataAccessLanguageEvents.footerSelectorChange,
       ),
       tap(({ language }) => {
         languageService.setLanguageIntoLocalStorage(language);
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 // add effects here

@@ -41,7 +41,7 @@ export function sharedUtilFnErrorTransformer(error: unknown): SharedModelError {
  */
 export const byErrorType = <K extends SharedModelErrorTypes>(type: K) => {
   return (
-    error: SharedModelError
+    error: SharedModelError,
   ): error is Extract<SharedModelError, { type: K }> => {
     return error.type === type;
   };

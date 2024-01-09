@@ -45,7 +45,7 @@ Cypress.Commands.add('login', (credentials) => {
           .its('status')
           .should('eq', 200);
       },
-    }
+    },
   );
 });
 

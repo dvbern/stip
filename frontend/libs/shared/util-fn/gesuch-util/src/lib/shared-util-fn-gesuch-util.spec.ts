@@ -30,7 +30,7 @@ describe('gesuch util', () => {
       elternteilUnbekanntVerstorben: boolean | undefined,
       elternTyp: ElternTyp,
       grund: ElternAbwesenheitsGrund | undefined,
-      expectElternteil: boolean
+      expectElternteil: boolean,
     ) => {
       const familienSituation: Familiensituation = {
         elternteilUnbekanntVerstorben,
@@ -43,8 +43,8 @@ describe('gesuch util', () => {
       }
 
       expect(calculateExpectElternteil(elternTyp, familienSituation)).toEqual(
-        expectElternteil
+        expectElternteil,
       );
-    }
+    },
   );
 });

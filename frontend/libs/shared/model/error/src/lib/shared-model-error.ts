@@ -49,7 +49,7 @@ export const SharedModelError = z.intersection(
         message: validationErrors[0]?.message,
         messageKey: 'shared.genericError.validation',
         validationErrors,
-      })
+      }),
     ),
     ErrorTypes.unknownHttpError.transform(({ error }) => {
       return createError('unknownHttpError', {
@@ -61,7 +61,7 @@ export const SharedModelError = z.intersection(
       createError('unknownError', {
         messageKey: 'shared.genericError.general',
         error,
-      })
+      }),
     ),
   ]),
   z.object({
@@ -69,14 +69,14 @@ export const SharedModelError = z.intersection(
       .number()
       .or(z.string().transform((x) => +x))
       .optional(),
-  })
+  }),
 );
 
 export type SharedModelError = z.infer<typeof SharedModelError>;
 
 const createError = <K extends SharedModelErrorTypes, T>(
   type: K,
-  data: T & { messageKey: string; message?: string }
+  data: T & { messageKey: string; message?: string },
 ) => ({
   type,
   ...data,

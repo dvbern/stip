@@ -27,7 +27,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
     // eslint-disable-next-line no-inner-declarations
     function HttpErrorInterceptor(
       req: HttpRequest<unknown>,
-      next: HttpHandlerFn
+      next: HttpHandlerFn,
     ) {
       const store = inject(Store);
       return next(req).pipe(
@@ -35,7 +35,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
           store.dispatch(
             SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
               errors: [sharedUtilFnErrorTransformer(error)],
-            })
+            }),
           );
 
           if (type === 'globalOnly') {
@@ -45,7 +45,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
             // TODO fix this: throwError stops stuff and the local error handling is not reached
             return throwError(error); // global errors plus local catchErrors in Effects.
           }
-        })
+        }),
       );
     }
 

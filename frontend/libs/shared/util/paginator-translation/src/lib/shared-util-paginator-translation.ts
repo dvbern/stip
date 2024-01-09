@@ -4,16 +4,15 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslateParser, TranslateService } from '@ngx-translate/core';
 import { startWith, switchMap } from 'rxjs';
 
-type TranslatableProperties =
-  | keyof Pick<
-      SharedUtilPaginatorTranslation,
-      | 'itemsPerPageLabel'
-      | 'firstPageLabel'
-      | 'lastPageLabel'
-      | 'nextPageLabel'
-      | 'previousPageLabel'
-      | 'rangeLabel'
-    >;
+type TranslatableProperties = keyof Pick<
+  SharedUtilPaginatorTranslation,
+  | 'itemsPerPageLabel'
+  | 'firstPageLabel'
+  | 'lastPageLabel'
+  | 'nextPageLabel'
+  | 'previousPageLabel'
+  | 'rangeLabel'
+>;
 
 @Injectable()
 export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
@@ -29,7 +28,7 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
 
   constructor(
     private translateService: TranslateService,
-    private translateParser: TranslateParser
+    private translateParser: TranslateParser,
   ) {
     super();
 
@@ -37,7 +36,9 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
       .pipe(
         takeUntilDestroyed(),
         startWith({}),
-        switchMap(() => this.translateService.get(Object.values(this.labelMap)))
+        switchMap(() =>
+          this.translateService.get(Object.values(this.labelMap)),
+        ),
       )
       .subscribe((translation) => {
         Object.entries(this.labelMap).forEach(([key, value]) => {
@@ -50,7 +51,7 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
   override getRangeLabel = (
     page: number,
     pageSize: number,
-    length: number
+    length: number,
   ): string => {
     const rangeLabel = this.rangeLabel;
     if (!rangeLabel) {

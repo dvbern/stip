@@ -7,7 +7,7 @@ import { parseInputDateString } from './date-util';
 export function maxDateValidatorForLocale(
   locale: Language,
   maxDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ) {
   return maxDateValidator(locale, new Date(), maxDate, dateFormatVariant);
 }
@@ -16,7 +16,7 @@ export function maxDateValidator(
   locale: Language,
   referenceDate: Date,
   maxDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const date = control.value;
@@ -26,7 +26,7 @@ export function maxDateValidator(
     const parsedDate = parseInputDateString(
       control.value,
       getFormatDef(locale, dateFormatVariant).acceptedInputs,
-      referenceDate
+      referenceDate,
     );
     if (!parsedDate || !isValid(parsedDate)) {
       return null;
@@ -37,7 +37,7 @@ export function maxDateValidator(
           value: control.value,
           maxDate: format(
             maxDate,
-            getFormatDef(locale, dateFormatVariant).niceInput
+            getFormatDef(locale, dateFormatVariant).niceInput,
           ),
         },
       };

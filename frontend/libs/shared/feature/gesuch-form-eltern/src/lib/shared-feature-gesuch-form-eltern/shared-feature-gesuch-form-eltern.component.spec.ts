@@ -27,6 +27,6 @@ describe('SharedFeatureGesuchFormElternComponent', () => {
         },
       });
       expect(editedElternteil?.adresse?.ort).toBe(expected);
-    }
+    },
   );
 });

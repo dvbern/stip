@@ -45,8 +45,8 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
     return originalList
       ? [...originalList].sort((a, b) =>
           (a.vorname + ' ' + a.nachname).localeCompare(
-            b.vorname + ' ' + b.nachname
-          )
+            b.vorname + ' ' + b.nachname,
+          ),
         )
       : undefined;
   });
@@ -75,7 +75,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: KINDER,
-        })
+        }),
       );
       this.editedKind = undefined;
     }
@@ -91,7 +91,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: KINDER,
-        })
+        }),
       );
       this.editedKind = undefined;
     }
@@ -104,7 +104,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
         SharedEventGesuchFormKinder.nextTriggered({
           id: gesuch.id,
           origin: KINDER,
-        })
+        }),
       );
   }
 
@@ -115,7 +115,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private buildUpdatedGesuchWithDeletedKinder(kind: KindUpdate) {
     const { gesuch, gesuchFormular } = this.view$();
     const updatedKinders = gesuchFormular?.kinds?.filter(
-      (entry) => entry.id !== kind.id
+      (entry) => entry.id !== kind.id,
     );
 
     return {

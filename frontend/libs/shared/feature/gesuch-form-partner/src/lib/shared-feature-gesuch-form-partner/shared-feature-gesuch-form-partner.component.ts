@@ -100,7 +100,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   view = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
   laenderSig = computed(() => this.view().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender))
+    switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
 
   form = this.formBuilder.group({
@@ -108,7 +108,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     nachname: ['', [Validators.required]],
     vorname: ['', [Validators.required]],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
-      this.formBuilder
+      this.formBuilder,
     ),
     geburtsdatum: [
       '',
@@ -118,12 +118,12 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         minDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MAX_AGE_ADULT),
-          'date'
+          'date',
         ),
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_ADULT),
-          'date'
+          'date',
         ),
       ],
     ],
@@ -134,7 +134,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   });
 
   ausbildungMitEinkommenOderErwerbstaetigSig = toSignal(
-    this.form.controls.ausbildungMitEinkommenOderErwerbstaetig.valueChanges
+    this.form.controls.ausbildungMitEinkommenOderErwerbstaetig.valueChanges,
   );
 
   constructor() {
@@ -147,7 +147,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         ];
         this.form.controls.sozialversicherungsnummer.clearValidators();
         this.form.controls.sozialversicherungsnummer.addValidators(
-          svValidators
+          svValidators,
         );
 
         if (gesuchFormular?.partner) {
@@ -160,7 +160,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
             ...partnerForForm,
             geburtsdatum: parseBackendLocalDateAndPrint(
               partner.geburtsdatum,
-              this.languageSig()
+              this.languageSig(),
             ),
             jahreseinkommen: partnerForForm.jahreseinkommen?.toString(),
             fahrkosten: partnerForForm.fahrkosten?.toString(),
@@ -168,7 +168,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           });
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
@@ -184,11 +184,11 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
               trancheId: gesuch.gesuchTrancheToWorkWith.id,
               gesuchFormular,
               origin: PARTNER,
-            })
+            }),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
@@ -196,27 +196,27 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           !this.ausbildungMitEinkommenOderErwerbstaetigSig();
         if (this.view().readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         } else {
           this.formUtils.setDisabledState(
             this.form.controls.jahreseinkommen,
             noAusbildungMitEinkommenOderErwerbstaetigkeit,
-            true
+            true,
           );
           this.formUtils.setDisabledState(
             this.form.controls.fahrkosten,
             noAusbildungMitEinkommenOderErwerbstaetigkeit,
-            true
+            true,
           );
           this.formUtils.setDisabledState(
             this.form.controls.verpflegungskosten,
             noAusbildungMitEinkommenOderErwerbstaetigkeit,
-            true
+            true,
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -237,7 +237,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           gesuchId,
           trancheId,
           gesuchFormular,
-        })
+        }),
       );
     }
   }
@@ -249,7 +249,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         SharedEventGesuchFormPartner.nextTriggered({
           id: gesuch.id,
           origin: PARTNER,
-        })
+        }),
       );
     }
   }
@@ -266,7 +266,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: PARTNER,
-        })
+        }),
       );
     }
   }
@@ -279,7 +279,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE_ADULT),
-      this.languageSig()
+      this.languageSig(),
     );
   }
 
@@ -296,7 +296,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       geburtsdatum: parseStringAndPrintForBackendLocalDate(
         formValues.geburtsdatum,
         this.languageSig(),
-        subYears(new Date(), MEDIUM_AGE_ADULT)
+        subYears(new Date(), MEDIUM_AGE_ADULT),
       )!,
       jahreseinkommen: fromFormatedNumber(formValues.jahreseinkommen),
       fahrkosten: fromFormatedNumber(formValues.fahrkosten),

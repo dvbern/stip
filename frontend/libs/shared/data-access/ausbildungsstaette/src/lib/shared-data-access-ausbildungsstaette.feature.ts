@@ -32,7 +32,7 @@ export const gesuchAppDataAccessAusbildungsstaettesFeature = createFeature({
         ...state,
         loading: true,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -42,7 +42,7 @@ export const gesuchAppDataAccessAusbildungsstaettesFeature = createFeature({
         ausbildungsstaettes: ausbildungsstaettes,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
     on(
       SharedDataAccessAusbildungsstaetteApiEvents.ausbildungsstaettesLoadedFailure,
@@ -52,8 +52,8 @@ export const gesuchAppDataAccessAusbildungsstaettesFeature = createFeature({
         ausbildungsstaettes: [],
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 

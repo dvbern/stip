@@ -6,7 +6,7 @@ import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
 import { extendEslintJson } from './helpers/eslint';
 
 export function dataAccessTypeFactory(
-  options: NormalizedSchema
+  options: NormalizedSchema,
 ): LibTypeGenerator {
   return {
     libGenerator: libraryGenerator,
@@ -29,9 +29,9 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
         },
       ];
       return json;
-    }
+    },
   );
   tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md')
+    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );
 }

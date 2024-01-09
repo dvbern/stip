@@ -106,24 +106,24 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         minDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MAX_AGE_ADULT),
-          'date'
+          'date',
         ),
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_CHILD),
-          'date'
+          'date',
         ),
       ],
     ],
     ...addWohnsitzControls(this.formBuilder),
     ausbildungssituation: this.formBuilder.control<Ausbildungssituation>(
       '' as Ausbildungssituation,
-      [Validators.required]
+      [Validators.required],
     ),
   });
 
   private wohnsitzChangedSig = toSignal(
-    this.form.controls.wohnsitz.valueChanges
+    this.form.controls.wohnsitz.valueChanges,
   );
 
   showWohnsitzSplitterSig = computed(() => {
@@ -136,21 +136,21 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
-          !this.showWohnsitzSplitterSig() || this.viewSig().readonly
+          !this.showWohnsitzSplitterSig() || this.viewSig().readonly,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -159,7 +159,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       ...this.kind,
       geburtsdatum: parseBackendLocalDateAndPrint(
         this.kind.geburtsdatum,
-        this.languageSig()
+        this.languageSig(),
       ),
       ...wohnsitzAnteileString(this.kind),
     });
@@ -172,7 +172,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       this.form.getRawValue().geburtsdatum,
       this.languageSig(),
-      subYears(new Date(), MEDIUM_AGE)
+      subYears(new Date(), MEDIUM_AGE),
     );
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
@@ -196,7 +196,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE),
-      this.languageSig()
+      this.languageSig(),
     );
   }
 

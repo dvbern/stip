@@ -23,5 +23,5 @@ Cypress.Commands.add(
   (matSelect: Chainable, value: string): Chainable => {
     matSelect.click();
     return cy.get('mat-option').contains(value).click();
-  }
+  },
 );

@@ -10,7 +10,7 @@ import { SharedDataAccessStammdatenApiEvents } from './shared-data-access-stammd
 export const loadStammdatens = createEffect(
   (
     events$ = inject(Actions),
-    stammdatenService = inject(StammdatenService)
+    stammdatenService = inject(StammdatenService),
   ) => {
     return events$.pipe(
       ofType(SharedDataAccessStammdatenApiEvents.init),
@@ -19,18 +19,18 @@ export const loadStammdatens = createEffect(
           map((laender) =>
             SharedDataAccessStammdatenApiEvents.stammdatensLoadedSuccess({
               laender: laender as Land[],
-            })
+            }),
           ),
           catchError((error) => [
             SharedDataAccessStammdatenApiEvents.stammdatensLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // add effects here

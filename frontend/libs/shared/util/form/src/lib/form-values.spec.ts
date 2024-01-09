@@ -20,7 +20,7 @@ describe('prepareFormValues', () => {
           a: [1, []],
           b: ['', []],
         }),
-        ['a']
+        ['a'],
       );
     expect(invalid).toThrow();
   });

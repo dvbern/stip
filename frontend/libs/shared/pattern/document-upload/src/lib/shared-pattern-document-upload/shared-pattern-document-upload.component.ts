@@ -41,7 +41,7 @@ export class SharedPatternDocumentUploadComponent implements OnChanges {
   handleMultipleDocumentsAdded(documents: File[]) {
     this.store.effectClearErrors();
     documents.forEach((fileUpload) =>
-      this.store.effectUploadDocument({ fileUpload, options: this.options })
+      this.store.effectUploadDocument({ fileUpload, options: this.options }),
     );
   }
 
@@ -66,7 +66,7 @@ export class SharedPatternDocumentUploadComponent implements OnChanges {
 }
 
 const isHTMLInputElement = (
-  target: EventTarget
+  target: EventTarget,
 ): target is HTMLInputElement => {
   return 'files' in target;
 };

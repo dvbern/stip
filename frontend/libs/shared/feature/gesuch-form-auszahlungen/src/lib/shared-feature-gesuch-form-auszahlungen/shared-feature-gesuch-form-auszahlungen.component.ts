@@ -99,7 +99,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
   constructor() {
     const kontoinhaberinChanges$ = toSignal(
-      this.form.controls.kontoinhaber.valueChanges
+      this.form.controls.kontoinhaber.valueChanges,
     );
 
     effect(
@@ -115,7 +115,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           this.form.reset();
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -130,13 +130,13 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
             break;
           case Kontoinhaber.VATER:
             this.setValuesFrom(
-              calculateElternSituationGesuch(gesuchFormular).vater
+              calculateElternSituationGesuch(gesuchFormular).vater,
             );
             this.disableNameAndAdresse();
             break;
           case Kontoinhaber.MUTTER:
             this.setValuesFrom(
-              calculateElternSituationGesuch(gesuchFormular).mutter
+              calculateElternSituationGesuch(gesuchFormular).mutter,
             );
             this.disableNameAndAdresse();
             break;
@@ -147,7 +147,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
             break;
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -155,11 +155,11 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         const { readonly } = this.view();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -180,7 +180,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: AUSZAHLUNGEN,
-        })
+        }),
       );
     }
   }
@@ -193,7 +193,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
           origin: AUSZAHLUNGEN,
-        })
+        }),
       );
     }
   }
@@ -203,7 +203,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   }
 
   private setValuesFrom(
-    valuesFrom: PersonInAusbildungUpdate | ElternUpdate | undefined
+    valuesFrom: PersonInAusbildungUpdate | ElternUpdate | undefined,
   ): void {
     if (valuesFrom) {
       this.form.patchValue(valuesFrom);

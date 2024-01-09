@@ -31,10 +31,10 @@ export const sharedDataAccessGlobalNotificationsFeature = createFeature({
               ...errorsById,
               [state.nextErrorId + i]: error,
             }),
-            {}
+            {},
           ),
         },
-      })
+      }),
     ),
 
     on(
@@ -47,8 +47,8 @@ export const sharedDataAccessGlobalNotificationsFeature = createFeature({
           ...state,
           globalNotificationsById: globalNotifications,
         };
-      }
-    )
+      },
+    ),
   ),
 });
 

@@ -10,7 +10,7 @@ import { ConfigurationService } from '@dv/shared/model/gesuch';
 export const loadDeploymentConfig = createEffect(
   (
     actions$ = inject(Actions),
-    configurationService = inject(ConfigurationService)
+    configurationService = inject(ConfigurationService),
   ) => {
     return actions$.pipe(
       ofType(SharedDataAccessConfigEvents.appInit),
@@ -19,18 +19,18 @@ export const loadDeploymentConfig = createEffect(
           map((deploymentConfig) =>
             SharedDataAccessConfigEvents.deploymentConfigLoadedSuccess({
               deploymentConfig,
-            })
+            }),
           ),
           catchError((error) => [
             SharedDataAccessConfigEvents.deploymentConfigLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // add effects here

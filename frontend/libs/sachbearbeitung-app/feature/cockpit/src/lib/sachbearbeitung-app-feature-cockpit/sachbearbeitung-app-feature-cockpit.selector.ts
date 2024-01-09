@@ -8,5 +8,5 @@ export const selectSachbearbeitungAppFeatureCockpitView = createSelector(
   (gesuche, gesucheLoading) => ({
     gesuche,
     gesucheLoading,
-  })
+  }),
 );

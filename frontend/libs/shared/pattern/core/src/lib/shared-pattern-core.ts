@@ -86,7 +86,7 @@ export const metaReducers = [debugReducers];
 
 export function provideSharedPatternCore(
   appRoutes: Route[],
-  compileTimeConfig: CompiletimeConfig
+  compileTimeConfig: CompiletimeConfig,
 ): ApplicationConfig['providers'] {
   return [
     // providers
@@ -98,7 +98,7 @@ export function provideSharedPatternCore(
         SharedPatternInterceptorDeploymentConfig,
         ...withDvGlobalHttpErrorInterceptorFn({ type: 'globalAndLocal' }),
         // STUB add global interceptors for auth, error handling, ...
-      ])
+      ]),
     ),
     provideRouter(
       appRoutes,
@@ -110,7 +110,7 @@ export function provideSharedPatternCore(
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'top',
-      })
+      }),
     ),
     provideSharedPatternI18nTitleStrategy(),
     provideSharedPatternNgbDatepickerAdapter(),
@@ -132,7 +132,7 @@ export function provideSharedPatternCore(
           strictActionWithinNgZone: true,
           strictActionTypeUniqueness: true,
         },
-      }
+      },
     ),
     provideState(sharedDataAccessGlobalNotificationsFeature),
     provideState(sharedDataAccessBenutzersFeature),
@@ -143,7 +143,7 @@ export function provideSharedPatternCore(
       sharedDataAccessBenutzerEffects,
       sharedDataAccessConfigEffects,
       sharedDataAccessLanguageEffects,
-      sharedDataAccessStammdatenEffects
+      sharedDataAccessStammdatenEffects,
     ),
     provideRouterStore(),
     ...(isDevMode() ? [provideStoreDevtools({ connectInZone: true })] : []),

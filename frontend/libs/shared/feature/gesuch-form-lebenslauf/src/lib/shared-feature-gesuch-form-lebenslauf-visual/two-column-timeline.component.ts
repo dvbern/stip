@@ -72,7 +72,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
         this.startDate,
         this.lebenslaufItems,
         this.ausbildung,
-        this.ausbildungsstaettes
+        this.ausbildungsstaettes,
       );
     }
   }
@@ -81,7 +81,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     expectedSartDate: Date | null,
     lebenslaufItems: LebenslaufItemUpdate[],
     plannedAusbildung: Ausbildung | undefined,
-    ausbildungsstaettes: Ausbildungsstaette[]
+    ausbildungsstaettes: Ausbildungsstaette[],
   ) {
     const timelineRawItems = lebenslaufItems.map(
       (lebenslaufItem) =>
@@ -92,18 +92,19 @@ export class TwoColumnTimelineComponent implements OnChanges {
           id: lebenslaufItem.id,
           label: this.getLebenslaufItemLabel(lebenslaufItem),
           editable: true,
-        } as TimelineRawItem)
+        }) as TimelineRawItem,
     );
 
     // planned ausbildung
-    const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
-      staette.ausbildungsgaenge?.some(
-        (ausbildungsgang) =>
-          plannedAusbildung?.ausbildungsgangId === ausbildungsgang.id
-      )
+    const ausbildungsstaette = ausbildungsstaettes.find(
+      (staette) =>
+        staette.ausbildungsgaenge?.some(
+          (ausbildungsgang) =>
+            plannedAusbildung?.ausbildungsgangId === ausbildungsgang.id,
+        ),
     );
     const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-      (each) => each.id === plannedAusbildung?.ausbildungsgangId
+      (each) => each.id === plannedAusbildung?.ausbildungsgangId,
     );
 
     timelineRawItems.push({
@@ -131,7 +132,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
   }
 
   private getLebenslaufItemLabel(
-    lebenslaufItem: LebenslaufItemUpdate
+    lebenslaufItem: LebenslaufItemUpdate,
   ): TimelineRawItem['label'] {
     if (
       lebenslaufItem.taetigskeitsart !== undefined &&
@@ -198,13 +199,13 @@ export class TwoColumnTimelineComponent implements OnChanges {
   }
 
   public handleEditItem(
-    item: TimelineBusyBlock | TimelineBusyBlockChild
+    item: TimelineBusyBlock | TimelineBusyBlockChild,
   ): void {
     this.editItemTriggered.emit(item.id);
   }
 
   private getTranslatedAusbildungstaetteName(
-    staette: Ausbildungsstaette | undefined
+    staette: Ausbildungsstaette | undefined,
   ): string | undefined {
     if (staette === undefined) {
       return undefined;
@@ -215,7 +216,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
   protected readonly printDateAsMonthYear = printDateAsMonthYear;
 
   private getTranslatedAusbildungsgangBezeichung(
-    ausbildungsgang: Ausbildungsgang | undefined
+    ausbildungsgang: Ausbildungsgang | undefined,
   ): string | undefined {
     if (ausbildungsgang === undefined) {
       return undefined;

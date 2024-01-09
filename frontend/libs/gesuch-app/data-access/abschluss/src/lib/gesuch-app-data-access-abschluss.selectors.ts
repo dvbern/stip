@@ -13,5 +13,5 @@ export const selectGesuchAppDataAccessAbschlusssView = createSelector(
     ...state,
     gesuch,
     abschlussPhase: toAbschlussPhase(gesuch, true),
-  })
+  }),
 );

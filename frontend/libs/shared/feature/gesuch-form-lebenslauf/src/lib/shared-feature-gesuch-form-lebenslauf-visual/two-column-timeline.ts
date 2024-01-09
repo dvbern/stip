@@ -80,7 +80,7 @@ export class TwoColumnTimeline {
   fillWith(expectedStartDate: Date | null, rawItems: TimelineRawItem[]) {
     const { items, rows, leftCols, rightCols } = TwoColumnTimeline.prepareItems(
       expectedStartDate,
-      rawItems
+      rawItems,
     );
     this.items = items;
     this.rows = rows;
@@ -90,7 +90,7 @@ export class TwoColumnTimeline {
 
   static prepareItems(
     expectedStartDate: Date | null,
-    rawItems: TimelineRawItem[]
+    rawItems: TimelineRawItem[],
   ): {
     items: (TimelineBusyBlock | TimelineGapBlock)[];
     rows: number;
@@ -147,7 +147,7 @@ export class TwoColumnTimeline {
             positionStartRow: startRow,
             positionRowSpan: 0,
             children: inputItem.children.map(
-              (rawChild) => rawChild as TimelineBusyBlockChild
+              (rawChild) => rawChild as TimelineBusyBlockChild,
             ),
           } as TimelineBusyBlock);
           debug('moved from input to current: ', inputItem.label);
@@ -185,7 +185,7 @@ export class TwoColumnTimeline {
               debug(
                 'moved from current to output at row: ',
                 each.positionStartRow,
-                each.label
+                each.label,
               );
             }
           }
@@ -269,10 +269,10 @@ export class TwoColumnTimeline {
 
   static sortAndMergeRawItems(
     rawItems: TimelineRawItem[],
-    mode: 'MERGE' | 'NO_MERGE'
+    mode: 'MERGE' | 'NO_MERGE',
   ) {
     const inputSorted = [...rawItems].sort((a, b) =>
-      isBefore(a.von, b.von) ? -1 : 1
+      isBefore(a.von, b.von) ? -1 : 1,
     );
 
     const output: TimelineMergedRawItem[] = [];
@@ -305,12 +305,12 @@ export class TwoColumnTimeline {
           group.col,
           group.von,
           group.bis,
-          inputSorted
+          inputSorted,
         );
         while (overlapping.length) {
           debug(
             'found overlapping: ',
-            JSON.stringify(overlapping.map((c) => c.label))
+            JSON.stringify(overlapping.map((c) => c.label)),
           );
 
           for (const eachOverlapping of overlapping) {
@@ -331,7 +331,7 @@ export class TwoColumnTimeline {
               'group date range: ',
               printDateAsMonthYear(group.von),
               ' ',
-              printDateAsMonthYear(group.bis)
+              printDateAsMonthYear(group.bis),
             );
           }
 
@@ -340,7 +340,7 @@ export class TwoColumnTimeline {
             group.col,
             group.von,
             group.bis,
-            inputSorted
+            inputSorted,
           );
         }
       }
@@ -350,7 +350,7 @@ export class TwoColumnTimeline {
 
       debug(
         'finished group: ',
-        JSON.stringify(group.children.map((c) => c.label))
+        JSON.stringify(group.children.map((c) => c.label)),
       );
     }
 
@@ -359,28 +359,28 @@ export class TwoColumnTimeline {
 
   static getEarliestEnddate(list: { bis: Date }[]) {
     const listSortedByEnddate = [...list].sort((a, b) =>
-      isBefore(a.bis, b.bis) ? -1 : 1
+      isBefore(a.bis, b.bis) ? -1 : 1,
     );
     return listSortedByEnddate[0].bis;
   }
 
   static getLatestEnddate(list: { bis: Date }[]) {
     const listSortedByEnddate = [...list].sort((a, b) =>
-      isBefore(a.bis, b.bis) ? 1 : -1
+      isBefore(a.bis, b.bis) ? 1 : -1,
     );
     return listSortedByEnddate[0].bis;
   }
 
   static getEarliestStartdate(list: { von: Date }[]) {
     const listSortedByEnddate = [...list].sort((a, b) =>
-      isBefore(a.von, b.von) ? -1 : 1
+      isBefore(a.von, b.von) ? -1 : 1,
     );
     return listSortedByEnddate[0].von;
   }
 
   static selectCol(
     col: 'LEFT' | 'RIGHT',
-    output: (TimelineBusyBlock | TimelineGapBlock)[]
+    output: (TimelineBusyBlock | TimelineGapBlock)[],
   ) {
     return output
       .filter((each) => each.col === col && isTimelineBusyBlock(each))
@@ -391,7 +391,7 @@ export class TwoColumnTimeline {
     col: 'LEFT' | 'RIGHT',
     von: Date,
     bis: Date,
-    list: TimelineRawItem[]
+    list: TimelineRawItem[],
   ): TimelineRawItem[] {
     return list
       .filter((each) => each.col === col)

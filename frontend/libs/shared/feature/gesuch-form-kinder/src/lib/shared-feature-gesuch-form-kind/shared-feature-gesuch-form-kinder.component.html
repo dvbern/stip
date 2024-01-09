@@ -1,115 +1,106 @@
 <!-- loading -->
 @if (view$().loading) {
-<div
-  data-testid="form-kinder-loading"
-  class="my-2 p-2 py-4 d-flex rounded shadow-sm border"
->
-  <div class="dv-progress-bar-indeterminate">
-    <div></div>
+  <div data-testid="form-kinder-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
+    <div class="dv-progress-bar-indeterminate">
+      <div></div>
+    </div>
   </div>
-</div>
 }
 
 <!-- kinder editor -->
 @if (editedKind) {
-<dv-shared-feature-gesuch-form-kinder-editor
-  [kind]="editedKind"
-  (saveTriggered)="handleEditorSave($event)"
-  (closeTriggered)="handleEditorClose()"
-/>
+  <dv-shared-feature-gesuch-form-kinder-editor
+    [kind]="editedKind"
+    (saveTriggered)="handleEditorSave($event)"
+    (closeTriggered)="handleEditorClose()"
+  />
 } @else {
-<div class="row g-4 my-2">
-  <!-- Table -->
-  @if (sortedKinderSig(); as kinder) {
-  <div class="col-12 col-xl-8">
-    @if (kinder.length) {
-    <table class="table" aria-describedby="List von Kinder">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">
-            {{ 'shared.form.geschwister.name' | translate }}
-          </th>
-          <th scope="col">
-            {{ 'shared.form.geschwister.geburtsdatum.label' | translate }}
-          </th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (kindRaw of kinder; track trackByIndex($index)) {
-        <tr>
-          @if (kindRaw; as kinder) {
-          <th scope="row">
-            <i class="material-symbols-rounded">done</i>
-          </th>
-          <td>{{ kinder.vorname }} {{ kinder.nachname }}</td>
-          <td>
-            {{
-              parseBackendLocalDateAndPrint(kinder.geburtsdatum, languageSig())
-            }}
-          </td>
-          <td>
-            @if (!view$().readonly) {
-            <button
-              type="button"
-              class="btn btn-link p-0 lh-1"
-              (click)="handleSelectKinder(kinder)"
-              [title]="'shared.form.kinder.edit' | translate"
-            >
-              <i class="material-symbols-rounded">edit</i>
-            </button>
-            }
-          </td>
-          <td>
-            @if (!view$().readonly) {
-            <button
-              type="button"
-              class="btn btn-link p-0 lh-1"
-              (click)="handleDeleteKinder(kinder)"
-              [title]="'shared.form.kinder.delete' | translate"
-            >
-              <i class="material-symbols-rounded">delete</i>
-            </button>
-            } @else {
-            <button
-              type="button"
-              class="btn btn-link p-0 lh-1"
-              (click)="handleSelectKinder(kinder)"
-              [title]="'shared.form.kinder.view' | translate"
-            >
-              <i class="material-symbols-rounded">visibility</i>
-            </button>
-            }
-          </td>
-          }
-        </tr>
+  <div class="row g-4 my-2">
+    <!-- Table -->
+    @if (sortedKinderSig(); as kinder) {
+      <div class="col-12 col-xl-8">
+        @if (kinder.length) {
+          <table class="table" aria-describedby="List von Kinder">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">
+                  {{ 'shared.form.geschwister.name' | translate }}
+                </th>
+                <th scope="col">
+                  {{ 'shared.form.geschwister.geburtsdatum.label' | translate }}
+                </th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (kindRaw of kinder; track trackByIndex($index)) {
+                <tr>
+                  @if (kindRaw; as kinder) {
+                    <th scope="row">
+                      <i class="material-symbols-rounded">done</i>
+                    </th>
+                    <td>{{ kinder.vorname }} {{ kinder.nachname }}</td>
+                    <td>
+                      {{ parseBackendLocalDateAndPrint(kinder.geburtsdatum, languageSig()) }}
+                    </td>
+                    <td>
+                      @if (!view$().readonly) {
+                        <button
+                          type="button"
+                          class="btn btn-link p-0 lh-1"
+                          (click)="handleSelectKinder(kinder)"
+                          [title]="'shared.form.kinder.edit' | translate"
+                        >
+                          <i class="material-symbols-rounded">edit</i>
+                        </button>
+                      }
+                    </td>
+                    <td>
+                      @if (!view$().readonly) {
+                        <button
+                          type="button"
+                          class="btn btn-link p-0 lh-1"
+                          (click)="handleDeleteKinder(kinder)"
+                          [title]="'shared.form.kinder.delete' | translate"
+                        >
+                          <i class="material-symbols-rounded">delete</i>
+                        </button>
+                      } @else {
+                        <button
+                          type="button"
+                          class="btn btn-link p-0 lh-1"
+                          (click)="handleSelectKinder(kinder)"
+                          [title]="'shared.form.kinder.view' | translate"
+                        >
+                          <i class="material-symbols-rounded">visibility</i>
+                        </button>
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
         }
-      </tbody>
-    </table>
+      </div>
     }
   </div>
-  }
-</div>
 
-<!-- ADD -->
-<div class="d-flex flex-column flex-md-row">
-  @if (!view$().readonly) {
-  <button
-    type="button"
-    class="btn btn-outline-primary"
-    (click)="handleAddKinder()"
-  >
-    {{ 'shared.form.kinder.add' | translate }}
-  </button>
-  }
-</div>
+  <!-- ADD -->
+  <div class="d-flex flex-column flex-md-row">
+    @if (!view$().readonly) {
+      <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()">
+        {{ 'shared.form.kinder.add' | translate }}
+      </button>
+    }
+  </div>
 
-<!-- Buttons -->
-<dv-shared-ui-step-form-buttons>
-  <button type="button" class="btn btn-primary" (click)="handleContinue()">
-    {{ 'shared.form.gonext' | translate }}
-  </button>
-</dv-shared-ui-step-form-buttons>
+  <!-- Buttons -->
+  <dv-shared-ui-step-form-buttons>
+    <button type="button" class="btn btn-primary" (click)="handleContinue()">
+      {{ 'shared.form.gonext' | translate }}
+    </button>
+  </dv-shared-ui-step-form-buttons>
 }

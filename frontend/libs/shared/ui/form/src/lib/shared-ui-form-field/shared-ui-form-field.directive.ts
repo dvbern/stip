@@ -32,7 +32,7 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
   private get control() {
     if (!this.nullableControl) {
       throw new Error(
-        'No ngControl was found, please make sure that there is a MatFormFieldControl'
+        'No ngControl was found, please make sure that there is a MatFormFieldControl',
       );
     }
     return this.nullableControl;
@@ -49,16 +49,16 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
   ngAfterViewInit() {
     const touched$ = this.touchedStateDuringCheck$.pipe(
       startWith(false),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
     const errorMessages$ = this.errorMessages.changes.pipe(
       startWith({}),
-      map(() => this.errorMessages?.toArray() ?? [])
+      map(() => this.errorMessages?.toArray() ?? []),
     );
     const validityHasChanged$ =
       this.control.statusChanges?.pipe(
         startWith(null),
-        map(() => this.control.status)
+        map(() => this.control.status),
       ) ?? of(null);
     combineLatest([validityHasChanged$, errorMessages$, touched$])
       .pipe(map((values) => [...values, this.control.touched] as const))

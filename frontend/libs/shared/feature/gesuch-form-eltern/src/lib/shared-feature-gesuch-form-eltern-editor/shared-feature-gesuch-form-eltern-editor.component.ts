@@ -110,7 +110,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     nachname: ['', [Validators.required]],
     vorname: ['', [Validators.required]],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
-      this.formBuilder
+      this.formBuilder,
     ),
     identischerZivilrechtlicherWohnsitz: [true, []],
     identischerZivilrechtlicherWohnsitzPLZ: [
@@ -134,12 +134,12 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         minDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MAX_AGE_ADULT),
-          'date'
+          'date',
         ),
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_ADULT),
-          'date'
+          'date',
         ),
       ],
     ],
@@ -158,7 +158,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
     const zivilrechtlichChanged$ = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
-      { useDefault: true }
+      { useDefault: true },
     );
     effect(
       () => {
@@ -166,28 +166,28 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         this.formUtils.setDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
           zivilrechtlichIdentisch,
-          true
+          true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
           zivilrechtlichIdentisch,
-          true
+          true,
         );
         this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
         this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         const { readonly } = this.view$();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -197,7 +197,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         ...this.elternteil,
         geburtsdatum: parseBackendLocalDateAndPrint(
           this.elternteil.geburtsdatum,
-          this.languageSig()
+          this.languageSig(),
         ),
       });
 
@@ -205,7 +205,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         Validators.required,
         sharedUtilValidatorAhv(
           `eltern${capitalized(this.elternteil.elternTyp)}`,
-          this.gesuchFormular
+          this.gesuchFormular,
         ),
       ];
       this.form.controls.sozialversicherungsnummer.clearValidators();
@@ -224,7 +224,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
       this.languageSig(),
-      subYears(new Date(), MEDIUM_AGE_ADULT)
+      subYears(new Date(), MEDIUM_AGE_ADULT),
     );
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
@@ -258,7 +258,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE_ADULT),
-      this.languageSig()
+      this.languageSig(),
     );
   }
 }

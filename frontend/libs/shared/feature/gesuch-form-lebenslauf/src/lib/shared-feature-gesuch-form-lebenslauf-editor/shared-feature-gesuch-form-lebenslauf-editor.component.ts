@@ -128,16 +128,16 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   showBerufsbezeichnungSig = computed(
     () =>
       this.bildungsartSig() === 'EIDGENOESSISCHES_BERUFSATTEST' ||
-      this.bildungsartSig() === 'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
+      this.bildungsartSig() === 'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS',
   );
   showFachrichtungSig = computed(
     () =>
       this.bildungsartSig() === 'BACHELOR_FACHHOCHSCHULE' ||
       this.bildungsartSig() === 'BACHELOR_HOCHSCHULE_UNI' ||
-      this.bildungsartSig() === 'MASTER'
+      this.bildungsartSig() === 'MASTER',
   );
   showTitelDesAbschlussesSig = computed(
-    () => this.bildungsartSig() === 'ANDERER_BILDUNGSABSCHLUSS'
+    () => this.bildungsartSig() === 'ANDERER_BILDUNGSABSCHLUSS',
   );
   kantonValues = this.prepareKantonValues();
 
@@ -148,55 +148,55 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
         this.startChanged$();
         this.form.controls.bis.updateValueAndValidity();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         this.endChanged$();
         this.form.controls.von.updateValueAndValidity();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.berufsbezeichnung,
           !this.showBerufsbezeichnungSig(),
-          true
+          true,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
           !this.showFachrichtungSig(),
-          true
+          true,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.titelDesAbschlusses,
           !this.showTitelDesAbschlussesSig(),
-          true
+          true,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         const { readonly } = this.view$();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -211,7 +211,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     kantonValues.sort((a, b) =>
       this.translateService
         .instant('shared.kanton.' + a)
-        .localeCompare(this.translateService.instant('shared.kanton.' + b))
+        .localeCompare(this.translateService.instant('shared.kanton.' + b)),
     );
     //add Ausland after sort
     kantonValues.push(WohnsitzKanton.AUSLAND);
@@ -234,7 +234,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
           minDateValidatorForLocale(
             this.languageSig(),
             changes['minStartDate'].currentValue,
-            'monthYear'
+            'monthYear',
           ),
         ]);
       }
@@ -250,7 +250,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
           false,
           new Date(),
           this.languageSig(),
-          'monthYear'
+          'monthYear',
         ),
       ]);
       if (changes['maxEndDate'].currentValue) {
@@ -260,7 +260,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
               this.form.controls.von,
               previousAusbildungen,
               new Date(),
-              'monthYear'
+              'monthYear',
             ),
           ]);
         }
@@ -268,7 +268,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
           maxDateValidatorForLocale(
             this.languageSig(),
             changes['maxEndDate'].currentValue,
-            'monthYear'
+            'monthYear',
           ),
         ]);
       }
@@ -305,7 +305,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
       this.form.controls.bildungsart.clearValidators();
       this.form.controls.taetigskeitsart.setValidators(Validators.required);
       this.form.controls.taetigkeitsBeschreibung.setValidators(
-        Validators.required
+        Validators.required,
       );
     }
   }
@@ -322,7 +322,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
           this.form,
           this.item.type === 'AUSBILDUNG'
             ? ['bildungsart', 'wohnsitz', 'ausbildungAbgeschlossen']
-            : ['taetigskeitsart', 'taetigkeitsBeschreibung']
+            : ['taetigskeitsart', 'taetigkeitsBeschreibung'],
         ),
       });
     }
@@ -346,12 +346,12 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     return onMonthYearInputBlur(
       ctrl,
       this.minStartDate || new Date(),
-      this.languageSig()
+      this.languageSig(),
     );
   }
 
   protected readonly bildungsartValues = Object.values(
-    LebenslaufAusbildungsArt
+    LebenslaufAusbildungsArt,
   );
   protected readonly taetigskeitsartValues = Object.values(Taetigskeitsart);
 }

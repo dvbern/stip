@@ -29,6 +29,6 @@ export function updateTsConfig(tree: Tree, options: NormalizedSchema): void {
       };
 
       return json;
-    }
+    },
   );
 }

@@ -54,7 +54,7 @@ dateFormatsFR.set('monthYear', {
 
 export function getFormatDef(
   locale: Language,
-  dateType: DateFormatVariant
+  dateType: DateFormatVariant,
 ): DateFormatTypeDef {
   return dateFormats.get(locale)!.get(dateType)!;
 }

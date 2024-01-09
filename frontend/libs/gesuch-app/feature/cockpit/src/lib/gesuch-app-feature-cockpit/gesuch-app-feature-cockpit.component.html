@@ -5,10 +5,7 @@
 
   <div class="container mt-5 mb-5">
     <h1 class="text-white mb-4">
-      {{
-        'gesuch-app.cockpit.welcome.titel'
-          | translate : { name: benutzerNameSig() }
-      }}
+      {{ 'gesuch-app.cockpit.welcome.titel' | translate: { name: benutzerNameSig() } }}
     </h1>
 
     <div class="row">
@@ -16,161 +13,129 @@
       <div class="col-lg-8 mb-lg-5">
         <!-- progress -->
         @if (cockpitView().loading) {
-        <div class="my-4">
-          <div class="dv-progress-bar-indeterminate bg-dark">
-            <div class="bg-light"></div>
+          <div class="my-4">
+            <div class="dv-progress-bar-indeterminate bg-dark">
+              <div class="bg-light"></div>
+            </div>
           </div>
-        </div>
         }
 
         <!-- period 1-2 -->
         @if (fall$ | async; as fall) {
-        <div>
-          @for ( periode of cockpitView().gesuchsperiodes; track
-          trackByPerioden($index, periode) ) {
-          <div
-            class="card mb-5 shadow-lg"
-            [class.col-md-6]="!periode.gesuchId"
-            [class.col-md-12]="periode.gesuchId"
-          >
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md">
-                  <!-- Periode titel -->
-                  <div class="card-title d-flex">
-                    @if (periode.semester === 'HERBST') {
-                    <dv-shared-ui-icon-chip
-                      style="background-color: #feefea; color: #fe7e55"
-                      class="me-2"
-                    >
-                      <i class="material-symbols-rounded fs-5">eco</i>
-                    </dv-shared-ui-icon-chip>
-                    } @else if (periode.semester === 'FRUEHLING') {
-                    <dv-shared-ui-icon-chip
-                      style="background-color: #eff7e0; color: #81be06"
-                      class="me-2"
-                    >
-                      <i class="material-symbols-rounded fs-5">deceased</i>
-                    </dv-shared-ui-icon-chip>
-                    }
-                    <div>
-                      <div class="mt-1">
-                        <h3 data-testid="cockpit-periode-title">
-                          <span>{{
-                            'gesuch-app.cockpit.gesuch.semester.' +
-                              periode.semester.toLowerCase() | translate
-                          }}</span>
-                          <span>&nbsp;</span>
-                          <span>{{ periode.yearsLabel }}</span>
-                        </h3>
+          <div>
+            @for (periode of cockpitView().gesuchsperiodes; track trackByPerioden($index, periode)) {
+              <div
+                class="card mb-5 shadow-lg"
+                [class.col-md-6]="!periode.gesuchId"
+                [class.col-md-12]="periode.gesuchId"
+              >
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md">
+                      <!-- Periode titel -->
+                      <div class="card-title d-flex">
+                        @if (periode.semester === 'HERBST') {
+                          <dv-shared-ui-icon-chip style="background-color: #feefea; color: #fe7e55" class="me-2">
+                            <i class="material-symbols-rounded fs-5">eco</i>
+                          </dv-shared-ui-icon-chip>
+                        } @else if (periode.semester === 'FRUEHLING') {
+                          <dv-shared-ui-icon-chip style="background-color: #eff7e0; color: #81be06" class="me-2">
+                            <i class="material-symbols-rounded fs-5">deceased</i>
+                          </dv-shared-ui-icon-chip>
+                        }
+                        <div>
+                          <div class="mt-1">
+                            <h3 data-testid="cockpit-periode-title">
+                              <span>{{
+                                'gesuch-app.cockpit.gesuch.semester.' + periode.semester.toLowerCase() | translate
+                              }}</span>
+                              <span>&nbsp;</span>
+                              <span>{{ periode.yearsLabel }}</span>
+                            </h3>
+                          </div>
+                          <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
+                            <span>{{ periode.gueltigAb | date: 'dd.MM.yyyy' }}</span>
+                            <span> - </span>
+                            <span>{{ periode.gueltigBis | date: 'dd.MM.yyyy' }}</span>
+                          </h6>
+                        </div>
                       </div>
-                      <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
-                        <span>{{
-                          periode.gueltigAb | date : 'dd.MM.yyyy'
-                        }}</span>
-                        <span> - </span>
-                        <span>{{
-                          periode.gueltigBis | date : 'dd.MM.yyyy'
-                        }}</span>
-                      </h6>
+                      <!-- loading Gesuch -->
+                      @if (periode.gesuchLoading) {
+                        <div class="spinner-border text-primary my-4" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      }
+                      <!-- existing Gesuch (left) -->
+                      @if (periode.gesuchId) {
+                        <div class="d-flex flex-column align-items-start">
+                          <span class="mt-4 fw-normal small">{{
+                            'gesuch-app.cockpit.periode.status.titel' | translate
+                          }}</span>
+                          <span class="fw-medium">{{
+                            'gesuch-app.cockpit.periode.status.nicht_komplett' | translate
+                          }}</span>
+                          <ng-container
+                            *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
+                          ></ng-container>
+                        </div>
+                      }
                     </div>
+                    <!-- existing Gesuch (right pic) -->
+                    @if (periode.gesuchId) {
+                      <div class="col-md p-4">
+                        <img
+                          src="/assets/images/undraw_exams_re_4ios.svg"
+                          [alt]="'gesuch-app.cockpit.gesuch.img.alt' | translate"
+                          class="w-100"
+                          style="max-width: 300px"
+                        />
+                      </div>
+                    }
                   </div>
-                  <!-- loading Gesuch -->
-                  @if (periode.gesuchLoading) {
-                  <div class="spinner-border text-primary my-4" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                  }
-                  <!-- existing Gesuch (left) -->
+                  <!-- existing Gesuch buttons -->
                   @if (periode.gesuchId) {
-                  <div class="d-flex flex-column align-items-start">
-                    <span class="mt-4 fw-normal small">{{
-                      'gesuch-app.cockpit.periode.status.titel' | translate
-                    }}</span>
-                    <span class="fw-medium">{{
-                      'gesuch-app.cockpit.periode.status.nicht_komplett'
-                        | translate
-                    }}</span>
-                    <ng-container
-                      *ngTemplateOutlet="
-                        einreichefrist;
-                        context: { periode: periode }
-                      "
-                    ></ng-container>
-                  </div>
+                    <div class="row">
+                      <div class="col-md">
+                        <a
+                          class="btn btn-primary mt-3 w-100"
+                          data-testid="cockpit-gesuch-edit"
+                          [routerLink]="['/gesuch/person', periode.gesuchId]"
+                        >
+                          {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
+                        </a>
+                      </div>
+                      <div class="col-md">
+                        <a class="btn btn-outline-primary mt-3 w-100" data-testid="cockpit-gesuch-nachfrist">
+                          {{ 'gesuch-app.cockpit.gesuch.nachfrist' | translate }}
+                        </a>
+                      </div>
+                    </div>
+                  }
+                  <!-- no Gesuch yet -->
+                  @if (!periode.gesuchId && !periode.gesuchLoading) {
+                    <div class="d-flex flex-column align-items-start">
+                      <ng-container *ngTemplateOutlet="einreichefrist; context: { periode: periode }"></ng-container>
+                      <div class="mb-3"></div>
+                      <button type="button" class="btn btn-primary mt-4 w-100" (click)="handleCreate(periode, fall.id)">
+                        {{ 'gesuch-app.cockpit.gesuch.new' | translate }}
+                      </button>
+                    </div>
                   }
                 </div>
-                <!-- existing Gesuch (right pic) -->
-                @if (periode.gesuchId) {
-                <div class="col-md p-4">
-                  <img
-                    src="/assets/images/undraw_exams_re_4ios.svg"
-                    [alt]="'gesuch-app.cockpit.gesuch.img.alt' | translate"
-                    class="w-100"
-                    style="max-width: 300px"
-                  />
-                </div>
-                }
               </div>
-              <!-- existing Gesuch buttons -->
-              @if (periode.gesuchId) {
-              <div class="row">
-                <div class="col-md">
-                  <a
-                    class="btn btn-primary mt-3 w-100"
-                    data-testid="cockpit-gesuch-edit"
-                    [routerLink]="['/gesuch/person', periode.gesuchId]"
-                  >
-                    {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
-                  </a>
-                </div>
-                <div class="col-md">
-                  <a
-                    class="btn btn-outline-primary mt-3 w-100"
-                    data-testid="cockpit-gesuch-nachfrist"
-                  >
-                    {{ 'gesuch-app.cockpit.gesuch.nachfrist' | translate }}
-                  </a>
-                </div>
-              </div>
-              }
-              <!-- no Gesuch yet -->
-              @if (!periode.gesuchId && !periode.gesuchLoading) {
-              <div class="d-flex flex-column align-items-start">
-                <ng-container
-                  *ngTemplateOutlet="
-                    einreichefrist;
-                    context: { periode: periode }
-                  "
-                ></ng-container>
-                <div class="mb-3"></div>
-                <button
-                  type="button"
-                  class="btn btn-primary mt-4 w-100"
-                  (click)="handleCreate(periode, fall.id)"
-                >
-                  {{ 'gesuch-app.cockpit.gesuch.new' | translate }}
-                </button>
-              </div>
-              }
-            </div>
+            }
           </div>
-          }
-        </div>
         }
       </div>
 
       <ng-template #einreichefrist let-periode="periode">
-        <span class="mt-4 fw-normal small">{{
-          'gesuch-app.cockpit.periode.einreichfrist.titel' | translate
-        }}</span>
+        <span class="mt-4 fw-normal small">{{ 'gesuch-app.cockpit.periode.einreichfrist.titel' | translate }}</span>
         @if (periode.einreichfrist) {
-        <span class="fw-medium">
-          {{
-            'gesuch-app.cockpit.periode.einreichfrist.spaetestens' | translate
-          }}
-          {{ periode.einreichfrist | date : 'dd.MM.yyyy' }}
-        </span>
+          <span class="fw-medium">
+            {{ 'gesuch-app.cockpit.periode.einreichfrist.spaetestens' | translate }}
+            {{ periode.einreichfrist | date: 'dd.MM.yyyy' }}
+          </span>
         }
       </ng-template>
 
@@ -179,14 +144,8 @@
         <!-- NACHRICHTEN -->
         <div class="card mb-5 shadow-lg">
           <div class="card-body">
-            <h3
-              class="card-title d-flex align-items-center"
-              data-testid="cockpit-nachrichten-title"
-            >
-              <dv-shared-ui-icon-chip
-                style="background-color: #e6f9fd; color: #07c6e0"
-                class="me-2"
-              >
+            <h3 class="card-title d-flex align-items-center" data-testid="cockpit-nachrichten-title">
+              <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
                 <i class="material-symbols-rounded fs-5">mail</i>
               </dv-shared-ui-icon-chip>
               <span>Nachrichten</span>
@@ -199,16 +158,12 @@
           <div class="card-body">
             <h3 class="card-title mb-4">Allgemeine Informationen</h3>
             <p class="card-text">
-              Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze
-              Übersicht, auf welcher Basis Ausbildungsbeiträge ausgerichtet
-              werden. Ausserdem werden Sie darüber informiert, wie bei der
-              Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein
-              Stipendium oder Darlehen zu erfüllen sind und weitere nützliche
-              Grundlagen.
+              Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
+              Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
+              Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
+              sind und weitere nützliche Grundlagen.
             </p>
-            <a class="btn btn-outline-primary mt-3 w-100">
-              Stipendien und Darlehen
-            </a>
+            <a class="btn btn-outline-primary mt-3 w-100"> Stipendien und Darlehen </a>
           </div>
         </div>
       </div>

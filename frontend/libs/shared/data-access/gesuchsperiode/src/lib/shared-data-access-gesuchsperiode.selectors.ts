@@ -18,5 +18,5 @@ export const selectSharedDataAccessGesuchsperiodesView = createSelector(
         format(Date.parse(p.gueltigBis), 'yy'),
       ].join('/'),
     })),
-  })
+  }),
 );

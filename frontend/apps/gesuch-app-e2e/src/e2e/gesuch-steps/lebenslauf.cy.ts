@@ -19,7 +19,7 @@ describe('gesuch-app gesuch form', () => {
     [['AUSBILDUNG'], ['TAETIGKEIT']] as [SharedModelLebenslauf['type']][]
   ).forEach(([type]) =>
     it(`should have correct required validators for ${capitalized(
-      type
+      type,
     )}`, () => {
       CockpitPO.openGesuch();
       getStepLebenslauf().click();
@@ -31,6 +31,6 @@ describe('gesuch-app gesuch form', () => {
       SharedLebenslaufPO.getAddButton(type).click();
       getSubmitButton().click();
       SharedLebenslaufPO.getArtInput(type).should('have.class', 'ng-invalid');
-    })
+    }),
   );
 });

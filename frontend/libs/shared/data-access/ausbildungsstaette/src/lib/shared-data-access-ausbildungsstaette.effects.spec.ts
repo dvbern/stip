@@ -11,7 +11,7 @@ describe('SharedDataAccessAusbildungsgang Effects', () => {
 
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) =>
-      expect(actual).toEqual(expected)
+      expect(actual).toEqual(expected),
     );
   });
 
@@ -27,12 +27,12 @@ describe('SharedDataAccessAusbildungsgang Effects', () => {
 
       const effectStream$ = loadAusbildungsstaettes(
         eventsMock$,
-        ausbildungsstaetteServiceMock
+        ausbildungsstaetteServiceMock,
       );
 
       expectObservable(effectStream$).toBe('160ms a', {
         a: SharedDataAccessAusbildungsstaetteApiEvents.ausbildungsstaettesLoadedSuccess(
-          { ausbildungsstaettes: [] }
+          { ausbildungsstaettes: [] },
         ),
       });
     });

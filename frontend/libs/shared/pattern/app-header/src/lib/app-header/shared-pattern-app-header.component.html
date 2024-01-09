@@ -1,28 +1,19 @@
 <!-- HEADER -->
-<header
-  class="top-0 border-bottom w-100 z-3"
-  [class.shadow-sm]="isScroll && !compactHeader"
->
+<header class="top-0 border-bottom w-100 z-3" [class.shadow-sm]="isScroll && !compactHeader">
   <ng-template #logoOrBackLink>
     @if (backLink) {
-    <a
-      class="first-entry btn btn-light btn-nav fw-normal shadow-none d-flex align-items-center align-self-center"
-      [routerLink]="backLink.path"
-      data-testid="gesuch-step-nav-dashboard"
-    >
-      <i class="text-white material-symbols-rounded fs-3 me-2"
-        >arrow_left_alt</i
+      <a
+        class="first-entry btn btn-light btn-nav fw-normal shadow-none d-flex align-items-center align-self-center"
+        [routerLink]="backLink.path"
+        data-testid="gesuch-step-nav-dashboard"
       >
-      <span>{{ backLink.text }}</span>
-    </a>
+        <i class="text-white material-symbols-rounded fs-3 me-2">arrow_left_alt</i>
+        <span>{{ backLink.text }}</span>
+      </a>
     } @else {
-    <a class="first-entry" routerLink="/">
-      <img
-        src="assets/images/logo_kanton_bern_full.svg"
-        alt="Logo Kanton Bern"
-        height="60"
-      />
-    </a>
+      <a class="first-entry" routerLink="/">
+        <img src="assets/images/logo_kanton_bern_full.svg" alt="Logo Kanton Bern" height="60" />
+      </a>
     }
   </ng-template>
   <!-- Small screens Header -->
@@ -34,12 +25,7 @@
       <div class="d-flex gap-2 align-items-center">
         <ng-content select=".header-mobile-addons"></ng-content>
 
-        <button
-          class="dv-button-icon"
-          type="button"
-          [attr.aria-label]="'shared.menu' | translate"
-          (click)="openMenu()"
-        >
+        <button class="dv-button-icon" type="button" [attr.aria-label]="'shared.menu' | translate" (click)="openMenu()">
           <span class="material-symbols-rounded">menu</span>
         </button>
       </div>
@@ -57,9 +43,7 @@
       </div>
 
       <!-- top right -->
-      <div
-        class="d-flex flex-grow-1 ms-3 justify-content-end align-items-center"
-      >
+      <div class="d-flex flex-grow-1 ms-3 justify-content-end align-items-center">
         <ng-content select=".header-desktop-right"></ng-content>
         <dv-shared-ui-language-selector
           class="p-3"
@@ -81,9 +65,7 @@
 
             <div ngbDropdownMenu aria-labelledby="userMenu">
               <button type="button" ngbDropdownItem>Profil</button>
-              <button type="button" ngbDropdownItem (click)="logout()">
-                Logout
-              </button>
+              <button type="button" ngbDropdownItem (click)="logout()">Logout</button>
             </div>
           </div>
         </div>
@@ -120,9 +102,7 @@
           <a class="nav-link">Profil</a>
         </li>
         <li class="nav-item">
-          <button type="button" class="nav-link" (click)="logout()">
-            Logout
-          </button>
+          <button type="button" class="nav-link" (click)="logout()">Logout</button>
         </li>
       </ul>
     </div>

@@ -108,13 +108,13 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
 
   handleLanguageChangeHeader(language: Language) {
     this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language })
+      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
   }
 
   handleLanguageChangeFooter(language: Language) {
     this.store.dispatch(
-      SharedDataAccessLanguageEvents.footerSelectorChange({ language })
+      SharedDataAccessLanguageEvents.footerSelectorChange({ language }),
     );
   }
 }

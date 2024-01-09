@@ -10,7 +10,7 @@ import { sharedDataAccessGesuchsperiodeEvents } from './shared-data-access-gesuc
 export const loadGesuchsperiodes = createEffect(
   (
     actions$ = inject(Actions),
-    gesuchsperiodeService = inject(GesuchsperiodeService)
+    gesuchsperiodeService = inject(GesuchsperiodeService),
   ) => {
     return actions$.pipe(
       ofType(sharedDataAccessGesuchsperiodeEvents.init),
@@ -19,18 +19,18 @@ export const loadGesuchsperiodes = createEffect(
           map((gesuchsperiodes) =>
             sharedDataAccessGesuchsperiodeEvents.gesuchsperiodesLoadedSuccess({
               gesuchsperiodes,
-            })
+            }),
           ),
           catchError((error) => [
             sharedDataAccessGesuchsperiodeEvents.gesuchsperiodesLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // add effects here

@@ -18,6 +18,6 @@ export function eventTypeFactory(options: NormalizedSchema): LibTypeGenerator {
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
   tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md')
+    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );
 }

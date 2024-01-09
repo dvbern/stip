@@ -21,7 +21,7 @@ describe('SharedUiFormAddressComponent', () => {
     fixture = TestBed.createComponent(SharedUiFormAddressComponent);
     component = fixture.componentInstance;
     component.group = SharedUiFormAddressComponent.buildAddressFormGroup(
-      TestBed.inject(NonNullableFormBuilder)
+      TestBed.inject(NonNullableFormBuilder),
     );
     fixture.detectChanges();
   });

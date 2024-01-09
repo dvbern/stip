@@ -28,7 +28,7 @@ export class SharedPatternRouteReuseStrategyConfigurable extends BaseRouteReuseS
   }
   override shouldReuseRoute(
     future: ActivatedRouteSnapshot,
-    curr: ActivatedRouteSnapshot
+    curr: ActivatedRouteSnapshot,
   ): boolean {
     if (future.data['shouldReuseRoute'] === false) {
       return false;

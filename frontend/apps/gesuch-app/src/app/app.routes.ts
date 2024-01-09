@@ -6,7 +6,7 @@ export const appRoutes: Route[] = [
     path: 'gesuch-app-feature-gesuch-form-abschluss',
     loadChildren: () =>
       import('@dv/gesuch-app/feature/gesuch-form-abschluss').then(
-        (m) => m.gesuchAppFeatureGesuchFormAbschlussRoutes
+        (m) => m.gesuchAppFeatureGesuchFormAbschlussRoutes,
       ),
   },
   {
@@ -15,7 +15,7 @@ export const appRoutes: Route[] = [
     title: 'gesuch-app.cockpit.title',
     loadChildren: () =>
       import('@dv/gesuch-app/feature/cockpit').then(
-        (m) => m.gesuchAppFeatureCockpitRoutes
+        (m) => m.gesuchAppFeatureCockpitRoutes,
       ),
   },
   {
@@ -23,11 +23,11 @@ export const appRoutes: Route[] = [
     canActivate: [hasBenutzer],
     loadComponent: () =>
       import('@dv/gesuch-app/feature/gesuch-form').then(
-        (m) => m.GesuchAppFeatureGesuchFormComponent
+        (m) => m.GesuchAppFeatureGesuchFormComponent,
       ),
     loadChildren: () =>
       import('@dv/gesuch-app/feature/gesuch-form').then(
-        (m) => m.gesuchAppFeatureGesuchFormRoutes
+        (m) => m.gesuchAppFeatureGesuchFormRoutes,
       ),
   },
 ];

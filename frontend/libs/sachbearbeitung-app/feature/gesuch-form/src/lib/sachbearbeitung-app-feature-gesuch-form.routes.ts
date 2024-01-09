@@ -21,7 +21,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.kinder.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-kinder').then(
-        (m) => m.gesuchAppFeatureGesuchFormKinderRoutes
+        (m) => m.gesuchAppFeatureGesuchFormKinderRoutes,
       ),
   },
   {
@@ -32,7 +32,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.lebenslauf.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-lebenslauf').then(
-        (m) => m.gesuchAppFeatureGesuchFormLebenslaufRoutes
+        (m) => m.gesuchAppFeatureGesuchFormLebenslaufRoutes,
       ),
   },
   {
@@ -43,7 +43,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.geschwister.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-geschwister').then(
-        (m) => m.gesuchAppFeatureGesuchFormGeschwisterRoutes
+        (m) => m.gesuchAppFeatureGesuchFormGeschwisterRoutes,
       ),
   },
   {
@@ -54,7 +54,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.auszahlung.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-auszahlungen').then(
-        (m) => m.gesuchAppFeatureGesuchFormAuszahlungenRoutes
+        (m) => m.gesuchAppFeatureGesuchFormAuszahlungenRoutes,
       ),
   },
   {
@@ -65,7 +65,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.familiensituation.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-familiensituation').then(
-        (m) => m.gesuchAppFeatureGesuchFormFamiliensituationRoutes
+        (m) => m.gesuchAppFeatureGesuchFormFamiliensituationRoutes,
       ),
   },
   {
@@ -76,7 +76,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.partner.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-partner').then(
-        (m) => m.gesuchAppFeatureGesuchFormPartnerRoutes
+        (m) => m.gesuchAppFeatureGesuchFormPartnerRoutes,
       ),
   },
   {
@@ -87,7 +87,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.eltern.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-eltern').then(
-        (m) => m.gesuchAppFeatureGesuchFormElternRoutes
+        (m) => m.gesuchAppFeatureGesuchFormElternRoutes,
       ),
   },
   {
@@ -98,7 +98,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.person.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-person').then(
-        (m) => m.gesuchAppFeatureGesuchFormPersonRoutes
+        (m) => m.gesuchAppFeatureGesuchFormPersonRoutes,
       ),
   },
   {
@@ -109,7 +109,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.education.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-education').then(
-        (m) => m.gesuchAppFeatureGesuchFormEducationRoutes
+        (m) => m.gesuchAppFeatureGesuchFormEducationRoutes,
       ),
   },
   {
@@ -120,7 +120,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.einnahmenkosten.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
-        (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes
+        (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
       ),
   },
 ];

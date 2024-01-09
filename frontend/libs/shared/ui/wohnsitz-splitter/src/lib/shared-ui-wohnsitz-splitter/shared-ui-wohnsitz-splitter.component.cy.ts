@@ -53,6 +53,6 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
       getInput('a').type(value.toString());
       getInput('a').should('have.value', expectedA);
       getInput('b').should('have.value', expectedB);
-    })
+    }),
   );
 });

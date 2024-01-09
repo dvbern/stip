@@ -1,30 +1,28 @@
 <div class="container">
   <div class="row">
     @if (viewSig().gesuch; as gesuch) {
-    <div class="col-12 col-xl-8 mt-4 d-flex flex-column align-items-start">
-      @switch (viewSig().abschlussPhase) { @case ('NOT_READY') {
-      <p [innerHTML]="'shared.form.abschluss.notReady' | translate"></p>
-      } @case ('READY_TO_SEND') {
-      <p [innerHTML]="'shared.form.abschluss.readyToSend.text' | translate"></p>
-      <div class="alert alert-info d-flex" role="alert">
-        <span class="text-info material-symbols-rounded me-3">info</span>
-        <span
-          [innerHTML]="'shared.form.abschluss.readyToSend.warning' | translate"
-        ></span>
-      </div>
-      <p [innerHTML]="'shared.form.abschluss.readyToSend.info' | translate"></p>
+      <div class="col-12 col-xl-8 mt-4 d-flex flex-column align-items-start">
+        @switch (viewSig().abschlussPhase) {
+          @case ('NOT_READY') {
+            <p [innerHTML]="'shared.form.abschluss.notReady' | translate"></p>
+          }
+          @case ('READY_TO_SEND') {
+            <p [innerHTML]="'shared.form.abschluss.readyToSend.text' | translate"></p>
+            <div class="alert alert-info d-flex" role="alert">
+              <span class="text-info material-symbols-rounded me-3">info</span>
+              <span [innerHTML]="'shared.form.abschluss.readyToSend.warning' | translate"></span>
+            </div>
+            <p [innerHTML]="'shared.form.abschluss.readyToSend.info' | translate"></p>
 
-      <button
-        type="submit"
-        class="btn btn-primary m-auto mt-4"
-        (click)="abschliessen(gesuch.id)"
-      >
-        {{ 'shared.form.abschluss.abschliessen' | translate }}
-      </button>
-      } @case ('SUBMITTED') {
-      <p [innerHTML]="'shared.form.abschluss.submitted' | translate"></p>
-      } }
-    </div>
+            <button type="submit" class="btn btn-primary m-auto mt-4" (click)="abschliessen(gesuch.id)">
+              {{ 'shared.form.abschluss.abschliessen' | translate }}
+            </button>
+          }
+          @case ('SUBMITTED') {
+            <p [innerHTML]="'shared.form.abschluss.submitted' | translate"></p>
+          }
+        }
+      </div>
     }
   </div>
 </div>

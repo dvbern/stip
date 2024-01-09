@@ -54,12 +54,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepsSig = computed(() =>
-    this.stepManager.getAllSteps(this.viewSig().gesuchFormular)
+    this.stepManager.getAllSteps(this.viewSig().gesuchFormular),
   );
 
   handleLanguageChangeHeader(language: Language) {
     this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language })
+      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
   }
 }

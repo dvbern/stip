@@ -15,7 +15,7 @@ export class SharedPatternNgbDatepickerI18nNgxTranslateAdapter
 
   getWeekdayLabel(weekday: number): string {
     return this.translateService.instant(
-      `shared.datepicker.weekday.${weekday}`
+      `shared.datepicker.weekday.${weekday}`,
     );
   }
 

@@ -21,6 +21,6 @@ export class SharedUiGesuchStepWrapperComponent {
   public outlet!: RouterOutlet;
   public activated$ = new EventEmitter();
   @Output() public step = this.activated$.pipe(
-    map(() => this.outlet.activatedRoute.snapshot.data['step'])
+    map(() => this.outlet.activatedRoute.snapshot.data['step']),
   );
 }

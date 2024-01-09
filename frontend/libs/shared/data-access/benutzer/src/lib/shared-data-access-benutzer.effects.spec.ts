@@ -10,7 +10,7 @@ describe('SharedDataAccessBenutzer Effects', () => {
 
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) =>
-      expect(actual).toEqual(expected)
+      expect(actual).toEqual(expected),
     );
   });
 
@@ -26,7 +26,7 @@ describe('SharedDataAccessBenutzer Effects', () => {
 
       const effectStream$ = loadCurrentBenutzer(
         eventsMock$,
-        benutzerServiceMock
+        benutzerServiceMock,
       );
 
       expectObservable(effectStream$).toBe('160ms a', {

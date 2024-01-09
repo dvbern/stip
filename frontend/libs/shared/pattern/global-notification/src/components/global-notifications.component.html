@@ -1,8 +1,9 @@
-@if (globalNotificationsSig().notificationList; as notifications) { @for
-(notification of notifications; track trackByIndex($index)) {
-<dv-notification
-  [isToast]="true"
-  [notification]="notification"
-  (closeTriggered)="hideNotification(notification)"
-></dv-notification>
-} }
+@if (globalNotificationsSig().notificationList; as notifications) {
+  @for (notification of notifications; track trackByIndex($index)) {
+    <dv-notification
+      [isToast]="true"
+      [notification]="notification"
+      (closeTriggered)="hideNotification(notification)"
+    ></dv-notification>
+  }
+}

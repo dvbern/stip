@@ -80,7 +80,7 @@ export const ABSCHLUSS = {
 
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
-  formular: SharedModelGesuchFormular | null
+  formular: SharedModelGesuchFormular | null,
 ) => {
   if (step === PARTNER) {
     const zivilstand = formular?.personInAusbildung?.zivilstand;

@@ -34,7 +34,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
 
   abschliessen(gesuchId: string) {
     this.store.dispatch(
-      GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({ gesuchId })
+      GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({ gesuchId }),
     );
   }
 }

@@ -37,12 +37,12 @@ export const loadOwnGesuchs = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    gesuchService = inject(GesuchService)
+    gesuchService = inject(GesuchService),
   ) => {
     return actions$.pipe(
       ofType(
         SharedDataAccessGesuchEvents.init,
-        SharedDataAccessGesuchEvents.gesuchRemovedSuccess
+        SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       ),
       switchMap(() => store.select(selectCurrentBenutzer)),
       filter(sharedUtilFnTypeGuardsIsDefined),
@@ -51,18 +51,18 @@ export const loadOwnGesuchs = createEffect(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
-            })
+            }),
           ),
           catchError((error) => [
             SharedDataAccessGesuchEvents.gesuchsLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 export const loadAllGesuchs = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
@@ -74,25 +74,25 @@ export const loadAllGesuchs = createEffect(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
-            })
+            }),
           ),
           catchError((error) => [
             SharedDataAccessGesuchEvents.gesuchsLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const loadGesuch = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    gesuchService = inject(GesuchService)
+    gesuchService = inject(GesuchService),
   ) => {
     return actions$.pipe(
       ofType(
@@ -106,29 +106,29 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormKinder.init,
         SharedEventGesuchFormLebenslauf.init,
         SharedEventGesuchFormEinnahmenkosten.init,
-        SharedEventGesuchFormAbschluss.init
+        SharedEventGesuchFormAbschluss.init,
       ),
       concatLatestFrom(() => store.select(selectRouteId)),
       switchMap(([, id]) => {
         if (!id) {
           throw new Error(
-            'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id'
+            'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
           );
         }
         return gesuchService.getGesuch$({ gesuchId: id }).pipe(
           map((gesuch) =>
-            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch })
+            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
           ),
           catchError((error) => [
             SharedDataAccessGesuchEvents.gesuchLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
+          ]),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const createGesuch = createEffect(
@@ -140,30 +140,30 @@ export const createGesuch = createEffect(
           switchMap(() =>
             gesuchService.getGesucheForFall$({
               fallId: create.fallId,
-            })
+            }),
           ),
           map(
             (gesuche) =>
               gesuche.find(
-                ({ gesuchsperiode: { id } }) => id === create.gesuchsperiodeId
-              )?.id
+                ({ gesuchsperiode: { id } }) => id === create.gesuchsperiodeId,
+              )?.id,
           ),
           filter(sharedUtilFnTypeGuardsIsDefined),
           map((id) =>
             SharedDataAccessGesuchEvents.gesuchCreatedSuccess({
               id,
-            })
+            }),
           ),
           catchError((error) => [
             SharedDataAccessGesuchEvents.gesuchCreatedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const updateGesuch = createEffect(
@@ -175,7 +175,7 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormEducation.saveTriggered,
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormAuszahlung.saveTriggered,
-        SharedEventGesuchFormEinnahmenkosten.saveTriggered
+        SharedEventGesuchFormEinnahmenkosten.saveTriggered,
       ),
       concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
         return gesuchService
@@ -188,18 +188,18 @@ export const updateGesuch = createEffect(
               SharedDataAccessGesuchEvents.gesuchUpdatedSuccess({
                 id: gesuchId,
                 origin,
-              })
+              }),
             ),
             catchError((error) => [
               SharedDataAccessGesuchEvents.gesuchUpdatedFailure({
                 error: sharedUtilFnErrorTransformer(error),
               }),
-            ])
+            ]),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const updateGesuchSubform = createEffect(
@@ -209,7 +209,7 @@ export const updateGesuchSubform = createEffect(
         SharedEventGesuchFormEltern.saveSubformTriggered,
         SharedEventGesuchFormGeschwister.saveSubformTriggered,
         SharedEventGesuchFormKinder.saveSubformTriggered,
-        SharedEventGesuchFormLebenslauf.saveSubformTriggered
+        SharedEventGesuchFormLebenslauf.saveSubformTriggered,
       ),
       concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
         return gesuchService
@@ -222,18 +222,18 @@ export const updateGesuchSubform = createEffect(
               SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess({
                 id: gesuchId,
                 origin,
-              })
+              }),
             ),
             catchError((error) => [
               SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure({
                 error: sharedUtilFnErrorTransformer(error),
               }),
-            ])
+            ]),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const removeGesuch = createEffect(
@@ -247,12 +247,12 @@ export const removeGesuch = createEffect(
             SharedDataAccessGesuchEvents.gesuchRemovedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const redirectToGesuchForm = createEffect(
@@ -261,17 +261,17 @@ export const redirectToGesuchForm = createEffect(
       ofType(SharedDataAccessGesuchEvents.gesuchCreatedSuccess),
       tap(({ id }) => {
         router.navigate(['gesuch', PERSON.route, id]);
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const redirectToGesuchFormNextStep = createEffect(
   (
     actions$ = inject(Actions),
     router = inject(Router),
-    stepManager = inject(SharedUtilGesuchFormStepManagerService)
+    stepManager = inject(SharedUtilGesuchFormStepManagerService),
   ) => {
     return actions$.pipe(
       ofType(
@@ -285,15 +285,15 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormEducation.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
-        SharedEventGesuchFormEinnahmenkosten.nextTriggered
+        SharedEventGesuchFormEinnahmenkosten.nextTriggered,
       ),
       tap(({ id, origin }) => {
         const target = stepManager.getNext(origin);
         router.navigate(['gesuch', target.route, id]);
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const refreshGesuchFormStep = createEffect(
@@ -302,10 +302,10 @@ export const refreshGesuchFormStep = createEffect(
       ofType(SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess),
       tap(({ id, origin }) => {
         router.navigate(['gesuch', origin.route, id]);
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 // add effects here
@@ -324,7 +324,7 @@ export const sharedDataAccessGesuchEffects = {
 
 const prepareFormularData = (
   id: string,
-  gesuchFormular: GesuchFormularUpdate
+  gesuchFormular: GesuchFormularUpdate,
 ) => {
   const { lebenslaufItems, geschwisters, elterns, kinds, ...formular } =
     gesuchFormular;

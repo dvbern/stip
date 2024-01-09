@@ -1,8 +1,4 @@
-<div
-  class="overlay-anchor w-100"
-  cdkOverlayOrigin
-  #origin="cdkOverlayOrigin"
-></div>
+<div class="overlay-anchor w-100" cdkOverlayOrigin #origin="cdkOverlayOrigin"></div>
 
 <ng-template
   cdkConnectedOverlay
@@ -13,9 +9,7 @@
   [cdkConnectedOverlayPositions]="positions"
   [cdkConnectedOverlayOpen]="isOpen"
 >
-  <section
-    class="overlay d-flex flex-column position-relative p-4 rounded shadow bg-white me-md-4"
-  >
+  <section class="overlay d-flex flex-column position-relative p-4 rounded shadow bg-white me-md-4">
     <button
       type="button"
       class="dv-button-icon dv-button-icon-md position-absolute top-0 end-0 m-1"
@@ -26,11 +20,7 @@
     </button>
     <ng-content select=".title"></ng-content>
     <ng-content select=".content"></ng-content>
-    <button
-      type="button"
-      class="btn btn-outline-primary align-self-center mt-auto"
-      (click)="closeOverlay.emit(true)"
-    >
+    <button type="button" class="btn btn-outline-primary align-self-center mt-auto" (click)="closeOverlay.emit(true)">
       {{ 'shared.form-field.close-info-message' | translate }}
     </button>
   </section>

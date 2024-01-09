@@ -20,14 +20,14 @@ import { NotificationComponent } from './notification/notification.component';
 export class GlobalNotificationsComponent {
   private store = inject(Store);
   globalNotificationsSig = this.store.selectSignal(
-    selectSharedDataAccessGlobalNotificationsView
+    selectSharedDataAccessGlobalNotificationsView,
   );
 
   hideNotification(notification: SharedModelGlobalNotification): void {
     this.store.dispatch(
       SharedDataAccessGlobalNotificationEvents.hideNotificationTriggered({
         notificationId: notification.id,
-      })
+      }),
     );
   }
 

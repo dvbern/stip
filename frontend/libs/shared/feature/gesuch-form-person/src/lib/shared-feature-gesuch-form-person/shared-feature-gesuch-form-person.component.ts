@@ -131,7 +131,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   updateValidity$ = new Subject<unknown>();
   laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender))
+    switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
   hiddenFieldsSetSig = signal(new Set());
   isSozialversicherungsnummerInfoShown = false;
@@ -156,7 +156,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     nachname: ['', [Validators.required]],
     vorname: ['', [Validators.required]],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
-      this.formBuilder
+      this.formBuilder,
     ),
     identischerZivilrechtlicherWohnsitz: [true, []],
     identischerZivilrechtlicherWohnsitzPLZ: [
@@ -180,12 +180,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         minDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MAX_AGE_GESUCHSSTELLER),
-          'date'
+          'date',
         ),
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_GESUCHSSTELLER),
-          'date'
+          'date',
         ),
       ],
     ],
@@ -210,7 +210,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   });
 
   private wohnsitzChangedSig = toSignal(
-    this.form.controls.wohnsitz.valueChanges
+    this.form.controls.wohnsitz.valueChanges,
   );
 
   showWohnsitzSplitterSig = computed(() => {
@@ -218,7 +218,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   });
 
   private nationalitaetChangedSig = toSignal(
-    this.form.controls.nationalitaet.valueChanges
+    this.form.controls.nationalitaet.valueChanges,
   );
 
   showAuslaenderAusweisSig = computed(() => {
@@ -234,20 +234,20 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
-          this.viewSig().readonly
+          this.viewSig().readonly,
         );
         this.updateVisbility(
           this.form.controls.wohnsitzAnteilMutter,
           this.showWohnsitzSplitterSig(),
-          { resetOnInvisible: true }
+          { resetOnInvisible: true },
         );
         this.updateVisbility(
           this.form.controls.wohnsitzAnteilVater,
           this.showWohnsitzSplitterSig(),
-          { resetOnInvisible: true }
+          { resetOnInvisible: true },
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     // patch form value
     effect(
@@ -260,7 +260,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         ];
         this.form.controls.sozialversicherungsnummer.clearValidators();
         this.form.controls.sozialversicherungsnummer.addValidators(
-          svValidators
+          svValidators,
         );
         if (gesuchFormular?.personInAusbildung) {
           const person = gesuchFormular.personInAusbildung;
@@ -268,7 +268,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             ...person,
             geburtsdatum: parseBackendLocalDateAndPrint(
               person.geburtsdatum,
-              this.languageSig()
+              this.languageSig(),
             ),
           };
           this.form.patchValue({
@@ -279,11 +279,11 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.form.reset();
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
-      { useDefault: true }
+      { useDefault: true },
     );
     effect(
       () => {
@@ -291,21 +291,21 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         this.updateVisibilityAndDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
           !zivilrechtlichIdentisch,
-          this.viewSig().readonly
+          this.viewSig().readonly,
         );
         this.updateVisibilityAndDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
           !zivilrechtlichIdentisch,
-          this.viewSig().readonly
+          this.viewSig().readonly,
         );
         this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
         this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     const nationalitaetChangedSig = toSignal(
-      this.form.controls.nationalitaet.valueChanges
+      this.form.controls.nationalitaet.valueChanges,
     );
     effect(
       () => {
@@ -315,12 +315,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.updateVisibilityAndDisabledState(
             this.form.controls.heimatort,
             true,
-            this.viewSig().readonly
+            this.viewSig().readonly,
           );
           this.updateVisibilityAndDisabledState(
             this.form.controls.vormundschaft,
             true,
-            this.viewSig().readonly
+            this.viewSig().readonly,
           );
           this.updateVisbility(this.form.controls.niederlassungsstatus, false, {
             resetOnInvisible: true,
@@ -343,7 +343,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.updateVisibilityAndDisabledState(
             this.form.controls.niederlassungsstatus,
             true,
-            this.viewSig().readonly
+            this.viewSig().readonly,
           );
           this.updateVisbility(this.form.controls.heimatort, false, {
             resetOnInvisible: true,
@@ -353,7 +353,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           });
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -361,11 +361,11 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -387,7 +387,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: PERSON,
-        })
+        }),
       );
     }
   }
@@ -400,7 +400,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
           origin: PERSON,
-        })
+        }),
       );
     }
   }
@@ -413,7 +413,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
-      this.languageSig()
+      this.languageSig(),
     );
   }
 
@@ -436,7 +436,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
             this.form.getRawValue().geburtsdatum,
             this.languageSig(),
-            subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER)
+            subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
           )!,
           ...wohnsitzAnteileNumber(this.form.getRawValue()),
         },
@@ -448,7 +448,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     formControl: FormControl,
     visibile: boolean,
     disabled: boolean,
-    opts = { resetOnInvisible: true }
+    opts = { resetOnInvisible: true },
   ): void {
     this.formUtils.setDisabledState(formControl, disabled);
     this.updateVisbility(formControl, visibile, opts);
@@ -457,7 +457,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private updateVisbility(
     formControl: FormControl,
     visible: boolean,
-    opts: { resetOnInvisible: boolean }
+    opts: { resetOnInvisible: boolean },
   ): void {
     this.hiddenFieldsSetSig.update((hiddenFieldsSet) => {
       if (visible) {

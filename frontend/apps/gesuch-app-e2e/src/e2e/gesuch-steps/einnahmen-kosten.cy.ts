@@ -18,7 +18,7 @@ describe('gesuch-app einnahmen & kosten form', () => {
     getStepTitle().should('contain.text', 'Einnahmen & Kosten');
     SharedEinnahmenKostenInAusbildungPO.getFormLoading().should('exist');
     SharedEinnahmenKostenInAusbildungPO.getFormNettoerwerbseinkommen().should(
-      'exist'
+      'exist',
     );
     SharedEinnahmenKostenInAusbildungPO.getFormLoading().should('not.exist');
 
@@ -30,11 +30,11 @@ describe('gesuch-app einnahmen & kosten form', () => {
         SharedEinnahmenKostenInAusbildungPO.getFormNettoerwerbseinkommen().focus();
         SharedEinnahmenKostenInAusbildungPO.getFormNettoerwerbseinkommen().clear();
         SharedEinnahmenKostenInAusbildungPO.getFormNettoerwerbseinkommen().type(
-          '10000'
+          '10000',
         );
         SharedEinnahmenKostenInAusbildungPO.getFormNettoerwerbseinkommen().should(
           'have.value',
-          "10'000"
+          "10'000",
         );
       });
   });
