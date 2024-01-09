@@ -16,7 +16,8 @@ describe('app generator', () => {
   });
 
   describe('app', () => {
-    it('should generate new app and add new scope to module boundaries and generator', async () => {
+    // TODO: reenable once the --experimental-vm-modules flag has become unecesary
+    it.skip('should generate new app and add new scope to module boundaries and generator', async () => {
       tree.write(
         'libs/tooling/nx-plugin/src/generators/lib/schema.json',
         // mock schema.json
