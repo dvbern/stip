@@ -1,15 +1,15 @@
 stages: [build, validate, test, analyze, package, deploy, mirror]
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.0.7'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.1.4'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@v0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@v0.1.4'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
       context-dir: 'frontend'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.1.1'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.1.4'
     inputs:
       sonar-scanner: cli
       context-dir: 'frontend'
