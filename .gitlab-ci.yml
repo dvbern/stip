@@ -3,7 +3,7 @@ stages: [build, deploy, mirror]
 variables:
   ARGOCD_APP: stip
   ARGOCD_IMAGES: api,gesuch-app,sachbearbeitung-app
-  STIP_OVERLAYS_DIR: manifests/stip/overlays 
+  STIP_OVERLAYS_DIR: manifests/stip/overlays
 
 backend:
   stage: build
@@ -16,8 +16,6 @@ frontend:
   trigger:
     include: frontend/.gitlab-ci.yml
     strategy: depend
-
-# TODO: Mirror job
 
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
@@ -59,7 +57,13 @@ include:
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
-  
+
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.4'
     inputs:
       review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@1b1aaf6cf443278d2aca15a5b062441008b3e0bd'
+    inputs:
+      git-mirror-target: "dvbern/stip"
+      mirror-on: "tag"
+      mirror-when: "always"
