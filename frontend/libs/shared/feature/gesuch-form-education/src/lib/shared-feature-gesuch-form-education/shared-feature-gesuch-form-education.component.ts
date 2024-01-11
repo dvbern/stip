@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -61,7 +60,6 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
   selector: 'dv-shared-feature-gesuch-form-education',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     NgbInputDatepicker,
@@ -106,7 +104,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         maxDateValidatorForLocale(
           this.languageSig(),
           addYears(new Date(), 100),
-          'monthYear'
+          'monthYear',
         ),
       ],
       [],
@@ -118,7 +116,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormEducationView);
   ausbildungsstaette$ = toSignal(
-    this.form.controls.ausbildungsstaette.valueChanges
+    this.form.controls.ausbildungsstaette.valueChanges,
   );
   ausbildungsstaettOptionsSig: Signal<
     (Ausbildungsstaette & { translatedName?: string })[]
@@ -140,7 +138,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     });
   });
   ausbildungNichtGefundenChanged$ = toSignal(
-    this.form.controls.ausbildungNichtGefunden.valueChanges
+    this.form.controls.ausbildungNichtGefunden.valueChanges,
   );
   startChanged$ = toSignal(this.form.controls.ausbildungBegin.valueChanges);
   endChanged$ = toSignal(this.form.controls.ausbildungEnd.valueChanges);
@@ -153,7 +151,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         .ausbildungsstaettes.find(
           (ausbildungsstaette) =>
             this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ===
-            this.ausbildungsstaette$()
+            this.ausbildungsstaette$(),
         )
         ?.ausbildungsgaenge?.map((ausbildungsgang) => {
           return {
@@ -174,7 +172,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         true,
         new Date(),
         this.languageSig(),
-        'monthYear'
+        'monthYear',
       ),
     ]);
 
@@ -193,7 +191,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         this.formUtils.setRequired(ausbildungsgang, !value);
         this.formUtils.setRequired(ausbildungsstaette, !value);
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(() => {
       const { gesuchsPeriodenStart } = this.viewSig();
@@ -203,7 +201,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         maxDateValidatorForLocale(
           this.languageSig(),
           addYears(new Date(), 100),
-          'monthYear'
+          'monthYear',
         ),
       ];
 
@@ -212,8 +210,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           minDateValidatorForLocale(
             this.languageSig(),
             gesuchsPeriodenStart,
-            'monthYear'
-          )
+            'monthYear',
+          ),
         );
       }
       this.form.controls.ausbildungBegin.clearValidators();
@@ -224,14 +222,14 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         this.startChanged$();
         this.form.controls.ausbildungEnd.updateValueAndValidity();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         this.endChanged$();
         this.form.controls.ausbildungBegin.updateValueAndValidity();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     // fill form
@@ -244,12 +242,12 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
             (ausbildungsstaette) =>
               ausbildungsstaette.ausbildungsgaenge?.find(
                 (ausbildungsgang) =>
-                  ausbildungsgang.id === ausbildung.ausbildungsgangId
-              )
+                  ausbildungsgang.id === ausbildung.ausbildungsgangId,
+              ),
           );
           const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
             (ausbildungsgang) =>
-              ausbildungsgang.id === ausbildung?.ausbildungsgangId
+              ausbildungsgang.id === ausbildung?.ausbildungsgangId,
           );
           this.form.patchValue({
             ...ausbildung,
@@ -261,24 +259,24 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           this.form.reset();
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     // When Staette null, disable gang
     const staetteSig = toSignal(
       this.form.controls.ausbildungsstaette.valueChanges.pipe(
-        startWith(this.form.value.ausbildungsstaette)
-      )
+        startWith(this.form.value.ausbildungsstaette),
+      ),
     );
     effect(
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
           !staetteSig() || this.viewSig().readonly,
-          !this.viewSig().readonly
+          !this.viewSig().readonly,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -286,11 +284,11 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -331,7 +329,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           gesuchId,
           trancheId,
           gesuchFormular,
-        })
+        }),
       );
     }
   }
@@ -344,7 +342,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
           origin: AUSBILDUNG,
-        })
+        }),
       );
     }
   }
@@ -357,7 +355,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     const { gesuch, gesuchFormular } = this.viewSig();
     const { ausbildungsgang, ...formValue } = convertTempFormToRealValues(
       this.form,
-      ['fachrichtung', 'pensum']
+      ['fachrichtung', 'pensum'],
     );
     const ret = {
       gesuchId: gesuch?.id,
@@ -375,7 +373,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   }
 
   getTranslatedAusbildungstaetteName(
-    staette: Ausbildungsstaette | undefined
+    staette: Ausbildungsstaette | undefined,
   ): string | undefined {
     if (staette === undefined) {
       return undefined;
@@ -388,7 +386,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   }
 
   private getTranslatedAusbildungsgangName(
-    ausbildungsgang: Ausbildungsgang
+    ausbildungsgang: Ausbildungsgang,
   ): string | undefined {
     return this.languageSig() === 'fr'
       ? ausbildungsgang.bezeichnungFr

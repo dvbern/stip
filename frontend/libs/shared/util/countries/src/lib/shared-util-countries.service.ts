@@ -15,7 +15,7 @@ export class SharedUtilCountriesService {
           this.translate.translations[
             this.translate.currentLang ?? this.translate.defaultLang
           ],
-      })
+      }),
     )
     .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
@@ -34,13 +34,13 @@ export class SharedUtilCountriesService {
         translated.sort(({ text: a }, { text: b }) =>
           a.localeCompare(b, this.translate.currentLang, {
             ignorePunctuation: true,
-          })
+          }),
         );
         return [
           { code: 'CH', text: translations['shared.country.CH'] },
           ...translated,
         ];
-      })
+      }),
     );
   }
 }

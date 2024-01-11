@@ -10,7 +10,7 @@ describe('selectGesuchAppDataAccessAbschlusssView', () => {
     };
     const result = selectGesuchAppDataAccessAbschlusssView.projector(
       state,
-      null
+      null,
     );
     expect(result).toEqual(state);
   });

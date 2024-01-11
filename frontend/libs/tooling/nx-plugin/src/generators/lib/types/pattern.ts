@@ -7,7 +7,7 @@ import { extendEslintJson } from './helpers/eslint';
 import { updateTsConfig } from './helpers/tsconfig';
 
 export function patternTypeFactory(
-  options: NormalizedSchema
+  options: NormalizedSchema,
 ): LibTypeGenerator {
   const { scope } = options;
   return {
@@ -24,6 +24,6 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
   updateTsConfig(tree, options);
   tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md')
+    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );
 }

@@ -42,7 +42,7 @@ export default async function (tree: Tree, options: AppGeneratorSchema) {
 
   return async () => {
     console['log'](
-      `\nℹ️ Scope for "${projectName}" added to ".eslintrc.json" and "libs/tooling/nx-plugin/src/generators/lib/schema.json"\n\n`
+      `\nℹ️ Scope for "${projectName}" added to ".eslintrc.json" and "libs/tooling/nx-plugin/src/generators/lib/schema.json"\n\n`,
     );
     console['log'](`Project: --project ${projectName}\n`);
     console['log'](`Can be used to run additional commands like`);
@@ -53,7 +53,7 @@ export default async function (tree: Tree, options: AppGeneratorSchema) {
 function addFiles(
   tree: Tree,
   options: AppGeneratorSchema,
-  { projectName, projectRoot }: { projectName: string; projectRoot: string }
+  { projectName, projectRoot }: { projectName: string; projectRoot: string },
 ) {
   const templateOptions = {
     ...options,
@@ -120,8 +120,8 @@ function removeNxWelcomeComponent(tree: Tree, pathToApp: string) {
         .replace('NxWelcomeComponent,', '')
         .replace(
           "import { NxWelcomeComponent } from './nx-welcome.component';",
-          ''
-        )
+          '',
+        ),
     );
   }
   const appComponentSpecContent = tree
@@ -134,8 +134,8 @@ function removeNxWelcomeComponent(tree: Tree, pathToApp: string) {
         .replace('NxWelcomeComponent,', '')
         .replace(
           "import { NxWelcomeComponent } from './nx-welcome.component';",
-          ''
-        )
+          '',
+        ),
     );
   }
 }
@@ -159,6 +159,6 @@ function addScope(tree: Tree, projectName: string) {
         label: `${projectName} - used only by ${projectName}`,
       });
       return json;
-    }
+    },
   );
 }

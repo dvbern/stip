@@ -2,15 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  EventEmitter,
   inject,
   Input,
   OnChanges,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
 
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 
@@ -20,12 +17,7 @@ import { DocumentOptions } from './shared-pattern-document-upload.model';
 @Component({
   selector: 'dv-shared-pattern-document-upload',
   standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    MatFormFieldModule,
-    SharedUiDropFileComponent,
-  ],
+  imports: [TranslateModule, MatFormFieldModule, SharedUiDropFileComponent],
   templateUrl: './shared-pattern-document-upload.component.html',
   styleUrls: ['./shared-pattern-document-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +41,7 @@ export class SharedPatternDocumentUploadComponent implements OnChanges {
   handleMultipleDocumentsAdded(documents: File[]) {
     this.store.effectClearErrors();
     documents.forEach((fileUpload) =>
-      this.store.effectUploadDocument({ fileUpload, options: this.options })
+      this.store.effectUploadDocument({ fileUpload, options: this.options }),
     );
   }
 
@@ -74,7 +66,7 @@ export class SharedPatternDocumentUploadComponent implements OnChanges {
 }
 
 const isHTMLInputElement = (
-  target: EventTarget
+  target: EventTarget,
 ): target is HTMLInputElement => {
   return 'files' in target;
 };

@@ -1,125 +1,113 @@
-<div
-  class="wrapper"
-  *ngIf="timeline.items"
-  data-testid="two-columns-timeline-wrapper"
-  [style]="
-    'grid-template-rows: repeat(' +
-    ((timeline.rows || 1) - 1) +
-    ', minmax(35px, auto));' +
-    'grid-template-columns: repeat(' +
-    ((timeline.leftCols || 1) + (timeline.rightCols || 1)) +
-    ', minmax(0, 1fr))'
-  "
->
+@if (timeline.items) {
   <div
-    class="box"
-    *ngFor="let item of timeline.items; trackBy: trackByIndex"
-    [class.left]="item.col === 'LEFT'"
-    [class.right]="item.col === 'RIGHT'"
-    [class.both]="item.col === 'BOTH'"
-    [class.show-contents-on-hover]="isTimelineGapBlock(item)"
+    class="wrapper"
+    data-testid="two-columns-timeline-wrapper"
     [style]="
-      'grid-column: ' +
-      item.positionStartCol +
-      ' / span ' +
-      item.positionColSpan +
-      ';' +
-      'grid-row: ' +
-      item.positionStartRow +
-      ' / span ' +
-      item.positionRowSpan +
-      ';'
+      'grid-template-rows: repeat(' +
+      ((timeline.rows || 1) - 1) +
+      ', minmax(35px, auto));' +
+      'grid-template-columns: repeat(' +
+      ((timeline.leftCols || 1) + (timeline.rightCols || 1)) +
+      ', minmax(0, 1fr))'
     "
   >
-    <!-- busy block -->
-    <ng-container *ngIf="isTimelineBusyBlock(item)">
-      <ng-container *ngIf="asBusyBlock(item) as busyItem">
-        <div
-          class="d-flex flex-column gap-3"
-          *ngIf="busyItem.children as children"
-        >
-          <div *ngFor="let child of children; trackBy: trackByIndex">
-            <ng-template #content>
-              <h5 data-testid="two-column-timeline-label">
-                {{ child.label.title | translate }}
-              </h5>
-              <div *ngIf="child.label.subTitle; let subTitle">
-                <small
-                  class="d-inline-block"
-                  data-testid="two-column-timeline-sub-label"
-                >
-                  {{ subTitle.key | translate }}: {{ subTitle.value }}
-                </small>
-              </div>
-              <small class="d-inline-block">{{
-                printDateAsMonthYear(child.von) +
-                  ' - ' +
-                  printDateAsMonthYear(child.bis)
-              }}</small>
-            </ng-template>
-            <a
-              *ngIf="child.editable"
-              class="w-100 d-block"
-              (click)="handleEditItem(child)"
-            >
-              <ng-container *ngTemplateOutlet="content"></ng-container>
-            </a>
-            <ng-container *ngIf="!child.editable">
-              <ng-container *ngTemplateOutlet="content"></ng-container>
-            </ng-container>
-          </div>
-        </div>
-      </ng-container>
-    </ng-container>
-
-    <!-- gap -->
-    <div
-      *ngIf="isTimelineGapBlock(item)"
-      class="position-relative"
-      data-testid="timeline-gap-block"
-    >
-      <div class="hide-on-hover">
-        <h5>{{ 'shared.form.lebenslauf.missingEntries' | translate }}</h5>
-        <small>{{
-          printDateAsMonthYear(item.von) +
-            ' - ' +
-            printDateAsMonthYear(item.bis)
-        }}</small>
-      </div>
+    @for (item of timeline.items; track trackByIndex($index)) {
       <div
-        class="plus-and-buttons d-flex gap-3 justify-content-end align-items-center"
+        class="box"
+        [class.left]="item.col === 'LEFT'"
+        [class.right]="item.col === 'RIGHT'"
+        [class.both]="item.col === 'BOTH'"
+        [class.show-contents-on-hover]="isTimelineGapBlock(item)"
+        [style]="
+          'grid-column: ' +
+          item.positionStartCol +
+          ' / span ' +
+          item.positionColSpan +
+          ';' +
+          'grid-row: ' +
+          item.positionStartRow +
+          ' / span ' +
+          item.positionRowSpan +
+          ';'
+        "
       >
-        <div class="hiding-wrapper">
-          <div class="show-on-hover d-flex gap-3 align-items-center">
-            <button
-              type="button"
-              class="btn btn-secondary d-flex align-items-center add-button-40"
-              (click)="handleAddAusbildung(asGapBlock(item))"
-            >
-              <i class="material-symbols-rounded">school</i>
-              <span class="d-none d-sm-block ms-2">{{
-                'shared.form.lebenslauf.add.ausbildung.short' | translate
-              }}</span>
-            </button>
-            <button
-              type="button"
-              class="btn btn-dark d-flex align-items-center add-button-40"
-              (click)="handleAddTaetigkeit(asGapBlock(item))"
-            >
-              <i class="material-symbols-rounded">work</i>
-              <span class="d-none d-sm-block ms-2">{{
-                'shared.form.lebenslauf.add.taetigkeit.short' | translate
-              }}</span>
-            </button>
+        @if (isTimelineBusyBlock(item)) {
+          <!-- busy block -->
+          @if (asBusyBlock(item); as busyItem) {
+            @if (busyItem.children; as children) {
+              <div class="d-flex flex-column gap-3">
+                @for (child of children; track trackByIndex($index)) {
+                  <div>
+                    <ng-template #content>
+                      <h5 data-testid="two-column-timeline-label">
+                        {{ child.label.title | translate }}
+                      </h5>
+                      @if (child.label.subTitle; as subTitle) {
+                        <div>
+                          <small class="d-inline-block" data-testid="two-column-timeline-sub-label">
+                            {{ subTitle.key | translate }}: {{ subTitle.value }}
+                          </small>
+                        </div>
+                      }
+                      <small class="d-inline-block">{{
+                        printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
+                      }}</small>
+                    </ng-template>
+                    @if (child.editable) {
+                      <a class="w-100 d-block" (click)="handleEditItem(child)">
+                        <ng-container *ngTemplateOutlet="content"></ng-container>
+                      </a>
+                    }
+                    @if (!child.editable) {
+                      <ng-container *ngTemplateOutlet="content"></ng-container>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
+        } @else if (isTimelineGapBlock(item)) {
+          <!-- gap -->
+          <div class="position-relative" data-testid="timeline-gap-block">
+            <div class="hide-on-hover">
+              <h5>{{ 'shared.form.lebenslauf.missingEntries' | translate }}</h5>
+              <small>{{ printDateAsMonthYear(item.von) + ' - ' + printDateAsMonthYear(item.bis) }}</small>
+            </div>
+            <div class="plus-and-buttons d-flex gap-3 justify-content-end align-items-center">
+              <div class="hiding-wrapper">
+                <div class="show-on-hover d-flex gap-3 align-items-center">
+                  <button
+                    type="button"
+                    class="btn btn-secondary d-flex align-items-center add-button-40"
+                    (click)="handleAddAusbildung(asGapBlock(item))"
+                  >
+                    <i class="material-symbols-rounded">school</i>
+                    <span class="d-none d-sm-block ms-2">{{
+                      'shared.form.lebenslauf.add.ausbildung.short' | translate
+                    }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-dark d-flex align-items-center add-button-40"
+                    (click)="handleAddTaetigkeit(asGapBlock(item))"
+                  >
+                    <i class="material-symbols-rounded">work</i>
+                    <span class="d-none d-sm-block ms-2">{{
+                      'shared.form.lebenslauf.add.taetigkeit.short' | translate
+                    }}</span>
+                  </button>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn d-flex align-items-center justify-content-center add-chip flex-shrink-0 z-1"
+              >
+                <i class="material-symbols-rounded fs-2 rotate-on-hover">add</i>
+              </button>
+            </div>
           </div>
-        </div>
-        <button
-          type="button"
-          class="btn d-flex align-items-center justify-content-center add-chip flex-shrink-0 z-1"
-        >
-          <i class="material-symbols-rounded fs-2 rotate-on-hover">add</i>
-        </button>
+        }
       </div>
-    </div>
+    }
   </div>
-</div>
+}

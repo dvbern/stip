@@ -27,7 +27,9 @@ describe('lib generator', () => {
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/model/example/package.json')).toBeFalsy();
       expect(
-        tree.exists('libs/shared/model/example/src/lib/shared-model-example.ts')
+        tree.exists(
+          'libs/shared/model/example/src/lib/shared-model-example.ts',
+        ),
       ).toBeTruthy();
     });
 
@@ -40,19 +42,19 @@ describe('lib generator', () => {
       await generator(tree, options);
       const config = readProjectConfiguration(
         tree,
-        'shared-model-example-complex-name'
+        'shared-model-example-complex-name',
       );
       expect(config).toBeDefined();
       expect(
-        tree.exists('libs/shared/model/example-complex-name/package.json')
+        tree.exists('libs/shared/model/example-complex-name/package.json'),
       ).toBeFalsy();
       expect(
         tree.exists(
-          'libs/shared/model/example-complex-name/src/lib/shared-model-example-complex-name.ts'
-        )
+          'libs/shared/model/example-complex-name/src/lib/shared-model-example-complex-name.ts',
+        ),
       ).toBeTruthy();
       expect(
-        tree.exists('libs/shared/model/example-complex-name/package.json')
+        tree.exists('libs/shared/model/example-complex-name/package.json'),
       ).toBeFalsy();
     });
 
@@ -65,16 +67,16 @@ describe('lib generator', () => {
       await generator(tree, options);
       const config = readProjectConfiguration(
         tree,
-        'shared-model-example-complex-name'
+        'shared-model-example-complex-name',
       );
       expect(config).toBeDefined();
       expect(
-        tree.exists('libs/shared/model/example-complex-name/package.json')
+        tree.exists('libs/shared/model/example-complex-name/package.json'),
       ).toBeFalsy();
       expect(
         tree.exists(
-          'libs/shared/model/example-complex-name/src/lib/shared-model-example-complex-name.ts'
-        )
+          'libs/shared/model/example-complex-name/src/lib/shared-model-example-complex-name.ts',
+        ),
       ).toBeTruthy();
     });
   });
@@ -90,17 +92,17 @@ describe('lib generator', () => {
       const config = readProjectConfiguration(tree, 'shared-util-fn-example');
       expect(config).toBeDefined();
       expect(
-        tree.exists('libs/shared/util-fn/example/package.json')
+        tree.exists('libs/shared/util-fn/example/package.json'),
       ).toBeFalsy();
       expect(
         tree.exists(
-          'libs/shared/util-fn/example/src/lib/shared-util-fn-example.ts'
-        )
+          'libs/shared/util-fn/example/src/lib/shared-util-fn-example.ts',
+        ),
       ).toBeTruthy();
       expect(
         tree.exists(
-          'libs/shared/util-fn/example/src/lib/shared-util-fn-example.spec.ts'
-        )
+          'libs/shared/util-fn/example/src/lib/shared-util-fn-example.spec.ts',
+        ),
       ).toBeTruthy();
     });
   });
@@ -117,17 +119,17 @@ describe('lib generator', () => {
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/util/example/package.json')).toBeFalsy();
       expect(
-        tree.exists('libs/shared/util/src/lib/example.service.ts')
+        tree.exists('libs/shared/util/src/lib/example.service.ts'),
       ).toBeFalsy();
       expect(
         tree.exists(
-          'libs/shared/util/example/src/lib/shared-util-example.service.ts'
-        )
+          'libs/shared/util/example/src/lib/shared-util-example.service.ts',
+        ),
       ).toBeTruthy();
       expect(
         tree.exists(
-          'libs/shared/util/example/src/lib/shared-util-example.service.spec.ts'
-        )
+          'libs/shared/util/example/src/lib/shared-util-example.service.spec.ts',
+        ),
       ).toBeTruthy();
     });
   });
@@ -157,19 +159,19 @@ describe('lib generator', () => {
       await generator(tree, options);
       const config = readProjectConfiguration(
         tree,
-        'shared-data-access-example'
+        'shared-data-access-example',
       );
       expect(config).toBeDefined();
       expect(
-        tree.exists('libs/shared/data-access/example/package.json')
+        tree.exists('libs/shared/data-access/example/package.json'),
       ).toBeFalsy();
       expect(
-        tree.exists('libs/shared/data-access/example/README.md')
+        tree.exists('libs/shared/data-access/example/README.md'),
       ).toBeFalsy();
       expect(
         tree.exists(
-          'libs/shared/data-access/example/src/lib/shared-data-access-example.actions.ts'
-        )
+          'libs/shared/data-access/example/src/lib/shared-data-access-example.actions.ts',
+        ),
       ).toBeFalsy();
     });
   });
@@ -186,7 +188,7 @@ describe('lib generator', () => {
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/pattern/example/lib/')).toBeFalsy();
       expect(
-        tree.exists('libs/shared/pattern/example/package.json')
+        tree.exists('libs/shared/pattern/example/package.json'),
       ).toBeFalsy();
       expect(tree.exists('libs/shared/pattern/example/README.md')).toBeFalsy();
     });
@@ -204,14 +206,14 @@ describe('lib generator', () => {
       expect(config).toBeDefined();
       expect(
         tree.exists(
-          'libs/shared/feature/example/src/lib/shared-feature-example.routes.ts'
-        )
+          'libs/shared/feature/example/src/lib/shared-feature-example.routes.ts',
+        ),
       ).toBeTruthy();
       expect(
-        tree.exists('libs/shared/feature/example/src/lib/lib.routes.ts')
+        tree.exists('libs/shared/feature/example/src/lib/lib.routes.ts'),
       ).toBeFalsy();
       expect(
-        tree.exists('libs/shared/feature/example/package.json')
+        tree.exists('libs/shared/feature/example/package.json'),
       ).toBeFalsy();
       expect(tree.exists('libs/shared/feature/example/README.md')).toBeFalsy();
     });

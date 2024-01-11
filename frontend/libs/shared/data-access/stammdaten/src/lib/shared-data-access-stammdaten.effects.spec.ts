@@ -10,7 +10,7 @@ describe('SharedDataAccessStammdaten Effects', () => {
 
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) =>
-      expect(actual).toEqual(expected)
+      expect(actual).toEqual(expected),
     );
   });
 

@@ -8,11 +8,11 @@ export type FamiliensituationFormStepName =
 
 export interface FamiliensituationFormStep {
   getNext(
-    familiensituation: FamiliensituationUpdate
+    familiensituation: FamiliensituationUpdate,
   ): FamiliensituationFormStep;
 
   getPrevious(
-    familienstituation: FamiliensituationUpdate
+    familienstituation: FamiliensituationUpdate,
   ): FamiliensituationFormStep;
   name: FamiliensituationFormStepName;
 }
@@ -26,7 +26,7 @@ export const FamiliensituationFormSteps = {
   ELTERN_VERHEIRATET_ZUSAMMEN: createFamSitStep({
     name: 'ELTERN_VERHEIRATET_ZUSAMMEN',
     getNext(
-      familiensituation: FamiliensituationUpdate
+      familiensituation: FamiliensituationUpdate,
     ): FamiliensituationFormStep {
       if (familiensituation.elternVerheiratetZusammen === null) {
         return this;
@@ -43,7 +43,7 @@ export const FamiliensituationFormSteps = {
   ALIMENTENREGELUNG: createFamSitStep({
     name: 'ALIMENTENREGELUNG',
     getNext(
-      familiensituation: FamiliensituationUpdate
+      familiensituation: FamiliensituationUpdate,
     ): FamiliensituationFormStep {
       return familiensituation.gerichtlicheAlimentenregelung === false
         ? FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
@@ -57,7 +57,7 @@ export const FamiliensituationFormSteps = {
   ELTERN_UNBEKANNT_VERSTORBEN: createFamSitStep({
     name: 'ELTERN_UNBEKANNT_VERSTORBEN',
     getNext(
-      familiensituation: FamiliensituationUpdate
+      familiensituation: FamiliensituationUpdate,
     ): FamiliensituationFormStep {
       return familiensituation.elternteilUnbekanntVerstorben === false
         ? FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET

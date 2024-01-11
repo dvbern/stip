@@ -14,20 +14,20 @@ export interface ElternSituation {
 }
 
 export function calculateElternSituationGesuch(
-  gesuch: SharedModelGesuchFormular | null
+  gesuch: SharedModelGesuchFormular | null,
 ): ElternSituation {
   return calculateElternSituation(gesuch?.familiensituation, gesuch?.elterns);
 }
 
 function calculateElternSituation(
   familienSituation: FamiliensituationUpdate | undefined,
-  elterns: ElternUpdate[] | undefined
+  elterns: ElternUpdate[] | undefined,
 ): ElternSituation {
   return {
     expectVater: calculateExpectElternteil(ElternTyp.VATER, familienSituation),
     expectMutter: calculateExpectElternteil(
       ElternTyp.MUTTER,
-      familienSituation
+      familienSituation,
     ),
     vater: findElternteil(ElternTyp.VATER, elterns),
     mutter: findElternteil(ElternTyp.MUTTER, elterns),
@@ -36,7 +36,7 @@ function calculateElternSituation(
 
 export function calculateExpectElternteil(
   type: ElternTyp,
-  familienSituation: FamiliensituationUpdate | undefined
+  familienSituation: FamiliensituationUpdate | undefined,
 ): boolean {
   if (familienSituation) {
     const elternteilLebt = familienSituation.elternteilUnbekanntVerstorben
@@ -53,7 +53,7 @@ export function calculateExpectElternteil(
 
 export function findElternteil(
   elternTyp: ElternTyp,
-  elterns: ElternUpdate[] | undefined
+  elterns: ElternUpdate[] | undefined,
 ): ElternUpdate | undefined {
   return elterns?.find((eltern) => eltern.elternTyp === elternTyp) || undefined;
 }

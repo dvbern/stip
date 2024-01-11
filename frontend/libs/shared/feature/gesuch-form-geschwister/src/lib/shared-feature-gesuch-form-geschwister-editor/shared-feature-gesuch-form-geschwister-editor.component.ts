@@ -111,19 +111,19 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
         minDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MAX_AGE_ADULT),
-          'date'
+          'date',
         ),
         maxDateValidatorForLocale(
           this.languageSig(),
           subYears(new Date(), MIN_AGE_CHILD),
-          'date'
+          'date',
         ),
       ],
     ],
     ...addWohnsitzControls(this.formBuilder),
     ausbildungssituation: this.formBuilder.control<Ausbildungssituation>(
       '' as Ausbildungssituation,
-      [Validators.required]
+      [Validators.required],
     ),
   });
 
@@ -139,10 +139,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
-          !this.showWohnsitzSplitterSig() || this.viewSig().readonly
+          !this.showWohnsitzSplitterSig() || this.viewSig().readonly,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
@@ -151,27 +151,27 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
           this.formUtils.setDisabledState(
             this.form.controls.wohnsitzAnteilMutter,
             true,
-            true
+            true,
           );
           this.formUtils.setDisabledState(
             this.form.controls.wohnsitzAnteilVater,
             true,
-            true
+            true,
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
     effect(
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -180,7 +180,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       ...this.geschwister,
       geburtsdatum: parseBackendLocalDateAndPrint(
         this.geschwister.geburtsdatum,
-        this.languageSig()
+        this.languageSig(),
       ),
       ...wohnsitzAnteileString(this.geschwister),
     });
@@ -193,7 +193,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       this.form.getRawValue().geburtsdatum,
       this.languageSig(),
-      subYears(new Date(), MEDIUM_AGE)
+      subYears(new Date(), MEDIUM_AGE),
     );
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
@@ -214,11 +214,11 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     this.closeTriggered.emit();
   }
 
-  onGeburtsdatumBlur(_: any) {
+  onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
       subYears(new Date(), MEDIUM_AGE),
-      this.languageSig()
+      this.languageSig(),
     );
   }
 

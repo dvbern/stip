@@ -29,7 +29,7 @@ export const sharedDataAccessBenutzersFeature = createFeature({
         currentBenutzer: null,
         loading: true,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -39,7 +39,7 @@ export const sharedDataAccessBenutzersFeature = createFeature({
         currentBenutzer: benutzer,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
     on(
       SharedDataAccessBenutzerApiEvents.currentBenutzerLoadedFailure,
@@ -49,8 +49,8 @@ export const sharedDataAccessBenutzersFeature = createFeature({
         currentBenutzer: null,
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 

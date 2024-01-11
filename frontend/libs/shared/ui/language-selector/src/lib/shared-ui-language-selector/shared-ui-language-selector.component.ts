@@ -1,4 +1,4 @@
-import { NgFor, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,7 +17,7 @@ import {
 @Component({
   selector: 'dv-shared-ui-language-selector',
   standalone: true,
-  imports: [NgFor, UpperCasePipe, TranslateModule],
+  imports: [UpperCasePipe, TranslateModule],
   templateUrl: './shared-ui-language-selector.component.html',
   styleUrls: ['./shared-ui-language-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

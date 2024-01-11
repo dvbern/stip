@@ -1,10 +1,4 @@
-import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import {
@@ -18,7 +12,7 @@ import { NotificationComponent } from './notification/notification.component';
 @Component({
   selector: 'dv-global-notifications',
   standalone: true,
-  imports: [CommonModule, NotificationComponent],
+  imports: [NotificationComponent],
   templateUrl: './global-notifications.component.html',
   styleUrls: ['./global-notifications.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,14 +20,14 @@ import { NotificationComponent } from './notification/notification.component';
 export class GlobalNotificationsComponent {
   private store = inject(Store);
   globalNotificationsSig = this.store.selectSignal(
-    selectSharedDataAccessGlobalNotificationsView
+    selectSharedDataAccessGlobalNotificationsView,
   );
 
   hideNotification(notification: SharedModelGlobalNotification): void {
     this.store.dispatch(
       SharedDataAccessGlobalNotificationEvents.hideNotificationTriggered({
         notificationId: notification.id,
-      })
+      }),
     );
   }
 

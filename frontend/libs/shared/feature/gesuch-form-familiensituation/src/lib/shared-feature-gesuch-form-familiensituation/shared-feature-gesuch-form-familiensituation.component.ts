@@ -32,7 +32,7 @@ import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-naviga
 import { MaskitoModule } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
@@ -98,7 +98,7 @@ const animationTime = 500;
       state('left', style({ left: '-100%', display: 'none' })),
       state(
         'hidden',
-        style({ position: 'absolute', left: '100%', display: 'none' })
+        style({ position: 'absolute', left: '100%', display: 'none' }),
       ),
       transition('void => *', []),
       transition('* => *', [animate(`${animationTime}ms ease-in`)]),
@@ -160,11 +160,11 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     ],
     sorgerecht: this.formBuilder.control<Elternschaftsteilung | undefined>(
       undefined,
-      { validators: Validators.required }
+      { validators: Validators.required },
     ),
     obhut: this.formBuilder.control<Elternschaftsteilung | undefined>(
       undefined,
-      { validators: Validators.required }
+      { validators: Validators.required },
     ),
     obhutMutter: ['', [Validators.required]],
     obhutVater: ['', [Validators.required]],
@@ -207,20 +207,20 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     elternVerheiratetZusammen.enable();
     const elternVerheiratetZusammenSig = toSignal(
-      elternVerheiratetZusammen.valueChanges
+      elternVerheiratetZusammen.valueChanges,
     );
     const gerichtlicheAlimentenregelungSig = toSignal(
-      gerichtlicheAlimentenregelung.valueChanges
+      gerichtlicheAlimentenregelung.valueChanges,
     );
     const werZahltAlimenteSig = toSignal(werZahltAlimente.valueChanges);
     const elternteilUnbekanntVerstorbenSig = toSignal(
-      elternteilUnbekanntVerstorben.valueChanges
+      elternteilUnbekanntVerstorben.valueChanges,
     );
     const vaterVerstorbenUnbekanntSig = toSignal(
-      vaterUnbekanntVerstorben.valueChanges
+      vaterUnbekanntVerstorben.valueChanges,
     );
     const mutterVerstorbenUnbekanntSig = toSignal(
-      mutterUnbekanntVerstorben.valueChanges
+      mutterUnbekanntVerstorben.valueChanges,
     );
     const obhutSig = toSignal(obhut.valueChanges);
 
@@ -233,17 +233,17 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
             ...initialFormFamSit,
 
             obhutMutter: numberToPercentString(
-              gesuchFormular?.familiensituation?.obhutMutter
+              gesuchFormular?.familiensituation?.obhutMutter,
             ),
             obhutVater: numberToPercentString(
-              gesuchFormular?.familiensituation?.obhutVater
+              gesuchFormular?.familiensituation?.obhutVater,
             ),
           });
         } else {
           this.form.reset();
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     // effect for gerichtlicheAlimentenregelung
@@ -251,11 +251,11 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
       () => {
         this.setDisabledStateAndHide(
           gerichtlicheAlimentenregelung,
-          elternVerheiratetZusammenSig() !== false
+          elternVerheiratetZusammenSig() !== false,
         );
         this.goNextStep();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -265,15 +265,15 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
         this.setDisabledStateAndHide(
           werZahltAlimente,
-          gerichtlicheAlimentenregelung !== true
+          gerichtlicheAlimentenregelung !== true,
         );
         this.setDisabledStateAndHide(
           elternteilUnbekanntVerstorben,
-          gerichtlicheAlimentenregelung !== false
+          gerichtlicheAlimentenregelung !== false,
         );
         this.goNextStep();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -282,23 +282,23 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           elternteilUnbekanntVerstorbenSig();
         this.setDisabledStateAndHide(
           mutterUnbekanntVerstorben,
-          elternteilUnbekanntVerstorben !== true
+          elternteilUnbekanntVerstorben !== true,
         );
         this.setDisabledStateAndHide(
           vaterUnbekanntVerstorben,
-          elternteilUnbekanntVerstorben !== true
+          elternteilUnbekanntVerstorben !== true,
         );
         this.setDisabledStateAndHide(
           sorgerecht,
-          elternteilUnbekanntVerstorben !== false
+          elternteilUnbekanntVerstorben !== false,
         );
         this.setDisabledStateAndHide(
           obhut,
-          elternteilUnbekanntVerstorben !== false
+          elternteilUnbekanntVerstorben !== false,
         );
         this.goNextStep();
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -306,10 +306,10 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
         const vaterUnbekanntVerstorben = vaterVerstorbenUnbekanntSig();
         this.setDisabledStateAndHide(
           vaterUnbekanntGrund,
-          vaterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT
+          vaterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -317,10 +317,10 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
         const mutterUnbekanntVerstorben = mutterVerstorbenUnbekanntSig();
         this.setDisabledStateAndHide(
           mutterUnbekanntGrund,
-          mutterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT
+          mutterUnbekanntVerstorben !== ElternAbwesenheitsGrund.UNBEKANNT,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -329,7 +329,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
         this.setDisabledStateAndHide(obhutVater, notGemeinsam);
         this.setDisabledStateAndHide(obhutMutter, notGemeinsam);
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -352,10 +352,10 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
         this.setDisabledStateAndHide(
           vaterWiederverheiratet,
-          !showVaterVerheiratedFrage
+          !showVaterVerheiratedFrage,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -378,10 +378,10 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
         this.setDisabledStateAndHide(
           mutterWiederverheiratet,
-          !showMutterVerheiratedFrage
+          !showMutterVerheiratedFrage,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -389,11 +389,11 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
         const { readonly } = this.view();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -461,7 +461,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
           gesuchFormular,
           origin: FAMILIENSITUATION,
-        })
+        }),
       );
     }
   }
@@ -474,7 +474,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
           origin: FAMILIENSITUATION,
-        })
+        }),
       );
     }
   }
@@ -498,7 +498,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   private updateSteps(
     newCurrent: FamiliensituationFormStep,
     newNext: FamiliensituationFormStep,
-    newPrev: FamiliensituationFormStep
+    newPrev: FamiliensituationFormStep,
   ): void {
     if (this.currentFamiliensituationFormStep === newCurrent) {
       return;
@@ -514,11 +514,11 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   }
 
   private getKeyByValue(
-    value: FamiliensituationFormStep
+    value: FamiliensituationFormStep,
   ): keyof FamiliensituationFormSteps {
     const key = (
       Object.keys(
-        FamiliensituationFormSteps
+        FamiliensituationFormSteps,
       ) as (keyof FamiliensituationFormSteps)[]
     ).find((key) => FamiliensituationFormSteps[key] === value);
 
@@ -531,7 +531,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
   private setDisabledStateAndHide(
     formControl: FormControl,
-    disabled: boolean
+    disabled: boolean,
   ): void {
     this.formUtils.setDisabledState(formControl, disabled, true);
     this.hiddenFieldsSetSig.update((setToUpdate) => {

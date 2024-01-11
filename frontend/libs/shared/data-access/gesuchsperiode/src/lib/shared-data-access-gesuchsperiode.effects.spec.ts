@@ -10,7 +10,7 @@ describe('sharedDataAccessGesuchsperiode Effects', () => {
 
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) =>
-      expect(actual).toEqual(expected)
+      expect(actual).toEqual(expected),
     );
   });
 
@@ -26,7 +26,7 @@ describe('sharedDataAccessGesuchsperiode Effects', () => {
 
       const effectStream$ = loadGesuchsperiodes(
         actionsMock$,
-        gesuchsperiodeServiceMock
+        gesuchsperiodeServiceMock,
       );
 
       expectObservable(effectStream$).toBe('160ms a', {

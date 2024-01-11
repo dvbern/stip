@@ -38,7 +38,7 @@ export function sharedUtilIsValidAhv(ahv: string) {
 export function sharedUtilIsUniqueAhv(
   ahv: string,
   type: FieldsWithSV,
-  gesuchFormular: SharedModelGesuchFormular
+  gesuchFormular: SharedModelGesuchFormular,
 ) {
   const elterns = gesuchFormular.elterns ?? [];
   const svNummers: Record<FieldsWithSV, string | undefined> = {
@@ -59,7 +59,7 @@ export function sharedUtilIsUniqueAhv(
 
 export function sharedUtilValidatorAhv(
   type: FieldsWithSV,
-  gesuchFormular: SharedModelGesuchFormular | null
+  gesuchFormular: SharedModelGesuchFormular | null,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control?.value) {

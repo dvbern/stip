@@ -21,7 +21,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(
-      SachbearbeitungAppFeatureGesuchFormComponent
+      SachbearbeitungAppFeatureGesuchFormComponent,
     );
     component = fixture.componentInstance;
     fixture.detectChanges();

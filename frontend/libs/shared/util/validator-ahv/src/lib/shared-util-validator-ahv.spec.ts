@@ -37,7 +37,7 @@ describe('sharedUtilAhvValidator', () => {
         personInAusbildung: {
           sozialversicherungsnummer: '756.1111.1111.13',
         } as any,
-      })(mock)
+      })(mock),
     ).toBe(null);
   });
 
@@ -48,7 +48,7 @@ describe('sharedUtilAhvValidator', () => {
         partner: {
           sozialversicherungsnummer: mock.value,
         } as any,
-      })(mock)
+      })(mock),
     ).toBe(null);
   });
 
@@ -57,7 +57,7 @@ describe('sharedUtilAhvValidator', () => {
     expect(
       sharedUtilValidatorAhv('partner', {
         personInAusbildung: { sozialversicherungsnummer: mock.value } as any,
-      })(mock)
+      })(mock),
     ).toEqual({
       notUniqueAhv: true,
     });
@@ -70,7 +70,7 @@ describe('sharedUtilAhvValidator', () => {
         elterns: [
           { elternTyp: ElternTyp.VATER, sozialversicherungsnummer: mock.value },
         ] as any,
-      })(mock)
+      })(mock),
     ).toEqual({
       notUniqueAhv: true,
     });
@@ -86,7 +86,7 @@ describe('sharedUtilAhvValidator', () => {
             sozialversicherungsnummer: '756.1111.1111.13',
           },
         ] as any,
-      })(mock)
+      })(mock),
     ).toEqual(null);
   });
 
@@ -101,7 +101,7 @@ describe('sharedUtilAhvValidator', () => {
           },
           { elternTyp: ElternTyp.VATER, sozialversicherungsnummer: mock.value },
         ] as any,
-      })(mock)
+      })(mock),
     ).toEqual(null);
   });
 });

@@ -52,7 +52,7 @@ describe('SharedUtilValidatorRangeService', () => {
 function runValidation(
   min: number,
   max: number,
-  control: FormControl
+  control: FormControl,
 ): ValidationErrors {
   return sharedUtilValidatorRange(min, max)(control);
 }

@@ -1,7 +1,7 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, interval, merge, Observable, of, Subject } from 'rxjs';
+import { combineLatest, interval, merge, Observable, Subject } from 'rxjs';
 import {
   concatMap,
   mergeMap,
@@ -72,7 +72,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                       ...state.documents.filter(
                         (d) =>
                           sharedUtilFnTypeGuardsIsDefined(d.progress) &&
-                          d.progress !== 100
+                          d.progress !== 100,
                       ),
                     ],
                     loading: false,
@@ -83,19 +83,19 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                     errors: [{ translationKey: GENERIC_ERROR }],
                     loading: false,
                   });
-                }
-              )
-            )
-        )
-      )
+                },
+              ),
+            ),
+        ),
+      ),
   );
 
   readonly effectClearErrors = this.effect((options$: Observable<void>) =>
     options$.pipe(
       tap(() => {
         return this.patchState({ errors: undefined });
-      })
-    )
+      }),
+    ),
   );
 
   readonly effectRemoveDocument = this.effect(
@@ -103,7 +103,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
       documentIdWithOptions$: Observable<{
         dokumentId: string;
         options: DocumentOptions;
-      }>
+      }>,
     ) => {
       return documentIdWithOptions$.pipe(
         tap(() => {
@@ -118,7 +118,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                   this.updater((state) => ({
                     ...state,
                     documents: state.documents.filter(
-                      (document) => document.id !== dokumentId
+                      (document) => document.id !== dokumentId,
                     ),
                     loading: false,
                   }))(),
@@ -126,12 +126,12 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                   this.patchState({
                     errors: [{ translationKey: GENERIC_ERROR }],
                     loading: false,
-                  })
-              )
-            )
-        )
+                  }),
+              ),
+            ),
+        ),
       );
-    }
+    },
   );
 
   effectUploadDocument = this.effect(
@@ -139,7 +139,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
       documentIdWithOptions$: Observable<{
         fileUpload: File;
         options: DocumentOptions;
-      }>
+      }>,
     ) => {
       return documentIdWithOptions$.pipe(
         tap(() => {
@@ -152,7 +152,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
             .pipe(shareReplay({ bufferSize: 1, refCount: true }));
           const cancellingThisDocument$ = this.cancelDocumentUpload$.pipe(
             filter((d) => d.dokumentId === tempDokumentId),
-            shareReplay({ bufferSize: 1, refCount: true })
+            shareReplay({ bufferSize: 1, refCount: true }),
           );
           // Fake an upload status change, could be removed if this feature is being integrated in backend
           const uploading$ = merge(
@@ -167,12 +167,12 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                   type: HttpEventType.UploadProgress,
                   loaded: fileUpload.size - fileUpload.size / (i + 1),
                   total: fileUpload.size,
-                })
-              )
-            )
+                }),
+              ),
+            ),
           ).pipe(
             takeUntil(cancellingThisDocument$),
-            shareReplay({ bufferSize: 1, refCount: true })
+            shareReplay({ bufferSize: 1, refCount: true }),
           );
           return merge(
             uploading$,
@@ -180,9 +180,9 @@ export class DocumentStore extends ComponentStore<DocumentState> {
               map(() =>
                 createHttpEvent({
                   type: HttpEventType.User,
-                })
-              )
-            )
+                }),
+              ),
+            ),
           ).pipe(
             tapResponse(
               (event) => {
@@ -212,7 +212,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                       documents: updateProgressFor(
                         state.documents,
                         tempDokumentId,
-                        (event.loaded / fileUpload.size) * 100
+                        (event.loaded / fileUpload.size) * 100,
                       ),
                     }))();
                     break;
@@ -221,7 +221,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                     this.updater((state) => ({
                       ...state,
                       documents: state.documents.filter(
-                        (d) => d.id !== tempDokumentId
+                        (d) => d.id !== tempDokumentId,
                       ),
                     }))();
                     this.effectGetDocuments({ dokumentTyp, gesuchId });
@@ -233,7 +233,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                       documents: updateProgressFor(
                         state.documents,
                         tempDokumentId,
-                        100
+                        100,
                       ),
                     }))();
                     this.effectGetDocuments({ dokumentTyp, gesuchId });
@@ -247,7 +247,7 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                 this.patchState((state) => ({
                   loading: areFilesUploading(state),
                   documents: state.documents.filter(
-                    (d) => d.id !== createTempId(fileUpload)
+                    (d) => d.id !== createTempId(fileUpload),
                   ),
                   errors: [
                     ...(state.errors ?? []),
@@ -267,12 +267,12 @@ export class DocumentStore extends ComponentStore<DocumentState> {
                       : [{ translationKey: GENERIC_ERROR }]),
                   ],
                 }));
-              }
-            )
+              },
+            ),
           );
-        })
+        }),
       );
-    }
+    },
   );
 }
 
@@ -291,7 +291,7 @@ function createHttpEvent(event: HttpEvent<unknown>) {
 function updateProgressFor(
   dokumente: DocumentUpload[],
   dokumentId: string,
-  progress: number
+  progress: number,
 ) {
   return dokumente.map((d) => {
     if (d.id === dokumentId) {

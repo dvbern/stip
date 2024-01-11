@@ -1,5 +1,5 @@
 export function percentStringToNumber(
-  value?: string | undefined
+  value?: string | undefined,
 ): number | undefined {
   const parsed = parseInt(value || '');
   if (isNaN(parsed)) {

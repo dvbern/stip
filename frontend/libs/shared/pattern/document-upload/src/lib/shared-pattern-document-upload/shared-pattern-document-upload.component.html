@@ -6,28 +6,18 @@
 >
   <ng-content select=".title"></ng-content>
   <label class="position-relative upload" [class.disabled]="view().loading">
-    <div
-      class="pe-none position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
-    >
-      <div
-        class="spinner-border text-secondary my-4"
-        role="status"
-        *ngIf="view().loading"
-      >
-        <span class="visually-hidden">{{
-          'shared.file.downloading' | translate
-        }}</span>
-      </div>
+    <div class="pe-none position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+      @if (view().loading) {
+        <div class="spinner-border text-secondary my-4" role="status">
+          <span class="visually-hidden">{{ 'shared.file.downloading' | translate }}</span>
+        </div>
+      }
     </div>
     <div
       class="text-center text-muted text-italic my-4 d-md-block d-none"
       [innerHTML]="'shared.file.dropZone' | translate"
     ></div>
-    <button
-      (click)="fileInput.click()"
-      type="button"
-      class="btn btn-outline-primary"
-    >
+    <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
       {{ 'shared.file.upload' | translate }}
     </button>
     <input
@@ -45,65 +35,53 @@
 
 <!-- todo add drop zone / file selector  -->
 
-<div
-  class="border border-2 bg-white border-top-0 pt-1 rounded-bottom-3 shadow"
-  *ngIf="hasEntriesSig()"
->
-  <ul class="d-flex flex-column mb-2 list-unstyled">
-    <li
-      *ngFor="
-        let document of view().documents;
-        trackBy: trackByIndex;
-        let first = first
-      "
-      class="px-3 py-2"
-      [class.border-top]="!first"
-    >
-      <div class="d-flex flex-row justify-content-between">
-        <span class="text-truncate" [title]="document.filename">{{
-          document.filename
-        }}</span>
-        <button
-          type="button"
-          class="dv-button-icon flex-shrink-0 cancel-icon ms-2"
-          *ngIf="document.progress !== undefined; else deleteFile"
-          [attr.aria-label]="'shared.cancel' | translate"
-          (click)="handleCancelClicked(document.id)"
-        >
-          <span class="material-symbols-rounded align-middle">clear</span>
-        </button>
-        <ng-template #deleteFile>
-          <button
-            type="button"
-            class="dv-button-icon flex-shrink-0 delete-icon ms-2"
-            [attr.aria-label]="'shared.form.delete' | translate"
-            [disabled]="view().loading"
-            (click)="handleRemoveClicked(document.id)"
-          >
-            <span class="material-symbols-rounded align-middle text-muted"
-              >delete</span
-            >
-          </button>
-        </ng-template>
-      </div>
-      <div class="progress mt-1" *ngIf="document.progress !== undefined">
-        <div
-          class="progress-bar"
-          role="progressbar"
-          [style.width]="document.progress + '%'"
-          [attr.aria-valuenow]="document.progress"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        ></div>
-      </div>
-    </li>
-    <li
-      *ngFor="let error of view().errors; trackBy: trackByIndex"
-      class="px-3 py-2"
-    >
-      <mat-error
-        [innerHTML]="error.translationKey | translate : error.values"
-      ></mat-error>
-    </li>
-  </ul>
-</div>
+@if (hasEntriesSig()) {
+  <div class="border border-2 bg-white border-top-0 pt-1 rounded-bottom-3 shadow">
+    <ul class="d-flex flex-column mb-2 list-unstyled">
+      @for (document of view().documents; track trackByIndex($index); let first = $first) {
+        <li class="px-3 py-2" [class.border-top]="!first">
+          <div class="d-flex flex-row justify-content-between">
+            <span class="text-truncate" [title]="document.filename">{{ document.filename }}</span>
+            @if (document.progress !== undefined) {
+              <button
+                type="button"
+                class="dv-button-icon flex-shrink-0 cancel-icon ms-2"
+                [attr.aria-label]="'shared.cancel' | translate"
+                (click)="handleCancelClicked(document.id)"
+              >
+                <span class="material-symbols-rounded align-middle">clear</span>
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="dv-button-icon flex-shrink-0 delete-icon ms-2"
+                [attr.aria-label]="'shared.form.delete' | translate"
+                [disabled]="view().loading"
+                (click)="handleRemoveClicked(document.id)"
+              >
+                <span class="material-symbols-rounded align-middle text-muted">delete</span>
+              </button>
+            }
+          </div>
+          @if (document.progress !== undefined) {
+            <div class="progress mt-1">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                [style.width]="document.progress + '%'"
+                [attr.aria-valuenow]="document.progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          }
+        </li>
+      }
+      @for (error of view().errors; track trackByIndex($index)) {
+        <li class="px-3 py-2">
+          <mat-error [innerHTML]="error.translationKey | translate: error.values"></mat-error>
+        </li>
+      }
+    </ul>
+  </div>
+}

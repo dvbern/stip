@@ -4,7 +4,7 @@ describe('selectSharedDataAccessGlobalNotificationsView', () => {
   it('selects view', () => {
     const state = {
       nextErrorId: 0,
-      globalNotifications: {},
+      globalNotificationsById: {},
       notificationList: [],
     };
     const result =

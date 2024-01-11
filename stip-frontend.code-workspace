@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": "./"
+    }
+  ],
+  "extensions": {
+    "recommendations": [
+      "smulyono.reveal",
+      "nrwl.angular-console",
+      "esbenp.prettier-vscode",
+      "Orta.vscode-jest",
+      "dbaeumer.vscode-eslint"
+    ]
+  },
+  "settings": {
+    "files.exclude": {
+      "backend/**": true
+    },
+    "eslint.validate": ["json"],
+    "eslint.workingDirectories": ["./frontend"]
+  }
+}

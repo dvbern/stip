@@ -3,5 +3,5 @@ import { sharedDataAccessConfigsFeature } from './shared-data-access-config.feat
 
 export const selectSharedDataAccessConfigsView = createSelector(
   sharedDataAccessConfigsFeature.selectConfigsState,
-  (state) => ({ ...state })
+  (state) => ({ ...state }),
 );

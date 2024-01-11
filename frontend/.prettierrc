@@ -2,6 +2,12 @@
   "singleQuote": true,
   "overrides": [
     {
+      "files": "*.html",
+      "options": {
+        "printWidth": 120
+      }
+    },
+    {
       "files": "tsconfig.base.json",
       "options": {
         "printWidth": 180

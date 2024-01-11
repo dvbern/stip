@@ -59,7 +59,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   private laender$ = new BehaviorSubject<Land[]>([]);
 
   translatedLaender$ = this.laender$.pipe(
-    switchMap((laender) => this.countriesService.getCountryList(laender))
+    switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
 
   touchedSig = signal(false);

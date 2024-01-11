@@ -19,14 +19,14 @@ export class SharedUtilFormService {
           this.appRef.isStable.pipe(
             filter((isStable) => isStable),
             take(1),
-            map(() => parent)
-          )
+            map(() => parent),
+          ),
         ),
-        takeUntilDestroyed()
+        takeUntilDestroyed(),
       )
       .subscribe((parent) => {
         const input = parent.nativeElement.querySelector<HTMLElement>(
-          'input.ng-invalid, .mat-mdc-select-invalid, .mat-mdc-radio-group.ng-invalid input[type=radio]'
+          'input.ng-invalid, .mat-mdc-select-invalid, .mat-mdc-radio-group.ng-invalid input[type=radio]',
         );
         if (input) {
           input.focus();
@@ -46,7 +46,7 @@ export class SharedUtilFormService {
     control: FormControl,
     isDisabled: boolean,
     clearOnDisable?: boolean,
-    options?: { emitEvent: boolean }
+    options?: { emitEvent: boolean },
   ) {
     if (isDisabled) {
       if (clearOnDisable) {
@@ -74,18 +74,18 @@ export class SharedUtilFormService {
    * Convert the value changes from a given control into a signal
    */
   signalFromChanges<R>(
-    control: FormControl<R>
+    control: FormControl<R>,
   ): ReturnType<typeof toSignal<R | undefined>>;
   /**
    * Convert the value changes from a given control into a signal with default values
    */
   signalFromChanges<R>(
     control: FormControl<R>,
-    opts: { useDefault: boolean }
+    opts: { useDefault: boolean },
   ): ReturnType<typeof toSignal<R, R>>;
   signalFromChanges<R>(
     control: FormControl<R>,
-    opts?: { useDefault?: boolean }
+    opts?: { useDefault?: boolean },
   ) {
     return opts?.useDefault
       ? toSignal<R, R>(control.valueChanges, {

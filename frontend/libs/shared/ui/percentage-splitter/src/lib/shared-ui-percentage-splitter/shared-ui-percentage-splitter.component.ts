@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +7,6 @@ import {
   Input,
   OnInit,
   runInInjectionContext,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -26,7 +24,6 @@ import { percentStringToNumber } from '../utils/form';
   selector: 'dv-shared-ui-percentage-splitter',
   standalone: true,
   imports: [
-    CommonModule,
     MaskitoModule,
     MatFormFieldModule,
     MatInputModule,
@@ -69,7 +66,7 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
             this.controlB.setErrors(null);
           }
         },
-        { allowSignalWrites: true }
+        { allowSignalWrites: true },
       );
 
       effect(
@@ -80,7 +77,7 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
             this.controlA.setErrors(null);
           }
         },
-        { allowSignalWrites: true }
+        { allowSignalWrites: true },
       );
     });
   }

@@ -25,5 +25,5 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
         : null,
       readonly: gesuchsView.readonly,
     };
-  }
+  },
 );

@@ -10,7 +10,7 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-namespace
 declare namespace Cypress {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Chainable<Subject> {
@@ -23,5 +23,5 @@ Cypress.Commands.add(
   (matSelect: Chainable, value: string): Chainable => {
     matSelect.click();
     return cy.get('mat-option').contains(value).click();
-  }
+  },
 );

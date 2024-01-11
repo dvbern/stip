@@ -26,9 +26,9 @@ describe('validator-date', () => {
         controlMin,
         range2 ? [range1, range2] : [range1],
         new Date(),
-        'monthYear'
+        'monthYear',
       );
       expect(validator(controlMax)).toStrictEqual(expectedValue);
-    }
+    },
   );
 });

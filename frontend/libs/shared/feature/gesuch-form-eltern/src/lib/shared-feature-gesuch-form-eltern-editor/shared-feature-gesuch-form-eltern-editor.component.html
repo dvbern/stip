@@ -1,17 +1,11 @@
 <h3 class="mt-4">
-  {{
-    'shared.form.eltern.' +
-      (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
-      '.title' | translate
-  }}
+  {{ 'shared.form.eltern.' + (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') + '.title' | translate }}
 </h3>
 
 <form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{
-        'shared.form.shared.social-insurance-number.label' | translate
-      }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.social-insurance-number.label' | translate }}</mat-label>
       <input
         matInput
         formControlName="sozialversicherungsnummer"
@@ -32,18 +26,14 @@
 
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{
-        'shared.form.shared.lastname.label' | translate
-      }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
       <input formControlName="nachname" matInput type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{
-        'shared.form.shared.firstname.label' | translate
-      }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
       <input formControlName="vorname" matInput type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -62,73 +52,52 @@
 
   <div class="row g-4">
     <div class="col-12 col-xl-8">
-      <mat-checkbox
-        type="checkbox"
-        formControlName="identischerZivilrechtlicherWohnsitz"
-        >{{
-          'shared.form.shared.identical-civil-residence.label' | translate
-        }}</mat-checkbox
-      >
+      <mat-checkbox type="checkbox" formControlName="identischerZivilrechtlicherWohnsitz">{{
+        'shared.form.shared.identical-civil-residence.label' | translate
+      }}</mat-checkbox>
     </div>
   </div>
   <!-- alternative civil residence -->
-  <div
-    class="row g-4 mt-1"
-    *ngIf="!form.value.identischerZivilrechtlicherWohnsitz"
-  >
-    <div class="col-12 col-xl-8">
-      <label class="mb-2">{{
-        'shared.form.shared.alternative-civil-residence.title' | translate
-      }}</label>
-      <div class="row g-4">
-        <!-- PLZ -->
-        <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
-          <mat-label
-            >{{ 'shared.form.shared.address.zipcode.label' | translate }}
-          </mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="identischerZivilrechtlicherWohnsitzPLZ"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
+  @if (!form.value.identischerZivilrechtlicherWohnsitz) {
+    <div class="row g-4 mt-1">
+      <div class="col-12 col-xl-8">
+        <label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | translate }}</label>
+        <div class="row g-4">
+          <!-- PLZ -->
+          <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+            <input matInput type="text" formControlName="identischerZivilrechtlicherWohnsitzPLZ" />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
 
-        <!-- Ort -->
-        <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
-          <mat-label
-            >{{ 'shared.form.shared.address.city.label' | translate }}
-          </mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="identischerZivilrechtlicherWohnsitzOrt"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
+          <!-- Ort -->
+          <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
+            <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
+            <input matInput type="text" formControlName="identischerZivilrechtlicherWohnsitzOrt" />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
     </div>
-  </div>
+  }
 
   <h3 class="pt-5">{{ 'shared.weiterangaben' | translate }}</h3>
 
   <div class="row g-4 my-2">
     <!-- GEBURTSDATUM -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{
-        'shared.form.shared.birthday.label' | translate
-      }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
 
       <input
         matInput
         type="text"
         placeholder="dd.mm.yyyy"
         formControlName="geburtsdatum"
-        (blur)="onGeburtsdatumBlur($event)"
+        (blur)="onGeburtsdatumBlur()"
       />
 
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -157,22 +126,14 @@
   </div>
 
   <div class="row g-4 my-2">
-    <mat-radio-group
-      formControlName="ausweisbFluechtling"
-      dvSharedUiFormField
-      class="col-12 d-flex flex-column"
-    >
+    <mat-radio-group formControlName="ausweisbFluechtling" dvSharedUiFormField class="col-12 d-flex flex-column">
       <label>{{
         'shared.form.eltern.ausweisbFluechtling.' +
           (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
           '.label' | translate
       }}</label>
-      <mat-radio-button [value]="true">{{
-        'shared.form.radio.yes' | translate
-      }}</mat-radio-button>
-      <mat-radio-button [value]="false">{{
-        'shared.form.radio.no' | translate
-      }}</mat-radio-button>
+      <mat-radio-button [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+      <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -184,15 +145,9 @@
       dvSharedUiFormField
       class="col-12 d-flex flex-column"
     >
-      <label>{{
-        'shared.form.eltern.ergaenzungsleistungAusbezahlt.label' | translate
-      }}</label>
-      <mat-radio-button [value]="true">{{
-        'shared.form.radio.yes' | translate
-      }}</mat-radio-button>
-      <mat-radio-button [value]="false">{{
-        'shared.form.radio.no' | translate
-      }}</mat-radio-button>
+      <label>{{ 'shared.form.eltern.ergaenzungsleistungAusbezahlt.label' | translate }}</label>
+      <mat-radio-button [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+      <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -204,17 +159,11 @@
       dvSharedUiFormField
       class="col-12 d-flex flex-column"
     >
-      <label>{{
-        'shared.form.eltern.sozialhilfebeitraegeAusbezahlt.label' | translate
-      }}</label>
+      <label>{{ 'shared.form.eltern.sozialhilfebeitraegeAusbezahlt.label' | translate }}</label>
 
-      <mat-radio-button [value]="true">{{
-        'shared.form.radio.yes' | translate
-      }}</mat-radio-button>
+      <mat-radio-button [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
 
-      <mat-radio-button [value]="false">{{
-        'shared.form.radio.no' | translate
-      }}</mat-radio-button>
+      <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -224,26 +173,25 @@
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button
-      *ngIf="elternteil.id && !view$().readonly"
-      type="button"
-      class="btn btn-outline-primary d-flex align-items-center justify-content-center"
-      (click)="handleDelete()"
-      [title]="'shared.form.lebenslaufitem.delete' | translate"
-    >
-      <i class="material-symbols-rounded me-2">delete</i>
-      {{ 'shared.form.delete' | translate }}
-    </button>
+    @if (elternteil.id && !view$().readonly) {
+      <button
+        type="button"
+        class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+        (click)="handleDelete()"
+        [title]="'shared.form.lebenslaufitem.delete' | translate"
+      >
+        <i class="material-symbols-rounded me-2">delete</i>
+        {{ 'shared.form.delete' | translate }}
+      </button>
+    }
 
-    <button
-      type="button"
-      class="btn btn-outline-primary"
-      (click)="handleCancel()"
-    >
+    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()">
       {{ 'shared.form.back' | translate }}
     </button>
-    <button type="submit" class="btn btn-primary" *ngIf="!view$().readonly">
-      {{ 'shared.form.save-and-back' | translate }}
-    </button>
+    @if (!view$().readonly) {
+      <button type="submit" class="btn btn-primary">
+        {{ 'shared.form.save-and-back' | translate }}
+      </button>
+    }
   </dv-shared-ui-step-form-buttons>
 </form>

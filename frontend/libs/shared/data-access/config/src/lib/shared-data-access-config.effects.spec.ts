@@ -18,9 +18,9 @@ it('loads actors effect - success', (done) => {
       expect(action).toEqual(
         SharedDataAccessConfigEvents.deploymentConfigLoadedSuccess({
           deploymentConfig: {},
-        })
+        }),
       );
       done();
-    }
+    },
   );
 });

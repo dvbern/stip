@@ -9,13 +9,12 @@ import {
   Renderer2,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-ui-drop-file',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
   templateUrl: './shared-ui-drop-file.component.html',
   styleUrls: ['./shared-ui-drop-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

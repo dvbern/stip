@@ -13,31 +13,31 @@ import { SharedDataAccessAusbildungsstaetteApiEvents } from './shared-data-acces
 export const loadAusbildungsstaettes = createEffect(
   (
     events$ = inject(Actions),
-    ausbildungsstaetteService = inject(AusbildungsstaetteService)
+    ausbildungsstaetteService = inject(AusbildungsstaetteService),
   ) => {
     return events$.pipe(
       ofType(
         SharedEventGesuchFormEducation.init,
         SharedEventGesuchFormLebenslauf.init,
-        SharedEventGesuchFormEinnahmenkosten.init
+        SharedEventGesuchFormEinnahmenkosten.init,
       ),
       switchMap(() =>
         ausbildungsstaetteService.getAusbildungsstaetten$().pipe(
           map((ausbildungsstaettes) =>
             SharedDataAccessAusbildungsstaetteApiEvents.ausbildungsstaettesLoadedSuccess(
-              { ausbildungsstaettes }
-            )
+              { ausbildungsstaettes },
+            ),
           ),
           catchError((error) => [
             SharedDataAccessAusbildungsstaetteApiEvents.ausbildungsstaettesLoadedFailure(
-              { error: sharedUtilFnErrorTransformer(error) }
+              { error: sharedUtilFnErrorTransformer(error) },
             ),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // add effects here

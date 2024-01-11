@@ -11,5 +11,5 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
     gesuchFormular: gesuchsView.gesuchFormular,
     laender: stammdatenView.laender,
     readonly: gesuchsView.readonly,
-  })
+  }),
 );

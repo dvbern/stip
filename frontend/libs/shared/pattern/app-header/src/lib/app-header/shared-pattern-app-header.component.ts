@@ -11,7 +11,7 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   NgbDropdown,
@@ -41,11 +41,9 @@ import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
   standalone: true,
   imports: [
     CommonModule,
-    CommonModule,
     TranslateModule,
     RouterOutlet,
     RouterLink,
-    NgFor,
     NgbOffcanvasModule,
     SharedUiLanguageSelectorComponent,
     SharedUiIconChipComponent,
@@ -110,13 +108,13 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
 
   handleLanguageChangeHeader(language: Language) {
     this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language })
+      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
   }
 
   handleLanguageChangeFooter(language: Language) {
     this.store.dispatch(
-      SharedDataAccessLanguageEvents.footerSelectorChange({ language })
+      SharedDataAccessLanguageEvents.footerSelectorChange({ language }),
     );
   }
 }

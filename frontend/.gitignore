@@ -46,3 +46,5 @@ Thumbs.db
 .env
 
 affected-apps.gitlab-ci.yml
+
+.nx/cache

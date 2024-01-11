@@ -12,7 +12,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getFormBeginnDerAusbildung().type('gugus').blur();
       SharedEducationPO.getFormBeginnDerAusbildung().should(
         'have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
     });
     it('should be invalid if end is not a date', () => {
@@ -20,7 +20,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getFormEndeDerAusbildung().type('gugus').blur();
       SharedEducationPO.getFormEndeDerAusbildung().should(
         'have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
     });
     it('should be valid if a past date is provided for begin', () => {
@@ -28,7 +28,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getFormBeginnDerAusbildung().type('01.2020').blur();
       SharedEducationPO.getFormBeginnDerAusbildung().should(
         'not.have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
     });
     it('should be valid if the begin date is before the end date', () => {
@@ -37,11 +37,11 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getFormEndeDerAusbildung().type('01.2020').blur();
       SharedEducationPO.getFormBeginnDerAusbildung().should(
         'not.have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
       SharedEducationPO.getFormEndeDerAusbildung().should(
         'not.have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
     });
     it('should be invalid if the begin date is after the end date', () => {
@@ -50,11 +50,11 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getFormEndeDerAusbildung().type('01.2019').blur();
       SharedEducationPO.getFormBeginnDerAusbildung().should(
         'not.have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
       SharedEducationPO.getFormEndeDerAusbildung().should(
         'have.class',
-        'ng-invalid'
+        'ng-invalid',
       );
       SharedEducationPO.getForm().should('have.class', 'ng-invalid');
       SharedEducationPO.getForm()

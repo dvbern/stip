@@ -28,7 +28,7 @@ export function countByStatus(gesuche: SharedModelGesuch[]): GesuchByStatus[] {
       [toHandledState(g.gesuchStatus)]:
         (acc[toHandledState(g.gesuchStatus)] ?? 0) + 1,
     }),
-    {} as GesuchstatusMap<number>
+    {} as GesuchstatusMap<number>,
   );
   return (Object.keys(STATUS_ICON_MAP) as HandledStates[]).reduce(
     (acc, status) => [
@@ -39,6 +39,6 @@ export function countByStatus(gesuche: SharedModelGesuch[]): GesuchByStatus[] {
         count: gesucheByStatus[status] ?? 0,
       },
     ],
-    [] as GesuchByStatus[]
+    [] as GesuchByStatus[],
   );
 }

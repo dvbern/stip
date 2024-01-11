@@ -13,6 +13,6 @@ export namespace SharedLebenslaufPO {
     cy.get(
       `[formcontrolname=${
         type === 'AUSBILDUNG' ? 'bildungs' : 'taetigskeits'
-      }art]`
+      }art]`,
     );
 }

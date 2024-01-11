@@ -8,7 +8,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -50,14 +49,12 @@ import {
   getDateDifference,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
-import { BehaviorSubject } from 'rxjs';
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -104,7 +101,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
   });
   viewSig = this.store.selectSignal(
-    selectSharedFeatureGesuchFormEinnahmenkostenView
+    selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
   maskitoNumber = maskitoNumber;
@@ -143,15 +140,18 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const hatKinder = kinds ? kinds.length > 0 : false;
     const geburtsdatum = parseBackendLocalDateAndPrint(
       personInAusbildung.geburtsdatum,
-      this.languageSig()
+      this.languageSig(),
     );
     const istErwachsen = !geburtsdatum
       ? false
       : (getDateDifference(geburtsdatum, new Date())?.years ?? 0) > 18;
     // TODO: Use stammdaten info once available
     const ausbildungsgang = ausbildungsstaettes
-      .find((a) =>
-        a.ausbildungsgaenge?.some((g) => g.id === ausbildung.ausbildungsgangId)
+      .find(
+        (a) =>
+          a.ausbildungsgaenge?.some(
+            (g) => g.id === ausbildung.ausbildungsgangId,
+          ),
       )
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgangId);
     const willSekundarstufeZwei = ausbildungsgang?.bezeichnungDe === 'Bachelor';
@@ -168,7 +168,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   });
 
   view$ = this.store.selectSignal(
-    selectSharedFeatureGesuchFormEinnahmenkostenView
+    selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
 
   constructor() {
@@ -193,39 +193,39 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
         this.setDisabledStateAndHide(
           this.form.controls.renten,
-          !hatElternteilVerloren
+          !hatElternteilVerloren,
         );
         this.setDisabledStateAndHide(this.form.controls.zulagen, !hatKinder);
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,
-          !willSekundarstufeZwei
+          !willSekundarstufeZwei,
         );
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenTertiaerstufe,
-          !willTertiaerstufe
+          !willTertiaerstufe,
         );
         this.setDisabledStateAndHide(
           this.form.controls.willDarlehen,
-          !istErwachsen
+          !istErwachsen,
         );
         this.setDisabledStateAndHide(
           this.form.controls.auswaertigeMittagessenProWoche,
-          !wohnsitzNotEigenerHaushalt
+          !wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.wohnkosten,
-          !wohnsitzNotEigenerHaushalt
+          !wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.personenImHaushalt,
-          !wohnsitzNotEigenerHaushalt
+          !wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.alimente,
-          !existiertGerichtlicheAlimentenregelung
+          !existiertGerichtlicheAlimentenregelung,
         );
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     // fill form
@@ -256,7 +256,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.reset();
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
 
     effect(
@@ -264,11 +264,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         const { readonly } = this.view$();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable()
+            control.disable(),
           );
         }
       },
-      { allowSignalWrites: true }
+      { allowSignalWrites: true },
     );
   }
 
@@ -292,7 +292,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: EINNAHMEN_KOSTEN,
-        })
+        }),
       );
     }
   }
@@ -305,7 +305,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
           origin: EINNAHMEN_KOSTEN,
-        })
+        }),
       );
     }
   }
@@ -334,21 +334,21 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         einnahmenKosten: {
           ...formValues,
           nettoerwerbseinkommen: fromFormatedNumber(
-            formValues.nettoerwerbseinkommen
+            formValues.nettoerwerbseinkommen,
           ),
           alimente: fromFormatedNumber(formValues.alimente),
           zulagen: fromFormatedNumber(formValues.zulagen),
           renten: fromFormatedNumber(formValues.renten),
           eoLeistungen: fromFormatedNumber(formValues.eoLeistungen),
           ergaenzungsleistungen: fromFormatedNumber(
-            formValues.ergaenzungsleistungen
+            formValues.ergaenzungsleistungen,
           ),
           beitraege: fromFormatedNumber(formValues.beitraege),
           ausbildungskostenSekundarstufeZwei: fromFormatedNumber(
-            formValues.ausbildungskostenSekundarstufeZwei
+            formValues.ausbildungskostenSekundarstufeZwei,
           ),
           ausbildungskostenTertiaerstufe: fromFormatedNumber(
-            formValues.ausbildungskostenTertiaerstufe
+            formValues.ausbildungskostenTertiaerstufe,
           ),
           fahrkosten: fromFormatedNumber(formValues.fahrkosten),
           wohnkosten: fromFormatedNumber(formValues.wohnkosten),
@@ -360,7 +360,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   private setDisabledStateAndHide(
     formControl: FormControl,
-    disabled: boolean
+    disabled: boolean,
   ): void {
     this.formUtils.setDisabledState(formControl, disabled, true);
 

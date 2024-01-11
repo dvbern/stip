@@ -4,7 +4,7 @@ import { intervalToDuration, format, isValid, parse, parseISO } from 'date-fns';
 
 export function parseBackendLocalDateAndPrint(
   value: string | null | undefined,
-  locale: Language
+  locale: Language,
 ) {
   return formatBackendLocalDate(value, locale);
 }
@@ -12,14 +12,14 @@ export function parseBackendLocalDateAndPrint(
 export function printDate(
   date: Date,
   locale: Language,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ) {
   return format(date, getFormatDef(locale, dateFormatVariant).niceInput);
 }
 
 export function formatBackendLocalDate(
   value: string | null | undefined,
-  locale: Language
+  locale: Language,
 ) {
   if (value === null || value === undefined) {
     return undefined;
@@ -34,24 +34,24 @@ export function formatBackendLocalDate(
 export function parseStringAndPrintForBackendLocalDate(
   value: string | null | undefined,
   locale: Language,
-  referenceDate: Date
+  referenceDate: Date,
 ) {
   return asBackendLocalDate(
     value,
     getFormatDef(locale, 'date').acceptedInputs,
-    referenceDate
+    referenceDate,
   );
 }
 
 export function parseInputDateStringVariants(
   value: string | null | undefined,
-  srcFormats: string[]
+  srcFormats: string[],
 ) {
   if (value === null || value === undefined) {
     return undefined;
   }
   const parsedDates = srcFormats.map((srcFormat) =>
-    parse(value, srcFormat, new Date())
+    parse(value, srcFormat, new Date()),
   );
   return parsedDates;
 }
@@ -59,14 +59,14 @@ export function parseInputDateStringVariants(
 export function parseInputDateString(
   value: string | null | undefined,
   srcFormats: string[],
-  referenceDate: Date
+  referenceDate: Date,
 ) {
   if (value === null || value === undefined) {
     return undefined;
   }
   // the reference date is used with 'yy' to guess the closest date
   const parsedDates = srcFormats.map((srcFormat) =>
-    parse(value, srcFormat, referenceDate)
+    parse(value, srcFormat, referenceDate),
   );
   const validDates = parsedDates.filter((each) => isValid(each));
   if (validDates.length) {
@@ -78,7 +78,7 @@ export function parseInputDateString(
 export function asBackendLocalDate(
   value: string | null | undefined,
   srcFormats: string[],
-  referenceDate: Date
+  referenceDate: Date,
 ) {
   const date = parseInputDateString(value, srcFormats, referenceDate);
   if (date === undefined || !isValid(date)) {
@@ -98,7 +98,7 @@ export function printDateAsMonthYear(date: Date) {
 export function getDateDifference(
   date: Date | string,
   refDate: Date,
-  variant: DateFormatVariant = 'date'
+  variant: DateFormatVariant = 'date',
 ) {
   const start =
     typeof date === 'string'

@@ -1,4 +1,4 @@
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -42,7 +42,6 @@ import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
   imports: [
     CommonModule,
     RouterLink,
-    NgFor,
     TranslateModule,
     GesuchAppPatternMainLayoutComponent,
     SharedUiLanguageSelectorComponent,
@@ -72,12 +71,12 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
           falls.length === 0
             ? this.http.post(fallUrl, {}).pipe(
                 switchMap(() => this.http.get<Fall[]>(fallUrl)),
-                map((falls) => falls[0])
+                map((falls) => falls[0]),
               )
-            : [falls[0]]
-        )
+            : [falls[0]],
+        ),
       );
-    })
+    }),
   );
   // -----
 
@@ -101,7 +100,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
           fallId,
           gesuchsperiodeId: periode.id,
         },
-      })
+      }),
     );
   }
 
@@ -111,7 +110,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   trackByPerioden(
     _index: number,
-    periode: Gesuchsperiode & { gesuchLoading: boolean }
+    periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
   }
@@ -122,7 +121,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   handleLanguageChangeHeader(language: Language) {
     this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language })
+      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
   }
 }

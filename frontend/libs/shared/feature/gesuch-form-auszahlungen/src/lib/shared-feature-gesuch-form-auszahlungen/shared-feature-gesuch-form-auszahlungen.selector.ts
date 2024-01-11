@@ -20,18 +20,18 @@ export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
       gesuchFormular: gesuchsView.gesuchFormular,
       laender: stammdatenView.laender,
       kontoinhaberValues: calculateKontoinhaberValuesGesuch(
-        gesuchsView.gesuchFormular
+        gesuchsView.gesuchFormular,
       ),
       hasNecessaryPreSteps: calculateHasNecessaryPreStepsGesuch(
-        gesuchsView.gesuchFormular
+        gesuchsView.gesuchFormular,
       ),
       readonly: gesuchsView.readonly,
     };
-  }
+  },
 );
 
 function calculateHasNecessaryPreStepsGesuch(
-  formular: SharedModelGesuchFormular | null
+  formular: SharedModelGesuchFormular | null,
 ) {
   if (!formular?.familiensituation) {
     return false;
@@ -40,7 +40,7 @@ function calculateHasNecessaryPreStepsGesuch(
   return calculateHasNecessaryPreSteps(elternSituation);
 }
 export function calculateHasNecessaryPreSteps(
-  elternSituation: ElternSituation
+  elternSituation: ElternSituation,
 ) {
   if (elternSituation.expectMutter && !elternSituation.mutter) {
     return false;
@@ -52,7 +52,7 @@ export function calculateHasNecessaryPreSteps(
 }
 
 function calculateKontoinhaberValuesGesuch(
-  formular: SharedModelGesuchFormular | null
+  formular: SharedModelGesuchFormular | null,
 ) {
   const elternSituation = calculateElternSituationGesuch(formular);
   return calculateKontoinhaberValues(elternSituation);

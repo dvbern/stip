@@ -19,7 +19,7 @@ const sortStrings = (arr: string[]) =>
 
 export default async function validate(
   tree: Tree,
-  schema: ValidateGeneratorSchema
+  schema: ValidateGeneratorSchema,
 ) {
   const { fix } = schema;
   const projectJsonPaths = [
@@ -37,7 +37,7 @@ export default async function validate(
         !n.endsWith('-app') &&
         !n.endsWith('-e2e') &&
         !n.startsWith('shared-styles') &&
-        !n.startsWith('shared-assets')
+        !n.startsWith('shared-assets'),
     );
 
   const aggregateViolations: string[] = [];
@@ -47,7 +47,7 @@ export default async function validate(
     const { violations, fixes } = await validateProjectTagsMatchProjectLocation(
       tree,
       project,
-      fix
+      fix,
     );
     aggregateFixes.push(...fixes);
     aggregateViolations.push(...violations);
@@ -64,7 +64,7 @@ export default async function validate(
 
   const tsconfigBaseJsonViolations = await validateTsconfigBaseJson(
     tree,
-    relevantLibProjectNames
+    relevantLibProjectNames,
   );
   aggregateViolations.push(...tsconfigBaseJsonViolations);
   aggregateViolations.push(...boundariesViolation);
@@ -100,11 +100,11 @@ async function validateSelectors(tree: Tree, project: Project) {
   findFiles(
     tree,
     path.join(sourceRoot, 'lib'),
-    /(component|pipe|directive)\.ts$/
+    /(component|pipe|directive)\.ts$/,
   ).forEach((filePath) => {
     const fileContent = tree.read(filePath, 'utf-8');
     const selectors = Array.from(
-      fileContent?.matchAll(/selector:\s*'(?<selector>.*)'/g) ?? []
+      fileContent?.matchAll(/selector:\s*'(?<selector>.*)'/g) ?? [],
     ).map((match) => match.groups?.selector);
     selectors.forEach((selector) => {
       const normalizedSelector = selector?.replace(/-/g, '').toLowerCase();
@@ -122,7 +122,7 @@ async function validateSelectors(tree: Tree, project: Project) {
 
   if (incorrectSelectors.length) {
     const violation = `Project ${chalk.inverse(
-      projectName
+      projectName,
     )} has components, directive or pipes with selector that doesn't match its location.
 
 ${incorrectSelectors
@@ -140,7 +140,7 @@ File:     ${filePath}`;
 async function validateProjectTagsMatchProjectLocation(
   tree: Tree,
   project: Project,
-  fix = false
+  fix = false,
 ): Promise<Result> {
   const violations = [];
   const fixes = [];
@@ -176,7 +176,7 @@ async function validateProjectTagsMatchProjectLocation(
     if (fix) {
       projectJson.tags = expectedTags;
       fixes.push(`${chalk.inverse(
-        'FIX'
+        'FIX',
       )} Project ${name} (${appsOrLibs}) and its project.json was updated with
 new tags:      ${chalk.inverse(expectedTags.join(','))}
 original tags: ${tags.join(',')}`);
@@ -198,33 +198,33 @@ Difference: ${chalk.inverse(tagsDiff.join(', '))}`);
 }
 
 async function validateEslintEnforceModuleBoundariesMatchesFolderStructure(
-  tree: Tree
+  tree: Tree,
 ): Promise<string[]> {
   const violations = [];
   const moduleBoundaries = await getModuleBoundaries(tree);
   const relevantBoundaries = moduleBoundaries.filter((item: any) =>
-    ['scope:'].some((prefix) => item.sourceTag.startsWith(prefix))
+    ['scope:'].some((prefix) => item.sourceTag.startsWith(prefix)),
   );
   const scopes = Array.from(
     new Set(
       relevantBoundaries
         .filter((item: any) => item.sourceTag.startsWith('scope:'))
-        .map((item: any) => item.sourceTag.split(':')[1])
-    )
+        .map((item: any) => item.sourceTag.split(':')[1]),
+    ),
   ).filter((scope) => scope !== 'tooling');
 
   const scopesGenerator = readJson(
     tree,
-    'libs/tooling/nx-plugin/src/generators/lib/schema.json'
+    'libs/tooling/nx-plugin/src/generators/lib/schema.json',
   )
     .properties.scope['x-prompt'].items.map((i: any) => i.value)
     .sort();
   const scopeApps = sortStrings(getFoldersFromTree(tree, './apps'));
   const scopeLibs = sortStrings(getFoldersFromTree(tree, './libs')).filter(
-    (s) => s !== 'tooling'
+    (s) => s !== 'tooling',
   );
   const scopeDirs = Array.from(new Set([...scopeApps, ...scopeLibs])).filter(
-    (scope) => !scope.endsWith('-e2e') && scope !== 'tooling'
+    (scope) => !scope.endsWith('-e2e') && scope !== 'tooling',
   );
 
   const scopeFoldersDiff = diff(scopes, scopeDirs);
@@ -250,7 +250,7 @@ Difference:              ${chalk.inverse(folderGeneratorDiff.join(', '))}`);
 
   if (violations.length > 0) {
     violations.unshift(
-      `Enforce module boundaries definitions in ".eslintrc.json" are out of sync with the workspace folder structure, please resolve the conflict manually by adjusting rules or removing redundant folders.`
+      `Enforce module boundaries definitions in ".eslintrc.json" are out of sync with the workspace folder structure, please resolve the conflict manually by adjusting rules or removing redundant folders.`,
     );
   }
   return violations;
@@ -258,17 +258,17 @@ Difference:              ${chalk.inverse(folderGeneratorDiff.join(', '))}`);
 
 async function validateTsconfigBaseJson(
   tree: Tree,
-  libProjectNames: string[]
+  libProjectNames: string[],
 ): Promise<string[]> {
   const violations = [];
   const tsconfigBaseJson = await readJson(tree, './tsconfig.base.json');
   const tsconfigBaseJsonPaths = tsconfigBaseJson?.compilerOptions?.paths ?? {};
   const tsconfigBaseJsonPathsAsProjectNames = Object.keys(
-    tsconfigBaseJsonPaths
+    tsconfigBaseJsonPaths,
   ).map((path) => path.replace('@dv/', '').replace(/\//g, '-'));
 
   const tsconfigBaseJsonPathsWithoutProject = Object.keys(
-    tsconfigBaseJsonPaths
+    tsconfigBaseJsonPaths,
   ).filter((path) => {
     const projectNameFromPath = path.replace('@dv/', '').replace(/\//g, '-');
     return !libProjectNames.includes(projectNameFromPath);
@@ -276,19 +276,19 @@ async function validateTsconfigBaseJson(
   if (tsconfigBaseJsonPathsWithoutProject.length > 0) {
     violations.push(
       `The "tsconfig.base.json" file contains paths that do not match any project in the workspace: \n${chalk.inverse(
-        tsconfigBaseJsonPathsWithoutProject.join('\n')
-      )}\n`
+        tsconfigBaseJsonPathsWithoutProject.join('\n'),
+      )}\n`,
     );
   }
 
   const projectNamesWithoutTsconfigBaseJsonPath = libProjectNames.filter(
-    (projectName) => !tsconfigBaseJsonPathsAsProjectNames.includes(projectName)
+    (projectName) => !tsconfigBaseJsonPathsAsProjectNames.includes(projectName),
   );
   if (projectNamesWithoutTsconfigBaseJsonPath.length > 0) {
     violations.push(
       `The following projects are missing a path in the "tsconfig.base.json" file: \n${chalk.inverse(
-        projectNamesWithoutTsconfigBaseJsonPath.join('\n')
-      )}\n`
+        projectNamesWithoutTsconfigBaseJsonPath.join('\n'),
+      )}\n`,
     );
   }
 
@@ -299,11 +299,11 @@ async function getModuleBoundaries(tree: Tree) {
   const ENFORCE_MODULE_BOUNDARIES = '@nx/enforce-module-boundaries';
   const eslintJson = await readJson(tree, './.eslintrc.json');
   const boundaries = eslintJson?.overrides.find(
-    (o: any) => o?.rules?.[ENFORCE_MODULE_BOUNDARIES]
+    (o: any) => o?.rules?.[ENFORCE_MODULE_BOUNDARIES],
   )?.rules?.[ENFORCE_MODULE_BOUNDARIES]?.[1]?.depConstraints;
   if (!boundaries) {
     throw new Error(
-      `The definition for eslint rule "'@nrwl/nx/enforce-module-boundaries'" not found in the root .eslintrc.json, it should be the first item in the "overrides" array`
+      `The definition for eslint rule "'@nrwl/nx/enforce-module-boundaries'" not found in the root .eslintrc.json, it should be the first item in the "overrides" array`,
     );
   }
   return boundaries;
@@ -315,7 +315,7 @@ function getFoldersFromTree(tree: Tree, path: string) {
     .children(path)
     .filter(
       (path) =>
-        !IGNORE.some((ignore) => path.includes(ignore)) && !tree.isFile(path)
+        !IGNORE.some((ignore) => path.includes(ignore)) && !tree.isFile(path),
     );
   return folders;
 }
@@ -325,15 +325,15 @@ function diff(a: any[], b: any[]) {
     new Set(
       a
         .filter((item) => !b.includes(item))
-        .concat(b.filter((item) => !a.includes(item)))
-    )
+        .concat(b.filter((item) => !a.includes(item))),
+    ),
   );
 }
 
 function findFiles(
   tree: Tree,
   directory: string,
-  fileName: string | RegExp
+  fileName: string | RegExp,
 ): string[] {
   const foundFiles: string[] = [];
 

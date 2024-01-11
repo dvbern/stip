@@ -24,8 +24,8 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       options.nameDasherized,
       'src',
       'lib',
-      options.name + 'service.ts'
-    )
+      options.name + 'service.ts',
+    ),
   );
   tree.delete(
     path.join(
@@ -33,7 +33,7 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       options.nameDasherized,
       'src',
       'lib',
-      options.name + 'service.spec.ts'
-    )
+      options.name + 'service.spec.ts',
+    ),
   );
 }

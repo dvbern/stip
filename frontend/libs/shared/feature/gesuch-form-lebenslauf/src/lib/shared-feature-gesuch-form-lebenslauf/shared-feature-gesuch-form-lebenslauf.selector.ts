@@ -12,8 +12,8 @@ export const selectSharedFeatureGesuchFormLebenslaufVew = createSelector(
     ausbildung: gesuchsView.gesuchFormular?.ausbildung,
     ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
     lebenslaufItems: (gesuchsView.gesuchFormular?.lebenslaufItems ?? []).filter(
-      (each) => each?.id
+      (each) => each?.id,
     ),
     readonly: gesuchsView.readonly,
-  })
+  }),
 );

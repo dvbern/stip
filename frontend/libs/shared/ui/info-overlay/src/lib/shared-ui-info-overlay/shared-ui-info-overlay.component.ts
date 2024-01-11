@@ -8,7 +8,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import {
   BlockScrollStrategy,
   CdkConnectedOverlay,
@@ -30,7 +30,7 @@ import {
 @Component({
   selector: 'dv-shared-ui-info-overlay',
   standalone: true,
-  imports: [CommonModule, OverlayModule, TranslateModule],
+  imports: [OverlayModule, TranslateModule],
   templateUrl: './shared-ui-info-overlay.component.html',
   styleUrls: ['./shared-ui-info-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +47,7 @@ export class SharedUiInfoOverlayComponent implements AfterViewInit {
       {
         overlayX: 'start',
         overlayY: 'top',
-      }
+      },
     ),
   ];
   private viewPortRuler = inject(ViewportRuler);
@@ -57,7 +57,7 @@ export class SharedUiInfoOverlayComponent implements AfterViewInit {
   private afterViewInit$ = new Subject<void>();
   private blockScrollStrategy = new BlockScrollStrategy(
     this.viewPortRuler,
-    this.document
+    this.document,
   );
   public currentScrollStrategy!: ScrollStrategy;
 
@@ -71,20 +71,20 @@ export class SharedUiInfoOverlayComponent implements AfterViewInit {
             map(() =>
               this.viewPortRuler.getViewportSize().width >= 768
                 ? 'free'
-                : 'block'
+                : 'block',
             ),
             distinctUntilChanged(),
-            map((type) => ({ type, originalScrollStrategy }))
+            map((type) => ({ type, originalScrollStrategy })),
           );
         }),
-        takeUntilDestroyed()
+        takeUntilDestroyed(),
       )
       .subscribe(({ type, originalScrollStrategy }) => {
         this.overlay.scrollStrategy =
           type === 'block' ? this.blockScrollStrategy : originalScrollStrategy;
         if (this.overlay.overlayRef) {
           this.overlay.overlayRef?.updateScrollStrategy(
-            this.overlay.scrollStrategy
+            this.overlay.scrollStrategy,
           );
         }
       });

@@ -21,7 +21,7 @@ const partnerCases = (): [GesuchFormStepState, Zivilstand, boolean][] => {
 const alimentAufteilungCases = (): [
   GesuchFormStepState,
   Elternschaftsteilung,
-  boolean
+  boolean,
 ][] => [
   ['enable', Elternschaftsteilung.MUTTER, false],
   ['enable', Elternschaftsteilung.VATER, false],
@@ -37,9 +37,9 @@ describe('GesuchFormSteps', () => {
           personInAusbildung: {
             zivilstand,
           },
-        } as Partial<SharedModelGesuchFormular>)
+        } as Partial<SharedModelGesuchFormular>),
       ).toBe(state);
-    }
+    },
   );
 
   it.each(alimentAufteilungCases())(
@@ -50,8 +50,8 @@ describe('GesuchFormSteps', () => {
           familiensituation: {
             werZahltAlimente,
           },
-        } as Partial<SharedModelGesuchFormular>)
+        } as Partial<SharedModelGesuchFormular>),
       ).toBe(state);
-    }
+    },
   );
 });

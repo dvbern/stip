@@ -23,8 +23,8 @@ export const sharedDataAccessLanguageFeature = createFeature({
       SharedDataAccessLanguageEvents.resolvedFromLocalStorage,
       SharedDataAccessLanguageEvents.headerMenuSelectorChange,
       SharedDataAccessLanguageEvents.footerSelectorChange,
-      (state, { language }): State => ({ ...state, language })
-    )
+      (state, { language }): State => ({ ...state, language }),
+    ),
   ),
 });
 

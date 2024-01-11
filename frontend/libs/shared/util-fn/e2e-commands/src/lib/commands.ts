@@ -12,7 +12,7 @@
 
 import Chainable = Cypress.Chainable;
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-namespace
 declare namespace Cypress {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Chainable<Subject> {
@@ -45,7 +45,7 @@ Cypress.Commands.add('login', (credentials) => {
           .its('status')
           .should('eq', 200);
       },
-    }
+    },
   );
 });
 

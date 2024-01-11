@@ -28,7 +28,7 @@ export const sharedDataAccessStammdatensFeature = createFeature({
         ...state,
         loading: true,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -38,7 +38,7 @@ export const sharedDataAccessStammdatensFeature = createFeature({
         laender,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
     on(
       SharedDataAccessStammdatenApiEvents.stammdatensLoadedFailure,
@@ -48,8 +48,8 @@ export const sharedDataAccessStammdatensFeature = createFeature({
         laender: [],
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 

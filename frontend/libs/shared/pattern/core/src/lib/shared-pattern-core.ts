@@ -20,13 +20,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import {
-  ActionReducer,
-  MetaReducer,
-  provideState,
-  provideStore,
-  Store,
-} from '@ngrx/store';
+import { ActionReducer, provideState, provideStore, Store } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
@@ -77,9 +71,7 @@ export class ExplicitMissingTranslationHandler
   }
 }
 
-export function debugReducers(
-  reducer: ActionReducer<unknown>
-): ActionReducer<unknown> {
+export function debugReducers<T>(reducer: ActionReducer<T>): ActionReducer<T> {
   return function (state, action) {
     if (isDevMode()) {
       console['log']('state', state);
@@ -90,11 +82,11 @@ export function debugReducers(
   };
 }
 
-export const metaReducers: MetaReducer<any>[] = [debugReducers];
+export const metaReducers = [debugReducers];
 
 export function provideSharedPatternCore(
   appRoutes: Route[],
-  compileTimeConfig: CompiletimeConfig
+  compileTimeConfig: CompiletimeConfig,
 ): ApplicationConfig['providers'] {
   return [
     // providers
@@ -106,7 +98,7 @@ export function provideSharedPatternCore(
         SharedPatternInterceptorDeploymentConfig,
         ...withDvGlobalHttpErrorInterceptorFn({ type: 'globalAndLocal' }),
         // STUB add global interceptors for auth, error handling, ...
-      ])
+      ]),
     ),
     provideRouter(
       appRoutes,
@@ -118,7 +110,7 @@ export function provideSharedPatternCore(
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'top',
-      })
+      }),
     ),
     provideSharedPatternI18nTitleStrategy(),
     provideSharedPatternNgbDatepickerAdapter(),
@@ -140,7 +132,7 @@ export function provideSharedPatternCore(
           strictActionWithinNgZone: true,
           strictActionTypeUniqueness: true,
         },
-      }
+      },
     ),
     provideState(sharedDataAccessGlobalNotificationsFeature),
     provideState(sharedDataAccessBenutzersFeature),
@@ -151,10 +143,10 @@ export function provideSharedPatternCore(
       sharedDataAccessBenutzerEffects,
       sharedDataAccessConfigEffects,
       sharedDataAccessLanguageEffects,
-      sharedDataAccessStammdatenEffects
+      sharedDataAccessStammdatenEffects,
     ),
     provideRouterStore(),
-    ...(isDevMode() ? [provideStoreDevtools({})] : []),
+    ...(isDevMode() ? [provideStoreDevtools({ connectInZone: true })] : []),
 
     // modules which don't support Angular Standalone APIs yet
     importProvidersFrom([

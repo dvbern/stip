@@ -43,7 +43,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         gesuchs: [],
-      })
+      }),
     ),
 
     on(
@@ -62,7 +62,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
         gesuch: null,
         gesuchFormular: null,
         loading: true,
-      })
+      }),
     ),
 
     on(
@@ -82,7 +82,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         loading: true,
-      })
+      }),
     ),
 
     on(
@@ -96,7 +96,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
               geschwisters: [],
             }
           : null,
-      })
+      }),
     ),
 
     on(
@@ -106,7 +106,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
         gesuchs,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -117,7 +117,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
         gesuchFormular: getGesuchFormular(gesuch),
         loading: false,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -127,7 +127,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
         ...state,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -135,7 +135,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -150,8 +150,8 @@ export const sharedDataAccessGesuchsFeature = createFeature({
         ...state,
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 
@@ -166,7 +166,7 @@ export const {
 } = sharedDataAccessGesuchsFeature;
 
 const getGesuchFormular = (
-  gesuch: SharedModelGesuch
+  gesuch: SharedModelGesuch,
 ): SharedModelGesuchFormular | null => {
   return gesuch.gesuchTrancheToWorkWith.gesuchFormular ?? null;
 };

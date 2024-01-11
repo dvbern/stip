@@ -10,7 +10,7 @@ import {
 export function minDateValidatorForLocale(
   locale: Language,
   minDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ) {
   return minDateValidator(locale, new Date(), minDate, dateFormatVariant);
 }
@@ -19,7 +19,7 @@ export function minDateValidator(
   locale: Language,
   referenceDate: Date,
   minDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const date = control.value;
@@ -29,7 +29,7 @@ export function minDateValidator(
     const parsedDate = parseInputDateString(
       control.value,
       getFormatDef(locale, dateFormatVariant).acceptedInputs,
-      referenceDate
+      referenceDate,
     );
     if (!parsedDate || !isValid(parsedDate)) {
       return null;
@@ -40,7 +40,7 @@ export function minDateValidator(
           value: control.value,
           minDate: format(
             minDate,
-            getFormatDef(locale, dateFormatVariant).niceInput
+            getFormatDef(locale, dateFormatVariant).niceInput,
           ),
         },
       };

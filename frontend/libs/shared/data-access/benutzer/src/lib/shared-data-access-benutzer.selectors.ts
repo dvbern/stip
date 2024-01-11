@@ -3,5 +3,5 @@ import { sharedDataAccessBenutzersFeature } from './shared-data-access-benutzer.
 
 export const selectSharedDataAccessBenutzersView = createSelector(
   sharedDataAccessBenutzersFeature.selectBenutzersState,
-  (state) => ({ ...state })
+  (state) => ({ ...state }),
 );

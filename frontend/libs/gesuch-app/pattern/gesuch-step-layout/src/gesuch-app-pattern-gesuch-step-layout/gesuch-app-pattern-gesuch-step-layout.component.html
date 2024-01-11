@@ -7,60 +7,49 @@
         <span class="fw-medium">Eva Mendes</span>
       </p>
 
-      <dv-shared-pattern-gesuch-step-nav
-        class="sidenav p-4"
-        [steps]="stepsSig()"
-      />
+      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [steps]="stepsSig()" />
     </div>
 
-    <div class="container mb-5 pt-lg-4 px-lg-4" *ngIf="step">
-      <!-- step header (mobile) -->
-      <div
-        class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
-      >
-        <dv-shared-ui-progress-bar
-          [current]="step.currentStepNumber"
-          [total]="stepManager.getTotalSteps(viewSig().gesuchFormular)"
-        ></dv-shared-ui-progress-bar>
-        <div class="text-end">
-          <h5 class="step-title">
+    @if (step) {
+      <div class="container mb-5 pt-lg-4 px-lg-4">
+        <!-- step header (mobile) -->
+        <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
+          <dv-shared-ui-progress-bar
+            [current]="step.currentStepNumber"
+            [total]="stepManager.getTotalSteps(viewSig().gesuchFormular)"
+          ></dv-shared-ui-progress-bar>
+          <div class="text-end">
+            <h5 class="step-title">
+              {{ step.translationKey | translate }}
+            </h5>
+            @if (stepManager.getNext(step).translationKey) {
+              <p class="fst-italic mb-0">
+                {{ 'shared.form.next' | translate }}:
+                {{ stepManager.getNext(step).translationKey | translate }}
+              </p>
+            }
+          </div>
+        </div>
+        <!-- title (desktop) -->
+        <div class="d-none d-lg-flex justify-content-start">
+          <dv-shared-ui-icon-chip class="step-icon me-3">
+            <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
+          </dv-shared-ui-icon-chip>
+
+          <h2 class="fw-bold" data-testid="step-title">
             {{ step.translationKey | translate }}
-          </h5>
-          <p
-            class="fst-italic mb-0"
-            *ngIf="stepManager.getNext(step).translationKey"
-          >
-            {{ 'shared.form.next' | translate }}:
-            {{ stepManager.getNext(step).translationKey | translate }}
-          </p>
+          </h2>
+        </div>
+
+        <div>
+          <ng-content></ng-content>
         </div>
       </div>
-
-      <!-- title (desktop) -->
-      <div class="d-none d-lg-flex justify-content-start">
-        <dv-shared-ui-icon-chip class="step-icon me-3">
-          <i class="material-symbols-rounded title-icon">{{
-            step.iconSymbolName
-          }}</i>
-        </dv-shared-ui-icon-chip>
-
-        <h2 class="fw-bold" data-testid="step-title">
-          {{ step.translationKey | translate }}
-        </h2>
-      </div>
-
-      <div>
-        <ng-content></ng-content>
-      </div>
-    </div>
+    }
   </div>
 
   <div class="header-mobile-addons">
-    <a
-      routerLink="/"
-      class="dv-button-icon"
-      [attr.aria-label]="'shared.home' | translate"
-    >
+    <a routerLink="/" class="dv-button-icon" [attr.aria-label]="'shared.home' | translate">
       <span class="material-symbols-rounded text-black">home</span>
     </a>
   </div>

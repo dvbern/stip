@@ -20,6 +20,6 @@ export function modelTypeFactory(options: NormalizedSchema): LibTypeGenerator {
 function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
   tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md')
+    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );
 }

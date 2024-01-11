@@ -16,8 +16,8 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
       .filter((p) =>
         isBefore(
           Date.parse(p.aufschaltdatum ? p.aufschaltdatum : ''),
-          new Date()
-        )
+          new Date(),
+        ),
       )
       .filter((p) => isAfter(Date.parse(p.gueltigBis), addDays(new Date(), 1)))
       .map((p) => ({
@@ -26,5 +26,5 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
         gesuchId: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id)
           ?.id,
       })),
-  })
+  }),
 );

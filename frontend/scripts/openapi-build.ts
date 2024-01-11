@@ -125,7 +125,7 @@ async function generateOpenApi(directory: string, apis: string[]) {
 
   return new Promise<void>((resolve, reject) => {
     child.on('exit', (code) =>
-      code === 0 ? resolve() : reject('exit code: ' + code)
+      code === 0 ? resolve() : reject('exit code: ' + code),
     );
     child.on('error', reject);
   });

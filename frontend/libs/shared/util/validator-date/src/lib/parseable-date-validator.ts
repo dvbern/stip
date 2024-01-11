@@ -6,7 +6,7 @@ import { parseInputDateString, printDate } from './date-util';
 
 export function parseableDateValidatorForLocale(
   locale: Language,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ) {
   return parseableDateValidator(locale, new Date(), dateFormatVariant);
 }
@@ -14,7 +14,7 @@ export function parseableDateValidatorForLocale(
 export function parseDateForVariant(
   val: string | null | undefined,
   referenceDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ): Date | null {
   if (!val) {
     return null;
@@ -22,7 +22,7 @@ export function parseDateForVariant(
   const parsed = parseInputDateString(
     val,
     getFormatDef('de', dateFormatVariant).acceptedInputs,
-    referenceDate
+    referenceDate,
   );
   if (!!parsed && isValid(parsed)) {
     return parsed;
@@ -33,7 +33,7 @@ export function parseDateForVariant(
 function parseableDateValidator(
   locale: Language,
   referenceDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ) {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control?.value) {
@@ -42,7 +42,7 @@ function parseableDateValidator(
       const parsed = parseDateForVariant(
         control.value,
         referenceDate,
-        dateFormatVariant
+        dateFormatVariant,
       );
       if (!!parsed && isValid(parsed)) {
         return null;
@@ -58,7 +58,7 @@ function parseableDateValidator(
 export function onDateInputBlur(
   control: FormControl,
   referenceDate: Date,
-  locale: Language
+  locale: Language,
 ) {
   onDateInputBlurBasic(control, referenceDate, locale, 'date');
 }
@@ -66,7 +66,7 @@ export function onDateInputBlur(
 export function onMonthYearInputBlur(
   control: FormControl,
   referenceDate: Date,
-  locale: Language
+  locale: Language,
 ) {
   onDateInputBlurBasic(control, referenceDate, locale, 'monthYear');
 }
@@ -75,7 +75,7 @@ export function onDateInputBlurBasic(
   control: FormControl,
   referenceDate: Date,
   locale: Language,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ) {
   const val = control.value;
   const date = parseDateForVariant(val, referenceDate, dateFormatVariant);

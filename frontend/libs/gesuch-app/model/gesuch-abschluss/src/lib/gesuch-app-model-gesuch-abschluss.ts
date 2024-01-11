@@ -3,7 +3,7 @@ import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 export type AbschlussPhase = 'NOT_READY' | 'READY_TO_SEND' | 'SUBMITTED';
 export const toAbschlussPhase = (
   gesuch: SharedModelGesuch | null,
-  isComplete: boolean
+  isComplete: boolean,
 ): AbschlussPhase => {
   if (!gesuch) {
     return 'NOT_READY';

@@ -27,7 +27,7 @@ export const sharedDataAccessConfigsFeature = createFeature({
         ...state,
         loading: true,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -37,7 +37,7 @@ export const sharedDataAccessConfigsFeature = createFeature({
         deploymentConfig,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
     on(
       SharedDataAccessConfigEvents.deploymentConfigLoadedFailure,
@@ -47,8 +47,8 @@ export const sharedDataAccessConfigsFeature = createFeature({
         deploymentConfig: undefined,
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 

@@ -27,7 +27,7 @@ export const addWohnsitzControls = (fb: NonNullableFormBuilder) => {
 };
 
 export function wohnsitzAnteileNumber(
-  anteile: Partial<WohnsitzAnteile<string>>
+  anteile: Partial<WohnsitzAnteile<string>>,
 ) {
   return {
     wohnsitzAnteilMutter: percentStringToNumber(anteile.wohnsitzAnteilMutter),
@@ -36,7 +36,7 @@ export function wohnsitzAnteileNumber(
 }
 
 export function wohnsitzAnteileString(
-  anteile: Partial<WohnsitzAnteile<number>>
+  anteile: Partial<WohnsitzAnteile<number>>,
 ) {
   return {
     wohnsitzAnteilMutter: numberToPercentString(anteile.wohnsitzAnteilMutter),
@@ -47,7 +47,7 @@ export function wohnsitzAnteileString(
 export function updateWohnsitzControlsState(
   formUtils: SharedUtilFormService,
   form: WohnsitzAnteile<FormControl>,
-  disabled: boolean
+  disabled: boolean,
 ) {
   formUtils.setDisabledState(form.wohnsitzAnteilVater, disabled, false);
   formUtils.setDisabledState(form.wohnsitzAnteilMutter, disabled, false);

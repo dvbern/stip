@@ -15,7 +15,7 @@ export function createDateDependencyValidator(
   allowEqual: boolean,
   referenceDate: Date,
   locale: Language,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const otherValue = otherControl.value;
@@ -27,7 +27,7 @@ export function createDateDependencyValidator(
           allowEqual,
           referenceDate,
           locale,
-          dateFormatVariant
+          dateFormatVariant,
         )
       : validateStartBeforeEnd(
           otherValue,
@@ -35,7 +35,7 @@ export function createDateDependencyValidator(
           allowEqual,
           referenceDate,
           locale,
-          dateFormatVariant
+          dateFormatVariant,
         );
   };
 }
@@ -44,18 +44,18 @@ export function createOverlappingValidator(
   minDateControl: FormControl<string | null>,
   intervalValues: Readonly<[string, string]>[],
   referenceDate: Date,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const minDate = parseDateForVariant(
       minDateControl.value,
       new Date(),
-      dateFormatVariant
+      dateFormatVariant,
     );
     const maxDate = parseDateForVariant(
       control.value,
       new Date(),
-      dateFormatVariant
+      dateFormatVariant,
     );
     const intervals = intervalValues.map(([start, end]) => [
       parseDateForVariant(start, referenceDate, dateFormatVariant),
@@ -72,7 +72,7 @@ export function createOverlappingValidator(
       }
       const isOverlapping = areIntervalsOverlapping(
         { start: minDate, end: maxDate },
-        { start, end }
+        { start, end },
       );
       return (
         isOverlapping ||
@@ -90,18 +90,18 @@ export function validateStartBeforeEnd(
   allowEqual: boolean,
   referenceDate: Date,
   locale: Language,
-  dateFormatVariant: DateFormatVariant
+  dateFormatVariant: DateFormatVariant,
 ): ValidationErrors | null {
   if (startValue && endValue) {
     const startDate = parseDateForVariant(
       startValue,
       new Date(),
-      dateFormatVariant
+      dateFormatVariant,
     );
     const endDate = parseDateForVariant(
       endValue,
       new Date(),
-      dateFormatVariant
+      dateFormatVariant,
     );
 
     if (startDate && endDate) {

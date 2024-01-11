@@ -1,9 +1,4 @@
-import {
-  AbstractControl,
-  FormControl,
-  ValidationErrors,
-  ValidatorFn,
-} from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { getNumberType, isValidPhoneNumber, parse } from 'libphonenumber-js';
 
 export function sharedUtilIsValidTelefonNummer(telefonnummer: string) {

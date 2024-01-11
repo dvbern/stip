@@ -10,10 +10,10 @@ describe('familiensituation-form-steps', () => {
         elternVerheiratetZusammen: true,
       };
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN
+        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN
+        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN,
       );
     });
     it('has question answered false', () => {
@@ -21,10 +21,10 @@ describe('familiensituation-form-steps', () => {
         elternVerheiratetZusammen: false,
       };
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN
+        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ALIMENTENREGELUNG
+        FamiliensituationFormSteps.ALIMENTENREGELUNG,
       );
     });
   });
@@ -40,28 +40,28 @@ describe('familiensituation-form-steps', () => {
     it('has question not answered', () => {
       famSit.gerichtlicheAlimentenregelung = undefined;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN
+        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ALIMENTENREGELUNG
+        FamiliensituationFormSteps.ALIMENTENREGELUNG,
       );
     });
     it('has question answered true', () => {
       famSit.gerichtlicheAlimentenregelung = true;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN
+        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ALIMENTENREGELUNG
+        FamiliensituationFormSteps.ALIMENTENREGELUNG,
       );
     });
     it('has question answered false', () => {
       famSit.gerichtlicheAlimentenregelung = false;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN
+        FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
+        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN,
       );
     });
   });
@@ -80,28 +80,28 @@ describe('familiensituation-form-steps', () => {
     it('has question not answered', () => {
       famSit.elternteilUnbekanntVerstorben = undefined;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ALIMENTENREGELUNG
+        FamiliensituationFormSteps.ALIMENTENREGELUNG,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
+        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN,
       );
     });
     it('has question answered true', () => {
       famSit.elternteilUnbekanntVerstorben = true;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ALIMENTENREGELUNG
+        FamiliensituationFormSteps.ALIMENTENREGELUNG,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
+        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN,
       );
     });
     it('has question answered false', () => {
       famSit.elternteilUnbekanntVerstorben = false;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ALIMENTENREGELUNG
+        FamiliensituationFormSteps.ALIMENTENREGELUNG,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET
+        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET,
       );
     });
   });
@@ -121,28 +121,28 @@ describe('familiensituation-form-steps', () => {
     it('has question not answered', () => {
       famSit.elternteilUnbekanntVerstorben = undefined;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
+        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET
+        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET,
       );
     });
     it('has question answered true', () => {
       famSit.elternteilUnbekanntVerstorben = true;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
+        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET
+        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET,
       );
     });
     it('has question answered false', () => {
       famSit.elternteilUnbekanntVerstorben = false;
       expect(step.getPrevious(famSit)).toEqual(
-        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN
+        FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN,
       );
       expect(step.getNext(famSit)).toEqual(
-        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET
+        FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET,
       );
     });
   });

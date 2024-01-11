@@ -10,6 +10,7 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
       type: 'unknownError',
       error: 'unknown error',
       message: 'Unknown Error',
+      messageKey: 'shared.genericError.general',
     });
   });
   it('should extract error message', () => {
@@ -17,7 +18,7 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
     expect(sharedUtilFnErrorTransformer(error)).toEqual({
       type: 'unknownError',
       error,
-      message: 'boom',
+      messageKey: 'shared.genericError.general',
     });
   });
   it('should extract validation errors', () => {
@@ -26,7 +27,7 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
         messageTemplate:
           'dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message',
         message: 'Es darf nur ein Gesuch pro Gesuchsteller eingereicht werden',
-        propertyPath: null,
+        propertyPath: '',
       },
     ];
     const error = {
@@ -39,7 +40,8 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
     expect(sharedUtilFnErrorTransformer(error)).toEqual({
       type: 'validationError',
       validationErrors,
-      message: error.message,
+      message: 'Es darf nur ein Gesuch pro Gesuchsteller eingereicht werden',
+      messageKey: 'shared.genericError.validation',
       status: error.status,
     });
   });
@@ -50,6 +52,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       {
         messageTemplate: 'dv.error.validation.1',
         message: 'error validation 1',
+        propertyPath: 'foo.bar.baz',
       },
       {
         messageTemplate: 'dv.error.validation.2',
@@ -60,7 +63,8 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
     [
       {
         messageTemplate: 'dv.error.validation.3',
-        message: 'error validation 1',
+        message: 'error validation 3',
+        propertyPath: 'foo.bar.baz',
       },
     ],
   ];
@@ -81,14 +85,12 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       error: {
         validationErrors: validationErrorsCollection[0],
       },
-      message: 'Bad Request',
       status: 400,
     },
     {
       error: {
         validationErrors: validationErrorsCollection[1],
       },
-      message: 'Bad Request',
       status: 400,
     },
   ];
@@ -101,13 +103,15 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       {
         type: 'validationError',
         validationErrors: validationErrorsCollection[0],
-        message: 'Bad Request',
+        message: 'error validation 1',
+        messageKey: 'shared.genericError.validation',
         status: 400,
       },
       {
         type: 'validationError',
         validationErrors: validationErrorsCollection[1],
-        message: 'Bad Request',
+        message: 'error validation 3',
+        messageKey: 'shared.genericError.validation',
         status: 400,
       },
     ]);

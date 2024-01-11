@@ -48,7 +48,7 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private store = inject(Store);
   stepsSig = computed(() =>
-    this.stepManager.getAllSteps(this.viewSig().gesuchFormular)
+    this.stepManager.getAllSteps(this.viewSig().gesuchFormular),
   );
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 }

@@ -4,5 +4,5 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 
 export const sharedPatternGesuchStepNavView = createSelector(
   selectSharedDataAccessGesuchsView,
-  (gesuch) => ({ ...gesuch })
+  (gesuch) => ({ ...gesuch }),
 );

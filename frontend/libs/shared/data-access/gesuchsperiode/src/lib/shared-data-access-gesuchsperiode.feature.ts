@@ -27,7 +27,7 @@ export const sharedDataAccessGesuchsperiodesFeature = createFeature({
         ...state,
         loading: true,
         error: undefined,
-      })
+      }),
     ),
 
     on(
@@ -37,7 +37,7 @@ export const sharedDataAccessGesuchsperiodesFeature = createFeature({
         gesuchsperiodes,
         loading: false,
         error: undefined,
-      })
+      }),
     ),
     on(
       sharedDataAccessGesuchsperiodeEvents.gesuchsperiodesLoadedFailure,
@@ -47,8 +47,8 @@ export const sharedDataAccessGesuchsperiodesFeature = createFeature({
         gesuchsperiodes: [],
         loading: false,
         error,
-      })
-    )
+      }),
+    ),
   ),
 });
 

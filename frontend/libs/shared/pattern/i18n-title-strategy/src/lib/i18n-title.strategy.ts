@@ -24,8 +24,8 @@ export class SharedPatternI18nTitleStrategy extends TitleStrategy {
     const langChangeWithTitleAndUrl$ = this.translateService.onLangChange.pipe(
       withLatestFrom(
         this.store.select(selectTitle),
-        this.store.select(selectUrl)
-      )
+        this.store.select(selectUrl),
+      ),
     );
     const langChangeWithTitleAndUrl = toSignal(langChangeWithTitleAndUrl$);
     effect(() => {
@@ -59,7 +59,7 @@ export class SharedPatternI18nTitleStrategy extends TitleStrategy {
   private missingTranslationKey(url: string) {
     console.error(
       `[${SharedPatternI18nTitleStrategy.name}]`,
-      `The title translation key for route "${url}" is not defined, please add it to the corresponding route config.`
+      `The title translation key for route "${url}" is not defined, please add it to the corresponding route config.`,
     );
   }
 }

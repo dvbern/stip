@@ -31,7 +31,7 @@ function initializeKeycloak(
   ngZone: NgZone,
   keycloak: KeycloakService,
   http: HttpClient,
-  compileTimeConfig: SharedModelCompiletimeConfig
+  compileTimeConfig: SharedModelCompiletimeConfig,
 ) {
   return () =>
     http
@@ -64,7 +64,7 @@ function initializeKeycloak(
 
                     const acceptablePaths = ['/api/v1'];
                     const isAcceptablePathMatch = acceptablePaths.some((path) =>
-                      url.startsWith(path)
+                      url.startsWith(path),
                     );
 
                     return !(method !== 'OPTIONS' && isAcceptablePathMatch);
@@ -74,7 +74,7 @@ function initializeKeycloak(
                 .catch((err) => reject(err));
             });
           });
-        })
+        }),
       );
 }
 

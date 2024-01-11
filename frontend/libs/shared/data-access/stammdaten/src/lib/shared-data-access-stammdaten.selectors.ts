@@ -3,5 +3,5 @@ import { sharedDataAccessStammdatensFeature } from './shared-data-access-stammda
 
 export const selectSharedDataAccessStammdatensView = createSelector(
   sharedDataAccessStammdatensFeature.selectStammdatensState,
-  (state) => ({ ...state })
+  (state) => ({ ...state }),
 );

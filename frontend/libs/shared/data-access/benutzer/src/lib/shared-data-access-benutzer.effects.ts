@@ -16,18 +16,18 @@ export const loadCurrentBenutzer = createEffect(
           map((benutzer) =>
             SharedDataAccessBenutzerApiEvents.currentBenutzerLoadedSuccess({
               benutzer,
-            })
+            }),
           ),
           catchError((error) => [
             SharedDataAccessBenutzerApiEvents.currentBenutzerLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // add effects here

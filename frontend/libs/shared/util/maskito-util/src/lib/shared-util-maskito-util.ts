@@ -21,13 +21,13 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
 
 export function fromFormatedNumber(formatedNumber: string): number;
 export function fromFormatedNumber(
-  formatedNumber: string | null
+  formatedNumber: string | null,
 ): number | null;
 export function fromFormatedNumber(
-  formatedNumber: string | undefined
+  formatedNumber: string | undefined,
 ): number | undefined;
 export function fromFormatedNumber(
-  formatedNumber: string | null | undefined
+  formatedNumber: string | null | undefined,
 ): number | null | undefined {
   if (formatedNumber === '' || formatedNumber?.trim() === '') {
     return null;

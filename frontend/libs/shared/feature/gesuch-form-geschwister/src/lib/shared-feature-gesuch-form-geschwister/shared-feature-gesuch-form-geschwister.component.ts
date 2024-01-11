@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +23,6 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
@@ -47,8 +45,8 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
     return originalList
       ? [...originalList].sort((a, b) =>
           (a.vorname + ' ' + a.nachname).localeCompare(
-            b.vorname + ' ' + b.nachname
-          )
+            b.vorname + ' ' + b.nachname,
+          ),
         )
       : undefined;
   });
@@ -77,7 +75,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: GESCHWISTER,
-        })
+        }),
       );
       this.editedGeschwister = undefined;
     }
@@ -93,7 +91,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
           trancheId,
           gesuchFormular,
           origin: GESCHWISTER,
-        })
+        }),
       );
       this.editedGeschwister = undefined;
     }
@@ -106,7 +104,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
         SharedEventGesuchFormGeschwister.nextTriggered({
           id: gesuch.id,
           origin: GESCHWISTER,
-        })
+        }),
       );
     }
   }
@@ -116,11 +114,11 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithDeletedGeschwister(
-    geschwister: GeschwisterUpdate
+    geschwister: GeschwisterUpdate,
   ) {
     const { gesuch, gesuchFormular } = this.view$();
     const updatedGeschwisters = gesuchFormular?.geschwisters?.filter(
-      (entry) => entry.id !== geschwister.id
+      (entry) => entry.id !== geschwister.id,
     );
 
     return {
@@ -134,7 +132,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithUpdatedGeschwister(
-    geschwister: GeschwisterUpdate
+    geschwister: GeschwisterUpdate,
   ) {
     const { gesuch, gesuchFormular } = this.view$();
     // update existing geschwister if found

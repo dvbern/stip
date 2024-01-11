@@ -22,12 +22,12 @@ export const gesuchEinreichen = createEffect(
             GesuchAppDataAccessAbschlussApiEvents.abschlussFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
-          ])
-        )
-      )
+          ]),
+        ),
+      ),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // add effects here

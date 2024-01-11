@@ -3,5 +3,5 @@ import { gesuchAppDataAccessAusbildungsstaettesFeature } from './shared-data-acc
 
 export const selectSharedDataAccessAusbildungsstaettesView = createSelector(
   gesuchAppDataAccessAusbildungsstaettesFeature.selectAusbildungsstaettesState,
-  (state) => ({ ...state })
+  (state) => ({ ...state }),
 );

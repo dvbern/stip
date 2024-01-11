@@ -73,10 +73,10 @@
       },
       "configurations": {
         "production": {
-          "browserTarget": "gesuch-app:build:production"
+          "buildTarget": "gesuch-app:build:production"
         },
         "development": {
-          "browserTarget": "gesuch-app:build:development"
+          "buildTarget": "gesuch-app:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -84,31 +84,18 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "gesuch-app:build"
+        "buildTarget": "gesuch-app:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": [
-          "apps/gesuch-app/**/*.ts",
-          "apps/gesuch-app/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/gesuch-app/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "apps/gesuch-app/jest.config.ts"
       }
     },
     "serve-static": {

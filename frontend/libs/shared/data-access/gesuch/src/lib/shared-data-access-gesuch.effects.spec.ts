@@ -11,7 +11,7 @@ describe('sharedDataAccessGesuch Effects', () => {
 
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) =>
-      expect(actual).toEqual(expected)
+      expect(actual).toEqual(expected),
     );
   });
 
@@ -31,7 +31,7 @@ describe('sharedDataAccessGesuch Effects', () => {
       const effectStream$ = loadOwnGesuchs(
         actionsMock$,
         gesuchStoreMock,
-        gesuchServiceMock
+        gesuchServiceMock,
       );
 
       expectObservable(effectStream$).toBe('160ms a', {
