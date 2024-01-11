@@ -32,14 +32,13 @@ include:
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@78ae9a34'
     inputs:
       name: "deploy:uat"
-      deployment-overlay-path: "$STIP_OVERLAYS_DIR/uat"
+      gitops-mode: "helm"
       deployment-environment: "uat"
       deployment-environment-url: "https://uat-stip.$DVB_OCP_APOLLO_ROUTER"
-      deployment-image-names: "$ARGOCD_IMAGES"
-      deployment-on: "tag"
+      deployment-on: "default"
       deployment-mode: "manual"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
