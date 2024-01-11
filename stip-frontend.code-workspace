@@ -18,6 +18,40 @@
       "backend/**": true
     },
     "eslint.validate": ["json"],
-    "eslint.workingDirectories": ["./frontend"]
+    "eslint.workingDirectories": ["./frontend"],
+    "jest.rootPath": "frontend",
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#097bd5",
+      "activityBar.background": "#097bd5",
+      "activityBar.foreground": "#e7e7e7",
+      "activityBar.inactiveForeground": "#e7e7e799",
+      "activityBarBadge.background": "#fba3d4",
+      "activityBarBadge.foreground": "#15202b",
+      "commandCenter.border": "#e7e7e799",
+      "sash.hoverBorder": "#097bd5",
+      "statusBar.background": "#075fa4",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#097bd5",
+      "statusBarItem.remoteBackground": "#075fa4",
+      "statusBarItem.remoteForeground": "#e7e7e7",
+      "titleBar.activeBackground": "#075fa4",
+      "titleBar.activeForeground": "#e7e7e7",
+      "titleBar.inactiveBackground": "#075fa499",
+      "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.remoteColor": "#075fa4",
+    "sqltools.connections": [
+      {
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 5432,
+        "driver": "PostgreSQL",
+        "name": "stip",
+        "database": "stip",
+        "username": "stip",
+        "password": "stip"
+      }
+    ],
+    "angular.enable-strict-mode-prompt": false
   }
 }

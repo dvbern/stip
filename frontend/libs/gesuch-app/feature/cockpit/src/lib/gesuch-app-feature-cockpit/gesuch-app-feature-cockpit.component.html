@@ -117,7 +117,12 @@
                     <div class="d-flex flex-column align-items-start">
                       <ng-container *ngTemplateOutlet="einreichefrist; context: { periode: periode }"></ng-container>
                       <div class="mb-3"></div>
-                      <button type="button" class="btn btn-primary mt-4 w-100" (click)="handleCreate(periode, fall.id)">
+                      <button
+                        data-testid="cockpit-gesuch-new"
+                        type="button"
+                        class="btn btn-primary mt-4 w-100"
+                        (click)="handleCreate(periode, fall.id)"
+                      >
                         {{ 'gesuch-app.cockpit.gesuch.new' | translate }}
                       </button>
                     </div>
