@@ -17,6 +17,8 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
       gesuchFormular: gesuchsView.gesuchFormular,
       ausbildung: gesuchsView.gesuchFormular?.ausbildung,
       ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
+      ausbildungsstaetteByLand:
+        ausbildungsstaettesView.ausbildungsstaetteByLand,
       gesuchsPeriodenStart: gesuchsPeriodenStart
         ? subMonths(gesuchsPeriodenStart, 1)
         : null,

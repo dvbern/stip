@@ -4,6 +4,10 @@ describe('selectSharedDataAccessAusbildungsstaettesView', () => {
   it('selects view', () => {
     const state = {
       ausbildungsstaettes: [],
+      ausbildungsstaetteByLand: {
+        AUSLAND: [],
+        CH: [],
+      },
       loading: false,
       error: undefined,
     };
