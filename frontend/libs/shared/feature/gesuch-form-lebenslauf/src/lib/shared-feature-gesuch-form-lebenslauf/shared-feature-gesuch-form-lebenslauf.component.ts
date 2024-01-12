@@ -47,11 +47,11 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
 
-  minDate$: Signal<Date | null> = computed(() => {
+  minDateSig: Signal<Date | null> = computed(() => {
     const geburtsdatum =
-      this.view$().gesuchFormular?.personInAusbildung?.geburtsdatum;
+      this.viewSig().gesuchFormular?.personInAusbildung?.geburtsdatum;
     if (geburtsdatum) {
       const sixteenthBirthdate = setMonth(
         addYears(Date.parse(geburtsdatum), 16),
@@ -66,9 +66,9 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
     return null;
   });
 
-  maxDate$: Signal<Date | null> = computed(() => {
+  maxDateSig: Signal<Date | null> = computed(() => {
     const ausbildungStart =
-      this.view$().gesuchFormular?.ausbildung?.ausbildungBegin;
+      this.viewSig().gesuchFormular?.ausbildung?.ausbildungBegin;
     if (ausbildungStart) {
       const start = dateFromMonthYearString(ausbildungStart);
       console.log('ausbildung start parsed: ', start);
@@ -78,7 +78,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   });
 
   ausbildungenSig: Signal<LebenslaufItemUpdate[]> = computed(() => {
-    return this.view$().lebenslaufItems.filter((l) => l.bildungsart);
+    return this.viewSig().lebenslaufItems.filter((l) => l.bildungsart);
   });
 
   editedItem?: SharedModelLebenslauf;
@@ -143,7 +143,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     this.store.dispatch(
       SharedEventGesuchFormLebenslauf.nextTriggered({
         id: gesuch!.id!,
@@ -157,7 +157,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithDeletedItem(itemId: string) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const updatedItems = gesuchFormular?.lebenslaufItems?.filter(
       (item) => item.id !== itemId,
     );
@@ -173,7 +173,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithUpdatedItem(item: LebenslaufItemUpdate) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     // update existing item if found
     const updatedItems =
       gesuchFormular?.lebenslaufItems?.map((oldItem) => {

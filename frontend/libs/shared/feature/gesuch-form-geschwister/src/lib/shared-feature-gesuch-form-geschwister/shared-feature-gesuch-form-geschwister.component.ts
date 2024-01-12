@@ -34,14 +34,14 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private store = inject(Store);
 
-  view$ = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   languageSig = this.store.selectSignal(selectLanguage);
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   sortedGeschwistersSig = computed(() => {
-    const originalList = this.view$().gesuchFormular?.geschwisters;
+    const originalList = this.viewSig().gesuchFormular?.geschwisters;
     return originalList
       ? [...originalList].sort((a, b) =>
           (a.vorname + ' ' + a.nachname).localeCompare(
@@ -98,7 +98,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormGeschwister.nextTriggered({
@@ -116,7 +116,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private buildUpdatedGesuchWithDeletedGeschwister(
     geschwister: GeschwisterUpdate,
   ) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const updatedGeschwisters = gesuchFormular?.geschwisters?.filter(
       (entry) => entry.id !== geschwister.id,
     );
@@ -134,7 +134,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private buildUpdatedGesuchWithUpdatedGeschwister(
     geschwister: GeschwisterUpdate,
   ) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     // update existing geschwister if found
     const updatedGeschwisters =
       gesuchFormular?.geschwisters?.map((oldGeschwister) => {

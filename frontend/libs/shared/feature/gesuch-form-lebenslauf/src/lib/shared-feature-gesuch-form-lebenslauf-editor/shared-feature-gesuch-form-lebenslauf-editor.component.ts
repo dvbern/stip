@@ -96,7 +96,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
 
   form = this.formBuilder.group({
     taetigkeitsBeschreibung: [
@@ -123,8 +123,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   });
 
   bildungsartSig = toSignal(this.form.controls.bildungsart.valueChanges);
-  startChanged$ = toSignal(this.form.controls.von.valueChanges);
-  endChanged$ = toSignal(this.form.controls.bis.valueChanges);
+  startChangedSig = toSignal(this.form.controls.von.valueChanges);
+  endChangedSig = toSignal(this.form.controls.bis.valueChanges);
   showBerufsbezeichnungSig = computed(
     () =>
       this.bildungsartSig() === 'EIDGENOESSISCHES_BERUFSATTEST' ||
@@ -145,14 +145,14 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
-        this.startChanged$();
+        this.startChangedSig();
         this.form.controls.bis.updateValueAndValidity();
       },
       { allowSignalWrites: true },
     );
     effect(
       () => {
-        this.endChanged$();
+        this.endChangedSig();
         this.form.controls.von.updateValueAndValidity();
       },
       { allowSignalWrites: true },
@@ -189,7 +189,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     );
     effect(
       () => {
-        const { readonly } = this.view$();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
