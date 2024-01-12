@@ -18,46 +18,46 @@ frontend:
     strategy: depend
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.1.6'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.1.6'
     inputs:
       name: "deploy:dev"
-      deployment-overlay-path: "$STIP_OVERLAYS_DIR/dev"
       deployment-environment: "dev"
       deployment-environment-url: "https://dev-stip.$DVB_OCP_MERCURY_ROUTER"
-      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-environment-values-path: "charts/stip/environments/dev/values.yaml"
       deployment-on: "default"
       deployment-mode: "on_success"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@78ae9a34'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.1.6'
     inputs:
       name: "deploy:uat"
-      gitops-mode: "helm"
       deployment-environment: "uat"
-      deployment-environment-url: "https://uat-stip.$DVB_OCP_APOLLO_ROUTER"
-      deployment-on: "default"
-      deployment-mode: "manual"
-      argocd-server: "$ARGOCD_SERVER"
-      argocd-token: "$ARGOCD_TOKEN"
-      argocd-app-name: "$ARGOCD_APP"
-
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.1.4'
-    inputs:
-      name: "deploy:prod"
-      deployment-overlay-path: "$STIP_OVERLAYS_DIR/prod"
-      deployment-environment: "prod"
-      deployment-environment-url: "https://stip.$DVB_OCP_APOLLO_ROUTER"
-      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-environment-url: "https://uat-stip.kibon.ch"
+      deployment-environment-values-path: "charts/stip/environments/uat/values.yaml"
       deployment-on: "tag"
       deployment-mode: "manual"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.1.6'
+    inputs:
+      name: "deploy:prod"
+      deployment-environment: "prod"
+      deployment-environment-url: "https://stip.kibon.ch"
+      deployment-environment-values-path: "charts/stip/environments/prod/values.yaml"
+      deployment-on: "tag"
+      deployment-mode: "manual"
+      argocd-server: "$ARGOCD_SERVER"
+      argocd-token: "$ARGOCD_TOKEN"
+      argocd-app-name: "$ARGOCD_APP"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.6'
     inputs:
       review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
 
