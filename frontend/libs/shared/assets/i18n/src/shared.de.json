@@ -266,6 +266,7 @@
   "shared.form.partner.jahreseinkommen.label": "Jahreseinkommen",
 
   "shared.einnahmenkosten.title": "Einnahmen & Kosten",
+  "shared.form.einnahmenkosten.optional.label": "(Optional)",
   "shared.form.einnahmenkosten.top.incomplete": "Bitte füllen Sie zuerst folgende Schritte aus:",
   "shared.form.einnahmenkosten.top.incomplete.and": "und",
   "shared.form.einnahmenkosten.einnahmen.title": "Einnahmen pro Jahr",
