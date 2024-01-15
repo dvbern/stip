@@ -11,7 +11,7 @@
       ', minmax(0, 1fr))'
     "
   >
-    @for (item of timeline.items; track trackByIndex($index)) {
+    @for (item of timeline.items; track item) {
       <div
         class="box"
         [class.left]="item.col === 'LEFT'"
@@ -36,7 +36,7 @@
           @if (asBusyBlock(item); as busyItem) {
             @if (busyItem.children; as children) {
               <div class="d-flex flex-column gap-3">
-                @for (child of children; track trackByIndex($index)) {
+                @for (child of children; track child) {
                   <div>
                     <ng-template #content>
                       <h5 data-testid="two-column-timeline-label">
