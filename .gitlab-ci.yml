@@ -20,7 +20,7 @@ frontend:
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.1.6'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@3e1f8511'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
     inputs:
       name: "deploy:dev"
       deployment-environment: "dev"
@@ -33,7 +33,7 @@ include:
       argocd-app-name: "$ARGOCD_APP"
 
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@3e1f8511'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
     inputs:
       name: "deploy:uat"
       deployment-environment: "uat"
@@ -45,7 +45,7 @@ include:
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@3e1f8511'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
     inputs:
       name: "deploy:prod"
       deployment-environment: "prod"
