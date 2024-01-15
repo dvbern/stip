@@ -228,11 +228,11 @@
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons>
       @if (!viewSig().readonly) {
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>
       } @else {
-        <button type="button" class="btn btn-primary" (click)="handleContinue()">
+        <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-next">
           {{ 'shared.form.gonext' | translate }}
         </button>
       }

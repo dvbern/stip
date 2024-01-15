@@ -5,7 +5,7 @@
     </div>
   </div>
 } @else {
-  <form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+  <form [formGroup]="form" data-testid="form-family-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
     <div class="col-12 col-xl-6 col-md-9">
       <dv-shared-ui-stepper-navigation
         [nextStepVisible]="hasNextStep()"
@@ -20,7 +20,12 @@
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
           [@inOutPaneAnimation]="stateSig()['ELTERN_VERHEIRATET_ZUSAMMEN'] ?? 'hidden'"
         >
-          <mat-radio-group formControlName="elternVerheiratetZusammen" dvSharedUiFormField class="d-flex flex-column">
+          <mat-radio-group
+            formControlName="elternVerheiratetZusammen"
+            data-testid="form-family-elternVerheiratetZusammen"
+            dvSharedUiFormField
+            class="d-flex flex-column"
+          >
             <label>{{
               'shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label' | translate
             }}</label>
@@ -292,11 +297,11 @@
     <!-- buttons -->
     <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
       @if (!view().readonly) {
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>
       } @else {
-        <button type="button" class="btn btn-primary" (click)="handleContinue()">
+        <button type="button" class="btn btn-primary" data-testid="button-next" (click)="handleContinue()">
           {{ 'shared.form.gonext' | translate }}
         </button>
       }

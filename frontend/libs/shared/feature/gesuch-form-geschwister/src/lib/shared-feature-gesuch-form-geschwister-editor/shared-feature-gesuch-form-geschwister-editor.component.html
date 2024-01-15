@@ -1,15 +1,15 @@
-<form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+<form [formGroup]="form" data-testid="form-geschwister-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-      <input matInput formControlName="nachname" type="text" />
+      <input matInput formControlName="nachname" data-testid="form-person-nachname" type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-      <input matInput formControlName="vorname" type="text" />
+      <input matInput formControlName="vorname" data-testid="form-person-vorname" type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -21,7 +21,13 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
 
-      <input placeholder="dd.mm.yyyy" matInput formControlName="geburtsdatum" (blur)="onGeburtsdatumBlur()" />
+      <input
+        placeholder="dd.mm.yyyy"
+        matInput
+        formControlName="geburtsdatum"
+        data-testid="form-person-geburtsdatum"
+        (blur)="onGeburtsdatumBlur()"
+      />
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -40,7 +46,7 @@
     <!-- Wohnsitz -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
-      <mat-select matInput formControlName="wohnsitz">
+      <mat-select matInput formControlName="wohnsitz" data-testid="form-person-wohnsitz">
         <mat-option [value]="null" disabled selected>
           {{ 'shared.form.select.empty' | translate }}
         </mat-option>
@@ -72,6 +78,7 @@
     <!-- Ausbildungssituation -->
     <mat-radio-group
       formControlName="ausbildungssituation"
+      data-testid="form-person-ausbildungssituation"
       dvSharedUiFormField
       class="col-12 col-md-6 col-xl-4 d-flex flex-column"
     >
@@ -89,11 +96,11 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()">
+    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel-back">
       {{ 'shared.form.back' | translate }}
     </button>
     @if (!viewSig().readonly) {
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
         {{ 'shared.form.save-and-back' | translate }}
       </button>
     }

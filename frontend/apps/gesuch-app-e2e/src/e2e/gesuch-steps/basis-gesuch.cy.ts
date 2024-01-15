@@ -1,6 +1,8 @@
 import { getStep, getStepTitle } from '@dv/shared/util-fn/e2e-helpers';
 import { CockpitPO } from '../../support/po/cockpit.po';
 import { format, addMonths } from 'date-fns';
+import { addYears } from 'date-fns/esm';
+import { get } from 'cypress/types/lodash';
 
 const person = {
   sozialversicherungsnummer: '756.1111.1111.13',
@@ -30,11 +32,67 @@ const person = {
   korrespondenzSprache: 'Deutsch',
 };
 
+const vater = {
+  sozialversicherungsnummer: '756.2222.2222.24',
+  nachname: 'Muster',
+  vorname: 'Maximilian',
+  adresse: {
+    land: 'Schweiz',
+    coAdresse: '',
+    strasse: 'Aarbergergasse',
+    hausnummer: '5a',
+    plz: '3000',
+    ort: 'Bern',
+  },
+  identischerZivilrechtlicherWohnsitz: true,
+  telefonnummer: '0041791111111',
+  geburtsdatum: '25.12.1969',
+  ausweisbFluechtling: false,
+  ergaenzungsleistungAusbezahlt: false,
+  sozialhilfebeitraegeAusbezahlt: false,
+};
+
+const mutter = {
+  sozialversicherungsnummer: '756.3333.3333.35',
+  nachname: 'Muster',
+  vorname: 'Maxine',
+  adresse: {
+    land: 'Schweiz',
+    coAdresse: '',
+    strasse: 'Aarbergergasse',
+    hausnummer: '5a',
+    plz: '3000',
+    ort: 'Bern',
+  },
+  identischerZivilrechtlicherWohnsitz: true,
+  telefonnummer: '0041791111111',
+  geburtsdatum: '25.12.1968',
+  ausweisbFluechtling: false,
+  ergaenzungsleistungAusbezahlt: false,
+  sozialhilfebeitraegeAusbezahlt: false,
+};
+
+const bruder = {
+  nachname: 'Muster',
+  vorname: 'Simon',
+  geburtsdatum: '25.12.2005',
+  wohnsitz: 'Eigener Haushalt',
+  ausbildungssituation: 'In Ausbildung',
+};
+
+const kind = {
+  nachname: 'Muster',
+  vorname: 'Sara',
+  geburtsdatum: '25.12.2018',
+  wohnsitz: 'Eigener Haushalt',
+  ausbildungssituation: 'Vorschulalter',
+};
+
 // const getSozialversicherungsnummer = getFormControlFactory(
 //   'form-person-sozialversicherungsnummer',
 // );
 
-describe('gesuch-app ein neues gesuch erstellen', () => {
+describe('gesuch-app: Neues gesuch erstellen - Person', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/');
@@ -43,98 +101,369 @@ describe('gesuch-app ein neues gesuch erstellen', () => {
   it('should enter the correct person data', () => {
     // CockpitPO.getGesuchNew().click()
     CockpitPO.getGesuchEdit().first().click();
-    getStep('person').click();
-    getStepTitle().should('contain.text', 'Person in Ausbildung');
+    cy.wait(4000);
 
-    // for facilitating building the test
-    cy.getBySel('form-person-sozialversicherungsnummer').clear();
-    cy.getBySel('form-person-nachname').clear();
-    cy.getBySel('form-person-vorname').clear();
-    cy.getBySel('form-address-strasse').clear();
-    cy.getBySel('form-address-hausnummer').clear();
-    cy.getBySel('form-address-plz').clear();
-    cy.getBySel('form-address-ort').clear();
-    cy.getBySel('form-person-email').clear();
-    cy.getBySel('form-person-telefonnummer').clear();
-    cy.getBySel('form-person-geburtsdatum').clear();
-    cy.getBySel('form-person-heimatort').clear();
+    // Step 1: Person
+    // getStep('person').click();
+    // getStepTitle().should('contain.text', 'Person in Ausbildung');
 
-    cy.getBySel('form-person-sozialversicherungsnummer').should('exist');
-    cy.getBySel('form-person-sozialversicherungsnummer').type(
-      person.sozialversicherungsnummer,
-    );
+    // // clear the the test for development ease
+    // cy.getBySel('form-person-sozialversicherungsnummer').clear();
+    // cy.getBySel('form-person-nachname').clear();
+    // cy.getBySel('form-person-vorname').clear();
+    // cy.getBySel('form-address-strasse').clear();
+    // cy.getBySel('form-address-hausnummer').clear();
+    // cy.getBySel('form-address-plz').clear();
+    // cy.getBySel('form-address-ort').clear();
+    // cy.getBySel('form-person-email').clear();
+    // cy.getBySel('form-person-telefonnummer').clear();
+    // cy.getBySel('form-person-geburtsdatum').clear();
+    // cy.getBySel('form-person-heimatort').clear();
 
-    cy.getBySel('form-person-anrede').click();
-    cy.get('mat-option').contains('Herr').click();
+    // cy.getBySel('form-person-sozialversicherungsnummer').should('exist');
+    // cy.getBySel('form-person-sozialversicherungsnummer').type(
+    //   person.sozialversicherungsnummer,
+    // );
 
-    cy.getBySel('form-person-nachname').type(person.nachname);
-    cy.getBySel('form-person-vorname').type(person.vorname);
+    // cy.getBySel('form-person-anrede').click();
+    // cy.get('mat-option').contains('Herr').click();
 
-    cy.getBySel('form-address-strasse').type(person.adresse.strasse);
-    cy.getBySel('form-address-hausnummer').type(
-      person.adresse.hausnummer ?? '',
-    );
-    cy.getBySel('form-address-plz').type(person.adresse.plz);
-    cy.getBySel('form-address-ort').type(person.adresse.ort);
+    // cy.getBySel('form-person-nachname').type(person.nachname);
+    // cy.getBySel('form-person-vorname').type(person.vorname);
 
-    cy.getBySel('form-address-land').click();
-    cy.get('mat-option').contains(person.adresse.land).click();
+    // cy.getBySel('form-address-strasse').type(person.adresse.strasse);
+    // cy.getBySel('form-address-hausnummer').type(
+    //   person.adresse.hausnummer ?? '',
+    // );
+    // cy.getBySel('form-address-plz').type(person.adresse.plz);
+    // cy.getBySel('form-address-ort').type(person.adresse.ort);
 
-    // is checked by default
-    // cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz').click();
+    // cy.getBySel('form-address-land').click();
+    // cy.get('mat-option').contains(person.adresse.land).click();
 
-    cy.getBySel('form-person-email').type(person.email);
-    cy.getBySel('form-person-telefonnummer').type(person.telefonnummer);
-    cy.getBySel('form-person-geburtsdatum').type(person.geburtsdatum);
+    // // is checked by default
+    // // cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz').click();
 
-    cy.getBySel('form-person-nationalitaet').click();
-    cy.get('mat-option').contains(person.nationalitaet).click();
+    // cy.getBySel('form-person-email').type(person.email);
+    // cy.getBySel('form-person-telefonnummer').type(person.telefonnummer);
+    // cy.getBySel('form-person-geburtsdatum').type(person.geburtsdatum);
 
-    cy.getBySel('form-person-heimatort').type(person.heimatort ?? '');
+    // cy.getBySel('form-person-nationalitaet').click();
+    // cy.get('mat-option').contains(person.nationalitaet).click();
 
-    cy.getBySel('form-person-zivilstand').click();
-    cy.get('mat-option').contains(person.zivilstand).click();
+    // cy.getBySel('form-person-heimatort').type(person.heimatort ?? '');
+
+    // cy.getBySel('form-person-zivilstand').click();
+    // cy.get('mat-option').contains(person.zivilstand).click();
+
+    // cy.getBySel('form-person-wohnsitz').click();
+    // cy.get('mat-option').contains(person.wohnsitz).click();
+
+    // cy.getBySel('form-person-quellenbesteuert').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-person-sozialhilfeBeitraege').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-person-korrespondenzSprache')
+    //   .get('mat-radio-button')
+    //   .contains(person.korrespondenzSprache)
+    //   .click();
+
+    // cy.getBySel('form-person-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save-continue').click();
+    //   });
+
+    // // Step 2: Ausbildung
+    // getStepTitle().should('contain.text', 'Ausbildung');
+
+    // // clear the the test for development ease
+    // cy.getBySel('form-education-fachrichtung').clear();
+    // cy.getBySel('form-education-beginn-der-ausbildung').clear();
+    // cy.getBySel('form-education-ende-der-ausbildung').clear();
+
+    // cy.getBySel('form-education-ausbildungsstaette').click();
+    // cy.get('mat-option').contains('Universtität Bern').click();
+
+    // cy.getBySel('form-education-ausbildungsgang').click();
+    // cy.get('mat-option').contains('Bachelor').click();
+
+    // cy.getBySel('form-education-fachrichtung').type('Informatik');
+
+    // const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
+    // cy.getBySel('form-education-beginn-der-ausbildung').type(nextMonth);
+
+    // const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
+    // cy.getBySel('form-education-ende-der-ausbildung').type(inTwoYears);
+
+    // cy.getBySel('form-education-pensum').click();
+    // cy.get('mat-option').contains('Vollzeit').click();
+
+    // cy.getBySel('button-save-continue').click();
+
+    // cy.getBySel('form-education-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save-continue').click();
+    //   });
+
+    // Step 3: Lebenslauf
+    // getStepTitle().should('contain.text', 'Lebenslauf');
+
+    // cy.getBySel('lebenslauf-add-ausbildung').click();
+
+    // cy.getBySel('lebenslauf-editor-ausbildungsart-select').click();
+    // cy.get('mat-option').contains('Berufsmaturität').click();
+
+    // // const fiveYearsAgo = format(addYears(new Date(), -5), 'MM.yyyy');
+    // cy.getBySel('lebenslauf-editor-beginn').type('08.2020');
+
+    // // const threeYearsAgo = format(addYears(new Date(), -3), 'MM.yyyy');
+    // cy.getBySel('lebenslauf-editor-ende').type('01.2024');
+
+    // cy.getBySel('lebenslauf-editor-wohnsitz').click();
+    // cy.get('mat-option').contains('Bern').click();
+
+    // cy.getBySel('lebenslauf-editor-ausbildung-abgeschlossen').click();
+
+    // cy.getBySel('form-lebenslauf-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save').click();
+    //   });
+
+    // //  Step 3: lebenslauf Vorlehere
+    // cy.getBySel('lebenslauf-add-ausbildung').click();
+
+    // cy.getBySel('lebenslauf-editor-ausbildungsart-select').click();
+    // cy.get('mat-option').contains('Vorlehre').click();
+
+    // // const fiveYearsAgo = format(addYears(new Date(), -5), 'MM.yyyy');
+    // cy.getBySel('lebenslauf-editor-beginn').type('8.2006');
+
+    // // const threeYearsAgo = format(addYears(new Date(), -3), 'MM.yyyy');
+    // cy.getBySel('lebenslauf-editor-ende').type('12.2019');
+
+    // cy.getBySel('lebenslauf-editor-wohnsitz').click();
+    // cy.get('mat-option').contains('Bern').click();
+
+    // cy.getBySel('lebenslauf-editor-ausbildung-abgeschlossen').click();
+
+    // cy.getBySel('form-lebenslauf-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save').click();
+    //   });
+
+    // // Step 3: Tätigkeit
+    // cy.getBySel('lebenslauf-add-taetigkeit').click();
+
+    // cy.getBySel('lebenslauf-editor-taetigkeitsart-select').click();
+    // cy.get('mat-option').contains('Erwerbstätigkeit').click();
+
+    // cy.getBySel('lebenslauf-editor-taetigkeits-beschreibung').type(
+    //   'Serviceangestellter',
+    // );
+
+    // cy.getBySel('lebenslauf-editor-beginn').type('7.2019');
+
+    // cy.getBySel('lebenslauf-editor-ende').type('7.2020');
+
+    // cy.getBySel('lebenslauf-editor-wohnsitz').click();
+    // cy.get('mat-option').contains('Bern').click();
+
+    // cy.getBySel('form-lebenslauf-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save').click();
+    //   });
+
+    // cy.getBySel('button-continue').click();
+
+    // Step 4: Familiensituation
+    // getStepTitle().should('contain.text', 'Familiensituation');
+
+    // cy.getBySel('form-family-elternVerheiratetZusammen').within(() => {
+    //   cy.get('mat-radio-button').contains('Ja').click();
+    // });
+
+    // cy.getBySel('form-education-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save-continue').click();
+    //   });
+
+    // // Step 5: Eltern
+    // getStepTitle().should('contain.text', 'Eltern');
+
+    // cy.getBySel('button-add-vater').click();
+
+    // // clear the the test for development ease
+    // // cy.getBySel('form-person-sozialversicherungsnummer').clear();
+    // // cy.getBySel('form-person-nachname').clear();
+    // // cy.getBySel('form-person-vorname').clear();
+    // // cy.getBySel('form-address-strasse').clear();
+    // // cy.getBySel('form-address-hausnummer').clear();
+    // // cy.getBySel('form-address-plz').clear();
+    // // cy.getBySel('form-address-ort').clear();
+    // // cy.getBySel('form-person-telefonnummer').clear();
+    // // cy.getBySel('form-person-geburtsdatum').clear();
+
+    // cy.getBySel('form-person-sozialversicherungsnummer').should('exist');
+    // cy.getBySel('form-person-sozialversicherungsnummer').type(
+    //   vater.sozialversicherungsnummer,
+    // );
+
+    // cy.getBySel('form-person-nachname').type(vater.nachname);
+    // cy.getBySel('form-person-vorname').type(vater.vorname);
+
+    // cy.getBySel('form-address-strasse').type(vater.adresse.strasse);
+    // cy.getBySel('form-address-hausnummer').type(vater.adresse.hausnummer ?? '');
+    // cy.getBySel('form-address-plz').type(vater.adresse.plz);
+    // cy.getBySel('form-address-ort').type(vater.adresse.ort);
+
+    // cy.getBySel('form-address-land').click();
+    // cy.get('mat-option').contains(vater.adresse.land).click();
+
+    // // is checked by default
+    // // cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz').click();
+
+    // cy.getBySel('form-person-geburtsdatum').type(vater.geburtsdatum);
+    // cy.getBySel('form-person-telefonnummer').type(vater.telefonnummer);
+
+    // cy.getBySel('form-person-ausweisFluechtling').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-person-ergaenzungsleistungAusbezahlt').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-person-sozialhilfebeitraegeAusbezahlt').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-eltern-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save-continue').click();
+    //   });
+
+    // cy.getBySel('button-add-mutter').click();
+
+    // // clear the the test for development ease
+    // // cy.getBySel('form-person-sozialversicherungsnummer').clear();
+    // // cy.getBySel('form-person-nachname').clear();
+    // // cy.getBySel('form-person-vorname').clear();
+    // // cy.getBySel('form-address-strasse').clear();
+    // // cy.getBySel('form-address-hausnummer').clear();
+    // // cy.getBySel('form-address-plz').clear();
+    // // cy.getBySel('form-address-ort').clear();
+    // // cy.getBySel('form-person-telefonnummer').clear();
+    // // cy.getBySel('form-person-geburtsdatum').clear();
+
+    // cy.getBySel('form-person-sozialversicherungsnummer').should('exist');
+    // cy.getBySel('form-person-sozialversicherungsnummer').type(
+    //   mutter.sozialversicherungsnummer,
+    // );
+
+    // cy.getBySel('form-person-nachname').type(mutter.nachname);
+    // cy.getBySel('form-person-vorname').type(mutter.vorname);
+
+    // cy.getBySel('form-address-strasse').type(mutter.adresse.strasse);
+    // cy.getBySel('form-address-hausnummer').type(
+    //   mutter.adresse.hausnummer ?? '',
+    // );
+    // cy.getBySel('form-address-plz').type(mutter.adresse.plz);
+    // cy.getBySel('form-address-ort').type(mutter.adresse.ort);
+
+    // cy.getBySel('form-address-land').click();
+    // cy.get('mat-option').contains(mutter.adresse.land).click();
+
+    // // is checked by default
+    // // cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz').click();
+
+    // cy.getBySel('form-person-geburtsdatum').type(mutter.geburtsdatum);
+    // cy.getBySel('form-person-telefonnummer').type(mutter.telefonnummer);
+
+    // cy.getBySel('form-person-ausweisFluechtling').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-person-ergaenzungsleistungAusbezahlt').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-person-sozialhilfebeitraegeAusbezahlt').within(() => {
+    //   cy.get('mat-radio-button').contains('Nein').click();
+    // });
+
+    // cy.getBySel('form-eltern-form')
+    //   .should('have.class', 'ng-valid')
+    //   .then(() => {
+    //     cy.getBySel('button-save-continue').click();
+    //   });
+
+    // cy.getBySel('button-continue').click();
+
+    // intermediarry step click for dev ease
+    getStep('geschwister').click();
+
+    // Step 6: Geschwister
+    getStepTitle().should('contain.text', 'Geschwister');
+
+    cy.getBySel('button-add-geschwister').click();
+
+    cy.getBySel('form-person-nachname').type(bruder.nachname);
+    cy.getBySel('form-person-vorname').type(bruder.vorname);
+
+    cy.getBySel('form-person-geburtsdatum').type(bruder.geburtsdatum);
 
     cy.getBySel('form-person-wohnsitz').click();
-    cy.get('mat-option').contains(person.wohnsitz).click();
+    cy.get('mat-option').contains(bruder.wohnsitz).click();
 
-    cy.getBySel('form-person-quellenbesteuert').within(() => {
-      cy.get('mat-radio-button').contains('Nein').click();
+    cy.getBySel('form-person-ausbildungssituation').within(() => {
+      cy.get('mat-radio-button').contains(bruder.ausbildungssituation).click();
     });
 
-    cy.getBySel('form-person-sozialhilfeBeitraege').within(() => {
-      cy.get('mat-radio-button').contains('Nein').click();
-    });
-
-    cy.getBySel('form-person-korrespondenzSprache')
-      .get('mat-radio-button')
-      .contains(person.korrespondenzSprache)
-      .click();
-
-    cy.getBySel('form-person-form')
+    cy.getBySel('form-geschwister-form')
       .should('have.class', 'ng-valid')
       .then(() => {
         cy.getBySel('button-save-continue').click();
+        cy.getBySel('button-continue').click();
       });
 
-    // Step 2: Ausbildung
-    getStepTitle().should('contain.text', 'Ausbildung');
+    // Step 7: Ehe und Konkubinatspartner
 
-    cy.getBySel('form-education-ausbildungsstaette').click();
-    cy.get('mat-option').contains('Universtität Bern').click();
+    // step 8: Kinder
+    getStepTitle().should('contain.text', 'Kinder');
 
-    cy.getBySel('form-education-ausbildungsgang').select('BACHELOR');
-    cy.getBySel('form-education-fachrichtung').type('Informatik');
+    cy.getBySel('button-add-kind').click();
 
-    const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
-    cy.getBySel('form-education-beginn-der-ausbildung').type(nextMonth);
+    cy.getBySel('form-person-nachname').should('exist');
+    cy.getBySel('form-person-nachname').type(kind.nachname);
+    cy.getBySel('form-person-vorname').type(kind.vorname);
 
-    const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
-    cy.getBySel('form-education-ende-der-ausbildung').type(inTwoYears);
+    cy.getBySel('form-person-geburtsdatum').type(kind.geburtsdatum);
 
-    cy.getBySel('form-education-pensum').select('VOLLZEIT');
-    cy.getBySel('button-save-continue').click();
+    cy.getBySel('form-person-wohnsitz').click();
+    cy.get('mat-option').contains(kind.wohnsitz).click();
 
-    // Step 3: Lebenslauf
+    cy.getBySel('form-person-ausbildungssituation').within(() => {
+      cy.get('mat-radio-button').contains(kind.ausbildungssituation).click();
+    });
+
+    cy.getBySel('form-geschwister-form')
+      .should('have.class', 'ng-valid')
+      .then(() => {
+        cy.getBySel('button-save-continue').click();
+        cy.getBySel('button-continue').click();
+      });
+
+    // Step 9: Auszahlung
   });
 });

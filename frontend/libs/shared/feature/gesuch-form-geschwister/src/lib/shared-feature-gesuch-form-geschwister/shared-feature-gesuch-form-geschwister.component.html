@@ -103,7 +103,12 @@
   <!-- ADD -->
   <div class="d-flex flex-column flex-md-row">
     @if (!view$().readonly) {
-      <button type="button" class="btn btn-outline-primary" (click)="handleAddGeschwister()">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="handleAddGeschwister()"
+        data-testid="button-add-geschwister"
+      >
         {{ 'shared.form.geschwister.add' | translate }}
       </button>
     }
@@ -111,7 +116,7 @@
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-primary" (click)="handleContinue()">
+    <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-continue">
       {{ 'shared.form.gonext' | translate }}
     </button>
   </dv-shared-ui-step-form-buttons>
