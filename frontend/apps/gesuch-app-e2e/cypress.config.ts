@@ -16,5 +16,5 @@ export default defineConfig({
     E2E_USERNAME: process.env['E2E_USERNAME'],
     E2E_PASSWORD: process.env['E2E_PASSWORD'],
   },
-  scrollBehavior: 'nearest',
+  defaultCommandTimeout: 20000,
 });

@@ -41,5 +41,6 @@ export const dvCypressConfigs = {
       task(on, config);
       return config;
     },
+    watchForFileChanges: false,
   }),
 };

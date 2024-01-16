@@ -1,4 +1,4 @@
-<form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+<form [formGroup]="form" data-testid="form-kind-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
