@@ -312,6 +312,23 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    // When Ausbildungsgang null, disable fachrichtung
+    const ausbildungsgangSig = toSignal(
+      this.form.controls.ausbildungsgang.valueChanges.pipe(
+        startWith(this.form.value.ausbildungsstaette),
+      ),
+    );
+    effect(
+      () => {
+        this.formUtils.setDisabledState(
+          this.form.controls.fachrichtung,
+          !ausbildungsgangSig() || this.viewSig().readonly,
+          !this.viewSig().readonly,
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
     effect(
       () => {
         const { readonly } = this.viewSig();
