@@ -21,6 +21,7 @@
         <mat-select
           formControlName="ausbildungsland"
           (selectionChange)="handleLandChangedByUser()"
+          data-testid="form-education-ausbildungsland"
           [placeholder]="'shared.form.select.empty' | translate"
         >
           @for (l of ausbildungslandValues; track trackByIndex($index)) {
@@ -44,6 +45,7 @@
             id="typeahead-focus"
             type="text"
             formControlName="ausbildungsstaette"
+            data-testid="form-education-ausbildungsstaette"
             matInput
             [matAutocomplete]="staetten"
             [placeholder]="'shared.form.select.empty' | translate"
@@ -56,6 +58,7 @@
               mat-icon-button
               aria-label="Clear"
               (click)="form.controls.ausbildungsstaette.reset()"
+              data-testid="button-form-education-ausbildungsstaette-clear"
               [disabled]="viewSig().readonly"
             >
               <span class="material-symbols-rounded align-middle">clear</span>
@@ -75,7 +78,13 @@
           <mat-label>
             {{ 'shared.form.education.ausbildungsstaette.label' | translate }}
           </mat-label>
-          <input matInput type="text" formControlName="alternativeAusbildungsstaette" [readonly]="viewSig().readonly" />
+          <input
+            matInput
+            type="text"
+            formControlName="alternativeAusbildungsstaette"
+            data-testid="form-education-alternativeAusbildungsstaette"
+            [readonly]="viewSig().readonly"
+          />
         </mat-form-field>
       }
     </div>
@@ -89,7 +98,11 @@
           </mat-label>
 
           <!-- AUsbildungsgang Select -->
-          <mat-select formControlName="ausbildungsgang" (change)="handleGangChangedByUser()">
+          <mat-select
+            formControlName="ausbildungsgang"
+            data-testid="form-education-ausbildungsgang"
+            (change)="handleGangChangedByUser()"
+          >
             <mat-option [value]="null" selected>
               {{ 'shared.form.select.empty' | translate }}
             </mat-option>
@@ -121,7 +134,13 @@
         <mat-label>
           {{ 'shared.form.education.fachrichtung.label' | translate }}
         </mat-label>
-        <input type="text" matInput formControlName="fachrichtung" />
+        <input
+          type="text"
+          matInput
+          formControlName="fachrichtung"
+          [readonly]="viewSig().readonly"
+          data-testid="form-education-fachrichtung"
+        />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -131,9 +150,12 @@
     <!-- MANUELL -->
     <div class="row g-4">
       <div class="col-12">
-        <mat-checkbox formControlName="ausbildungNichtGefunden" (change)="handleManuellChangedByUser()">{{
-          'shared.form.education.manuell.label' | translate
-        }}</mat-checkbox>
+        <mat-checkbox
+          formControlName="ausbildungNichtGefunden"
+          data-testid="form-education-ausbildungNichtGefunden"
+          (change)="handleManuellChangedByUser()"
+          >{{ 'shared.form.education.manuell.label' | translate }}</mat-checkbox
+        >
       </div>
     </div>
 
@@ -208,7 +230,7 @@
           {{ 'shared.form.education.pensum.label' | translate }}
         </mat-label>
 
-        <mat-select formControlName="pensum">
+        <mat-select formControlName="pensum" data-testid="form-education-pensum">
           <mat-option [value]="null" selected>
             {{ 'shared.form.select.empty' | translate }}
           </mat-option>
@@ -227,11 +249,11 @@
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons>
       @if (!viewSig().readonly) {
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>
       } @else {
-        <button type="button" class="btn btn-primary" (click)="handleContinue()">
+        <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-next">
           {{ 'shared.form.gonext' | translate }}
         </button>
       }

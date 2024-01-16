@@ -1,8 +1,11 @@
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { SharedEducationPO } from '@dv/shared/util-fn/e2e-helpers';
+import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
+
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education.component';
 
 describe(SharedFeatureGesuchFormEducationComponent.name, () => {
@@ -61,6 +64,33 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         .find('mat-error')
         .should('include.text', 'YearAfterStart');
     });
+    it('should have disabled inputs depending on each previous input state', () => {
+      const fields = {
+        land: 'form-education-ausbildungsland',
+        staette: 'form-education-ausbildungsstaette',
+        gang: 'form-education-ausbildungsgang',
+        fachrichtung: 'form-education-fachrichtung',
+      };
+      mountWithGesuch();
+
+      cy.getBySel(fields.staette).should('be.disabled');
+      cy.getBySel(fields.land).click();
+      cy.get('mat-option').eq(0).click();
+      cy.getBySel(fields.staette).should('not.be.disabled');
+
+      cy.getBySel(fields.gang).should('have.class', 'mat-mdc-select-disabled');
+      cy.getBySel(fields.staette).click();
+      cy.get('mat-option').eq(0).click();
+      cy.getBySel(fields.gang).should(
+        'not.have.class',
+        'mat-mdc-select-disabled',
+      );
+
+      cy.getBySel(fields.fachrichtung).should('be.disabled');
+      cy.getBySel(fields.gang).click();
+      cy.get('mat-option').eq(1).click();
+      cy.getBySel(fields.fachrichtung).should('not.be.disabled');
+    });
   });
 });
 
@@ -73,7 +103,25 @@ function mountWithGesuch(): void {
     providers: [
       provideMockStore({
         initialState: {
-          ausbildungsstaettes: { ausbildungsstaettes: [] },
+          ausbildungsstaettes: {
+            ausbildungsstaettes: <Ausbildungsstaette[]>[
+              {
+                nameDe: 'staette1',
+                nameFr: 'staette1',
+                id: '1',
+                ausbildungsgaenge: [
+                  {
+                    ausbildungsort: 'BERN',
+                    ausbildungsrichtung: 'FACHHOCHSCHULEN',
+                    bezeichnungDe: 'gang1',
+                    bezeichnungFr: 'gang1',
+                    ausbildungsstaetteId: '1',
+                    id: '1',
+                  },
+                ],
+              },
+            ],
+          },
           gesuchs: {
             gesuchFormular: {},
           },
