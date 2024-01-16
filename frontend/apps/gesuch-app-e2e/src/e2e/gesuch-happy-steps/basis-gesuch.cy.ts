@@ -1,20 +1,27 @@
 import { getStepTitle } from '@dv/shared/util-fn/e2e-helpers';
 import { CockpitPO } from '../../support/po/cockpit.po';
-import { format, addMonths } from 'date-fns';
+import { Person, PersonPO } from '../../support/po/person.po';
+import { EducationPO } from '../../support/po/education.po';
+import { Adresse } from '../../support/po/adresse.po';
+// import { Anrede } from '@dv/shared/model/gesuch';
+// import { Anrede } from '../../../../../libs/shared/model/gesuch/src/lib/openapi/model/anrede';
 
-const person = {
+const adresse: Adresse = {
+  land: 'Schweiz',
+  coAdresse: '',
+  strasse: 'Aarbergergasse',
+  hausnummer: '5a',
+  plz: '3000',
+  ort: 'Bern',
+};
+
+const person: Person = {
   sozialversicherungsnummer: '756.1111.1111.13',
   anrede: 'Herr',
+  // anrede: Anrede.HERR,
   nachname: 'Muster',
   vorname: 'Max',
-  adresse: {
-    land: 'Schweiz',
-    coAdresse: '',
-    strasse: 'Aarbergergasse',
-    hausnummer: '5a',
-    plz: '3000',
-    ort: 'Bern',
-  },
+  adresse,
   identischerZivilrechtlicherWohnsitz: true,
   email: 'max.muster@dvbern.ch',
   telefonnummer: '0041791111111',
@@ -42,14 +49,7 @@ const vater = {
   sozialversicherungsnummer: '756.2222.2222.24',
   nachname: 'Muster',
   vorname: 'Maximilian',
-  adresse: {
-    land: 'Schweiz',
-    coAdresse: '',
-    strasse: 'Aarbergergasse',
-    hausnummer: '5a',
-    plz: '3000',
-    ort: 'Bern',
-  },
+  adresse,
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0041791111111',
   geburtsdatum: '25.12.1969',
@@ -62,14 +62,7 @@ const mutter = {
   sozialversicherungsnummer: '756.3333.3333.35',
   nachname: 'Muster',
   vorname: 'Maxine',
-  adresse: {
-    land: 'Schweiz',
-    coAdresse: '',
-    strasse: 'Aarbergergasse',
-    hausnummer: '5a',
-    plz: '3000',
-    ort: 'Bern',
-  },
+  adresse,
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0041791111111',
   geburtsdatum: '25.12.1968',
@@ -105,62 +98,12 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
 
     // cy.get('[data-testid=cockpit-gesuch-new]', { timeout: 20000 }).click();
 
-    cy.getBySel('form-person-loading').should('not.exist', { timeout: 10000 });
+    cy.getBySel('form-person-loading').should('not.exist');
 
     // Step 1: Person
     getStepTitle().should('contain.text', 'Person in Ausbildung');
 
-    cy.getBySel('form-person-sozialversicherungsnummer').should('exist');
-    cy.getBySel('form-person-sozialversicherungsnummer').type(
-      person.sozialversicherungsnummer,
-    );
-
-    cy.getBySel('form-person-anrede').click();
-    cy.get('mat-option').contains('Herr').click();
-
-    cy.getBySel('form-person-nachname').type(person.nachname);
-    cy.getBySel('form-person-vorname').type(person.vorname);
-
-    cy.getBySel('form-address-strasse').type(person.adresse.strasse);
-    cy.getBySel('form-address-hausnummer').type(
-      person.adresse.hausnummer ?? '',
-    );
-    cy.getBySel('form-address-plz').type(person.adresse.plz);
-    cy.getBySel('form-address-ort').type(person.adresse.ort);
-
-    cy.getBySel('form-address-land').click();
-    cy.get('mat-option').contains(person.adresse.land).click();
-
-    // is checked by default
-    // cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz').click();
-
-    cy.getBySel('form-person-email').type(person.email);
-    cy.getBySel('form-person-telefonnummer').type(person.telefonnummer);
-    cy.getBySel('form-person-geburtsdatum').type(person.geburtsdatum);
-
-    cy.getBySel('form-person-nationalitaet').click();
-    cy.get('mat-option').contains(person.nationalitaet).click();
-
-    cy.getBySel('form-person-heimatort').type(person.heimatort ?? '');
-
-    cy.getBySel('form-person-zivilstand').click();
-    cy.get('mat-option').contains(person.zivilstand).click();
-
-    cy.getBySel('form-person-wohnsitz').click();
-    cy.get('mat-option').contains(person.wohnsitz).click();
-
-    cy.getBySel('form-person-quellenbesteuert').within(() => {
-      cy.get('mat-radio-button').contains('Nein').click();
-    });
-
-    cy.getBySel('form-person-sozialhilfeBeitraege').within(() => {
-      cy.get('mat-radio-button').contains('Nein').click();
-    });
-
-    cy.getBySel('form-person-korrespondenzSprache')
-      .get('mat-radio-button')
-      .contains(person.korrespondenzSprache)
-      .click();
+    PersonPO.fillPersonForm(person);
 
     cy.getBySel('form-person-form')
       .should('have.class', 'ng-valid')
@@ -172,26 +115,7 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
     getStepTitle().should('contain.text', 'Ausbildung');
 
     // clear the the test for development ease
-    cy.getBySel('form-education-fachrichtung').clear();
-    cy.getBySel('form-education-beginn-der-ausbildung').clear();
-    cy.getBySel('form-education-ende-der-ausbildung').clear();
-
-    cy.getBySel('form-education-ausbildungsstaette').click();
-    cy.get('mat-option').contains('Universtität Bern').click();
-
-    cy.getBySel('form-education-ausbildungsgang').click();
-    cy.get('mat-option').contains('Bachelor').click();
-
-    cy.getBySel('form-education-fachrichtung').type('Informatik');
-
-    const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
-    cy.getBySel('form-education-beginn-der-ausbildung').type(nextMonth);
-
-    const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
-    cy.getBySel('form-education-ende-der-ausbildung').type(inTwoYears);
-
-    cy.getBySel('form-education-pensum').click();
-    cy.get('mat-option').contains('Vollzeit').click();
+    EducationPO.fillEducationForm();
 
     cy.getBySel('form-education-form')
       .should('have.class', 'ng-valid')
@@ -373,9 +297,7 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
     cy.intercept('GET', '/api/v1/gesuch/*').as('getResource');
 
     // Step 6: Geschwister
-    cy.getBySel('form-geschwister-loading').should('not.exist', {
-      timeout: 10000,
-    });
+    cy.getBySel('form-geschwister-loading').should('not.exist');
 
     getStepTitle().should('contain.text', 'Geschwister');
 
@@ -417,7 +339,7 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
     getStepTitle().should('contain.text', 'Kinder');
 
     // step 8: Kinder
-    cy.getBySel('form-kinder-loading').should('not.exist', { timeout: 10000 });
+    cy.getBySel('form-kinder-loading').should('not.exist');
 
     cy.getBySel('button-add-kind').click();
 
