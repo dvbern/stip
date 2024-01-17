@@ -1,4 +1,4 @@
-stages: [build, deploy, mirror]
+stages: [build, test, deploy, mirror]
 
 variables:
   ARGOCD_APP: stip
@@ -66,3 +66,69 @@ include:
       git-mirror-target: "dvbern/stip"
       mirror-on: "tag"
       mirror-when: "always"
+
+.argocd_e2e:
+  stage: test
+  tags: [ "zone:tz", "os:linux", "type:docker" ]
+  image:
+    name: docker-registry.dvbern.ch/devops/docker/tools/k8s/main
+    entrypoint: [ "" ]
+  resource_group: "argocd:dev"
+  script:
+    - git clone https://gitlab-ci-token:$DEPLOYMENT_CONFIG_ACCESS_TOKEN@gitlab.dvbern.ch/stip/deployment-config.git deployment-config
+    - cd deployment-config
+    - values_file=charts/stip/environments/e2e/values.yaml
+    # Only set image version if it is set or not empty
+    - |
+      if [ -z "$IMAGE_VERSION" ]; then
+        yq -e -i ".image.tag = \"$IMAGE_VERSION\"" $values_file
+      fi
+
+    - yq -e -i ".postgres-cluster.enabled = $POSTGRES_ENABLED" $values_file
+    - yq -e -i ".api.replicaCount = $REPLICA_COUNT" $values_file
+    - yq -e -i ".gesuchApp.replicaCount = $REPLICA_COUNT" $values_file
+    - yq -e -i ".sachbearbeitungApp.replicaCount = $REPLICA_COUNT" $values_file
+    - |
+      if [ -n "$(git status --porcelain)" ]; then
+        git add -A
+        git commit -m "ci(deploy): start e2e app"
+        git push
+      else
+        echo "Deployment Config already up-to-date, skipping commit and push"
+      fi
+    - |
+      echo "Using ArgoCD Server at $ARGOCD_SERVER
+
+      # Download ArgoCD CLI and sync
+      curl -ksSL -o /usr/local/bin/argocd https://$ARGOCD_SERVER/download/argocd-linux-amd64
+      argocd app sync stip-e2e-app --insecure
+      argocd app wait stip-e2e-app --insecure
+
+argocd_e2e:start:
+  extends: .argocd_e2e
+  variables:
+    IMAGE_VERSION: $VERSION
+    REPLICA_COUNT: 1
+    POSTGRES_ENABLED: "true"
+  environment:
+    name: e2e
+    url: "https://dev-e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    action: start
+    on_stop: "argocd_e2e:stop"
+  rules:
+    - if: $PIPELINE_TYPE == "default"
+      when: manual # TODO set to automatic after testing
+
+argocd_e2e:stop:
+  extends: .argocd_e2e
+  variables:
+    IMAGE_VERSION: $VERSION
+    REPLICA_COUNT: 0
+    POSTGRES_ENABLED: "false"
+  environment:
+    name: e2e
+    url: "https://dev-e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    action: stop
+  rules:
+    - if: $PIPELINE_TYPE == "default"
+      when: manual # TODO set to automatic after testing
