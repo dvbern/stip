@@ -67,7 +67,7 @@ include:
       mirror-on: "tag"
       mirror-when: "always"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-install@b7a60c185a16cb94ec9c303fcf9e25f74fa41e75'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-install@65f114f45e6d4503a2d79482b5f77df392e01213'
     inputs:
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
