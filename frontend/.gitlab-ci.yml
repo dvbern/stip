@@ -92,7 +92,7 @@ stop_e2e:
     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=0 --insecure
     - argocd app set stip-e2e --helm-set postgres-cluster.enabled=false --insecure
     - argocd app sync stip-e2e --prune --insecure
-    - argocd app wait stip-e2e
+    - argocd app wait stip-e2e --insecure
   environment:
     name: e2e
     url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
