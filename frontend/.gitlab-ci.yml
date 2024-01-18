@@ -3,16 +3,18 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@0331f2c17f61e3ef2c8c967c913c86b974f512b5'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@5a1fe55cca78c622eb31d96ce400f6c3f4de3c09'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
       context-dir: 'frontend'
+      component-test-package-version: '13.6.2'
       e2e-on: 'never'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@0331f2c17f61e3ef2c8c967c913c86b974f512b5'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@5a1fe55cca78c622eb31d96ce400f6c3f4de3c09'
     inputs:
       name: ".nx"
+      e2e-test-package-version: '13.6.2'
       context-dir: 'frontend'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.1.4'
