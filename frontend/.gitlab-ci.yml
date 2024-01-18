@@ -3,14 +3,14 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@162174fa55969dd9e36951ade47ddd4c380c7398'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@40350d1189b402e43516b4a06b36ae776faf4f91'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
       context-dir: 'frontend'
       e2e-on: 'never'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@162174fa55969dd9e36951ade47ddd4c380c7398'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@40350d1189b402e43516b4a06b36ae776faf4f91'
     inputs:
       name: ".nx"
       context-dir: 'frontend'
@@ -65,7 +65,7 @@ start_e2e:
     action: start
   rules:
     - if: $PIPELINE_TYPE == "default"
-      when: manual # TODO set to automatic after testing
+      when: always
 
 run_e2e:
   extends: .nx-e2e-test
@@ -79,6 +79,8 @@ run_e2e:
     - start_e2e
 
 stop_e2e:
+  # Always run, even if prerequisites failed
+  when: always
   stage: test
   needs:
     - run_e2e
@@ -97,4 +99,4 @@ stop_e2e:
     action: stop
   rules:
     - if: $PIPELINE_TYPE == "default"
-      when: manual # TODO set to automatic after testing
+      when: always
