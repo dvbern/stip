@@ -69,8 +69,8 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-install@23fb5ca15e20adc66f4500cd855587afe1d24818'
     inputs:
-      argocd-server: "$ARGOCD_SERVER"
-      argocd-token: "$ARGOCD_TOKEN"
+      argocd-server: $ARGOCD_SERVER
+      argocd-token: $ARGOCD_TOKEN
 
 start_e2e:
   stage: test
