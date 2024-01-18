@@ -60,6 +60,7 @@ public class GesuchDokumentService {
 		return gesuchDokument;
 	}
 
+	@Transactional
 	public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
 		GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElse(null);
 		if(gesuchDokument == null) {
@@ -68,6 +69,7 @@ public class GesuchDokumentService {
 		return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
 	}
 
+	@Transactional
 	public Optional<DokumentDto> findDokument(UUID dokumentId) {
 		Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
 		Dokument dokument = dokumentRepository.findById(dokumentId);
