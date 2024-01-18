@@ -3,14 +3,14 @@ stages: [build, validate, test, analyze, package, deploy, mirror]
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@40350d1189b402e43516b4a06b36ae776faf4f91'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@fd0c966bb7794fceae98c31efe1362029b221806'
     inputs:
       app-name: '*-app'
       test-app-name: '*-app'
       context-dir: 'frontend'
       e2e-on: 'never'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@40350d1189b402e43516b4a06b36ae776faf4f91'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@fd0c966bb7794fceae98c31efe1362029b221806'
     inputs:
       name: ".nx"
       context-dir: 'frontend'
