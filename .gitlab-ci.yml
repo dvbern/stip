@@ -66,8 +66,3 @@ include:
       git-mirror-target: "dvbern/stip"
       mirror-on: "tag"
       mirror-when: "always"
-
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-install@23fb5ca15e20adc66f4500cd855587afe1d24818'
-    inputs:
-      argocd-server: "$E2E_ARGOCD_SERVER"
-      argocd-token: "$E2E_ARGOCD_TOKEN"
