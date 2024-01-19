@@ -1,5 +1,5 @@
 {
-  "name": "dv-stip-workspace",
+  "name": "@dv/stip-frontend",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
