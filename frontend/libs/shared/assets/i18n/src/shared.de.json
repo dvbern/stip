@@ -59,6 +59,10 @@
   "shared.table.paginator.previousPage": "Vorherige Seite",
   "shared.table.paginator.firstPage": "Erste Seite",
   "shared.table.paginator.range": "Seite {{page}} von {{pages}}",
+  "shared.dialog.unsavedChanges.title": "Ungespeicherte Änderungen",
+  "shared.dialog.unsavedChanges.text": "Beim Verlassen dieser Seite verlieren sie alle nicht gespeicherten Eingaben.",
+  "shared.dialog.unsavedChanges.cancel": "Zurück zum Formular",
+  "shared.dialog.unsavedChanges.confirm": "Seite verlassen",
 
   "shared.form.next": "Nächstes",
   "shared.form.previous": "Vorheriges",

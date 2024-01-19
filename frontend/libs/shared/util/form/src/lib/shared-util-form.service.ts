@@ -1,8 +1,16 @@
 import { ApplicationRef, ElementRef, Injectable, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject, concat, from, of } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
+
+import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import {
+  ComponentWithForm,
+  hasUnsavedChanges,
+} from '@dv/shared/util/unsaved-changes';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +18,8 @@ import { filter, map, switchMap, take } from 'rxjs/operators';
 export class SharedUtilFormService {
   private focusInput$ = new Subject<ElementRef<HTMLElement>>();
   private appRef = inject(ApplicationRef);
+  private translate = inject(TranslateService);
+  private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
 
   constructor() {
     this.focusInput$
@@ -33,6 +43,42 @@ export class SharedUtilFormService {
           input.scrollIntoView({ block: 'center' });
         }
       });
+  }
+
+  /**
+   * Register a form for unsaved changes check
+   *
+   * It creates a handler for the beforeunload event and removes it when the component is destroyed
+   *
+   * @param component The target component that has a form property or an unsaved indicator
+   */
+  registerFormForUnsavedCheck(component: ComponentWithForm) {
+    const wndw = this.wndw;
+    // Prevent accessing window directly because there are cases where it is not available, for example in SSR
+    // even if currently no such feature is currently planned
+    if (sharedUtilFnTypeGuardsIsDefined(wndw)) {
+      const handler = (e: BeforeUnloadEvent) => {
+        const unsaved = hasUnsavedChanges(component);
+        const message = unsaved
+          ? // Browsers show their own message, but just in case we try to set our own message
+            this.translate.instant('shared.dialog.unsavedChanges.text')
+          : null;
+        if (message) {
+          e.returnValue = message;
+        }
+        return message;
+      };
+      // Register the before close event handler
+      wndw.addEventListener('beforeunload', handler);
+      concat(
+        // Create a never ending observable to keep the handler alive until the component is destroyed
+        from(new Promise(() => {})).pipe(takeUntilDestroyed()),
+        // continue with a instantly ending observable to remove the handler once the previous observable is completed
+        of({}),
+      ).subscribe(() => {
+        wndw.removeEventListener('beforeunload', handler);
+      });
+    }
   }
 
   focusFirstInvalid(elementRef: ElementRef<HTMLElement>) {

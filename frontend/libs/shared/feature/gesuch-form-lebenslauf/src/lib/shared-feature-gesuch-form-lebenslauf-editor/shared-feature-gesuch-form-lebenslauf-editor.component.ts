@@ -27,6 +27,7 @@ import { MaskitoModule } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -54,6 +55,7 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
@@ -92,6 +94,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   @Output() saveTriggered = new EventEmitter<LebenslaufItemUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
+  @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
@@ -142,6 +145,13 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   kantonValues = this.prepareKantonValues();
 
   constructor() {
+    this.formIsUnsaved = observeUnsavedChanges(
+      this.form,
+      this.saveTriggered,
+      this.closeTriggered,
+      this.deleteTriggered,
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
@@ -325,6 +335,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
             : ['taetigskeitsart', 'taetigkeitsBeschreibung'],
         ),
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -334,6 +345,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
 
   handleCancel() {
     this.closeTriggered.emit();
+    this.form.markAsPristine();
   }
 
   handleDelete() {
