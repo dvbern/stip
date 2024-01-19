@@ -49,7 +49,7 @@ include:
       argocd-server: "$E2E_ARGOCD_SERVER"
       argocd-token: "$E2E_ARGOCD_TOKEN"
 
-start_e2e:
+start-e2e:
   stage: e2e
   resource_group: "argocd:dev"
   extends: .install-argocd
@@ -70,7 +70,8 @@ start_e2e:
     - if: $PIPELINE_TYPE == "default"
       when: always
 
-run_e2e:
+run-e2e:
+  stage: e2e
   extends: .nx-e2e-test
   resource_group: "e2e"
   variables:
@@ -79,13 +80,13 @@ run_e2e:
     E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
     E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
   needs:
-    - start_e2e
+    - start-e2e
 
-stop_e2e:
+stop-e2e:
   when: always
   stage: e2e
   needs:
-    - run_e2e
+    - run-e2e
   resource_group: "argocd:dev"
   extends: .install-argocd
   script:
