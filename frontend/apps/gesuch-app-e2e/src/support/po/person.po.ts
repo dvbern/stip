@@ -1,80 +1,80 @@
-import { AddressPO, Adresse } from './adresse.po';
+import { PersonInAusbildung } from '@dv/shared/model/gesuch';
+import { AddressPO } from './adresse.po';
+import {
+  getRadioOption,
+  getSelectOption,
+} from '@dv/shared/util-fn/e2e-helpers';
 
-export interface Person {
-  sozialversicherungsnummer: string;
-  anrede: string;
-  nachname: string;
-  vorname: string;
-  adresse: Adresse;
-  identischerZivilrechtlicherWohnsitz: boolean;
-  email: string;
-  telefonnummer: string;
-  geburtsdatum: string;
-  nationalitaet: string;
-  heimatort?: string;
-  zivilstand: string;
-  wohnsitz: string;
-  quellenbesteuert: boolean;
-  sozialhilfebeitraege: boolean;
-  digitaleKommunikation: boolean;
-  korrespondenzSprache: string;
-  iban: string;
-  nettoerwerbseinkommen: string;
-  fahrkosten: string;
-  wohnkosten: string;
-  ausbildungskostenSekundarstufeZwei: string;
-  auswaertigeMittagessenProWoche: string;
-  personenImHaushalt: string;
-  zulagen: string;
-}
+const elements = {
+  form: () => cy.getBySel('form-person-form'),
+  sozialversicherungsnummer: () =>
+    cy.getBySel('form-person-sozialversicherungsnummer'),
+  anredeSelect: () => cy.getBySel('form-person-anrede'),
+  nachname: () => cy.getBySel('form-person-nachname'),
+  vorname: () => cy.getBySel('form-person-vorname'),
 
-const fillPersonForm = (person: Person) => {
-  cy.getBySel('form-person-sozialversicherungsnummer').type(
-    person.sozialversicherungsnummer,
-  );
+  identischerZivilrechtlicherWohnsitz: () =>
+    cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz'),
+  email: () => cy.getBySel('form-person-email'),
+  telefonnummer: () => cy.getBySel('form-person-telefonnummer'),
+  geburtsdatum: () => cy.getBySel('form-person-geburtsdatum'),
+  nationalitaetSelect: () => cy.getBySel('form-person-nationalitaet'),
+  heimatort: () => cy.getBySel('form-person-heimatort'),
+  vorumundschaftCheckbox: () => cy.getBySel('form-person-vorumundschaft'),
+  zivilstandSelect: () => cy.getBySel('form-person-zivilstand'),
+  wohnsitzSelect: () => cy.getBySel('form-person-wohnsitz'),
+  quellenbesteuertRadio: () => cy.getBySel('form-person-quellenbesteuert'),
+  sozialhilfeBeitraegeRadio: () =>
+    cy.getBySel('form-person-sozialhilfeBeitraege'),
+  korrespondenzSpracheRadio: () =>
+    cy.getBySel('form-person-korrespondenzSprache'),
+  digitaleKommunikation: () => cy.getBySel('form-person-digitaleKommunikation'),
+  niederlassungsstatusSelect: () =>
+    cy.getBySel('form-person-niederlassungsstatus'),
+  infoNiederlassungsstatus: () =>
+    cy.getBySel('info-person-niederlassungsstatus'),
 
-  cy.getBySel('form-person-anrede').click();
-  cy.get('mat-option').contains('Herr').click();
+  loading: () => cy.getBySel('form-person-loading'),
+};
 
-  cy.getBySel('form-person-nachname').type(person.nachname);
-  cy.getBySel('form-person-vorname').type(person.vorname);
+const fillPersonForm = (person: PersonInAusbildung) => {
+  elements.sozialversicherungsnummer().type(person.sozialversicherungsnummer);
+
+  elements.anredeSelect().click();
+  getSelectOption(person.anrede).click();
+
+  elements.nachname().type(person.nachname);
+  elements.vorname().type(person.vorname);
 
   AddressPO.fillAddressForm(person.adresse);
 
-  cy.getBySel('form-person-email').type(person.email);
-  cy.getBySel('form-person-telefonnummer').type(person.telefonnummer);
-  cy.getBySel('form-person-geburtsdatum').type(person.geburtsdatum);
+  elements.email().type(person.email);
+  elements.telefonnummer().type(person.telefonnummer);
+  elements.geburtsdatum().type(person.geburtsdatum);
 
-  cy.getBySel('form-person-nationalitaet').click();
-  cy.get('mat-option').contains(person.nationalitaet).click();
+  elements.nationalitaetSelect().click();
+  getSelectOption(person.nationalitaet).click();
 
-  cy.getBySel('form-person-heimatort').type(person.heimatort ?? '');
+  elements.zivilstandSelect().click();
+  getSelectOption(person.zivilstand ?? 'LEDIG').click();
 
-  cy.getBySel('form-person-zivilstand').click();
-  cy.get('mat-option').contains(person.zivilstand).click();
+  elements.wohnsitzSelect().click();
+  getSelectOption(person.wohnsitz).click();
 
-  cy.getBySel('form-person-wohnsitz').click();
-  cy.get('mat-option').contains(person.wohnsitz).click();
-
-  cy.getBySel('form-person-quellenbesteuert').within(() => {
-    cy.get('mat-radio-button').contains('Nein').click();
+  elements.quellenbesteuertRadio().within(() => {
+    getRadioOption(person.quellenbesteuert).click();
   });
 
-  cy.getBySel('form-person-sozialhilfeBeitraege').within(() => {
-    cy.get('mat-radio-button').contains('Nein').click();
+  elements.sozialhilfeBeitraegeRadio().within(() => {
+    getRadioOption(person.sozialhilfebeitraege).click();
   });
 
-  cy.getBySel('form-person-korrespondenzSprache')
-    .get('mat-radio-button')
-    .contains(person.korrespondenzSprache)
-    .click();
-};
-
-const getPersonForm = () => {
-  return cy.getBySel('form-person-form');
+  elements.korrespondenzSpracheRadio().within(() => {
+    getRadioOption(person.korrespondenzSprache).click();
+  });
 };
 
 export const PersonPO = {
+  elements,
   fillPersonForm,
-  getPersonForm,
 };

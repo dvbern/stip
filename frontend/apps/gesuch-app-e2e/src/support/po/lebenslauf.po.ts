@@ -1,35 +1,80 @@
-const addAusbildung = () => {
-  cy.getBySel('lebenslauf-add-ausbildung').click();
-  fillLebenslaufForm();
+import { LebenslaufItem } from '@dv/shared/model/gesuch';
+import { getSelectOption } from '@dv/shared/util-fn/e2e-helpers';
+
+const elements = {
+  addAusbildung: () => cy.getBySel('lebenslauf-add-ausbildung'),
+  addTaetigkeit: () => cy.getBySel('lebenslauf-add-taetigkeit'),
+
+  form: () => cy.getBySel('form-lebenslauf-form'),
+
+  ausbildungsartSelect: () =>
+    cy.getBySel('lebenslauf-editor-ausbildungsart-select'),
+  berufsbezeichnung: () => cy.getBySel('lebenslauf-editor-berufsbezeichnung'),
+  fachrichtung: () => cy.getBySel('lebenslauf-editor-fachrichtung'),
+  titelDesAbschlusses: () =>
+    cy.getBySel('lebenslauf-editor-titelDesAbschlusses'),
+  taetigkeitsartSelect: () =>
+    cy.getBySel('lebenslauf-editor-taetigkeitsart-select'),
+  taetigkeitsBeschreibung: () =>
+    cy.getBySel('lebenslauf-editor-taetigkeitsBeschreibung'),
+  beginn: () => cy.getBySel('lebenslauf-editor-von'),
+  ende: () => cy.getBySel('lebenslauf-editor-bis'),
+  wohnsitzSelect: () => cy.getBySel('lebenslauf-editor-wohnsitz'),
+  ausbildungAbgeschlossenCheckbox: () =>
+    cy.getBySel('lebenslauf-editor-ausbildung-abgeschlossen'),
+
+  loading: () => cy.getBySel('lebenslauf-editor-loading'),
+  getButtonDelete: () => cy.getBySel('lebenslauf-editor-delete'),
+  getButtonSave: () => cy.getBySel('button-save'),
+  getButtonBack: () => cy.getBySel('button-back'),
 };
 
-const addTaetigkeit = () => {
-  cy.getBySel('lebenslauf-add-taetigkeit').click();
-  fillLebenslaufForm();
+const addAusbildung = (item: LebenslaufItem) => {
+  elements.addAusbildung().click();
+
+  elements.ausbildungsartSelect().click();
+  getSelectOption(item.bildungsart ?? 'FACHMATURITAET').click();
+
+  elements.beginn().type(item.von);
+  elements.ende().type(item.bis);
+
+  elements.wohnsitzSelect().click();
+  getSelectOption(item.wohnsitz).click();
+
+  elements.ausbildungAbgeschlossenCheckbox().click();
+
+  elements
+    .form()
+    .should('have.class', 'ng-valid')
+    .then(() => {
+      elements.getButtonSave().click();
+    });
 };
 
-const fillLebenslaufForm = () => {
-  cy.getBySel('lebenslauf-editor-ausbildungsart-select').click();
-  cy.get('mat-option').contains('Berufsmaturität').click();
+const addTaetigkeit = (item: LebenslaufItem) => {
+  elements.addTaetigkeit().click();
 
-  // const fiveYearsAgo = format(addYears(new Date(), -5), 'MM.yyyy');
-  cy.getBySel('lebenslauf-editor-beginn').type('08.2020');
+  elements.taetigkeitsartSelect().click();
+  getSelectOption(item.taetigskeitsart ?? 'ERWERBSTAETIGKEIT').click();
 
-  // const threeYearsAgo = format(addYears(new Date(), -3), 'MM.yyyy');
-  cy.getBySel('lebenslauf-editor-ende').type('01.2024');
+  elements.taetigkeitsBeschreibung().type(item.taetigkeitsBeschreibung ?? '');
 
-  cy.getBySel('lebenslauf-editor-wohnsitz').click();
-  cy.get('mat-option').contains('Bern').click();
+  elements.beginn().type(item.von);
+  elements.ende().type(item.bis);
 
-  cy.getBySel('lebenslauf-editor-ausbildung-abgeschlossen').click();
-};
+  elements.wohnsitzSelect().click();
+  getSelectOption(item.wohnsitz).click();
 
-const getLebenslaufForm = () => {
-  return cy.getBySel('form-lebenslauf-form');
+  elements
+    .form()
+    .should('have.class', 'ng-valid')
+    .then(() => {
+      elements.getButtonSave().click();
+    });
 };
 
 export const LebenslaufPO = {
+  elements,
   addAusbildung,
   addTaetigkeit,
-  getLebenslaufForm,
 };

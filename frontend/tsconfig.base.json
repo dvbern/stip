@@ -119,5 +119,5 @@
       "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]
     }
   },
-  "exclude": ["tmp", "node_modules", "**/cypress.config.ts", "libs/tooling/nx-plugin/src/generators/lib/files"]
+  "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]
 }

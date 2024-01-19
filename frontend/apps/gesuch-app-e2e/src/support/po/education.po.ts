@@ -1,29 +1,48 @@
-import { format, addMonths } from 'date-fns';
+import { Ausbildung } from '@dv/shared/model/gesuch';
+import { getSelectOption } from '@dv/shared/util-fn/e2e-helpers';
 
-const fillEducationForm = () => {
-  cy.getBySel('form-education-ausbildungsstaette').click();
-  cy.get('mat-option').contains('Universtität Bern').click();
+export interface EducationForm extends Ausbildung {
+  ausbildungsstaette: string;
+  ausbildungsgang: string;
+}
 
-  cy.getBySel('form-education-ausbildungsgang').click();
-  cy.get('mat-option').contains('Bachelor').click();
+const elements = {
+  form: () => cy.getBySel('form-education-form'),
+  ausbildungsstaetteSelect: () =>
+    cy.getBySel('form-education-ausbildungsstaette'),
+  alternativeAusbildungsstaette: () =>
+    cy.getBySel('form-education-alternativeAusbildungsstaette'),
+  ausbildungsgangSelect: () => cy.getBySel('form-education-ausbildungsgang'),
+  alternativeAusbildungsgang: () =>
+    cy.getBySel('form-education-alternativeAusbildungsgang'),
+  fachrichtung: () => cy.getBySel('form-education-fachrichtung'),
+  ausbildungBegin: () => cy.getBySel('form-education-beginn-der-ausbildung'),
+  ausbildungEnd: () => cy.getBySel('form-education-ende-der-ausbildung'),
+  pensumSelect: () => cy.getBySel('form-education-pensum'),
 
-  cy.getBySel('form-education-fachrichtung').type('Informatik');
+  ausbildungNichtGefundenCheckbox: () =>
+    cy.getBySel('form-education-ausbidungNichtGefunden'),
 
-  const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
-  cy.getBySel('form-education-beginn-der-ausbildung').type(nextMonth);
-
-  const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
-  cy.getBySel('form-education-ende-der-ausbildung').type(inTwoYears);
-
-  cy.getBySel('form-education-pensum').click();
-  cy.get('mat-option').contains('Vollzeit').click();
+  loading: () => cy.getBySel('education-form-loading'),
 };
 
-const getEducationForm = () => {
-  return cy.getBySel('form-education-form');
+const fillEducationForm = (ausbildung: EducationForm) => {
+  elements.ausbildungsstaetteSelect().click();
+  getSelectOption(ausbildung.ausbildungsstaette).click();
+
+  elements.ausbildungsgangSelect().click();
+  getSelectOption(ausbildung.ausbildungsgang).click();
+
+  elements.fachrichtung().type(ausbildung.fachrichtung);
+
+  elements.ausbildungBegin().type(ausbildung.ausbildungBegin);
+  elements.ausbildungEnd().type(ausbildung.ausbildungEnd);
+
+  elements.pensumSelect().click();
+  getSelectOption(ausbildung.pensum).click();
 };
 
 export const EducationPO = {
+  elements,
   fillEducationForm,
-  getEducationForm,
 };

@@ -9,7 +9,7 @@
       <input
         matInput
         formControlName="sozialversicherungsnummer"
-        data-testid="form-person-sozialversicherungsnummer"
+        data-testid="form-eltern-sozialversicherungsnummer"
         placeholder="756.xxxx.xxxx.xx"
         [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
       />
@@ -28,14 +28,14 @@
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-      <input formControlName="nachname" data-testid="form-person-nachname" matInput type="text" />
+      <input formControlName="nachname" data-testid="form-eltern-nachname" matInput type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-      <input formControlName="vorname" data-testid="form-person-vorname" matInput type="text" />
+      <input formControlName="vorname" data-testid="form-eltern-vorname" matInput type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -67,7 +67,12 @@
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
             <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
-            <input matInput type="text" formControlName="identischerZivilrechtlicherWohnsitzPLZ" />
+            <input
+              matInput
+              type="text"
+              formControlName="identischerZivilrechtlicherWohnsitzPLZ"
+              data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
+            />
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -76,7 +81,12 @@
           <!-- Ort -->
           <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
             <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
-            <input matInput type="text" formControlName="identischerZivilrechtlicherWohnsitzOrt" />
+            <input
+              matInput
+              type="text"
+              formControlName="identischerZivilrechtlicherWohnsitzOrt"
+              data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
+            />
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -98,7 +108,7 @@
         type="text"
         placeholder="dd.mm.yyyy"
         formControlName="geburtsdatum"
-        data-testid="form-person-geburtsdatum"
+        data-testid="form-eltern-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
 
@@ -117,7 +127,7 @@
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
-      <input matInput type="text" formControlName="telefonnummer" data-testid="form-person-telefonnummer" />
+      <input matInput type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -130,7 +140,7 @@
   <div class="row g-4 my-2">
     <mat-radio-group
       formControlName="ausweisbFluechtling"
-      data-testid="form-person-ausweisFluechtling"
+      data-testid="form-eltern-ausweisFluechtling"
       dvSharedUiFormField
       class="col-12 d-flex flex-column"
     >
@@ -149,7 +159,7 @@
   <div class="row g-4 my-2">
     <mat-radio-group
       formControlName="ergaenzungsleistungAusbezahlt"
-      data-testid="form-person-ergaenzungsleistungAusbezahlt"
+      data-testid="form-eltern-ergaenzungsleistungAusbezahlt"
       dvSharedUiFormField
       class="col-12 d-flex flex-column"
     >
@@ -164,7 +174,7 @@
   <div class="row g-4 my-2">
     <mat-radio-group
       formControlName="sozialhilfebeitraegeAusbezahlt"
-      data-testid="form-person-sozialhilfebeitraegeAusbezahlt"
+      data-testid="form-eltern-sozialhilfebeitraegeAusbezahlt"
       dvSharedUiFormField
       class="col-12 d-flex flex-column"
     >
@@ -187,7 +197,7 @@
         type="button"
         class="btn btn-outline-primary d-flex align-items-center justify-content-center"
         (click)="handleDelete()"
-        data-testid="eltern-editor-delete"
+        data-testid="form-eltern-delete"
         [title]="'shared.form.lebenslaufitem.delete' | translate"
       >
         <i class="material-symbols-rounded me-2">delete</i>
@@ -195,11 +205,11 @@
       </button>
     }
 
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel-back">
+    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-back">
       {{ 'shared.form.back' | translate }}
     </button>
     @if (!view$().readonly) {
-      <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+      <button type="submit" class="btn btn-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | translate }}
       </button>
     }

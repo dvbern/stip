@@ -18,39 +18,37 @@
 
       <!-- Nährere Bezeichnung (falls nötig) -->
       @if (showBerufsbezeichnungSig()) {
-        <mat-form-field
-          dvSharedUiFormField
-          class="col-12 col-md-6 col-xl-4"
-          data-testid="lebenslauf-editor-berufsbezeichnung"
-        >
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.berufsbezeichnung' | translate }}</mat-label>
-          <input matInput formControlName="berufsbezeichnung" type="text" />
+          <input
+            matInput
+            formControlName="berufsbezeichnung"
+            data-testid="lebenslauf-editor-berufsbezeichnung"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
       }
       @if (showFachrichtungSig()) {
-        <mat-form-field
-          dvSharedUiFormField
-          class="col-12 col-md-6 col-xl-4"
-          data-testid="lebenslauf-editor-fachrichtung"
-        >
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.fachrichtung' | translate }}</mat-label>
-          <input matInput formControlName="fachrichtung" type="text" />
+          <input matInput formControlName="fachrichtung" data-testid="lebenslauf-editor-fachrichtung" type="text" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
       }
       @if (showTitelDesAbschlussesSig()) {
-        <mat-form-field
-          dvSharedUiFormField
-          class="col-12 col-md-6 col-xl-4"
-          data-testid="lebenslauf-editor-titel-des-abschlusses"
-        >
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.titelDesAbschlusses' | translate }}</mat-label>
-          <input matInput formControlName="titelDesAbschlusses" type="text" />
+          <input
+            matInput
+            formControlName="titelDesAbschlusses"
+            data-testid="lebenslauf-editor-titel-des-abschlusses"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -83,7 +81,7 @@
         <input
           matInput
           formControlName="taetigkeitsBeschreibung"
-          data-testid="lebenslauf-editor-taetigkeits-beschreibung"
+          data-testid="lebenslauf-editor-taetigkeitsBeschreibung"
           type="text"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">
@@ -101,7 +99,7 @@
       <input
         matInput
         formControlName="von"
-        data-testid="lebenslauf-editor-beginn"
+        data-testid="lebenslauf-editor-von"
         placeholder="MM.YYYY"
         (blur)="onDateBlur(form.controls.von)"
       />
@@ -133,7 +131,7 @@
       <input
         matInput
         formControlName="bis"
-        data-testid="lebenslauf-editor-ende"
+        data-testid="lebenslauf-editor-bis"
         placeholder="MM.YYYY"
         (blur)="onDateBlur(form.controls.bis)"
       />

@@ -1,6 +1,6 @@
 <div>
   @if (view().loading) {
-    <div data-testid="form-person-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
+    <div data-testid="form-auszahlung-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
       <div class="dv-progress-bar-indeterminate">
         <div></div>
       </div>
@@ -47,7 +47,7 @@
         <!-- Nachname -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-          <input matInput type="text" [formControlName]="'nachname'" data-testid="form-person-nachname" />
+          <input matInput type="text" [formControlName]="'nachname'" data-testid="form-auszahlung-nachname" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -56,7 +56,7 @@
         <!-- Vorname -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-          <input matInput type="text" [formControlName]="'vorname'" data-testid="form-person-vorname" />
+          <input matInput type="text" [formControlName]="'vorname'" data-testid="form-auszahlung-vorname" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
