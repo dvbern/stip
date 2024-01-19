@@ -5,6 +5,7 @@ import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
 import {
   SharedModelGesuchFormStep,
   isStepDisabled,
+  isStepValid,
   FAMILIENSITUATION,
   PERSON,
   AUSBILDUNG,
@@ -56,6 +57,7 @@ export class SharedUtilGesuchFormStepManagerService {
     };
     return steps[this.compiletimeConfig.appType].map((step) => ({
       ...step,
+      valid: isStepValid(step, gesuchFormular),
       disabled: isStepDisabled(step, gesuchFormular),
     }));
   }

@@ -21,6 +21,9 @@ export interface State {
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   gesuchs: SharedModelGesuch[];
+  cache: {
+    gesuchFormular: SharedModelGesuchFormular | null;
+  };
   loading: boolean;
   error: SharedModelError | undefined;
 }
@@ -29,6 +32,9 @@ const initialState: State = {
   gesuch: null,
   gesuchFormular: null,
   gesuchs: [],
+  cache: {
+    gesuchFormular: null,
+  },
   loading: false,
   error: undefined,
 };
@@ -43,6 +49,12 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         gesuchs: [],
+        // Allow cached gesuchFormular to be used if gesuchFormular is null
+        // (e.g. while navigating between steps and the navbar shouldn't be updated)
+        cache: {
+          ...state.cache,
+          gesuchFormular: null,
+        },
       }),
     ),
 
@@ -111,13 +123,19 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.gesuchLoadedSuccess,
-      (state, { gesuch }): State => ({
-        ...state,
-        gesuch,
-        gesuchFormular: getGesuchFormular(gesuch),
-        loading: false,
-        error: undefined,
-      }),
+      (state, { gesuch }): State => {
+        const gesuchFormular = getGesuchFormular(gesuch);
+        return {
+          ...state,
+          gesuch,
+          gesuchFormular: gesuchFormular,
+          cache: {
+            gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
+          },
+          loading: false,
+          error: undefined,
+        };
+      },
     ),
 
     on(

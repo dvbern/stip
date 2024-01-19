@@ -1,35 +1,64 @@
 import {
   Elternschaftsteilung,
+  GesuchFormularUpdate,
   SharedModelGesuchFormular,
-  Zivilstand,
 } from '@dv/shared/model/gesuch';
-import { ELTERN, isStepDisabled, PARTNER } from './gesuch-form-steps';
+import {
+  ELTERN,
+  isStepValid,
+  isStepDisabled,
+  PARTNER,
+  PERSON,
+  AUSBILDUNG,
+  LEBENSLAUF,
+  AUSZAHLUNGEN,
+  EINNAHMEN_KOSTEN,
+  FAMILIENSITUATION,
+  GESCHWISTER,
+  KINDER,
+} from './gesuch-form-steps';
+import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 
-type GesuchFormStepState = 'enable' | 'disable';
-const partnerCases = (): [GesuchFormStepState, Zivilstand, boolean][] => {
-  return [
-    ['disable', 'LEDIG', true],
-    ['disable', 'VERWITWET', true],
-    ['disable', 'AUFGELOESTE_PARTNERSCHAFT', true],
-    ['disable', 'GESCHIEDEN_GERICHTLICH', true],
-    ['enable', 'KONKUBINAT', false],
-    ['enable', 'VERHEIRATET', false],
-    ['enable', 'EINGETRAGENE_PARTNERSCHAFT', false],
-  ];
-};
+// Used for type safety and intelisense
+const typeGuard = <T>(value: T): T => value;
 
-const alimentAufteilungCases = (): [
-  GesuchFormStepState,
-  Elternschaftsteilung,
-  boolean,
-][] => [
+const partnerCases = [
+  ['disable', 'LEDIG', true],
+  ['disable', 'VERWITWET', true],
+  ['disable', 'AUFGELOESTE_PARTNERSCHAFT', true],
+  ['disable', 'GESCHIEDEN_GERICHTLICH', true],
+  ['enable', 'KONKUBINAT', false],
+  ['enable', 'VERHEIRATET', false],
+  ['enable', 'EINGETRAGENE_PARTNERSCHAFT', false],
+] as const;
+
+const alimentAufteilungCases = [
   ['enable', Elternschaftsteilung.MUTTER, false],
   ['enable', Elternschaftsteilung.VATER, false],
   ['disable', Elternschaftsteilung.GEMEINSAM, true],
-];
+] as const;
+
+const validationCases = typeGuard<
+  [SharedModelGesuchFormStep, keyof GesuchFormularUpdate][]
+>([
+  [AUSBILDUNG, 'ausbildung'],
+  [PERSON, 'personInAusbildung'],
+  [LEBENSLAUF, 'lebenslaufItems'],
+  [FAMILIENSITUATION, 'familiensituation'],
+  [ELTERN, 'elterns'],
+  [GESCHWISTER, 'geschwisters'],
+  [PARTNER, 'partner'],
+  [KINDER, 'kinds'],
+  [AUSZAHLUNGEN, 'auszahlung'],
+  [EINNAHMEN_KOSTEN, 'einnahmenKosten'],
+]).map(
+  ([step, ...rest]) =>
+    // Add toString to make jest output more readable
+    [{ ...step, toString: () => step.route }, ...rest] as const,
+);
 
 describe('GesuchFormSteps', () => {
-  it.each(partnerCases())(
+  it.each(partnerCases)(
     'should %s Partner Step if GS is %s',
     (_, zivilstand, state) => {
       expect(
@@ -42,7 +71,7 @@ describe('GesuchFormSteps', () => {
     },
   );
 
-  it.each(alimentAufteilungCases())(
+  it.each(alimentAufteilungCases)(
     'should %s Eltern Step if GS is %s',
     (_, werZahltAlimente, state) => {
       expect(
@@ -52,6 +81,23 @@ describe('GesuchFormSteps', () => {
           },
         } as Partial<SharedModelGesuchFormular>),
       ).toBe(state);
+    },
+  );
+
+  it.each(validationCases)(
+    'route %s should be valid if %s is set',
+    (step, field) => {
+      expect(isStepValid(step, { [field]: {} })).toBe(true);
+    },
+  );
+
+  // TODO: Add tests to check for invalid once validation is resolved
+  // <---
+
+  it.each(validationCases)(
+    'route %s validity should be undefined if %s is not set',
+    (step, field) => {
+      expect(isStepValid(step, { [field]: null })).toBe(undefined);
     },
   );
 });

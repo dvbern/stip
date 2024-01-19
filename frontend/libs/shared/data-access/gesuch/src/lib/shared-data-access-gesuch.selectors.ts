@@ -16,6 +16,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       readonly:
         state.gesuch?.gesuchStatus === Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT,
       trancheId: state.gesuch?.gesuchTrancheToWorkWith.id,
+      cachedGesuchFormular: state.gesuchFormular ?? state.cache.gesuchFormular,
     };
   },
 );

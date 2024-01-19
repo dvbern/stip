@@ -1,4 +1,5 @@
 import { SharedModelGesuchFormular, Zivilstand } from '@dv/shared/model/gesuch';
+
 import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 
 export const PERSON: SharedModelGesuchFormStep = {
@@ -108,4 +109,25 @@ export const isStepDisabled = (
     );
   }
   return false;
+};
+
+export const isStepValid = (
+  step: SharedModelGesuchFormStep,
+  formular: SharedModelGesuchFormular | null,
+) => {
+  const stepFieldMap: Record<string, keyof SharedModelGesuchFormular> = {
+    [PERSON.route]: 'personInAusbildung',
+    [AUSBILDUNG.route]: 'ausbildung',
+    [LEBENSLAUF.route]: 'lebenslaufItems',
+    [FAMILIENSITUATION.route]: 'familiensituation',
+    [ELTERN.route]: 'elterns',
+    [GESCHWISTER.route]: 'geschwisters',
+    [PARTNER.route]: 'partner',
+    [KINDER.route]: 'kinds',
+    [AUSZAHLUNGEN.route]: 'auszahlung',
+    [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  };
+  const field = stepFieldMap[step.route];
+  // TODO: add validation from API or run frontend validators somehow
+  return formular?.[field] ? true : undefined;
 };

@@ -1,3 +1,19 @@
 :host {
   display: block;
+
+  .btn-nav.active,
+  .btn-nav:hover {
+    .validator-indicator {
+      display: none;
+    }
+  }
+
+  .validator-indicator {
+    font-size: 0.8em;
+    right: -0.3em;
+    bottom: -0.2em;
+    border-radius: 50%;
+    border: 0.25px solid var(--dv-light);
+    background-color: var(--dv-light);
+  }
 }

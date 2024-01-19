@@ -7,7 +7,7 @@ import {
   inject,
   Input,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -37,6 +37,7 @@ import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
     SharedUiLanguageSelectorComponent,
     GesuchAppPatternMainLayoutComponent,
     RouterLink,
+    RouterLinkActive,
   ],
   templateUrl: './gesuch-app-pattern-gesuch-step-layout.component.html',
   styleUrls: ['./gesuch-app-pattern-gesuch-step-layout.component.scss'],
@@ -54,7 +55,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepsSig = computed(() =>
-    this.stepManager.getAllSteps(this.viewSig().gesuchFormular),
+    this.stepManager.getAllSteps(this.viewSig().cachedGesuchFormular),
   );
 
   handleLanguageChangeHeader(language: Language) {
