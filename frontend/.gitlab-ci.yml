@@ -1,4 +1,4 @@
-stages: [build, validate, test, analyze, package, deploy, mirror]
+stages: [build, validate, test, analyze, package, e2e, deploy, mirror]
 
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
@@ -50,11 +50,12 @@ include:
       argocd-token: "$E2E_ARGOCD_TOKEN"
 
 start_e2e:
-  stage: test
+  stage: e2e
   resource_group: "argocd:dev"
   extends: .install-argocd
   script:
     - argocd app sync stip-e2e --insecure
+    - argocd app set stip-e2e --helm-set image.tag=$VERSION --insecure
     - argocd app set stip-e2e --helm-set api.replicaCount=1 --insecure
     - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=1 --insecure
     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=1 --insecure
@@ -75,15 +76,14 @@ run_e2e:
   variables:
     E2E_USERNAME: $E2E_USERNAME
     E2E_PASSWORD: $E2E_PASSWORD
-    E2E_BASEURL_GS: "e2e-stip.$DVB_OCP_MERCURY_ROUTER"
-    E2E_BASEURL_SB: "e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
   needs:
     - start_e2e
 
 stop_e2e:
-  # Always run, even if prerequisites failed
   when: always
-  stage: test
+  stage: e2e
   needs:
     - run_e2e
   resource_group: "argocd:dev"
