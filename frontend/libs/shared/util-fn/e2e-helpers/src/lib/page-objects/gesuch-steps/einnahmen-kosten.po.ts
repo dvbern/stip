@@ -19,4 +19,9 @@ export namespace SharedEinnahmenKostenInAusbildungPO {
 
   export const getFormAlimente = () =>
     cy.getBySel('form-einnahmen-kosten-alimente');
+
+  export const getFormZulagen = () =>
+    cy.getBySel('form-einnahmen-kosten-zulagen');
+
+  export const getFormSave = () => cy.getBySel('form-einnahmen-kosten-save');
 }
