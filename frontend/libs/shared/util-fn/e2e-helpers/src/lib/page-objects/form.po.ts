@@ -6,24 +6,23 @@ export const getButtonContinue = () => cy.getBySel('button-continue');
 export const getButtonBack = () => cy.getBySel('button-back');
 export const getButtonSave = () => cy.getBySel('button-save');
 
-export const getSelectOption = (name: string) =>
-  cy.getBySel('mat-option').contains(name, { matchCase: false });
+/**
+ * @argument name - The slug of the select option data-testid
+ * data-testid="select-option-<name>"
+ * data-testids cannot contain spaces
+ */
+export const getSelectOption = (name: string) => cy.getBySel(name).first();
+/**
+ * @argument text - The text value of the option, for translated or arbitrary values
+ */
+export const getSelectOptionByText = (text: string) =>
+  cy.get('mat-option').contains(text, { matchCase: false });
 
-export const getRadioOption = (
-  name: string | boolean,
-  subject?: HTMLElement,
-) => {
+export const getRadioOption = (name: string | boolean) => {
   if (typeof name === 'boolean') {
-    if (!subject) {
-      throw new Error('Subject argument is required when name is a boolean.');
-    }
-    return cy
-      .get('mat-radio-button', { withinSubject: subject })
-      .contains(name ? 'Ja' : 'Nein');
+    return cy.getBySel(name ? 'yes' : 'no').find('input');
   }
-  return cy
-    .get('mat-radio-button', { withinSubject: subject })
-    .contains(name, { matchCase: false });
+  return cy.getBySel(name).find('input');
 };
 
 export const getFormControlFactory = (formControlName: string) => {

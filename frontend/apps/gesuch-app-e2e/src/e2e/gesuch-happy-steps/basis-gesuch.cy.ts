@@ -64,8 +64,9 @@ const person: PersonInAusbildung = {
 const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
 const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
 
+// todo: fix typo
 const education: EducationValues = {
-  ausbildungsstaette: 'Universität Bern',
+  ausbildungsstaette: 'Universtität Bern',
   ausbildungsgang: 'Bachelor',
   fachrichtung: 'Informatik',
   ausbildungBegin: nextMonth,

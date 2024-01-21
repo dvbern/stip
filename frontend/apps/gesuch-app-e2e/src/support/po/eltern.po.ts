@@ -13,6 +13,8 @@ const elements = {
   nachname: () => cy.getBySel('form-eltern-nachname'),
   vorname: () => cy.getBySel('form-eltern-vorname'),
 
+  adresse: AddressPO,
+
   identischerZivilrechtlicherWohnsitzCheckbox: () =>
     cy.getBySel('form-eltern-identischerZivilrechtlicherWohnsitz'),
   identischerZivilrechtlicherWohnsitzPLZ: () =>
@@ -54,13 +56,13 @@ const addElternTeil = (item: Eltern) => {
 
   AddressPO.fillAddressForm(item.adresse);
 
-  elements.identischerZivilrechtlicherWohnsitzCheckbox().click();
-  elements
-    .identischerZivilrechtlicherWohnsitzPLZ()
-    .type(item.identischerZivilrechtlicherWohnsitzPLZ ?? '');
-  elements
-    .identischerZivilrechtlicherWohnsitzOrt()
-    .type(item.identischerZivilrechtlicherWohnsitzOrt ?? '');
+  // elements.identischerZivilrechtlicherWohnsitzCheckbox().click();
+  // elements
+  //   .identischerZivilrechtlicherWohnsitzPLZ()
+  //   .type(item.identischerZivilrechtlicherWohnsitzPLZ ?? '');
+  // elements
+  //   .identischerZivilrechtlicherWohnsitzOrt()
+  //   .type(item.identischerZivilrechtlicherWohnsitzOrt ?? '');
 
   elements.geburtsdatum().type(item.geburtsdatum);
   elements.telefonnummer().type(item.telefonnummer);

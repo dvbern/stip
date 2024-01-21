@@ -10,7 +10,7 @@ const elements = {
   nachname: () => cy.getBySel('form-auszahlung-nachname'),
   vorname: () => cy.getBySel('form-auszahlung-vorname'),
 
-  adresse: () => AddressPO,
+  adresse: AddressPO,
 
   iban: () => cy.getBySel('form-auszahlung-iban'),
 };

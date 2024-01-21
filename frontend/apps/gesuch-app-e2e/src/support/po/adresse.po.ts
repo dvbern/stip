@@ -17,7 +17,7 @@ const fillAddressForm = (adresse: Adresse) => {
   elements.plz().type(adresse.plz);
   elements.ort().type(adresse.ort);
 
-  elements.coAdresse().type(adresse.coAdresse ?? '');
+  // elements.coAdresse().type(adresse.coAdresse ?? '');
 
   elements.landSelect().click();
   getSelectOption(adresse.land).click();

@@ -1,5 +1,8 @@
 import { Ausbildung } from '@dv/shared/model/gesuch';
-import { getSelectOption } from '@dv/shared/util-fn/e2e-helpers';
+import {
+  getSelectOption,
+  getSelectOptionByText,
+} from '@dv/shared/util-fn/e2e-helpers';
 
 export interface EducationForm extends Ausbildung {
   ausbildungsstaette: string;
@@ -28,7 +31,7 @@ const elements = {
 
 const fillEducationForm = (ausbildung: EducationForm) => {
   elements.ausbildungsstaetteSelect().click();
-  getSelectOption(ausbildung.ausbildungsstaette).click();
+  getSelectOptionByText(ausbildung.ausbildungsstaette).click();
 
   elements.ausbildungsgangSelect().click();
   getSelectOption(ausbildung.ausbildungsgang).click();

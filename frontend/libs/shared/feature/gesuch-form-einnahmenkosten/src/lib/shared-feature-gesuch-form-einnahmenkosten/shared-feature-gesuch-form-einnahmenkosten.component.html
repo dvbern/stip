@@ -275,8 +275,12 @@
               dvSharedUiFormField
             >
               <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
-              <mat-radio-button [value]="true"> {{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
-              <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+              <mat-radio-button [attr.data-testid]="'yes'" [value]="true">
+                {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
+              >
+              <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
+                'shared.form.radio.no' | translate
+              }}</mat-radio-button>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
@@ -295,8 +299,12 @@
               dvSharedUiFormField
             >
               <mat-label>{{ 'shared.form.einnahmenkosten.willDarlehen.label' | translate }}</mat-label>
-              <mat-radio-button [value]="true"> {{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
-              <mat-radio-button [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+              <mat-radio-button [attr.data-testid]="'yes'" [value]="true">
+                {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
+              >
+              <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
+                'shared.form.radio.no' | translate
+              }}</mat-radio-button>
 
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}

@@ -13,6 +13,8 @@ const elements = {
   nachname: () => cy.getBySel('form-person-nachname'),
   vorname: () => cy.getBySel('form-person-vorname'),
 
+  adresse: AddressPO,
+
   identischerZivilrechtlicherWohnsitz: () =>
     cy.getBySel('form-person-identischerZivilrechtlicherWohnsitz'),
   email: () => cy.getBySel('form-person-email'),
@@ -55,12 +57,16 @@ const fillPersonForm = (person: PersonInAusbildung) => {
   elements.nationalitaetSelect().click();
   getSelectOption(person.nationalitaet).click();
 
+  // todo: check if this default works
+  elements.heimatort().type(person.heimatort ?? 'Bern');
+
   elements.zivilstandSelect().click();
   getSelectOption(person.zivilstand ?? 'LEDIG').click();
 
   elements.wohnsitzSelect().click();
   getSelectOption(person.wohnsitz).click();
 
+  // todos: should this be abstracted even more?
   elements.quellenbesteuertRadio().within(() => {
     getRadioOption(person.quellenbesteuert).click();
   });
