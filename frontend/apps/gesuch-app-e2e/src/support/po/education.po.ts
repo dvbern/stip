@@ -7,10 +7,14 @@ import {
 export interface EducationForm extends Ausbildung {
   ausbildungsstaette: string;
   ausbildungsgang: string;
+  // todo: why is this not in the model?
+  ausbildungsland: string;
 }
 
 const elements = {
   form: () => cy.getBySel('form-education-form'),
+
+  ausbildungslandSelect: () => cy.getBySel('form-education-ausbildungsland'),
   ausbildungsstaetteSelect: () =>
     cy.getBySel('form-education-ausbildungsstaette'),
   alternativeAusbildungsstaette: () =>
@@ -30,6 +34,9 @@ const elements = {
 };
 
 const fillEducationForm = (ausbildung: EducationForm) => {
+  elements.ausbildungslandSelect().click();
+  getSelectOption(ausbildung.ausbildungsland).click();
+
   elements.ausbildungsstaetteSelect().click();
   getSelectOptionByText(ausbildung.ausbildungsstaette).click();
 

@@ -66,6 +66,7 @@ const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
 
 // todo: fix typo
 const education: EducationValues = {
+  ausbildungsland: 'CH',
   ausbildungsstaette: 'Universtität Bern',
   ausbildungsgang: 'Bachelor',
   fachrichtung: 'Informatik',
