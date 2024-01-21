@@ -50,21 +50,24 @@
       </div>
       <div class="row g-4 mt-1">
         <!-- ZULAGEN -->
-        @if (!hiddenFieldsSetSig().has(form.controls.zulagen)) {
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.zulagen.label' | translate }}</mat-label>
-            <input
-              formControlName="zulagen"
-              data-testid="form-einnahmen-kosten-zulagen"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-        }
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-label>
+            {{ 'shared.form.einnahmenkosten.zulagen.label' | translate }}
+            @if (!formStateSig().hatKinder) {
+              {{ 'shared.form.einnahmenkosten.optional.label' | translate }}
+            }
+          </mat-label>
+          <input
+            data-testid="form-einnahmen-kosten-zulagen"
+            formControlName="zulagen"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
       </div>
       <div class="row g-4 mt-1">
         <!-- RENTEN -->

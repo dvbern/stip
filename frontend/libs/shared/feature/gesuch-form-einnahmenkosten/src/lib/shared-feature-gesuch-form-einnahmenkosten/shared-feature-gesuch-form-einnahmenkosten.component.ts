@@ -195,7 +195,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.controls.renten,
           !hatElternteilVerloren,
         );
-        this.setDisabledStateAndHide(this.form.controls.zulagen, !hatKinder);
+        this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,
           !willSekundarstufeZwei,
@@ -312,10 +312,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
+    const { hatKinder } = this.formStateSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'nettoerwerbseinkommen',
       'alimente',
-      'zulagen',
       'renten',
       'ausbildungskostenSekundarstufeZwei',
       'ausbildungskostenTertiaerstufe',
@@ -325,6 +325,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'verdienstRealisiert',
       'willDarlehen',
       'auswaertigeMittagessenProWoche',
+      ...(hatKinder ? ['zulagen' as const] : []),
     ]);
     return {
       gesuchId: gesuch?.id,

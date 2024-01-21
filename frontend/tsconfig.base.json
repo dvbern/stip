@@ -61,6 +61,7 @@
       "@dv/shared/feature/gesuch-form-partner": ["libs/shared/feature/gesuch-form-partner/src/index.ts"],
       "@dv/shared/feature/gesuch-form-person": ["libs/shared/feature/gesuch-form-person/src/index.ts"],
       "@dv/shared/model/api": ["libs/shared/model/api/src/index.ts"],
+      "@dv/shared/model/ausbildung": ["libs/shared/model/ausbildung/src/index.ts"],
       "@dv/shared/model/config": ["libs/shared/model/config/src/index.ts"],
       "@dv/shared/model/eltern": ["libs/shared/model/eltern/src/index.ts"],
       "@dv/shared/model/error": ["libs/shared/model/error/src/index.ts"],

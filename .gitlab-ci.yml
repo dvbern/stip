@@ -1,9 +1,9 @@
-stages: [build, deploy, mirror]
+stages: [test, build, deploy, mirror]
 
 variables:
   ARGOCD_APP: stip
   ARGOCD_IMAGES: api,gesuch-app,sachbearbeitung-app
-  STIP_OVERLAYS_DIR: manifests/stip/overlays 
+  STIP_OVERLAYS_DIR: manifests/stip/overlays
 
 backend:
   stage: build
@@ -17,49 +17,52 @@ frontend:
     include: frontend/.gitlab-ci.yml
     strategy: depend
 
-# TODO: Mirror job
-
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.1.6'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
     inputs:
       name: "deploy:dev"
-      deployment-overlay-path: "$STIP_OVERLAYS_DIR/dev"
       deployment-environment: "dev"
       deployment-environment-url: "https://dev-stip.$DVB_OCP_MERCURY_ROUTER"
-      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-environment-values-path: "charts/stip/environments/dev/values.yaml"
       deployment-on: "default"
       deployment-mode: "on_success"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.1.4'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
     inputs:
       name: "deploy:uat"
-      deployment-overlay-path: "$STIP_OVERLAYS_DIR/uat"
       deployment-environment: "uat"
-      deployment-environment-url: "https://uat-stip.$DVB_OCP_APOLLO_ROUTER"
-      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-environment-url: "https://uat-stip.kibon.ch"
+      deployment-environment-values-path: "charts/stip/environments/uat/values.yaml"
       deployment-on: "tag"
       deployment-mode: "manual"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
     inputs:
       name: "deploy:prod"
-      deployment-overlay-path: "$STIP_OVERLAYS_DIR/prod"
       deployment-environment: "prod"
-      deployment-environment-url: "https://stip.$DVB_OCP_APOLLO_ROUTER"
-      deployment-image-names: "$ARGOCD_IMAGES"
+      deployment-environment-url: "https://stip.kibon.ch"
+      deployment-environment-values-path: "charts/stip/environments/prod/values.yaml"
       deployment-on: "tag"
       deployment-mode: "manual"
       argocd-server: "$ARGOCD_SERVER"
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
-  
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.4'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.6'
     inputs:
       review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@f59b6bfce107fe606d8fd6685044e61a1dcf53a5'
+    inputs:
+      git-mirror-target: "dvbern/stip"
+      mirror-on: "tag"
+      mirror-when: "always"
