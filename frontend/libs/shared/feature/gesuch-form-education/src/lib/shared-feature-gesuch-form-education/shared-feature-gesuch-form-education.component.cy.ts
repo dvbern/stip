@@ -66,9 +66,14 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     });
     it('should have disabled inputs depending on each previous input state', () => {
       const fields = {
+        notFound: 'form-education-ausbildungNichtGefunden',
         land: 'form-education-ausbildungsland',
         staette: 'form-education-ausbildungsstaette',
         gang: 'form-education-ausbildungsgang',
+        alternativ: {
+          staette: 'form-education-alternativeAusbildungsstaette',
+          gang: 'form-education-alternativeAusbildungsgang',
+        },
         fachrichtung: 'form-education-fachrichtung',
       };
       mountWithGesuch();
@@ -89,6 +94,16 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       cy.getBySel(fields.fachrichtung).should('be.disabled');
       cy.getBySel(fields.gang).click();
       cy.get('mat-option').eq(1).click();
+      cy.getBySel(fields.fachrichtung).should('not.be.disabled');
+      cy.getBySel(fields.fachrichtung).type('fachrichtung1');
+      cy.getBySel(fields.fachrichtung).should('have.value', 'fachrichtung1');
+
+      cy.getBySel(fields.notFound).click();
+      cy.getBySel(fields.fachrichtung).should('have.value', '');
+
+      cy.getBySel(fields.fachrichtung).should('be.disabled');
+      cy.getBySel(fields.alternativ.staette).type('staette1');
+      cy.getBySel(fields.alternativ.gang).type('gang1');
       cy.getBySel(fields.fachrichtung).should('not.be.disabled');
     });
   });

@@ -122,7 +122,13 @@
 
           <!-- alternativer Ausbildungsgang -->
           @if (form.value['ausbildungNichtGefunden']) {
-            <input type="text" matInput formControlName="alternativeAusbildungsgang" [readonly]="viewSig().readonly" />
+            <input
+              type="text"
+              matInput
+              formControlName="alternativeAusbildungsgang"
+              data-testid="form-education-alternativeAusbildungsgang"
+              [readonly]="viewSig().readonly"
+            />
           }
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
