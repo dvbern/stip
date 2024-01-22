@@ -1,4 +1,4 @@
-stages: [build, deploy, mirror]
+stages: [test, build, deploy, mirror]
 
 variables:
   ARGOCD_APP: stip

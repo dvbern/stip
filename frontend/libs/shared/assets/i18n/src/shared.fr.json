@@ -269,6 +269,7 @@
   "shared.form.partner.jahreseinkommen.label": "Revenu annuel",
 
   "shared.einnahmenkosten.title": "Recettes & coûts",
+  "shared.form.einnahmenkosten.optional.label": "(en option)",
   "shared.form.einnahmenkosten.top.incomplete": "Veuillez d'abord remplir les étapes suivantes:",
   "shared.form.einnahmenkosten.top.incomplete.and": "et",
   "shared.form.einnahmenkosten.einnahmen.title": "Recettes par an",
