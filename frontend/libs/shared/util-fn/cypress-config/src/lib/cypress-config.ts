@@ -37,8 +37,23 @@ export const dvCypressConfigs = {
     },
   }),
   e2e: createCypressConfig({
+    video: true,
     setupNodeEvents(on, config) {
       task(on, config);
+
+      // https://docs.cypress.io/guides/guides/screenshots-and-videos#Delete-videos-for-specs-without-failing-or-retried-tests
+      on('after:spec', (_, results: CypressCommandLine.RunResult) => {
+        if (results && results.video) {
+          // Do we have failures for any retry attempts?
+          const failures = results.tests.some((test) =>
+            test.attempts.some((attempt) => attempt.state === 'failed'),
+          );
+          if (!failures) {
+            // delete the video if the spec passed and no tests retried
+            fs.unlinkSync(results.video);
+          }
+        }
+      });
       return config;
     },
     watchForFileChanges: false,

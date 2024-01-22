@@ -6,11 +6,8 @@ describe('gesuch-app cockpit', () => {
     cy.visit('/');
   });
 
-  it('should redirect to cockpit on startup', () => {
+  it('should redirect to cockpit on startup and render periode', () => {
     cy.url().should('include', 'gesuch-app-feature-cockpit');
-  });
-
-  it('should render periode', () => {
     CockpitPO.getPeriodeTitle().should('exist');
     CockpitPO.getPeriodeTitle()
       .first()
