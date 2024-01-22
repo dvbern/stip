@@ -152,12 +152,8 @@
           (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
           '.label' | translate
       }}</label>
-      <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
-        'shared.form.radio.yes' | translate
-      }}</mat-radio-button>
-      <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
-        'shared.form.radio.no' | translate
-      }}</mat-radio-button>
+      <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -171,12 +167,8 @@
       class="col-12 d-flex flex-column"
     >
       <label>{{ 'shared.form.eltern.ergaenzungsleistungAusbezahlt.label' | translate }}</label>
-      <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
-        'shared.form.radio.yes' | translate
-      }}</mat-radio-button>
-      <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
-        'shared.form.radio.no' | translate
-      }}</mat-radio-button>
+      <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -191,13 +183,9 @@
     >
       <label>{{ 'shared.form.eltern.sozialhilfebeitraegeAusbezahlt.label' | translate }}</label>
 
-      <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
-        'shared.form.radio.yes' | translate
-      }}</mat-radio-button>
+      <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
 
-      <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
-        'shared.form.radio.no' | translate
-      }}</mat-radio-button>
+      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}

@@ -21,6 +21,7 @@ import {
   Geschwister,
   Kind,
   LebenslaufItem,
+  Partner,
   PersonInAusbildung,
 } from '@dv/shared/model/gesuch';
 import { LebenslaufPO } from '../../support/po/lebenslauf.po';
@@ -30,6 +31,7 @@ import { GeschwisterPO } from '../../support/po/geschwister.po';
 import { KinderPO } from '../../support/po/kinder.po';
 import { AuszahlungPO } from '../../support/po/auszahlung.po';
 import { EinnahmenKostenPO } from '../../support/po/einnahmen-kosten.po';
+import { PartnerPO } from '../../support/po/partner.po';
 
 const adresse: Adresse = {
   land: 'CH',
@@ -53,7 +55,7 @@ const person: PersonInAusbildung = {
   nationalitaet: 'CH',
   // niederlassungsstatus: Niederlassungsstatus.C,
   heimatort: 'Bern',
-  zivilstand: 'LEDIG',
+  zivilstand: 'VERHEIRATET',
   wohnsitz: 'FAMILIE',
   quellenbesteuert: false,
   sozialhilfebeitraege: false,
@@ -121,6 +123,14 @@ const einnahmenKosten: EinnahmenKosten = {
   auswaertigeMittagessenProWoche: 5,
 };
 
+const partner: Partner = {
+  adresse,
+  vorname: 'Susanne',
+  geburtsdatum: '16.12.1990',
+  sozialversicherungsnummer: '756.2222.2222.55',
+  nachname: 'Schmitt',
+};
+
 const vater: Eltern = {
   sozialversicherungsnummer: '756.2222.2222.24',
   nachname: 'Muster',
@@ -173,7 +183,7 @@ const familienlsituation: Familiensituation = {
   elternVerheiratetZusammen: true,
 };
 
-describe('gesuch-app: Neues gesuch erstellen - Person', () => {
+describe.only('gesuch-app: Neues gesuch erstellen - Person', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/');
@@ -240,13 +250,13 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
 
     ElternPO.addVater(vater);
 
+    ElternPO.elements.loading().should('not.exist');
+
     ElternPO.addMutter(mutter);
 
     ElternPO.elements.loading().should('not.exist');
 
     getButtonContinue().click();
-
-    cy.intercept('GET', '/api/v1/gesuch/*').as('getResource');
 
     // Step 6: Geschwister  ========================================================
     getStepTitle().should('contain.text', 'Geschwister');
@@ -255,17 +265,21 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
 
     GeschwisterPO.addGeschwister(bruder);
 
-    // cy.intercept('PATCH', '/api/v1/gesuch/*').as('patchResource');
-    // cy.intercept('GET', '/api/v1/gesuch/*').as('getResource');
-
-    // cy.wait('@patchResource');
-    // cy.wait('@getResource');
-
     GeschwisterPO.elements.loading().should('not.exist');
 
-    cy.getBySel('button-continue').click();
+    getButtonContinue().click();
 
     // Step 7: Ehe und Konkubinatspartner ============================================
+
+    getStepTitle().should('contain.text', 'Ehe- / Konkubinatspartner');
+
+    PartnerPO.elements.loading().should('not.exist');
+
+    PartnerPO.fillPartnerForm(partner);
+
+    getButtonSaveContinue().click();
+
+    PartnerPO.elements.loading().should('not.exist');
 
     // step 8: Kinder ================================================================
     getStepTitle().should('contain.text', 'Kinder');
@@ -276,13 +290,7 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
 
     KinderPO.elements.loading().should('not.exist');
 
-    // cy.intercept('PATCH', '/api/v1/gesuch/*').as('patchResource');
-    // cy.intercept('GET', '/api/v1/gesuch/*').as('getResource');
-
-    cy.getBySel('button-continue').click();
-
-    // cy.wait('@patchResource');
-    // cy.wait('@getResource');
+    getButtonContinue().click();
 
     // Step 9: Auszahlung ===========================================================
 
@@ -304,18 +312,12 @@ describe('gesuch-app: Neues gesuch erstellen - Person', () => {
 
     EinnahmenKostenPO.fillEinnahmenKostenForm(einnahmenKosten);
 
-    // cy.intercept('PATCH', '/api/v1/gesuch/*').as('patchResource');
-    // cy.intercept('GET', '/api/v1/gesuch/*').as('getResource');
-
     EinnahmenKostenPO.elements
       .form()
       .should('have.class', 'ng-valid')
       .then(() => {
         getButtonSaveContinue().click();
       });
-
-    // cy.wait('@patchResource');
-    // cy.wait('@getResource');
 
     EinnahmenKostenPO.elements.loading().should('not.exist');
 

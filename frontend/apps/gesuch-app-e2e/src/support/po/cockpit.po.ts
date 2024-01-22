@@ -1,7 +1,5 @@
-import {
-  getStepTitle,
-  SharedPersonInAusbildungPO,
-} from '@dv/shared/util-fn/e2e-helpers';
+import { getStepTitle } from '@dv/shared/util-fn/e2e-helpers';
+import { PersonPO } from './person.po';
 
 export namespace CockpitPO {
   export const getPeriodeTitle = () => cy.getBySel('cockpit-periode-title');
@@ -13,10 +11,6 @@ export namespace CockpitPO {
   export const openGesuch = () => {
     CockpitPO.getGesuchEdit().first().click();
     getStepTitle().should('contain.text', 'Person in Ausbildung');
-    SharedPersonInAusbildungPO.getFormPersonName().should('exist');
+    PersonPO.elements.nachname().should('exist');
   };
-
-  // export const newGesuch = () => {
-  //   CockpitPO.getGesuchNew().click();
-  // };
 }

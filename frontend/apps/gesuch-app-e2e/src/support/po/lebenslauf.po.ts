@@ -23,6 +23,8 @@ const elements = {
   ausbildungAbgeschlossenCheckbox: () =>
     cy.getBySel('lebenslauf-editor-ausbildung-abgeschlossen'),
 
+  timelineGap: () => cy.getBySel('timeline-gap-block'),
+
   loading: () => cy.getBySel('lebenslauf-editor-loading'),
   getButtonDelete: () => cy.getBySel('lebenslauf-editor-delete'),
   getButtonSave: () => cy.getBySel('button-save'),

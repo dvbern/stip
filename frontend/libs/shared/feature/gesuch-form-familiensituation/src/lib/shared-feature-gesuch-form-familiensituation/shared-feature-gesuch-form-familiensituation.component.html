@@ -30,11 +30,11 @@
               'shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label' | translate
             }}</label>
 
-            <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
+            <mat-radio-button data-testid="yes" [value]="true">{{
               'shared.form.radio.yes' | translate
             }}</mat-radio-button>
 
-            <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
+            <mat-radio-button data-testid="no" [value]="false">{{
               'shared.form.radio.no' | translate
             }}</mat-radio-button>
 
@@ -56,11 +56,11 @@
               class="d-flex flex-column"
             >
               <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
-              <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
+              <mat-radio-button data-testid="yes" [value]="true">{{
                 'shared.form.radio.yes' | translate
               }}</mat-radio-button>
 
-              <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
+              <mat-radio-button data-testid="no" [value]="false">{{
                 'shared.form.radio.no' | translate
               }}</mat-radio-button>
 
@@ -117,11 +117,11 @@
               class="d-flex flex-column"
             >
               <label>{{ 'shared.form.familiensituation.elternteil-verstorben-unbekannt.label' | translate }}</label>
-              <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
+              <mat-radio-button data-testid="yes" [value]="true">{{
                 'shared.form.radio.yes' | translate
               }}</mat-radio-button>
 
-              <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
+              <mat-radio-button data-testid="no" [value]="false">{{
                 'shared.form.radio.no' | translate
               }}</mat-radio-button>
 
@@ -395,13 +395,11 @@
         >
           <label>{{ 'shared.form.familiensituation.mutter-wiederverheiratet.label' | translate }}</label>
 
-          <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
+          <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | translate
           }}</mat-radio-button>
 
-          <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
-            'shared.form.radio.no' | translate
-          }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
 
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -420,13 +418,11 @@
         >
           <label>{{ 'shared.form.familiensituation.vater-wiederverheiratet.label' | translate }}</label>
 
-          <mat-radio-button [attr.data-testid]="'yes'" [value]="true">{{
+          <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | translate
           }}</mat-radio-button>
 
-          <mat-radio-button [attr.data-testid]="'no'" [value]="false">{{
-            'shared.form.radio.no' | translate
-          }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
 
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}

@@ -72,6 +72,7 @@ const MEDIUM_AGE_ADULT = 30;
     TranslateModule,
     SharedUiFormFieldDirective,
     SharedUiFormCountryComponent,
+    SharedUiFormAddressComponent,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,

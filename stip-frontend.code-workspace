@@ -15,7 +15,8 @@
   },
   "settings": {
     "files.exclude": {
-      "backend/**": true
+      "backend/**": true,
+      "contract/**": true
     },
     "eslint.validate": ["json"],
     "eslint.workingDirectories": ["./frontend"],
@@ -52,6 +53,28 @@
         "password": "stip"
       }
     ],
-    "angular.enable-strict-mode-prompt": false
+    "angular.enable-strict-mode-prompt": false,
+    "launch": {
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "type": "chrome",
+          "request": "launch",
+          "name": "Stip Chrome",
+          "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "msedge",
+          "request": "launch",
+          "name": "Stip Edge",
+          "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        }
+      ]
+    },
+    "editor.formatOnSave": true
   }
 }

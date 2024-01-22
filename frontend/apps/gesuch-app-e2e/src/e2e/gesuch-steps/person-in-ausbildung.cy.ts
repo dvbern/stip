@@ -2,10 +2,10 @@ import {
   getNavDashboard,
   getStepPersonInAusbildung,
   getStepTitle,
-  SharedPersonInAusbildungPO,
 } from '@dv/shared/util-fn/e2e-helpers';
 
 import { CockpitPO } from '../../support/po/cockpit.po';
+import { PersonPO } from '../../support/po/person.po';
 
 describe('gesuch-app gesuch form', () => {
   beforeEach(() => {
@@ -17,16 +17,17 @@ describe('gesuch-app gesuch form', () => {
     CockpitPO.openGesuch();
     getStepPersonInAusbildung().click();
     getStepTitle().should('contain.text', 'Person in Ausbildung');
-    SharedPersonInAusbildungPO.getFormPersonLoading().should('not.exist');
+    PersonPO.elements.loading().should('not.exist');
 
     // Name auslesen
-    SharedPersonInAusbildungPO.getFormPersonName()
+    PersonPO.elements
+      .nachname()
       .invoke('val')
       .then((prevName) => {
         // Name updaten
-        SharedPersonInAusbildungPO.getFormPersonName().focus();
-        SharedPersonInAusbildungPO.getFormPersonName().clear();
-        SharedPersonInAusbildungPO.getFormPersonName().type('Updated name');
+        PersonPO.elements.nachname().focus();
+        PersonPO.elements.nachname().clear();
+        PersonPO.elements.nachname().type('Updated name');
 
         // speichern und weiter
         cy.get('form').submit();
@@ -38,16 +39,17 @@ describe('gesuch-app gesuch form', () => {
         CockpitPO.getGesuchEdit().first().click();
         getStepPersonInAusbildung().click();
         getStepTitle().should('contain.text', 'Person in Ausbildung');
-        SharedPersonInAusbildungPO.getFormPersonName()
+        PersonPO.elements
+          .nachname()
           .invoke('val')
           .then((updatedName) => {
             // CHECK: Name muss geaendert worden sein
             expect(updatedName === 'Updated name');
 
             // RESET: Name zuruecksetzen
-            SharedPersonInAusbildungPO.getFormPersonName().focus();
-            SharedPersonInAusbildungPO.getFormPersonName().clear();
-            SharedPersonInAusbildungPO.getFormPersonName().type(prevName);
+            PersonPO.elements.nachname().focus();
+            PersonPO.elements.nachname().clear();
+            PersonPO.elements.nachname().type(prevName);
             cy.get('form').submit();
           });
       });
