@@ -63,6 +63,7 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@10ddb6aa7b7338ee8fc9a8760d2fe46710e35980'
     inputs:
+      git-mirror-clone-token: "$GITLAB_STIP_PULL_TOKEN"
       git-mirror-target: "dvbern/stip"
       mirror-on: "tag"
       mirror-when: "always"
