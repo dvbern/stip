@@ -19,6 +19,15 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
+import { subYears } from 'date-fns';
+import { Observable, Subject } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+
+import { SharedUtilFormService } from '@dv/shared/util/form';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import {
   addWohnsitzControls,
@@ -46,14 +55,7 @@ import {
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
 } from '@dv/shared/util/validator-date';
-import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
-import { subYears } from 'date-fns';
-import { Subject } from 'rxjs';
-import { SharedUtilFormService } from '@dv/shared/util/form';
-import { MatSelectModule } from '@angular/material/select';
-import { MatRadioModule } from '@angular/material/radio';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;
@@ -89,6 +91,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
   @Output() saveTriggered = new EventEmitter<KindUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
+  @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
@@ -131,6 +134,12 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   });
 
   constructor() {
+    this.formIsUnsaved = observeUnsavedChanges(
+      this.form,
+      this.saveTriggered,
+      this.closeTriggered,
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         updateWohnsitzControlsState(
@@ -181,6 +190,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         geburtsdatum,
         ...wohnsitzAnteileNumber(this.form.getRawValue()),
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -190,6 +200,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
   handleCancel() {
     this.closeTriggered.emit();
+    this.form.markAsPristine();
   }
 
   onGeburtsdatumBlur() {

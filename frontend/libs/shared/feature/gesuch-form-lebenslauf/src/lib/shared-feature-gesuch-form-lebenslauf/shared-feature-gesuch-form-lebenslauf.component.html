@@ -6,6 +6,7 @@
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (deleteTriggered)="handleDeleteItem($event)"
+    (formIsUnsaved)="hasUnsavedChanges = $event"
     [minStartDate]="minDate$()"
     [maxEndDate]="maxDate$()"
   />

@@ -1,4 +1,7 @@
 import { Route } from '@angular/router';
+
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+
 import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch-form-partner/shared-feature-gesuch-form-partner.component';
 
 export const gesuchAppFeatureGesuchFormPartnerRoutes: Route[] = [
@@ -14,6 +17,7 @@ export const gesuchAppFeatureGesuchFormPartnerRoutes: Route[] = [
         path: ':id',
         title: 'shared.partner.title',
         component: SharedFeatureGesuchFormPartnerComponent,
+        canDeactivate: [checkUnsavedChanges],
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children
