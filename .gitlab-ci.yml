@@ -1,4 +1,4 @@
-stages: [test, build, e2e, deploy, mirror]
+stages: [test, build, e2e, mirror, deploy]
 
 variables:
   ARGOCD_APP: stip
@@ -61,7 +61,7 @@ include:
     inputs:
       review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@f59b6bfce107fe606d8fd6685044e61a1dcf53a5'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@b55c4f991581ed4504d85ae42d3dc5d21894ba96'
     inputs:
       git-mirror-target: "dvbern/stip"
       mirror-on: "tag"
