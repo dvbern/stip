@@ -27,6 +27,7 @@
     <querydsl.version>5.0.0</querydsl.version>
     <skipITs>true</skipITs>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+    <sonar.exclusions>file:**/generated/**</sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
     <rest-assured.version>4.5.1</rest-assured.version>
