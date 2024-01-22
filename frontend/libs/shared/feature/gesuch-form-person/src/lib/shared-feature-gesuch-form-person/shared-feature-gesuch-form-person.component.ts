@@ -229,6 +229,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   });
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         updateWohnsitzControlsState(
@@ -389,6 +390,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           origin: PERSON,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 

@@ -1,10 +1,13 @@
 import { Route } from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+
 import {
   gesuchAppDataAccessAusbildungsstaetteEffects,
   gesuchAppDataAccessAusbildungsstaettesFeature,
 } from '@dv/shared/data-access/ausbildungsstaette';
-import { provideEffects } from '@ngrx/effects';
-import { provideState } from '@ngrx/store';
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+
 import { SharedFeatureGesuchFormLebenslaufComponent } from './shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.component';
 
 export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
@@ -21,6 +24,7 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
         path: ':id',
         title: 'shared.geschwister.title',
         component: SharedFeatureGesuchFormLebenslaufComponent,
+        canDeactivate: [checkUnsavedChanges],
         data: {
           // reinitialize when navigated to the same route
           shouldReuseRoute: false,

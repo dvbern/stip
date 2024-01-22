@@ -8,15 +8,14 @@
       "executor": "@nx/cypress:cypress",
       "options": {
         "cypressConfig": "apps/gesuch-app-e2e/cypress.config.ts",
-        "devServerTarget": "gesuch-app:serve:development",
         "testingType": "e2e"
       },
       "configurations": {
-        "production": {
-          "devServerTarget": "gesuch-app:serve:production"
+        "dev": {
+          "devServerTarget": "gesuch-app:serve:development"
         },
-        "ci": {
-          "devServerTarget": "gesuch-app:serve-static"
+        "prod": {
+          "devServerTarget": "gesuch-app:serve:production"
         }
       }
     },

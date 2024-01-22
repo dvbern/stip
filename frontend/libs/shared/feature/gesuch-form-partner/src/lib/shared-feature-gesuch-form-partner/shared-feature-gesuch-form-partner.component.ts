@@ -138,6 +138,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   );
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         const { gesuchFormular } = this.view();
@@ -239,6 +240,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           gesuchFormular,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
@@ -268,6 +270,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           origin: PARTNER,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 

@@ -156,6 +156,28 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
   });
 
+  describe('should have conditional required validation for some fields', () => {
+    it('field zulagen should be optional if no kind has been specified', () => {
+      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
+      SharedEinnahmenKostenInAusbildungPO.getFormSave().click();
+      SharedEinnahmenKostenInAusbildungPO.getFormZulagen().should(
+        'not.have.class',
+        'ng-invalid',
+      );
+    });
+
+    it('field zulagen should not be optional if a kind has been specified', () => {
+      mountWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE, {
+        kinds: [{} as never],
+      });
+      SharedEinnahmenKostenInAusbildungPO.getFormSave().click();
+      SharedEinnahmenKostenInAusbildungPO.getFormZulagen().should(
+        'have.class',
+        'ng-invalid',
+      );
+    });
+  });
+
   describe('should display alimente field correctly based on current state', () => {
     it('should not display alimente field if gerichtlicheAlimentenregelung is undefined', () => {
       mountWithInitialGesuchsformular({
@@ -201,11 +223,15 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 });
 
-function mountWithPreparedGesuchWithWohnsitz(wohnsitz: Wohnsitz): void {
+function mountWithPreparedGesuchWithWohnsitz(
+  wohnsitz: Wohnsitz,
+  overrideGesuchFormular: Partial<GesuchFormularUpdate> = {},
+): void {
   const gesuchFormular = {
     familiensituation: { elternVerheiratetZusammen: true },
     personInAusbildung: createEmptyPersonInAusbildung(),
     ausbildung: createEmptyAusbildung(),
+    ...overrideGesuchFormular,
   };
   gesuchFormular.personInAusbildung.wohnsitz = wohnsitz;
   mountWithInitialGesuchsformular(gesuchFormular);
