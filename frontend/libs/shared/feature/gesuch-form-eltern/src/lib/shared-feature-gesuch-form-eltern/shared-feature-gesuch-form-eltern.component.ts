@@ -39,6 +39,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
 
+  hasUnsavedChanges = false;
   laenderSig = computed(() => {
     return this.viewSig().laender;
   });

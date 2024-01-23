@@ -24,6 +24,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
+import { Observable } from 'rxjs';
 
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -54,6 +55,8 @@ import {
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
+
 import { selectSharedFeatureGesuchFormElternView } from '../shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.selector';
 
 const MAX_AGE_ADULT = 130;
@@ -92,11 +95,12 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     'elternTyp'
   > &
     Required<Pick<ElternUpdate, 'elternTyp'>>;
+  @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) gesuchFormular!: SharedModelGesuchFormular;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
-  @Input({ required: true }) laender!: Land[];
+  @Output() formIsUnsaved: Observable<boolean>;
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
 
@@ -155,6 +159,13 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   });
 
   constructor() {
+    this.formIsUnsaved = observeUnsavedChanges(
+      this.form,
+      this.saveTriggered,
+      this.closeTriggered,
+      this.deleteTriggered,
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
@@ -237,6 +248,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         elternTyp: this.elternteil.elternTyp,
         geburtsdatum,
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -251,6 +263,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   }
 
   handleCancel() {
+    this.form.markAsPristine();
     this.closeTriggered.emit();
   }
 

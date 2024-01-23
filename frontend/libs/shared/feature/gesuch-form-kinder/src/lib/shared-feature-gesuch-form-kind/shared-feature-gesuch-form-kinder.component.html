@@ -13,6 +13,7 @@
     [kind]="editedKind"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
+    (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
   <div class="row g-4 my-2">

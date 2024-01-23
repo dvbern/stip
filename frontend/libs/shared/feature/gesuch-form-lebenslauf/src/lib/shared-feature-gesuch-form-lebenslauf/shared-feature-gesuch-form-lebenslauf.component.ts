@@ -46,6 +46,7 @@ const AUSBILDUNGS_MONTH = 8; // August
 export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
+  hasUnsavedChanges = false;
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
 

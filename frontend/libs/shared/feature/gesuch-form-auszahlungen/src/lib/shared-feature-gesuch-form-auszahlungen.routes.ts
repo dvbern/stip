@@ -1,4 +1,7 @@
 import { Route } from '@angular/router';
+
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+
 import { SharedFeatureGesuchFormAuszahlungenComponent } from './shared-feature-gesuch-form-auszahlungen/shared-feature-gesuch-form-auszahlungen.component';
 
 export const gesuchAppFeatureGesuchFormAuszahlungenRoutes: Route[] = [
@@ -14,6 +17,7 @@ export const gesuchAppFeatureGesuchFormAuszahlungenRoutes: Route[] = [
         path: ':id',
         title: 'shared.auszahlung.title',
         component: SharedFeatureGesuchFormAuszahlungenComponent,
+        canDeactivate: [checkUnsavedChanges],
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children

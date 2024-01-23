@@ -36,6 +36,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
 
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
+  hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;

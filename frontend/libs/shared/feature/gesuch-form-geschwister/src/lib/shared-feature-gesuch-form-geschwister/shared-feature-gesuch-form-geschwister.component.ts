@@ -36,6 +36,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
+  hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
@@ -53,7 +54,12 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   editedGeschwister?: Partial<GeschwisterUpdate>;
 
+  constructor() {
+    console.log('GESCHWISTER INIT 1', this.hasUnsavedChanges);
+  }
+
   ngOnInit(): void {
+    console.log('GESCHWISTER INIT 2 ', this.hasUnsavedChanges);
     this.store.dispatch(SharedEventGesuchFormGeschwister.init());
   }
 
