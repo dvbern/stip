@@ -71,6 +71,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         staette: 'form-education-ausbildungsstaette',
         gang: 'form-education-ausbildungsgang',
         alternativ: {
+          land: 'form-education-alternativeAusbildungsland',
           staette: 'form-education-alternativeAusbildungsstaette',
           gang: 'form-education-alternativeAusbildungsgang',
         },
@@ -99,12 +100,30 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       cy.getBySel(fields.fachrichtung).should('have.value', 'fachrichtung1');
 
       cy.getBySel(fields.notFound).click();
-      cy.getBySel(fields.fachrichtung).should('have.value', '');
+      [
+        fields.alternativ.land,
+        fields.alternativ.staette,
+        fields.alternativ.gang,
+        fields.fachrichtung,
+      ].forEach((field) => {
+        cy.getBySel(field).should('have.value', '');
+        cy.getBySel(field).should('not.be.disabled');
+        cy.getBySel(field).focus().blur();
+        cy.getBySel(field).should('have.class', 'ng-invalid');
+      });
 
-      cy.getBySel(fields.fachrichtung).should('be.disabled');
-      cy.getBySel(fields.alternativ.staette).type('staette1');
-      cy.getBySel(fields.alternativ.gang).type('gang1');
-      cy.getBySel(fields.fachrichtung).should('not.be.disabled');
+      cy.getBySel(fields.alternativ.land)
+        .type('land1')
+        .should('have.value', 'land1');
+      cy.getBySel(fields.alternativ.staette)
+        .type('staette1')
+        .should('have.value', 'staette1');
+      cy.getBySel(fields.alternativ.gang)
+        .type('gang1')
+        .should('have.value', 'gang1');
+      cy.getBySel(fields.fachrichtung)
+        .type('fachrichtung1')
+        .should('have.value', 'fachrichtung1');
     });
   });
 });
