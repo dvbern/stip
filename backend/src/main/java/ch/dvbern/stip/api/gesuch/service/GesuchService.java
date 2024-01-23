@@ -67,17 +67,20 @@ public class GesuchService {
 
 	private final GesuchsperiodenService gesuchsperiodeService;
 
+	@Transactional
 	public Optional<GesuchDto> findGesuch(UUID id) {
 		return gesuchRepository.findByIdOptional(id).map(this::mapWithTrancheToWorkWith);
 	}
+
 	@Transactional
 	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
 		var gesuch = gesuchRepository.requireById(gesuchId);
-		preventUpdateVonGesuchIfReadOnyl(gesuch);
+		preventUpdateVonGesuchIfReadOnly(gesuch);
 		var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
 				.orElseThrow(NotFoundException::new);
 		updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 	}
+
 
 	private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
 		resetFieldsOnUpdate(trancheToUpdate.getGesuchFormular(), trancheUpdate.getGesuchFormular());
@@ -89,6 +92,7 @@ public class GesuchService {
 		}
 	}
 
+	@Transactional
 	public List<GesuchDto> findAllWithPersonInAusbildung() {
 		return gesuchRepository.findAllWithFormular()
 				.filter(gesuch -> this.getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null)
@@ -99,12 +103,12 @@ public class GesuchService {
 	@Transactional
 	public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
 		Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
-		createInitalGesuchTranche(gesuch);
+		createInitialGesuchTranche(gesuch);
 		gesuchRepository.persist(gesuch);
 		return mapWithTrancheToWorkWith(gesuch);
 	}
 
-	private void createInitalGesuchTranche(Gesuch gesuch) {
+	private void createInitialGesuchTranche(Gesuch gesuch) {
 		var periode = gesuchsperiodeService
 				.getGesuchsperiode(gesuch.getGesuchsperiode().getId())
 				.orElseThrow(NotFoundException::new);
@@ -116,10 +120,12 @@ public class GesuchService {
 		gesuch.getGesuchTranchen().add(tranche);
 	}
 
+	@Transactional
 	public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
 		return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
 	}
 
+	@Transactional
 	public List<GesuchDto> findAllForFall(UUID fallId) {
 		return gesuchRepository.findAllForFall(fallId).map(this::mapWithTrancheToWorkWith).toList();
 	}
@@ -127,7 +133,7 @@ public class GesuchService {
 	@Transactional
 	public void deleteGesuch(UUID gesuchId) {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		preventUpdateVonGesuchIfReadOnyl(gesuch);
+		preventUpdateVonGesuchIfReadOnly(gesuch);
 		gesuchRepository.delete(gesuch);
 	}
 
@@ -136,7 +142,7 @@ public class GesuchService {
 		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
 		validateGesuchEinreichen(gesuch);
-		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).count() == 0) {
+		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).findAny().isEmpty()) {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
 		} else {
 			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
@@ -343,7 +349,7 @@ public class GesuchService {
 				!update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
 	}
 
-	private void preventUpdateVonGesuchIfReadOnyl(Gesuch gesuch) {
+	private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
 		if (Gesuchstatus.readonlyGesuchStatusList.contains(gesuch.getGesuchStatus())) {
 			throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
 					+ gesuch.getGesuchStatus());

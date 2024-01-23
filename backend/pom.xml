@@ -23,7 +23,7 @@
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.2.3.Final</quarkus.platform.version>
+    <quarkus.platform.version>3.6.4</quarkus.platform.version>
     <querydsl.version>5.0.0</querydsl.version>
     <skipITs>true</skipITs>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
@@ -159,7 +159,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.13.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tika</groupId>
@@ -262,6 +261,11 @@
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>1.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.13.0</version>
     </dependency>
   </dependencies>
   <build>

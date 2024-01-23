@@ -92,6 +92,7 @@ public class BenutzerService {
 		return optionalFall.map(benutzerMapper::toDto);
 	}
 
+	@Transactional
 	public List<BenutzerDto> getAllBenutzer() {
 		return benutzerRepository.findAll().stream().map(benutzerMapper::toDto).toList();
 	}

@@ -34,7 +34,7 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
 export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private store = inject(Store);
 
-  view$ = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
@@ -42,7 +42,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   sortedKinderSig = computed(() => {
-    const originalList = this.view$().gesuchFormular?.kinds;
+    const originalList = this.viewSig().gesuchFormular?.kinds;
     return originalList
       ? [...originalList].sort((a, b) =>
           (a.vorname + ' ' + a.nachname).localeCompare(
@@ -99,7 +99,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id)
       this.store.dispatch(
         SharedEventGesuchFormKinder.nextTriggered({
@@ -114,7 +114,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithDeletedKinder(kind: KindUpdate) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const updatedKinders = gesuchFormular?.kinds?.filter(
       (entry) => entry.id !== kind.id,
     );
@@ -130,7 +130,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithUpdatedKind(kind: KindUpdate) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     // update existing kind if found
     const updatedKinders =
       gesuchFormular?.kinds?.map((oldKind) => {
