@@ -187,7 +187,7 @@
   "shared.form.geschwister.geburtsdatum.label": "Geburtsdatum",
   "shared.form.geschwister.wohnsitz.label": "Wohnt bei",
   "shared.form.geschwister.ausbildungssituation.label": "Ausbildungssituation",
-  "shared.form.geschwister.ausbildungssituation.select.IN_AUSBILDUNG": "In Ausbildung",
+  "shared.form.geschwister.ausbildungssituation.select.IN_AUSBILDUNG": "In nachobligatorischer Ausbildung",
   "shared.form.geschwister.ausbildungssituation.select.KEINE": "Keine der Optionen",
   "shared.form.geschwister.ausbildungssituation.select.VORSCHULPFLICHTIG": "Vorschulpflichtig",
   "shared.form.geschwister.ausbildungssituation.select.SCHULPFLICHTIG": "Schulpflichtig",
