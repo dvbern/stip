@@ -1,4 +1,7 @@
 import { Route } from '@angular/router';
+
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+
 import { SharedFeatureGesuchFormGeschwisterComponent } from './shared-feature-gesuch-form-geschwister/shared-feature-gesuch-form-geschwister.component';
 
 export const gesuchAppFeatureGesuchFormGeschwisterRoutes: Route[] = [
@@ -14,6 +17,8 @@ export const gesuchAppFeatureGesuchFormGeschwisterRoutes: Route[] = [
         path: ':id',
         title: 'shared.geschwister.title',
         component: SharedFeatureGesuchFormGeschwisterComponent,
+        runGuardsAndResolvers: 'always',
+        canDeactivate: [checkUnsavedChanges],
         data: {
           // reinitialize when navigated to the same route
           shouldReuseRoute: false,

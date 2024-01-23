@@ -1,5 +1,7 @@
 import { Route } from '@angular/router';
 
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+
 import { SharedFeatureGesuchFormElternComponent } from './shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.component';
 
 export const gesuchAppFeatureGesuchFormElternRoutes: Route[] = [
@@ -15,6 +17,8 @@ export const gesuchAppFeatureGesuchFormElternRoutes: Route[] = [
         path: ':id',
         title: 'shared.eltern.title',
         component: SharedFeatureGesuchFormElternComponent,
+        runGuardsAndResolvers: 'always',
+        canDeactivate: [checkUnsavedChanges],
         data: {
           // reinitialize when navigated to the same route
           shouldReuseRoute: false,

@@ -180,6 +180,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   });
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     // add multi-control validators
     this.form.controls.ausbildungEnd.addValidators([
       createDateDependencyValidator(
@@ -393,6 +394,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           gesuchFormular,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 

@@ -187,6 +187,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   }
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     Object.values(this.form.controls).forEach((control) => control.disable());
     const {
       elternVerheiratetZusammen,
@@ -463,6 +464,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           origin: FAMILIENSITUATION,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 

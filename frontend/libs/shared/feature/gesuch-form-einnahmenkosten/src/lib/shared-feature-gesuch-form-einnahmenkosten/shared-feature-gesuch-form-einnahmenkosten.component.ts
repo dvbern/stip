@@ -172,6 +172,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   );
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         const {
@@ -294,6 +295,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           origin: EINNAHMEN_KOSTEN,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
