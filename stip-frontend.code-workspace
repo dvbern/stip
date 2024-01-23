@@ -51,6 +51,16 @@
         "database": "stip",
         "username": "stip",
         "password": "stip"
+      },
+      {
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 5445,
+        "driver": "PostgreSQL",
+        "database": "stip",
+        "username": "stip",
+        "password": "stip",
+        "name": "stip-dektop"
       }
     ],
     "angular.enable-strict-mode-prompt": false,

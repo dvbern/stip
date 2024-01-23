@@ -183,11 +183,14 @@ const familienlsituation: Familiensituation = {
   elternVerheiratetZusammen: true,
 };
 
-describe.only('gesuch-app: Neues gesuch erstellen - Person', () => {
+describe('gesuch-app: Neues gesuch erstellen - Person', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/');
   });
+
+  let entityId = '';
+  let token = '';
 
   it('should enter the correct person data', () => {
     CockpitPO.getGesuchNew().click();
@@ -198,12 +201,19 @@ describe.only('gesuch-app: Neues gesuch erstellen - Person', () => {
 
     PersonPO.fillPersonForm(person);
 
+    cy.intercept('GET', '/api/v1/gesuch/*').as('getRequest');
+
     PersonPO.elements
       .form()
       .should('have.class', 'ng-valid')
       .then(() => {
         getButtonSaveContinue().click();
       });
+
+    cy.wait('@getRequest').then((interception) => {
+      entityId = interception.response?.body.id;
+      token = interception.request.headers['authorization'] as string;
+    });
 
     // Step 2: Ausbildung ========================================================
 
@@ -324,6 +334,19 @@ describe.only('gesuch-app: Neues gesuch erstellen - Person', () => {
     // Step 11: Freigabe =============================================================
     getStepTitle().should('contain.text', 'Freigabe');
 
-    cy.getBySel('button-abschluss').click();
+    CockpitPO.getNavDashboard().click();
+    // cy.getBySel('button-abschluss').click();
+  });
+
+  after(() => {
+    if (entityId && token) {
+      cy.request({
+        method: 'DELETE',
+        url: `api/v1/gesuch/${entityId}`,
+        headers: {
+          Authorization: token,
+        },
+      });
+    }
   });
 });

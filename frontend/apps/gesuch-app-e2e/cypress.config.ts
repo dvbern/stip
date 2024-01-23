@@ -11,6 +11,7 @@ export default defineConfig({
     ...nxE2EPreset(__dirname),
     baseUrl: process.env['E2E_BASEURL_GS'],
     ...dvCypressConfigs.e2e,
+    specPattern: ['./src/e2e/gesuch-steps/gesuch-erstellen.cy.ts'],
   },
   env: {
     E2E_USERNAME: process.env['E2E_USERNAME'],
