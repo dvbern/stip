@@ -102,7 +102,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   @Output() deleteTriggered = new EventEmitter<string>();
   @Output() formIsUnsaved: Observable<boolean>;
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
 
@@ -167,13 +167,13 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     );
     this.formUtils.registerFormForUnsavedCheck(this);
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
-    const zivilrechtlichChanged$ = this.formUtils.signalFromChanges(
+    const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
     );
     effect(
       () => {
-        const zivilrechtlichIdentisch = zivilrechtlichChanged$() === true;
+        const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
         this.formUtils.setDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
           zivilrechtlichIdentisch,
@@ -191,7 +191,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     );
     effect(
       () => {
-        const { readonly } = this.view$();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),

@@ -264,7 +264,7 @@
 
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
-        @if (!view$().readonly) {
+        @if (!viewSig().readonly) {
           <button type="submit" class="btn btn-primary" data-testid="form-einnahmen-kosten-save">
             {{ 'shared.form.save-and-continue' | translate }}
           </button>
