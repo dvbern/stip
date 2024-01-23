@@ -189,6 +189,21 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
+    const landChangedSig = this.formUtils.signalFromChanges(
+      this.form.controls.adresse.controls.land,
+      { useDefault: true },
+    );
+    // make SVN required if CH
+    effect(
+      () => {
+        const land = landChangedSig();
+        this.formUtils.setRequired(
+          this.form.controls.sozialversicherungsnummer,
+          land === 'CH',
+        );
+      },
+      { allowSignalWrites: true },
+    );
     effect(
       () => {
         const { readonly } = this.viewSig();
@@ -213,7 +228,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       });
 
       const svValidators = [
-        Validators.required,
         sharedUtilValidatorAhv(
           `eltern${capitalized(this.elternteil.elternTyp)}`,
           this.gesuchFormular,
