@@ -72,7 +72,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
       this.viewSig().gesuchFormular?.ausbildung?.ausbildungBegin;
     if (ausbildungStart) {
       const start = dateFromMonthYearString(ausbildungStart);
-      console.log('ausbildung start parsed: ', start);
+      // console.log('ausbildung start parsed: ', start);
       return start ? subMonths(start, 1) : null;
     }
     return null;
