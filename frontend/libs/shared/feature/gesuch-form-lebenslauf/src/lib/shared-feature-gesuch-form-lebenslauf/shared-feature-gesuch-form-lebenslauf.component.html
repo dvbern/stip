@@ -13,7 +13,7 @@
 } @else {
   <!-- loading -->
   @if (viewSig().loading) {
-    <div data-testid="form-item-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
+    <div data-testid="lebenslauf-editor-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
       <div class="dv-progress-bar-indeterminate">
         <div></div>
       </div>
@@ -90,7 +90,7 @@
       }
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
-        <button type="button" class="btn btn-primary" (click)="handleContinue()">
+        <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-continue">
           {{ 'shared.form.gonext' | translate }}
         </button>
       </dv-shared-ui-step-form-buttons>

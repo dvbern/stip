@@ -92,7 +92,7 @@
   <!-- ADD -->
   <div class="d-flex flex-column flex-md-row">
     @if (!viewSig().readonly) {
-      <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()">
+      <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()" data-testid="button-add-kind">
         {{ 'shared.form.kinder.add' | translate }}
       </button>
     }
@@ -100,7 +100,7 @@
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-primary" (click)="handleContinue()">
+    <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-continue">
       {{ 'shared.form.gonext' | translate }}
     </button>
   </dv-shared-ui-step-form-buttons>

@@ -31,6 +31,8 @@ export class ElternteilCardComponent {
   @Output()
   addTriggered = new EventEmitter<ElternTyp>();
 
+  elternTypen = ElternTyp;
+
   handleClick() {
     if (this.elternteil) {
       this.editTriggered.emit(this.elternteil);
