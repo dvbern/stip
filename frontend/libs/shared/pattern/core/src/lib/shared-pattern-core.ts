@@ -73,10 +73,10 @@ export class ExplicitMissingTranslationHandler
 
 export function debugReducers<T>(reducer: ActionReducer<T>): ActionReducer<T> {
   return function (state, action) {
-    if (isDevMode()) {
-      console['log']('state', state);
-      console['log']('action', action);
-    }
+    // if (isDevMode()) {
+    //   console['log']('state', state);
+    //   console['log']('action', action);
+    // }
 
     return reducer(state, action);
   };

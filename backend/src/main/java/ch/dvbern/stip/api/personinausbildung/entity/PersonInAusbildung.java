@@ -120,6 +120,10 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private boolean digitaleKommunikation = true;
 
     @NotNull
+    @Column(nullable = false)
+    private boolean vormundschaft = false;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Sprache korrespondenzSprache;

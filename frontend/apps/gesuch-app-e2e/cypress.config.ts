@@ -11,10 +11,12 @@ export default defineConfig({
     ...nxE2EPreset(__dirname),
     baseUrl: process.env['E2E_BASEURL_GS'],
     ...dvCypressConfigs.e2e,
+    specPattern: ['./src/e2e/gesuch-steps/gesuch-erstellen.cy.ts'],
+    scrollBehavior: 'center',
   },
   env: {
     E2E_USERNAME: process.env['E2E_USERNAME'],
     E2E_PASSWORD: process.env['E2E_PASSWORD'],
   },
-  scrollBehavior: 'nearest',
+  defaultCommandTimeout: 20000,
 });
