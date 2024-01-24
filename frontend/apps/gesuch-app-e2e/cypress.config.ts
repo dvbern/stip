@@ -12,6 +12,7 @@ export default defineConfig({
     baseUrl: process.env['E2E_BASEURL_GS'],
     ...dvCypressConfigs.e2e,
     specPattern: ['./src/e2e/gesuch-steps/gesuch-erstellen.cy.ts'],
+    scrollBehavior: 'center',
   },
   env: {
     E2E_USERNAME: process.env['E2E_USERNAME'],

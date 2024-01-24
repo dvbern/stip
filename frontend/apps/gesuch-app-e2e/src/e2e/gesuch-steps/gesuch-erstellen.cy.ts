@@ -184,6 +184,10 @@ const familienlsituation: Familiensituation = {
 };
 
 describe('gesuch-app: Neues gesuch erstellen - Person', () => {
+  before(() => {
+    cy.viewport(1440, 1080);
+  });
+
   beforeEach(() => {
     cy.login();
     cy.visit('/');

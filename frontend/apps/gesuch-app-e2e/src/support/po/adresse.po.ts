@@ -11,11 +11,14 @@ const elements = {
 };
 
 const fillAddressForm = (adresse: Adresse) => {
-  elements.strasse().type(adresse.strasse);
-  elements.hausnummer().type(adresse.hausnummer ?? '');
+  elements.strasse().clear().type(adresse.strasse);
+  elements
+    .hausnummer()
+    .clear()
+    .type(adresse.hausnummer ?? '');
 
-  elements.plz().type(adresse.plz);
-  elements.ort().type(adresse.ort);
+  elements.plz().clear().type(adresse.plz);
+  elements.ort().clear().type(adresse.ort);
 
   // elements.coAdresse().type(adresse.coAdresse ?? '');
 
