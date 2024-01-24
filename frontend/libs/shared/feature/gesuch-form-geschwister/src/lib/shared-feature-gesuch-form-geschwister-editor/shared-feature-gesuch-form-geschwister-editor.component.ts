@@ -27,7 +27,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import {
   addWohnsitzControls,
@@ -56,6 +56,7 @@ import {
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
 } from '@dv/shared/util/validator-date';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;
@@ -94,6 +95,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
 
   @Output() saveTriggered = new EventEmitter<GeschwisterUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
+  @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
@@ -134,6 +136,12 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   });
 
   constructor() {
+    this.formIsUnsaved = observeUnsavedChanges(
+      this.form,
+      this.saveTriggered,
+      this.closeTriggered,
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         updateWohnsitzControlsState(
@@ -203,6 +211,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
         wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
         ...wohnsitzAnteileNumber(this.form.getRawValue()),
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -211,6 +220,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   }
 
   handleCancel() {
+    this.form.markAsPristine();
     this.closeTriggered.emit();
   }
 

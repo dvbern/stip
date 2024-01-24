@@ -39,12 +39,13 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
 
+  hasUnsavedChanges = false;
   laenderSig = computed(() => {
-    return this.view$().laender;
+    return this.viewSig().laender;
   });
   languageSig = this.store.selectSignal(selectLanguage);
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
 
   editedElternteil?: Omit<Partial<ElternUpdate>, 'elternTyp'> &
     Required<Pick<ElternUpdate, 'elternTyp'>>;
@@ -54,7 +55,7 @@ export class SharedFeatureGesuchFormElternComponent {
     this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
     effect(
       () => {
-        const { loading, gesuch, gesuchFormular } = this.view$();
+        const { loading, gesuch, gesuchFormular } = this.viewSig();
         if (
           !loading &&
           gesuch &&
@@ -82,7 +83,7 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   handleAddElternteil(elternTyp: ElternTyp) {
-    const { gesuchFormular } = this.view$();
+    const { gesuchFormular } = this.viewSig();
     this.editedElternteil = setupElternTeil(elternTyp, gesuchFormular);
   }
 
@@ -119,7 +120,7 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormEltern.nextTriggered({
@@ -135,7 +136,8 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   private buildUpdatedGesuchWithDeletedElternteil(id: string) {
-    const { gesuch, gesuchFormular, expectMutter, expectVater } = this.view$();
+    const { gesuch, gesuchFormular, expectMutter, expectVater } =
+      this.viewSig();
     const updatedElterns = gesuchFormular?.elterns?.filter(
       (entry) =>
         entry.id !== id &&
@@ -153,7 +155,8 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   private buildUpdatedGesuchWithUpdatedElternteil(elternteil: ElternUpdate) {
-    const { gesuch, gesuchFormular, expectMutter, expectVater } = this.view$();
+    const { gesuch, gesuchFormular, expectMutter, expectVater } =
+      this.viewSig();
     // update existing elternteil if found
     const updatedElterns =
       gesuchFormular?.elterns

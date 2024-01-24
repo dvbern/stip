@@ -1,5 +1,5 @@
 <!-- loading -->
-@if (view$().loading) {
+@if (viewSig().loading) {
   <div data-testid="form-kinder-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
     <div class="dv-progress-bar-indeterminate">
       <div></div>
@@ -13,6 +13,7 @@
     [kind]="editedKind"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
+    (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
   <div class="row g-4 my-2">
@@ -46,7 +47,7 @@
                       {{ parseBackendLocalDateAndPrint(kinder.geburtsdatum, languageSig()) }}
                     </td>
                     <td>
-                      @if (!view$().readonly) {
+                      @if (!viewSig().readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -58,7 +59,7 @@
                       }
                     </td>
                     <td>
-                      @if (!view$().readonly) {
+                      @if (!viewSig().readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -90,7 +91,7 @@
 
   <!-- ADD -->
   <div class="d-flex flex-column flex-md-row">
-    @if (!view$().readonly) {
+    @if (!viewSig().readonly) {
       <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()" data-testid="button-add-kind">
         {{ 'shared.form.kinder.add' | translate }}
       </button>

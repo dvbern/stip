@@ -167,11 +167,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     } as const;
   });
 
-  view$ = this.store.selectSignal(
-    selectSharedFeatureGesuchFormEinnahmenkostenView,
-  );
-
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         const {
@@ -231,7 +228,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     // fill form
     effect(
       () => {
-        const { einnahmenKosten } = this.view$();
+        const { einnahmenKosten } = this.viewSig();
         if (einnahmenKosten) {
           this.form.patchValue({
             ...einnahmenKosten,
@@ -261,7 +258,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
     effect(
       () => {
-        const { readonly } = this.view$();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
@@ -294,11 +291,12 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           origin: EINNAHMEN_KOSTEN,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormEinnahmenkosten.nextTriggered({

@@ -189,7 +189,7 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    @if (item.id && !view$().readonly) {
+    @if (item.id && !viewSig().readonly) {
       <button
         type="button"
         class="btn btn-outline-primary d-flex align-items-center justify-content-center"
@@ -205,7 +205,7 @@
     <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-back">
       {{ 'shared.form.back' | translate }}
     </button>
-    @if (!view$().readonly) {
+    @if (!viewSig().readonly) {
       <button type="submit" class="btn btn-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | translate }}
       </button>

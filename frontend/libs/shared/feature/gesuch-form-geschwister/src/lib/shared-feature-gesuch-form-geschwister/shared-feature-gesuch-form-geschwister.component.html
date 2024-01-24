@@ -1,5 +1,5 @@
 <!-- loading -->
-@if (view$().loading) {
+@if (viewSig().loading) {
   <div data-testid="form-geschwister-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
     <div class="dv-progress-bar-indeterminate">
       <div></div>
@@ -13,6 +13,7 @@
     [geschwister]="editedGeschwister"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
+    (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
   <!-- Infobx -->
@@ -58,7 +59,7 @@
                       {{ parseBackendLocalDateAndPrint(geschwister.geburtsdatum, languageSig()) }}
                     </td>
                     <td>
-                      @if (!view$().readonly) {
+                      @if (!viewSig().readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -70,7 +71,7 @@
                       }
                     </td>
                     <td>
-                      @if (!view$().readonly) {
+                      @if (!viewSig().readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -102,7 +103,7 @@
 
   <!-- ADD -->
   <div class="d-flex flex-column flex-md-row">
-    @if (!view$().readonly) {
+    @if (!viewSig().readonly) {
       <button
         type="button"
         class="btn btn-outline-primary"

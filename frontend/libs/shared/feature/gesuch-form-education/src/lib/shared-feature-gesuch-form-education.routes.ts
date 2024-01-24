@@ -6,6 +6,7 @@ import {
   gesuchAppDataAccessAusbildungsstaetteEffects,
   gesuchAppDataAccessAusbildungsstaettesFeature,
 } from '@dv/shared/data-access/ausbildungsstaette';
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
 
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education/shared-feature-gesuch-form-education.component';
 
@@ -24,6 +25,7 @@ export const gesuchAppFeatureGesuchFormEducationRoutes: Route[] = [
         path: ':id',
         title: 'shared.education.title',
         component: SharedFeatureGesuchFormEducationComponent,
+        canDeactivate: [checkUnsavedChanges],
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children

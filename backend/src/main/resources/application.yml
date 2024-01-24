@@ -10,6 +10,10 @@ kstip:
     mimetypes: "image/tiff,image/jpeg,image/png,application/pdf"
 
 quarkus:
+  execution-model-annotations:
+    # TODO: use FAIL as soon as @Blocking is detected on subclasses
+    # see: https://github.com/quarkusio/quarkus/issues/38275
+    detection-mode: WARN
   flyway:
     locations: "db/migration"
     baseline-on-migrate: true

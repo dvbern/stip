@@ -6,19 +6,20 @@
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (deleteTriggered)="handleDeleteItem($event)"
-    [minStartDate]="minDate$()"
-    [maxEndDate]="maxDate$()"
+    (formIsUnsaved)="hasUnsavedChanges = $event"
+    [minStartDate]="minDateSig()"
+    [maxEndDate]="maxDateSig()"
   />
 } @else {
   <!-- loading -->
-  @if (view$().loading) {
+  @if (viewSig().loading) {
     <div data-testid="lebenslauf-editor-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
       <div class="dv-progress-bar-indeterminate">
         <div></div>
       </div>
     </div>
   } @else {
-    @if (minDate$() && maxDate$()) {
+    @if (minDateSig() && maxDateSig()) {
       <!-- Infobx -->
       <div class="row">
         <div class="col-12 col-xl-8 my-3">
@@ -26,8 +27,8 @@
             'shared.form.lebenslauf.top.info'
               | translate
                 : {
-                    von: minDate$() ? printDateAsMonthYear(minDate$()!) : '?',
-                    bis: maxDate$() ? printDateAsMonthYear(maxDate$()!) : '?'
+                    von: minDateSig() ? printDateAsMonthYear(minDateSig()!) : '?',
+                    bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?'
                   }
           }}</span>
         </div>
@@ -38,7 +39,7 @@
         <div class="col-12 col-xl-8 my-3">
           <div class="row add-buttons">
             <div class="col-6 my-3">
-              @if (!view$().readonly) {
+              @if (!viewSig().readonly) {
                 <button
                   type="button"
                   class="btn btn-outline-secondary w-100 d-flex flex-column align-items-center rounded-2 fs-5"
@@ -51,7 +52,7 @@
               }
             </div>
             <div class="col-6 my-3">
-              @if (!view$().readonly) {
+              @if (!viewSig().readonly) {
                 <button
                   type="button"
                   class="btn btn-outline-dark w-100 d-flex flex-column align-items-center rounded-2 fs-5"
@@ -68,19 +69,19 @@
       </div>
 
       <!-- visual -->
-      @if (view$().lebenslaufItems; as items) {
+      @if (viewSig().lebenslaufItems; as items) {
         <div class="row">
-          @if (view$().ausbildung; as ausbildung) {
+          @if (viewSig().ausbildung; as ausbildung) {
             <div class="col-12 col-xl-8 my-3">
               <dv-shared-feature-gesuch-form-lebenslauf-visual
-                [startDate]="minDate$()"
+                [startDate]="minDateSig()"
                 [lebenslaufItems]="items"
                 [ausbildung]="ausbildung"
                 (addAusbildungTriggered)="handleAddAusbildung($event)"
                 (addTaetigkeitTriggered)="handleAddTaetigkeit($event)"
                 (editItemTriggered)="handleEditItemId($event, items)"
                 (deleteItemTriggered)="handleDeleteItem($event)"
-                [ausbildungsstaettes]="view$().ausbildungsstaettes"
+                [ausbildungsstaettes]="viewSig().ausbildungsstaettes"
                 [language]="languageSig()"
               />
             </div>

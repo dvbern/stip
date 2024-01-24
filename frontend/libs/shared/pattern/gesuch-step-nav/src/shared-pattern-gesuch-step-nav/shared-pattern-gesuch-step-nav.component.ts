@@ -37,7 +37,7 @@ export class SharedPatternGesuchStepNavComponent {
 
   route = inject(Router);
 
-  view$ = this.store.selectSignal(sharedPatternGesuchStepNavView);
+  viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
   trackByIndex(index: number): number {
     return index;

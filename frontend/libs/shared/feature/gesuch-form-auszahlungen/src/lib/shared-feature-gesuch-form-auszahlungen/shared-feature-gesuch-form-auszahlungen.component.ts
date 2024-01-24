@@ -98,7 +98,8 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   view = this.store.selectSignal(selectSharedFeatureGesuchFormAuszahlungenView);
 
   constructor() {
-    const kontoinhaberinChanges$ = toSignal(
+    this.formUtils.registerFormForUnsavedCheck(this);
+    const kontoinhaberinChangesSig = toSignal(
       this.form.controls.kontoinhaber.valueChanges,
     );
 
@@ -120,7 +121,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
     effect(
       () => {
-        const kontoinhaberin = kontoinhaberinChanges$();
+        const kontoinhaberin = kontoinhaberinChangesSig();
         const { gesuchFormular } = this.view();
         this.language = this.languageSig();
         switch (kontoinhaberin) {
@@ -182,6 +183,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           origin: AUSZAHLUNGEN,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
