@@ -22,7 +22,7 @@ export function isMobileNumber(telefonnummer: string): boolean {
 
 export function sharedUtilValidatorTelefonNummer(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    console.log('validating phone number: ' + control?.value);
+    // console.log('validating phone number: ' + control?.value);
     if (!control?.value) {
       return null;
     } else {

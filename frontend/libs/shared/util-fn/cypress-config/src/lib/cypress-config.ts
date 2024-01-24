@@ -56,5 +56,6 @@ export const dvCypressConfigs = {
       });
       return config;
     },
+    watchForFileChanges: false,
   }),
 };

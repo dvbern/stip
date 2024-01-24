@@ -131,13 +131,13 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     const ausbildungsstaettes = this.viewSig().ausbildungsstaetteByLand;
     return ausbildungsland ? ausbildungsstaettes[ausbildungsland] : [];
   });
-  ausbildungsstaette$ = toSignal(
+  ausbildungsstaetteSig = toSignal(
     this.form.controls.ausbildungsstaette.valueChanges,
   );
   ausbildungsstaettOptionsSig: Signal<
     (Ausbildungsstaette & { translatedName?: string })[]
   > = computed(() => {
-    const currentAusbildungsstaette = this.ausbildungsstaette$();
+    const currentAusbildungsstaette = this.ausbildungsstaetteSig();
     const toReturn = currentAusbildungsstaette
       ? this.ausbildungsstaetteByLandSig().filter((ausbildungsstaette) => {
           return this.getTranslatedAusbildungstaetteName(ausbildungsstaette)
@@ -153,21 +153,19 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       };
     });
   });
-  ausbildungNichtGefundenChanged$ = toSignal(
+  ausbildungNichtGefundenChangedSig = toSignal(
     this.form.controls.ausbildungNichtGefunden.valueChanges,
   );
-  startChanged$ = toSignal(this.form.controls.ausbildungBegin.valueChanges);
-  endChanged$ = toSignal(this.form.controls.ausbildungEnd.valueChanges);
+  startChangedSig = toSignal(this.form.controls.ausbildungBegin.valueChanges);
+  endChangedSig = toSignal(this.form.controls.ausbildungEnd.valueChanges);
 
-  ausbildungsgangOptions$: Signal<
-    (Ausbildungsgang & { translatedName?: string })[]
-  > = computed(() => {
+  ausbildungsgangOptionsSig = computed(() => {
     return (
       this.viewSig()
         .ausbildungsstaettes.find(
           (ausbildungsstaette) =>
             this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ===
-            this.ausbildungsstaette$(),
+            this.ausbildungsstaetteSig(),
         )
         ?.ausbildungsgaenge?.map((ausbildungsgang) => {
           return {
@@ -196,7 +194,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
-        const value = this.ausbildungNichtGefundenChanged$();
+        const value = this.ausbildungNichtGefundenChangedSig();
         const {
           alternativeAusbildungsgang,
           alternativeAusbildungsstaette,
@@ -236,14 +234,14 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     });
     effect(
       () => {
-        this.startChanged$();
+        this.startChangedSig();
         this.form.controls.ausbildungEnd.updateValueAndValidity();
       },
       { allowSignalWrites: true },
     );
     effect(
       () => {
-        this.endChanged$();
+        this.endChangedSig();
         this.form.controls.ausbildungBegin.updateValueAndValidity();
       },
       { allowSignalWrites: true },
