@@ -16,30 +16,30 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-
-import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
-import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  Ausbildungsgang,
-  AusbildungsPensum,
-  Ausbildungsstaette,
-} from '@dv/shared/model/gesuch';
+import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import {
   AusbildungsLand,
   ortToAusbidlungsLand,
 } from '@dv/shared/model/ausbildung';
 import {
+  Ausbildungsgang,
+  AusbildungsPensum,
+  Ausbildungsstaette,
+} from '@dv/shared/model/gesuch';
+import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
+import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   convertTempFormToRealValues,
   SharedUtilFormService,
@@ -57,7 +57,6 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
 import { startWith } from 'rxjs';
-
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-education.selector';
 
 @Component({
@@ -78,6 +77,7 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MatAutocompleteModule,
     MaskitoModule,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-education.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

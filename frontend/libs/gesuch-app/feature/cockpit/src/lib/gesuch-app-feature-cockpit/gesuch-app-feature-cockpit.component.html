@@ -14,9 +14,7 @@
         <!-- progress -->
         @if (cockpitView().loading) {
           <div class="my-4">
-            <div class="dv-progress-bar-indeterminate bg-dark">
-              <div class="bg-light"></div>
-            </div>
+            <dv-shared-ui-loading data-testid="cockpit-loadig"></dv-shared-ui-loading>
           </div>
         }
 

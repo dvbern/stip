@@ -58,6 +58,7 @@ import {
 import { SharedUtilFormService } from '@dv/shared/util/form';
 
 import { selectSharedFeatureGesuchFormPartnerView } from './shared-feature-gesuch-form-partner.selector';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_ADULT = 10;
@@ -81,6 +82,7 @@ const MEDIUM_AGE_ADULT = 30;
     SharedUiFormMessageErrorDirective,
     GesuchAppUiStepFormButtonsComponent,
     MatCheckboxModule,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-partner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

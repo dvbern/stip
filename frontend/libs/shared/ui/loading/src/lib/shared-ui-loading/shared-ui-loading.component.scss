@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // background: var(--dv-gray-100);
+  width: 100%;
+}
+.spinner {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+
+  border: 4px solid var(--dv-gray-300);
+  border-top-color: var(--dv-gray-800);
+  border-radius: 9999px;
+
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+.spinner-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

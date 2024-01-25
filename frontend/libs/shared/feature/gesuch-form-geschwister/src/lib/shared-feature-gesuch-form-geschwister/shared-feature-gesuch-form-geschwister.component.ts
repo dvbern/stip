@@ -19,6 +19,8 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
 
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   standalone: true,
@@ -27,6 +29,7 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
     NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

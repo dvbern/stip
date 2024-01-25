@@ -35,6 +35,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
 import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
 // -----
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-gesuch-app-feature-cockpit',
@@ -50,6 +51,7 @@ import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
     NgbDropdownToggle,
     SharedUiIconChipComponent,
     NgbDropdownItem,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
   styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
