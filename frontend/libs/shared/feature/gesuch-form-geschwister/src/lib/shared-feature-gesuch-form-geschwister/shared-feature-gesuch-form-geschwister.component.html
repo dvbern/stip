@@ -1,10 +1,7 @@
 <!-- loading -->
 @if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-geschwister-loading"></dv-shared-ui-loading>
-}
-
-<!-- geschwister editor -->
-@if (editedGeschwister) {
+} @else if (editedGeschwister) {
   <dv-shared-feature-gesuch-form-geschwister-editor
     [geschwister]="editedGeschwister"
     (saveTriggered)="handleEditorSave($event)"

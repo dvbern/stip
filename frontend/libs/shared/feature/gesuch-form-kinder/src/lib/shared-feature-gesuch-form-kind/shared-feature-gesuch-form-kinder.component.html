@@ -1,10 +1,7 @@
 <!-- loading -->
 @if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-kinder-loading"></dv-shared-ui-loading>
-}
-
-<!-- kinder editor -->
-@if (editedKind) {
+} @else if (editedKind) {
   <dv-shared-feature-gesuch-form-kinder-editor
     [kind]="editedKind"
     (saveTriggered)="handleEditorSave($event)"
