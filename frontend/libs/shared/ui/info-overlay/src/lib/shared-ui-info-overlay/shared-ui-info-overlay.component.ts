@@ -37,6 +37,7 @@ import {
 })
 export class SharedUiInfoOverlayComponent implements AfterViewInit {
   @Input() isOpen = false;
+  @Input() overlayPanelClass: string | string[] = '';
   @Output() closeOverlay = new EventEmitter<boolean>();
   public positions = [
     new ConnectionPositionPair(
