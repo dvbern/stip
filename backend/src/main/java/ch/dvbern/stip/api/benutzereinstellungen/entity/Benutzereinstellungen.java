@@ -9,9 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-@Entity(name = "benutzereinstellungen")
+@Entity()
 @Table(indexes = {
-    @Index(name = "IX_benutzereinstellungen_benutzer_id", columnList = "benutzer_id"),
     @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant")
 })
 @Audited
@@ -20,7 +19,7 @@ import org.hibernate.envers.Audited;
 public class Benutzereinstellungen extends AbstractMandantEntity {
 
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "benutzereinstellungen")
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzereinstellungen_benutzer_id"), nullable = false)
     private @Valid Benutzer benutzer;
 

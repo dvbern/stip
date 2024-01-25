@@ -17,8 +17,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Entity
 @Table(
-        indexes = {@Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
-				   @Index(name = "IX_benuter_mandant", columnList = "mandant")}
+    indexes = {
+        @Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
+        @Index(name = "IX_benuter_mandant", columnList = "mandant"),
+        @Index(name = "IX_benutzer_benutzereinstellungen_id", columnList = "benutzereinstellungen_id"),
+    }
 )
 @Audited
 @Getter
@@ -41,7 +44,7 @@ public class Benutzer extends AbstractMandantEntity {
 
     @AhvConstraint(optional = true)
     @Column(nullable = true)
-	private String sozialversicherungsnummer;
+    private String sozialversicherungsnummer;
 
     @NotNull
     @Column(nullable = false)
@@ -54,7 +57,7 @@ public class Benutzer extends AbstractMandantEntity {
     private BenutzerTyp benutzerTyp = BenutzerTyp.GESUCHSTELLER;
 
     @NotNull
-    @OneToOne(mappedBy = "benutzer")
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"), nullable = false)
     private @Valid Benutzereinstellungen benutzereinstellungen;
 }
