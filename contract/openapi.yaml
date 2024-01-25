@@ -2199,13 +2199,21 @@ components:
                 buchstabenFr:
                     description: ''
                     type: string
+        Benutzereinstellungen:
+          description: ''
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+            digitaleKommunikation:
+              description: ''
+              type: boolean
         BenutzereinstellungenUpdate:
             description: ''
             type: object
             properties:
                 id:
                     $ref: '#/components/schemas/UUID'
-                    description: ''
                 digitaleKommunikation:
                     description: ''
                     type: boolean

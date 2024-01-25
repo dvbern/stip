@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BenutzerDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BenutzereinstellungenDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid BenutzerDto benutzer;
   private @Valid Boolean digitaleKommunikation;
 
   /**
@@ -43,24 +41,6 @@ public class BenutzereinstellungenDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public BenutzereinstellungenDto benutzer(BenutzerDto benutzer) {
-    this.benutzer = benutzer;
-    return this;
-  }
-
-  
-  @JsonProperty("benutzer")
-  public BenutzerDto getBenutzer() {
-    return benutzer;
-  }
-
-  @JsonProperty("benutzer")
-  public void setBenutzer(BenutzerDto benutzer) {
-    this.benutzer = benutzer;
   }
 
   /**
@@ -93,13 +73,12 @@ public class BenutzereinstellungenDto  implements Serializable {
     }
     BenutzereinstellungenDto benutzereinstellungen = (BenutzereinstellungenDto) o;
     return Objects.equals(this.id, benutzereinstellungen.id) &&
-        Objects.equals(this.benutzer, benutzereinstellungen.benutzer) &&
         Objects.equals(this.digitaleKommunikation, benutzereinstellungen.digitaleKommunikation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, benutzer, digitaleKommunikation);
+    return Objects.hash(id, digitaleKommunikation);
   }
 
   @Override
@@ -108,7 +87,6 @@ public class BenutzereinstellungenDto  implements Serializable {
     sb.append("class BenutzereinstellungenDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
     sb.append("    digitaleKommunikation: ").append(toIndentedString(digitaleKommunikation)).append("\n");
     sb.append("}");
     return sb.toString();
