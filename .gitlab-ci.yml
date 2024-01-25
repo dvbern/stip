@@ -79,7 +79,7 @@ include:
       context-dir: 'frontend'
       e2e-on: 'never'
 
-nx-new-e2e-test:
+.nx-new-e2e-test:
   extends: .nx-base
   stage: test
   image:
@@ -114,7 +114,7 @@ start-e2e:
 
 run-e2e:
   stage: e2e
-  extends: .nx-e2e-test
+  extends: .nx-new-e2e-test
   resource_group: "e2e"
   variables:
     E2E_USERNAME: $E2E_USERNAME
