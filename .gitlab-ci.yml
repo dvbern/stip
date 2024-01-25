@@ -91,7 +91,7 @@ include:
   artifacts:
     when: always
     paths:
-      - "frontend/\0"
+      - "frontend/__not_configured"
     expire_in: 1 day
   rules:
     - allow_failure: true
