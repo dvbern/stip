@@ -91,7 +91,7 @@ include:
   artifacts:
     when: always
     paths:
-      - "frontend/__not_configured"
+      - "frontend/dist/cypress"
     expire_in: 1 day
   rules:
     - allow_failure: true
