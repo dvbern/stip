@@ -75,26 +75,8 @@ include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@efac626337eae9d43a7ab9555641f42e2f7874fe'
     inputs:
       name: ".nx"
-      # e2e-test-package-version: '13.6.2'
+      e2e-test-package-version: '13.6.2'
       context-dir: 'frontend'
-      e2e-on: 'never'
-
-.nx-new-e2e-test:
-  extends: .nx-base
-  stage: test
-  image:
-    name: "docker-registry.dvbern.ch/dockerhub/cypress/browsers:node-20.10.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1"
-  script:
-    - cd $CI_PROJECT_DIR/frontend
-    - npm install -g cypress@13.6.2
-    - npx nx run-many --target=e2e 
-  artifacts:
-    when: always
-    paths:
-      - "frontend/dist/cypress"
-    expire_in: 1 day
-  rules:
-    - allow_failure: true
 
 start-e2e:
   stage: e2e
@@ -119,7 +101,7 @@ start-e2e:
 
 run-e2e:
   stage: e2e
-  extends: .nx-new-e2e-test
+  extends: .nx-e2e-test
   resource_group: "e2e"
   variables:
     E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
