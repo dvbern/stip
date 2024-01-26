@@ -9,14 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BenutzereinstellungenUpdate } from './benutzereinstellungenUpdate';
 
 /**
  *
  */
-export interface BenutzerUpdate {
-  sozialversicherungsnummer: string;
-  vorname: string;
-  nachname: string;
-  benutzereinstellungen?: BenutzereinstellungenUpdate;
+export interface BenutzereinstellungenUpdate {
+  id?: string;
+  /**
+   *
+   */
+  digitaleKommunikation?: boolean;
 }
