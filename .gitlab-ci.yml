@@ -122,8 +122,6 @@ run-e2e:
   extends: .nx-new-e2e-test
   resource_group: "e2e"
   variables:
-    E2E_USERNAME: "$E2E_USERNAME"
-    E2E_PASSWORD: "$E2E_PASSWORD"
     E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
     E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
   needs:
