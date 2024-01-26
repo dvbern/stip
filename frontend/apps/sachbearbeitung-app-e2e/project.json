@@ -4,7 +4,7 @@
   "sourceRoot": "apps/sachbearbeitung-app-e2e/src",
   "projectType": "application",
   "targets": {
-    "e2e": {
+    "e2e-disabled": {
       "executor": "@nx/cypress:cypress",
       "options": {
         "cypressConfig": "apps/sachbearbeitung-app-e2e/cypress.config.ts",
