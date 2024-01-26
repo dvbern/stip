@@ -1,4 +1,4 @@
-stages: [test, build, e2e, mirror, deploy]
+stages: [e2e, test, build, mirror, deploy]
 
 variables:
   ARGOCD_APP: stip
@@ -102,7 +102,7 @@ start-e2e:
   extends: .install-argocd
   script:
     - argocd app sync stip-e2e --insecure
-    - argocd app set stip-e2e --helm-set image.tag=$VERSION --insecure
+    - argocd app set stip-e2e --helm-set image.tag=cf17b405 --insecure
     - argocd app set stip-e2e --helm-set api.replicaCount=1 --insecure
     - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=1 --insecure
     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=1 --insecure
