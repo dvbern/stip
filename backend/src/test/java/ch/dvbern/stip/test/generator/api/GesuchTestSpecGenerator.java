@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.generator.api;
 
-import ch.dvbern.oss.stip.contract.test.dto.*;
+import ch.dvbern.stip.generated.test.dto.*;
 import ch.dvbern.stip.test.util.TestConstants;
 import org.instancio.Instancio;
 import org.instancio.Model;

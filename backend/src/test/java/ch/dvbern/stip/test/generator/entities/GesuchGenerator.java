@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.generator.entities;
 
-import ch.dvbern.oss.stip.contract.test.dto.*;
+import ch.dvbern.stip.generated.test.dto.*;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;

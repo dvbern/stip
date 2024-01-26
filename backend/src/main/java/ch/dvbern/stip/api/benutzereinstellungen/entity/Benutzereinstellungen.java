@@ -18,10 +18,10 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Benutzereinstellungen extends AbstractMandantEntity {
 
-    @NotNull
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "benutzereinstellungen")
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzereinstellungen_benutzer_id"), nullable = false)
-    private @Valid Benutzer benutzer;
+//    @NotNull
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "benutzereinstellungen")
+//    @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzereinstellungen_benutzer_id"), nullable = false)
+//    private @Valid Benutzer benutzer;
 
     @NotNull
     @Column(nullable = false)

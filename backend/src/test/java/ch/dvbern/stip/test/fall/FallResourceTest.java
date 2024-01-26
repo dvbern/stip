@@ -1,7 +1,7 @@
 package ch.dvbern.stip.test.fall;
 
-import ch.dvbern.oss.stip.contract.test.api.FallApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.FallDtoSpec;
+import ch.dvbern.stip.generated.test.api.FallApiSpec;
+import ch.dvbern.stip.generated.test.dto.FallDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;

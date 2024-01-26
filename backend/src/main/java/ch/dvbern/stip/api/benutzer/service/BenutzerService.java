@@ -85,7 +85,7 @@ public class BenutzerService {
 		newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
 		newBenutzer.setSozialversicherungsnummer(jsonWebToken.getClaim(OidcConstants.CLAIM_AHV_NUMMER));
 		newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
-        newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen().setBenutzer(newBenutzer));
+        newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
 
 		benutzerRepository.persist(newBenutzer);
 		return newBenutzer;
