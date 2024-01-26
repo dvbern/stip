@@ -57,7 +57,6 @@
     "@angular/platform-browser": "~17.0.0",
     "@angular/platform-browser-dynamic": "~17.0.0",
     "@angular/router": "~17.0.0",
-    "@kibon/stip-contract": "^1.20.1",
     "@maskito/angular": "^1.9.0",
     "@maskito/core": "^1.9.0",
     "@maskito/kit": "^1.9.0",
