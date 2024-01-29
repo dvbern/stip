@@ -59,7 +59,6 @@ const person: PersonInAusbildung = {
   wohnsitz: 'FAMILIE',
   quellenbesteuert: false,
   sozialhilfebeitraege: false,
-  digitaleKommunikation: true,
   korrespondenzSprache: 'DEUTSCH',
 };
 

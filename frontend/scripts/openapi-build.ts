@@ -20,7 +20,7 @@ import { PathLike } from 'fs';
 import childProcess from 'child_process';
 import path from 'path';
 
-const yaml = './node_modules/@kibon/stip-contract/openapi.yaml';
+const yaml = '../contract/openapi.yaml';
 const dependencies = require('../package.json').dependencies;
 
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');

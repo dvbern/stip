@@ -32,9 +32,6 @@ Install the dependencies with `npm ci` (append `--legacy-peer-deps` or `--force`
 
 > The `--legacy-peer-deps` flag might need to used in case the dependencies available at the time of last workspace update did not fulfil their peerDependencies ranges perfectly. This might change again in the future as newer versions of the libraries are released and the `--legacy-peer-deps` flag might not be needed anymore.
 
-In order to install the dependency `@kibon/stip-contract` a DvBern internal access is needed. Follow [this](https://intra.dvbern.ch/display/DEV/GitLab%3A+NPM+Registry+verwenden) tutorial to setup the access to the private `npm` registry.  
-For external users, please uninstall the `@kibon/stip-contract` in order to use this repository. It is only required to update the models and interfaces.
-
 There are two different Apps that can be built, served, tested, etc: `gesuch-app` and `sachbearbeitung-app`. `npm run start` for example starts the GS and SB App.
 
 | Task     | Gesuch-App         | Sachbearbeitung-App | All                |
@@ -61,7 +58,7 @@ To obtain a test user it is possible to log in the administration panel on https
 
 ### TLDR local development:
 
-1. `npm ci` (check that `@kibon/stip-contract` is installable, as mentioned above)
+1. `npm ci`
 2. Ensure that the API and everything else is running:
    - https://gitlab.dvbern.ch/kibon/stip-api
 3. Ensure the [Authorization](#authorization) is configured
