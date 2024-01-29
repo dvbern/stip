@@ -55,14 +55,22 @@
                         }}</small>
                       </div>
                       @if (child.ausbildungAbgeschlossen && item.col === 'LEFT') {
-                        <small class="gap d-flex">
-                          <i class="material-symbols-rounded">check_box</i>
-                          <span>{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
+                        <small class="d-flex gap-1">
+                          <i
+                            [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | translate"
+                            class="material-symbols-rounded"
+                            >check_box</i
+                          >
+                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
                         </small>
                       } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT') {
-                        <small class="gap d-flex">
-                          <i class="material-symbols-rounded">check_box_outline_blank</i>
-                          <span>{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
+                        <small class="d-flex gap-1">
+                          <i
+                            [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | translate"
+                            class="material-symbols-rounded"
+                            >check_box_outline_blank</i
+                          >
+                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
                         </small>
                       }
                     </ng-template>
