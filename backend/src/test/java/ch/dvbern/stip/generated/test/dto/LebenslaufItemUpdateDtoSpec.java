@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LebenslaufItemUpdateDtoSpec.JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG
 })
 @JsonTypeName("LebenslaufItemUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class LebenslaufItemUpdateDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;

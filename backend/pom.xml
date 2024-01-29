@@ -571,6 +571,7 @@
                     <serializationLibrary>jackson</serializationLibrary>
                     <containerDefaultToNull>true</containerDefaultToNull>
                     <snapshotVersion>true</snapshotVersion>
+                    <hideGenerationTimestamp>true</hideGenerationTimestamp>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

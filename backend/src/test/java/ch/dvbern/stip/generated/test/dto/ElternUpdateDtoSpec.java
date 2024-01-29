@@ -47,7 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ElternUpdateDtoSpec.JSON_PROPERTY_NACHNAME
 })
 @JsonTypeName("ElternUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class ElternUpdateDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
@@ -260,9 +260,9 @@ public class ElternUpdateDtoSpec {
    * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
@@ -270,7 +270,7 @@ public class ElternUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }

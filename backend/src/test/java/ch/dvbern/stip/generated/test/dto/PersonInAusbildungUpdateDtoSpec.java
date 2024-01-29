@@ -60,7 +60,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_KORRESPONDENZ_SPRACHE
 })
 @JsonTypeName("PersonInAusbildungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class PersonInAusbildungUpdateDtoSpec {
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;

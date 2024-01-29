@@ -43,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH
 })
 @JsonTypeName("Gesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDtoSpec {
   public static final String JSON_PROPERTY_FALL = "fall";
   private FallDtoSpec fall;
