@@ -37,6 +37,10 @@ public class Ausbildung extends AbstractMandantEntity {
 	@Column
 	private String alternativeAusbildungsstaette;
 
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column
+    private String alternativeAusbildungsland;
+
 	@NotNull
 	@Size(max = DB_DEFAULT_MAX_LENGTH)
 	@Column(nullable = false)
