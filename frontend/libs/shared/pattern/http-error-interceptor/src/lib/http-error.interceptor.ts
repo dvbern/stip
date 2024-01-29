@@ -1,7 +1,7 @@
 import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { catchError, EMPTY, throwError } from 'rxjs';
+import { EMPTY, catchError, throwError } from 'rxjs';
 
 import { SharedDataAccessGlobalNotificationEvents } from '@dv/shared/data-access/global-notification';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';

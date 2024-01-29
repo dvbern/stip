@@ -2,28 +2,28 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   EventEmitter,
-  inject,
   Input,
+  computed,
+  inject,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import {
-  selectLanguage,
   SharedDataAccessLanguageEvents,
+  selectLanguage,
 } from '@dv/shared/data-access/language';
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
+import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
+import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 
 @Component({
   selector: 'dv-gesuch-app-pattern-gesuch-step-layout',

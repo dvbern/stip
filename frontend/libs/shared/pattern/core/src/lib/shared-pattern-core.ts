@@ -1,4 +1,9 @@
 import {
+  HttpBackend,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import {
   ApplicationConfig,
   ENVIRONMENT_INITIALIZER,
   importProvidersFrom,
@@ -6,24 +11,19 @@ import {
   isDevMode,
   provideZoneChangeDetection,
 } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import {
-  provideRouter,
   Route,
+  provideRouter,
   withComponentInputBinding,
   withDisabledInitialNavigation,
   withInMemoryScrolling,
   withRouterConfig,
 } from '@angular/router';
-import {
-  HttpBackend,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { ActionReducer, provideState, provideStore, Store } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { ActionReducer, Store, provideState, provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import {
   MissingTranslationHandler,
   MissingTranslationHandlerParams,
@@ -33,36 +33,36 @@ import {
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 
 import {
+  sharedDataAccessBenutzerEffects,
+  sharedDataAccessBenutzersFeature,
+} from '@dv/shared/data-access/benutzer';
+import {
   SharedDataAccessConfigEvents,
   sharedDataAccessConfigEffects,
   sharedDataAccessConfigsFeature,
 } from '@dv/shared/data-access/config';
-import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
-import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
+import { sharedDataAccessGlobalNotificationsFeature } from '@dv/shared/data-access/global-notification';
 import {
   SharedDataAccessLanguageEvents,
   sharedDataAccessLanguageEffects,
   sharedDataAccessLanguageFeature,
 } from '@dv/shared/data-access/language';
-import { sharedDataAccessGlobalNotificationsFeature } from '@dv/shared/data-access/global-notification';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
-import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-title-strategy';
-import { provideSharedPatternNgbDatepickerAdapter } from '@dv/shared/pattern/ngb-datepicker-adapter';
-import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 import {
   sharedDataAccessStammdatenEffects,
   sharedDataAccessStammdatensFeature,
 } from '@dv/shared/data-access/stammdaten';
-import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
-import {
-  sharedDataAccessBenutzerEffects,
-  sharedDataAccessBenutzersFeature,
-} from '@dv/shared/data-access/benutzer';
 import {
   CompiletimeConfig,
   SharedModelCompiletimeConfig,
 } from '@dv/shared/model/config';
+import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
+import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import { withDvGlobalHttpErrorInterceptorFn } from '@dv/shared/pattern/http-error-interceptor';
+import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-title-strategy';
+import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
+import { provideSharedPatternNgbDatepickerAdapter } from '@dv/shared/pattern/ngb-datepicker-adapter';
+import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 
 export class ExplicitMissingTranslationHandler
   implements MissingTranslationHandler

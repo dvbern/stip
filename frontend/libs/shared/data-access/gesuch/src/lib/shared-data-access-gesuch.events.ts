@@ -1,8 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { GesuchCreate, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { SharedModelError } from '@dv/shared/model/error';
+import { GesuchCreate, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export const SharedDataAccessGesuchEvents = createActionGroup({
   source: 'Gesuch API',

@@ -1,6 +1,8 @@
 import { createSelector } from '@ngrx/store';
-import { sharedDataAccessGlobalNotificationsFeature } from './shared-data-access-global-notification.feature';
+
 import { SharedModelGlobalNotification } from '@dv/shared/model/global-notification';
+
+import { sharedDataAccessGlobalNotificationsFeature } from './shared-data-access-global-notification.feature';
 
 export const selectSharedDataAccessGlobalNotificationsView = createSelector(
   sharedDataAccessGlobalNotificationsFeature.selectGlobalNotificationsState,

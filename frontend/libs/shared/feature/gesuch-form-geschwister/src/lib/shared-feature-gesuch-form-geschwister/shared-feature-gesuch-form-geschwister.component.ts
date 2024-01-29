@@ -1,25 +1,24 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   computed,
   inject,
-  OnInit,
 } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
-import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
-import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
+import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
+import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
-
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',

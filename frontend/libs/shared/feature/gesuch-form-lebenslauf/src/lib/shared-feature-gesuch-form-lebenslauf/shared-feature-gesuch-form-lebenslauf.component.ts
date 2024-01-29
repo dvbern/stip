@@ -1,32 +1,32 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  inject,
   OnInit,
   Signal,
+  computed,
+  inject,
 } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears, setMonth, subMonths } from 'date-fns';
 
-import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
-import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
+import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   dateFromMonthYearString,
   printDateAsMonthYear,
 } from '@dv/shared/util/validator-date';
 
+import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feature-gesuch-form-lebenslauf-editor/shared-feature-gesuch-form-lebenslauf-editor.component';
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
-import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 const AUSBILDUNGS_MONTH = 8; // August
 

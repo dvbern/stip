@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { SharedUiIconChipComponent } from './shared-ui-icon-chip.component';
 
 describe('SharedUiIconChipComponent', () => {

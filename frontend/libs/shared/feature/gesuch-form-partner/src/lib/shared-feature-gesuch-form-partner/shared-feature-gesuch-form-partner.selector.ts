@@ -1,4 +1,5 @@
 import { createSelector } from '@ngrx/store';
+
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 

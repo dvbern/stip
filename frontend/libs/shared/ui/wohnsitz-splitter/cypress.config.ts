@@ -1,6 +1,7 @@
+import * as path from 'path';
+
 import { nxComponentTestingPreset } from '@nx/angular/plugins/component-testing';
 import { defineConfig } from 'cypress';
-import * as path from 'path';
 
 import { dvCypressConfigs } from '@dv/shared/util-fn/cypress-config';
 

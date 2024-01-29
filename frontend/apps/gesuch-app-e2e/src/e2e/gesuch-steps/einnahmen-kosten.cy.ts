@@ -1,7 +1,7 @@
 import {
+  SharedEinnahmenKostenInAusbildungPO,
   getStepEinnahmenKostenAusbildung,
   getStepTitle,
-  SharedEinnahmenKostenInAusbildungPO,
 } from '@dv/shared/util-fn/e2e-helpers';
 
 import { CockpitPO } from '../../support/po/cockpit.po';

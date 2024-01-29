@@ -1,9 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   NgbDateAdapter,
   NgbDateParserFormatter,
-  NgbDatepickerI18n,
   NgbDateStruct,
+  NgbDatepickerI18n,
 } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 

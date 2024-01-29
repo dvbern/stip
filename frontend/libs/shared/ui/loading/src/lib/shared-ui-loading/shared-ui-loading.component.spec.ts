@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedUiLoadingComponent } from './shared-ui-loading.component';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedUiLoadingComponent } from './shared-ui-loading.component';
 
 describe('SharedUiLoadingComponent', () => {
   let component: SharedUiLoadingComponent;

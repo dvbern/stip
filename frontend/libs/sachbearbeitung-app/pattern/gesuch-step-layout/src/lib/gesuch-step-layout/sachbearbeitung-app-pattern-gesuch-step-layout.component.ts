@@ -1,23 +1,23 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
-  inject,
   computed,
+  inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
 
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
-import { SharedUiSearchComponent } from '@dv/shared/ui/search';
-import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
+import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 
 @Component({

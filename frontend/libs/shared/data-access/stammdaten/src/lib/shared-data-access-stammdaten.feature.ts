@@ -1,9 +1,9 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
 import { SharedModelError } from '@dv/shared/model/error';
+import { Land } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessStammdatenApiEvents } from './shared-data-access-stammdaten.events';
-import { Land } from '@dv/shared/model/gesuch';
 
 export interface State {
   laender: Land[];

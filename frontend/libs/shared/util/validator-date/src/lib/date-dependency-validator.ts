@@ -4,10 +4,12 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
+import { areIntervalsOverlapping, isAfter, isEqual } from 'date-fns';
+
 import { Language } from '@dv/shared/model/language';
-import { parseDateForVariant } from '../index';
-import { isAfter, isEqual, areIntervalsOverlapping } from 'date-fns';
+
 import { DateFormatVariant } from './date-format-util';
+import { parseDateForVariant } from '../index';
 
 export function createDateDependencyValidator(
   direction: 'before' | 'after',

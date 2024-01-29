@@ -1,7 +1,7 @@
 import { Kind } from '@dv/shared/model/gesuch';
 import {
-  getSelectOption,
   getRadioOption,
+  getSelectOption,
 } from '@dv/shared/util-fn/e2e-helpers';
 
 const elements = {

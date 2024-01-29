@@ -1,9 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedUiFormCountryComponent } from './shared-ui-form-country.component';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedUiFormCountryComponent } from './shared-ui-form-country.component';
 
 @Component({
   imports: [ReactiveFormsModule],

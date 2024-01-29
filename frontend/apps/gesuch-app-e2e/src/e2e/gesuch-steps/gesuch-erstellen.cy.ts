@@ -1,17 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import {
-  getButtonContinue,
-  getButtonSaveContinue,
-  getStepTitle,
-} from '@dv/shared/util-fn/e2e-helpers';
-import { CockpitPO } from '../../support/po/cockpit.po';
-import { PersonPO } from '../../support/po/person.po';
-import {
-  EducationForm as EducationValues,
-  EducationPO,
-} from '../../support/po/education.po';
 
 import { addMonths, format } from 'date-fns';
+
 import {
   Adresse,
   Auszahlung,
@@ -24,14 +14,26 @@ import {
   Partner,
   PersonInAusbildung,
 } from '@dv/shared/model/gesuch';
-import { LebenslaufPO } from '../../support/po/lebenslauf.po';
+import {
+  getButtonContinue,
+  getButtonSaveContinue,
+  getStepTitle,
+} from '@dv/shared/util-fn/e2e-helpers';
+
+import { AuszahlungPO } from '../../support/po/auszahlung.po';
+import { CockpitPO } from '../../support/po/cockpit.po';
+import {
+  EducationPO,
+  EducationForm as EducationValues,
+} from '../../support/po/education.po';
+import { EinnahmenKostenPO } from '../../support/po/einnahmen-kosten.po';
 import { ElternPO } from '../../support/po/eltern.po';
 import { FamilyPO } from '../../support/po/familiy.po';
 import { GeschwisterPO } from '../../support/po/geschwister.po';
 import { KinderPO } from '../../support/po/kinder.po';
-import { AuszahlungPO } from '../../support/po/auszahlung.po';
-import { EinnahmenKostenPO } from '../../support/po/einnahmen-kosten.po';
+import { LebenslaufPO } from '../../support/po/lebenslauf.po';
 import { PartnerPO } from '../../support/po/partner.po';
+import { PersonPO } from '../../support/po/person.po';
 
 const adresse: Adresse = {
   land: 'CH',

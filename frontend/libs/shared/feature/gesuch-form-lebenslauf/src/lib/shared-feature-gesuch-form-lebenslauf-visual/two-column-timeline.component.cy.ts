@@ -2,13 +2,15 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import {
-  LebenslaufItemUpdate,
   Ausbildung,
   LebenslaufAusbildungsArt,
+  LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
-import { LebenslaufPo } from '../../../cypress/support/lebenslauf.po';
+
 import { TwoColumnTimelineComponent } from './two-column-timeline.component';
+import { LebenslaufPo } from '../../../cypress/support/lebenslauf.po';
 
 const translations = {
   de: {

@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  OnInit,
+  Signal,
   computed,
   effect,
-  ElementRef,
   inject,
-  OnInit,
   signal,
-  Signal,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -44,6 +44,7 @@ import {
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
+import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
   DocumentOptions,
   SharedPatternDocumentUploadComponent,
@@ -52,33 +53,31 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-
-import { AppSettings } from '@dv/shared/pattern/app-settings';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  addWohnsitzControls,
   SharedUiWohnsitzSplitterComponent,
+  addWohnsitzControls,
   updateWohnsitzControlsState,
   wohnsitzAnteileNumber,
   wohnsitzAnteileString,
 } from '@dv/shared/ui/wohnsitz-splitter';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 

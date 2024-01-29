@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedUiWohnsitzSplitterComponent } from './shared-ui-wohnsitz-splitter.component';
-import { TranslateModule } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedUiWohnsitzSplitterComponent } from './shared-ui-wohnsitz-splitter.component';
 
 describe('SharedUiWohnsitzSplitterComponent', () => {
   let component: SharedUiWohnsitzSplitterComponent;

@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export const SharedEventGesuchFormFamiliensituation = createActionGroup({
   source: 'GesuchFormFamiliensituation Page',

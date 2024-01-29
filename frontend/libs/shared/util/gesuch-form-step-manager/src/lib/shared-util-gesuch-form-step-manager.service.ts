@@ -1,21 +1,21 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+
 import { AppType, SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
-
 import {
-  SharedModelGesuchFormStep,
-  isStepDisabled,
-  FAMILIENSITUATION,
-  PERSON,
+  ABSCHLUSS,
   AUSBILDUNG,
-  LEBENSLAUF,
-  ELTERN,
-  GESCHWISTER,
-  PARTNER,
-  KINDER,
   AUSZAHLUNGEN,
   EINNAHMEN_KOSTEN,
-  ABSCHLUSS,
+  ELTERN,
+  FAMILIENSITUATION,
+  GESCHWISTER,
+  KINDER,
+  LEBENSLAUF,
+  PARTNER,
+  PERSON,
+  SharedModelGesuchFormStep,
+  isStepDisabled,
 } from '@dv/shared/model/gesuch-form';
 import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
 
