@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT
 })
 @JsonTypeName("AusbildungsgangUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AusbildungsgangUpdateDtoSpec {
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
   private String bezeichnungDe;

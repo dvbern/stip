@@ -1481,7 +1481,6 @@ components:
                 - identischerZivilrechtlicherWohnsitz
                 - nachname
                 - sozialhilfebeitraegeAusbezahlt
-                - sozialversicherungsnummer
                 - telefonnummer
                 - vorname
                 - elternTyp

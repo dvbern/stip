@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS
 })
 @JsonTypeName("ValidationReport")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class ValidationReportDtoSpec {
   public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
   private List<ValidationErrorDtoSpec> validationErrors;

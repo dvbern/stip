@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PartnerDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN
 })
 @JsonTypeName("Partner")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class PartnerDtoSpec {
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;

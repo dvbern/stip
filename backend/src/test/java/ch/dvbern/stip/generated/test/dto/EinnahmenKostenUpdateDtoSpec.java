@@ -45,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE
 })
 @JsonTypeName("EinnahmenKostenUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class EinnahmenKostenUpdateDtoSpec {
   public static final String JSON_PROPERTY_NETTOERWERBSEINKOMMEN = "nettoerwerbseinkommen";
   private BigDecimal nettoerwerbseinkommen;

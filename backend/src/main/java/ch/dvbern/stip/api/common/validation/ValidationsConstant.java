@@ -70,6 +70,7 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE =
 			"{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
 	public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
+    public static final String VALIDATION_AHV_IF_SWISS_MESSAGE = "{jakarta.validation.contraints.ahvIfSwiss.message}";
 	public static final String VALIDATION_EMAIL_MESSAGE = "{jakarta.validation.constraints.email.message}";
 	public static final String VALIDATION_BUCHSTABEN_RANGE_MESSAGE = "{jakarta.validation.constraints.buchstaben.range.message}";
 	public static final String VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE =

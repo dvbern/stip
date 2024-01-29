@@ -43,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterDtoSpec.JSON_PROPERTY_COPY_OF_ID
 })
 @JsonTypeName("Geschwister")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GeschwisterDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;

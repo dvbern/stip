@@ -52,7 +52,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN
 })
 @JsonTypeName("GesuchFormular")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-01-25T14:58:08.517580200+01:00[Europe/Zurich]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchFormularDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
   private AusbildungDtoSpec ausbildung;
