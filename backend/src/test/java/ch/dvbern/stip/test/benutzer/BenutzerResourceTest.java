@@ -117,7 +117,9 @@ class BenutzerResourceTest {
     void createAndFindSachbearbeitenden() {
         String nachname = UUID.randomUUID().toString();
         final var updateDto = Instancio.of(benutzerUpdateDtoSpecModel)
-                .set(field(BenutzerUpdateDtoSpec::getNachname), nachname).create();
+            .set(field(BenutzerUpdateDtoSpec::getNachname), nachname)
+            .set(field(BenutzerUpdateDtoSpec::getBenutzereinstellungen), me.getBenutzereinstellungen())
+            .create();
         api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
