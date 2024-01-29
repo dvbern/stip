@@ -58,11 +58,13 @@ public class GesuchStatusConfigProducer {
 		return (Gesuch) args[0];
 	}
 
+    @SuppressWarnings("java:S1135")
 	private void sendGesuchNichtKomplettEingereichtEmail(
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
-		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO in KSTIP-530
+        //TODO in KSTIP-530
+		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0);
 		mailService.sendGesuchNichtKomplettEingereichtEmail(
 				gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
@@ -70,11 +72,13 @@ public class GesuchStatusConfigProducer {
 				gesuch.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache().getLocale());
 	}
 
+    @SuppressWarnings("java:S1135")
 	private void sendGesuchNichtKomplettEingereichtNachfristEmail(
 			@NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
 			@NonNull Object[] args
 	) {
-		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0); //TODO in KSTIP-530
+        //TODO in KSTIP-530
+		GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0);
 		mailService.sendGesuchNichtKomplettEingereichtNachfristEmail(
 				gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
 				gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
