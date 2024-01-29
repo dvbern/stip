@@ -72,7 +72,7 @@ include:
       argocd-server: "$E2E_ARGOCD_SERVER"
       argocd-token: "$E2E_ARGOCD_TOKEN"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@efac626337eae9d43a7ab9555641f42e2f7874fe'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@b2bce2f00106241c91bbbfe1c77d9cd3750e227f'
     inputs:
       name: ".nx"
       e2e-test-package-version: '13.6.2'
