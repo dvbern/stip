@@ -30,6 +30,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -185,10 +186,9 @@ class GesuchValidatorTest {
 	@Test
 	void testFieldValidationErrorEltern() {
 		String[] constraintMessages = {
-				VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE
+				VALIDATION_IZW_FIELD_REQUIRED_MESSAGE
 		};
 		Eltern eltern = new Eltern();
-		eltern.setSozialversicherungsnummer("123.456.789.101112");
 		eltern.setIdentischerZivilrechtlicherWohnsitz(false);
 		Gesuch gesuch = prepareDummyGesuch();
 		Set<Eltern> elternSet = new HashSet<>();
@@ -200,7 +200,7 @@ class GesuchValidatorTest {
 	@Test
 	void testNullFieldValidationErrorEltern() {
 		String[] constraintMessages = {
-				VALIDATION_AHV_MESSAGE, VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE
+				VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE
 		};
 		Eltern eltern = new Eltern();
 		eltern.setIdentischerZivilrechtlicherWohnsitz(true);

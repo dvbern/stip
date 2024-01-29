@@ -1,8 +1,8 @@
 package ch.dvbern.stip.test.config;
 
 
-import ch.dvbern.oss.stip.contract.test.api.ConfigurationApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.DeploymentConfigDtoSpec;
+import ch.dvbern.stip.generated.test.api.ConfigurationApiSpec;
+import ch.dvbern.stip.generated.test.dto.DeploymentConfigDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;

@@ -73,6 +73,7 @@
       "@dv/shared/pattern/angular-material-config": ["libs/shared/pattern/angular-material-config/src/index.ts"],
       "@dv/shared/pattern/app-header": ["libs/shared/pattern/app-header/src/index.ts"],
       "@dv/shared/pattern/app-initialization": ["libs/shared/pattern/app-initialization/src/index.ts"],
+      "@dv/shared/pattern/app-settings": ["libs/shared/pattern/app-settings/src/index.ts"],
       "@dv/shared/pattern/core": ["libs/shared/pattern/core/src/index.ts"],
       "@dv/shared/pattern/document-upload": ["libs/shared/pattern/document-upload/src/index.ts"],
       "@dv/shared/pattern/gesuch-step-nav": ["libs/shared/pattern/gesuch-step-nav/src/index.ts"],
@@ -122,5 +123,5 @@
       "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]
     }
   },
-  "exclude": ["tmp", "node_modules", "**/cypress.config.ts", "libs/tooling/nx-plugin/src/generators/lib/files"]
+  "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]
 }

@@ -267,7 +267,6 @@ function createEmptyPersonInAusbildung(): PersonInAusbildung {
     quellenbesteuert: false,
     heimatort: '',
     sozialhilfebeitraege: false,
-    digitaleKommunikation: true,
     korrespondenzSprache: 'DEUTSCH',
   };
 }

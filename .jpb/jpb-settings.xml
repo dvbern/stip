@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default">
+        <entities>
+          <entity value="ch.dvbern.stip.api.fall.entity.Fall" />
+          <entity value="ch.dvbern.stip.api.eltern.entity.Eltern" />
+          <entity value="ch.dvbern.stip.api.gesuch.entity.Gesuch" />
+          <entity value="ch.dvbern.stip.api.gesuch.entity.GesuchTranche" />
+          <entity value="ch.dvbern.stip.api.gesuch.entity.GesuchFormular" />
+          <entity value="ch.dvbern.stip.api.adresse.entity.Adresse" />
+        </entities>
+      </persistence-unit>
+      <persistence-unit moduleName="stip-api" name="Default">
+        <packages>
+          <package value="ch.dvbern.stip.api" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
+</project>

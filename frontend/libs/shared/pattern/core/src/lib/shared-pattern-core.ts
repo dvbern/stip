@@ -37,6 +37,7 @@ import {
   sharedDataAccessConfigEffects,
   sharedDataAccessConfigsFeature,
 } from '@dv/shared/data-access/config';
+import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
 import {
   SharedDataAccessLanguageEvents,
@@ -73,10 +74,10 @@ export class ExplicitMissingTranslationHandler
 
 export function debugReducers<T>(reducer: ActionReducer<T>): ActionReducer<T> {
   return function (state, action) {
-    if (isDevMode()) {
-      console['log']('state', state);
-      console['log']('action', action);
-    }
+    // if (isDevMode()) {
+    //   console['log']('state', state);
+    //   console['log']('action', action);
+    // }
 
     return reducer(state, action);
   };
@@ -91,6 +92,7 @@ export function provideSharedPatternCore(
   return [
     // providers
     provideSharedPatternAppInitialization(),
+    provideSharedAppSettings(compileTimeConfig.appType),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(

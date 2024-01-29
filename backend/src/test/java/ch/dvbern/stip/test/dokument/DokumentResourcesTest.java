@@ -1,8 +1,8 @@
 package ch.dvbern.stip.test.dokument;
 
-import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.DokumentDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.test.dto.DokumentDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;

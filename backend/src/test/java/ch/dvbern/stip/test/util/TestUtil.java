@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.util;
 
-import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchCreateDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.ws.rs.core.HttpHeaders;

@@ -1,7 +1,7 @@
 package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import ch.dvbern.oss.stip.contract.test.dto.AdresseDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.test.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.test.dto.LandDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 

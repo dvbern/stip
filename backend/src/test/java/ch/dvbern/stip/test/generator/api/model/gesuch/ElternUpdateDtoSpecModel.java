@@ -3,9 +3,9 @@ package ch.dvbern.stip.test.generator.api.model.gesuch;
 import java.time.LocalDate;
 import java.util.List;
 
-import ch.dvbern.oss.stip.contract.test.dto.ElternTypDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ElternUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.test.dto.ElternUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.test.util.TestConstants;
 import org.instancio.Assign;
 import org.instancio.Instancio;

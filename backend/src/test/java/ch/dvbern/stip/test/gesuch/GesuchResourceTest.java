@@ -1,12 +1,11 @@
 package ch.dvbern.stip.test.gesuch;
 
-import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchCreateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.test.dto.*;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
@@ -28,6 +27,7 @@ import java.util.UUID;
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.instancio.Select.field;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -231,6 +231,29 @@ class GesuchResourceTest {
 				.assertThat()
 				.statusCode(Response.Status.ACCEPTED.getStatusCode());
 	}
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(14)
+    void testUpdateGesuchAddForeignEltern() {
+        var gesuchUpdateDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecElternsModel).create();
+        final var elternteile = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns();
+
+        for (final var elternteil : elternteile) {
+            elternteil.setSozialversicherungsnummer(null);
+            final var newAdresse = Instancio.of(AdresseSpecModel.adresseSpecModel)
+                .set(field(AdresseDtoSpec::getLand), LandDtoSpec.DE)
+                .create();
+            elternteil.setAdresse(newAdresse);
+        }
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(elternteile);
+
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    }
 
 	@Test
 	@TestAsGesuchsteller
