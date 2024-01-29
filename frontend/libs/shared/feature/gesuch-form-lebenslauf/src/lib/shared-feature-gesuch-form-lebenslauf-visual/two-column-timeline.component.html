@@ -49,9 +49,22 @@
                           </small>
                         </div>
                       }
-                      <small class="d-inline-block">{{
-                        printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
-                      }}</small>
+                      <div>
+                        <small class="d-inline-block">{{
+                          printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
+                        }}</small>
+                      </div>
+                      @if (child.ausbildungAbgeschlossen && item.col === 'LEFT') {
+                        <small class="gap d-flex">
+                          <i class="material-symbols-rounded">check_box</i>
+                          <span>{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
+                        </small>
+                      } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT') {
+                        <small class="gap d-flex">
+                          <i class="material-symbols-rounded">check_box_outline_blank</i>
+                          <span>{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
+                        </small>
+                      }
                     </ng-template>
                     @if (child.editable) {
                       <a class="w-100 d-block" (click)="handleEditItem(child)">

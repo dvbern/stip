@@ -14,6 +14,7 @@ export interface TimelineRawItem {
   von: Date;
   bis: Date;
   editable: boolean;
+  ausbildungAbgeschlossen: boolean;
 }
 export interface TimelineMergedRawItem extends TimelineRawItem {
   children: TimelineRawItem[];
@@ -39,7 +40,7 @@ export class TimelineBusyBlock extends TimelineBlock {
   override col!: 'LEFT' | 'RIGHT';
   label!: TimelineLabel;
   editable!: boolean;
-
+  ausbildungAbgeschlossen!: boolean;
   children?: TimelineBusyBlockChild[];
 }
 
@@ -49,6 +50,7 @@ export class TimelineBusyBlockChild {
   von!: Date;
   bis!: Date;
   editable!: boolean;
+  ausbildungAbgeschlossen!: boolean;
 }
 
 export class TimelineGapBlock extends TimelineBlock {
