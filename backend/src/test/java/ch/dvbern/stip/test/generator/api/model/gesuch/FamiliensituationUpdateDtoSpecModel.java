@@ -2,9 +2,9 @@ package ch.dvbern.stip.test.generator.api.model.gesuch;
 
 import java.math.BigDecimal;
 
-import ch.dvbern.oss.stip.contract.test.dto.ElternschaftsteilungDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.FamiliensituationUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.ElternschaftsteilungDtoSpec;
+import ch.dvbern.stip.generated.test.dto.FamiliensituationUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchFormularUpdateDtoSpec;
 import org.instancio.Assign;
 import org.instancio.Instancio;
 import org.instancio.Model;

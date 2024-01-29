@@ -2,9 +2,11 @@ package ch.dvbern.stip.api.benutzer.entity;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
-import ch.dvbern.stip.api.common.validation.AhvConstraint;
+import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,8 +17,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Entity
 @Table(
-        indexes = {@Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
-				   @Index(name = "IX_benuter_mandant", columnList = "mandant")}
+    indexes = {
+        @Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
+        @Index(name = "IX_benuter_mandant", columnList = "mandant"),
+        @Index(name = "IX_benutzer_benutzereinstellungen_id", columnList = "benutzereinstellungen_id"),
+    }
 )
 @Audited
 @Getter
@@ -39,7 +44,7 @@ public class Benutzer extends AbstractMandantEntity {
 
     @AhvConstraint(optional = true)
     @Column(nullable = true)
-	private String sozialversicherungsnummer;
+    private String sozialversicherungsnummer;
 
     @NotNull
     @Column(nullable = false)
@@ -50,4 +55,9 @@ public class Benutzer extends AbstractMandantEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BenutzerTyp benutzerTyp = BenutzerTyp.GESUCHSTELLER;
+
+    @NotNull
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"), nullable = false)
+    private @Valid Benutzereinstellungen benutzereinstellungen;
 }

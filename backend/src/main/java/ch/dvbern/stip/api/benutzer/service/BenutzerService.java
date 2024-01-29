@@ -11,6 +11,8 @@ import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
+import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.benutzereinstellungen.repo.BenutzereinstellungenRepository;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
@@ -36,6 +38,7 @@ public class BenutzerService {
 
 	private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
 	private final BenutzerRepository benutzerRepository;
+    private final BenutzereinstellungenRepository benutzereinstellungenRepository;
 
 	private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
 
@@ -82,6 +85,7 @@ public class BenutzerService {
 		newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
 		newBenutzer.setSozialversicherungsnummer(jsonWebToken.getClaim(OidcConstants.CLAIM_AHV_NUMMER));
 		newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
+        newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
 
 		benutzerRepository.persist(newBenutzer);
 		return newBenutzer;

@@ -31,7 +31,9 @@ class ArchitectureTest {
             .optionalLayer("Type")
             .definedBy("..type..")
             .optionalLayer("Statemachines")
-            .definedBy("..common.statemachines..");
+            .definedBy("..common.statemachines..")
+            .layer("Validation")
+            .definedBy("..validation..");
 
     @Test
     void test_layer_boundaries() {
@@ -40,7 +42,7 @@ class ArchitectureTest {
                 .whereLayer("Repository")
                 .mayOnlyBeAccessedByLayers("Service")
                 .whereLayer("Entity")
-                .mayOnlyBeAccessedByLayers("Service", "Repository", "Generated", "Statemachines");
+                .mayOnlyBeAccessedByLayers("Service", "Repository", "Generated", "Statemachines", "Validation");
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }

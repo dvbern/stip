@@ -1,7 +1,7 @@
 package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import ch.dvbern.oss.stip.contract.test.dto.AusbildungsgangUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.BildungsartDtoSpec;
+import ch.dvbern.stip.generated.test.dto.AusbildungsgangUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.BildungsartDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 

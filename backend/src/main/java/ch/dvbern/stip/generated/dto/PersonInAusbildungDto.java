@@ -34,7 +34,6 @@ public class PersonInAusbildungDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid Boolean sozialhilfebeitraege;
   private @Valid Boolean quellenbesteuert;
-  private @Valid Boolean digitaleKommunikation;
   private @Valid String nachname;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache korrespondenzSprache;
   private @Valid String heimatort;
@@ -276,25 +275,6 @@ public class PersonInAusbildungDto  implements Serializable {
 
   /**
    **/
-  public PersonInAusbildungDto digitaleKommunikation(Boolean digitaleKommunikation) {
-    this.digitaleKommunikation = digitaleKommunikation;
-    return this;
-  }
-
-  
-  @JsonProperty("digitaleKommunikation")
-  @NotNull
-  public Boolean getDigitaleKommunikation() {
-    return digitaleKommunikation;
-  }
-
-  @JsonProperty("digitaleKommunikation")
-  public void setDigitaleKommunikation(Boolean digitaleKommunikation) {
-    this.digitaleKommunikation = digitaleKommunikation;
-  }
-
-  /**
-   **/
   public PersonInAusbildungDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
@@ -503,7 +483,6 @@ public class PersonInAusbildungDto  implements Serializable {
         Objects.equals(this.wohnsitz, personInAusbildung.wohnsitz) &&
         Objects.equals(this.sozialhilfebeitraege, personInAusbildung.sozialhilfebeitraege) &&
         Objects.equals(this.quellenbesteuert, personInAusbildung.quellenbesteuert) &&
-        Objects.equals(this.digitaleKommunikation, personInAusbildung.digitaleKommunikation) &&
         Objects.equals(this.nachname, personInAusbildung.nachname) &&
         Objects.equals(this.korrespondenzSprache, personInAusbildung.korrespondenzSprache) &&
         Objects.equals(this.heimatort, personInAusbildung.heimatort) &&
@@ -518,7 +497,7 @@ public class PersonInAusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, quellenbesteuert, digitaleKommunikation, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, quellenbesteuert, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
   }
 
   @Override
@@ -538,7 +517,6 @@ public class PersonInAusbildungDto  implements Serializable {
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    quellenbesteuert: ").append(toIndentedString(quellenbesteuert)).append("\n");
-    sb.append("    digitaleKommunikation: ").append(toIndentedString(digitaleKommunikation)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    korrespondenzSprache: ").append(toIndentedString(korrespondenzSprache)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");

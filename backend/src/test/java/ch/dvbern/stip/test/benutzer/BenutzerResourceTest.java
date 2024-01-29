@@ -2,10 +2,11 @@ package ch.dvbern.stip.test.benutzer;
 
 import java.util.UUID;
 
-import ch.dvbern.oss.stip.contract.test.api.BenutzerApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.BenutzerDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.BenutzerUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.generated.test.api.BenutzerApiSpec;
+import ch.dvbern.stip.generated.test.dto.BenutzerDtoSpec;
+import ch.dvbern.stip.generated.test.dto.BenutzerUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.test.benutzer.util.TestAsSachbearbeiter;
@@ -43,6 +44,8 @@ class BenutzerResourceTest {
 
     private UUID sachbearbeiterUUID;
 
+    private BenutzerDtoSpec me;
+
     @Test
     @TestAsGesuchsteller
     @Order(1)
@@ -54,6 +57,8 @@ class BenutzerResourceTest {
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract()
                 .as(BenutzerDtoSpec.class);
+
+        me = benutzerDto;
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
@@ -83,6 +88,7 @@ class BenutzerResourceTest {
     void test_update_me() {
 
         final var updateDto = Instancio.of(benutzerUpdateDtoSpecModel).create();
+        updateDto.setBenutzereinstellungen(me.getBenutzereinstellungen());
 
         api.updateCurrentBenutzer()
                 .body(updateDto)
@@ -111,7 +117,9 @@ class BenutzerResourceTest {
     void createAndFindSachbearbeitenden() {
         String nachname = UUID.randomUUID().toString();
         final var updateDto = Instancio.of(benutzerUpdateDtoSpecModel)
-                .set(field(BenutzerUpdateDtoSpec::getNachname), nachname).create();
+            .set(field(BenutzerUpdateDtoSpec::getNachname), nachname)
+            .set(field(BenutzerUpdateDtoSpec::getBenutzereinstellungen), me.getBenutzereinstellungen())
+            .create();
         api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()

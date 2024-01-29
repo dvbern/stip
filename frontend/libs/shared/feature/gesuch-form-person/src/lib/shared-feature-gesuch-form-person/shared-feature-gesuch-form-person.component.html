@@ -439,12 +439,17 @@
         </div>
       </div>
 
-      <div class="row g-4 mt-1">
-        <!-- digitale Kommunikation -->
-        <mat-checkbox formControlName="digitaleKommunikation" data-testid="form-person-digitaleKommunikation">{{
-          'shared.form.person.digital-communication.label' | translate
-        }}</mat-checkbox>
-      </div>
+      @if (appSettings.hasFormFeature('digitaleKommunikation')) {
+        <div class="row g-4 mt-1">
+          <!-- digitale Kommunikation -->
+          <mat-checkbox
+            disabled="true"
+            [checked]="viewSig().benutzerEinstellungen.digitaleKommunikation"
+            data-testid="form-person-digitaleKommunikation"
+            >{{ 'shared.form.person.digital-communication.label' | translate }}</mat-checkbox
+          >
+        </div>
+      }
 
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>

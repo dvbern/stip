@@ -1481,7 +1481,6 @@ components:
                 - identischerZivilrechtlicherWohnsitz
                 - nachname
                 - sozialhilfebeitraegeAusbezahlt
-                - sozialversicherungsnummer
                 - telefonnummer
                 - vorname
                 - elternTyp
@@ -1666,7 +1665,6 @@ components:
                 - wohnsitz
                 - sozialhilfebeitraege
                 - quellenbesteuert
-                - digitaleKommunikation
                 - korrespondenzSprache
             type: object
             properties:
@@ -1707,8 +1705,6 @@ components:
                 sozialhilfebeitraege:
                     type: boolean
                 quellenbesteuert:
-                    type: boolean
-                digitaleKommunikation:
                     type: boolean
                 vormundschaft:
                     description: Required nur wenn Land = CH
@@ -1853,6 +1849,8 @@ components:
                     type: string
                 nachname:
                     type: string
+                benutzereinstellungen:
+                    $ref: '#/components/schemas/BenutzereinstellungenUpdate'
         TenantAuthConfig:
             title: Root Type for TenantAuthConfig
             description: ''
@@ -2200,6 +2198,24 @@ components:
                 buchstabenFr:
                     description: ''
                     type: string
+        Benutzereinstellungen:
+          description: ''
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UUID'
+            digitaleKommunikation:
+              description: ''
+              type: boolean
+        BenutzereinstellungenUpdate:
+            description: ''
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                digitaleKommunikation:
+                    description: ''
+                    type: boolean
     responses:
         Unauthorized:
             content:

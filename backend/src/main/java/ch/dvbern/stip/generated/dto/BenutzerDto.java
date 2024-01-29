@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.BenutzereinstellungenUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class BenutzerDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid UUID id;
+  private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
 
   /**
@@ -107,6 +109,24 @@ public class BenutzerDto  implements Serializable {
 
   /**
    **/
+  public BenutzerDto benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+    this.benutzereinstellungen = benutzereinstellungen;
+    return this;
+  }
+
+  
+  @JsonProperty("benutzereinstellungen")
+  public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
+    return benutzereinstellungen;
+  }
+
+  @JsonProperty("benutzereinstellungen")
+  public void setBenutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+    this.benutzereinstellungen = benutzereinstellungen;
+  }
+
+  /**
+   **/
   public BenutzerDto sachbearbeiterZuordnungStammdaten(SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten) {
     this.sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdaten;
     return this;
@@ -137,12 +157,13 @@ public class BenutzerDto  implements Serializable {
         Objects.equals(this.vorname, benutzer.vorname) &&
         Objects.equals(this.nachname, benutzer.nachname) &&
         Objects.equals(this.id, benutzer.id) &&
+        Objects.equals(this.benutzereinstellungen, benutzer.benutzereinstellungen) &&
         Objects.equals(this.sachbearbeiterZuordnungStammdaten, benutzer.sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, vorname, nachname, id, sachbearbeiterZuordnungStammdaten);
+    return Objects.hash(sozialversicherungsnummer, vorname, nachname, id, benutzereinstellungen, sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
@@ -154,6 +175,7 @@ public class BenutzerDto  implements Serializable {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("    sachbearbeiterZuordnungStammdaten: ").append(toIndentedString(sachbearbeiterZuordnungStammdaten)).append("\n");
     sb.append("}");
     return sb.toString();

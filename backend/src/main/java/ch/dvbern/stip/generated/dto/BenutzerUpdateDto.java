@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.BenutzereinstellungenUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -24,6 +25,7 @@ public class BenutzerUpdateDto  implements Serializable {
   private @Valid String sozialversicherungsnummer;
   private @Valid String vorname;
   private @Valid String nachname;
+  private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
 
   /**
    **/
@@ -82,6 +84,24 @@ public class BenutzerUpdateDto  implements Serializable {
     this.nachname = nachname;
   }
 
+  /**
+   **/
+  public BenutzerUpdateDto benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+    this.benutzereinstellungen = benutzereinstellungen;
+    return this;
+  }
+
+  
+  @JsonProperty("benutzereinstellungen")
+  public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
+    return benutzereinstellungen;
+  }
+
+  @JsonProperty("benutzereinstellungen")
+  public void setBenutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+    this.benutzereinstellungen = benutzereinstellungen;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -94,12 +114,13 @@ public class BenutzerUpdateDto  implements Serializable {
     BenutzerUpdateDto benutzerUpdate = (BenutzerUpdateDto) o;
     return Objects.equals(this.sozialversicherungsnummer, benutzerUpdate.sozialversicherungsnummer) &&
         Objects.equals(this.vorname, benutzerUpdate.vorname) &&
-        Objects.equals(this.nachname, benutzerUpdate.nachname);
+        Objects.equals(this.nachname, benutzerUpdate.nachname) &&
+        Objects.equals(this.benutzereinstellungen, benutzerUpdate.benutzereinstellungen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, vorname, nachname);
+    return Objects.hash(sozialversicherungsnummer, vorname, nachname, benutzereinstellungen);
   }
 
   @Override
@@ -110,6 +131,7 @@ public class BenutzerUpdateDto  implements Serializable {
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("}");
     return sb.toString();
   }
