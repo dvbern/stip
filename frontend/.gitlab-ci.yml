@@ -6,7 +6,7 @@ include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@b2bce2f00106241c91bbbfe1c77d9cd3750e227f'
     inputs:
       app-name: '*-app'
-      test-app-name: '*-app'
+      test-app-name: '*'
       context-dir: 'frontend'
       component-test-package-version: '13.6.2'
       e2e-on: 'never'
