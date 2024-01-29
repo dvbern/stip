@@ -101,6 +101,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
     fachrichtung: [<string | null>null, [Validators.required]],
     ausbildungNichtGefunden: [false, []],
+    alternativeAusbildungsland: [<string | undefined>undefined],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
     ausbildungBegin: ['', []],
@@ -196,15 +197,19 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         const value = this.ausbildungNichtGefundenChangedSig();
         const {
+          ausbildungsland,
+          alternativeAusbildungsland,
           alternativeAusbildungsgang,
           alternativeAusbildungsstaette,
           ausbildungsgang,
           ausbildungsstaette,
         } = this.form.controls;
-        this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
-        this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
+        this.formUtils.setRequired(ausbildungsland, !value);
         this.formUtils.setRequired(ausbildungsgang, !value);
         this.formUtils.setRequired(ausbildungsstaette, !value);
+        this.formUtils.setRequired(alternativeAusbildungsland, !!value);
+        this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
+        this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
       },
       { allowSignalWrites: true },
     );
@@ -250,8 +255,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     // fill form
     effect(
       () => {
-        const { ausbildung } = this.viewSig();
-        const { ausbildungsstaettes } = this.viewSig();
+        const { ausbildung, ausbildungsstaettes } = this.viewSig();
         if (ausbildung && ausbildungsstaettes) {
           const ausbildungsstaette = ausbildungsstaettes.find(
             (ausbildungsstaette) =>
@@ -305,6 +309,29 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
           !staetteSig() || this.viewSig().readonly,
+          !this.viewSig().readonly,
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
+    // When Ausbildungsgang is null, disable fachrichtung. But only if ausbildungNichtGefunden is false
+    const ausbildungsgangSig = toSignal(
+      this.form.controls.ausbildungsgang.valueChanges.pipe(
+        startWith(this.form.value.ausbildungsgang),
+      ),
+    );
+    const ausbildungNichtGefundenSig = toSignal(
+      this.form.controls.ausbildungNichtGefunden.valueChanges.pipe(
+        startWith(this.form.value.ausbildungNichtGefunden),
+      ),
+    );
+    effect(
+      () => {
+        this.formUtils.setDisabledState(
+          this.form.controls.fachrichtung,
+          (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()) ||
+            this.viewSig().readonly,
           !this.viewSig().readonly,
         );
       },

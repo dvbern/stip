@@ -1,8 +1,11 @@
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { SharedEducationPO } from '@dv/shared/util-fn/e2e-helpers';
+import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
+
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education.component';
 
 describe(SharedFeatureGesuchFormEducationComponent.name, () => {
@@ -61,6 +64,67 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         .find('mat-error')
         .should('include.text', 'YearAfterStart');
     });
+    it('should have disabled inputs depending on each previous input state', () => {
+      const fields = {
+        notFound: 'form-education-ausbildungNichtGefunden',
+        land: 'form-education-ausbildungsland',
+        staette: 'form-education-ausbildungsstaette',
+        gang: 'form-education-ausbildungsgang',
+        alternativ: {
+          land: 'form-education-alternativeAusbildungsland',
+          staette: 'form-education-alternativeAusbildungsstaette',
+          gang: 'form-education-alternativeAusbildungsgang',
+        },
+        fachrichtung: 'form-education-fachrichtung',
+      };
+      mountWithGesuch();
+
+      cy.getBySel(fields.staette).should('be.disabled');
+      cy.getBySel(fields.land).click();
+      cy.get('mat-option').eq(0).click();
+      cy.getBySel(fields.staette).should('not.be.disabled');
+
+      cy.getBySel(fields.gang).should('have.class', 'mat-mdc-select-disabled');
+      cy.getBySel(fields.staette).click();
+      cy.get('mat-option').eq(0).click();
+      cy.getBySel(fields.gang).should(
+        'not.have.class',
+        'mat-mdc-select-disabled',
+      );
+
+      cy.getBySel(fields.fachrichtung).should('be.disabled');
+      cy.getBySel(fields.gang).click();
+      cy.get('mat-option').eq(1).click();
+      cy.getBySel(fields.fachrichtung).should('not.be.disabled');
+      cy.getBySel(fields.fachrichtung).type('fachrichtung1');
+      cy.getBySel(fields.fachrichtung).should('have.value', 'fachrichtung1');
+
+      cy.getBySel(fields.notFound).click();
+      [
+        fields.alternativ.land,
+        fields.alternativ.staette,
+        fields.alternativ.gang,
+        fields.fachrichtung,
+      ].forEach((field) => {
+        cy.getBySel(field).should('have.value', '');
+        cy.getBySel(field).should('not.be.disabled');
+        cy.getBySel(field).focus().blur();
+        cy.getBySel(field).should('have.class', 'ng-invalid');
+      });
+
+      cy.getBySel(fields.alternativ.land)
+        .type('land1')
+        .should('have.value', 'land1');
+      cy.getBySel(fields.alternativ.staette)
+        .type('staette1')
+        .should('have.value', 'staette1');
+      cy.getBySel(fields.alternativ.gang)
+        .type('gang1')
+        .should('have.value', 'gang1');
+      cy.getBySel(fields.fachrichtung)
+        .type('fachrichtung1')
+        .should('have.value', 'fachrichtung1');
+    });
   });
 });
 
@@ -73,7 +137,25 @@ function mountWithGesuch(): void {
     providers: [
       provideMockStore({
         initialState: {
-          ausbildungsstaettes: { ausbildungsstaettes: [] },
+          ausbildungsstaettes: {
+            ausbildungsstaettes: <Ausbildungsstaette[]>[
+              {
+                nameDe: 'staette1',
+                nameFr: 'staette1',
+                id: '1',
+                ausbildungsgaenge: [
+                  {
+                    ausbildungsort: 'BERN',
+                    ausbildungsrichtung: 'FACHHOCHSCHULEN',
+                    bezeichnungDe: 'gang1',
+                    bezeichnungFr: 'gang1',
+                    ausbildungsstaetteId: '1',
+                    id: '1',
+                  },
+                ],
+              },
+            ],
+          },
           gesuchs: {
             gesuchFormular: {},
           },
