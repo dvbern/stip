@@ -1,11 +1,6 @@
 <div>
-  <!-- loading -->
   @if (viewSig().loading) {
-    <div data-testid="form-person-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
-      <div class="dv-progress-bar-indeterminate">
-        <div></div>
-      </div>
-    </div>
+    <dv-shared-ui-loading data-testid="form-person-loading"></dv-shared-ui-loading>
   } @else {
     <form [formGroup]="form" data-testid="form-person-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
       <!-- AHV -->

@@ -45,6 +45,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 import { extractIBAN, ExtractIBANResult } from 'ibantools';
 import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-gesuch-form-auszahlungen.selector';
@@ -66,6 +67,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiFormAddressComponent,
     NgbAlert,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-auszahlungen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

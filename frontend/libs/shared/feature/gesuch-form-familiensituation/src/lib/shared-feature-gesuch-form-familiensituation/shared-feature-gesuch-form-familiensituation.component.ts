@@ -63,6 +63,8 @@ import {
   FamiliensituationFormSteps,
 } from './familiensituation-form-steps';
 
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+
 type FamSitStepMeta = {
   [P in keyof FamiliensituationFormSteps]?: FamSitAnimationState;
 };
@@ -87,6 +89,7 @@ const animationTime = 500;
     SharedUiPercentageSplitterComponent,
     GesuchAppUiStepFormButtonsComponent,
     SharedUiStepperNavigationComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],

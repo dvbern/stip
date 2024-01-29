@@ -24,6 +24,8 @@ import { ElternteilCardComponent } from './elternteil-card/elternteil-card.compo
 import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch-form-eltern.selector';
 import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-gesuch-form-eltern-editor/shared-feature-gesuch-form-eltern-editor.component';
 
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern',
   standalone: true,
@@ -32,6 +34,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

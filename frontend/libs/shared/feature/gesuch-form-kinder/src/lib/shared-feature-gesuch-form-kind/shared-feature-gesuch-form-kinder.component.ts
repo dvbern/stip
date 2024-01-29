@@ -18,6 +18,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
 import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-gesuch-form-kind-editor/shared-feature-gesuch-form-kind-editor.component';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-kinder',
@@ -27,6 +28,7 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
     NgbAlert,
     SharedFeatureGesuchFormKinderEditorComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kinder.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

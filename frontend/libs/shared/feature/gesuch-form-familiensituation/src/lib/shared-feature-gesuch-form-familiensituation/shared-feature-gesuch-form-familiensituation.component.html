@@ -1,9 +1,5 @@
 @if (view().loading) {
-  <div data-testid="form-family-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
-    <div class="dv-progress-bar-indeterminate">
-      <div></div>
-    </div>
-  </div>
+  <dv-shared-ui-loading data-testid="form-family-loading"></dv-shared-ui-loading>
 } @else {
   <form [formGroup]="form" data-testid="form-family-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
     <div class="col-12 col-xl-6 col-md-9">

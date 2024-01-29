@@ -4,6 +4,7 @@
   "shared.close": "Close",
   "shared.cancel": "Cancel",
   "shared.accept": "Accept",
+  "shared.ui.loading.text": "Charger le contenu...",
   "shared.genericError.validation": "Une tentative d'enregistrement de valeurs non valables a été effectuée.",
   "shared.genericError.http": "Une erreur inattendue s'est produite lors de la connexion au serveur.",
   "shared.genericError.general": "Une erreur est survenue.",

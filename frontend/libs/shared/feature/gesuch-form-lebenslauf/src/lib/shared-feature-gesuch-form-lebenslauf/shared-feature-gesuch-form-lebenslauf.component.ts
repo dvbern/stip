@@ -26,6 +26,7 @@ import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feat
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
 import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 const AUSBILDUNGS_MONTH = 8; // August
 
@@ -38,6 +39,7 @@ const AUSBILDUNGS_MONTH = 8; // August
     TranslateModule,
     TwoColumnTimelineComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf.component.scss'],
