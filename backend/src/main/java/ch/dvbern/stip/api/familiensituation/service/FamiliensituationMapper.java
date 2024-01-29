@@ -1,10 +1,11 @@
 package ch.dvbern.stip.api.familiensituation.service;
 
-import ch.dvbern.stip.generated.dto.FamiliensituationDto;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.generated.dto.FamiliensituationDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface FamiliensituationMapper {

@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
+import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
-import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

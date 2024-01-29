@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.common.entity;
 
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+
 import java.time.LocalDateTime;
 
 public class AbstractEntityListener {

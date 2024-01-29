@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.eltern.entity;
 
-import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;

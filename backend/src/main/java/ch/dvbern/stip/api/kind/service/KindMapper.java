@@ -5,7 +5,8 @@ import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.generated.dto.KindDto;
 import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import jakarta.ws.rs.NotFoundException;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import java.util.Iterator;
 import java.util.List;

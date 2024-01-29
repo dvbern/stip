@@ -6,11 +6,7 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.test.util.TestUtil;
-import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
-import org.hibernate.validator.internal.engine.path.PathImpl;
-import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 

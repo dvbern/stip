@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.fall.service;
 
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
-import ch.dvbern.stip.generated.dto.FallDto;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.generated.dto.FallDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;

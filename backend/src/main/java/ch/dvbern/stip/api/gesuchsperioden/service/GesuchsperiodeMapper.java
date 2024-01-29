@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
-import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import org.mapstruct.*;
 
 @Mapper(config = MappingConfig.class)

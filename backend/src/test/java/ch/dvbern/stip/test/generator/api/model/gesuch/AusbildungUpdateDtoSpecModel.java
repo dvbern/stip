@@ -1,11 +1,11 @@
 package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.generated.test.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchFormularUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
+
+import java.util.UUID;
 
 import static org.instancio.Select.field;
 

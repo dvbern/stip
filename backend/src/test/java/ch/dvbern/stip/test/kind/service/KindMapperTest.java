@@ -1,13 +1,5 @@
 package ch.dvbern.stip.test.kind.service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -16,6 +8,10 @@ import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
 
 class KindMapperTest {
 

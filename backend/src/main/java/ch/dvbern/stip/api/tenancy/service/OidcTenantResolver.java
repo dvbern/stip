@@ -5,8 +5,6 @@ import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.Objects;
-
 @ApplicationScoped
 public class OidcTenantResolver implements TenantResolver {
 
