@@ -1,7 +1,7 @@
 package ch.dvbern.stip.test.ausbildung;
 
-import ch.dvbern.oss.stip.contract.test.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.AusbildungsstaetteDtoSpec;
+import ch.dvbern.stip.generated.test.api.AusbildungsstaetteApiSpec;
+import ch.dvbern.stip.generated.test.dto.AusbildungsstaetteDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestConstants;

@@ -29,6 +29,8 @@
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
+    <rest-assured.version>4.5.1</rest-assured.version>
+    <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -183,12 +185,6 @@
       <artifactId>quarkus-config-yaml</artifactId>
     </dependency>
     <dependency>
-      <groupId>ch.dvbern.oss.stip</groupId>
-      <artifactId>stip-contract-test-client</artifactId>
-      <version>${contract.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
@@ -202,6 +198,7 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
+      <version>${rest-assured.version}</version>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
@@ -419,9 +416,70 @@
         <defaultGoal>generate-sources</defaultGoal>
         <plugins>
           <plugin>
+            <!-- Wir generieren die Files nicht in den target ordner, daher muessen die 
+                        directories manuell beim clean geloescht werden -->
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${basedir}/src/test/java/ch/dvbern/stip/generated</directory>
+                </fileset>
+                <fileset>
+                  <directory>${basedir}/src/main/java/ch/dvbern/stip/generated</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.0.2</version>
+            <executions>
+              <execution>
+                <id>copy-openapi-contract-to-quarkus</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/src/main/resources/META-INF/</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${basedir}/../contract/</directory>
+                      <includes>
+                        <include>openapi.yaml</include>
+                      </includes>
+                    </resource>
+                  </resources>
+                  <overwrite>true</overwrite>
+                </configuration>
+              </execution>
+              <!-- This copies only the relevant java classed of the the generated rest-assured client -->
+              <execution>
+                <id>copy-openapi-rest-assured-classes-to-project</id>
+                <!-- note that this is run AFTER the client is generated through openapi in the generate-rest-assured-test-client execution -->
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/src/test/java</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${rest-assured.gen.dir}/src/main/java</directory>
+                      <includes>
+                        <include>**/*</include>
+                      </includes>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.openapitools</groupId>
             <artifactId>openapi-generator-maven-plugin</artifactId>
-            <version>7.0.1</version>
+            <version>7.1.0</version>
             <executions>
               <execution>
                 <id>generate-stubs</id>
@@ -480,6 +538,39 @@
                       @lombok.AllArgsConstructor
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)</additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                  </configOptions>
+                  <typeMappings>
+                    <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
+                  </typeMappings>
+                </configuration>
+              </execution>
+              <execution>
+                <id>generate-rest-assured-client</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <configuration>
+                  <inputSpec>${contract.path}</inputSpec>
+                  <output>${rest-assured.gen.dir}</output>
+                  <generatorName>java</generatorName>
+                  <library>rest-assured</library>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.groupId}-test-client</artifactId>
+                  <artifactVersion>${project.version}</artifactVersion>
+                  <skipOverwrite>false</skipOverwrite>
+                  <generateModelTests>false</generateModelTests>
+                  <generateApiTests>false</generateApiTests>
+                  <apiNameSuffix>ApiSpec</apiNameSuffix>
+                  <modelNameSuffix>DtoSpec</modelNameSuffix>
+                  <configOptions>
+                    <modelPackage>${package.generated.test}.dto</modelPackage>
+                    <invokerPackage>${package.generated.test}</invokerPackage>
+                    <apiPackage>${package.generated.test}.api</apiPackage>
+                    <useJakartaEe>true</useJakartaEe>
+                    <serializationLibrary>jackson</serializationLibrary>
+                    <containerDefaultToNull>true</containerDefaultToNull>
+                    <snapshotVersion>true</snapshotVersion>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

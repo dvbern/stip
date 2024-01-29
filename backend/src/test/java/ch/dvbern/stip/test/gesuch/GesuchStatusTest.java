@@ -1,8 +1,8 @@
 package ch.dvbern.stip.test.gesuch;
 
-import ch.dvbern.oss.stip.contract.test.api.GesuchApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;

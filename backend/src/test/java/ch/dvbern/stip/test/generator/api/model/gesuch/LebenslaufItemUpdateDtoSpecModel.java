@@ -1,8 +1,8 @@
 package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import ch.dvbern.oss.stip.contract.test.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.LebenslaufAusbildungsArtDtoSpec;
-import ch.dvbern.oss.stip.contract.test.dto.LebenslaufItemUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.test.dto.LebenslaufAusbildungsArtDtoSpec;
+import ch.dvbern.stip.generated.test.dto.LebenslaufItemUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 

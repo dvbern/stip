@@ -1,6 +1,6 @@
 package ch.dvbern.stip.test.generator.api.model.benutzer;
 
-import ch.dvbern.oss.stip.contract.test.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
+import ch.dvbern.stip.generated.test.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 

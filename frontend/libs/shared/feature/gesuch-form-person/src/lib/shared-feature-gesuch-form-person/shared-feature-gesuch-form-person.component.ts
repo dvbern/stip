@@ -54,6 +54,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 
+import { AppSettings } from '@dv/shared/pattern/app-settings';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import {
   convertTempFormToRealValues,
@@ -133,6 +134,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   translatedLaender$ = toObservable(this.laenderSig).pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
+  appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set());
   isSozialversicherungsnummerInfoShown = false;
   isNiederlassungsstatusInfoShown = false;
@@ -203,7 +205,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     ...addWohnsitzControls(this.formBuilder),
     quellenbesteuert: [<boolean | null>null, [Validators.required]],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
-    digitaleKommunikation: [true, []],
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
     }),

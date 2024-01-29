@@ -1,7 +1,7 @@
 package ch.dvbern.stip.test.tenancy.resource;
 
-import ch.dvbern.oss.stip.contract.test.api.TenantApiSpec;
-import ch.dvbern.oss.stip.contract.test.dto.TenantInfoDtoSpec;
+import ch.dvbern.stip.generated.test.api.TenantApiSpec;
+import ch.dvbern.stip.generated.test.dto.TenantInfoDtoSpec;
 import ch.dvbern.stip.test.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
 import ch.dvbern.stip.test.util.TestDatabaseEnvironment;
