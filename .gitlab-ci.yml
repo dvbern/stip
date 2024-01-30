@@ -61,7 +61,7 @@ include:
     inputs:
       review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@10ddb6aa7b7338ee8fc9a8760d2fe46710e35980'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@d6b31043c5d68cfd6b228576e3a00d7050a97c58'
     inputs:
       git-mirror-clone-token: "$GITLAB_STIP_PULL_TOKEN"
       git-mirror-target: "dvbern/stip"
