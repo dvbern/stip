@@ -1,9 +1,9 @@
 import { TestScheduler } from 'rxjs/testing';
 
-import { loadCurrentBenutzer } from './shared-data-access-benutzer.effects';
-
-import { SharedDataAccessBenutzerApiEvents } from './shared-data-access-benutzer.events';
 import { BenutzerService } from '@dv/shared/model/gesuch';
+
+import { loadCurrentBenutzer } from './shared-data-access-benutzer.effects';
+import { SharedDataAccessBenutzerApiEvents } from './shared-data-access-benutzer.events';
 
 describe('SharedDataAccessBenutzer Effects', () => {
   let scheduler: TestScheduler;

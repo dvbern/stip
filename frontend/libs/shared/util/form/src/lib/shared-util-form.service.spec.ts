@@ -6,8 +6,8 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
 import { FormGroup } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedUtilFormService } from './shared-util-form.service';
 

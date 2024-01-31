@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedUiDropFileComponent } from './shared-ui-drop-file.component';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedUiDropFileComponent } from './shared-ui-drop-file.component';
 
 describe('SharedUiDropFileComponent', () => {
   let component: SharedUiDropFileComponent;

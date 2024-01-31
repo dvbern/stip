@@ -1,24 +1,26 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
-  inject,
   Injector,
   Input,
   OnInit,
+  effect,
+  inject,
   runInInjectionContext,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { maskitoPercent } from '@dv/shared/util/maskito-util';
+
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { maskitoPercent } from '@dv/shared/util/maskito-util';
+
 import { percentStringToNumber } from '../utils/form';
 @Component({
   selector: 'dv-shared-ui-percentage-splitter',

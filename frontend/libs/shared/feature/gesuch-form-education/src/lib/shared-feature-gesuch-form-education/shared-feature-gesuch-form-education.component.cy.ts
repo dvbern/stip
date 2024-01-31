@@ -2,9 +2,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
+import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { SharedEducationPO } from '@dv/shared/util-fn/e2e-helpers';
-import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
 
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education.component';
 

@@ -3,10 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, switchMap } from 'rxjs';
 
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
-import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
-import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
+import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { AusbildungsstaetteService } from '@dv/shared/model/gesuch';
+import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 import { SharedDataAccessAusbildungsstaetteApiEvents } from './shared-data-access-ausbildungsstaette.events';
 

@@ -1,37 +1,37 @@
+import { A11yModule } from '@angular/cdk/a11y';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   QueryList,
   Signal,
+  ViewChild,
   ViewChildren,
   computed,
   inject,
-  ViewChild,
-  OnInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { A11yModule } from '@angular/cdk/a11y';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
   MatPaginator,
   MatPaginatorIntl,
   MatPaginatorModule,
 } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { countByStatus } from '@dv/sachbearbeitung-app/util-fn/gesuch-helper';
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import {
+  SharedUiFocusableListDirective,
+  SharedUiFocusableListItemDirective,
+} from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
-import {
-  SharedUiFocusableListItemDirective,
-  SharedUiFocusableListDirective,
-} from '@dv/shared/ui/focusable-list';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 
 import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
 

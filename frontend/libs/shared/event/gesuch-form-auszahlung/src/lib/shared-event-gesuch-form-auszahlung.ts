@@ -1,6 +1,7 @@
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
+
+import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export const SharedEventGesuchFormAuszahlung = createActionGroup({
   source: 'GesuchFormAuszahlung Page',

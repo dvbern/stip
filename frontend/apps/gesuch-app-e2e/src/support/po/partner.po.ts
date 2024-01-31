@@ -1,4 +1,5 @@
 import { Partner } from '@dv/shared/model/gesuch';
+
 import { AddressPO } from './adresse.po';
 
 export const elements = {

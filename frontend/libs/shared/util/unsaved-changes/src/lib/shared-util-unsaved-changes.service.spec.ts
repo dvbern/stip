@@ -1,10 +1,10 @@
 import { FormControl, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 import {
   hasUnsavedChanges,
   observeUnsavedChanges,
 } from './shared-util-unsaved-changes';
-import { Subject } from 'rxjs';
 
 describe('SharedUtilUnsavedGuard', () => {
   it('should return false if form is pristine', () => {

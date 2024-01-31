@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,11 +7,11 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject, combineLatest, map, startWith } from 'rxjs';
 
 import { Land } from '@dv/shared/model/gesuch';
 import {
@@ -18,11 +19,10 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import {
-  SharedUiFormControlProxyDirective,
   ProxyableControl,
+  SharedUiFormControlProxyDirective,
   injectTargetControl,
 } from '@dv/shared/ui/form-control-proxy';
-import { combineLatest, startWith, map, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'dv-shared-ui-form-country',

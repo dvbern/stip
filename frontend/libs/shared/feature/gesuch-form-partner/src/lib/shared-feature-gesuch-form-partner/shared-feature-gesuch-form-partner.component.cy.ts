@@ -5,9 +5,9 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PartnerUpdate } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { getSubmitButton } from '@dv/shared/util-fn/e2e-helpers';
 
 import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch-form-partner.component';
-import { getSubmitButton } from '@dv/shared/util-fn/e2e-helpers';
 
 function clickAusbildungMitEinkommenOderErwerbstaetigCheckbox(): void {
   cy.getByTestId('ausbildungMitEinkommenOderErwerbstaetig')

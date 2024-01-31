@@ -1,15 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
+import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import {
   Ausbildung,
   GesuchFormularUpdate,
   PersonInAusbildung,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
-import { SharedEinnahmenKostenInAusbildungPO } from '@dv/shared/util-fn/e2e-helpers';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { SharedEinnahmenKostenInAusbildungPO } from '@dv/shared/util-fn/e2e-helpers';
+
 import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-feature-gesuch-form-einnahmenkosten.component';
 
 describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {

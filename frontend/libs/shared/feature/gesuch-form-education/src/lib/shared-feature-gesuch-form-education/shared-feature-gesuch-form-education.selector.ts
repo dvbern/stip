@@ -1,8 +1,8 @@
 import { createSelector } from '@ngrx/store';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
-
 import { format, subMonths } from 'date-fns';
+
+import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 
 export const selectSharedFeatureGesuchFormEducationView = createSelector(
   selectSharedDataAccessGesuchsView,

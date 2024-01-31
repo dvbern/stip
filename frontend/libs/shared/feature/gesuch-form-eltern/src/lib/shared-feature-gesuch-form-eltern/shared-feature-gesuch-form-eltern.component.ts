@@ -8,23 +8,22 @@ import {
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import {
   ElternTyp,
   ElternUpdate,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
-import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
-import { selectLanguage } from '@dv/shared/data-access/language';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { ElternteilCardComponent } from './elternteil-card/elternteil-card.component';
 import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch-form-eltern.selector';
 import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-gesuch-form-eltern-editor/shared-feature-gesuch-form-eltern-editor.component';
-
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern',

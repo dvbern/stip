@@ -1,15 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
   ElementRef,
   EventEmitter,
-  inject,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  computed,
+  effect,
+  inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -29,23 +29,24 @@ import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
-  WohnsitzKanton,
-  Taetigskeitsart,
-  LebenslaufItemUpdate,
   LebenslaufAusbildungsArt,
+  LebenslaufItemUpdate,
+  Taetigskeitsart,
+  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
   createDateDependencyValidator,
   createOverlappingValidator,
@@ -54,8 +55,8 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
-import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',

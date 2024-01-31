@@ -1,7 +1,8 @@
-import task from '@cypress/code-coverage/task';
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as fs from 'fs';
+
+import task from '@cypress/code-coverage/task';
 
 const lastPortFile = path.join(
   os.tmpdir(),

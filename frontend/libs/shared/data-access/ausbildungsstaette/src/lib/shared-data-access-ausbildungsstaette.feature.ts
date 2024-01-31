@@ -1,12 +1,11 @@
-import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { SharedModelError } from '@dv/shared/model/error';
-
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
+import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
+import { SharedModelError } from '@dv/shared/model/error';
+import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessAusbildungsstaetteApiEvents } from './shared-data-access-ausbildungsstaette.events';
-import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
 
 export interface State {
   ausbildungsstaettes: Ausbildungsstaette[];

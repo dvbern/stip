@@ -1,6 +1,7 @@
 import { Auszahlung } from '@dv/shared/model/gesuch';
-import { AddressPO } from './adresse.po';
 import { getSelectOption } from '@dv/shared/util-fn/e2e-helpers';
+
+import { AddressPO } from './adresse.po';
 
 const elements = {
   loading: () => cy.getBySel('form-auszahlung-loading'),

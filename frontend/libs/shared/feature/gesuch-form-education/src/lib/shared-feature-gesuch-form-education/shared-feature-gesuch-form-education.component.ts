@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
   ElementRef,
-  inject,
   OnInit,
   Signal,
+  computed,
+  effect,
+  inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -22,6 +22,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MaskitoModule } from '@maskito/angular';
+import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
+import { addYears } from 'date-fns';
+import { startWith } from 'rxjs';
+
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import {
@@ -29,8 +36,8 @@ import {
   ortToAusbidlungsLand,
 } from '@dv/shared/model/ausbildung';
 import {
-  Ausbildungsgang,
   AusbildungsPensum,
+  Ausbildungsgang,
   Ausbildungsstaette,
 } from '@dv/shared/model/gesuch';
 import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
@@ -41,8 +48,8 @@ import {
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import {
   createDateDependencyValidator,
@@ -51,12 +58,7 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { MaskitoModule } from '@maskito/angular';
-import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
-import { addYears } from 'date-fns';
-import { startWith } from 'rxjs';
+
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-education.selector';
 
 @Component({

@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Land } from '@dv/shared/model/gesuch';
 import { TranslateService } from '@ngx-translate/core';
 import { map, shareReplay, startWith } from 'rxjs/operators';
+
+import { Land } from '@dv/shared/model/gesuch';
 
 @Injectable({
   providedIn: 'root',

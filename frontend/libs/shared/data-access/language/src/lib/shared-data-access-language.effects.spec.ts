@@ -1,8 +1,8 @@
 import { TestScheduler } from 'rxjs/testing';
 
 import { resolveLanguageOnInit } from './shared-data-access-language.effects';
-import { SharedDataAccessLanguageService } from './shared-data-access-language.service';
 import { SharedDataAccessLanguageEvents } from './shared-data-access-language.events';
+import { SharedDataAccessLanguageService } from './shared-data-access-language.service';
 
 describe('SharedDataAccessLanguage Effects', () => {
   let scheduler: TestScheduler;

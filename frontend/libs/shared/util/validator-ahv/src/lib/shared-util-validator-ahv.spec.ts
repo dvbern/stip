@@ -1,10 +1,11 @@
 import { FormControl } from '@angular/forms';
 
-import {
-  sharedUtilValidatorAhv,
-  sharedUtilIsValidAhv,
-} from './shared-util-validator-ahv';
 import { ElternTyp } from '@dv/shared/model/gesuch';
+
+import {
+  sharedUtilIsValidAhv,
+  sharedUtilValidatorAhv,
+} from './shared-util-validator-ahv';
 
 describe('sharedUtilIsValidAhv', () => {
   it('valid ahv', () => {

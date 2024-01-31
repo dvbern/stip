@@ -1,5 +1,5 @@
-import { TestScheduler } from 'rxjs/testing';
 import { Store } from '@ngrx/store';
+import { TestScheduler } from 'rxjs/testing';
 
 import { GesuchService } from '@dv/shared/model/gesuch';
 

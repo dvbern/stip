@@ -6,12 +6,12 @@ import {
   QueryList,
   inject,
 } from '@angular/core';
+import { FormControlName } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { Subject, combineLatest, of } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 import { SharedUiFormMessageErrorDirective } from '../shared-ui-form-message/shared-ui-form-message-error.directive';
-import { FormControlName } from '@angular/forms';
 
 @Directive({
   selector: '[dvSharedUiFormField]',

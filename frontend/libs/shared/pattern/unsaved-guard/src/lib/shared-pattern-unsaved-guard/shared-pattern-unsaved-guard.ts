@@ -1,6 +1,7 @@
-import { CanDeactivateFn } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CanDeactivateFn } from '@angular/router';
+import { map } from 'rxjs';
 
 import {
   ComponentWithForm,
@@ -8,7 +9,6 @@ import {
 } from '@dv/shared/util/unsaved-changes';
 
 import { SharedPatternConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
-import { map } from 'rxjs';
 
 export const checkUnsavedChanges: CanDeactivateFn<ComponentWithForm> = (
   component: ComponentWithForm,
