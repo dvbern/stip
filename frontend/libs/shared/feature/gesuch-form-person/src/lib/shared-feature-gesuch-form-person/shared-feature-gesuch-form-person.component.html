@@ -361,6 +361,34 @@
             }}</mat-checkbox>
           </div>
         }
+
+        <!-- EINREISEDATUM -->
+        @if (!hiddenFieldsSetSig().has(form.controls.einreisedatum)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.person.einreisedatum.label' | translate }}</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="einreisedatum"
+              data-testid="form-person-einreisedatum"
+              (blur)="onEinreisedatumBlur()"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          @if (showEinreiseDatumWarningSig()) {
+            <div class="col-12 col-md-6 col-xl-4">
+              <ngb-alert type="warning" [dismissible]="false">
+                <div class="d-flex gap-3">
+                  <span class="material-symbols-rounded text-warning">warning</span>
+                  <span>{{ 'shared.form.person.einreisedatum.info' | translate }}</span>
+                </div>
+              </ngb-alert>
+            </div>
+          }
+        }
       </div>
 
       <!-- WOHNSITZ AUFTEILUNG -->

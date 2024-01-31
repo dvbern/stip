@@ -125,6 +125,8 @@
   "shared.form.person.niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C": "Autorisation d'établissement C",
   "shared.form.person.niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B": "Autorisation de séjour B",
   "shared.form.person.niederlassungsstatus.FLUECHTLING": "Réfugié",
+  "shared.form.person.einreisedatum.label": "Date d'entrée en Suisse",
+  "shared.form.person.einreisedatum.info": "Seules les personnes titulaires d'un permis d'établissement B bernois et ayant un domicile en Suisse depuis cinq ans sont autorisées à faire une demande.",
   "shared.form.person.korrespondenzSprache.label": "Langue de correspondance",
   "shared.form.person.korrespondenzSprache.DEUTSCH": "Allemand",
   "shared.form.person.korrespondenzSprache.FRANZOESISCH": "Français",

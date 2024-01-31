@@ -1692,6 +1692,9 @@ components:
                 niederlassungsstatus:
                     $ref: '#/components/schemas/Niederlassungsstatus'
                     description: Required wenn Nationalitaet != CH
+                einreisedatum:
+                    description: Visible nur wenn niederlassungsstatus B
+                    $ref: '#/components/schemas/LocalDate'
                 zivilstand:
                     $ref: '#/components/schemas/Zivilstand'
                 wohnsitz:
