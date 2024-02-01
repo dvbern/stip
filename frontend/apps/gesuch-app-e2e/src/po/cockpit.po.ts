@@ -1,4 +1,5 @@
-import { Page } from 'playwright';
+import { Page } from '@playwright/test';
+
 export class CockpitPO {
   private page: Page;
 
@@ -13,10 +14,6 @@ export class CockpitPO {
   public getGesuchEdit() {
     return this.page.getByTestId('cockpit-gesuch-edit');
   }
-
-  // public getGesuchRemove() {
-  //   return this.page.getByTestId('cockpit-gesuch-remove');
-  // }
 
   public async goToDashBoard() {
     await this.page.goto('/');

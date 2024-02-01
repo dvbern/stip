@@ -1,7 +1,9 @@
-import { expect, test as base } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
+
+import { Adresse, PersonInAusbildung } from '@dv/shared/model/gesuch';
+
 import { CockpitPO } from './po/cockpit.po';
 import { PersonPO } from './po/person.po';
-import { Adresse, PersonInAusbildung } from '@dv/shared/model/gesuch';
 
 const adresse: Adresse = {
   land: 'CH',
@@ -23,13 +25,11 @@ const person: PersonInAusbildung = {
   telefonnummer: '0041791111111',
   geburtsdatum: '25.12.1990',
   nationalitaet: 'CH',
-  // niederlassungsstatus: Niederlassungsstatus.C,
   heimatort: 'Bern',
   zivilstand: 'LEDIG',
   wohnsitz: 'FAMILIE',
   quellenbesteuert: false,
   sozialhilfebeitraege: false,
-  digitaleKommunikation: true,
   korrespondenzSprache: 'DEUTSCH',
 };
 
@@ -56,5 +56,5 @@ test('Neues gesuch erstellen', async ({ page, cockpit }) => {
 
   await personPage.fillPersonForm(person);
 
-  await expect(personPage.elements.form).toHaveClass('ng-valid');
+  await expect(personPage.elements.form).toHaveClass(/ng-valid/);
 });

@@ -1,4 +1,5 @@
-import { Page, Locator } from 'playwright';
+import { Locator, Page } from '@playwright/test';
+
 import { Adresse } from '@dv/shared/model/gesuch';
 
 export class AddressPO {

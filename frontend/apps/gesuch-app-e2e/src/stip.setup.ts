@@ -1,4 +1,5 @@
-import { test as setup, expect } from '@playwright/test';
+import { expect, test as setup } from '@playwright/test';
+
 import { STIP_STORAGE_STATE } from '../playwright.config';
 
 setup('authenticate', async ({ page }) => {

@@ -55,7 +55,6 @@ const person: PersonInAusbildung = {
   telefonnummer: '0041791111111',
   geburtsdatum: '25.12.1990',
   nationalitaet: 'CH',
-  // niederlassungsstatus: Niederlassungsstatus.C,
   heimatort: 'Bern',
   zivilstand: 'VERHEIRATET',
   wohnsitz: 'FAMILIE',

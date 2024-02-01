@@ -7,7 +7,6 @@ import {
 export interface EducationForm extends Ausbildung {
   ausbildungsstaette: string;
   ausbildungsgang: string;
-  // todo: why is this not in the model?
   ausbildungsland: string;
 }
 

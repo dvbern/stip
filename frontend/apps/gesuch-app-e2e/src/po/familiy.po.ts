@@ -1,0 +1,77 @@
+import { Locator, Page } from '@playwright/test';
+
+import { Familiensituation } from '@dv/shared/model/gesuch';
+
+export class FamilyPO {
+  public elements: {
+    page: Page;
+    loading: () => Locator;
+    form: Locator;
+    elternVerheiratetZusammenRadio: Locator;
+    gerichtlicheAlimentenregelungRadio: Locator;
+    werZahltAlimenteSelect: Locator;
+    elternteilUnbekanntVerstorbenRadio: Locator;
+    mutterUnbekanntVerstorbenRadio: Locator;
+    mutterUnbekanntGrundRadio: Locator;
+    vaterUnbekanntVerstorbenRadio: Locator;
+    vaterUnbekanntGrundRadio: Locator;
+    mutterWiederVerheiratetRadio: Locator;
+    vaterWiederverheiratetRadio: Locator;
+    sorgerechtSelect: Locator;
+    obhutSelect: Locator;
+    getStepperButtonNext: Locator;
+    getStepperButtonPrevious: Locator;
+    getButtonSave: Locator;
+  };
+
+  constructor(page: Page) {
+    this.elements = {
+      page,
+      loading: () => page.getByTestId('form-family-loading'),
+
+      form: page.getByTestId('form-family-form'),
+
+      elternVerheiratetZusammenRadio: page.getByTestId(
+        'form-family-elternVerheiratetZusammen',
+      ),
+      gerichtlicheAlimentenregelungRadio: page.getByTestId(
+        'form-family-gerichtlicheAlimentenregelung',
+      ),
+      werZahltAlimenteSelect: page.getByTestId('form-family-werZahltAlimente'),
+      elternteilUnbekanntVerstorbenRadio: page.getByTestId(
+        'form-family-elternteilUnbekanntVerstorben',
+      ),
+      mutterUnbekanntVerstorbenRadio: page.getByTestId(
+        'form-family-mutterUnbekanntVerstorben',
+      ),
+      mutterUnbekanntGrundRadio: page.getByTestId(
+        'form-family-mutterUnbekanntGrund',
+      ),
+      vaterUnbekanntVerstorbenRadio: page.getByTestId(
+        'form-family-vaterUnbekanntVerstorben',
+      ),
+      vaterUnbekanntGrundRadio: page.getByTestId(
+        'form-family-vaterUnbekanntGrund',
+      ),
+      mutterWiederVerheiratetRadio: page.getByTestId(
+        'form-family-mutterWiederVerheiratet',
+      ),
+      vaterWiederverheiratetRadio: page.getByTestId(
+        'form-family-vaterWiederverheiratet',
+      ),
+      sorgerechtSelect: page.getByTestId('form-family-sorgerecht'),
+      obhutSelect: page.getByTestId('form-family-obhut'),
+
+      getStepperButtonNext: page.getByTestId('stepper-next'),
+      getStepperButtonPrevious: page.getByTestId('stepper-previous'),
+      getButtonSave: page.getByTestId('button-save-continue'),
+    };
+  }
+
+  async fillMinimalForm(item: Familiensituation) {
+    await this.elements.elternVerheiratetZusammenRadio
+      .getByTestId(item.elternVerheiratetZusammen ? 'yes' : 'no')
+      .getByRole('radio')
+      .click();
+  }
+}

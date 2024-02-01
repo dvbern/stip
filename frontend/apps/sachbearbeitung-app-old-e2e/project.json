@@ -1,13 +1,13 @@
 {
-  "name": "sachbearbeitung-app-e2e",
+  "name": "sachbearbeitung-app-old-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/sachbearbeitung-app-e2e/src",
+  "sourceRoot": "apps/sachbearbeitung-app-old-e2e/src",
   "projectType": "application",
   "targets": {
     "e2e-disabled": {
       "executor": "@nx/cypress:cypress",
       "options": {
-        "cypressConfig": "apps/sachbearbeitung-app-e2e/cypress.config.ts",
+        "cypressConfig": "apps/sachbearbeitung-app-old-e2e/cypress.config.ts",
         "devServerTarget": "sachbearbeitung-app:serve:development",
         "testingType": "e2e"
       },
@@ -25,6 +25,6 @@
       "outputs": ["{options.outputFile}"]
     }
   },
-  "tags": ["type:e2e", "scope:sachbearbeitung-app"],
+  "tags": ["type:e2e", "scope:sachbearbeitung-app-old"],
   "implicitDependencies": ["sachbearbeitung-app"]
 }

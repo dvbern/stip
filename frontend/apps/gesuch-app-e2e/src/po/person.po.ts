@@ -1,7 +1,8 @@
+import { Locator, Page } from '@playwright/test';
+
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
 
 import { AddressPO } from './adresse.po';
-import { Page, Locator } from 'playwright';
 
 export class PersonPO {
   public elements: {
@@ -24,7 +25,6 @@ export class PersonPO {
     quellenbesteuertRadio: Locator;
     sozialhilfeBeitraegeRadio: Locator;
     korrespondenzSpracheRadio: Locator;
-    digitaleKommunikation: Locator;
     niederlassungsstatusSelect: Locator;
     infoNiederlassungsstatus: Locator;
     loading: () => Locator;
@@ -61,9 +61,6 @@ export class PersonPO {
       korrespondenzSpracheRadio: page.getByTestId(
         'form-person-korrespondenzSprache',
       ),
-      digitaleKommunikation: page.getByTestId(
-        'form-person-digitaleKommunikation',
-      ),
       niederlassungsstatusSelect: page.getByTestId(
         'form-person-niederlassungsstatus',
       ),
@@ -95,7 +92,6 @@ export class PersonPO {
     await this.elements.nationalitaetSelect.click();
     await this.elements.page.getByTestId(person.nationalitaet).first().click();
 
-    // todo: check if this default works
     await this.elements.heimatort.fill(person.heimatort ?? 'Bern');
 
     await this.elements.zivilstandSelect.click();
