@@ -21,22 +21,21 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.PreMatching;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Provider;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 
 @Provider
 @PreMatching
 @RequestScoped
+@RequiredArgsConstructor
 public class RequestVerificationFilter implements ContainerRequestFilter {
-
-	@Inject
-	ConfigService configService;
+	private final ConfigService configService;
 
 	@Override
 	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
@@ -55,7 +54,7 @@ public class RequestVerificationFilter implements ContainerRequestFilter {
 	}
 
 	private boolean isEnvAndVersionMatching(ContainerRequestContext req) {
-		String environment = req.getHeaderString("environment"); // Todo Constant header shared ?
+		String environment = req.getHeaderString("environment");
 		String version = req.getHeaderString("version");
 		DeploymentConfigDto backendConfig = configService.getDeploymentConfiguration();
 		// Local not used

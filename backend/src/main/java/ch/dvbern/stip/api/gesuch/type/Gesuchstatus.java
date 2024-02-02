@@ -27,8 +27,9 @@ public enum Gesuchstatus {
 	NICHT_KOMPLETT_EINGEREICHT,
 	NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
 
-	public static Set<Gesuchstatus> readonlyGesuchStatusList =
-			EnumSet.of(EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+    public static final Set<Gesuchstatus> READONLY_GESUCH_STATUS_LIST = Set.copyOf(
+        EnumSet.of(EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT_NACHFRIST)
+    );
 
     public boolean isEingereicht() {
         return this == EINGEREICHT ||
