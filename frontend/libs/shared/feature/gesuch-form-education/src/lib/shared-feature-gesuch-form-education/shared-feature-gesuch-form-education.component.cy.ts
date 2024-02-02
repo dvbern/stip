@@ -2,7 +2,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
+import { Ausbildungsstaette, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { SharedEducationPO } from '@dv/shared/util-fn/e2e-helpers';
 
@@ -28,7 +28,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     });
     it('should be valid if a past date is provided for begin', () => {
       mountWithGesuch();
-      SharedEducationPO.getFormBeginnDerAusbildung().type('01.2020').blur();
+      SharedEducationPO.getFormBeginnDerAusbildung().type('01.2018').blur();
       SharedEducationPO.getFormBeginnDerAusbildung().should(
         'not.have.class',
         'ng-invalid',
@@ -157,6 +157,14 @@ function mountWithGesuch(): void {
             ],
           },
           gesuchs: {
+            gesuch: <SharedModelGesuch>{
+              gesuchTrancheToWorkWith: {
+                id: '1',
+              },
+              gesuchsperiode: {
+                gueltigAb: '2020-01-01',
+              },
+            },
             gesuchFormular: {},
           },
           language: { language: 'de' },
