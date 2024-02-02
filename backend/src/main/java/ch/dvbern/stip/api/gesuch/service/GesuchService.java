@@ -350,7 +350,7 @@ public class GesuchService {
 	}
 
 	private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-		if (Gesuchstatus.readonlyGesuchStatusList.contains(gesuch.getGesuchStatus())) {
+		if (Gesuchstatus.READONLY_GESUCH_STATUS_LIST.contains(gesuch.getGesuchStatus())) {
 			throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
 					+ gesuch.getGesuchStatus());
 		}

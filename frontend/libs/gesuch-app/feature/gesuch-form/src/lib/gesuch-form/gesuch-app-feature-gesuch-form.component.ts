@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { GesuchAppPatternGesuchStepLayoutComponent } from '@dv/gesuch-app/pattern/gesuch-step-layout';
-import { SharedUiGesuchStepWrapperComponent } from '@dv/shared/ui/gesuch-step-wrapper';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { SharedUiGesuchStepWrapperComponent } from '@dv/shared/ui/gesuch-step-wrapper';
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form',
@@ -15,5 +15,5 @@ import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureGesuchFormComponent {
-  step?: SharedModelGesuchFormStep;
+  stepSig = signal<SharedModelGesuchFormStep | undefined>(undefined);
 }

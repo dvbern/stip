@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   computed,
   inject,
-  OnInit,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
@@ -15,25 +16,26 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
+import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { Fall, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
 // TODO: Refactor once services and landing page exist
 // -----
-import { HttpClient } from '@angular/common/http';
-import { filter, map, switchMap } from 'rxjs/operators';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
-import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+
 // -----
 
 @Component({
@@ -50,6 +52,7 @@ import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
     NgbDropdownToggle,
     SharedUiIconChipComponent,
     NgbDropdownItem,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
   styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],

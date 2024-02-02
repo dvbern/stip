@@ -1,5 +1,5 @@
-import { Directive, ElementRef, inject } from '@angular/core';
 import { Highlightable } from '@angular/cdk/a11y';
+import { Directive, ElementRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Directive({

@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.time.LocalDateTime;
-
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -9,6 +7,8 @@ import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @ApplicationScoped
 @RequiredArgsConstructor

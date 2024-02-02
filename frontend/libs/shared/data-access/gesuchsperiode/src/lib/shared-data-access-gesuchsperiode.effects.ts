@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import { catchError, switchMap, map } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, switchMap } from 'rxjs';
 
 import { GesuchsperiodeService } from '@dv/shared/model/gesuch';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';

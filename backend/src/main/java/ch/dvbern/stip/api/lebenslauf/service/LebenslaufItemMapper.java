@@ -5,7 +5,9 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import jakarta.ws.rs.NotFoundException;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.Iterator;
 import java.util.List;

@@ -1,4 +1,5 @@
 import { LebenslaufAusbildungsArt } from '@dv/shared/model/gesuch';
+
 import { LebenslaufEditorPO } from './lebenslauf-editor.po';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace

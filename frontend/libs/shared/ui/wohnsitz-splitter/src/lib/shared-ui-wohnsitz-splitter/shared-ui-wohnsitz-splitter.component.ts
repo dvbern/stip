@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { SharedUiPercentageSplitterComponent } from '@dv/shared/ui/percentage-splitter';
-import { TranslateModule } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedUiPercentageSplitterComponent } from '@dv/shared/ui/percentage-splitter';
 
 @Component({
   selector: 'dv-shared-ui-wohnsitz-splitter',

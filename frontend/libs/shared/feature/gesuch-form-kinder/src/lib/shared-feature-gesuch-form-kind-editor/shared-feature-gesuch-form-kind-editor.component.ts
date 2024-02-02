@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
   ElementRef,
   EventEmitter,
-  inject,
   Input,
   OnChanges,
   Output,
+  computed,
+  effect,
+  inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -17,26 +17,17 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
-import { MatSelectModule } from '@angular/material/select';
-import { MatRadioModule } from '@angular/material/radio';
 
-import { SharedUtilFormService } from '@dv/shared/util/form';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import {
-  addWohnsitzControls,
-  wohnsitzAnteileNumber,
-  SharedUiWohnsitzSplitterComponent,
-  wohnsitzAnteileString,
-  updateWohnsitzControlsState,
-} from '@dv/shared/ui/wohnsitz-splitter';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
@@ -47,15 +38,24 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import {
+  SharedUiWohnsitzSplitterComponent,
+  addWohnsitzControls,
+  updateWohnsitzControlsState,
+  wohnsitzAnteileNumber,
+  wohnsitzAnteileString,
+} from '@dv/shared/ui/wohnsitz-splitter';
+import { SharedUtilFormService } from '@dv/shared/util/form';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;

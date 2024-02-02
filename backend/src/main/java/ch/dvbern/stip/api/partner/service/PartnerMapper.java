@@ -4,7 +4,8 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.generated.dto.PartnerDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface PartnerMapper {

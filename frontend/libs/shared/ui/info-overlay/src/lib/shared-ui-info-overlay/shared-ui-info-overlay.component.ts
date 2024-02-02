@@ -1,4 +1,13 @@
 import {
+  BlockScrollStrategy,
+  CdkConnectedOverlay,
+  ConnectionPositionPair,
+  OverlayModule,
+  ScrollStrategy,
+  ViewportRuler,
+} from '@angular/cdk/overlay';
+import { DOCUMENT } from '@angular/common';
+import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
@@ -8,15 +17,6 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import {
-  BlockScrollStrategy,
-  CdkConnectedOverlay,
-  ConnectionPositionPair,
-  OverlayModule,
-  ScrollStrategy,
-  ViewportRuler,
-} from '@angular/cdk/overlay';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -37,6 +37,7 @@ import {
 })
 export class SharedUiInfoOverlayComponent implements AfterViewInit {
   @Input() isOpen = false;
+  @Input() overlayPanelClass: string | string[] = '';
   @Output() closeOverlay = new EventEmitter<boolean>();
   public positions = [
     new ConnectionPositionPair(

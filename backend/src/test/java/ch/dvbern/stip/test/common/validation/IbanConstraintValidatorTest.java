@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.test.util.TestConstants.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
-public class IbanConstraintValidatorTest {
+class IbanConstraintValidatorTest {
     private IbanConstraintValidator ibanValidator;
 
     @BeforeEach

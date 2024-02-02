@@ -1,21 +1,21 @@
-import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { combineLatest, interval, merge, Observable, Subject } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { ComponentStore, tapResponse } from '@ngrx/component-store';
+import { Observable, Subject, combineLatest, interval, merge } from 'rxjs';
 import {
   concatMap,
-  mergeMap,
-  map,
-  switchMap,
-  tap,
-  takeWhile,
-  shareReplay,
-  takeUntil,
   filter,
+  map,
+  mergeMap,
+  shareReplay,
+  switchMap,
+  takeUntil,
+  takeWhile,
+  tap,
 } from 'rxjs/operators';
 
-import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { GesuchService } from '@dv/shared/model/gesuch';
+import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
 
 import {

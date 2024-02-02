@@ -1,12 +1,12 @@
 package ch.dvbern.stip.test.common.validation;
 
-import java.util.regex.Pattern;
-
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import java.util.regex.Pattern;
+
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class EmailPatternTest {
 

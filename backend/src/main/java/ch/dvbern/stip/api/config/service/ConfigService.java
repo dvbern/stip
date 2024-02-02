@@ -17,28 +17,26 @@
 
 package ch.dvbern.stip.api.config.service;
 
-import java.util.List;
-
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import java.util.List;
 
 @ApplicationScoped
 public class ConfigService {
 
-    @Inject
     @ConfigProperty(name = "kstip.environment", defaultValue = "local")
     String environment;
-    @Inject
+
     @ConfigProperty(name = "kstip.version")
     String version;
 
-    @Inject
+
     @ConfigProperty(name = "bucket.name")
     String bucketName;
 
-    @Inject
+
     @ConfigProperty(name = "kstip.allowed.mimetypes")
     List<String> allowedMimeTypes;
 

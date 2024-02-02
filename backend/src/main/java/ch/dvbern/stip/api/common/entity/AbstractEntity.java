@@ -17,13 +17,11 @@
 
 package ch.dvbern.stip.api.common.entity;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.TenantId;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.proxy.HibernateProxy;
@@ -62,6 +60,9 @@ public abstract class AbstractEntity implements Serializable {
     @Column(nullable = false)
     private String userMutiert;
 
+    // java:S2097 https://sonarqube-next.dvbern.ch/coding_rules?open=java%3AS2097&rule_key=java%3AS2097
+    // This is already done, but SonarQube doesn't understand HibernateProxy
+    @SuppressWarnings("java:S2097")
     @Override
     public final boolean equals(Object o) {
         if (this == o) {

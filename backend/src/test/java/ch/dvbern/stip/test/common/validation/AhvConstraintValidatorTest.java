@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
 class AhvConstraintValidatorTest {
 	@Test

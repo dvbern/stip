@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.stammdaten.resource;
 
-import ch.dvbern.stip.generated.api.StammdatenResource;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
+import ch.dvbern.stip.generated.api.StammdatenResource;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;

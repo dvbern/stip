@@ -1,8 +1,8 @@
 import {
+  SharedPersonInAusbildungPO,
   getNavDashboard,
   getStepPersonInAusbildung,
   getStepTitle,
-  SharedPersonInAusbildungPO,
 } from '@dv/shared/util-fn/e2e-helpers';
 
 import { CockpitPO } from '../../support/po/cockpit.po';

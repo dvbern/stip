@@ -14,7 +14,8 @@ public class AusbildungNichtGefundenRequiredFieldsConstraintValidator implements
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (ausbildung.isAusbildungNichtGefunden()) {
 			return StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsgang())
-					&& StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsstaette());
+					&& StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsstaette())
+                    && StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsland());
 		}
 
 		constraintValidatorContext.disableDefaultConstraintViolation();

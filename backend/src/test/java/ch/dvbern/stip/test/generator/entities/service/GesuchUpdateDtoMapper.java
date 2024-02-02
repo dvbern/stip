@@ -1,8 +1,8 @@
 package ch.dvbern.stip.test.generator.entities.service;
 
-import ch.dvbern.stip.generated.test.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.test.dto.GesuchUpdateDtoSpec;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

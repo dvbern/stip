@@ -7,9 +7,10 @@ import {
   Output,
   computed,
 } from '@angular/core';
-import { SharedModelGlobalNotification } from '@dv/shared/model/global-notification';
 import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedModelGlobalNotification } from '@dv/shared/model/global-notification';
 
 type Severity = 'SEVERE' | 'ERROR';
 

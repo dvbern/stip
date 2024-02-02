@@ -2,11 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { LebenslaufAusbildungsArt } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
+
+import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';
 import { LebenslaufEditorPageActions } from '../../../cypress/support/lebenslauf-editor-page.actions';
 import { LebenslaufEditorPO } from '../../../cypress/support/lebenslauf-editor.po';
-import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';
 
 describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
   beforeEach(() => {

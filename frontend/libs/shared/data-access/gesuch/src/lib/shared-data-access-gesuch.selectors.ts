@@ -1,6 +1,7 @@
-import { Gesuchstatus } from '@dv/shared/model/gesuch';
-import { createSelector } from '@ngrx/store';
 import { getRouterSelectors } from '@ngrx/router-store';
+import { createSelector } from '@ngrx/store';
+
+import { Gesuchstatus } from '@dv/shared/model/gesuch';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 

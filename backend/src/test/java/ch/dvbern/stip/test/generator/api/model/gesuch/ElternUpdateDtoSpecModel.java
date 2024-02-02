@@ -1,8 +1,5 @@
 package ch.dvbern.stip.test.generator.api.model.gesuch;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import ch.dvbern.stip.generated.test.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.test.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchFormularUpdateDtoSpec;
@@ -11,6 +8,9 @@ import org.instancio.Assign;
 import org.instancio.Instancio;
 import org.instancio.Model;
 import org.instancio.When;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
 import static org.instancio.Select.field;

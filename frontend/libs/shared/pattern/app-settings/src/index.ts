@@ -3,9 +3,9 @@ import { Provider } from '@angular/core';
 import { AppType } from '@dv/shared/model/config';
 
 import {
+  AppSettings,
   AppSettingsGesuchApp,
   AppSettingsSachbearbeitungApp,
-  AppSettings,
 } from './lib/app-settings/app-settings';
 export { AppSettings } from './lib/app-settings/app-settings';
 

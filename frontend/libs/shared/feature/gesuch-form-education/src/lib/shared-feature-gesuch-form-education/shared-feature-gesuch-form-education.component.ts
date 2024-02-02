@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
   ElementRef,
-  inject,
   OnInit,
   Signal,
+  computed,
+  effect,
+  inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -16,33 +16,40 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MaskitoModule } from '@maskito/angular';
+import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
+import { addYears } from 'date-fns';
+import { startWith } from 'rxjs';
 
-import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
-import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  Ausbildungsgang,
-  AusbildungsPensum,
-  Ausbildungsstaette,
-} from '@dv/shared/model/gesuch';
+import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import {
   AusbildungsLand,
   ortToAusbidlungsLand,
 } from '@dv/shared/model/ausbildung';
 import {
+  AusbildungsPensum,
+  Ausbildungsgang,
+  Ausbildungsstaette,
+} from '@dv/shared/model/gesuch';
+import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
+import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import {
   createDateDependencyValidator,
@@ -51,12 +58,6 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { MaskitoModule } from '@maskito/angular';
-import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
-import { addYears } from 'date-fns';
-import { startWith } from 'rxjs';
 
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-education.selector';
 
@@ -78,6 +79,7 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MatAutocompleteModule,
     MaskitoModule,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-education.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -101,10 +103,10 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
     fachrichtung: [<string | null>null, [Validators.required]],
     ausbildungNichtGefunden: [false, []],
+    alternativeAusbildungsland: [<string | undefined>undefined],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
-    ausbildungBegin: ['', []],
-    ausbildungEnd: [
+    ausbildungBegin: [
       '',
       [
         Validators.required,
@@ -115,8 +117,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           'monthYear',
         ),
       ],
-      [],
     ],
+    ausbildungEnd: ['', []],
     pensum: this.formBuilder.control<AusbildungsPensum | null>(null, {
       validators: Validators.required,
     }),
@@ -179,32 +181,25 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
-    // add multi-control validators
-    this.form.controls.ausbildungEnd.addValidators([
-      createDateDependencyValidator(
-        'after',
-        this.form.controls.ausbildungBegin,
-        true,
-        new Date(),
-        this.languageSig(),
-        'monthYear',
-      ),
-    ]);
 
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
         const value = this.ausbildungNichtGefundenChangedSig();
         const {
+          ausbildungsland,
+          alternativeAusbildungsland,
           alternativeAusbildungsgang,
           alternativeAusbildungsstaette,
           ausbildungsgang,
           ausbildungsstaette,
         } = this.form.controls;
-        this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
-        this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
+        this.formUtils.setRequired(ausbildungsland, !value);
         this.formUtils.setRequired(ausbildungsgang, !value);
         this.formUtils.setRequired(ausbildungsstaette, !value);
+        this.formUtils.setRequired(alternativeAusbildungsland, !!value);
+        this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
+        this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
       },
       { allowSignalWrites: true },
     );
@@ -218,6 +213,14 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           addYears(new Date(), 100),
           'monthYear',
         ),
+        createDateDependencyValidator(
+          'after',
+          this.form.controls.ausbildungBegin,
+          true,
+          new Date(),
+          this.languageSig(),
+          'monthYear',
+        ),
       ];
 
       if (gesuchsPeriodenStart) {
@@ -229,8 +232,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           ),
         );
       }
-      this.form.controls.ausbildungBegin.clearValidators();
-      this.form.controls.ausbildungBegin.addValidators(validators);
+      this.form.controls.ausbildungEnd.clearValidators();
+      this.form.controls.ausbildungEnd.addValidators(validators);
     });
     effect(
       () => {
@@ -250,8 +253,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     // fill form
     effect(
       () => {
-        const { ausbildung } = this.viewSig();
-        const { ausbildungsstaettes } = this.viewSig();
+        const { ausbildung, ausbildungsstaettes } = this.viewSig();
         if (ausbildung && ausbildungsstaettes) {
           const ausbildungsstaette = ausbildungsstaettes.find(
             (ausbildungsstaette) =>
@@ -305,6 +307,29 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
           !staetteSig() || this.viewSig().readonly,
+          !this.viewSig().readonly,
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
+    // When Ausbildungsgang is null, disable fachrichtung. But only if ausbildungNichtGefunden is false
+    const ausbildungsgangSig = toSignal(
+      this.form.controls.ausbildungsgang.valueChanges.pipe(
+        startWith(this.form.value.ausbildungsgang),
+      ),
+    );
+    const ausbildungNichtGefundenSig = toSignal(
+      this.form.controls.ausbildungNichtGefunden.valueChanges.pipe(
+        startWith(this.form.value.ausbildungNichtGefunden),
+      ),
+    );
+    effect(
+      () => {
+        this.formUtils.setDisabledState(
+          this.form.controls.fachrichtung,
+          (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()) ||
+            this.viewSig().readonly,
           !this.viewSig().readonly,
         );
       },

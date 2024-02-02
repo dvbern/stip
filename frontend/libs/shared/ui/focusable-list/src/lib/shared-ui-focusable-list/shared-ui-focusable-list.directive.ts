@@ -1,3 +1,4 @@
+import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import {
   Directive,
   HostListener,
@@ -6,7 +7,6 @@ import {
   QueryList,
   SimpleChanges,
 } from '@angular/core';
-import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 
 import { SharedUiFocusableListItemDirective } from '../shared-ui-focusable-list-item/shared-ui-focusable-list-item.directive';
 

@@ -1,11 +1,11 @@
 import { inject } from '@angular/core';
-import { catchError, switchMap, map } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, switchMap } from 'rxjs';
 
+import { ConfigurationService } from '@dv/shared/model/gesuch';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 import { SharedDataAccessConfigEvents } from './shared-data-access-config.events';
-import { ConfigurationService } from '@dv/shared/model/gesuch';
 
 export const loadDeploymentConfig = createEffect(
   (

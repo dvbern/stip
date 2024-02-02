@@ -1,6 +1,6 @@
 import {
-  getStepTitle,
   SharedPersonInAusbildungPO,
+  getStepTitle,
 } from '@dv/shared/util-fn/e2e-helpers';
 
 export namespace CockpitPO {

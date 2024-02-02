@@ -1,11 +1,11 @@
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 import {
-  getSubmitButton,
+  SharedLebenslaufPO,
   getStepLebenslauf,
   getStepTitle,
-  SharedLebenslaufPO,
+  getSubmitButton,
 } from '@dv/shared/util-fn/e2e-helpers';
+import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { CockpitPO } from '../../support/po/cockpit.po';
 

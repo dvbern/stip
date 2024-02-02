@@ -96,6 +96,7 @@
       "@dv/shared/ui/icon-chip": ["libs/shared/ui/icon-chip/src/index.ts"],
       "@dv/shared/ui/info-overlay": ["libs/shared/ui/info-overlay/src/index.ts"],
       "@dv/shared/ui/language-selector": ["libs/shared/ui/language-selector/src/index.ts"],
+      "@dv/shared/ui/loading": ["libs/shared/ui/loading/src/index.ts"],
       "@dv/shared/ui/percentage-splitter": ["libs/shared/ui/percentage-splitter/src/index.ts"],
       "@dv/shared/ui/progress-bar": ["libs/shared/ui/progress-bar/src/index.ts"],
       "@dv/shared/ui/search": ["libs/shared/ui/search/src/index.ts"],

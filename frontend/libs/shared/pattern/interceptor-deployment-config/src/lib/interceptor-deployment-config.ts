@@ -1,11 +1,11 @@
 import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { KeycloakService } from 'keycloak-angular';
 import { combineLatest, concatMap, filter, from, take } from 'rxjs';
 
 import { selectDeploymentConfig } from '@dv/shared/data-access/config';
 import { SHARED_MODEL_CONFIG_RESOURCE } from '@dv/shared/model/config';
-import { KeycloakService } from 'keycloak-angular';
 
 export function SharedPatternInterceptorDeploymentConfig(
   req: HttpRequest<unknown>,

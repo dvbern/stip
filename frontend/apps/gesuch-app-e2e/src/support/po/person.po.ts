@@ -1,9 +1,10 @@
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
-import { AddressPO } from './adresse.po';
 import {
   getRadioOption,
   getSelectOption,
 } from '@dv/shared/util-fn/e2e-helpers';
+
+import { AddressPO } from './adresse.po';
 
 const elements = {
   form: () => cy.getBySel('form-person-form'),

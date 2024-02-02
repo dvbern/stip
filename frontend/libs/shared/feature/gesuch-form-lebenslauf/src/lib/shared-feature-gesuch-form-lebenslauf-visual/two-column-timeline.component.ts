@@ -4,11 +4,11 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  inject,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -25,16 +25,16 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import {
-  asBusyBlock,
-  asGapBlock,
-  isTimelineBusyBlock,
-  isTimelineGapBlock,
   TimelineAddCommand,
   TimelineBusyBlock,
   TimelineBusyBlockChild,
   TimelineGapBlock,
   TimelineRawItem,
   TwoColumnTimeline,
+  asBusyBlock,
+  asGapBlock,
+  isTimelineBusyBlock,
+  isTimelineGapBlock,
 } from './two-column-timeline';
 
 @Component({

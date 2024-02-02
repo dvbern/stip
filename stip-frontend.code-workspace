@@ -40,7 +40,6 @@
       "titleBar.inactiveBackground": "#075fa499",
       "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.remoteColor": "#075fa4",
     "sqltools.connections": [
       {
         "previewLimit": 50,

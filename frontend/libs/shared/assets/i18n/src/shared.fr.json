@@ -4,6 +4,7 @@
   "shared.close": "Close",
   "shared.cancel": "Cancel",
   "shared.accept": "Accept",
+  "shared.ui.loading.text": "Charger le contenu...",
   "shared.genericError.validation": "Une tentative d'enregistrement de valeurs non valables a été effectuée.",
   "shared.genericError.http": "Une erreur inattendue s'est produite lors de la connexion au serveur.",
   "shared.genericError.general": "Une erreur est survenue.",
@@ -144,7 +145,7 @@
   "shared.form.education.pensum.VOLLZEIT": "à temps plein",
   "shared.form.education.pensum.TEILZEIT": "à temps partiel",
   "shared.form.education.form.error.monthYearNotPast": "La date ne doit pas être dans le passé",
-  "shared.form.education.form.error.monthYearAfter": "La date de début doit être postérieure à {{ date }}.",
+  "shared.form.education.form.error.monthYearAfter": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
 
   "shared.familiensituation.title": "Situation familiale",

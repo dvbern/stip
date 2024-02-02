@@ -8,21 +8,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
-import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
-import { MaskitoModule } from '@maskito/angular';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MaskitoModule } from '@maskito/angular';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import {
   AUSBILDUNG,
   EINNAHMEN_KOSTEN,
@@ -33,22 +34,23 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
   maskitoNumber,
   maskitoPositiveNumber,
 } from '@dv/shared/util/maskito-util';
-import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import {
-  convertTempFormToRealValues,
-  SharedUtilFormService,
-} from '@dv/shared/util/form';
-import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   getDateDifference,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
+import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
+
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
 @Component({
@@ -65,6 +67,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

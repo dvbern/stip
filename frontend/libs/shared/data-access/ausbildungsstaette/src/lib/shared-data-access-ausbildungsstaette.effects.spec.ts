@@ -3,8 +3,8 @@ import { TestScheduler } from 'rxjs/testing';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { AusbildungsstaetteService } from '@dv/shared/model/gesuch';
 
-import { SharedDataAccessAusbildungsstaetteApiEvents } from './shared-data-access-ausbildungsstaette.events';
 import { loadAusbildungsstaettes } from './shared-data-access-ausbildungsstaette.effects';
+import { SharedDataAccessAusbildungsstaetteApiEvents } from './shared-data-access-ausbildungsstaette.events';
 
 describe('SharedDataAccessAusbildungsgang Effects', () => {
   let scheduler: TestScheduler;

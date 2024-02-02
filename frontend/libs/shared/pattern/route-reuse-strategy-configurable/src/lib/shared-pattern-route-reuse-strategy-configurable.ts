@@ -1,7 +1,7 @@
 import {
   ActivatedRouteSnapshot,
-  RouteReuseStrategy,
   BaseRouteReuseStrategy,
+  RouteReuseStrategy,
 } from '@angular/router';
 
 /**

@@ -1,18 +1,18 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  inject,
   Input,
   OnChanges,
+  computed,
+  inject,
 } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 
-import { DocumentStore } from './shared-pattern-document-upload.store';
 import { DocumentOptions } from './shared-pattern-document-upload.model';
+import { DocumentStore } from './shared-pattern-document-upload.store';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload',

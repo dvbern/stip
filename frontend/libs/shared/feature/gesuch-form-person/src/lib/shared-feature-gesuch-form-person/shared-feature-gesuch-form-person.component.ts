@@ -2,39 +2,37 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  OnInit,
+  Signal,
   computed,
   effect,
-  ElementRef,
   inject,
-  OnInit,
   signal,
-  Signal,
 } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MaskitoModule } from '@maskito/angular';
 import { NgbAlert, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { subYears } from 'date-fns';
 
-import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { PERSON } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
   Anrede,
   Land,
@@ -45,6 +43,8 @@ import {
   Wohnsitz,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
+import { PERSON } from '@dv/shared/model/gesuch-form';
+import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
   DocumentOptions,
   SharedPatternDocumentUploadComponent,
@@ -53,33 +53,33 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-
-import { AppSettings } from '@dv/shared/pattern/app-settings';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
+import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  convertTempFormToRealValues,
+  SharedUiWohnsitzSplitterComponent,
+  addWohnsitzControls,
+  updateWohnsitzControlsState,
+  wohnsitzAnteileNumber,
+  wohnsitzAnteileString,
+} from '@dv/shared/ui/wohnsitz-splitter';
+import { SharedUtilCountriesService } from '@dv/shared/util/countries';
+import {
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
-import {
-  addWohnsitzControls,
-  SharedUiWohnsitzSplitterComponent,
-  wohnsitzAnteileString,
-  wohnsitzAnteileNumber,
-  updateWohnsitzControlsState,
-} from '@dv/shared/ui/wohnsitz-splitter';
-import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
-import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-person.selector';
 
@@ -110,6 +110,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiFormAddressComponent,
     SharedPatternDocumentUploadComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

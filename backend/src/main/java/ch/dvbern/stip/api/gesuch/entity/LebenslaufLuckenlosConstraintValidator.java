@@ -1,15 +1,15 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import ch.dvbern.stip.api.common.entity.DateRange;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import org.jboss.logging.Logger;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import ch.dvbern.stip.api.common.entity.DateRange;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import org.jboss.logging.Logger;
 
 public class LebenslaufLuckenlosConstraintValidator implements ConstraintValidator<LebenslaufLuckenlosConstraint, GesuchFormular> {
 	private static final Logger LOG = Logger.getLogger(LebenslaufLuckenlosConstraintValidator.class);

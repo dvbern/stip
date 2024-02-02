@@ -1,15 +1,16 @@
 package ch.dvbern.stip.api.benutzereinstellungen.entity;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import jakarta.persistence.*;
-import jakarta.validation.Valid;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-@Entity()
+@Entity
 @Table(indexes = {
     @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant")
 })
@@ -17,12 +18,6 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class Benutzereinstellungen extends AbstractMandantEntity {
-
-//    @NotNull
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "benutzereinstellungen")
-//    @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzereinstellungen_benutzer_id"), nullable = false)
-//    private @Valid Benutzer benutzer;
-
     @NotNull
     @Column(nullable = false)
     private boolean digitaleKommunikation = true;

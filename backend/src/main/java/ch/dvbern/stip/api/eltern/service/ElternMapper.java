@@ -5,7 +5,8 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.generated.dto.ElternDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import jakarta.ws.rs.NotFoundException;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import java.util.Iterator;
 import java.util.List;

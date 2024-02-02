@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedUiPercentageSplitterComponent } from './shared-ui-percentage-splitter.component';
 import { FormControl } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+import { SharedUiPercentageSplitterComponent } from './shared-ui-percentage-splitter.component';
 
 describe('SharedUiPercentageSplitterComponent', () => {
   let component: SharedUiPercentageSplitterComponent;

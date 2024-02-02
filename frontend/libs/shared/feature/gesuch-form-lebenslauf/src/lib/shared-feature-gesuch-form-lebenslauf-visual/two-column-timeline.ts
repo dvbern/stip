@@ -1,6 +1,7 @@
 import { isDevMode } from '@angular/core';
-import { printDateAsMonthYear } from '@dv/shared/util/validator-date';
 import { addMonths, isAfter, isBefore, isEqual, subMonths } from 'date-fns';
+
+import { printDateAsMonthYear } from '@dv/shared/util/validator-date';
 
 type TimelineLabel = {
   title: string;

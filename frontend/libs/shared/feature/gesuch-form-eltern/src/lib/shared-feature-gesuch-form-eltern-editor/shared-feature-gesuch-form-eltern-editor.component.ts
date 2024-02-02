@@ -1,23 +1,24 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   ElementRef,
   EventEmitter,
-  inject,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  effect,
+  inject,
+  signal,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoModule } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
@@ -26,36 +27,36 @@ import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable } from 'rxjs';
 
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import {
+  ElternTyp,
+  ElternUpdate,
+  Land,
+  MASK_SOZIALVERSICHERUNGSNUMMER,
+  SharedModelGesuchFormular,
+} from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  ElternTyp,
-  Land,
-  ElternUpdate,
-  MASK_SOZIALVERSICHERUNGSNUMMER,
-  SharedModelGesuchFormular,
-} from '@dv/shared/model/gesuch';
-import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
+import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
+import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
-import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 import { selectSharedFeatureGesuchFormElternView } from '../shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.selector';
 
@@ -129,7 +130,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
     ],
-    sozialversicherungsnummer: ['', []],
+    sozialversicherungsnummer: [<string | undefined>undefined, []],
     geburtsdatum: [
       '',
       [
@@ -157,6 +158,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       [Validators.required],
     ],
   });
+
+  svnIsRequiredSig = signal(false);
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
@@ -197,10 +200,13 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     effect(
       () => {
         const land = landChangedSig();
+        const svnIsRequired = land === 'CH';
+
         this.formUtils.setRequired(
           this.form.controls.sozialversicherungsnummer,
-          land === 'CH',
+          svnIsRequired,
         );
+        this.svnIsRequiredSig.set(svnIsRequired);
       },
       { allowSignalWrites: true },
     );
