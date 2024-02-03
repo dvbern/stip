@@ -3,7 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { Adresse } from '@dv/shared/model/gesuch';
 
 export class AddressPO {
-  public elements: {
+  public elems: {
     page: Page;
     strasse: Locator;
     hausnummer: Locator;
@@ -14,7 +14,7 @@ export class AddressPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       page,
       strasse: page.getByTestId('form-address-strasse'),
       hausnummer: page.getByTestId('form-address-hausnummer'),
@@ -26,15 +26,15 @@ export class AddressPO {
   }
 
   public async fillAddressForm(adresse: Adresse) {
-    await this.elements.strasse.fill(adresse.strasse);
-    await this.elements.hausnummer.fill(adresse.hausnummer ?? '');
+    await this.elems.strasse.fill(adresse.strasse);
+    await this.elems.hausnummer.fill(adresse.hausnummer ?? '');
 
-    await this.elements.plz.fill(adresse.plz);
-    await this.elements.ort.fill(adresse.ort);
+    await this.elems.plz.fill(adresse.plz);
+    await this.elems.ort.fill(adresse.ort);
 
-    // await this.elements.coAdresse().type(adresse.coAdresse ?? '');
+    // await this.elems.coAdresse().type(adresse.coAdresse ?? '');
 
-    await this.elements.landSelect.click();
-    await this.elements.page.getByTestId(adresse.land).first().click();
+    await this.elems.landSelect.click();
+    await this.elems.page.getByTestId(adresse.land).first().click();
   }
 }

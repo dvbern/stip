@@ -1,14 +1,14 @@
 import { Locator, Page } from '@playwright/test';
 
 export class PercentageSplitterPO {
-  public elements: {
+  public elems: {
     page: Page;
     percentA: Locator;
     percentB: Locator;
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       page,
       percentA: page.getByTestId('component-percentage-splitter-a'),
       percentB: page.getByTestId('component-percentage-splitter-b'),
@@ -19,8 +19,8 @@ export class PercentageSplitterPO {
     percentA: string;
     percentB: string;
   }) {
-    await this.elements.percentA.fill(value.percentA);
+    await this.elems.percentA.fill(value.percentA);
 
-    await this.elements.percentB.fill(value.percentB);
+    await this.elems.percentB.fill(value.percentB);
   }
 }

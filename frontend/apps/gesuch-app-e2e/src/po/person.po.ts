@@ -3,9 +3,10 @@ import { Locator, Page } from '@playwright/test';
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
 
 import { AddressPO } from './adresse.po';
+import { selectMatRadio } from '../helpers/helpers';
 
 export class PersonPO {
-  public elements: {
+  public elems: {
     page: Page;
     form: Locator;
     sozialversicherungsnummer: Locator;
@@ -28,10 +29,12 @@ export class PersonPO {
     niederlassungsstatusSelect: Locator;
     infoNiederlassungsstatus: Locator;
     loading: () => Locator;
+    buttonSaveContinue: Locator;
+    buttonBack: Locator;
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       page,
       form: page.getByTestId('form-person-form'),
       sozialversicherungsnummer: page.getByTestId(
@@ -69,50 +72,53 @@ export class PersonPO {
       ),
 
       loading: () => page.getByTestId('form-person-loading'),
+
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
+      buttonBack: page.getByTestId('button-back'),
     };
   }
 
   async fillPersonForm(person: PersonInAusbildung) {
-    await this.elements.sozialversicherungsnummer.fill(
+    await this.elems.sozialversicherungsnummer.fill(
       person.sozialversicherungsnummer,
     );
 
-    await this.elements.anredeSelect.click();
-    await this.elements.page.getByTestId(person.anrede).click();
+    await this.elems.anredeSelect.click();
+    await this.elems.page.getByTestId(person.anrede).click();
 
-    await this.elements.nachname.fill(person.nachname);
-    await this.elements.vorname.fill(person.vorname);
+    await this.elems.nachname.fill(person.nachname);
+    await this.elems.vorname.fill(person.vorname);
 
-    await this.elements.adresse.fillAddressForm(person.adresse);
+    await this.elems.adresse.fillAddressForm(person.adresse);
 
-    await this.elements.email.fill(person.email);
-    await this.elements.telefonnummer.fill(person.telefonnummer);
-    await this.elements.geburtsdatum.fill(person.geburtsdatum);
+    await this.elems.email.fill(person.email);
+    await this.elems.telefonnummer.fill(person.telefonnummer);
+    await this.elems.geburtsdatum.fill(person.geburtsdatum);
 
-    await this.elements.nationalitaetSelect.click();
-    await this.elements.page.getByTestId(person.nationalitaet).first().click();
+    await this.elems.nationalitaetSelect.click();
+    await this.elems.page.getByTestId(person.nationalitaet).first().click();
 
-    await this.elements.heimatort.fill(person.heimatort ?? 'Bern');
+    await this.elems.heimatort.fill(person.heimatort ?? 'Bern');
 
-    await this.elements.zivilstandSelect.click();
-    await this.elements.page.getByTestId(person.zivilstand ?? 'LEDIG').click();
+    await this.elems.zivilstandSelect.click();
+    await this.elems.page.getByTestId(person.zivilstand ?? 'LEDIG').click();
 
-    await this.elements.wohnsitzSelect.click();
-    await this.elements.page.getByTestId(person.wohnsitz).click();
+    await this.elems.wohnsitzSelect.click();
+    await this.elems.page.getByTestId(person.wohnsitz).click();
 
-    await this.elements.quellenbesteuertRadio
-      .getByTestId(person.quellenbesteuert ? 'yes' : 'no')
-      .getByRole('radio')
-      .click();
+    await selectMatRadio(
+      this.elems.quellenbesteuertRadio,
+      person.quellenbesteuert,
+    );
 
-    await this.elements.sozialhilfeBeitraegeRadio
-      .getByTestId(person.sozialhilfebeitraege ? 'yes' : 'no')
-      .getByRole('radio')
-      .click();
+    await selectMatRadio(
+      this.elems.sozialhilfeBeitraegeRadio,
+      person.sozialhilfebeitraege,
+    );
 
-    await this.elements.korrespondenzSpracheRadio
-      .getByTestId(person.korrespondenzSprache)
-      .getByRole('radio')
-      .click();
+    await selectMatRadio(
+      this.elems.korrespondenzSpracheRadio,
+      person.korrespondenzSprache,
+    );
   }
 }

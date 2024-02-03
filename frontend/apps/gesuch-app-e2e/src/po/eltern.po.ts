@@ -5,7 +5,7 @@ import { Eltern } from '@dv/shared/model/gesuch';
 import { AddressPO } from './adresse.po';
 
 export class ElternPO {
-  public elements: {
+  public elems: {
     addVater: Locator;
     addMutter: Locator;
     form: Locator;
@@ -28,7 +28,7 @@ export class ElternPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       addVater: page.getByTestId('button-add-vater'),
       addMutter: page.getByTestId('button-add-mutter'),
       form: page.getByTestId('form-eltern-form'),
@@ -66,54 +66,54 @@ export class ElternPO {
   }
 
   async addVater(item: Eltern) {
-    await this.elements.addVater.click();
+    await this.elems.addVater.click();
 
     await this.fillElternTeil(item);
   }
 
   async addMutter(item: Eltern) {
-    await this.elements.addMutter.click();
+    await this.elems.addMutter.click();
 
     await this.fillElternTeil(item);
   }
 
   async fillElternTeil(item: Eltern) {
-    await this.elements.sozialversicherungsnummer.fill(
+    await this.elems.sozialversicherungsnummer.fill(
       item.sozialversicherungsnummer,
     );
-    await this.elements.nachname.fill(item.nachname);
-    await this.elements.vorname.fill(item.vorname);
+    await this.elems.nachname.fill(item.nachname);
+    await this.elems.vorname.fill(item.vorname);
 
-    await this.elements.adresse.fillAddressForm(item.adresse);
+    await this.elems.adresse.fillAddressForm(item.adresse);
 
-    await this.elements.identischerZivilrechtlicherWohnsitzCheckbox.click();
-    await this.elements.identischerZivilrechtlicherWohnsitzPLZ.fill(
+    await this.elems.identischerZivilrechtlicherWohnsitzCheckbox.click();
+    await this.elems.identischerZivilrechtlicherWohnsitzPLZ.fill(
       item.identischerZivilrechtlicherWohnsitzPLZ ?? '',
     );
-    await this.elements.identischerZivilrechtlicherWohnsitzOrt.fill(
+    await this.elems.identischerZivilrechtlicherWohnsitzOrt.fill(
       item.identischerZivilrechtlicherWohnsitzOrt ?? '',
     );
 
-    await this.elements.geburtsdatum.fill(item.geburtsdatum);
-    await this.elements.telefonnummer.fill(item.telefonnummer);
+    await this.elems.geburtsdatum.fill(item.geburtsdatum);
+    await this.elems.telefonnummer.fill(item.telefonnummer);
 
-    await this.elements.ausweisbFluechtlingRadio
+    await this.elems.ausweisbFluechtlingRadio
       .getByTestId(item.ausweisbFluechtling ? 'yes' : 'no')
       .getByRole('radio')
       .click();
 
-    await this.elements.ergaenzungsleistungAusbezahltRadio
+    await this.elems.ergaenzungsleistungAusbezahltRadio
       .getByTestId(item.ergaenzungsleistungAusbezahlt ? 'yes' : 'no')
       .getByRole('radio')
       .click();
 
-    await this.elements.sozialhilfebeitraegeAusbezahltRadio
+    await this.elems.sozialhilfebeitraegeAusbezahltRadio
       .getByTestId(item.sozialhilfebeitraegeAusbezahlt ? 'yes' : 'no')
       .getByRole('radio')
       .click();
 
-    await expect(this.elements.form).toHaveClass(/ng-valid/);
+    await expect(this.elems.form).toHaveClass(/ng-valid/);
 
-    await this.elements.getButtonSave.click();
+    await this.elems.getButtonSave.click();
   }
 }

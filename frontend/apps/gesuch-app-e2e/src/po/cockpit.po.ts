@@ -16,7 +16,7 @@ export class CockpitPO {
   }
 
   public async goToDashBoard() {
-    await this.page.goto('/');
+    await this.page.goto('/gesuch-app-feature-cockpit');
   }
 
   public getGesuchNew() {

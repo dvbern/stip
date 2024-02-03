@@ -3,7 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { Familiensituation } from '@dv/shared/model/gesuch';
 
 export class FamilyPO {
-  public elements: {
+  public elems: {
     page: Page;
     loading: () => Locator;
     form: Locator;
@@ -25,7 +25,7 @@ export class FamilyPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       page,
       loading: () => page.getByTestId('form-family-loading'),
 
@@ -69,7 +69,7 @@ export class FamilyPO {
   }
 
   async fillMinimalForm(item: Familiensituation) {
-    await this.elements.elternVerheiratetZusammenRadio
+    await this.elems.elternVerheiratetZusammenRadio
       .getByTestId(item.elternVerheiratetZusammen ? 'yes' : 'no')
       .getByRole('radio')
       .click();

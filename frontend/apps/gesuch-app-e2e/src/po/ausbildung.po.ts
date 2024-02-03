@@ -2,14 +2,17 @@ import { Locator, Page } from '@playwright/test';
 
 import { Ausbildung } from '@dv/shared/model/gesuch';
 
-export interface Education extends Ausbildung {
+import { selectMatOption } from '../helpers/helpers';
+
+export interface AusbildungValues extends Ausbildung {
   ausbildungsstaette: string;
   ausbildungsgang: string;
   ausbildungsland: string;
 }
 
-export class EducationPO {
-  public elements: {
+export class AusbildungPO {
+  public elems: {
+    page: Page;
     form: Locator;
     ausbildungslandSelect: Locator;
     ausbildungsstaetteSelect: Locator;
@@ -22,10 +25,13 @@ export class EducationPO {
     pensumSelect: Locator;
     ausbildungNichtGefundenCheckbox: Locator;
     loading: () => Locator;
+    buttonSaveContinue: Locator;
+    buttonBack: Locator;
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
+      page,
       form: page.getByTestId('form-education-form'),
 
       ausbildungslandSelect: page.getByTestId('form-education-ausbildungsland'),
@@ -49,31 +55,33 @@ export class EducationPO {
       ),
 
       loading: () => page.getByTestId('education-form-loading'),
+      // todo: now page objects to do:
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
+      buttonBack: page.getByTestId('button-back'),
     };
   }
 
-  public async fillEducationForm(ausbildung: Education) {
-    await this.elements.ausbildungslandSelect.click();
-    await this.elements.ausbildungslandSelect.selectOption(
+  public async fillEducationForm(ausbildung: AusbildungValues) {
+    await selectMatOption(
+      this.elems.ausbildungslandSelect,
       ausbildung.ausbildungsland,
     );
 
-    await this.elements.ausbildungsstaetteSelect.click();
-    await this.elements.ausbildungsstaetteSelect.selectOption(
+    await selectMatOption(
+      this.elems.ausbildungsstaetteSelect,
       ausbildung.ausbildungsstaette,
     );
 
-    await this.elements.ausbildungsgangSelect.click();
-    await this.elements.ausbildungsgangSelect.selectOption(
+    await selectMatOption(
+      this.elems.ausbildungsgangSelect,
       ausbildung.ausbildungsgang,
     );
 
-    await this.elements.fachrichtung.fill(ausbildung.fachrichtung);
+    await this.elems.fachrichtung.fill(ausbildung.fachrichtung);
 
-    await this.elements.ausbildungBegin.fill(ausbildung.ausbildungBegin);
-    await this.elements.ausbildungEnd.fill(ausbildung.ausbildungEnd);
+    await this.elems.ausbildungBegin.fill(ausbildung.ausbildungBegin);
+    await this.elems.ausbildungEnd.fill(ausbildung.ausbildungEnd);
 
-    await this.elements.pensumSelect.click();
-    await this.elements.pensumSelect.selectOption(ausbildung.pensum);
+    await selectMatOption(this.elems.pensumSelect, ausbildung.pensum);
   }
 }

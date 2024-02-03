@@ -3,7 +3,7 @@ import { Locator, Page, expect } from '@playwright/test';
 import { Geschwister } from '@dv/shared/model/gesuch';
 
 export class GeschwisterPO {
-  public elements: {
+  public elems: {
     page: Page;
     loading: () => Locator;
     addGeschwister: Locator;
@@ -18,7 +18,7 @@ export class GeschwisterPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       page,
       loading: () => page.getByTestId('form-geschwister-loading'),
       addGeschwister: page.getByTestId('button-add-geschwister'),
@@ -38,22 +38,22 @@ export class GeschwisterPO {
   }
 
   async addGeschwister(item: Geschwister) {
-    await this.elements.addGeschwister.click();
+    await this.elems.addGeschwister.click();
 
-    await this.elements.nachname.fill(item.nachname);
-    await this.elements.vorname.fill(item.vorname);
-    await this.elements.geburtsdatum.fill(item.geburtsdatum);
+    await this.elems.nachname.fill(item.nachname);
+    await this.elems.vorname.fill(item.vorname);
+    await this.elems.geburtsdatum.fill(item.geburtsdatum);
 
-    await this.elements.wohnsitzSelect.click();
-    await this.elements.page.getByTestId(item.wohnsitz).first().click();
+    await this.elems.wohnsitzSelect.click();
+    await this.elems.page.getByTestId(item.wohnsitz).first().click();
 
-    await this.elements.ausbildungssituationRadio.click();
-    await this.elements.page
+    await this.elems.ausbildungssituationRadio.click();
+    await this.elems.page
       .getByTestId(item.ausbildungssituation)
       .first()
       .click();
 
-    await expect(this.elements.form).toHaveClass(/ng-valid/);
-    await this.elements.getButtonSaveContinue.click();
+    await expect(this.elems.form).toHaveClass(/ng-valid/);
+    await this.elems.getButtonSaveContinue.click();
   }
 }

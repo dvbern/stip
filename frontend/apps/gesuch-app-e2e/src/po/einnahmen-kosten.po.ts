@@ -3,7 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { EinnahmenKosten } from '@dv/shared/model/gesuch';
 
 export class EinnahmenKostenPO {
-  public elements: {
+  public elems: {
     loading: () => Locator;
     form: Locator;
     nettoerwerbseinkommen: Locator;
@@ -24,7 +24,7 @@ export class EinnahmenKostenPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       loading: () => page.getByTestId('form-einnahmen-kosten-loading'),
 
       form: page.getByTestId('form-einnahmen-kosten-form'),
@@ -62,40 +62,38 @@ export class EinnahmenKostenPO {
   }
 
   public async fillEinnahmenKostenForm(einnahmenKosten: EinnahmenKosten) {
-    await this.elements.nettoerwerbseinkommen.fill(
+    await this.elems.nettoerwerbseinkommen.fill(
       einnahmenKosten.nettoerwerbseinkommen.toString(),
     );
-    await this.elements.alimente.fill(`${einnahmenKosten.alimente ?? 0}`);
-    await this.elements.zulagen.fill(`${einnahmenKosten.zulagen ?? 0}`);
-    await this.elements.renten.fill(`${einnahmenKosten.renten ?? 0}`);
-    await this.elements.eoLeistungen.fill(
-      `${einnahmenKosten.eoLeistungen ?? 0}`,
-    );
-    await this.elements.ergaenzungsleistungen.fill(
+    await this.elems.alimente.fill(`${einnahmenKosten.alimente ?? 0}`);
+    await this.elems.zulagen.fill(`${einnahmenKosten.zulagen ?? 0}`);
+    await this.elems.renten.fill(`${einnahmenKosten.renten ?? 0}`);
+    await this.elems.eoLeistungen.fill(`${einnahmenKosten.eoLeistungen ?? 0}`);
+    await this.elems.ergaenzungsleistungen.fill(
       `${einnahmenKosten.ergaenzungsleistungen ?? 0}`,
     );
-    await this.elements.beitraege.fill(`${einnahmenKosten.beitraege ?? 0}`);
-    await this.elements.ausbildungskostenSekundarstufeZwei.fill(
+    await this.elems.beitraege.fill(`${einnahmenKosten.beitraege ?? 0}`);
+    await this.elems.ausbildungskostenSekundarstufeZwei.fill(
       `${einnahmenKosten.ausbildungskostenSekundarstufeZwei ?? 0}`,
     );
-    await this.elements.ausbildungskostenTertiaerstufe.fill(
+    await this.elems.ausbildungskostenTertiaerstufe.fill(
       `${einnahmenKosten.ausbildungskostenTertiaerstufe ?? 0}`,
     );
-    await this.elements.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
-    await this.elements.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
-    await this.elements.auswaertigeMittagessenProWoche.fill(
+    await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
+    await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
+    await this.elems.auswaertigeMittagessenProWoche.fill(
       `${einnahmenKosten.auswaertigeMittagessenProWoche ?? 0}`,
     );
-    await this.elements.personenImHaushalt.fill(
+    await this.elems.personenImHaushalt.fill(
       `${einnahmenKosten.personenImHaushalt ?? 0}`,
     );
 
-    await this.elements.verdienstRealisiert
+    await this.elems.verdienstRealisiert
       .getByTestId(einnahmenKosten.verdienstRealisiert ? 'yes' : 'no')
       .getByRole('radio')
       .click();
 
-    await this.elements.willDarlehen
+    await this.elems.willDarlehen
       .getByTestId(einnahmenKosten.willDarlehen ? 'yes' : 'no')
       .getByRole('radio')
       .click();

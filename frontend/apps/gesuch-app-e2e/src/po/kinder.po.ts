@@ -3,7 +3,7 @@ import { Locator, Page, expect } from '@playwright/test';
 import { Kind } from '@dv/shared/model/gesuch';
 
 export class KinderPO {
-  public elements: {
+  public elems: {
     loading: () => Locator;
 
     addKind: Locator;
@@ -21,7 +21,7 @@ export class KinderPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       loading: () => page.getByTestId('form-kinder-loading'),
 
       addKind: page.getByTestId('button-add-kind'),
@@ -42,22 +42,22 @@ export class KinderPO {
   }
 
   async addKind(item: Kind) {
-    await this.elements.addKind.click();
+    await this.elems.addKind.click();
 
-    await this.elements.nachname.fill(item.nachname);
-    await this.elements.vorname.fill(item.vorname);
-    await this.elements.geburtsdatum.fill(item.geburtsdatum);
+    await this.elems.nachname.fill(item.nachname);
+    await this.elems.vorname.fill(item.vorname);
+    await this.elems.geburtsdatum.fill(item.geburtsdatum);
 
-    await this.elements.wohnsitzSelect.click();
-    await this.elements.wohnsitzSelect.selectOption(item.wohnsitz);
+    await this.elems.wohnsitzSelect.click();
+    await this.elems.wohnsitzSelect.selectOption(item.wohnsitz);
 
-    await this.elements.ausbildungssituationRadio.click();
-    await this.elements.ausbildungssituationRadio.selectOption(
+    await this.elems.ausbildungssituationRadio.click();
+    await this.elems.ausbildungssituationRadio.selectOption(
       item.ausbildungssituation,
     );
 
-    await expect(this.elements.form).toHaveClass(/ng-valid/);
+    await expect(this.elems.form).toHaveClass(/ng-valid/);
 
-    await this.elements.getButtonSaveContinue.click();
+    await this.elems.getButtonSaveContinue.click();
   }
 }

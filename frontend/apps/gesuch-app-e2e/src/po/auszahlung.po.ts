@@ -5,7 +5,7 @@ import { Auszahlung } from '@dv/shared/model/gesuch';
 import { AddressPO } from './adresse.po';
 
 export class AuszahlungPO {
-  public elements: {
+  public elems: {
     loading: () => Locator;
     form: Locator;
     kontoinhaberSelect: Locator;
@@ -16,7 +16,7 @@ export class AuszahlungPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       loading: () => page.getByTestId('form-auszahlung-loading'),
       form: page.getByTestId('form-auszahlung-form'),
       kontoinhaberSelect: page.getByTestId('form-auszahlung-kontoinhaber'),
@@ -30,11 +30,9 @@ export class AuszahlungPO {
   }
 
   async fillAuszahlungEigenesKonto(auszahlung: Auszahlung) {
-    await this.elements.kontoinhaberSelect.click();
-    await this.elements.kontoinhaberSelect.selectOption(
-      auszahlung.kontoinhaber,
-    );
+    await this.elems.kontoinhaberSelect.click();
+    await this.elems.kontoinhaberSelect.selectOption(auszahlung.kontoinhaber);
 
-    await this.elements.iban.fill(auszahlung.iban);
+    await this.elems.iban.fill(auszahlung.iban);
   }
 }

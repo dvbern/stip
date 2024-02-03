@@ -5,7 +5,7 @@ import { Partner } from '@dv/shared/model/gesuch';
 import { AddressPO } from './adresse.po';
 
 export class PartnerPO {
-  public elements: {
+  public elems: {
     page: Page;
     loading: () => Locator;
     form: Locator;
@@ -21,7 +21,7 @@ export class PartnerPO {
   };
 
   constructor(page: Page) {
-    this.elements = {
+    this.elems = {
       page,
       loading: () => page.getByTestId('form-partner-loading'),
       form: page.getByTestId('form-partner-form'),
@@ -45,15 +45,15 @@ export class PartnerPO {
   }
 
   async fillPartnerForm(partner: Partner) {
-    await this.elements.sozialversicherungsnummer.fill(
+    await this.elems.sozialversicherungsnummer.fill(
       partner.sozialversicherungsnummer,
     );
 
-    await this.elements.nachname.fill(partner.nachname);
-    await this.elements.vorname.fill(partner.vorname);
+    await this.elems.nachname.fill(partner.nachname);
+    await this.elems.vorname.fill(partner.vorname);
 
-    await this.elements.adresse.fillAddressForm(partner.adresse);
+    await this.elems.adresse.fillAddressForm(partner.adresse);
 
-    await this.elements.geburtsdatum.fill(partner.geburtsdatum);
+    await this.elems.geburtsdatum.fill(partner.geburtsdatum);
   }
 }

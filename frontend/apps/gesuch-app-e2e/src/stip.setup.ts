@@ -1,6 +1,7 @@
 import { test as setup } from '@playwright/test';
 import { addMilliseconds } from 'date-fns';
 
+import { BEARER_COOKIE, REFRESH_COOKIE } from './helpers/types';
 import { STIP_STORAGE_STATE } from '../playwright.config';
 
 interface KeycloakResponse {
@@ -15,9 +16,6 @@ interface KeycloakResponse {
   scope: string;
 }
 
-export const BEARER_COOKIE = 'access_cookie';
-export const REFRESH_COOKIE = 'refresh_cookie';
-
 setup('authenticate', async ({ page }) => {
   const username = process.env['E2E_USERNAME'] || 'e2e';
   const password = process.env['E2E_PASSWORD'] || 'NKsA.pu*ros6LmDu';
@@ -26,6 +24,7 @@ setup('authenticate', async ({ page }) => {
   await page.getByLabel('Username or email').fill(username);
   await page.getByLabel('Password', { exact: true }).fill(password);
 
+  // todo: get from environment
   const responsePromise = page.waitForResponse(
     'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern/protocol/openid-connect/token',
   );

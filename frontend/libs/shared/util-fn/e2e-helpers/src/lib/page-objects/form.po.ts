@@ -12,6 +12,7 @@ export const getButtonSave = () => cy.getBySel('button-save');
  * data-testids cannot contain spaces
  */
 export const getSelectOption = (name: string) => cy.getBySel(name).first();
+
 /**
  * @argument text - The text value of the option, for translated or arbitrary values
  */
