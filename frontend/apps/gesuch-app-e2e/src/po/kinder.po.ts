@@ -2,62 +2,38 @@ import { Locator, Page, expect } from '@playwright/test';
 
 import { Kind } from '@dv/shared/model/gesuch';
 
+import { KinderEditorPO } from './kinder-editor.po';
+
 export class KinderPO {
   public elems: {
+    page: Page;
     loading: () => Locator;
 
     addKind: Locator;
 
-    form: Locator;
-
-    nachname: Locator;
-    vorname: Locator;
-    geburtsdatum: Locator;
-    wohnsitzSelect: Locator;
-    ausbildungssituationRadio: Locator;
-
-    getButtonSaveContinue: Locator;
-    getButtonCancelBack: Locator;
+    buttonContinue: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
     this.elems = {
+      page,
       loading: () => page.getByTestId('form-kinder-loading'),
 
       addKind: page.getByTestId('button-add-kind'),
 
-      form: page.getByTestId('form-kind-form'),
-
-      nachname: page.getByTestId('form-kind-nachname'),
-      vorname: page.getByTestId('form-kind-vorname'),
-      geburtsdatum: page.getByTestId('form-kind-geburtsdatum'),
-      wohnsitzSelect: page.getByTestId('form-kind-wohnsitz'),
-      ausbildungssituationRadio: page.getByTestId(
-        'form-kind-ausbildungssituation',
-      ),
-
-      getButtonSaveContinue: page.getByTestId('button-save-continue'),
-      getButtonCancelBack: page.getByTestId('button-cancel-back'),
+      buttonContinue: page.getByTestId('button-continue'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
   async addKind(item: Kind) {
     await this.elems.addKind.click();
 
-    await this.elems.nachname.fill(item.nachname);
-    await this.elems.vorname.fill(item.vorname);
-    await this.elems.geburtsdatum.fill(item.geburtsdatum);
+    const editorPO = new KinderEditorPO(this.elems.page);
 
-    await this.elems.wohnsitzSelect.click();
-    await this.elems.wohnsitzSelect.selectOption(item.wohnsitz);
+    await editorPO.addKind(item);
 
-    await this.elems.ausbildungssituationRadio.click();
-    await this.elems.ausbildungssituationRadio.selectOption(
-      item.ausbildungssituation,
-    );
-
-    await expect(this.elems.form).toHaveClass(/ng-valid/);
-
-    await this.elems.getButtonSaveContinue.click();
+    await expect(this.elems.loading()).toBeHidden();
   }
 }

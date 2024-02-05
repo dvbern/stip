@@ -2,8 +2,11 @@ import { Locator, Page } from '@playwright/test';
 
 import { EinnahmenKosten } from '@dv/shared/model/gesuch';
 
+import { expectFormToBeValid, selectMatRadio } from '../helpers/helpers';
+
 export class EinnahmenKostenPO {
   public elems: {
+    page: Page;
     loading: () => Locator;
     form: Locator;
     nettoerwerbseinkommen: Locator;
@@ -21,11 +24,20 @@ export class EinnahmenKostenPO {
     personenImHaushalt: Locator;
     verdienstRealisiert: Locator;
     willDarlehen: Locator;
+
+    incompleteWarning: () => Locator;
+
+    buttonSaveContinue: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
     this.elems = {
+      page,
       loading: () => page.getByTestId('form-einnahmen-kosten-loading'),
+
+      incompleteWarning: () =>
+        page.getByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
 
       form: page.getByTestId('form-einnahmen-kosten-form'),
 
@@ -58,44 +70,45 @@ export class EinnahmenKostenPO {
         'form-einnahmen-kosten-verdienstRealisiert',
       ),
       willDarlehen: page.getByTestId('form-einnahmen-kosten-willDarlehen'),
+
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
   public async fillEinnahmenKostenForm(einnahmenKosten: EinnahmenKosten) {
     await this.elems.nettoerwerbseinkommen.fill(
-      einnahmenKosten.nettoerwerbseinkommen.toString(),
+      `${einnahmenKosten.nettoerwerbseinkommen ?? 0}`,
     );
-    await this.elems.alimente.fill(`${einnahmenKosten.alimente ?? 0}`);
+
     await this.elems.zulagen.fill(`${einnahmenKosten.zulagen ?? 0}`);
-    await this.elems.renten.fill(`${einnahmenKosten.renten ?? 0}`);
-    await this.elems.eoLeistungen.fill(`${einnahmenKosten.eoLeistungen ?? 0}`);
-    await this.elems.ergaenzungsleistungen.fill(
-      `${einnahmenKosten.ergaenzungsleistungen ?? 0}`,
-    );
-    await this.elems.beitraege.fill(`${einnahmenKosten.beitraege ?? 0}`);
+
     await this.elems.ausbildungskostenSekundarstufeZwei.fill(
       `${einnahmenKosten.ausbildungskostenSekundarstufeZwei ?? 0}`,
     );
-    await this.elems.ausbildungskostenTertiaerstufe.fill(
-      `${einnahmenKosten.ausbildungskostenTertiaerstufe ?? 0}`,
-    );
+
     await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
+
     await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
+
     await this.elems.auswaertigeMittagessenProWoche.fill(
       `${einnahmenKosten.auswaertigeMittagessenProWoche ?? 0}`,
     );
+
     await this.elems.personenImHaushalt.fill(
       `${einnahmenKosten.personenImHaushalt ?? 0}`,
     );
 
-    await this.elems.verdienstRealisiert
-      .getByTestId(einnahmenKosten.verdienstRealisiert ? 'yes' : 'no')
-      .getByRole('radio')
-      .click();
+    await selectMatRadio(
+      this.elems.verdienstRealisiert,
+      einnahmenKosten.verdienstRealisiert,
+    );
 
-    await this.elems.willDarlehen
-      .getByTestId(einnahmenKosten.willDarlehen ? 'yes' : 'no')
-      .getByRole('radio')
-      .click();
+    await selectMatRadio(
+      this.elems.willDarlehen,
+      einnahmenKosten.willDarlehen ?? false,
+    );
+
+    await expectFormToBeValid(this.elems.form);
   }
 }

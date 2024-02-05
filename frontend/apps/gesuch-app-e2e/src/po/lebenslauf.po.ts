@@ -15,7 +15,7 @@ export class LebenslaufPO {
     loading: () => Locator;
 
     buttonContinue: Locator;
-    buttonBack: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
@@ -29,7 +29,7 @@ export class LebenslaufPO {
       loading: () => page.getByTestId('lebenslauf-editor-loading'),
 
       buttonContinue: page.getByTestId('button-continue'),
-      buttonBack: page.getByTestId('button-back'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 

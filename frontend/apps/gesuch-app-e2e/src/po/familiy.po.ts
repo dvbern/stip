@@ -2,6 +2,8 @@ import { Locator, Page } from '@playwright/test';
 
 import { Familiensituation } from '@dv/shared/model/gesuch';
 
+import { expectFormToBeValid, selectMatRadio } from '../helpers/helpers';
+
 export class FamilyPO {
   public elems: {
     page: Page;
@@ -19,9 +21,11 @@ export class FamilyPO {
     vaterWiederverheiratetRadio: Locator;
     sorgerechtSelect: Locator;
     obhutSelect: Locator;
-    getStepperButtonNext: Locator;
-    getStepperButtonPrevious: Locator;
-    getButtonSave: Locator;
+
+    buttonNext: Locator;
+    buttonPrevious: Locator;
+
+    buttonSaveContinue: Locator;
   };
 
   constructor(page: Page) {
@@ -62,16 +66,18 @@ export class FamilyPO {
       sorgerechtSelect: page.getByTestId('form-family-sorgerecht'),
       obhutSelect: page.getByTestId('form-family-obhut'),
 
-      getStepperButtonNext: page.getByTestId('stepper-next'),
-      getStepperButtonPrevious: page.getByTestId('stepper-previous'),
-      getButtonSave: page.getByTestId('button-save-continue'),
+      buttonNext: page.getByTestId('stepper-next'),
+      buttonPrevious: page.getByTestId('stepper-previous'),
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
     };
   }
 
   async fillMinimalForm(item: Familiensituation) {
-    await this.elems.elternVerheiratetZusammenRadio
-      .getByTestId(item.elternVerheiratetZusammen ? 'yes' : 'no')
-      .getByRole('radio')
-      .click();
+    await selectMatRadio(
+      this.elems.elternVerheiratetZusammenRadio,
+      item.elternVerheiratetZusammen,
+    );
+
+    await expectFormToBeValid(this.elems.form);
   }
 }

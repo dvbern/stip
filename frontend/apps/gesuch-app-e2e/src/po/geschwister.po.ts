@@ -2,19 +2,16 @@ import { Locator, Page, expect } from '@playwright/test';
 
 import { Geschwister } from '@dv/shared/model/gesuch';
 
+import { GeschwisterEditorPO } from './geschwister-editor.po';
+
 export class GeschwisterPO {
   public elems: {
     page: Page;
     loading: () => Locator;
     addGeschwister: Locator;
-    form: Locator;
-    nachname: Locator;
-    vorname: Locator;
-    geburtsdatum: Locator;
-    wohnsitzSelect: Locator;
-    ausbildungssituationRadio: Locator;
-    getButtonSaveContinue: Locator;
-    getButtonCancelBack: Locator;
+
+    buttonContinue: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
@@ -22,38 +19,19 @@ export class GeschwisterPO {
       page,
       loading: () => page.getByTestId('form-geschwister-loading'),
       addGeschwister: page.getByTestId('button-add-geschwister'),
-      form: page.getByTestId('form-geschwister-form'),
 
-      nachname: page.getByTestId('form-geschwister-nachname'),
-      vorname: page.getByTestId('form-geschwister-vorname'),
-      geburtsdatum: page.getByTestId('form-geschwister-geburtsdatum'),
-      wohnsitzSelect: page.getByTestId('form-geschwister-wohnsitz'),
-      ausbildungssituationRadio: page.getByTestId(
-        'form-geschwister-ausbildungssituation',
-      ),
-
-      getButtonSaveContinue: page.getByTestId('button-save-continue'),
-      getButtonCancelBack: page.getByTestId('button-cancel-back'),
+      buttonContinue: page.getByTestId('button-continue'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
   async addGeschwister(item: Geschwister) {
     await this.elems.addGeschwister.click();
 
-    await this.elems.nachname.fill(item.nachname);
-    await this.elems.vorname.fill(item.vorname);
-    await this.elems.geburtsdatum.fill(item.geburtsdatum);
+    const editorPO = new GeschwisterEditorPO(this.elems.page);
 
-    await this.elems.wohnsitzSelect.click();
-    await this.elems.page.getByTestId(item.wohnsitz).first().click();
+    await editorPO.addGeschwister(item);
 
-    await this.elems.ausbildungssituationRadio.click();
-    await this.elems.page
-      .getByTestId(item.ausbildungssituation)
-      .first()
-      .click();
-
-    await expect(this.elems.form).toHaveClass(/ng-valid/);
-    await this.elems.getButtonSaveContinue.click();
+    await expect(this.elems.loading()).toBeHidden();
   }
 }

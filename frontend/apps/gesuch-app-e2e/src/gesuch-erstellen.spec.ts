@@ -3,17 +3,28 @@ import { addMonths, format } from 'date-fns';
 
 import {
   Adresse,
+  Auszahlung,
+  EinnahmenKosten,
+  Eltern,
+  Familiensituation,
+  Geschwister,
+  Kind,
   LebenslaufItem,
+  Partner,
   PersonInAusbildung,
 } from '@dv/shared/model/gesuch';
 
-import {
-  expectFormToBeValid,
-  expectStepTitleToContainText,
-} from './helpers/helpers';
+import { expectStepTitleToContainText } from './helpers/helpers';
 import { BEARER_COOKIE } from './helpers/types';
 import { AusbildungPO, AusbildungValues } from './po/ausbildung.po';
+import { AuszahlungPO } from './po/auszahlung.po';
 import { CockpitPO } from './po/cockpit.po';
+import { EinnahmenKostenPO } from './po/einnahmen-kosten.po';
+import { ElternPO } from './po/eltern.po';
+import { FamilyPO } from './po/familiy.po';
+import { FreigabePO } from './po/freigabe.po';
+import { GeschwisterPO } from './po/geschwister.po';
+import { KinderPO } from './po/kinder.po';
 import { LebenslaufPO } from './po/lebenslauf.po';
 import { PersonPO } from './po/person.po';
 import { STIP_STORAGE_STATE } from '../playwright.config';
@@ -86,6 +97,88 @@ const taetigkeit: LebenslaufItem = {
   id: '',
 };
 
+const auszahlung: Auszahlung = {
+  vorname: '',
+  adresse,
+  iban: 'CH9300762011623852957',
+  nachname: '',
+  kontoinhaber: 'GESUCHSTELLER',
+};
+
+const einnahmenKosten: EinnahmenKosten = {
+  nettoerwerbseinkommen: 15000,
+  fahrkosten: 100,
+  verdienstRealisiert: false,
+  wohnkosten: 1000,
+  ausbildungskostenSekundarstufeZwei: 1000,
+  zulagen: 250,
+  personenImHaushalt: 3,
+  auswaertigeMittagessenProWoche: 5,
+};
+
+export type EinnahmenKostenStrings = Record<keyof EinnahmenKosten, string>;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const partner: Partner = {
+  adresse,
+  vorname: 'Susanne',
+  geburtsdatum: '16.12.1990',
+  sozialversicherungsnummer: '756.2222.2222.55',
+  nachname: 'Schmitt',
+};
+
+const vater: Eltern = {
+  sozialversicherungsnummer: '756.2222.2222.24',
+  nachname: 'Muster',
+  vorname: 'Maximilian',
+  adresse,
+  identischerZivilrechtlicherWohnsitz: true,
+  telefonnummer: '0041791111111',
+  geburtsdatum: '25.12.1969',
+  ausweisbFluechtling: false,
+  ergaenzungsleistungAusbezahlt: false,
+  sozialhilfebeitraegeAusbezahlt: false,
+  id: '',
+  elternTyp: 'VATER',
+};
+
+const mutter: Eltern = {
+  sozialversicherungsnummer: '756.3333.3333.35',
+  nachname: 'Muster',
+  vorname: 'Maxine',
+  adresse,
+  identischerZivilrechtlicherWohnsitz: true,
+  telefonnummer: '0041791111111',
+  geburtsdatum: '25.12.1968',
+  ausweisbFluechtling: false,
+  ergaenzungsleistungAusbezahlt: false,
+  sozialhilfebeitraegeAusbezahlt: false,
+  id: '',
+  elternTyp: 'VATER',
+};
+
+const bruder: Geschwister = {
+  nachname: 'Muster',
+  vorname: 'Simon',
+  geburtsdatum: '25.12.2005',
+  wohnsitz: 'FAMILIE',
+  ausbildungssituation: 'VORSCHULPFLICHTIG',
+  id: '',
+};
+
+const kind: Kind = {
+  nachname: 'Muster',
+  vorname: 'Sara',
+  geburtsdatum: '25.12.2018',
+  wohnsitz: 'FAMILIE',
+  ausbildungssituation: 'VORSCHULPFLICHTIG',
+  id: '',
+};
+
+const familienlsituation: Familiensituation = {
+  elternVerheiratetZusammen: true,
+};
+
 // https://playwright.dev/docs/api-testing#sending-api-requests-from-ui-tests
 
 let apiContext: APIRequestContext;
@@ -134,7 +227,7 @@ test.afterAll(async () => {
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Neues gesuch erstellen', async ({ page, cockpit }) => {
+  test('Gesuch minimal', async ({ page, cockpit }) => {
     // Step 1: Person ============================================================
     await expectStepTitleToContainText('Person in Ausbildung', page);
 
@@ -143,8 +236,6 @@ test.describe('Neues gesuch erstellen', () => {
     await expect(personPO.elems.loading()).toBeHidden();
 
     await personPO.fillPersonForm(person);
-
-    expectFormToBeValid(personPO.elems.form);
 
     await personPO.elems.buttonSaveContinue.click();
 
@@ -157,14 +248,14 @@ test.describe('Neues gesuch erstellen', () => {
 
     await ausbildungPO.fillEducationForm(ausbildung);
 
-    await expectFormToBeValid(ausbildungPO.elems.form);
-
     await ausbildungPO.elems.buttonSaveContinue.click();
 
     // Step 3: Lebenslauf ========================================================
     await expectStepTitleToContainText('Lebenslauf', page);
 
     const lebenslaufPO = new LebenslaufPO(page);
+
+    await expect(lebenslaufPO.elems.loading()).toBeHidden();
 
     await lebenslaufPO.addAusbildung(ausbildung1);
 
@@ -175,5 +266,103 @@ test.describe('Neues gesuch erstellen', () => {
     await lebenslaufPO.elems.buttonContinue.click();
 
     // Step 4: Familiensituation ===================================================
+
+    await expectStepTitleToContainText('Familiensituation', page);
+
+    const familiyPO = new FamilyPO(page);
+
+    await expect(familiyPO.elems.loading()).toBeHidden();
+
+    await familiyPO.fillMinimalForm(familienlsituation);
+
+    await familiyPO.elems.buttonSaveContinue.click();
+
+    // Step 5: Eltern =============================================================
+
+    await expectStepTitleToContainText('Eltern', page);
+
+    const elternPO = new ElternPO(page);
+
+    await expect(elternPO.elems.loading()).toBeHidden();
+
+    await elternPO.addVater(vater);
+
+    await elternPO.addMutter(mutter);
+
+    await elternPO.elems.buttonContinue.click();
+
+    // Step 6: Geschwister  ========================================================
+
+    await expectStepTitleToContainText('Geschwister', page);
+
+    const geschwisterPO = new GeschwisterPO(page);
+
+    await expect(geschwisterPO.elems.loading()).toBeHidden();
+
+    await geschwisterPO.addGeschwister(bruder);
+
+    await geschwisterPO.elems.buttonContinue.click();
+
+    // Step 7: Partner =============================================================
+
+    // await expectStepTitleToContainText('Ehe- / Konkubinatspartner', page);
+
+    // const partnerPO = new PartnerPO(page);
+
+    // await expect(partnerPO.elems.loading()).toBeHidden();
+
+    // await partnerPO.elems.buttonSaveContinue.click();
+
+    // Step 8: Kinder =============================================================
+
+    await expectStepTitleToContainText('Kinder', page);
+
+    const kinderPO = new KinderPO(page);
+
+    await expect(kinderPO.elems.loading()).toBeHidden();
+
+    await kinderPO.addKind(kind);
+
+    await kinderPO.elems.buttonContinue.click();
+
+    // Step 9: Auszahlung ===========================================================
+
+    await expectStepTitleToContainText('Auszahlung', page);
+
+    const auszahlungPO = new AuszahlungPO(page);
+
+    await expect(auszahlungPO.elems.loading()).toBeHidden();
+
+    await auszahlungPO.fillAuszahlungEigenesKonto(auszahlung);
+
+    // hotfix for flaky test of Einnahmen & Kosten form
+    // fix by changing the initialization of the form in a separate task
+    const ausbildungPromise = page.waitForResponse(
+      '**/api/v1/ausbildungsstaette',
+    );
+
+    await auszahlungPO.elems.buttonSaveContinue.click();
+
+    // Step 10: Einnahmen und Kosten =================================================
+
+    await expectStepTitleToContainText('Einnahmen & Kosten', page);
+
+    const einnahmenKostenPO = new EinnahmenKostenPO(page);
+
+    await expect(einnahmenKostenPO.elems.loading()).toBeHidden();
+
+    await ausbildungPromise;
+
+    await einnahmenKostenPO.fillEinnahmenKostenForm(einnahmenKosten);
+
+    await einnahmenKostenPO.elems.buttonSaveContinue.click();
+
+    // Step 11: Freigabe ===========================================================
+
+    await expectStepTitleToContainText('Freigabe', page);
+
+    const freigabePO = new FreigabePO(page);
+
+    await freigabePO.abschluss();
   });
 });

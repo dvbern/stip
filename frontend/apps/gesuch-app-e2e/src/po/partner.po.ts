@@ -3,6 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { Partner } from '@dv/shared/model/gesuch';
 
 import { AddressPO } from './adresse.po';
+import { expectFormToBeValid } from '../helpers/helpers';
 
 export class PartnerPO {
   public elems: {
@@ -18,6 +19,9 @@ export class PartnerPO {
     jahreseinkommen: Locator;
     verpflegungskosten: Locator;
     fahrkosten: Locator;
+
+    buttonSaveContinue: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
@@ -41,6 +45,9 @@ export class PartnerPO {
       jahreseinkommen: page.getByTestId('form-partner-jahreseinkommen'),
       verpflegungskosten: page.getByTestId('form-partner-verpflegungskosten'),
       fahrkosten: page.getByTestId('form-partner-fahrkosten'),
+
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
@@ -55,5 +62,7 @@ export class PartnerPO {
     await this.elems.adresse.fillAddressForm(partner.adresse);
 
     await this.elems.geburtsdatum.fill(partner.geburtsdatum);
+
+    await expectFormToBeValid(this.elems.form);
   }
 }

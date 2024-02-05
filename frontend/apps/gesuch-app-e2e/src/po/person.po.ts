@@ -3,7 +3,7 @@ import { Locator, Page } from '@playwright/test';
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
 
 import { AddressPO } from './adresse.po';
-import { selectMatRadio } from '../helpers/helpers';
+import { expectFormToBeValid, selectMatRadio } from '../helpers/helpers';
 
 export class PersonPO {
   public elems: {
@@ -28,9 +28,11 @@ export class PersonPO {
     korrespondenzSpracheRadio: Locator;
     niederlassungsstatusSelect: Locator;
     infoNiederlassungsstatus: Locator;
+
     loading: () => Locator;
+
     buttonSaveContinue: Locator;
-    buttonBack: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
@@ -74,7 +76,7 @@ export class PersonPO {
       loading: () => page.getByTestId('form-person-loading'),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),
-      buttonBack: page.getByTestId('button-back'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
@@ -120,5 +122,7 @@ export class PersonPO {
       this.elems.korrespondenzSpracheRadio,
       person.korrespondenzSprache,
     );
+
+    await expectFormToBeValid(this.elems.form);
   }
 }

@@ -2,7 +2,7 @@ import { Locator, Page } from '@playwright/test';
 
 import { Ausbildung } from '@dv/shared/model/gesuch';
 
-import { selectMatOption } from '../helpers/helpers';
+import { expectFormToBeValid, selectMatOption } from '../helpers/helpers';
 
 export interface AusbildungValues extends Ausbildung {
   ausbildungsstaette: string;
@@ -26,7 +26,7 @@ export class AusbildungPO {
     ausbildungNichtGefundenCheckbox: Locator;
     loading: () => Locator;
     buttonSaveContinue: Locator;
-    buttonBack: Locator;
+    buttonNext: Locator;
   };
 
   constructor(page: Page) {
@@ -57,7 +57,7 @@ export class AusbildungPO {
       loading: () => page.getByTestId('education-form-loading'),
       // todo: now page objects to do:
       buttonSaveContinue: page.getByTestId('button-save-continue'),
-      buttonBack: page.getByTestId('button-back'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
@@ -83,5 +83,7 @@ export class AusbildungPO {
     await this.elems.ausbildungEnd.fill(ausbildung.ausbildungEnd);
 
     await selectMatOption(this.elems.pensumSelect, ausbildung.pensum);
+
+    await expectFormToBeValid(this.elems.form);
   }
 }
