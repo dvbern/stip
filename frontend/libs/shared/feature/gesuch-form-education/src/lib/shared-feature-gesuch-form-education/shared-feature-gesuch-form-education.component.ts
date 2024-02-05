@@ -106,18 +106,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     alternativeAusbildungsland: [<string | undefined>undefined],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
-    ausbildungBegin: [
-      '',
-      [
-        Validators.required,
-        parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
-        maxDateValidatorForLocale(
-          this.languageSig(),
-          addYears(new Date(), 100),
-          'monthYear',
-        ),
-      ],
-    ],
+    ausbildungBegin: ['', []],
     ausbildungEnd: ['', []],
     pensum: this.formBuilder.control<AusbildungsPensum | null>(null, {
       validators: Validators.required,
@@ -203,6 +192,33 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
+    effect(() => {
+      const { minAusbildungBeginDate } = this.viewSig();
+      const validators: ValidatorFn[] = [
+        Validators.required,
+        parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
+        maxDateValidatorForLocale(
+          this.languageSig(),
+          addYears(new Date(), 100),
+          'monthYear',
+        ),
+      ];
+
+      if (minAusbildungBeginDate) {
+        validators.push(
+          minDateValidatorForLocale(
+            this.languageSig(),
+            minAusbildungBeginDate,
+            'monthYear',
+            {
+              errorType: 'minDateLebenslauf',
+            },
+          ),
+        );
+      }
+      this.form.controls.ausbildungBegin.clearValidators();
+      this.form.controls.ausbildungBegin.addValidators(validators);
+    });
     effect(() => {
       const { gesuchsPeriodenStart } = this.viewSig();
       const validators: ValidatorFn[] = [
