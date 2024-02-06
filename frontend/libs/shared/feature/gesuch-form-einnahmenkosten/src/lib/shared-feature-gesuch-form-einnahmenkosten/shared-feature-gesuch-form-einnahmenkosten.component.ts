@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoModule } from '@maskito/angular';
+import { maskitoNumberOptionsGenerator } from '@maskito/kit';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -41,6 +42,7 @@ import {
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import {
+  NUMBER_THOUSAND_SEPARATOR,
   fromFormatedNumber,
   maskitoNumber,
   maskitoPositiveNumber,
@@ -107,6 +109,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
+  maskitoTeritaer = maskitoNumberOptionsGenerator({
+    max: 3000,
+    thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
+  });
+  maskitoSekundaer = maskitoNumberOptionsGenerator({
+    max: 2000,
+    thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
+  });
   maskitoNumber = maskitoNumber;
   maskitoPositiveNumber = maskitoPositiveNumber;
 
@@ -158,7 +168,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       )
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgangId);
     const willSekundarstufeZwei = ausbildungsgang?.bezeichnungDe === 'Bachelor';
-    const willTertiaerstufe = ausbildungsgang?.bezeichnungDe === 'Master';
+    const willTertiaerstufe =
+      ausbildungsgang?.bezeichnungDe?.includes('Master');
 
     return {
       hasData: true,
