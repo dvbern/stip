@@ -16,6 +16,10 @@ public class NoOverlapInAusbildungenConstraintValidator
         }
 
         final var ausbildung = gesuchFormular.getAusbildung();
+        if (ausbildung.getAusbildungBegin() == null || ausbildung.getAusbildungEnd() == null) {
+            return true;
+        }
+
         return !hasOverlap(ausbildung, gesuchFormular.getLebenslaufItems().stream());
     }
 

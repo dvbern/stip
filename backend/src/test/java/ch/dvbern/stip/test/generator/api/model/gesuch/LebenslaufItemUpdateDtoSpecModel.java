@@ -6,8 +6,13 @@ import ch.dvbern.stip.generated.test.dto.LebenslaufItemUpdateDtoSpec;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.instancio.Select.field;
 
 public final class LebenslaufItemUpdateDtoSpecModel {
@@ -16,8 +21,16 @@ public final class LebenslaufItemUpdateDtoSpecModel {
 			Instancio.ofList(LebenslaufItemUpdateDtoSpec.class).size(1)
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getId))
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getTaetigskeitsart))
-					.set(field(LebenslaufItemUpdateDtoSpec::getVon), "01.2022")
-					.set(field(LebenslaufItemUpdateDtoSpec::getBis), "02.2022")
+					.set(
+                        field(LebenslaufItemUpdateDtoSpec::getVon),
+                        LocalDate.now().minusMonths(3).with(firstDayOfMonth())
+                            .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
+                    )
+					.set(
+                        field(LebenslaufItemUpdateDtoSpec::getBis),
+                        LocalDate.now().minusMonths(2).with(lastDayOfMonth())
+                            .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
+                    )
 					.set(field(LebenslaufItemUpdateDtoSpec::getBildungsart), LebenslaufAusbildungsArtDtoSpec.MASTER)
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getBerufsbezeichnung))
 					.ignore(field(LebenslaufItemUpdateDtoSpec::getTitelDesAbschlusses))
