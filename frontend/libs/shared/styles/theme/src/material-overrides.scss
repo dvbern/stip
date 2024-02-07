@@ -78,6 +78,9 @@ $gesuch-app-theme: mat.define-light-theme(
       $gesuch-app-warn
     )};
 }
+.mat-mdc-form-field-error:not(:first-child) {
+  display: none;
+}
 .dense-control {
   @include mat.form-field-density(-2);
 }
