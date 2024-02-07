@@ -266,6 +266,14 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
       ]);
       if (changes['maxEndDate'].currentValue) {
         if (this.item?.type === 'AUSBILDUNG') {
+          this.form.controls.von.addValidators([
+            createOverlappingValidator(
+              this.form.controls.bis,
+              previousAusbildungen,
+              new Date(),
+              'monthYear',
+            ),
+          ]);
           this.form.controls.bis.addValidators([
             createOverlappingValidator(
               this.form.controls.von,
