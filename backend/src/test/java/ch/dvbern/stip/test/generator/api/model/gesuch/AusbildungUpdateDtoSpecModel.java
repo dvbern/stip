@@ -2,9 +2,13 @@ package ch.dvbern.stip.test.generator.api.model.gesuch;
 
 import ch.dvbern.stip.generated.test.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchFormularUpdateDtoSpec;
+import static java.time.temporal.TemporalAdjusters.*;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.UUID;
 
 import static org.instancio.Select.field;
@@ -13,8 +17,16 @@ public final class AusbildungUpdateDtoSpecModel {
 
 	public static final Model<AusbildungUpdateDtoSpec> ausbildungUpdateDtoSpecModel =
 			Instancio.of(AusbildungUpdateDtoSpec.class)
-					.set(field(AusbildungUpdateDtoSpec::getAusbildungBegin), "01.2022")
-					.set(field(AusbildungUpdateDtoSpec::getAusbildungEnd), "02.2022")
+					.set(
+                        field(AusbildungUpdateDtoSpec::getAusbildungBegin),
+                        LocalDate.now().minusMonths(1).with(firstDayOfMonth())
+                            .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
+                    )
+					.set(
+                        field(AusbildungUpdateDtoSpec::getAusbildungEnd),
+                        LocalDate.now().plusMonths(1).with(lastDayOfMonth())
+                            .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
+                    )
 					.set(field(AusbildungUpdateDtoSpec::getAusbildungNichtGefunden), false)
 					.ignore(field(AusbildungUpdateDtoSpec::getAlternativeAusbildungsgang))
 					.ignore(field(AusbildungUpdateDtoSpec::getAlternativeAusbildungsstaette))
