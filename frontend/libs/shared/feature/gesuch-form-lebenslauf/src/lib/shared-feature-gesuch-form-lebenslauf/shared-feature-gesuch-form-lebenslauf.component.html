@@ -1,21 +1,21 @@
 <!-- item editor -->
 @if (editedItem) {
   <dv-shared-feature-gesuch-form-lebenslauf-editor
-    [item]="editedItem"
-    [ausbildungen]="ausbildungenSig()"
+    [itemSig]="editedItem"
+    [ausbildungenSig]="ausbildungenSig()"
+    [minStartDateSig]="minDatesSig()?.optional ?? null"
+    [maxEndDateSig]="maxDateSig()"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (deleteTriggered)="handleDeleteItem($event)"
     (formIsUnsaved)="hasUnsavedChanges = $event"
-    [minStartDate]="minDateSig()"
-    [maxEndDate]="maxDateSig()"
   />
 } @else {
   <!-- loading -->
   @if (viewSig().loading) {
     <dv-shared-ui-loading data-testid="lebenslauf-editor-loading"></dv-shared-ui-loading>
   } @else {
-    @if (minDateSig() && maxDateSig()) {
+    @if (minDatesSig() && maxDateSig()) {
       <!-- Infobx -->
       <div class="row">
         <div class="col-12 col-xl-8 my-3">
@@ -23,7 +23,7 @@
             'shared.form.lebenslauf.top.info'
               | translate
                 : {
-                    von: minDateSig() ? printDateAsMonthYear(minDateSig()!) : '?',
+                    von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
                     bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?'
                   }
           }}</span>
@@ -70,7 +70,7 @@
           @if (viewSig().ausbildung; as ausbildung) {
             <div class="col-12 col-xl-8 my-3">
               <dv-shared-feature-gesuch-form-lebenslauf-visual
-                [startDate]="minDateSig()"
+                [startDate]="minDatesSig()?.required ?? null"
                 [lebenslaufItems]="items"
                 [ausbildung]="ausbildung"
                 (addAusbildungTriggered)="handleAddAusbildung($event)"
