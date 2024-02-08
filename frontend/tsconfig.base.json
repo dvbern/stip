@@ -105,7 +105,7 @@
       "@dv/shared/ui/wohnsitz-splitter": ["libs/shared/ui/wohnsitz-splitter/src/index.ts"],
       "@dv/shared/util-fn/cypress-config": ["libs/shared/util-fn/cypress-config/src/index.ts"],
       "@dv/shared/util-fn/e2e-commands": ["libs/shared/util-fn/e2e-commands/src/index.ts"],
-      "@dv/shared/util-fn/e2e-helpers": ["libs/shared/util-fn/e2e-helpers/src/index.ts"],
+      "@dv/shared/util-fn/e2e-util": ["libs/shared/util-fn/e2e-util/src/index.ts"],
       "@dv/shared/util-fn/error-transformer": ["libs/shared/util-fn/error-transformer/src/index.ts"],
       "@dv/shared/util-fn/gesuch-util": ["libs/shared/util-fn/gesuch-util/src/index.ts"],
       "@dv/shared/util-fn/local-storage-helper": ["libs/shared/util-fn/local-storage-helper/src/index.ts"],

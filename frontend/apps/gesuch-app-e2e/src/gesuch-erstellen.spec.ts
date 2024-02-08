@@ -1,4 +1,9 @@
-import { APIRequestContext, test as base, expect } from '@playwright/test';
+import {
+  APIRequestContext,
+  BrowserContext,
+  test as base,
+  expect,
+} from '@playwright/test';
 import { addMonths, format } from 'date-fns';
 
 import {
@@ -13,9 +18,12 @@ import {
   Partner,
   PersonInAusbildung,
 } from '@dv/shared/model/gesuch';
+import {
+  BEARER_COOKIE,
+  GS_STORAGE_STATE,
+  expectStepTitleToContainText,
+} from '@dv/shared/util-fn/e2e-util';
 
-import { expectStepTitleToContainText } from './helpers/helpers';
-import { BEARER_COOKIE } from './helpers/types';
 import { AusbildungPO, AusbildungValues } from './po/ausbildung.po';
 import { AuszahlungPO } from './po/auszahlung.po';
 import { CockpitPO } from './po/cockpit.po';
@@ -27,7 +35,6 @@ import { GeschwisterPO } from './po/geschwister.po';
 import { KinderPO } from './po/kinder.po';
 import { LebenslaufPO } from './po/lebenslauf.po';
 import { PersonPO } from './po/person.po';
-import { STIP_STORAGE_STATE } from '../playwright.config';
 
 const adresse: Adresse = {
   land: 'CH',
@@ -116,8 +123,6 @@ const einnahmenKosten: EinnahmenKosten = {
   auswaertigeMittagessenProWoche: 5,
 };
 
-export type EinnahmenKostenStrings = Record<keyof EinnahmenKosten, string>;
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const partner: Partner = {
   adresse,
@@ -183,6 +188,7 @@ const familienlsituation: Familiensituation = {
 
 let apiContext: APIRequestContext;
 let gesuchsId: string;
+let browserContext: BrowserContext;
 
 const test = base.extend<{ cockpit: CockpitPO }>({
   cockpit: async ({ page }, use) => {
@@ -204,11 +210,11 @@ const test = base.extend<{ cockpit: CockpitPO }>({
 });
 
 test.beforeAll(async ({ playwright, baseURL, browser }) => {
-  const context = await browser.newContext({
-    storageState: STIP_STORAGE_STATE,
+  browserContext = await browser.newContext({
+    storageState: GS_STORAGE_STATE,
   });
 
-  const cookies = await context.cookies();
+  const cookies = await browserContext.cookies();
   const bearer = cookies.find((c) => c.name === BEARER_COOKIE);
 
   apiContext = await playwright.request.newContext({
@@ -223,6 +229,7 @@ test.afterAll(async () => {
   await apiContext.delete(`/api/v1/gesuch/${gesuchsId}`);
 
   await apiContext.dispose();
+  await browserContext.close();
 });
 
 test.describe('Neues gesuch erstellen', () => {

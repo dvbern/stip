@@ -1,8 +1,10 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Familiensituation } from '@dv/shared/model/gesuch';
-
-import { expectFormToBeValid, selectMatRadio } from '../helpers/helpers';
+import {
+  expectFormToBeValid,
+  selectMatRadio,
+} from '@dv/shared/util-fn/e2e-util';
 
 export class FamilyPO {
   public elems: {

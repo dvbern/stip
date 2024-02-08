@@ -12,10 +12,5 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
-    "playwright.config.ts",
-    "../../libs/shared/util-fn/e2e-helpers/src/lib/helpers/helpers.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.js", "playwright.config.ts"]
 }

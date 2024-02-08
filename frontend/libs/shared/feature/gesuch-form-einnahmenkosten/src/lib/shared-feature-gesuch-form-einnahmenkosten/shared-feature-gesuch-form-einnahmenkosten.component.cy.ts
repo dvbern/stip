@@ -10,7 +10,7 @@ import {
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
-import { SharedEinnahmenKostenInAusbildungPO } from '@dv/shared/util-fn/e2e-helpers';
+import { SharedEinnahmenKostenInAusbildungPO } from '@dv/shared/util-fn/e2e-commands';
 
 import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-feature-gesuch-form-einnahmenkosten.component';
 

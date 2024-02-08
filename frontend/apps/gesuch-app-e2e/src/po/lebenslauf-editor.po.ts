@@ -1,8 +1,10 @@
 import { Locator, Page } from '@playwright/test';
 
 import { LebenslaufItem } from '@dv/shared/model/gesuch';
-
-import { expectFormToBeValid, selectMatOption } from '../helpers/helpers';
+import {
+  expectFormToBeValid,
+  selectMatOption,
+} from '@dv/shared/util-fn/e2e-util';
 
 export class LebenslaufEditorPO {
   public elems: {

@@ -79,6 +79,7 @@
       ]
     },
     "editor.formatOnSave": true,
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "exportall.config.relExclusion": []
   }
 }

@@ -1,9 +1,12 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Auszahlung } from '@dv/shared/model/gesuch';
+import {
+  expectFormToBeValid,
+  selectMatOption,
+} from '@dv/shared/util-fn/e2e-util';
 
 import { AddressPO } from './adresse.po';
-import { expectFormToBeValid, selectMatOption } from '../helpers/helpers';
 
 export class AuszahlungPO {
   public elems: {
