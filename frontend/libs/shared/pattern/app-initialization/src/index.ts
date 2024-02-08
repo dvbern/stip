@@ -56,7 +56,6 @@ function initializeKeycloak(
                   initOptions: {
                     onLoad: 'login-required',
                     checkLoginIframe: true,
-                    checkLoginIframeInterval: 30,
                   },
                   // TODO: Add silent check sso
                   shouldAddToken: (request) => {
