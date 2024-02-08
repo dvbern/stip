@@ -11,7 +11,7 @@
       ', minmax(0, 1fr))'
     "
   >
-    @for (item of timeline.items; track item) {
+    @for (item of timeline.items; track item; let last = $last) {
       <div
         class="box"
         [class.left]="item.col === 'LEFT'"
@@ -43,18 +43,14 @@
                         {{ child.label.title | translate }}
                       </h5>
                       @if (child.label.subTitle; as subTitle) {
-                        <div>
-                          <small class="d-inline-block" data-testid="two-column-timeline-sub-label">
-                            {{ subTitle.key | translate }}: {{ subTitle.value }}
-                          </small>
-                        </div>
+                        <small class="d-inline-block" data-testid="two-column-timeline-sub-label">
+                          {{ subTitle.key | translate }}: {{ subTitle.value }}
+                        </small>
                       }
-                      <div>
-                        <small class="d-inline-block">{{
-                          printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
-                        }}</small>
-                      </div>
-                      @if (child.ausbildungAbgeschlossen && item.col === 'LEFT') {
+                      <small class="d-inline-block">{{
+                        printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
+                      }}</small>
+                      @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
                         <small class="d-flex gap-1">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | translate"
@@ -63,7 +59,7 @@
                           >
                           <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
                         </small>
-                      } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT') {
+                      } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
                         <small class="d-flex gap-1">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | translate"
