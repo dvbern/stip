@@ -13,9 +13,11 @@ export class CockpitPO {
       page,
       title: page.getByTestId('cockpit-title'),
       list: page.getByTestId('cockpit-table'),
-      rows: page.getByTestId('cockpit-table'),
+      rows: page.getByTestId('cockpit-row-sv'),
     };
   }
 
-  async openGesuch() {}
+  public async goToDashBoard() {
+    await this.elems.page.goto('/sachbearbeitung-app-feature-cockpit');
+  }
 }

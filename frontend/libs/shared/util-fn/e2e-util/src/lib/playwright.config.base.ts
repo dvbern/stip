@@ -9,6 +9,16 @@ export const SB_STORAGE_STATE = 'sb-storage-state.json';
 export const baseConfig = defineConfig({
   use: {
     trace: 'on-first-retry',
-    ignoreHTTPSErrors: true,
+    ignoreHTTPSErrors: !process.env.CI,
+    screenshot: 'on',
+    video: {
+      mode: 'on-first-retry',
+      // size: { width: 1920, height: 1080 },
+      // smaller video size to reduce file size
+      size: { width: 1280, height: 720 },
+    },
   },
+  forbidOnly: !!process.env.CI,
+  retries: 1,
+  // workers: 2,
 });
