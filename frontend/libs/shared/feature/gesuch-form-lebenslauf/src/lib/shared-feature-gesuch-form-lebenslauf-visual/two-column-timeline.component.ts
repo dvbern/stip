@@ -92,6 +92,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
           id: lebenslaufItem.id,
           label: this.getLebenslaufItemLabel(lebenslaufItem),
           editable: true,
+          ausbildungAbgeschlossen: lebenslaufItem.ausbildungAbgeschlossen,
         }) as TimelineRawItem,
     );
 
@@ -125,6 +126,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
         },
       },
       editable: false,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem);
 
     this.timeline.fillWith(expectedSartDate, timelineRawItems);
