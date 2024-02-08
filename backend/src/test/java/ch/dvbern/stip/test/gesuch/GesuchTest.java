@@ -11,16 +11,16 @@ import java.util.UUID;
 
 import static ch.dvbern.stip.test.generator.entities.GesuchGenerator.initGesuch;
 
-public class GesuchTest {
+class GesuchTest {
 
     @Test
-    public void getTrancheByIdNotPresent() {
+    void getTrancheByIdNotPresent() {
         Gesuch gesuch = initGesuch();
         MatcherAssert.assertThat(gesuch.getGesuchTrancheById(UUID.randomUUID()).isPresent(), Matchers.is(false));
     }
 
     @Test
-    public void getTrancheByIdPresent() {
+    void getTrancheByIdPresent() {
         UUID testId = UUID.randomUUID();
         Gesuch gesuch = initGesuch();
         gesuch.getGesuchTranchen().get(0).setId(testId);
@@ -29,7 +29,7 @@ public class GesuchTest {
     }
 
     @Test
-    public void getTrancheByIdPresentMultipleTranchen() {
+    void getTrancheByIdPresentMultipleTranchen() {
         UUID testId = UUID.randomUUID();
         Gesuch gesuch = initGesuch();
         gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche().setId(testId));
@@ -38,13 +38,13 @@ public class GesuchTest {
 
     @Test
     public void getTrancheByDateNotPresent() {
-        Gesuch gesuch = initGesuch();
+        var gesuch = initGesuch();
         LocalDate ausserhalbPeriode = gesuch.getGesuchsperiode().getGueltigkeit().getGueltigBis().plusDays(1);
         MatcherAssert.assertThat(gesuch.getGesuchTrancheValidOnDate(ausserhalbPeriode).isPresent(), Matchers.is(false));
     }
 
     @Test
-    public void getTrancheByDatePresent() {
+    void getTrancheByDatePresent() {
         Gesuch gesuch = initGesuch();
         LocalDate innerhalbPeriode = gesuch.getGesuchsperiode().getGueltigkeit().getGueltigBis();
         MatcherAssert.assertThat(gesuch.getGesuchTrancheValidOnDate(innerhalbPeriode).isPresent(), Matchers.is(true));

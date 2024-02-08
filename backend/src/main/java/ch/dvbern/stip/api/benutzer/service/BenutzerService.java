@@ -45,11 +45,13 @@ public class BenutzerService {
 		return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
 	}
 
+    @SuppressWarnings("java:S1135")
 	public Benutzer getOrCreateCurrentBenutzer() {
 		final var keycloakId = jsonWebToken.getSubject();
 
 		if (keycloakId == null) {
-			throw new BadRequestException(); // TODO: use error handling
+            // TODO KSTIP-782: use error handling and remove SuppressWarnings
+			throw new BadRequestException();
 		}
 		Benutzer benutzer = benutzerRepository
 				.findByKeycloakId(keycloakId)
