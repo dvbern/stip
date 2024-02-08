@@ -279,6 +279,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
               person.geburtsdatum,
               this.languageSig(),
             ),
+            einreisedatum: parseBackendLocalDateAndPrint(
+              person.einreisedatum,
+              this.languageSig(),
+            ),
           };
           this.form.patchValue({
             ...personForForm,
