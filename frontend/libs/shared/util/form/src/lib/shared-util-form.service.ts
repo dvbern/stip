@@ -72,7 +72,7 @@ export class SharedUtilFormService {
       wndw.addEventListener('beforeunload', handler);
       concat(
         // Create a never ending observable to keep the handler alive until the component is destroyed
-        from(new Promise(() => {})).pipe(takeUntilDestroyed()),
+        from(new Promise(() => undefined)).pipe(takeUntilDestroyed()),
         // continue with a instantly ending observable to remove the handler once the previous observable is completed
         of({}),
       ).subscribe(() => {
