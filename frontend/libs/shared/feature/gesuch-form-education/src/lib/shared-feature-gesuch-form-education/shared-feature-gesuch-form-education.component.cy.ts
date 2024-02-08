@@ -2,7 +2,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { Ausbildungsstaette, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { SharedEducationPO } from '@dv/shared/util-fn/e2e-helpers';
 
@@ -10,6 +10,13 @@ import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesu
 
 describe(SharedFeatureGesuchFormEducationComponent.name, () => {
   describe('form validity', () => {
+    beforeEach(() => {
+      cy.clock(new Date('2019-02-01'));
+    });
+    afterEach(() => {
+      cy.clock().then((clock) => clock.restore());
+    });
+
     it('should be invalid if begin is not a date', () => {
       mountWithGesuch();
       SharedEducationPO.getFormBeginnDerAusbildung().type('gugus').blur();
@@ -63,6 +70,22 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getForm()
         .find('mat-error')
         .should('include.text', 'YearAfterStart');
+    });
+    (
+      [
+        ['before', '01.2019', 'invalid'],
+        ['equal', '02.2019', 'invalid'],
+        ['after', '03.2019', 'valid'],
+      ] as const
+    ).forEach(([position, endDate, expected]) => {
+      it(`should be ${expected} if end date is ${position} the current month`, () => {
+        mountWithGesuch();
+        SharedEducationPO.getFormEndeDerAusbildung().type(endDate).blur();
+        SharedEducationPO.getFormEndeDerAusbildung().should(
+          'have.class',
+          `ng-${expected}`,
+        );
+      });
     });
     it('should have disabled inputs depending on each previous input state', () => {
       const fields = {
@@ -157,14 +180,6 @@ function mountWithGesuch(): void {
             ],
           },
           gesuchs: {
-            gesuch: <SharedModelGesuch>{
-              gesuchTrancheToWorkWith: {
-                id: '1',
-              },
-              gesuchsperiode: {
-                gueltigAb: '2020-01-01',
-              },
-            },
             gesuchFormular: {},
           },
           language: { language: 'de' },

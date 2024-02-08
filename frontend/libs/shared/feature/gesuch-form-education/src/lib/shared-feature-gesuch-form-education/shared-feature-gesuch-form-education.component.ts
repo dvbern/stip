@@ -204,7 +204,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       { allowSignalWrites: true },
     );
     effect(() => {
-      const { gesuchsPeriodenStart } = this.viewSig();
+      const { minEndDatum } = this.viewSig();
       const validators: ValidatorFn[] = [
         Validators.required,
         parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
@@ -213,6 +213,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           addYears(new Date(), 100),
           'monthYear',
         ),
+        minDateValidatorForLocale(this.languageSig(), minEndDatum, 'monthYear'),
         createDateDependencyValidator(
           'after',
           this.form.controls.ausbildungBegin,
@@ -223,15 +224,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         ),
       ];
 
-      if (gesuchsPeriodenStart) {
-        validators.push(
-          minDateValidatorForLocale(
-            this.languageSig(),
-            gesuchsPeriodenStart,
-            'monthYear',
-          ),
-        );
-      }
       this.form.controls.ausbildungEnd.clearValidators();
       this.form.controls.ausbildungEnd.addValidators(validators);
     });
