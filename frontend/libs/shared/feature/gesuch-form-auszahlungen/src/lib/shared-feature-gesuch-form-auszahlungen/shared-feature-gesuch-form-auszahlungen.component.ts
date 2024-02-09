@@ -24,7 +24,7 @@ import { MaskitoModule } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { ExtractIBANResult, extractIBAN } from 'ibantools';
+import { extractIBAN } from 'ibantools';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
