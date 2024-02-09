@@ -1,5 +1,4 @@
 import { maskitoNumberOptionsGenerator } from '@maskito/kit';
-
 export const NUMBER_THOUSAND_SEPARATOR = "'";
 
 export const maskitoPercent = maskitoNumberOptionsGenerator({
@@ -18,6 +17,14 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
   min: 1,
   thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
 });
+
+export function maskitoMaxNumber(max: number) {
+  return maskitoNumberOptionsGenerator({
+    min: 0,
+    max: max,
+    thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
+  });
+}
 
 export function fromFormatedNumber(formatedNumber: string): number;
 export function fromFormatedNumber(
