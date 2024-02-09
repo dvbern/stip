@@ -42,7 +42,6 @@ export function withDvGlobalHttpErrorInterceptorFn({
           if (type === 'globalOnly') {
             return EMPTY; // global errors only. Effects will never fail, no local catchErrors are reached
           } else {
-            console.log('forward error to local error handling');
             // TODO fix this: throwError stops stuff and the local error handling is not reached
             return throwError(storableError); // global errors plus local catchErrors in Effects.
           }
