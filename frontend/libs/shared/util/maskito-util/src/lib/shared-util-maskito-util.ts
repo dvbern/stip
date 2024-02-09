@@ -1,4 +1,5 @@
 import { maskitoNumberOptionsGenerator } from '@maskito/kit';
+
 export const NUMBER_THOUSAND_SEPARATOR = "'";
 
 export const maskitoPercent = maskitoNumberOptionsGenerator({
