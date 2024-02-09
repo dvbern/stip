@@ -210,7 +210,7 @@ class GesuchServiceTest {
 			GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, elternschaftsteilung, Elternschaftsteilung.MUTTER);
 			MatcherAssert.assertThat(
 					tranche.getGesuchFormular().getElterns().size(),
-					Matchers.is(anzahlElternBevoreUpdate));
+					Matchers.is(anzahlElternBevoreUpdate - 1));
 		}
 	}
 
