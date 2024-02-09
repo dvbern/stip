@@ -5,7 +5,12 @@
 <form [formGroup]="form" data-testid="form-eltern-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.shared.social-insurance-number.label' | translate }}</mat-label>
+      <mat-label>
+        {{ 'shared.form.shared.social-insurance-number.label' | translate }}
+        @if (!svnIsRequiredSig()) {
+          {{ 'shared.form.einnahmenkosten.optional.label' | translate }}
+        }
+      </mat-label>
       <input
         matInput
         formControlName="sozialversicherungsnummer"

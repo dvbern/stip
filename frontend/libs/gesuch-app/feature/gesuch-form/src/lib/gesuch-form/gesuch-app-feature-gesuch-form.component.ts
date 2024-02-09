@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { GesuchAppPatternGesuchStepLayoutComponent } from '@dv/gesuch-app/pattern/gesuch-step-layout';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
@@ -15,5 +15,5 @@ import { SharedUiGesuchStepWrapperComponent } from '@dv/shared/ui/gesuch-step-wr
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureGesuchFormComponent {
-  step?: SharedModelGesuchFormStep;
+  stepSig = signal<SharedModelGesuchFormStep | undefined>(undefined);
 }

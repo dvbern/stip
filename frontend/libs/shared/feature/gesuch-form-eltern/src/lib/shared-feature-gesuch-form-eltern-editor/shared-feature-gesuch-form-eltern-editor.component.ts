@@ -9,6 +9,7 @@ import {
   SimpleChanges,
   effect,
   inject,
+  signal,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -129,7 +130,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
     ],
-    sozialversicherungsnummer: ['', []],
+    sozialversicherungsnummer: [<string | undefined>undefined, []],
     geburtsdatum: [
       '',
       [
@@ -157,6 +158,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       [Validators.required],
     ],
   });
+
+  svnIsRequiredSig = signal(false);
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
@@ -197,10 +200,13 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     effect(
       () => {
         const land = landChangedSig();
+        const svnIsRequired = land === 'CH';
+
         this.formUtils.setRequired(
           this.form.controls.sozialversicherungsnummer,
-          land === 'CH',
+          svnIsRequired,
         );
+        this.svnIsRequiredSig.set(svnIsRequired);
       },
       { allowSignalWrites: true },
     );

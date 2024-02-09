@@ -106,8 +106,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     alternativeAusbildungsland: [<string | undefined>undefined],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
-    ausbildungBegin: ['', []],
-    ausbildungEnd: [
+    ausbildungBegin: [
       '',
       [
         Validators.required,
@@ -118,8 +117,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           'monthYear',
         ),
       ],
-      [],
     ],
+    ausbildungEnd: ['', []],
     pensum: this.formBuilder.control<AusbildungsPensum | null>(null, {
       validators: Validators.required,
     }),
@@ -182,17 +181,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
-    // add multi-control validators
-    this.form.controls.ausbildungEnd.addValidators([
-      createDateDependencyValidator(
-        'after',
-        this.form.controls.ausbildungBegin,
-        true,
-        new Date(),
-        this.languageSig(),
-        'monthYear',
-      ),
-    ]);
 
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
@@ -216,7 +204,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       { allowSignalWrites: true },
     );
     effect(() => {
-      const { gesuchsPeriodenStart } = this.viewSig();
+      const { minEndDatum } = this.viewSig();
       const validators: ValidatorFn[] = [
         Validators.required,
         parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
@@ -225,19 +213,19 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           addYears(new Date(), 100),
           'monthYear',
         ),
+        minDateValidatorForLocale(this.languageSig(), minEndDatum, 'monthYear'),
+        createDateDependencyValidator(
+          'after',
+          this.form.controls.ausbildungBegin,
+          true,
+          new Date(),
+          this.languageSig(),
+          'monthYear',
+        ),
       ];
 
-      if (gesuchsPeriodenStart) {
-        validators.push(
-          minDateValidatorForLocale(
-            this.languageSig(),
-            gesuchsPeriodenStart,
-            'monthYear',
-          ),
-        );
-      }
-      this.form.controls.ausbildungBegin.clearValidators();
-      this.form.controls.ausbildungBegin.addValidators(validators);
+      this.form.controls.ausbildungEnd.clearValidators();
+      this.form.controls.ausbildungEnd.addValidators(validators);
     });
     effect(
       () => {

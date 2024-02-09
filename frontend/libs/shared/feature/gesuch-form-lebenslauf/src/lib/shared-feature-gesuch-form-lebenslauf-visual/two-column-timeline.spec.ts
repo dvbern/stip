@@ -14,6 +14,7 @@ describe('TwoColumnTimeline', () => {
       von: new Date(2016, 7),
       bis: new Date(2017, 11),
       editable: true,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem,
     JobA: {
       id: '12',
@@ -22,6 +23,7 @@ describe('TwoColumnTimeline', () => {
       von: new Date(2016, 7),
       bis: new Date(2016, 9),
       editable: true,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem,
     JobB: {
       id: '13',
@@ -30,6 +32,7 @@ describe('TwoColumnTimeline', () => {
       von: new Date(2017, 7),
       bis: new Date(2017, 10),
       editable: true,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem,
     JobC: {
       id: '14',
@@ -38,6 +41,7 @@ describe('TwoColumnTimeline', () => {
       von: new Date(2017, 8),
       bis: new Date(2017, 8),
       editable: true,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem,
     JobD: {
       id: '15',
@@ -46,6 +50,7 @@ describe('TwoColumnTimeline', () => {
       von: new Date(2017, 10),
       bis: new Date(2017, 11),
       editable: true,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem,
   };
   const dummyItems = createDummyItems();
@@ -109,6 +114,7 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 1,
         positionStartCol: 2,
         positionColSpan: 1,
+        ausbildungAbgeschlossen: false,
         children: [testItems.JobA],
       } as TimelineBusyBlock,
     );
@@ -127,6 +133,7 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 5,
         positionStartCol: 1,
         positionColSpan: 1,
+        ausbildungAbgeschlossen: false,
         children: [testItems.EFZ],
       } as TimelineBusyBlock,
     );
@@ -145,6 +152,7 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 2,
         positionStartCol: 2,
         positionColSpan: 1,
+        ausbildungAbgeschlossen: false,
         children: [testItems.JobB, testItems.JobC],
       } as TimelineBusyBlock,
     );
@@ -163,6 +171,7 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 2,
         positionStartCol: 2,
         positionColSpan: 1,
+        ausbildungAbgeschlossen: false,
         children: [testItems.JobD],
       } as TimelineBusyBlock,
     );

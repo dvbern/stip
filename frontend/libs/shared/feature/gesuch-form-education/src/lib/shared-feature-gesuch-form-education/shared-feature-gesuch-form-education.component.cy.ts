@@ -10,6 +10,13 @@ import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesu
 
 describe(SharedFeatureGesuchFormEducationComponent.name, () => {
   describe('form validity', () => {
+    beforeEach(() => {
+      cy.clock(new Date('2019-02-01'));
+    });
+    afterEach(() => {
+      cy.clock().then((clock) => clock.restore());
+    });
+
     it('should be invalid if begin is not a date', () => {
       mountWithGesuch();
       SharedEducationPO.getFormBeginnDerAusbildung().type('gugus').blur();
@@ -28,7 +35,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     });
     it('should be valid if a past date is provided for begin', () => {
       mountWithGesuch();
-      SharedEducationPO.getFormBeginnDerAusbildung().type('01.2020').blur();
+      SharedEducationPO.getFormBeginnDerAusbildung().type('01.2018').blur();
       SharedEducationPO.getFormBeginnDerAusbildung().should(
         'not.have.class',
         'ng-invalid',
@@ -63,6 +70,22 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       SharedEducationPO.getForm()
         .find('mat-error')
         .should('include.text', 'YearAfterStart');
+    });
+    (
+      [
+        ['before', '01.2019', 'invalid'],
+        ['equal', '02.2019', 'invalid'],
+        ['after', '03.2019', 'valid'],
+      ] as const
+    ).forEach(([position, endDate, expected]) => {
+      it(`should be ${expected} if end date is ${position} the current month`, () => {
+        mountWithGesuch();
+        SharedEducationPO.getFormEndeDerAusbildung().type(endDate).blur();
+        SharedEducationPO.getFormEndeDerAusbildung().should(
+          'have.class',
+          `ng-${expected}`,
+        );
+      });
     });
     it('should have disabled inputs depending on each previous input state', () => {
       const fields = {
