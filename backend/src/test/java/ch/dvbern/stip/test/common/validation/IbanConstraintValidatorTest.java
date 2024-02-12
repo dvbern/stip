@@ -36,4 +36,14 @@ class IbanConstraintValidatorTest {
     void testChecksumInvalid() {
         assertThat(ibanValidator.isValid(IBAN_CH_NUMMER_INVALID, null), is(false));
     }
+
+    @Test
+    void testValidQrIbanNotValid() {
+        assertThat(ibanValidator.isValid(QR_IBAN_CH_VALID, null), is(false));
+    }
+
+    @Test
+    void testInvalidQrIbanNotValid() {
+        assertThat(ibanValidator.isValid(QR_IBAN_CH_INVALID, null), is(false));
+    }
 }

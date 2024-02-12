@@ -34,6 +34,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.time.LocalDate;
+
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
@@ -43,6 +45,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @LandCHRequiredConstraint
 @NiederlassungsstatusRequiredConstraint
+@EinreisedatumRequiredIfNiederlassungsstatusConstraint
 @Entity
 @Table(indexes = {
         @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
@@ -102,6 +105,9 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private Niederlassungsstatus niederlassungsstatus;
+
+    @Column(nullable = true)
+    private LocalDate einreisedatum;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)

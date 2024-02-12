@@ -43,27 +43,27 @@
                         {{ child.label.title | translate }}
                       </h5>
                       @if (child.label.subTitle; as subTitle) {
-                        <small class="d-inline-block" data-testid="two-column-timeline-sub-label">
+                        <small class="d-block" data-testid="two-column-timeline-sub-label">
                           {{ subTitle.key | translate }}: {{ subTitle.value }}
                         </small>
                       }
-                      <small class="d-inline-block">{{
+                      <small class="d-block">{{
                         printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
                       }}</small>
                       @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="d-flex gap-1">
+                        <small class="d-flex gap-1 mt-2 align-items-center">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | translate"
-                            class="material-symbols-rounded"
+                            class="material-symbols-rounded fs-6"
                             >check_box</i
                           >
                           <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
                         </small>
                       } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="d-flex gap-1">
+                        <small class="d-flex gap-1 mt-2 align-items-center">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | translate"
-                            class="material-symbols-rounded"
+                            class="material-symbols-rounded fs-6"
                             >check_box_outline_blank</i
                           >
                           <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>

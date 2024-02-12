@@ -5,13 +5,7 @@
     }
   ],
   "extensions": {
-    "recommendations": [
-      "smulyono.reveal",
-      "nrwl.angular-console",
-      "esbenp.prettier-vscode",
-      "Orta.vscode-jest",
-      "dbaeumer.vscode-eslint"
-    ]
+    "recommendations": ["nrwl.angular-console", "esbenp.prettier-vscode", "Orta.vscode-jest", "dbaeumer.vscode-eslint"]
   },
   "settings": {
     "files.exclude": {
@@ -84,6 +78,8 @@
         }
       ]
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "files.eol": "\n",
+    "exportall.config.relExclusion": []
   }
 }
