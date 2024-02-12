@@ -26,7 +26,7 @@ import { MaskitoModule } from '@maskito/angular';
 import { NgbAlert, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { subYears } from 'date-fns';
+import { isAfter, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -76,6 +76,7 @@ import {
   minDateValidatorForLocale,
   onDateInputBlur,
   parseBackendLocalDateAndPrint,
+  parseDateForVariant,
   parseStringAndPrintForBackendLocalDate,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
@@ -113,6 +114,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
+  styleUrls: ['./shared-feature-gesuch-form-person.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormPersonComponent implements OnInit {
@@ -199,6 +201,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     niederlassungsstatus: this.formBuilder.control<
       Niederlassungsstatus | undefined
     >(undefined, { validators: Validators.required }),
+    einreisedatum: [
+      <string | undefined>undefined,
+      [parseableDateValidatorForLocale(this.languageSig(), 'date')],
+    ],
     vormundschaft: [false, []],
     zivilstand: this.formBuilder.control<Zivilstand>('' as Zivilstand, {
       validators: Validators.required,
@@ -218,6 +224,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   showWohnsitzSplitterSig = computed(() => {
     return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
   });
+  showEinreiseDatumWarningSig = signal(false);
 
   private nationalitaetChangedSig = toSignal(
     this.form.controls.nationalitaet.valueChanges,
@@ -271,6 +278,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             ...person,
             geburtsdatum: parseBackendLocalDateAndPrint(
               person.geburtsdatum,
+              this.languageSig(),
+            ),
+            einreisedatum: parseBackendLocalDateAndPrint(
+              person.einreisedatum,
               this.languageSig(),
             ),
           };
@@ -359,6 +370,49 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    const niederlassungsstatusChangedSig = toSignal(
+      this.form.controls.niederlassungsstatus.valueChanges,
+    );
+    effect(
+      () => {
+        // Niederlassung B -> required einreisedatum
+        const showEinreisedatum =
+          niederlassungsstatusChangedSig() ===
+          Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B;
+        this.formUtils.setRequired(
+          this.form.controls.einreisedatum,
+          showEinreisedatum,
+        );
+        this.updateVisbility(
+          this.form.controls.einreisedatum,
+          showEinreisedatum,
+          {
+            resetOnInvisible: true,
+          },
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
+    const einreisedatumChangedSig = toSignal(
+      this.form.controls.einreisedatum.valueChanges,
+    );
+    effect(
+      () => {
+        const einreisedatum = parseDateForVariant(
+          einreisedatumChangedSig(),
+          new Date(),
+          'date',
+        );
+        this.showEinreiseDatumWarningSig.set(
+          einreisedatum
+            ? isAfter(einreisedatum, subYears(new Date(), 5))
+            : false,
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
     effect(
       () => {
         const { readonly } = this.viewSig();
@@ -421,28 +475,42 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     );
   }
 
+  onEinreisedatumBlur() {
+    return onDateInputBlur(
+      this.form.controls.einreisedatum,
+      new Date(),
+      this.languageSig(),
+    );
+  }
+
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
+    const values = convertTempFormToRealValues(this.form, [
+      'quellenbesteuert',
+      'sozialhilfebeitraege',
+    ]);
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith?.id,
       gesuchFormular: {
         ...gesuchFormular,
         personInAusbildung: {
-          ...convertTempFormToRealValues(this.form, [
-            'quellenbesteuert',
-            'sozialhilfebeitraege',
-          ]),
+          ...values,
           adresse: {
             id: gesuchFormular?.personInAusbildung?.adresse?.id,
-            ...this.form.getRawValue().adresse,
+            ...values.adresse,
           },
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
-            this.form.getRawValue().geburtsdatum,
+            values.geburtsdatum,
             this.languageSig(),
             subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
           )!,
-          ...wohnsitzAnteileNumber(this.form.getRawValue()),
+          einreisedatum: parseStringAndPrintForBackendLocalDate(
+            values.einreisedatum,
+            this.languageSig(),
+            new Date(),
+          ),
+          ...wohnsitzAnteileNumber(values),
         },
       },
     };
@@ -466,6 +534,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     this.hiddenFieldsSetSig.update((hiddenFieldsSet) => {
       if (visible) {
         hiddenFieldsSet.delete(formControl);
+        formControl.enable();
       } else {
         hiddenFieldsSet.add(formControl);
         formControl.disable();

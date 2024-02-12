@@ -90,6 +90,8 @@ public final class ValidationsConstant {
 	public static final String VALIDATION_ALIMENTE_NULL_WHEN_NO_ALIMENTEREGELUNG = "{jakarta.validation.constraints.alimente.no.alimenteregelung.null.message}";
 	public static final String VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE = "dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message";
 	public static final String VALIDATION_IBAN_MESSAGE = "{jakarta.validation.constraints.iban.message}";
+
+    public static final String VALIDATION_EINREISEDATUM_FIELD_REQUIRED_MESSAGE = "{jakarta.validation.constraints.personInAusbildung.einreisedatum.required}";
     public static final String VALIDATION_NO_OVERLAP_INAUSBILDUNGEN = "{jakarta.validation.constraints.ausbildungen.noOverlap}";
     public static final String VALIDATION_AUSBILDUNG_ENDDATE_AFTER_STARTDATE = "{jakarta.validation.constraints.ausbildung.endDate.after.message}";
 }

@@ -125,6 +125,8 @@
   "shared.form.person.niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C": "Niederlassungsbewilligung C",
   "shared.form.person.niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B": "Aufenthaltsbewilligung B",
   "shared.form.person.niederlassungsstatus.FLUECHTLING": "Flüchtling",
+  "shared.form.person.einreisedatum.label": "Einreisedatum Schweiz",
+  "shared.form.person.einreisedatum.info": "Gesuchsberechtigt sind nur Personen welche eine bernische Niederlassungsbewilligung B besitzen und seit fünf Jahren einen Wohnsitz in der Schweiz haben.",
   "shared.form.person.korrespondenzSprache.label": "Korrespondenzsprache",
   "shared.form.person.korrespondenzSprache.DEUTSCH": "Deutsch",
   "shared.form.person.korrespondenzSprache.FRANZOESISCH": "Französisch",

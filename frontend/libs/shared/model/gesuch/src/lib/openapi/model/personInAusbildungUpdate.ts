@@ -32,6 +32,7 @@ export interface PersonInAusbildungUpdate {
    */
   heimatort?: string;
   niederlassungsstatus?: Niederlassungsstatus;
+  einreisedatum?: string;
   zivilstand?: Zivilstand;
   wohnsitz: Wohnsitz;
   /**

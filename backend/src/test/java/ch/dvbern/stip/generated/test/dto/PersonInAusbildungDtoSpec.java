@@ -47,6 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungDtoSpec.JSON_PROPERTY_NATIONALITAET,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_HEIMATORT,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_NIEDERLASSUNGSSTATUS,
+  PersonInAusbildungDtoSpec.JSON_PROPERTY_EINREISEDATUM,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_ZIVILSTAND,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_WOHNSITZ,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
@@ -94,6 +95,9 @@ public class PersonInAusbildungDtoSpec {
 
   public static final String JSON_PROPERTY_NIEDERLASSUNGSSTATUS = "niederlassungsstatus";
   private NiederlassungsstatusDtoSpec niederlassungsstatus;
+
+  public static final String JSON_PROPERTY_EINREISEDATUM = "einreisedatum";
+  private LocalDate einreisedatum;
 
   public static final String JSON_PROPERTY_ZIVILSTAND = "zivilstand";
   private ZivilstandDtoSpec zivilstand;
@@ -417,6 +421,32 @@ public class PersonInAusbildungDtoSpec {
   }
 
 
+  public PersonInAusbildungDtoSpec einreisedatum(LocalDate einreisedatum) {
+    
+    this.einreisedatum = einreisedatum;
+    return this;
+  }
+
+   /**
+   * Get einreisedatum
+   * @return einreisedatum
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINREISEDATUM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEinreisedatum() {
+    return einreisedatum;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINREISEDATUM)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinreisedatum(LocalDate einreisedatum) {
+    this.einreisedatum = einreisedatum;
+  }
+
+
   public PersonInAusbildungDtoSpec zivilstand(ZivilstandDtoSpec zivilstand) {
     
     this.zivilstand = zivilstand;
@@ -722,6 +752,7 @@ public class PersonInAusbildungDtoSpec {
         Objects.equals(this.nationalitaet, personInAusbildung.nationalitaet) &&
         Objects.equals(this.heimatort, personInAusbildung.heimatort) &&
         Objects.equals(this.niederlassungsstatus, personInAusbildung.niederlassungsstatus) &&
+        Objects.equals(this.einreisedatum, personInAusbildung.einreisedatum) &&
         Objects.equals(this.zivilstand, personInAusbildung.zivilstand) &&
         Objects.equals(this.wohnsitz, personInAusbildung.wohnsitz) &&
         Objects.equals(this.wohnsitzAnteilMutter, personInAusbildung.wohnsitzAnteilMutter) &&
@@ -737,7 +768,7 @@ public class PersonInAusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, quellenbesteuert, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, quellenbesteuert, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
   }
 
   @Override
@@ -755,6 +786,7 @@ public class PersonInAusbildungDtoSpec {
     sb.append("    nationalitaet: ").append(toIndentedString(nationalitaet)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");
+    sb.append("    einreisedatum: ").append(toIndentedString(einreisedatum)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
