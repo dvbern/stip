@@ -24,7 +24,6 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
