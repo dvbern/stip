@@ -1,5 +1,8 @@
+import { FormControl } from '@angular/forms';
+
 import { Kontoinhaber } from '@dv/shared/model/gesuch';
 
+import { ibanValidator } from './shared-feature-gesuch-form-auszahlungen.component';
 import {
   calculateHasNecessaryPreSteps,
   calculateKontoinhaberValues,
@@ -100,4 +103,13 @@ describe('gesuch util', () => {
       expect(ok).toEqual(expectedOk);
     },
   );
+
+  it.each([
+    ['3908704016075473007', null],
+    ['9300762011623852958', { invalidIBAN: true }],
+    ['4431999123000889012', { qrIBAN: true }],
+  ])('validating IBAN "%s" should return: %s', (iban, expected) => {
+    const result = ibanValidator()(new FormControl(iban));
+    expect(result).toEqual(expected);
+  });
 });
