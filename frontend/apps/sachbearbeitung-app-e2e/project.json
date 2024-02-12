@@ -1,23 +1,16 @@
 {
   "name": "sachbearbeitung-app-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/sachbearbeitung-app-e2e/src",
   "projectType": "application",
+  "sourceRoot": "apps/sachbearbeitung-app-e2e/src",
   "targets": {
-    "e2e-disabled": {
-      "executor": "@nx/cypress:cypress",
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": [
+        "{workspaceRoot}/dist/.playwright/apps/sachbearbeitung-app-e2e"
+      ],
       "options": {
-        "cypressConfig": "apps/sachbearbeitung-app-e2e/cypress.config.ts",
-        "devServerTarget": "sachbearbeitung-app:serve:development",
-        "testingType": "e2e"
-      },
-      "configurations": {
-        "production": {
-          "devServerTarget": "sachbearbeitung-app:serve:production"
-        },
-        "ci": {
-          "devServerTarget": "sachbearbeitung-app:serve-static"
-        }
+        "config": "apps/sachbearbeitung-app-e2e/playwright.config.ts"
       }
     },
     "lint": {

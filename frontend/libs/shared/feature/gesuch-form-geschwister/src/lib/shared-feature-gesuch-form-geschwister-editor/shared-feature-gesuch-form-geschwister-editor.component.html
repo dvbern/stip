@@ -96,11 +96,11 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel-back">
+    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.back' | translate }}
     </button>
     @if (!viewSig().readonly) {
-      <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+      <button type="submit" class="btn btn-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | translate }}
       </button>
     }

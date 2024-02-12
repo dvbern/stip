@@ -57,6 +57,7 @@
               type="button"
               class="btn btn-light btn-nav shadow-none d-flex align-items-center pe-1"
               id="userMenu"
+              data-testid="button-user-menu"
               ngbDropdownToggle
             >
               <span>{{ benutzerNameSig() }}</span>
@@ -64,8 +65,8 @@
             </button>
 
             <div ngbDropdownMenu aria-labelledby="userMenu">
-              <button type="button" ngbDropdownItem>Profil</button>
-              <button type="button" ngbDropdownItem (click)="logout()">Logout</button>
+              <button type="button" data-testid="button-profile" ngbDropdownItem>Profil</button>
+              <button type="button" data-testid="button-logout" (click)="logout()">Logout</button>
             </div>
           </div>
         </div>
