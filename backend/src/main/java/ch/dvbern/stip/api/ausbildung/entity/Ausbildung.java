@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.ausbildung.entity;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @AusbildungNichtGefundenRequiredFieldsConstraint
 @AusbildungNichtGefundenRequiredNullFieldsConstraint
+@AusbildungEndDateMustBeAfterStartConstraint
 @Entity
 @Table(indexes = {
 		@Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
@@ -55,6 +57,7 @@ public class Ausbildung extends AbstractMandantEntity {
 
 	@NotNull
 	@Column(nullable = false)
+    @Future
 	private LocalDate ausbildungEnd;
 
 	@NotNull

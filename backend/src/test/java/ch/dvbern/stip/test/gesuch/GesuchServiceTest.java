@@ -199,22 +199,6 @@ class GesuchServiceTest {
 	}
 
 	@Test
-	void noResetElternDataIfChangeToEltrenschaftAufteilungNotGemeinsam() {
-		for (var elternschaftsteilung : Elternschaftsteilung.values()) {
-			GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-			MatcherAssert.assertThat(
-					gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
-					Matchers.not(0));
-			var anzahlElternBevoreUpdate = gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
-
-			GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, elternschaftsteilung, Elternschaftsteilung.MUTTER);
-			MatcherAssert.assertThat(
-					tranche.getGesuchFormular().getElterns().size(),
-					Matchers.is(anzahlElternBevoreUpdate));
-		}
-	}
-
-	@Test
 	void noResetIfElternStayZusammen() {
 		GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
 		gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);

@@ -94,3 +94,6 @@ hs_err_pid*.log
 !**/.gitattributes
 !**/.editorconfig
 
+## playwright
+**/*storage-state.json
+

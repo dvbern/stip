@@ -24,7 +24,7 @@ import { MaskitoModule } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { ExtractIBANResult, extractIBAN } from 'ibantools';
+import { extractIBAN } from 'ibantools';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -89,7 +89,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     nachname: ['', [Validators.required]],
     vorname: ['', [Validators.required]],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(this.fb),
-    iban: ['', [Validators.required, this.ibanValidator()]],
+    iban: ['', [Validators.required, ibanValidator()]],
   });
 
   laenderSig = computed(() => {
@@ -235,32 +235,6 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     this.form.controls.adresse.enable();
   }
 
-  private ibanValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value === null || control.value === '') {
-        return null;
-      }
-      const extractIBANResult = extractIBAN('CH' + control.value);
-      if (extractIBANResult.valid && extractIBANResult.countryCode === 'CH') {
-        return null;
-      }
-      return this.constructIBANValidationErrors(extractIBANResult);
-    };
-  }
-
-  private constructIBANValidationErrors(extractIBANResult: ExtractIBANResult): {
-    invalidIBAN?: boolean;
-  } {
-    const errorObject: { invalidIBAN?: boolean } = {} as ValidationErrors;
-
-    if (!extractIBANResult.valid) {
-      errorObject.invalidIBAN = true;
-      return errorObject;
-    }
-
-    return errorObject;
-  }
-
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.view();
     const auszahlung = gesuchFormular?.auszahlung;
@@ -277,4 +251,24 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       },
     };
   }
+}
+
+export function ibanValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (control.value === null || control.value === '') {
+      return null;
+    }
+    const extractIBANResult = extractIBAN('CH' + control.value);
+    if (!extractIBANResult.valid || extractIBANResult.countryCode !== 'CH') {
+      return { invalidIBAN: true };
+    }
+    // Check IBAN is not a QR-IBAN, a QR based one, has in the first 5 digits a value between 30000 and 31999
+    if (
+      +extractIBANResult.iban.substring(4, 9) >= 30000 &&
+      +extractIBANResult.iban.substring(4, 9) <= 31999
+    ) {
+      return { qrIBAN: true };
+    }
+    return null;
+  };
 }

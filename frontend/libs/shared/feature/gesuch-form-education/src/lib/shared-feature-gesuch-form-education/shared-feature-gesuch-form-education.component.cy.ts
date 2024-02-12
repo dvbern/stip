@@ -4,7 +4,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
-import { SharedEducationPO } from '@dv/shared/util-fn/e2e-helpers';
+import { SharedEducationPO } from '@dv/shared/util-fn/e2e-commands';
 
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education.component';
 
