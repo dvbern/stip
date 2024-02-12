@@ -52,8 +52,14 @@
       cursor: pointer;
 
       &:hover {
-        text-decoration: underline;
+        h5 {
+          text-decoration: underline;
+        }
       }
+    }
+
+    .material-symbols-rounded {
+      margin-left: -2px;
     }
 
     &.right {

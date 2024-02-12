@@ -254,6 +254,8 @@
   "shared.form.lebenslauf.item.dateEnd": "À",
   "shared.form.lebenslauf.item.wohnsitz": "Domicile",
   "shared.form.lebenslauf.item.ausbildungAbgeschlossen": "Formation terminée?",
+  "shared.form.lebenslauf.item.abgeschlossen": "Formation terminé",
+  "shared.form.lebenslauf.item.nicht-abgeschlossen": "Formation pas terminé",
   "shared.form.lebenslauf.form.error.monthYearMin": "L'année ne doit pas être antérieure à {{min}}.",
   "shared.form.lebenslauf.form.error.monthYearMax": "L'année ne doit pas être postérieure à {{max}}.",
   "shared.form.lebenslauf.form.error.monthYearAfterStart": "La fin doit être postérieure au début",

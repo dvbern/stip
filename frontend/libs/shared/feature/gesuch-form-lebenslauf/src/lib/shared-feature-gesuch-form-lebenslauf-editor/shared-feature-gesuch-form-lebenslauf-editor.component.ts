@@ -258,7 +258,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
         createDateDependencyValidator(
           'after',
           this.form.controls.von,
-          false,
+          true,
           new Date(),
           this.languageSig(),
           'monthYear',
