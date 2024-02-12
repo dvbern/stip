@@ -9,7 +9,7 @@ import {
 export class FamilyPO {
   public elems: {
     page: Page;
-    loading: () => Locator;
+    loading: Locator;
     form: Locator;
     elternVerheiratetZusammenRadio: Locator;
     gerichtlicheAlimentenregelungRadio: Locator;
@@ -33,7 +33,7 @@ export class FamilyPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: () => page.getByTestId('form-family-loading'),
+      loading: page.getByTestId('form-family-loading'),
 
       form: page.getByTestId('form-family-form'),
 

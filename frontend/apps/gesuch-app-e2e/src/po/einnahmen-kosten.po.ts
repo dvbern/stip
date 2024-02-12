@@ -9,7 +9,7 @@ import {
 export class EinnahmenKostenPO {
   public elems: {
     page: Page;
-    loading: () => Locator;
+    loading: Locator;
     form: Locator;
     nettoerwerbseinkommen: Locator;
     alimente: Locator;
@@ -36,7 +36,7 @@ export class EinnahmenKostenPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: () => page.getByTestId('form-einnahmen-kosten-loading'),
+      loading: page.getByTestId('form-einnahmen-kosten-loading'),
 
       incompleteWarning: () =>
         page.getByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),

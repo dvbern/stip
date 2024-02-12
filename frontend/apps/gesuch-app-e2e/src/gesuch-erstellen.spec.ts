@@ -237,10 +237,8 @@ test.describe('Neues gesuch erstellen', () => {
   test('Gesuch minimal', async ({ page, cockpit }) => {
     // Step 1: Person ============================================================
     await expectStepTitleToContainText('Person in Ausbildung', page);
-
     const personPO = new PersonPO(page);
-
-    await expect(personPO.elems.loading()).toBeHidden();
+    await expect(personPO.elems.loading).toBeHidden();
 
     await personPO.fillPersonForm(person);
 
@@ -248,10 +246,8 @@ test.describe('Neues gesuch erstellen', () => {
 
     // Step 2: Ausbildung ========================================================
     await expectStepTitleToContainText('Ausbildung', page);
-
     const ausbildungPO = new AusbildungPO(page);
-
-    await expect(ausbildungPO.elems.loading()).toBeHidden();
+    await expect(ausbildungPO.elems.loading).toBeHidden();
 
     await ausbildungPO.fillEducationForm(ausbildung);
 
@@ -259,86 +255,64 @@ test.describe('Neues gesuch erstellen', () => {
 
     // Step 3: Lebenslauf ========================================================
     await expectStepTitleToContainText('Lebenslauf', page);
-
     const lebenslaufPO = new LebenslaufPO(page);
-
-    await expect(lebenslaufPO.elems.loading()).toBeHidden();
+    await expect(lebenslaufPO.elems.loading).toBeHidden();
 
     await lebenslaufPO.addAusbildung(ausbildung1);
-
     await lebenslaufPO.addAusbildung(ausbildung2);
-
     await lebenslaufPO.addTaetigkeit(taetigkeit);
 
     await lebenslaufPO.elems.buttonContinue.click();
 
     // Step 4: Familiensituation ===================================================
-
     await expectStepTitleToContainText('Familiensituation', page);
-
     const familiyPO = new FamilyPO(page);
-
-    await expect(familiyPO.elems.loading()).toBeHidden();
+    await expect(familiyPO.elems.loading).toBeHidden();
 
     await familiyPO.fillMinimalForm(familienlsituation);
 
     await familiyPO.elems.buttonSaveContinue.click();
 
     // Step 5: Eltern =============================================================
-
     await expectStepTitleToContainText('Eltern', page);
-
     const elternPO = new ElternPO(page);
-
-    await expect(elternPO.elems.loading()).toBeHidden();
+    await expect(elternPO.elems.loading).toBeHidden();
 
     await elternPO.addVater(vater);
-
     await elternPO.addMutter(mutter);
 
     await elternPO.elems.buttonContinue.click();
 
     // Step 6: Geschwister  ========================================================
-
     await expectStepTitleToContainText('Geschwister', page);
-
     const geschwisterPO = new GeschwisterPO(page);
-
-    await expect(geschwisterPO.elems.loading()).toBeHidden();
+    await expect(geschwisterPO.elems.loading).toBeHidden();
 
     await geschwisterPO.addGeschwister(bruder);
 
     await geschwisterPO.elems.buttonContinue.click();
 
     // Step 7: Partner =============================================================
-
     // await expectStepTitleToContainText('Ehe- / Konkubinatspartner', page);
-
     // const partnerPO = new PartnerPO(page);
 
-    // await expect(partnerPO.elems.loading()).toBeHidden();
+    // await expect(partnerPO.elems.loading).toBeHidden();
 
     // await partnerPO.elems.buttonSaveContinue.click();
 
     // Step 8: Kinder =============================================================
-
     await expectStepTitleToContainText('Kinder', page);
-
     const kinderPO = new KinderPO(page);
-
-    await expect(kinderPO.elems.loading()).toBeHidden();
+    await expect(kinderPO.elems.loading).toBeHidden();
 
     await kinderPO.addKind(kind);
 
     await kinderPO.elems.buttonContinue.click();
 
     // Step 9: Auszahlung ===========================================================
-
     await expectStepTitleToContainText('Auszahlung', page);
-
     const auszahlungPO = new AuszahlungPO(page);
-
-    await expect(auszahlungPO.elems.loading()).toBeHidden();
+    await expect(auszahlungPO.elems.loading).toBeHidden();
 
     await auszahlungPO.fillAuszahlungEigenesKonto(auszahlung);
 
@@ -351,12 +325,9 @@ test.describe('Neues gesuch erstellen', () => {
     await auszahlungPO.elems.buttonSaveContinue.click();
 
     // Step 10: Einnahmen und Kosten =================================================
-
     await expectStepTitleToContainText('Einnahmen & Kosten', page);
-
     const einnahmenKostenPO = new EinnahmenKostenPO(page);
-
-    await expect(einnahmenKostenPO.elems.loading()).toBeHidden();
+    await expect(einnahmenKostenPO.elems.loading).toBeHidden();
 
     await ausbildungPromise;
 
@@ -365,9 +336,7 @@ test.describe('Neues gesuch erstellen', () => {
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
     // Step 11: Freigabe ===========================================================
-
     await expectStepTitleToContainText('Freigabe', page);
-
     const freigabePO = new FreigabePO(page);
 
     await freigabePO.abschluss();

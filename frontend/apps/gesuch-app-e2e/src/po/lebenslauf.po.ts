@@ -12,7 +12,7 @@ export class LebenslaufPO {
 
     timelineGap: Locator;
 
-    loading: () => Locator;
+    loading: Locator;
 
     buttonContinue: Locator;
     buttonNext: Locator;
@@ -26,7 +26,7 @@ export class LebenslaufPO {
 
       timelineGap: page.getByTestId('timeline-gap-block'),
 
-      loading: () => page.getByTestId('lebenslauf-editor-loading'),
+      loading: page.getByTestId('lebenslauf-editor-loading'),
 
       buttonContinue: page.getByTestId('button-continue'),
       buttonNext: page.getByTestId('button-next'),
@@ -40,7 +40,7 @@ export class LebenslaufPO {
 
     await editorPO.addAusbildung(item);
 
-    await expect(this.elems.loading()).toBeHidden();
+    await expect(this.elems.loading).toBeHidden();
   }
 
   async addTaetigkeit(item: LebenslaufItem) {
@@ -50,6 +50,6 @@ export class LebenslaufPO {
 
     await editorPO.addTaetigkeit(item);
 
-    await expect(this.elems.loading()).toBeHidden();
+    await expect(this.elems.loading).toBeHidden();
   }
 }

@@ -32,7 +32,7 @@ export class PersonPO {
     niederlassungsstatusSelect: Locator;
     infoNiederlassungsstatus: Locator;
 
-    loading: () => Locator;
+    loading: Locator;
 
     buttonSaveContinue: Locator;
     buttonNext: Locator;
@@ -76,7 +76,7 @@ export class PersonPO {
         'info-person-niederlassungsstatus',
       ),
 
-      loading: () => page.getByTestId('form-person-loading'),
+      loading: page.getByTestId('form-person-loading'),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),

@@ -6,6 +6,18 @@ export const REFRESH_COOKIE = 'refresh_cookie';
 export const GS_STORAGE_STATE = 'gs-storage-state.json';
 export const SB_STORAGE_STATE = 'sb-storage-state.json';
 
+export interface KeycloakResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_expires_in: number;
+  refresh_token: string;
+  token_type: string;
+  id_token: string;
+  'not-before-policy': number;
+  session_state: string;
+  scope: string;
+}
+
 export const baseConfig = defineConfig({
   use: {
     trace: 'on-first-retry',

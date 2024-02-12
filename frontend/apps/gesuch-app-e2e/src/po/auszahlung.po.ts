@@ -11,7 +11,7 @@ import { AddressPO } from './adresse.po';
 export class AuszahlungPO {
   public elems: {
     page: Page;
-    loading: () => Locator;
+    loading: Locator;
     form: Locator;
     kontoinhaberSelect: Locator;
     nachname: Locator;
@@ -26,7 +26,7 @@ export class AuszahlungPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: () => page.getByTestId('form-auszahlung-loading'),
+      loading: page.getByTestId('form-auszahlung-loading'),
       form: page.getByTestId('form-auszahlung-form'),
       kontoinhaberSelect: page.getByTestId('form-auszahlung-kontoinhaber'),
       nachname: page.getByTestId('form-auszahlung-nachname'),

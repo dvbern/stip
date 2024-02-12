@@ -26,7 +26,7 @@ export class AusbildungPO {
     ausbildungEnd: Locator;
     pensumSelect: Locator;
     ausbildungNichtGefundenCheckbox: Locator;
-    loading: () => Locator;
+    loading: Locator;
     buttonSaveContinue: Locator;
     buttonNext: Locator;
   };
@@ -56,8 +56,8 @@ export class AusbildungPO {
         'form-education-ausbidungNichtGefunden',
       ),
 
-      loading: () => page.getByTestId('education-form-loading'),
-      // todo: now page objects to do:
+      loading: page.getByTestId('education-form-loading'),
+
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),
     };

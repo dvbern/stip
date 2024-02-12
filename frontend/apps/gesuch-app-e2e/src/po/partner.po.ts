@@ -8,7 +8,7 @@ import { AddressPO } from './adresse.po';
 export class PartnerPO {
   public elems: {
     page: Page;
-    loading: () => Locator;
+    loading: Locator;
     form: Locator;
     sozialversicherungsnummer: Locator;
     nachname: Locator;
@@ -27,7 +27,7 @@ export class PartnerPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: () => page.getByTestId('form-partner-loading'),
+      loading: page.getByTestId('form-partner-loading'),
       form: page.getByTestId('form-partner-form'),
       sozialversicherungsnummer: page.getByTestId(
         'form-partner-sozialversicherungsnummer',

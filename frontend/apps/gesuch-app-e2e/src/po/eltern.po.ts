@@ -10,7 +10,7 @@ export class ElternPO {
     addVater: Locator;
     addMutter: Locator;
 
-    loading: () => Locator;
+    loading: Locator;
 
     buttonContinue: Locator;
     buttonNext: Locator;
@@ -22,7 +22,7 @@ export class ElternPO {
       addVater: page.getByTestId('button-add-vater'),
       addMutter: page.getByTestId('button-add-mutter'),
 
-      loading: () => page.getByTestId('form-eltern-loading'),
+      loading: page.getByTestId('form-eltern-loading'),
 
       buttonContinue: page.getByTestId('button-continue'),
       buttonNext: page.getByTestId('button-next'),
@@ -36,7 +36,7 @@ export class ElternPO {
 
     await editorPO.fillElternTeilH(item);
 
-    await expect(this.elems.loading()).toBeHidden();
+    await expect(this.elems.loading).toBeHidden();
   }
 
   async addMutter(item: Eltern) {
@@ -46,6 +46,6 @@ export class ElternPO {
 
     await editorPO.fillElternTeilH(item);
 
-    await expect(this.elems.loading()).toBeHidden();
+    await expect(this.elems.loading).toBeHidden();
   }
 }

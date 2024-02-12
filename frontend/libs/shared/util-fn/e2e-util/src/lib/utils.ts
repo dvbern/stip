@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from '@playwright/test';
 
-export const getStepTitleP = async (page: Page) => {
+export const getStepTitle = async (page: Page) => {
   return page.getByTestId('step-title');
 };
 
@@ -8,7 +8,7 @@ export const expectStepTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(await getStepTitleP(page)).toContainText(text);
+  return expect(await getStepTitle(page)).toContainText(text);
 };
 
 export const selectMatOption = async (locator: Locator, value: string) => {

@@ -7,7 +7,7 @@ import { GeschwisterEditorPO } from './geschwister-editor.po';
 export class GeschwisterPO {
   public elems: {
     page: Page;
-    loading: () => Locator;
+    loading: Locator;
     addGeschwister: Locator;
 
     buttonContinue: Locator;
@@ -17,7 +17,7 @@ export class GeschwisterPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: () => page.getByTestId('form-geschwister-loading'),
+      loading: page.getByTestId('form-geschwister-loading'),
       addGeschwister: page.getByTestId('button-add-geschwister'),
 
       buttonContinue: page.getByTestId('button-continue'),
@@ -32,6 +32,6 @@ export class GeschwisterPO {
 
     await editorPO.addGeschwister(item);
 
-    await expect(this.elems.loading()).toBeHidden();
+    await expect(this.elems.loading).toBeHidden();
   }
 }

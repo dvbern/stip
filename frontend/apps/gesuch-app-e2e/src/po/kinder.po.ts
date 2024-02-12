@@ -7,7 +7,7 @@ import { KinderEditorPO } from './kinder-editor.po';
 export class KinderPO {
   public elems: {
     page: Page;
-    loading: () => Locator;
+    loading: Locator;
 
     addKind: Locator;
 
@@ -18,7 +18,7 @@ export class KinderPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: () => page.getByTestId('form-kinder-loading'),
+      loading: page.getByTestId('form-kinder-loading'),
 
       addKind: page.getByTestId('button-add-kind'),
 
@@ -34,6 +34,6 @@ export class KinderPO {
 
     await editorPO.addKind(item);
 
-    await expect(this.elems.loading()).toBeHidden();
+    await expect(this.elems.loading).toBeHidden();
   }
 }
