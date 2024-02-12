@@ -114,6 +114,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
+  styleUrls: ['./shared-feature-gesuch-form-person.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormPersonComponent implements OnInit {
