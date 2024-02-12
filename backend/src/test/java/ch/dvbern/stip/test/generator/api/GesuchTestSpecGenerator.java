@@ -7,7 +7,9 @@ import org.instancio.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Locale;
 
 import static ch.dvbern.stip.test.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpecModel;
@@ -30,6 +32,8 @@ import static ch.dvbern.stip.test.generator.api.model.gesuch.PartnerUpdateDtoSpe
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildungModel;
 import static ch.dvbern.stip.test.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.instancio.Select.field;
 
 public class GesuchTestSpecGenerator {
@@ -40,7 +44,10 @@ public class GesuchTestSpecGenerator {
 					field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung),
 					Instancio.of(personInAusbildungUpdateDtoSpecModel)
 							.set(field(PersonInAusbildungUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
-							.set(field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum), LocalDate.of(2000, 10, 10))
+							.set(
+                                field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
+                                LocalDate.now().minusMonths(2 + 3).minusYears(16)
+                            )
 							.set(field(PersonInAusbildungUpdateDtoSpec::getZivilstand), ZivilstandDtoSpec.VERHEIRATET)
 							.create())
 			.set(
@@ -65,8 +72,16 @@ public class GesuchTestSpecGenerator {
 			.set(
 					field(GesuchFormularUpdateDtoSpec::getLebenslaufItems),
 					Instancio.of(lebenslaufItemUpdateDtoSpecModel)
-							.set(field(LebenslaufItemUpdateDtoSpec::getVon), "08.2016")
-							.set(field(LebenslaufItemUpdateDtoSpec::getBis), "12.2021")
+							.set(
+                                field(LebenslaufItemUpdateDtoSpec::getVon),
+                                LocalDate.now().minusMonths(2 + 4).with(firstDayOfMonth())
+                                    .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
+                            )
+							.set(
+                                field(LebenslaufItemUpdateDtoSpec::getBis),
+                                LocalDate.now().minusMonths(2).with(lastDayOfMonth())
+                                    .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
+                            )
 							.create()
 			)
 			.set(
