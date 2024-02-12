@@ -1,5 +1,5 @@
 <form [formGroup]="form" data-testid="form-lebenslauf-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
-  @if (item.type === 'AUSBILDUNG') {
+  @if (itemSig().type === 'AUSBILDUNG') {
     <div class="row g-4 my-2">
       <!-- Ausbildungsart -->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
@@ -55,7 +55,7 @@
         </mat-form-field>
       }
     </div>
-  } @else if (item.type === 'TAETIGKEIT') {
+  } @else if (itemSig().type === 'TAETIGKEIT') {
     <div class="row g-4 my-2">
       <mat-form-field
         dvSharedUiFormField
@@ -94,7 +94,7 @@
   <div class="row g-4 my-2">
     <!-- START -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.lebenslauf.item.start.' + item.type!.toLowerCase() | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.lebenslauf.item.start.' + itemSig().type!.toLowerCase() | translate }}</mat-label>
 
       <input
         matInput
@@ -126,7 +126,7 @@
 
     <!-- ENDE -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.lebenslauf.item.end.' + item.type!.toLowerCase() | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.lebenslauf.item.end.' + itemSig().type!.toLowerCase() | translate }}</mat-label>
 
       <input
         matInput
@@ -176,7 +176,7 @@
       </mat-error>
     </mat-form-field>
     <!-- Ausbildung abgeschlossen -->
-    @if (item.type === 'AUSBILDUNG') {
+    @if (itemSig().type === 'AUSBILDUNG') {
       <div class="col-12 col-md-6">
         <mat-checkbox
           formControlName="ausbildungAbgeschlossen"
@@ -189,7 +189,7 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    @if (item.id && !viewSig().readonly) {
+    @if (itemSig().id && !viewSig().readonly) {
       <button
         type="button"
         class="btn btn-outline-primary d-flex align-items-center justify-content-center"

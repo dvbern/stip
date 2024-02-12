@@ -44,7 +44,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
 	@Test
 	void lebenslaufLuckenlosStartZuFruehTest() {
 		GesuchFormular gesuchFormular = initFormularWithLebenslaufItem(
-				LocalDate.of(2015, 10, 1),
+				LocalDate.of(2000, 5, 11),
 				LocalDate.of(2023, 12, 31));
 		assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 	}

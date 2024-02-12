@@ -28,9 +28,9 @@ public class LebenslaufLuckenlosConstraintValidator implements ConstraintValidat
 		// Sort the Lebenslaufsitem Daterange
 		Collections.sort(dateRanges, Comparator.comparing(dateRange -> dateRange.getGueltigAb()));
 
-		// Check if first Lebenslaufitem is After Daterange
+		// Check if first Lebenslaufitem is After birth
 		LocalDate currentDate = start;
-		if(start.isAfter(dateRanges.get(0).getGueltigAb())){
+		if(gesuchFormular.getPersonInAusbildung().getGeburtsdatum().isAfter(dateRanges.get(0).getGueltigAb())){
 			LOG.warn("Lebenslauf Item start bevor " + currentDate);
 			return false;
 		}
