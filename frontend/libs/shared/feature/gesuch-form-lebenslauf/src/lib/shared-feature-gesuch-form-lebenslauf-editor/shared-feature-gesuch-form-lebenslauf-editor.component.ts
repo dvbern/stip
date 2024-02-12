@@ -238,7 +238,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
         createDateDependencyValidator(
           'after',
           this.form.controls.von,
-          false,
+          true,
           new Date(),
           this.languageSig(),
           'monthYear',
@@ -247,6 +247,14 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       const maxEndDate = this.maxEndDateSig();
       if (maxEndDate) {
         if (this.itemSig().type === 'AUSBILDUNG') {
+          this.form.controls.von.addValidators([
+            createOverlappingValidator(
+              this.form.controls.bis,
+              previousAusbildungenSig(),
+              new Date(),
+              'monthYear',
+            ),
+          ]);
           this.form.controls.bis.addValidators([
             createOverlappingValidator(
               this.form.controls.von,

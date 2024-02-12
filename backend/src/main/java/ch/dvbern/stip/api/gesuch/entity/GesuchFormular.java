@@ -49,6 +49,7 @@ import java.util.Set;
 @LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
 @PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
 @AlimenteRequiredWhenAlimenteregelungConstraint(groups = GesuchEinreichenValidationGroup.class)
+@NoOverlapInAusbildungenConstraint
 @UniqueSvNumberConstraint
 @Entity
 @Table(indexes = {

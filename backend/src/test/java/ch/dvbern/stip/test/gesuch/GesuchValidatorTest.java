@@ -39,6 +39,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.*;
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -109,6 +111,8 @@ class GesuchValidatorTest {
 	@Test
 	void testNullFieldValidationErrorForAusbildung() {
 		Ausbildung ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().with(firstDayOfMonth()));
+        ausbildung.setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth()));
 		Gesuch gesuch = prepareDummyGesuch();
 		GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
 		gesuchTranche.getGesuchFormular().setAusbildung(ausbildung);
@@ -125,6 +129,8 @@ class GesuchValidatorTest {
 	void testFieldValidationErrorForAusbildung() {
 		Ausbildung ausbildung = new Ausbildung();
 		ausbildung.setAlternativeAusbildungsgang("ausbildungsgang alt");
+        ausbildung.setAusbildungBegin(LocalDate.now().with(firstDayOfMonth()));
+        ausbildung.setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth()));
 		Gesuch gesuch = prepareDummyGesuch();
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
 		// Die alternative Ausbildungsgang und Staette muessen bei keine alternative Ausbildung null sein

@@ -179,7 +179,7 @@ class AusbildungsgangResourceTest {
                 .assertThat()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        assertThat(getAusbildungsstaettenFromApi().length, is(numAusbildungsstaettenBevoreDelete));
+        assertThat(getAusbildungsstaettenFromApi().length, is(numAusbildungsstaettenBevoreDelete - 1));
     }
 
     private AusbildungsstaetteDtoSpec[] getAusbildungsstaettenFromApi() {
