@@ -21,7 +21,7 @@ export interface KeycloakResponse {
 export const baseConfig = defineConfig({
   use: {
     trace: 'on-first-retry',
-    ignoreHTTPSErrors: !process.env.CI,
+    ignoreHTTPSErrors: true,
     screenshot: 'on',
     video: {
       mode: 'on-first-retry',
