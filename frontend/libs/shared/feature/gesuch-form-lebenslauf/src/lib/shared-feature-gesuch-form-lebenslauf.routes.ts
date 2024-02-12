@@ -24,6 +24,7 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
         path: ':id',
         title: 'shared.geschwister.title',
         component: SharedFeatureGesuchFormLebenslaufComponent,
+        runGuardsAndResolvers: 'always',
         canDeactivate: [checkUnsavedChanges],
         data: {
           // reinitialize when navigated to the same route

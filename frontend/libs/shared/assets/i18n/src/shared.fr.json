@@ -147,6 +147,7 @@
   "shared.form.education.form.error.monthYearNotPast": "La date ne doit pas être dans le passé",
   "shared.form.education.form.error.monthYearAfter": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
+  "shared.form.education.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
 
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",

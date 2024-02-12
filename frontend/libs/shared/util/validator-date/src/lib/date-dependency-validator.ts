@@ -4,7 +4,12 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { areIntervalsOverlapping, isAfter, isEqual } from 'date-fns';
+import {
+  areIntervalsOverlapping,
+  compareAsc,
+  isAfter,
+  isEqual,
+} from 'date-fns';
 
 import { Language } from '@dv/shared/model/language';
 
@@ -43,30 +48,32 @@ export function createDateDependencyValidator(
 }
 
 export function createOverlappingValidator(
-  minDateControl: FormControl<string | null>,
+  otherDateControl: FormControl<string | null>,
   intervalValues: Readonly<[string, string]>[],
   referenceDate: Date,
   dateFormatVariant: DateFormatVariant,
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const minDate = parseDateForVariant(
-      minDateControl.value,
+    const date1 = parseDateForVariant(
+      otherDateControl.value,
       new Date(),
       dateFormatVariant,
     );
-    const maxDate = parseDateForVariant(
+    const date2 = parseDateForVariant(
       control.value,
       new Date(),
       dateFormatVariant,
     );
+
+    if (!date1 || !date2) {
+      return null;
+    }
+
+    const [minDate, maxDate] = [date1, date2].sort(compareAsc);
     const intervals = intervalValues.map(([start, end]) => [
       parseDateForVariant(start, referenceDate, dateFormatVariant),
       parseDateForVariant(end, referenceDate, dateFormatVariant),
     ]);
-
-    if (!minDate || !maxDate || (minDate && maxDate && maxDate < minDate)) {
-      return null;
-    }
 
     const hasOverlaps = intervals.some(([start, end]) => {
       if (!start || !end) {

@@ -147,6 +147,7 @@
   "shared.form.education.form.error.monthYearNotPast": "Das Datum darf nicht in der Vergangenheit liegen",
   "shared.form.education.form.error.monthYearAfter": "Das Enddatum muss nach dem {{ date }} sein",
   "shared.form.education.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
+  "shared.form.education.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
 
   "shared.familiensituation.title": "Familiensituation",
   "shared.form.familiensituation.mutter": "Mutter",
