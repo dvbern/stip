@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-ui-gesuch-step-wrapper',
+  displayName: 'shared-ui-comming-soon',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/ui/gesuch-step-wrapper',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/comming-soon',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

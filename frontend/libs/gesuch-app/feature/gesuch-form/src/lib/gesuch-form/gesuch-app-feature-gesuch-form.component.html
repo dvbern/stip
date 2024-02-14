@@ -1,3 +1,6 @@
 <dv-gesuch-app-pattern-gesuch-step-layout [step]="stepSig()">
-  <dv-shared-ui-gesuch-step-wrapper (step)="stepSig.set($event)"></dv-shared-ui-gesuch-step-wrapper>
+  <dv-shared-ui-router-outlet-wrapper
+    attribute="step"
+    (data)="stepSig.set($event)"
+  ></dv-shared-ui-router-outlet-wrapper>
 </dv-gesuch-app-pattern-gesuch-step-layout>
