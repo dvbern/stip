@@ -15,6 +15,9 @@
   "sachbearbeitung-app.admin.option.buchstabenZuteilungTitle": "Distribution de lettres aux gestionnaires",
   "sachbearbeitung-app.admin.option.weitereEinstellungenTitle": "Autres paramètres",
 
+  "sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiter": "Gestionnaire",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiterFilter": "Filtrer par gestionnaire",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",

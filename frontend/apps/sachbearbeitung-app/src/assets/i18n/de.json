@@ -15,6 +15,9 @@
   "sachbearbeitung-app.admin.option.buchstabenZuteilungTitle": "Buchstaben-Verteilung an Sachbearbeiter",
   "sachbearbeitung-app.admin.option.weitereEinstellungenTitle": "Weitere Einstellungen",
 
+  "sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiter": "Sachbearbeiter",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiterFilter": "Filtern nach Sachbearbeiter",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
