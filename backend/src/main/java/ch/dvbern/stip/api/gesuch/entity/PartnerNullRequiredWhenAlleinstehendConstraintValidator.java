@@ -12,7 +12,8 @@ public class PartnerNullRequiredWhenAlleinstehendConstraintValidator
         if (gesuchFormular.getPersonInAusbildung() == null) {
             return true;
         }
-        if (gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft() && gesuchFormular.getPartner() == null) {
+        if (gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft()
+            && gesuchFormular.getPartner() == null) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE)
                 .addConstraintViolation();

@@ -23,7 +23,8 @@ class LebenslaufItemMapperTest {
         List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos = new ArrayList<>();
         // ADD
         lebenslaufItemUpdateDtos.add(lebenslaufItemUpdateDto);
-        Set<LebenslaufItem> neulebenslaufItemSet = lebenslaufItemMapper.map(lebenslaufItemUpdateDtos, lebenslaufItemSet);
+        Set<LebenslaufItem> neulebenslaufItemSet =
+            lebenslaufItemMapper.map(lebenslaufItemUpdateDtos, lebenslaufItemSet);
         Assertions.assertEquals(1, neulebenslaufItemSet.size());
         // UPDATE
         lebenslaufItemUpdateDto.setId(UUID.randomUUID());
@@ -31,7 +32,9 @@ class LebenslaufItemMapperTest {
         lebenslaufItemUpdateDtos.add(lebenslaufItemUpdateDto);
         neulebenslaufItemSet.stream().forEach(lebenslaufItem -> lebenslaufItem.setId(lebenslaufItemUpdateDto.getId()));
         neulebenslaufItemSet = lebenslaufItemMapper.map(lebenslaufItemUpdateDtos, neulebenslaufItemSet);
-        Assertions.assertEquals(lebenslaufItemUpdateDto.getId(), neulebenslaufItemSet.stream().findFirst().get().getId());
+        Assertions.assertEquals(
+            lebenslaufItemUpdateDto.getId(),
+            neulebenslaufItemSet.stream().findFirst().get().getId());
         //DELETE ONE ADD A NEW ONE
         lebenslaufItemUpdateDtos.clear();
         lebenslaufItemUpdateDtos.add(prepareData());

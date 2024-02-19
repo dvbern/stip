@@ -1,11 +1,11 @@
 package ch.dvbern.stip.api.common.i18n;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import static java.lang.Thread.currentThread;
 import static java.util.Objects.requireNonNull;

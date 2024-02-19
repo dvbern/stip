@@ -1,5 +1,10 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -29,11 +34,6 @@ import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 
@@ -54,7 +54,7 @@ public class GesuchResourceImpl implements GesuchResource {
         return Buffer.buffer(result);
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
 
@@ -97,21 +97,21 @@ public class GesuchResourceImpl implements GesuchResource {
             .recoverWithItem(Response.serverError().build());
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
         GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(created.getId().toString()).build()).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
         gesuchDokumentService.deleteDokument(dokumentId);
         return Response.noContent().build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response deleteGesuch(UUID gesuchId) {
         gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
@@ -119,20 +119,20 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.noContent().build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response gesuchEinreichen(UUID gesuchId) {
         gesuchService.gesuchEinreichen(gesuchId);
         return Response.accepted().build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response gesuchEinreichenValidieren(UUID gesuchId) {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response gesuchNachfristBeantragen(UUID gesuchId) {
         gesuchService.setDokumentNachfrist(gesuchId);
@@ -163,39 +163,39 @@ public class GesuchResourceImpl implements GesuchResource {
         );
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {
         List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesuch(UUID gesuchId) {
         var gesuch = gesuchService.findGesuch(gesuchId).orElseThrow(NotFoundException::new);
         return Response.ok(gesuch).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesuche() {
         return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesucheForBenutzer(UUID benutzerId) {
         return Response.ok(gesuchService.findAllForBenutzer(benutzerId)).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesucheForFall(UUID fallId) {
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);

@@ -62,7 +62,9 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .extract()
             .as(ValidationReportDtoSpec.class);
 
-        assertThat(response.getValidationErrors().get(0).getMessageTemplate(), is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
+        assertThat(
+            response.getValidationErrors().get(0).getMessageTemplate(),
+            is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
 
     }
 
@@ -83,8 +85,14 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .getGesuchTrancheToWorkWith().getId();
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
 
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)

@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
@@ -17,9 +19,11 @@ import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import org.mapstruct.*;
-
-import java.util.List;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
     uses =
@@ -43,14 +47,11 @@ public abstract class GesuchFormularMapper {
 
     /**
      * partial update mapper for the Gesuchssteller
-     *
-     * @param gesuchFormularUpdateDto
-     * @param gesuchFormular
-     * @return
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract GesuchFormular partialUpdate(GesuchFormularUpdateDto gesuchFormularUpdateDto, @MappingTarget GesuchFormular gesuchFormular);
-
+    public abstract GesuchFormular partialUpdate(
+        GesuchFormularUpdateDto gesuchFormularUpdateDto,
+        @MappingTarget GesuchFormular gesuchFormular);
 
     @BeforeMapping
     public void clearDataOnUpdate(
@@ -64,7 +65,8 @@ public abstract class GesuchFormularMapper {
             return;
         }
 
-        if (entity.getFamiliensituation().getWerZahltAlimente() == updateDto.getFamiliensituation().getWerZahltAlimente()) {
+        if (entity.getFamiliensituation().getWerZahltAlimente() == updateDto.getFamiliensituation()
+            .getWerZahltAlimente()) {
             return;
         }
 
@@ -74,12 +76,12 @@ public abstract class GesuchFormularMapper {
         }
 
         switch (werZahlt) {
-            case VATER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
-            case MUTTER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
-            case GEMEINSAM -> {
-                removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
-                removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
-            }
+        case VATER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
+        case MUTTER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
+        case GEMEINSAM -> {
+            removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
+            removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
+        }
         }
     }
 

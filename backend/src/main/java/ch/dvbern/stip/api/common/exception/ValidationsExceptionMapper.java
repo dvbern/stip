@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.common.exception;
 
+import java.util.Set;
+
 import ch.dvbern.stip.generated.dto.ValidationErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.validation.ConstraintViolation;
-
-import java.util.Set;
 
 public final class ValidationsExceptionMapper {
 

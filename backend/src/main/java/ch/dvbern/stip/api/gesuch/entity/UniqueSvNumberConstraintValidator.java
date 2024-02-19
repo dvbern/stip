@@ -1,12 +1,12 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class UniqueSvNumberConstraintValidator
     implements ConstraintValidator<UniqueSvNumberConstraint, GesuchFormular> {

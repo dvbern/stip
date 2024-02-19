@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.benutzer.entity;
 
+import java.util.regex.Pattern;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import java.util.regex.Pattern;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.BUCHSTABEN_RANGE_VALIDATION_PATTERN;
 

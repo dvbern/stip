@@ -16,34 +16,42 @@ import java.util.Set;
 @Mapper(config = MappingConfig.class)
 public interface LebenslaufItemMapper {
 
-    @Mapping(source = "von", target = "von", qualifiedBy = {DateMapper.class, MonthYearToBeginOfMonth.class})
-    @Mapping(source = "bis", target = "bis", qualifiedBy = {DateMapper.class, MonthYearToEndOfMonth.class})
+    @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
+    @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     LebenslaufItem toEntity(LebenslaufItemDto lebenslaufItemDto);
 
-    @Mapping(source = "von", target = "von", qualifiedBy = {DateMapper.class, DateToMonthYear.class})
-    @Mapping(source = "bis", target = "bis", qualifiedBy = {DateMapper.class, DateToMonthYear.class})
+    @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
+    @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     LebenslaufItemDto toDto(LebenslaufItem lebenslaufItem);
 
-    @Mapping(source = "von", target = "von", qualifiedBy = {DateMapper.class, MonthYearToBeginOfMonth.class})
-    @Mapping(source = "bis", target = "bis", qualifiedBy = {DateMapper.class, MonthYearToEndOfMonth.class})
-    LebenslaufItem partialUpdate(LebenslaufItemUpdateDto lebenslaufItemUpdateDto, @MappingTarget LebenslaufItem lebenslaufItem);
+    @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
+    @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
+    LebenslaufItem partialUpdate(
+        LebenslaufItemUpdateDto lebenslaufItemUpdateDto,
+        @MappingTarget LebenslaufItem lebenslaufItem);
 
-    default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
+    default Set<LebenslaufItem> map(
+        List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos,
+        @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
         if (lebenslaufItemUpdateDtos.isEmpty()) {
             lebenslaufItemSet.clear();
         }
         Iterator<LebenslaufItem> iterator = lebenslaufItemSet.iterator();
         while (iterator.hasNext()) {
             LebenslaufItem lebenslaufItem = iterator.next();
-            if (lebenslaufItemUpdateDtos.stream().noneMatch(lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))) {
+            if (lebenslaufItemUpdateDtos.stream()
+                .noneMatch(lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))) {
                 iterator.remove();
             }
         }
         for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {
             if (lebenslaufItemUpdateDto.getId() != null) {
-                LebenslaufItem found = lebenslaufItemSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())).findFirst().orElseThrow(
-                    () -> new NotFoundException("LebenslaufItem Not FOUND")
-                );
+                LebenslaufItem found = lebenslaufItemSet.stream()
+                    .filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))
+                    .findFirst()
+                    .orElseThrow(
+                        () -> new NotFoundException("LebenslaufItem Not FOUND")
+                    );
                 lebenslaufItemSet.remove(found);
                 lebenslaufItemSet.add(partialUpdate(lebenslaufItemUpdateDto, found));
             } else {

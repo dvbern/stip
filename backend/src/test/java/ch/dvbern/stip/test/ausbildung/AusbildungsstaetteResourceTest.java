@@ -26,7 +26,8 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AusbildungsstaetteResourceTest {
 
-    private final AusbildungsstaetteApiSpec api = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsstaetteApiSpec api =
+        AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
     @Test
     @TestAsGesuchsteller

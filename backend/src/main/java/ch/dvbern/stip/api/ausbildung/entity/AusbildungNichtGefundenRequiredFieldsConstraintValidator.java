@@ -6,7 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 
-public class AusbildungNichtGefundenRequiredFieldsConstraintValidator implements ConstraintValidator<AusbildungNichtGefundenRequiredFieldsConstraint, Ausbildung> {
+public class AusbildungNichtGefundenRequiredFieldsConstraintValidator
+    implements ConstraintValidator<AusbildungNichtGefundenRequiredFieldsConstraint, Ausbildung> {
 
     @Override
     public boolean isValid(

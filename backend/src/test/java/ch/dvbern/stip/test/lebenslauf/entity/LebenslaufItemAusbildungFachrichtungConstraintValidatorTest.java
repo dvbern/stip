@@ -31,7 +31,8 @@ class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 
     @NotNull
     private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtOfFachrichtung() {
-        return lebenslaufAusbildungsArt -> getLebenslaufAusbildungsArtsForFachrichtung().contains(lebenslaufAusbildungsArt);
+        return lebenslaufAusbildungsArt -> getLebenslaufAusbildungsArtsForFachrichtung().contains(
+            lebenslaufAusbildungsArt);
     }
 
     @Test

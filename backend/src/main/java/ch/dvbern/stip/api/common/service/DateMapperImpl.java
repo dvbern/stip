@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.common.service;
 
+import java.time.LocalDate;
+
 import jakarta.ws.rs.BadRequestException;
 import org.mapstruct.Mapper;
-
-import java.time.LocalDate;
 
 @DateMapper
 @Mapper(config = MappingQualifierConfig.class)

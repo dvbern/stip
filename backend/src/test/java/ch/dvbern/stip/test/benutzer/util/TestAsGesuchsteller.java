@@ -14,7 +14,6 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.test.util.TestConstants.AHV_NUMMER_VALID;
 import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_TEST_ID;
 
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @TestSecurity(user = "gesuchsteller", roles = ROLE_GESUCHSTELLER)

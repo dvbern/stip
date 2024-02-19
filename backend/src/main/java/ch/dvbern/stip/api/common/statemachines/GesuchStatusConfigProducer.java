@@ -32,7 +32,9 @@ public class GesuchStatusConfigProducer {
             .onEntry(this::logTransition);
 
         config.configure(Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT)
-            .permit(GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT, Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST)
+            .permit(
+                GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT,
+                Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST)
             .onEntry(this::logTransition)
             .onEntry(this::sendGesuchNichtKomplettEingereichtEmail);
 

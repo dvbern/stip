@@ -1,14 +1,14 @@
 package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.common.exception.ValidationsException;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.tika.Tika;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
+
+import ch.dvbern.stip.api.common.exception.ValidationsException;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
 
 public final class FileUtil {
 

@@ -97,7 +97,8 @@ class GesuchServiceTest {
         for (var zivilstand : Zivilstand.values()) {
             if (zivilstand != GESCHIEDEN_GERICHTLICH) {
                 final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-                GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, GESCHIEDEN_GERICHTLICH, zivilstand);
+                GesuchTranche tranche =
+                    updateFromZivilstandToZivilstand(gesuchUpdateDto, GESCHIEDEN_GERICHTLICH, zivilstand);
                 MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
             }
         }
@@ -105,7 +106,7 @@ class GesuchServiceTest {
 
     @Test
     void testVerheiratetToKonkubinatEingetragenePartnerschaftShouldNotResetPartner() {
-        for (var zivilstand : new Zivilstand[]{KONKUBINAT, EINGETRAGENE_PARTNERSCHAFT}) {
+        for (var zivilstand : new Zivilstand[] { KONKUBINAT, EINGETRAGENE_PARTNERSCHAFT }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, zivilstand);
             MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
@@ -114,7 +115,7 @@ class GesuchServiceTest {
 
     @Test
     void testVerheiratetToGeschiedenAufgeloestVerwitwetShouldResetPartner() {
-        for (var zivilstand : new Zivilstand[]{GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET}) {
+        for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, zivilstand);
             MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
@@ -123,25 +124,27 @@ class GesuchServiceTest {
 
     @Test
     void testEingetragenePartnerschaftToKonkubinatVerheiratetShouldNotResetPartner() {
-        for (var zivilstand : new Zivilstand[]{KONKUBINAT, VERHEIRATET}) {
+        for (var zivilstand : new Zivilstand[] { KONKUBINAT, VERHEIRATET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-            GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, EINGETRAGENE_PARTNERSCHAFT, zivilstand);
+            GesuchTranche tranche =
+                updateFromZivilstandToZivilstand(gesuchUpdateDto, EINGETRAGENE_PARTNERSCHAFT, zivilstand);
             MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
         }
     }
 
     @Test
     void testEingetragenePartnerschaftToGeschiedenAufgeloestVerwitwetShouldResetPartner() {
-        for (var zivilstand : new Zivilstand[]{GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET}) {
+        for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-            GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, EINGETRAGENE_PARTNERSCHAFT, zivilstand);
+            GesuchTranche tranche =
+                updateFromZivilstandToZivilstand(gesuchUpdateDto, EINGETRAGENE_PARTNERSCHAFT, zivilstand);
             MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
         }
     }
 
     @Test
     void testkonkubinatToVerheiratetEingetragenePartnerschaftShouldNotResetPartner() {
-        for (var zivilstand : new Zivilstand[]{VERHEIRATET, EINGETRAGENE_PARTNERSCHAFT}) {
+        for (var zivilstand : new Zivilstand[] { VERHEIRATET, EINGETRAGENE_PARTNERSCHAFT }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, KONKUBINAT, zivilstand);
             MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
@@ -150,7 +153,7 @@ class GesuchServiceTest {
 
     @Test
     void testKonkubinatToGeschiedenAufgeloestVerwitwetShouldResetPartner() {
-        for (var zivilstand : new Zivilstand[]{GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET}) {
+        for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, KONKUBINAT, zivilstand);
             MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
@@ -172,24 +175,33 @@ class GesuchServiceTest {
     @Test
     void resetElternDataIfChangeFromMutterToGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        MatcherAssert.assertThat(gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), Matchers.not(0));
-        GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.MUTTER, Elternschaftsteilung.GEMEINSAM);
+        MatcherAssert.assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
+            Matchers.not(0));
+        GesuchTranche tranche =
+            updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.MUTTER, Elternschaftsteilung.GEMEINSAM);
         MatcherAssert.assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
     }
 
     @Test
     void resetElternDataIfChangeFromVaterToGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        MatcherAssert.assertThat(gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), Matchers.not(0));
-        GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.VATER, Elternschaftsteilung.GEMEINSAM);
+        MatcherAssert.assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
+            Matchers.not(0));
+        GesuchTranche tranche =
+            updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.VATER, Elternschaftsteilung.GEMEINSAM);
         MatcherAssert.assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
     }
 
     @Test
     void noResetElternDataIfNoChangeGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        MatcherAssert.assertThat(gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), Matchers.not(0));
-        var anzahlElternBevoreUpdate = gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
+        MatcherAssert.assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
+            Matchers.not(0));
+        var anzahlElternBevoreUpdate =
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
 
         GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.GEMEINSAM,
             Elternschaftsteilung.GEMEINSAM
@@ -203,15 +215,21 @@ class GesuchServiceTest {
     @Test
     void noResetIfElternStayZusammen() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
-        var anzahlElternBevoreUpdate = gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
+        var anzahlElternBevoreUpdate =
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         tranche.getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(anzahlElternBevoreUpdate));
+        MatcherAssert.assertThat(
+            tranche.getGesuchFormular().getElterns().size(),
+            Matchers.is(anzahlElternBevoreUpdate));
     }
 
     @Test
@@ -220,8 +238,14 @@ class GesuchServiceTest {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         tranche.getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternteilUnbekanntVerstorben(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternteilUnbekanntVerstorben(false);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -232,9 +256,14 @@ class GesuchServiceTest {
     @Test
     void resetMutterIfUnbekannt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto, ElternAbwesenheitsGrund.UNBEKANNT, ElternAbwesenheitsGrund.WEDER_NOCH);
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+            ElternAbwesenheitsGrund.UNBEKANNT,
+            ElternAbwesenheitsGrund.WEDER_NOCH);
 
         MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
         MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
@@ -243,9 +272,14 @@ class GesuchServiceTest {
     @Test
     void resetMutterIfVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto, ElternAbwesenheitsGrund.VERSTORBEN, ElternAbwesenheitsGrund.WEDER_NOCH);
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+            ElternAbwesenheitsGrund.VERSTORBEN,
+            ElternAbwesenheitsGrund.WEDER_NOCH);
 
         MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
         MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
@@ -254,9 +288,14 @@ class GesuchServiceTest {
     @Test
     void resetVaterIfUnbekannt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto, ElternAbwesenheitsGrund.WEDER_NOCH, ElternAbwesenheitsGrund.UNBEKANNT);
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+            ElternAbwesenheitsGrund.WEDER_NOCH,
+            ElternAbwesenheitsGrund.UNBEKANNT);
 
         MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
         MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
@@ -265,9 +304,14 @@ class GesuchServiceTest {
     @Test
     void resetVaterIfVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto, ElternAbwesenheitsGrund.WEDER_NOCH, ElternAbwesenheitsGrund.VERSTORBEN);
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+            ElternAbwesenheitsGrund.WEDER_NOCH,
+            ElternAbwesenheitsGrund.VERSTORBEN);
 
         MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
         MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
@@ -276,9 +320,14 @@ class GesuchServiceTest {
     @Test
     void resetBothIfVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto, ElternAbwesenheitsGrund.VERSTORBEN, ElternAbwesenheitsGrund.VERSTORBEN);
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+            ElternAbwesenheitsGrund.VERSTORBEN,
+            ElternAbwesenheitsGrund.VERSTORBEN);
 
         MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
         MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
@@ -287,9 +336,14 @@ class GesuchServiceTest {
     @Test
     void resetBothIfUnbekannt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto, ElternAbwesenheitsGrund.UNBEKANNT, ElternAbwesenheitsGrund.UNBEKANNT);
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+            ElternAbwesenheitsGrund.UNBEKANNT,
+            ElternAbwesenheitsGrund.UNBEKANNT);
 
         MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
         MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
@@ -300,13 +354,27 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlimente(BigDecimal.valueOf(1000));
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(new FamiliensituationUpdateDto());
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(true);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .setFamiliensituation(new FamiliensituationUpdateDto());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setGerichtlicheAlimentenregelung(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -317,7 +385,10 @@ class GesuchServiceTest {
     @Test
     void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlimente(BigDecimal.valueOf(1000));
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, true, gesuchUpdateDto);
 
@@ -327,7 +398,10 @@ class GesuchServiceTest {
     @Test
     void resetAlimenteIfGesetzlicheAlimenteregelungFromFalseToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlimente(BigDecimal.valueOf(1000));
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, true, gesuchUpdateDto);
 
@@ -348,7 +422,10 @@ class GesuchServiceTest {
     @Test
     void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlimente(BigDecimal.valueOf(1000));
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, false, gesuchUpdateDto);
 
@@ -358,7 +435,10 @@ class GesuchServiceTest {
     @Test
     void resetAlimenteIfGesetzlicheAlimenteregelungFromTrueToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(BigDecimal.valueOf(1000));
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlimente(BigDecimal.valueOf(1000));
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, false, gesuchUpdateDto);
 
@@ -379,7 +459,10 @@ class GesuchServiceTest {
     @Test
     void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNullAfterUpdate() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
@@ -397,7 +480,10 @@ class GesuchServiceTest {
     void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNull() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
@@ -412,13 +498,25 @@ class GesuchServiceTest {
     @Test
     void noResetAuswertigesMittagessenIfWohnsitzFamilie() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitz(Wohnsitz.FAMILIE);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitzAnteilMutter(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitzAnteilVater(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -432,11 +530,17 @@ class GesuchServiceTest {
     @Test
     void noResetAuswertigesMittagessenIfWohnsitzMutterVater() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitz(Wohnsitz.MUTTER_VATER);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -450,13 +554,25 @@ class GesuchServiceTest {
     @Test
     void resetAuswertigesMittagessenIfWohnsitzEigenerHaushalt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitzAnteilMutter(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitzAnteilVater(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -473,9 +589,18 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setEinnahmenKosten(null);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitzAnteilMutter(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setWohnsitzAnteilVater(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -514,7 +639,10 @@ class GesuchServiceTest {
             Matchers.is(1)
         );
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(LocalDate.of(2000, 10, 11));
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setGeburtsdatum(LocalDate.of(2000, 10, 11));
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
         MatcherAssert.assertThat(
@@ -576,19 +704,30 @@ class GesuchServiceTest {
         );
     }
 
-
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         return gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
     }
 
-    private GesuchTranche updateGesetzlicheAlimenteRegel(@Nullable Boolean from, Boolean to, GesuchUpdateDto gesuchUpdateDto) {
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(from);
+    private GesuchTranche updateGesetzlicheAlimenteRegel(
+        @Nullable Boolean from,
+        Boolean to,
+        GesuchUpdateDto gesuchUpdateDto) {
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setGerichtlicheAlimentenregelung(from);
         GesuchTranche trache = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trache);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(to);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setGerichtlicheAlimentenregelung(to);
         if (to) {
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
+            gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getFamiliensituation()
+                .setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
         }
 
         when(gesuchRepository.requireById(any())).thenReturn(trache.getGesuch());
@@ -610,14 +749,29 @@ class GesuchServiceTest {
             .findFirst();
     }
 
-    private GesuchTranche updateElternteilUnbekanntVerstorben(GesuchUpdateDto gesuchUpdateDto, ElternAbwesenheitsGrund grundMutter, ElternAbwesenheitsGrund grundVater) {
+    private GesuchTranche updateElternteilUnbekanntVerstorben(
+        GesuchUpdateDto gesuchUpdateDto,
+        ElternAbwesenheitsGrund grundMutter,
+        ElternAbwesenheitsGrund grundVater) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternteilUnbekanntVerstorben(true);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setMutterUnbekanntVerstorben(grundMutter);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setVaterUnbekanntVerstorben(grundVater);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternVerheiratetZusammen(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setElternteilUnbekanntVerstorben(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setMutterUnbekanntVerstorben(grundMutter);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setVaterUnbekanntVerstorben(grundVater);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
@@ -629,8 +783,14 @@ class GesuchServiceTest {
         Elternschaftsteilung from,
         Elternschaftsteilung to) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(true);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setWerZahltAlimente(from);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setGerichtlicheAlimentenregelung(true);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setWerZahltAlimente(from);
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setWerZahltAlimente(to);
@@ -639,7 +799,10 @@ class GesuchServiceTest {
         return tranche;
     }
 
-    private GesuchTranche updateFromZivilstandToZivilstand(GesuchUpdateDto gesuchUpdateDto, Zivilstand from, Zivilstand to) {
+    private GesuchTranche updateFromZivilstandToZivilstand(
+        GesuchUpdateDto gesuchUpdateDto,
+        Zivilstand from,
+        Zivilstand to) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setZivilstand(from);
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);

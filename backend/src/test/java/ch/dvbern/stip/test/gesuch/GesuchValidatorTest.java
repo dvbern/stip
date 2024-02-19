@@ -53,10 +53,10 @@ class GesuchValidatorTest {
 
     @Test
     void testFieldValidationErrorForPersonInAusbildung() {
-        String[] constraintMessages = {VALIDATION_NACHNAME_NOTBLANK_MESSAGE, VALIDATION_VORNAME_NOTBLANK_MESSAGE,
+        String[] constraintMessages = { VALIDATION_NACHNAME_NOTBLANK_MESSAGE, VALIDATION_VORNAME_NOTBLANK_MESSAGE,
             VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE,
             VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE,
-            VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE};
+            VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE };
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setAdresse(new Adresse());
         // Beim Land CH muss der Heimatort nicht leer sein
@@ -91,8 +91,9 @@ class GesuchValidatorTest {
     @Test
     void testNullFieldValidationErrorForPersonInAusbildung() {
         String[] constraintMessages =
-            {VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
-                VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE};
+            { VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
+                VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE,
+                VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE };
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         // Wohnsitz Anteil muessen leer sein beim Wohnsitz != MUTTER_VATER
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
@@ -117,12 +118,12 @@ class GesuchValidatorTest {
         GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
         gesuchTranche.getGesuchFormular().setAusbildung(ausbildung);
         // Die Ausbildungsgang und Staette muessen bei keine alternative Ausbildung gegeben werden
-        assertAllMessagesPresent(new String[]{VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE}, gesuch);
-        assertAllMessagesNotPresent(new String[]{VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
+        assertAllMessagesNotPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
         // Die alternative Ausbildungsgang und Staette muessen bei alternative Ausbildung gegeben werden
         gesuchTranche.getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
-        assertAllMessagesPresent(new String[]{VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE}, gesuch);
-        assertAllMessagesNotPresent(new String[]{VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
+        assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
     }
 
     @Test
@@ -135,16 +136,18 @@ class GesuchValidatorTest {
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
         // Die alternative Ausbildungsgang und Staette muessen bei keine alternative Ausbildung null sein
         assertAllMessagesPresent(
-            new String[]{VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE},
+            new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
             gesuch
         );
-        assertAllMessagesNotPresent(new String[]{VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE}, gesuch);
+        assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
         // Die Ausbildungsgang und Staette muessen bei alternative Ausbildung null sein
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungsgang(new Ausbildungsgang());
-        assertAllMessagesPresent(new String[]{VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE}, gesuch);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getAusbildung()
+            .setAusbildungsgang(new Ausbildungsgang());
+        assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
         assertAllMessagesNotPresent(
-            new String[]{VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE},
+            new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
             gesuch
         );
     }
@@ -164,12 +167,18 @@ class GesuchValidatorTest {
         assertAllMessagesPresent(constraintMessages, gesuch);
 
         // Test die Obhut Berechnung:
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutVater(new BigDecimal("40.00"));
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal("50.00"));
-        assertAllMessagesPresent(new String[]{VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE}, gesuch);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getFamiliensituation()
+            .setObhutVater(new BigDecimal("40.00"));
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getFamiliensituation()
+            .setObhutMutter(new BigDecimal("50.00"));
+        assertAllMessagesPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
         // korrekte Werten Meldung soll weg
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal("60.00"));
-        assertAllMessagesNotPresent(new String[]{VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE}, gesuch);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getFamiliensituation()
+            .setObhutMutter(new BigDecimal("60.00"));
+        assertAllMessagesNotPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
     }
 
     @Test
@@ -228,7 +237,7 @@ class GesuchValidatorTest {
         geschwisterSet.add(geschwister);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 
         // Test die Wohnsitzanteil Berechnung:
         geschwister.setWohnsitzAnteilVater(new BigDecimal("55.00"));
@@ -236,13 +245,13 @@ class GesuchValidatorTest {
         geschwisterSet = new HashSet<>();
         geschwisterSet.add(geschwister);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 
         geschwister.setWohnsitzAnteilMutter(new BigDecimal("45.00"));
         geschwisterSet = new HashSet<>();
         geschwisterSet.add(geschwister);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
-        assertAllMessagesNotPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE}, gesuch);
+        assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
     }
 
     @Test
@@ -255,7 +264,7 @@ class GesuchValidatorTest {
         geschwisterSet.add(geschwister);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
     }
 
     @Test
@@ -267,19 +276,19 @@ class GesuchValidatorTest {
         kindSet.add(kind);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
         // Test die Wohnsitzanteil Berechnung:
         kind.setWohnsitzAnteilVater(new BigDecimal("55.00"));
         kind.setWohnsitzAnteilMutter(new BigDecimal("55.00"));
         kindSet = new HashSet<>();
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
         kind.setWohnsitzAnteilMutter(new BigDecimal("45.00"));
         kindSet = new HashSet<>();
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesNotPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE}, gesuch);
+        assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
     }
 
     @Test
@@ -292,7 +301,7 @@ class GesuchValidatorTest {
         kindSet.add(kind);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
     }
 
     @Test
@@ -302,7 +311,7 @@ class GesuchValidatorTest {
         lebenslaufItemSet.add(lebenslaufItem);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setLebenslaufItems(lebenslaufItemSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_MESSAGE }, gesuch);
     }
 
     @Test
@@ -315,7 +324,7 @@ class GesuchValidatorTest {
         lebenslaufItemSet.add(lebenslaufItem);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setLebenslaufItems(lebenslaufItemSet);
-        assertAllMessagesPresent(new String[]{VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE}, gesuch);
+        assertAllMessagesPresent(new String[] { VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
     }
 
     @Test

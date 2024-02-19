@@ -32,14 +32,22 @@ public class MailService {
         Locale local) {
         Templates.getGesuchNichtKomplettEingereichtMailTemplate(name, vorname, local.getLanguage())
             .to(email)
-            .subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), local))
+            .subject(StipMessagesResourceBundle.getMessage(
+                StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+                local))
             .send().subscribe().asCompletionStage();
     }
 
-    public void sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email, Locale local) {
+    public void sendGesuchNichtKomplettEingereichtNachfristEmail(
+        String name,
+        String vorname,
+        String email,
+        Locale local) {
         Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(name, vorname, local.getLanguage())
             .to(email)
-            .subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(), local))
+            .subject(StipMessagesResourceBundle.getMessage(
+                StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(),
+                local))
             .send().subscribe().asCompletionStage();
     }
 
@@ -97,9 +105,13 @@ public class MailService {
 
         private static native MailTemplateInstance gesuchNichtKomplettEingereichtFr(String name, String vorname);
 
-        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(String name, String vorname);
+        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(
+            String name,
+            String vorname);
 
-        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(String name, String vorname);
+        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(
+            String name,
+            String vorname);
 
         public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
             String name,

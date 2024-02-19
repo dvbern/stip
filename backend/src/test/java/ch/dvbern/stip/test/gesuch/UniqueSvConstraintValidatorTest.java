@@ -27,7 +27,9 @@ class UniqueSvConstraintValidatorTest {
 
     @BeforeEach
     void setUp() {
-        gesuchFormular = gesuchFormularMapper.partialUpdate(GesuchGenerator.createGesuch().getGesuchTrancheToWorkWith().getGesuchFormular(), gesuchFormular);
+        gesuchFormular = gesuchFormularMapper.partialUpdate(GesuchGenerator.createGesuch()
+            .getGesuchTrancheToWorkWith()
+            .getGesuchFormular(), gesuchFormular);
     }
 
     @Test
@@ -71,6 +73,5 @@ class UniqueSvConstraintValidatorTest {
         assertThat(gesuchFormular.getElterns(), notNullValue());
         assertThat(validator.isValid(gesuchFormular, null), is(true));
     }
-
 
 }

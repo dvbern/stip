@@ -18,7 +18,9 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
         new PartnerNullRequiredWhenAlleinstehendConstraintValidator();
 
     @NotNull
-    private static GesuchFormular preapreGesuchFormularWithZivilstand(Zivilstand zivilstand, @Nullable Partner partner) {
+    private static GesuchFormular preapreGesuchFormularWithZivilstand(
+        Zivilstand zivilstand,
+        @Nullable Partner partner) {
         GesuchFormular gesuchFormular = new GesuchFormular()
             .setPartner(partner)
             .setPersonInAusbildung(new PersonInAusbildung().setZivilstand(zivilstand));

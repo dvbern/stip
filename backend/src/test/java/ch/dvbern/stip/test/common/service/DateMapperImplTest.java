@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-
 class DateMapperImplTest {
 
     private static final String MONTH_YEAR = "10.2023";

@@ -32,15 +32,19 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AusbildungsgangResourceTest {
 
-    private final AusbildungsgangApiSpec ausbildungsgangApi = AusbildungsgangApiSpec.ausbildungsgang(RequestSpecUtil.quarkusSpec());
-    private final AusbildungsstaetteApiSpec ausbildungsstaetteApiSpec = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsgangApiSpec ausbildungsgangApi =
+        AusbildungsgangApiSpec.ausbildungsgang(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsstaetteApiSpec ausbildungsstaetteApiSpec =
+        AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
     private UUID ausbildungsgangId;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void createAusbildungsgangAsGesuchstellerForbidden() {
-        ausbildungsgangApi.createAusbildungsgang().body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create()).execute(ResponseBody::prettyPeek)
+        ausbildungsgangApi.createAusbildungsgang()
+            .body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create())
+            .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
@@ -50,7 +54,9 @@ class AusbildungsgangResourceTest {
     @TestAsSachbearbeiter
     @Order(2)
     void createAusbildungsgangAsSachbearbeiter() {
-        var response = ausbildungsgangApi.createAusbildungsgang().body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create()).execute(ResponseBody::prettyPeek)
+        var response = ausbildungsgangApi.createAusbildungsgang()
+            .body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create())
+            .execute(ResponseBody::prettyPeek)
             .then();
 
         response.assertThat()

@@ -29,12 +29,16 @@ class MapperTest {
                 @Override
                 public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
                     var annotation = javaClass.getAnnotationOfType(Mapper.class);
-                    if (Objects.equals(annotation.config(), MAPPING_CONFIG) || Objects.equals(annotation.config(), MAPPING_QUALIFIER_CONFIG)) {
+                    if (Objects.equals(annotation.config(), MAPPING_CONFIG) || Objects.equals(
+                        annotation.config(),
+                        MAPPING_QUALIFIER_CONFIG)) {
                         return;
                     }
 
-                    String message = String.format("Class %s @Mapper must specify mapping config, expected annotation @Mapper(config = %s)",
-                        javaClass.getFullName(), MAPPING_CONFIG.getName()
+                    String message = String.format(
+                        "Class %s @Mapper must specify mapping config, expected annotation @Mapper(config = %s)",
+                        javaClass.getFullName(),
+                        MAPPING_CONFIG.getName()
                     );
 
                     conditionEvents.add(SimpleConditionEvent.violated(javaClass, message));

@@ -1,6 +1,5 @@
 package ch.dvbern.stip.test.config;
 
-
 import ch.dvbern.stip.generated.test.api.ConfigurationApiSpec;
 import ch.dvbern.stip.generated.test.dto.DeploymentConfigDtoSpec;
 import ch.dvbern.stip.test.util.RequestSpecUtil;
@@ -23,7 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ConfigResourceTest {
 
-    public final ConfigurationApiSpec configurationApiSpec = ConfigurationApiSpec._configuration(RequestSpecUtil.quarkusSpec());
+    public final ConfigurationApiSpec configurationApiSpec =
+        ConfigurationApiSpec._configuration(RequestSpecUtil.quarkusSpec());
 
     @Test
     void testGetDeploymentConfig() {

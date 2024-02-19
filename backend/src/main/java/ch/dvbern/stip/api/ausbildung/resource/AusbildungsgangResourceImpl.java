@@ -37,7 +37,7 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
     }
 
     @Override
-    @RolesAllowed({ROLE_SACHBEARBEITER, ROLE_GESUCHSTELLER})
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_GESUCHSTELLER })
     public Response getAusbildungsgang(UUID ausbildungsgangId) {
         return Response.ok(ausbildungsgangService.findById(ausbildungsgangId)).build();
     }

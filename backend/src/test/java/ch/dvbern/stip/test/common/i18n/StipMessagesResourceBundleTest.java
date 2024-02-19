@@ -20,8 +20,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StipMessagesResourceBundleTest {
     @Test
     void stipMessagesResourceBundleTest() {
-        String a = StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), Locale.GERMAN);
-        String b = StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), Locale.FRENCH);
+        String a = StipMessagesResourceBundle.getMessage(
+            StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+            Locale.GERMAN);
+        String b = StipMessagesResourceBundle.getMessage(
+            StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+            Locale.FRENCH);
         assertThat(a).isNotEqualTo(b);
     }
 }

@@ -9,7 +9,7 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.IGNORE,
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
     collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
-    uses = {EntityReferenceMapperImpl.class, DateMapperImpl.class}
+    uses = { EntityReferenceMapperImpl.class, DateMapperImpl.class }
 )
 public interface MappingConfig {
 }

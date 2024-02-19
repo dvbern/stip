@@ -5,7 +5,8 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 
-public class AusbildungNichtGefundenRequiredNullFieldsConstraintValidator implements ConstraintValidator<AusbildungNichtGefundenRequiredNullFieldsConstraint, Ausbildung> {
+public class AusbildungNichtGefundenRequiredNullFieldsConstraintValidator
+    implements ConstraintValidator<AusbildungNichtGefundenRequiredNullFieldsConstraint, Ausbildung> {
 
     @Override
     public boolean isValid(
@@ -16,9 +17,11 @@ public class AusbildungNichtGefundenRequiredNullFieldsConstraintValidator implem
         }
 
         constraintValidatorContext.disableDefaultConstraintViolation();
-        constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)
+        constraintValidatorContext.buildConstraintViolationWithTemplate(
+                VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)
             .addConstraintViolation();
-        return ausbildung.getAlternativeAusbildungsstaette() == null && ausbildung.getAlternativeAusbildungsgang() == null;
+        return ausbildung.getAlternativeAusbildungsstaette() == null
+            && ausbildung.getAlternativeAusbildungsgang() == null;
 
     }
 }

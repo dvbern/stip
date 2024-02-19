@@ -11,17 +11,31 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MappingConfig.class)
 public interface AusbildungMapper {
     @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
-    @Mapping(source = "ausbildungBegin", target = "ausbildungBegin", qualifiedBy = {DateMapper.class, MonthYearToBeginOfMonth.class})
-    @Mapping(source = "ausbildungEnd", target = "ausbildungEnd", qualifiedBy = {DateMapper.class, MonthYearToEndOfMonth.class})
+    @Mapping(source = "ausbildungBegin",
+        target = "ausbildungBegin",
+        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
+    @Mapping(source = "ausbildungEnd",
+        target = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     Ausbildung toEntity(AusbildungDto ausbildungDto);
 
     @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgangId")
-    @Mapping(source = "ausbildungBegin", target = "ausbildungBegin", qualifiedBy = {DateMapper.class, DateToMonthYear.class})
-    @Mapping(source = "ausbildungEnd", target = "ausbildungEnd", qualifiedBy = {DateMapper.class, DateToMonthYear.class})
+    @Mapping(source = "ausbildungBegin",
+        target = "ausbildungBegin",
+        qualifiedBy = { DateMapper.class, DateToMonthYear.class })
+    @Mapping(source = "ausbildungEnd",
+        target = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     AusbildungDto toDto(Ausbildung ausbildung);
 
-    @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang", qualifiedBy = {EntityReferenceMapper.class, EntityIdReference.class})
-    @Mapping(source = "ausbildungBegin", target = "ausbildungBegin", qualifiedBy = {DateMapper.class, MonthYearToBeginOfMonth.class})
-    @Mapping(source = "ausbildungEnd", target = "ausbildungEnd", qualifiedBy = {DateMapper.class, MonthYearToEndOfMonth.class})
+    @Mapping(source = "ausbildungsgangId",
+        target = "ausbildungsgang",
+        qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class })
+    @Mapping(source = "ausbildungBegin",
+        target = "ausbildungBegin",
+        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
+    @Mapping(source = "ausbildungEnd",
+        target = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 }

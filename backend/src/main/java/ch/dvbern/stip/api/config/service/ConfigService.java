@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.config.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import java.util.List;
 
 @ApplicationScoped
 public class ConfigService {
@@ -32,10 +32,8 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.version")
     String version;
 
-
     @ConfigProperty(name = "bucket.name")
     String bucketName;
-
 
     @ConfigProperty(name = "kstip.allowed.mimetypes")
     List<String> allowedMimeTypes;

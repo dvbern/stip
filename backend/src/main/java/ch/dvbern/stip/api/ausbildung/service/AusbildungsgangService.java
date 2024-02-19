@@ -46,7 +46,9 @@ public class AusbildungsgangService {
         ausbildungsgangRepository.delete(ausbildungsgang);
     }
 
-    private void persistsAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangUpdate, Ausbildungsgang ausbildungsgangToUpdate) {
+    private void persistsAusbildungsgang(
+        AusbildungsgangUpdateDto ausbildungsgangUpdate,
+        Ausbildungsgang ausbildungsgangToUpdate) {
         ausbildungsgangToUpdate.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaette()));
         ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
         ausbildungsgangRepository.persist(ausbildungsgangToUpdate);

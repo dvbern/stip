@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_ENDDATE_AFTER_STARTDATE;
 
-@Target({ElementType.TYPE, ElementType.PARAMETER})
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AusbildungEndDateMustBeAfterStartConstraintValidator.class)
 @Documented

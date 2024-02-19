@@ -13,7 +13,6 @@ import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.sli
 
 class ArchitectureTest {
 
-
     public static Architectures.LayeredArchitecture LAYERS = layeredArchitecture()
         .consideringAllDependencies()
         .layer("Resource")

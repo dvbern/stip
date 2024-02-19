@@ -42,7 +42,9 @@ class FallResourceTest {
     @TestAsGesuchsteller
     @Order(2)
     void testGetFallForBenutzer() {
-        var fall = fallApiSpec.getFallForBenutzer().benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID).execute(ResponseBody::prettyPeek)
+        var fall = fallApiSpec.getFallForBenutzer()
+            .benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()

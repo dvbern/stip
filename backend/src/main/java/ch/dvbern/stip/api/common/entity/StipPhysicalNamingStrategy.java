@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.common.entity;
 
+import java.util.regex.Pattern;
+
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
-
-import java.util.regex.Pattern;
 
 public class StipPhysicalNamingStrategy implements PhysicalNamingStrategy {
 

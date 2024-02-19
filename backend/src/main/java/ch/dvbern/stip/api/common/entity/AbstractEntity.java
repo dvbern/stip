@@ -17,19 +17,23 @@
 
 package ch.dvbern.stip.api.common.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.util.Constants;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.proxy.HibernateProxy;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
 
 @MappedSuperclass
 @Audited
@@ -72,8 +76,12 @@ public abstract class AbstractEntity implements Serializable {
             return false;
         }
 
-        Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy ?
+            hibernateProxy.getHibernateLazyInitializer().getPersistentClass() :
+            o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy ?
+            hibernateProxy.getHibernateLazyInitializer().getPersistentClass() :
+            this.getClass();
 
         if (thisEffectiveClass != oEffectiveClass) {
             return false;
@@ -86,6 +94,8 @@ public abstract class AbstractEntity implements Serializable {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy hibernateProxy ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy hibernateProxy ?
+            hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode() :
+            getClass().hashCode();
     }
 }

@@ -32,10 +32,14 @@ public class ElternUpdateDtoSpecModel {
                     1
                 ))
             )
-            .assign(Assign.given(field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz), field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitzOrt))
+            .assign(Assign.given(
+                    field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz),
+                    field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitzOrt))
                 .set(When.is(false), "Bern")
                 .set(When.is(true), null))
-            .assign(Assign.given(field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz), field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitzPLZ))
+            .assign(Assign.given(
+                    field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz),
+                    field(ElternUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitzPLZ))
                 .set(When.is(false), "3000")
                 .set(When.is(true), null))
             .toModel();

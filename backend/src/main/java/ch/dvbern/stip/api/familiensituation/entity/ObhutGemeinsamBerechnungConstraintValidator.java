@@ -16,7 +16,9 @@ public class ObhutGemeinsamBerechnungConstraintValidator
         if (familiensituation.getObhut() == Elternschaftsteilung.GEMEINSAM
             && familiensituation.getObhutMutter() != null
             && familiensituation.getObhutVater() != null) {
-            return familiensituation.getObhutMutter().add(familiensituation.getObhutVater()).compareTo(new BigDecimal(100)) == 0;
+            return familiensituation.getObhutMutter()
+                .add(familiensituation.getObhutVater())
+                .compareTo(new BigDecimal(100)) == 0;
         }
         return true;
     }

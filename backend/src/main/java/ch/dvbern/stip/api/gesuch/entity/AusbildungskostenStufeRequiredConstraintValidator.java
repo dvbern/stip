@@ -16,10 +16,12 @@ public class AusbildungskostenStufeRequiredConstraintValidator
         if (gesuchFormular.getAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
-        if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe() == SEKUNDAR_2) {
+        if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe()
+            == SEKUNDAR_2) {
             return gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() != null;
         }
-        if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe() == TERTIAER) {
+        if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe()
+            == TERTIAER) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(
                     VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE)

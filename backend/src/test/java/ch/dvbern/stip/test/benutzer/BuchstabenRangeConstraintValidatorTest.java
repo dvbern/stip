@@ -10,7 +10,8 @@ class BuchstabenRangeConstraintValidatorTest {
 
     @Test
     void testBuchstabenRangeConstraintValidator() {
-        BuchstabenRangeConstraintValidator buchstabenRangeConstraintValidator = new BuchstabenRangeConstraintValidator();
+        BuchstabenRangeConstraintValidator buchstabenRangeConstraintValidator =
+            new BuchstabenRangeConstraintValidator();
 
         // Unvalid Buchstaben Range
         assertThat(buchstabenRangeConstraintValidator.isValid("D-B", null), is(false));

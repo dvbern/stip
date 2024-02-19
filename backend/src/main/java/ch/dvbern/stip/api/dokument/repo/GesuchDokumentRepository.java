@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
@@ -8,10 +12,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 @RequiredArgsConstructor

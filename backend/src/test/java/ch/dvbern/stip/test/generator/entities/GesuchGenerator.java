@@ -27,7 +27,6 @@ import static ch.dvbern.stip.test.generator.api.model.gesuch.PersonInAusbildungU
 import static ch.dvbern.stip.test.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.instancio.Select.field;
 
-
 public final class GesuchGenerator {
     private GesuchGenerator() {
     }

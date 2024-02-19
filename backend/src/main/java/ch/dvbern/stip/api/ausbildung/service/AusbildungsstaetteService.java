@@ -18,7 +18,11 @@ public class AusbildungsstaetteService {
 
     @Transactional
     public Collection<AusbildungsstaetteDto> getAusbildungsstaetten() {
-        return ausbildungsstaetteRepository.findAll().stream().filter(staetten -> !staetten.getAusbildungsgaenge().isEmpty()).map(ausbildungsstaetteMapper::toDto).toList();
+        return ausbildungsstaetteRepository.findAll()
+            .stream()
+            .filter(staetten -> !staetten.getAusbildungsgaenge().isEmpty())
+            .map(ausbildungsstaetteMapper::toDto)
+            .toList();
     }
 
     public AusbildungsstaetteDto findById(UUID ausbildungsstetteId) {

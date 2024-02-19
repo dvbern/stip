@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.kind.service;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.generated.dto.KindDto;
@@ -7,10 +11,6 @@ import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 @Mapper(config = MappingConfig.class)
 public interface KindMapper {
@@ -33,9 +33,10 @@ public interface KindMapper {
         }
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
-                Kind found = kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
-                    () -> new NotFoundException("Kind Not FOUND")
-                );
+                Kind found =
+                    kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
+                        () -> new NotFoundException("Kind Not FOUND")
+                    );
                 kinder.remove(found);
                 kinder.add(partialUpdate(kindUpdateDto, found));
             } else {

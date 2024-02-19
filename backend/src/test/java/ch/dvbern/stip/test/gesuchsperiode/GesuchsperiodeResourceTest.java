@@ -45,7 +45,6 @@ class GesuchsperiodeResourceTest {
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
 
-
     @Test
     @TestAsGesuchsteller
     @Order(2)

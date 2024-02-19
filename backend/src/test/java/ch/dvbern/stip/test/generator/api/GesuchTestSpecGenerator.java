@@ -45,7 +45,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecPersonInAusbildungModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecPersonInAusbildungModel))
                     .create()
             )
             .toModel();
@@ -54,7 +56,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecFamiliensituationModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecFamiliensituationModel))
                     .create()
             )
             .toModel();
@@ -63,7 +67,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecPartnerModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecPartnerModel))
                     .create()
             )
             .toModel();
@@ -72,7 +78,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecAusbildungModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecAusbildungModel))
                     .create()
             )
             .toModel();
@@ -81,7 +89,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecAuszahlungModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecAuszahlungModel))
                     .create()
             )
             .toModel();
@@ -90,7 +100,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecGeschwistersModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecGeschwistersModel))
                     .create()
             )
             .toModel();
@@ -99,7 +111,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecLebenslaufModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecLebenslaufModel))
                     .create()
             )
             .toModel();
@@ -108,7 +122,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecElternsModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecElternsModel))
                     .create()
             )
             .toModel();
@@ -117,7 +133,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecEinnahmenKostenModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecEinnahmenKostenModel))
                     .create()
             )
             .toModel();
@@ -126,7 +144,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecKinderModel))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecKinderModel))
                     .create()
             )
             .toModel();
@@ -211,7 +231,9 @@ public class GesuchTestSpecGenerator {
             .set(
                 field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
                 Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(field(GesuchTrancheUpdateDtoSpec::getGesuchFormular), Instancio.create(gesuchFormularUpdateDtoSpecModelFull))
+                    .set(
+                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
+                        Instancio.create(gesuchFormularUpdateDtoSpecModelFull))
                     .create()
             )
             .toModel();

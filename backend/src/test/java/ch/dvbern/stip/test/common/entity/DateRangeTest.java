@@ -29,7 +29,9 @@ class DateRangeTest {
     @Test
     void testDateRangeEqualitySameHashCodeEquality() {
         Assertions.assertEquals(dateRange.equals(otherDateRange), dateRange.hashCode() == otherDateRange.hashCode());
-        Assertions.assertEquals(otherDateRange.equals(sameOtherDateRange), otherDateRange.hashCode() == sameOtherDateRange.hashCode());
+        Assertions.assertEquals(
+            otherDateRange.equals(sameOtherDateRange),
+            otherDateRange.hashCode() == sameOtherDateRange.hashCode());
     }
 
     @Test

@@ -1,5 +1,7 @@
 package ch.dvbern.stip.test.gesuch;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.generated.test.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.test.dto.GesuchstatusDtoSpec;
@@ -14,13 +16,14 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.instancio.Instancio;
-import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinderModel;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -61,7 +64,10 @@ class GesuchStatusTest {
     @Order(2)
     void testFillGesuchUndEinreichenDokumentFehlt() {
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
             .then()

@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.persistence.CascadeType;
@@ -11,8 +13,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.util.List;
 
 @Audited
 @Entity

@@ -1,5 +1,10 @@
 package ch.dvbern.stip.api.benutzer.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -19,11 +24,6 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor

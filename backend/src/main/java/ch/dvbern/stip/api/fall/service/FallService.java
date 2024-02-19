@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.fall.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -8,10 +12,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor

@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.benutzer.repo;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.QBenutzer;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
@@ -8,9 +11,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 @RequiredArgsConstructor

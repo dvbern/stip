@@ -1,5 +1,11 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -15,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-
-import java.util.*;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -54,7 +58,8 @@ public class GesuchDokumentService {
 
     @Transactional
     public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
-        GesuchDokument gesuchDokument = gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElse(null);
+        GesuchDokument gesuchDokument =
+            gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElse(null);
         if (gesuchDokument == null) {
             return new ArrayList<>();
         }

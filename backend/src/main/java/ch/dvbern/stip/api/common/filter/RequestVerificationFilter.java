@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.filter;
 
+import java.io.IOException;
+
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
@@ -27,8 +29,6 @@ import jakarta.ws.rs.container.PreMatching;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Provider;
 import lombok.RequiredArgsConstructor;
-
-import java.io.IOException;
 
 @Provider
 @PreMatching

@@ -17,6 +17,15 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.common.entity.DateRange;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
@@ -36,17 +45,19 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Stream;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
@@ -80,7 +91,6 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new);
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
     }
-
 
     private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
         resetFieldsOnUpdate(trancheToUpdate.getGesuchFormular(), trancheUpdate.getGesuchFormular());
@@ -182,11 +192,12 @@ public class GesuchService {
             .orElseThrow();
     }
 
-
     private void validateGesuchEinreichen(Gesuch gesuch) {
         gesuch.getGesuchTranchen().forEach(tranche -> {
             if (tranche.getGesuchFormular() == null || tranche.getGesuchFormular().getFamiliensituation() == null) {
-                throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", new HashSet<>());
+                throw new ValidationsException(
+                    "Es fehlt Formular Teilen um das Gesuch einreichen zu koennen",
+                    new HashSet<>());
             }
         });
 
@@ -205,11 +216,14 @@ public class GesuchService {
     private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
         if (getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null) {
             Stream<Gesuch> gesuchStream = gesuchRepository
-                .findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer());
+                .findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular()
+                    .getPersonInAusbildung()
+                    .getSozialversicherungsnummer());
 
             if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
                 throw new CustomValidationsException(
-                    "Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) eingereicht werden",
+                    "Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) "
+                        + "eingereicht werden",
                     new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE)
                 );
             }

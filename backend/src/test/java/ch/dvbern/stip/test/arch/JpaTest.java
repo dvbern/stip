@@ -38,20 +38,24 @@ class JpaTest {
                     final var tableAnnotation = fieldOwner.getAnnotationOfType(Table.class);
 
                     // don't check if it's not a foreign key constraint (e.g. on a inverse join column definition)
-                    if (javaField.getAnnotationOfType(JoinColumn.class).foreignKey().value() != ConstraintMode.CONSTRAINT) {
+                    if (javaField.getAnnotationOfType(JoinColumn.class).foreignKey().value()
+                        != ConstraintMode.CONSTRAINT) {
                         return;
                     }
 
                     if (tableAnnotation != null) {
                         final var hasIndex = Arrays.stream(tableAnnotation.indexes())
-                            .anyMatch(index -> index.columnList().contains(StipPhysicalNamingStrategy.toSnakeCase(fieldName)));
+                            .anyMatch(index -> index.columnList()
+                                .contains(StipPhysicalNamingStrategy.toSnakeCase(fieldName)));
 
                         if (hasIndex) {
                             return;
                         }
                     }
 
-                    String message = String.format("Foreign Key column %s on entity %s has no index", fieldName, fieldOwner.getSimpleName());
+                    String message = String.format("Foreign Key column %s on entity %s has no index",
+                        fieldName,
+                        fieldOwner.getSimpleName());
                     conditionEvents.add(SimpleConditionEvent.violated(javaField, message));
 
                 }

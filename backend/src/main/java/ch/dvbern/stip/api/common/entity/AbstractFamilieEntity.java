@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.common.entity;
 
+import java.math.BigDecimal;
+
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -11,8 +13,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.math.BigDecimal;
 
 @MappedSuperclass
 @Audited

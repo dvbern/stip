@@ -16,5 +16,7 @@ public interface AusbildungsstaetteMapper {
     AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Ausbildungsstaette partialUpdate(Ausbildungsstaette ausbildungsstaetteDto, @MappingTarget Ausbildungsstaette ausbildungsstaette);
+    Ausbildungsstaette partialUpdate(
+        Ausbildungsstaette ausbildungsstaetteDto,
+        @MappingTarget Ausbildungsstaette ausbildungsstaette);
 }

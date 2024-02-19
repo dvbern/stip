@@ -90,7 +90,6 @@ class BenutzerResourceTest {
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
-
         final var updatedBenutzer = api.getCurrentBenutzer()
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -131,7 +130,10 @@ class BenutzerResourceTest {
     @TestAsSachbearbeiter
     void createSachbearbeiterZuordnungStammdaten() {
         final var updateDto = Instancio.of(sachbearbeiterZuordnungStammdatenDtoSpecModel).create();
-        api.createOrUpdateSachbearbeiterStammdaten().benutzerIdPath(sachbearbeiterUUID).body(updateDto).execute(ResponseBody::prettyPeek)
+        api.createOrUpdateSachbearbeiterStammdaten()
+            .benutzerIdPath(sachbearbeiterUUID)
+            .body(updateDto)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Status.ACCEPTED.getStatusCode());

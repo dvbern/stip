@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.fall.repo;
 
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.entity.QFall;
@@ -24,9 +27,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 @RequiredArgsConstructor

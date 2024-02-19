@@ -13,7 +13,6 @@ import org.hibernate.envers.Audited;
 import java.time.LocalDate;
 import java.util.UUID;
 
-
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint
 @LebenslaufItemAusbildungBerufsbezeichnungConstraint
@@ -36,7 +35,6 @@ public class LebenslaufItem extends AbstractMandantEntity {
     @NotNull
     @Column(nullable = false)
     private LocalDate bis;
-
 
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)

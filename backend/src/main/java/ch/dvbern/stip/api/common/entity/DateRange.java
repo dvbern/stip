@@ -17,15 +17,15 @@
 
 package ch.dvbern.stip.api.common.entity;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
 
 @Embeddable
 @Getter

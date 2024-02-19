@@ -9,9 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
 public class TestDatabaseEnvironment implements QuarkusTestResourceLifecycleManager {
-
 
     private final JdbcDatabaseContainer postgres =
         new PostgreSQLContainer<>(DockerImageName.parse("docker-registry.dvbern.ch/dockerhub/library/postgres:15.3")

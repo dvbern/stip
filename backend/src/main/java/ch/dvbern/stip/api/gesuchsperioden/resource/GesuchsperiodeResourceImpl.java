@@ -25,17 +25,18 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
         var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(gesuchsperiode.getId().toString()).build()).build();
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(gesuchsperiode.getId().toString()).build())
+            .build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getAktiveGesuchsperioden() {
         var activeGesuchsperioden = gesuchsperiodenService.getAllActive();
         return Response.ok(activeGesuchsperioden).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesuchsperiode(UUID gesuchsperiodeId) {
         var gesuchsperiod = gesuchsperiodenService
@@ -45,7 +46,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
         return Response.ok(gesuchsperiod).build();
     }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesuchsperioden() {
         return Response.ok(gesuchsperiodenService.getAllGesuchsperioden()).build();

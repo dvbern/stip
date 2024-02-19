@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.common.validation;
 
-import lombok.Getter;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import lombok.Getter;
 
 import static java.lang.Thread.currentThread;
 import static java.util.Objects.requireNonNull;

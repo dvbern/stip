@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.common.exception;
 
+import java.util.List;
+
 import ch.dvbern.stip.generated.dto.ValidationErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-
-import java.util.List;
 
 public final class CustomValidationsExceptionMapper {
 

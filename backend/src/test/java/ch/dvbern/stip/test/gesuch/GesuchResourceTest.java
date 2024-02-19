@@ -57,7 +57,6 @@ class GesuchResourceTest {
         gesuchId = TestUtil.extractIdFromResponse(response);
     }
 
-
     @Test
     @TestAsGesuchsteller
     @Order(2)
@@ -197,7 +196,11 @@ class GesuchResourceTest {
             .getGeschwisters()
             .get(0)
             .setId(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).getId());
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).setNachname(geschwisterNameUpdateTest);
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getGeschwisters()
+            .get(0)
+            .setNachname(geschwisterNameUpdateTest);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -350,7 +353,10 @@ class GesuchResourceTest {
             .body()
             .as(ValidationReportDtoSpec.class);
 
-        Assertions.assertThat(validationReport).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(validationReportFromService);
+        Assertions.assertThat(validationReport)
+            .usingRecursiveComparison()
+            .ignoringCollectionOrder()
+            .isEqualTo(validationReportFromService);
     }
 
     @Test
@@ -370,7 +376,6 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
         assertThat(gesuchOpt.get().getBearbeiter(), is("John Doe"));
     }
-
 
     @Test
     @TestAsGesuchsteller

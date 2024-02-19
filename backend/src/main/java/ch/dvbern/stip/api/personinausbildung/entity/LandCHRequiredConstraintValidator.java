@@ -7,7 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE;
 
-public class LandCHRequiredConstraintValidator implements ConstraintValidator<LandCHRequiredConstraint, PersonInAusbildung> {
+public class LandCHRequiredConstraintValidator
+    implements ConstraintValidator<LandCHRequiredConstraint, PersonInAusbildung> {
 
     @Override
     public boolean isValid(

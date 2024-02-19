@@ -83,10 +83,14 @@ class EinnahmenKostenValidatorTest {
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
         gesuchFormular.getAusbildung().getAusbildungsgang().setAusbildungsrichtung(Bildungsart.FACHHOCHSCHULEN);
-        assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, TestUtil.initValidatorContext()))
+        assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(
+            gesuchFormular,
+            TestUtil.initValidatorContext()))
             .isFalse();
         gesuchFormular.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(BigDecimal.ONE);
-        assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, TestUtil.initValidatorContext()))
+        assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(
+            gesuchFormular,
+            TestUtil.initValidatorContext()))
             .isTrue();
     }
 }
