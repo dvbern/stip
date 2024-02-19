@@ -24,6 +24,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static ch.dvbern.stip.test.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinderModel;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
