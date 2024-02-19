@@ -1,7 +1,13 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.common.service.*;
+import ch.dvbern.stip.api.common.service.DateMapper;
+import ch.dvbern.stip.api.common.service.DateToMonthYear;
+import ch.dvbern.stip.api.common.service.EntityIdReference;
+import ch.dvbern.stip.api.common.service.EntityReferenceMapper;
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.service.MonthYearToBeginOfMonth;
+import ch.dvbern.stip.api.common.service.MonthYearToEndOfMonth;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import org.mapstruct.Mapper;

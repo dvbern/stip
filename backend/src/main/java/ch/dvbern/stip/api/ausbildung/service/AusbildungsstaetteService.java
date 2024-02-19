@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.Collection;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Collection;
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor

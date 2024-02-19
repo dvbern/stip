@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.communication.mail.service;
 
+import java.io.File;
+import java.util.List;
+import java.util.Locale;
+
 import ch.dvbern.stip.api.common.i18n.StipEmailMessages;
 import ch.dvbern.stip.api.common.i18n.StipMessagesResourceBundle;
 import ch.dvbern.stip.api.common.util.FileUtil;
@@ -12,10 +16,6 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.File;
-import java.util.List;
-import java.util.Locale;
 
 @ApplicationScoped
 @RequiredArgsConstructor

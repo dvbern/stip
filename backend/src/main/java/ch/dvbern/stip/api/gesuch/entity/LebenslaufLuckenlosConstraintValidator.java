@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.DateRange;
+import ch.dvbern.stip.api.common.util.DateRange;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jboss.logging.Logger;

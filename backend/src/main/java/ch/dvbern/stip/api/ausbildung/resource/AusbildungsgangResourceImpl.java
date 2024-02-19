@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.ausbildung.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import ch.dvbern.stip.generated.api.AusbildungsgangResource;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
@@ -9,8 +11,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;

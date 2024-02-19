@@ -1,17 +1,22 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint

@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
+import java.math.BigDecimal;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -10,8 +12,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.math.BigDecimal;
 
 @Audited
 @Entity

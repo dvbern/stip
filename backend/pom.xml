@@ -17,7 +17,7 @@
     <maven.compiler.release>17</maven.compiler.release>
     <package>ch.dvbern.stip</package>
     <package.generated>${package}.generated</package.generated>
-    <package.generated.test>${package.generated}.test</package.generated.test>
+    <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
