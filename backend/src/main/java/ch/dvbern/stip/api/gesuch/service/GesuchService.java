@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.entity.DateRange;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;

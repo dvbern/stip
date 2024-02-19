@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.entity.DateRange;
+import ch.dvbern.stip.api.common.util.DateRange;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

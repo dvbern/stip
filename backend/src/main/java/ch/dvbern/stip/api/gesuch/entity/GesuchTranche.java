@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.entity.DateRange;
+import ch.dvbern.stip.api.common.util.DateRange;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
