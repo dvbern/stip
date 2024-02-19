@@ -32,22 +32,17 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 			return false;
 		}
 		if (isElternTeilRequired(ElternTyp.VATER, gesuchFormular.getFamiliensituation())) {
-			if (gesuchFormular.getElterns()
-					.stream()
-					.filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-					.findAny()
-					.isEmpty()) {
-				return false;
-			}
-		} else if (gesuchFormular.getElterns()
-				.stream()
-				.filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-				.findAny()
-				.isPresent()) {
-			return false;
-		}
-		return true;
-	}
+            return gesuchFormular.getElterns()
+                    .stream()
+                    .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
+                    .findAny()
+                    .isPresent();
+		} else return gesuchFormular.getElterns()
+                .stream()
+                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
+                .findAny()
+                .isEmpty();
+    }
 
 	private boolean isElternTeilRequired(ElternTyp elternTyp, Familiensituation familiensituation) {
 		boolean elternteilLebt = true;
@@ -56,12 +51,9 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 					familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH
 					: familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH;
 		}
-		boolean elternteilKeineAlimente = true;
-		if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER && elternTyp == ElternTyp.VATER
-				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.MUTTER && elternTyp == ElternTyp.MUTTER
-				|| familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM) {
-			elternteilKeineAlimente = false;
-		}
-		return elternteilLebt && elternteilKeineAlimente;
+		boolean elternteilKeineAlimente = (familiensituation.getWerZahltAlimente() != Elternschaftsteilung.VATER || elternTyp != ElternTyp.VATER)
+                && (familiensituation.getWerZahltAlimente() != Elternschaftsteilung.MUTTER || elternTyp != ElternTyp.MUTTER)
+                && familiensituation.getWerZahltAlimente() != Elternschaftsteilung.GEMEINSAM;
+        return elternteilLebt && elternteilKeineAlimente;
 	}
 }

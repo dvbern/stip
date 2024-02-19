@@ -16,11 +16,9 @@ public class LandCHRequiredConstraintValidator implements ConstraintValidator<La
 		if (personInAusbildung.getNationalitaet() == Land.CH) {
 			return StringUtils.isNotEmpty(personInAusbildung.getHeimatort());
 		}
-		else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return personInAusbildung.getHeimatort() == null;
-		}
-	}
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE)
+                .addConstraintViolation();
+        return personInAusbildung.getHeimatort() == null;
+    }
 }

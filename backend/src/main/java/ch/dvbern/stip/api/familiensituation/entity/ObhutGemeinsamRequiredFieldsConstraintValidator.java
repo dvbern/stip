@@ -15,12 +15,11 @@ public class ObhutGemeinsamRequiredFieldsConstraintValidator
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (familiensituation.getObhut() == Elternschaftsteilung.GEMEINSAM) {
 			return familiensituation.getObhutVater() != null && familiensituation.getObhutMutter() != null;
-		} else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(
-							VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return familiensituation.getObhutVater() == null && familiensituation.getObhutMutter() == null;
 		}
-	}
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(
+                        VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE)
+                .addConstraintViolation();
+        return familiensituation.getObhutVater() == null && familiensituation.getObhutMutter() == null;
+    }
 }

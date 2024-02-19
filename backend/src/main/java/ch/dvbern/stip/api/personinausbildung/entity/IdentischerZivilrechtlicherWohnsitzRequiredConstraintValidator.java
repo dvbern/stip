@@ -15,11 +15,9 @@ public class IdentischerZivilrechtlicherWohnsitzRequiredConstraintValidator impl
 		if (!personInAusbildung.isIdentischerZivilrechtlicherWohnsitz()) {
 			return StringUtils.isNotEmpty(personInAusbildung.getIdentischerZivilrechtlicherWohnsitzPLZ()) && StringUtils.isNotEmpty(personInAusbildung.getIdentischerZivilrechtlicherWohnsitzOrt());
 		}
-		else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return personInAusbildung.getIdentischerZivilrechtlicherWohnsitzPLZ() == null && personInAusbildung.getIdentischerZivilrechtlicherWohnsitzOrt() == null;
-		}
-	}
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE)
+                .addConstraintViolation();
+        return personInAusbildung.getIdentischerZivilrechtlicherWohnsitzPLZ() == null && personInAusbildung.getIdentischerZivilrechtlicherWohnsitzOrt() == null;
+    }
 }

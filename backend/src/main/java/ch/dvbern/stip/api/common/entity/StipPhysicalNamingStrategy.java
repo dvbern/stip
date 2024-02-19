@@ -36,7 +36,9 @@ public class StipPhysicalNamingStrategy implements PhysicalNamingStrategy {
     }
 
     private Identifier convertToSnakeCase(final Identifier identifier) {
-        if (identifier == null) return null;
+        if (identifier == null) {
+            return null;
+        }
         final String newName = toSnakeCase(identifier.getText());
         return Identifier.toIdentifier(newName);
     }

@@ -29,7 +29,9 @@ public interface LebenslaufItemMapper {
     LebenslaufItem partialUpdate(LebenslaufItemUpdateDto lebenslaufItemUpdateDto, @MappingTarget LebenslaufItem lebenslaufItem);
 
     default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
-        if(lebenslaufItemUpdateDtos.isEmpty()) lebenslaufItemSet.clear();
+        if(lebenslaufItemUpdateDtos.isEmpty()) {
+            lebenslaufItemSet.clear();
+        }
         Iterator<LebenslaufItem> iterator = lebenslaufItemSet.iterator();
         while (iterator.hasNext()) {
             LebenslaufItem lebenslaufItem = iterator.next();

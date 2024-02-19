@@ -65,13 +65,14 @@ class DokumentResourcesTest {
 	@Order(2)
 	void test_create_dokument_with_wrong_mime_type() {
 		File file = new File(TEST_XML_FILE_LOCATION);
-		given()
+        gesuchApiSpec.createDokument();
+        given()
 				.pathParam("gesuchId", gesuchId)
 				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
 				.multiPart("fileUpload", file)
 				.when()
-				.post("/api/v1" + gesuchApiSpec.createDokument().REQ_URI)
+				.post("/api/v1" + GesuchApiSpec.CreateDokumentOper.REQ_URI)
 				.then()
 				.statusCode(Status.BAD_REQUEST.getStatusCode());
 	}
@@ -81,13 +82,14 @@ class DokumentResourcesTest {
 	@Order(3)
 	void test_create_dokument_for_gesuch() {
 		File file = new File(TEST_FILE_LOCATION);
-		given()
+        gesuchApiSpec.createDokument();
+        given()
 				.pathParam("gesuchId", gesuchId)
 				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
 				.multiPart("fileUpload", file)
 				.when()
-				.post("/api/v1" + gesuchApiSpec.createDokument().REQ_URI)
+				.post("/api/v1" + GesuchApiSpec.CreateDokumentOper.REQ_URI)
 				.then()
 				.statusCode(Status.CREATED.getStatusCode());
 	}

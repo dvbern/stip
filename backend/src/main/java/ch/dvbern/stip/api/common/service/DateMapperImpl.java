@@ -24,8 +24,8 @@ public class DateMapperImpl {
 			throw new BadRequestException("Invalid Date Format");
 		}
 
-		String month = date[0].length() == 1 ? "0" + date[0] : date[0];
-		return LocalDate.parse(date[1] + "-" + month + "-01");
+		String month = date[0].length() == 1 ? '0' + date[0] : date[0];
+		return LocalDate.parse(date[1] + '-' + month + "-01");
 	}
 
 	@MonthYearToEndOfMonth

@@ -75,13 +75,13 @@ class GesuchValidatorTest {
 
 		// Die Anteil muessen wenn gegeben einen 100% Pensum im Total entsprechend, groessere oder kleiner Angaben
 		// sind rejektiert
-		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal(40.00));
-		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(50.00));
+		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal("40.00"));
+		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("50.00"));
 		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
 						.equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
-		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal(60.00));
+		gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("60.00"));
 		violations = validator.validate(gesuch);
 		assertThat(violations.stream()
 				.anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
@@ -162,11 +162,11 @@ class GesuchValidatorTest {
 		assertAllMessagesPresent(constraintMessages, gesuch);
 
 		// Test die Obhut Berechnung:
-		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutVater(new BigDecimal(40.00));
-		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal(50.00));
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutVater(new BigDecimal("40.00"));
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal("50.00"));
 		assertAllMessagesPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
 		// korrekte Werten Meldung soll weg
-		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal(60.00));
+		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getFamiliensituation().setObhutMutter(new BigDecimal("60.00"));
 		assertAllMessagesNotPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
 	}
 
@@ -229,14 +229,14 @@ class GesuchValidatorTest {
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 
 		// Test die Wohnsitzanteil Berechnung:
-		geschwister.setWohnsitzAnteilVater(new BigDecimal(55.00));
-		geschwister.setWohnsitzAnteilMutter(new BigDecimal(55.00));
+		geschwister.setWohnsitzAnteilVater(new BigDecimal("55.00"));
+		geschwister.setWohnsitzAnteilMutter(new BigDecimal("55.00"));
 		geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
 
-		geschwister.setWohnsitzAnteilMutter(new BigDecimal(45.00));
+		geschwister.setWohnsitzAnteilMutter(new BigDecimal("45.00"));
 		geschwisterSet = new HashSet<>();
 		geschwisterSet.add(geschwister);
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
@@ -267,13 +267,13 @@ class GesuchValidatorTest {
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 		// Test die Wohnsitzanteil Berechnung:
-		kind.setWohnsitzAnteilVater(new BigDecimal(55.00));
-		kind.setWohnsitzAnteilMutter(new BigDecimal(55.00));
+		kind.setWohnsitzAnteilVater(new BigDecimal("55.00"));
+		kind.setWohnsitzAnteilMutter(new BigDecimal("55.00"));
 		kindSet = new HashSet<>();
 		kindSet.add(kind);
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
 		assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
-		kind.setWohnsitzAnteilMutter(new BigDecimal(45.00));
+		kind.setWohnsitzAnteilMutter(new BigDecimal("45.00"));
 		kindSet = new HashSet<>();
 		kindSet.add(kind);
 		getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);

@@ -21,7 +21,9 @@ public interface KindMapper {
     Kind partialUpdate(KindUpdateDto kindUpdateDto, @MappingTarget Kind kind);
 
     default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
-        if(kindUpdateDtos.isEmpty()) kinder.clear();
+        if(kindUpdateDtos.isEmpty()) {
+            kinder.clear();
+        }
         Iterator<Kind> iterator = kinder.iterator();
         while (iterator.hasNext()) {
             Kind kind = iterator.next();

@@ -16,7 +16,7 @@ import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
 
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target(ElementType.METHOD)
 @TestSecurity(user = "gesuchsteller2", roles = ROLE_GESUCHSTELLER)
 @OidcSecurity(
         claims = {

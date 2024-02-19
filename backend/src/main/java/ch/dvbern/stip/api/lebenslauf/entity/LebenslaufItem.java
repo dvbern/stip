@@ -20,9 +20,7 @@ import java.util.UUID;
 @LebenslaufItemAusbildungFachrichtungConstraint
 @LebenslaufItemAusbildungTitelDesAbschlussesConstraint
 @Entity
-@Table(indexes = {
-		@Index(name = "IX_lebenslauf_item_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_lebenslauf_item_mandant", columnList = "mandant"))
 @Getter
 @Setter
 public class LebenslaufItem extends AbstractMandantEntity {

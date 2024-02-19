@@ -17,9 +17,7 @@ import java.math.BigDecimal;
 @WerZahltAlimenteRequiredFieldConstraint
 @ObhutGemeinsamBerechnungConstraint
 @Entity
-@Table(indexes = {
-		@Index(name = "IX_familiensituation_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_familiensituation_mandant", columnList = "mandant"))
 @Getter
 @Setter
 public class Familiensituation extends AbstractMandantEntity {

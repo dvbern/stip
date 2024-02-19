@@ -11,10 +11,11 @@ public class EinnahmenKostenAlimenteRequiredConstraintValidator
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (gesuchFormular.getFamiliensituation() == null || gesuchFormular.getEinnahmenKosten() == null) {
 			return true;
-		} else if (gesuchFormular.getFamiliensituation().getGerichtlicheAlimentenregelung()) {
-			return gesuchFormular.getEinnahmenKosten().getAlimente() != null;
 		}
-		return true;
+        if (gesuchFormular.getFamiliensituation().getGerichtlicheAlimentenregelung()) {
+            return gesuchFormular.getEinnahmenKosten().getAlimente() != null;
+        }
+        return true;
 	}
 
 }

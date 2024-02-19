@@ -21,7 +21,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     private final UriInfo uriInfo;
     private final GesuchsperiodenService gesuchsperiodenService;
 
-    @RolesAllowed({ROLE_ADMIN})
+    @RolesAllowed(ROLE_ADMIN)
     @Override
     public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
         var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);

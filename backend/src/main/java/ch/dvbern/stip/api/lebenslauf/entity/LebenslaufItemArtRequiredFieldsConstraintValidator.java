@@ -14,13 +14,14 @@ public class LebenslaufItemArtRequiredFieldsConstraintValidator
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (lebenslaufItem.getBildungsart() == null && lebenslaufItem.getTaetigskeitsart() == null) {
 			return false;
-		} else if (lebenslaufItem.getBildungsart() != null && lebenslaufItem.getTaetigskeitsart() != null) {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(
-							VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return false;
 		}
-		return true;
+        if (lebenslaufItem.getBildungsart() != null && lebenslaufItem.getTaetigskeitsart() != null) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate(
+                            VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE)
+                    .addConstraintViolation();
+            return false;
+        }
+        return true;
 	}
 }

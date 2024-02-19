@@ -21,7 +21,9 @@ public interface ElternMapper {
     Eltern partialUpdate(ElternUpdateDto elternUpdateDto, @MappingTarget Eltern eltern);
 
     default Set<Eltern> map(List<ElternUpdateDto> elternUpdateDtos, @MappingTarget Set<Eltern> elternSet) {
-        if(elternUpdateDtos.isEmpty()) elternSet.clear();
+        if(elternUpdateDtos.isEmpty()) {
+            elternSet.clear();
+        }
         Iterator<Eltern> iterator = elternSet.iterator();
         while (iterator.hasNext()) {
             Eltern eltern = iterator.next();

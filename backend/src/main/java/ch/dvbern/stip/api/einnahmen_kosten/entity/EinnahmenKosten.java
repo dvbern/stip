@@ -15,9 +15,7 @@ import java.math.BigDecimal;
 
 @Audited
 @Entity
-@Table(indexes = {
-		@Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant"))
 @Getter
 @Setter
 public class EinnahmenKosten extends AbstractMandantEntity {

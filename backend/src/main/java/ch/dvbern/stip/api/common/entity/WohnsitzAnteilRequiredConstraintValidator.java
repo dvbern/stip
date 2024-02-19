@@ -15,11 +15,9 @@ public class WohnsitzAnteilRequiredConstraintValidator implements ConstraintVali
 		if (abstractFamilieEntity.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
 			return abstractFamilieEntity.getWohnsitzAnteilVater() != null && abstractFamilieEntity.getWohnsitzAnteilMutter() != null;
 		}
-		else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return abstractFamilieEntity.getWohnsitzAnteilVater() == null && abstractFamilieEntity.getWohnsitzAnteilMutter() == null;
-		}
-	}
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)
+                .addConstraintViolation();
+        return abstractFamilieEntity.getWohnsitzAnteilVater() == null && abstractFamilieEntity.getWohnsitzAnteilMutter() == null;
+    }
 }

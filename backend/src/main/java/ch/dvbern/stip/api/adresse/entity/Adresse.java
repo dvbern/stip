@@ -31,9 +31,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Entity
-@Table(indexes = {
-		@Index(name = "IX_adresse_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_adresse_mandant", columnList = "mandant"))
 @Audited
 @Getter
 @Setter

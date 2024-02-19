@@ -15,11 +15,9 @@ public class NiederlassungsstatusConstraintValidator implements ConstraintValida
 		if (personInAusbildung.getNationalitaet() != Land.CH) {
 			return personInAusbildung.getNiederlassungsstatus() != null;
 		}
-		else {
-			constraintValidatorContext.disableDefaultConstraintViolation();
-			constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE)
-					.addConstraintViolation();
-			return personInAusbildung.getNiederlassungsstatus() == null;
-		}
-	}
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE)
+                .addConstraintViolation();
+        return personInAusbildung.getNiederlassungsstatus() == null;
+    }
 }

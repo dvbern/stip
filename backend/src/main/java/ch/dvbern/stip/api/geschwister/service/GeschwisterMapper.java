@@ -21,7 +21,9 @@ public interface GeschwisterMapper {
     Geschwister partialUpdate(GeschwisterUpdateDto geschwisterUpdateDto, @MappingTarget Geschwister geschwister);
 
     default Set<Geschwister> map(List<GeschwisterUpdateDto> geschwisterUpdateDtos, @MappingTarget Set<Geschwister> geschwisterSet) {
-        if(geschwisterUpdateDtos.isEmpty()) geschwisterSet.clear();
+        if(geschwisterUpdateDtos.isEmpty()) {
+            geschwisterSet.clear();
+        }
         Iterator<Geschwister> iterator = geschwisterSet.iterator();
         while (iterator.hasNext()) {
             Geschwister geschwister = iterator.next();

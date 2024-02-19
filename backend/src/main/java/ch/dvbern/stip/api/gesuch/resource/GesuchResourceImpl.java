@@ -144,7 +144,7 @@ public class GesuchResourceImpl implements GesuchResource {
                                 dokumentDto.getObjectId()),
                         AsyncResponseTransformer.toPublisher())),
                 response -> Multi.createFrom()
-                        .safePublisher(AdaptersToFlow.publisher((Publisher<ByteBuffer>) response))
+                        .safePublisher(AdaptersToFlow.publisher(response))
                         .map(GesuchResourceImpl::toBuffer),
                 response -> Map.of(
                         "Content-Disposition",

@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 class DateRangeTest {
-	private LocalDate von = LocalDate.of(2022,12,1);
-	private LocalDate bis = LocalDate.of(2023,8,31);
+	private final LocalDate von = LocalDate.of(2022,12,1);
+	private final LocalDate bis = LocalDate.of(2023,8,31);
 
-	private DateRange dateRange = new DateRange();
-	private DateRange otherDateRange = new DateRange(von, bis);
-	private DateRange sameOtherDateRange = new DateRange(von, bis);
+	private final DateRange dateRange = new DateRange();
+	private final DateRange otherDateRange = new DateRange(von, bis);
+	private final DateRange sameOtherDateRange = new DateRange(von, bis);
 	@Test
 	void testDateRangeEquality(){
 		Assertions.assertEquals(false, dateRange.equals(otherDateRange));

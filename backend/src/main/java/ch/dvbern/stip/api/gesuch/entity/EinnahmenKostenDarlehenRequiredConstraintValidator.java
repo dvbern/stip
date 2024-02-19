@@ -13,10 +13,11 @@ public class EinnahmenKostenDarlehenRequiredConstraintValidator
 			ConstraintValidatorContext constraintValidatorContext) {
 		if (gesuchFormular.getPersonInAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
 			return true;
-		} else if (isVolljaehrig(gesuchFormular.getPersonInAusbildung().getGeburtsdatum())) {
-			return gesuchFormular.getEinnahmenKosten().getWillDarlehen() != null;
 		}
-		return true;
+        if (isVolljaehrig(gesuchFormular.getPersonInAusbildung().getGeburtsdatum())) {
+            return gesuchFormular.getEinnahmenKosten().getWillDarlehen() != null;
+        }
+        return true;
 	}
 
 	private static boolean isVolljaehrig(LocalDate geburtsdatum) {

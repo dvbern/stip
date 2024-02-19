@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target(ElementType.METHOD)
 @TestSecurity(user = "sachbearbeiter", roles = ROLE_SACHBEARBEITER)
 @OidcSecurity(
         claims = {
