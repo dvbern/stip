@@ -1,24 +1,28 @@
 package ch.dvbern.stip.api.ausbildung.resource;
 
-import ch.dvbern.stip.generated.api.AusbildungsgangApiSpec;
-import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsortDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungsgangApiSpec;
+import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsortDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.instancio.Instancio;
-import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpecModel;
 import static org.hamcrest.MatcherAssert.assertThat;

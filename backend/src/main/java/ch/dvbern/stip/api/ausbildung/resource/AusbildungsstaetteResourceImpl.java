@@ -1,12 +1,12 @@
 package ch.dvbern.stip.api.ausbildung.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsstaetteService;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteResource;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor

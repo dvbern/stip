@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.partner.entity;
 
-import ch.dvbern.stip.api.partner.entity.AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator;
-import ch.dvbern.stip.api.partner.entity.Partner;
-import org.junit.Test;
-
 import java.math.BigDecimal;
+
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

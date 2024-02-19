@@ -1,13 +1,11 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import java.time.LocalDate;
+import java.util.UUID;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuch;
 

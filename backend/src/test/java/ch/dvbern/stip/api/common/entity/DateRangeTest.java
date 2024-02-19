@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.common.entity;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.util.DateRange;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 class DateRangeTest {
     private final LocalDate von = LocalDate.of(2022, 12, 1);

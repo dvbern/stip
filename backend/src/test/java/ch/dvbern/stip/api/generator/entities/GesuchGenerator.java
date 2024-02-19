@@ -1,9 +1,16 @@
 package ch.dvbern.stip.api.generator.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
+import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
@@ -16,14 +23,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
-import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
-import ch.dvbern.stip.api.util.TestConstants;
 import org.instancio.Instancio;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator.gesuchTrancheDtoSpecModel;
 import static ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;

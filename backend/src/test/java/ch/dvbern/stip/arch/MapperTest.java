@@ -1,5 +1,7 @@
 package ch.dvbern.stip.arch;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.service.MappingQualifierConfig;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
@@ -9,8 +11,6 @@ import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
-
-import java.util.Objects;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 

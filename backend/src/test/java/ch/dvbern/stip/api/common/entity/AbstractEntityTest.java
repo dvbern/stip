@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.common.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.entity.ReferenceEntity;
-import org.junit.jupiter.api.Test;
-
 import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

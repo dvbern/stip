@@ -1,14 +1,14 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
-import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.UUID;
+
+import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
+import org.instancio.Instancio;
+import org.instancio.Model;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;

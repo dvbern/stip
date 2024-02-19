@@ -1,16 +1,14 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.LebenslaufLuckenlosConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

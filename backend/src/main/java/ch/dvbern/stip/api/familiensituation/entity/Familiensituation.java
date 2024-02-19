@@ -1,16 +1,21 @@
 package ch.dvbern.stip.api.familiensituation.entity;
 
+import java.math.BigDecimal;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.math.BigDecimal;
 
 @Audited
 @ObhutGemeinsamRequiredFieldsConstraint

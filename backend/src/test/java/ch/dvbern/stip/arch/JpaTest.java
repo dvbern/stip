@@ -1,5 +1,7 @@
 package ch.dvbern.stip.arch;
 
+import java.util.Arrays;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.entity.StipPhysicalNamingStrategy;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -12,8 +14,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 import static ch.dvbern.stip.arch.util.ArchTestUtil.APP_CLASSES;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
@@ -53,7 +53,8 @@ class JpaTest {
                         }
                     }
 
-                    String message = String.format("Foreign Key column %s on entity %s has no index",
+                    String message = String.format(
+                        "Foreign Key column %s on entity %s has no index",
                         fieldName,
                         fieldOwner.getSimpleName());
                     conditionEvents.add(SimpleConditionEvent.violated(javaField, message));

@@ -1,16 +1,14 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.NoOverlapInAusbildungenConstraintValidator;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;

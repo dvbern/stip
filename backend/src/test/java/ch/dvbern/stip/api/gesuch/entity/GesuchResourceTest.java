@@ -1,11 +1,9 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
@@ -14,6 +12,12 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -22,15 +26,17 @@ import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
-import org.junit.jupiter.api.*;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.instancio.Select.field;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)

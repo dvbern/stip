@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.geschwister.service;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.generated.dto.GeschwisterDto;
@@ -7,10 +11,6 @@ import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 @Mapper(config = MappingConfig.class)
 public interface GeschwisterMapper {

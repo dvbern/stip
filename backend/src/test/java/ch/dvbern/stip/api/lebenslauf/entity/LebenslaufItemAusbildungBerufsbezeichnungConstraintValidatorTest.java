@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_BERUFSBEZEICHNUNG_NULL_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;

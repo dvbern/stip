@@ -1,10 +1,9 @@
 package ch.dvbern.stip.api.common.service;
 
-import ch.dvbern.stip.api.common.service.DateMapperImpl;
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 class DateMapperImplTest {
 

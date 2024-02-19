@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.benutzer.util;
 
-import io.quarkus.test.security.TestSecurity;
-import io.quarkus.test.security.oidc.Claim;
-import io.quarkus.test.security.oidc.OidcSecurity;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import io.quarkus.test.security.TestSecurity;
+import io.quarkus.test.security.oidc.Claim;
+import io.quarkus.test.security.oidc.OidcSecurity;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 

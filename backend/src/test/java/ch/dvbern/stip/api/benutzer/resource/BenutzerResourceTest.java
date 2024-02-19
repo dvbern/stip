@@ -1,13 +1,15 @@
 package ch.dvbern.stip.api.benutzer.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDtoSpec;
-import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -15,9 +17,11 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.hamcrest.MatcherAssert;
 import org.instancio.Instancio;
-import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.generator.api.model.benutzer.BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpecModel;
 import static ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpecModel;

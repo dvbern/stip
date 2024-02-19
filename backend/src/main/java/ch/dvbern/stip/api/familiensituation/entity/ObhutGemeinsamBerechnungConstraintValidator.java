@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.familiensituation.entity;
 
+import java.math.BigDecimal;
+
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import java.math.BigDecimal;
 
 public class ObhutGemeinsamBerechnungConstraintValidator
     implements ConstraintValidator<ObhutGemeinsamBerechnungConstraint, Familiensituation> {

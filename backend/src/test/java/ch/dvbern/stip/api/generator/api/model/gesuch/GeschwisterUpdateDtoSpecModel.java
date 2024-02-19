@@ -1,14 +1,14 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import org.instancio.Assign;
 import org.instancio.Instancio;
 import org.instancio.Model;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 import static org.instancio.Select.field;
 

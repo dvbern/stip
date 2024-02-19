@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
@@ -10,9 +12,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-
-import static ch.dvbern.stip.api.common.util.OidcConstants.*;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 
 @RequestScoped
 @RequiredArgsConstructor

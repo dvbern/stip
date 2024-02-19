@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.stip.api.util.TestConstants;
 import org.instancio.Instancio;
 import org.instancio.Model;
 

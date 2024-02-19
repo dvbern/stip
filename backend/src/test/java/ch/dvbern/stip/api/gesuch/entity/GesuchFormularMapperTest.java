@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
+
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
@@ -11,7 +13,6 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchFormularMapperImpl;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
@@ -22,8 +23,6 @@ import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

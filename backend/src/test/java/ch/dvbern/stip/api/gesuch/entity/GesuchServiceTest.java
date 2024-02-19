@@ -1,5 +1,12 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -8,8 +15,7 @@ import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
@@ -21,7 +27,6 @@ import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -31,15 +36,14 @@ import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.*;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.EINGETRAGENE_PARTNERSCHAFT;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.GESCHIEDEN_GERICHTLICH;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.KONKUBINAT;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
+import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -261,7 +265,8 @@ class GesuchServiceTest {
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(
+            gesuchUpdateDto,
             ElternAbwesenheitsGrund.UNBEKANNT,
             ElternAbwesenheitsGrund.WEDER_NOCH);
 
@@ -277,7 +282,8 @@ class GesuchServiceTest {
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(
+            gesuchUpdateDto,
             ElternAbwesenheitsGrund.VERSTORBEN,
             ElternAbwesenheitsGrund.WEDER_NOCH);
 
@@ -293,7 +299,8 @@ class GesuchServiceTest {
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(
+            gesuchUpdateDto,
             ElternAbwesenheitsGrund.WEDER_NOCH,
             ElternAbwesenheitsGrund.UNBEKANNT);
 
@@ -309,7 +316,8 @@ class GesuchServiceTest {
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(
+            gesuchUpdateDto,
             ElternAbwesenheitsGrund.WEDER_NOCH,
             ElternAbwesenheitsGrund.VERSTORBEN);
 
@@ -325,7 +333,8 @@ class GesuchServiceTest {
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(
+            gesuchUpdateDto,
             ElternAbwesenheitsGrund.VERSTORBEN,
             ElternAbwesenheitsGrund.VERSTORBEN);
 
@@ -341,7 +350,8 @@ class GesuchServiceTest {
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
 
-        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(gesuchUpdateDto,
+        GesuchTranche tranche = updateElternteilUnbekanntVerstorben(
+            gesuchUpdateDto,
             ElternAbwesenheitsGrund.UNBEKANNT,
             ElternAbwesenheitsGrund.UNBEKANNT);
 

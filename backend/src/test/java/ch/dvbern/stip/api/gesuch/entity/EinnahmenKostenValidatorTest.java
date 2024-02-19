@@ -1,22 +1,18 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.common.type.Bildungsart;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
-import ch.dvbern.stip.api.gesuch.entity.AusbildungskostenStufeRequiredConstraintValidator;
-import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenDarlehenRequiredConstraintValidator;
-import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenZulagenRequiredConstraintValidator;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.kind.entity.Kind;
-import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.util.TestUtil;
-import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.util.TestUtil;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

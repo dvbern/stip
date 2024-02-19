@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.benutzer.entity;
 
-import ch.dvbern.stip.api.benutzer.entity.BuchstabenRangeConstraintValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

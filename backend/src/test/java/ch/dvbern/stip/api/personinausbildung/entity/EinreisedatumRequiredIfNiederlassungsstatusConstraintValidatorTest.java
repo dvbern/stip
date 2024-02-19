@@ -1,11 +1,9 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import ch.dvbern.stip.api.personinausbildung.entity.EinreisedatumRequiredIfNiederlassungsstatusConstraintValidator;
-import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

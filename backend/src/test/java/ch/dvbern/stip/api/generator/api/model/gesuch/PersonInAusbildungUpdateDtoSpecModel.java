@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
@@ -8,9 +11,6 @@ import org.instancio.Assign;
 import org.instancio.Instancio;
 import org.instancio.Model;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 import static org.instancio.Select.field;
 
@@ -18,7 +18,9 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
 
     public static final Model<PersonInAusbildungUpdateDtoSpec> personInAusbildungUpdateDtoSpecModel =
         Instancio.of(PersonInAusbildungUpdateDtoSpec.class)
-            .set(field(PersonInAusbildungUpdateDtoSpec::getAdresse), Instancio.create(AdresseSpecModel.adresseSpecModel))
+            .set(
+                field(PersonInAusbildungUpdateDtoSpec::getAdresse),
+                Instancio.create(AdresseSpecModel.adresseSpecModel))
             .set(field(PersonInAusbildungUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz), false)
             .set(field(PersonInAusbildungUpdateDtoSpec::getNationalitaet), LandDtoSpec.CH)
             .set(field(PersonInAusbildungUpdateDtoSpec::getWohnsitz), WohnsitzDtoSpec.MUTTER_VATER)

@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.util;
 
-import ch.dvbern.stip.api.common.util.DateRange;
-
 import java.time.LocalDate;
 import java.util.UUID;
+
+import ch.dvbern.stip.api.common.util.DateRange;
 
 public final class TestConstants {
 

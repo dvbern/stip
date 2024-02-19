@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.util;
 
-import io.restassured.builder.RequestSpecBuilder;
-
 import java.util.function.Supplier;
+
+import io.restassured.builder.RequestSpecBuilder;
 
 public class RequestSpecUtil {
 

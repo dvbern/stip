@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.common.validation;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.regex.Pattern;
+
+import org.junit.jupiter.api.Test;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
 import static org.hamcrest.MatcherAssert.assertThat;

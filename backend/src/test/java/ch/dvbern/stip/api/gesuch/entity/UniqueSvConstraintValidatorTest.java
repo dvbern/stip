@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.UniqueSvNumberConstraintValidator;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.partner.entity.Partner;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.util.TestConstants;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

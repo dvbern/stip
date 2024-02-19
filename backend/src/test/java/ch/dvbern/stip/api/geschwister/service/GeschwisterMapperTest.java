@@ -1,17 +1,19 @@
 package ch.dvbern.stip.api.geschwister.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
-import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.*;
 
 class GeschwisterMapperTest {
     GeschwisterMapper geschwisterMapper = new GeschwisterMapperImpl();

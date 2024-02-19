@@ -1,5 +1,12 @@
 package ch.dvbern.stip.api.communication.mail.service;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import ch.dvbern.stip.api.common.i18n.StipEmailMessages;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -9,13 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;

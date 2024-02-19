@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.AusbildungEndDateMustBeAfterStartConstraintValidator;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

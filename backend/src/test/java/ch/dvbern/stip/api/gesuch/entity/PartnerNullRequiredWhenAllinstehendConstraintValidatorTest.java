@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.PartnerNullRequiredWhenAlleinstehendConstraintValidator;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;

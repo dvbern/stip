@@ -1,16 +1,14 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import ch.dvbern.stip.api.gesuch.entity.FamiliensituationElternEntityRequiredConstraintValidator;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.util;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class TestDatabaseEnvironment implements QuarkusTestResourceLifecycleManager {
 

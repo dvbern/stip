@@ -1,16 +1,18 @@
 package ch.dvbern.stip.api.lebenslauf.service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
-import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.*;
 
 class LebenslaufItemMapperTest {
 

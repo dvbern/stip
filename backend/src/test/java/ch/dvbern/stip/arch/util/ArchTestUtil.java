@@ -2,7 +2,6 @@ package ch.dvbern.stip.arch.util;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.core.importer.ImportOption.Predefined;
 
 public final class ArchTestUtil {
