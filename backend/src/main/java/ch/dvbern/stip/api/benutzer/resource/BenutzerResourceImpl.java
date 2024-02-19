@@ -19,8 +19,8 @@ public class BenutzerResourceImpl implements BenutzerResource {
 
     @Override
     public Response createOrUpdateSachbearbeiterStammdaten(
-            UUID benutzerId,
-            SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
+        UUID benutzerId,
+        SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
         benutzerService.createOrUpdateSachbearbeiterStammdaten(benutzerId, sachbearbeiterZuordnungStammdatenDto);
         return Response.accepted().build();
     }
@@ -39,7 +39,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     @Override
     public Response getSachbearbeiterStammdaten(UUID benutzerId) {
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto = benutzerService.findSachbearbeiterZuordnungStammdatenWithBenutzerId(benutzerId).orElseThrow(
-                NotFoundException::new);
+            NotFoundException::new);
         return Response.ok(sachbearbeiterZuordnungStammdatenDto).build();
     }
 

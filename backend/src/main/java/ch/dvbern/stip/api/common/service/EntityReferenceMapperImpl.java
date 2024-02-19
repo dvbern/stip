@@ -13,7 +13,7 @@ public class EntityReferenceMapperImpl {
 
     @EntityIdReference
     public <T extends AbstractEntity> T getReference(UUID id, @TargetType Class<T> entityClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        if(id == null) {
+        if (id == null) {
             return null;
         }
         T reference = entityClass.getDeclaredConstructor().newInstance();

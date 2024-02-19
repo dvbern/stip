@@ -15,15 +15,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SachbearbeiterZuordnungStammdatenRepository implements BaseRepository<SachbearbeiterZuordnungStammdaten> {
 
-	private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-	public Optional<SachbearbeiterZuordnungStammdaten> findByBenutzerId(UUID benutzerId) {
-		var queryFactory = new JPAQueryFactory(entityManager);
-		var sachbearbeiterZuordnungStammdaten = QSachbearbeiterZuordnungStammdaten.sachbearbeiterZuordnungStammdaten;
-		var query = queryFactory
-				.select(sachbearbeiterZuordnungStammdaten)
-				.from(sachbearbeiterZuordnungStammdaten)
-				.where(sachbearbeiterZuordnungStammdaten.benutzer.id.eq(benutzerId));
-		return query.stream().findFirst();
-	}
+    public Optional<SachbearbeiterZuordnungStammdaten> findByBenutzerId(UUID benutzerId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var sachbearbeiterZuordnungStammdaten = QSachbearbeiterZuordnungStammdaten.sachbearbeiterZuordnungStammdaten;
+        var query = queryFactory
+            .select(sachbearbeiterZuordnungStammdaten)
+            .from(sachbearbeiterZuordnungStammdaten)
+            .where(sachbearbeiterZuordnungStammdaten.benutzer.id.eq(benutzerId));
+        return query.stream().findFirst();
+    }
 }

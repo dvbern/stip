@@ -17,13 +17,14 @@ import java.util.stream.Stream;
 public class BenutzerRepository implements BaseRepository<Benutzer> {
 
     private final EntityManager entityManager;
+
     public Optional<Benutzer> findByKeycloakId(String keycloakId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var benutzer = QBenutzer.benutzer;
         var query = queryFactory
-                .select(benutzer)
-                .from(benutzer)
-                .where(benutzer.keycloakId.eq(keycloakId));
+            .select(benutzer)
+            .from(benutzer)
+            .where(benutzer.keycloakId.eq(keycloakId));
         return query.stream().findFirst();
     }
 
@@ -32,9 +33,9 @@ public class BenutzerRepository implements BaseRepository<Benutzer> {
         var benutzer = QBenutzer.benutzer;
 
         var query = queryFactory
-                .select(benutzer)
-                .from(benutzer)
-                .where(benutzer.benutzerTyp.eq(benutzerTyp));
+            .select(benutzer)
+            .from(benutzer)
+            .where(benutzer.benutzerTyp.eq(benutzerTyp));
         return query.stream();
     }
 }

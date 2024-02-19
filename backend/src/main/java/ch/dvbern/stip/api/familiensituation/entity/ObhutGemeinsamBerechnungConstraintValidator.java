@@ -7,17 +7,17 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.math.BigDecimal;
 
 public class ObhutGemeinsamBerechnungConstraintValidator
-		implements ConstraintValidator<ObhutGemeinsamBerechnungConstraint, Familiensituation> {
+    implements ConstraintValidator<ObhutGemeinsamBerechnungConstraint, Familiensituation> {
 
-	@Override
-	public boolean isValid(
-			Familiensituation familiensituation,
-			ConstraintValidatorContext constraintValidatorContext) {
-		if (familiensituation.getObhut() == Elternschaftsteilung.GEMEINSAM
-				&& familiensituation.getObhutMutter() != null
-				&& familiensituation.getObhutVater() != null) {
-			return familiensituation.getObhutMutter().add(familiensituation.getObhutVater()).compareTo(new BigDecimal(100)) == 0;
-		}
-		return true;
-	}
+    @Override
+    public boolean isValid(
+        Familiensituation familiensituation,
+        ConstraintValidatorContext constraintValidatorContext) {
+        if (familiensituation.getObhut() == Elternschaftsteilung.GEMEINSAM
+            && familiensituation.getObhutMutter() != null
+            && familiensituation.getObhutVater() != null) {
+            return familiensituation.getObhutMutter().add(familiensituation.getObhutVater()).compareTo(new BigDecimal(100)) == 0;
+        }
+        return true;
+    }
 }

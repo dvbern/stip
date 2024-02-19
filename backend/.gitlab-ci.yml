@@ -1,4 +1,4 @@
-stages: [build, validate, test, analyze, package, deploy, mirror]
+stages: [ build, validate, test, analyze, package, deploy, mirror ]
 
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'

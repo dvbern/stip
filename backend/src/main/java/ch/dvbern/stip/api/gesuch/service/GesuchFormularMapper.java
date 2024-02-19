@@ -22,20 +22,20 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(config = MappingConfig.class,
-        uses =
-                {
-                        AdresseMapper.class,
-                        PersonInAusbildungMapper.class,
-                        FamiliensituationMapper.class,
-                        AusbildungMapper.class,
-                        LebenslaufItemMapper.class,
-                        PartnerMapper.class,
-                        AuszahlungMapper.class,
-                        GeschwisterMapper.class,
-                        ElternMapper.class,
-                        KindMapper.class,
-                        EinnahmenKostenMapper.class
-                })
+    uses =
+        {
+            AdresseMapper.class,
+            PersonInAusbildungMapper.class,
+            FamiliensituationMapper.class,
+            AusbildungMapper.class,
+            LebenslaufItemMapper.class,
+            PartnerMapper.class,
+            AuszahlungMapper.class,
+            GeschwisterMapper.class,
+            ElternMapper.class,
+            KindMapper.class,
+            EinnahmenKostenMapper.class
+        })
 public abstract class GesuchFormularMapper {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 

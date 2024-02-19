@@ -17,27 +17,27 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> {
 
-	private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-	public Optional<GesuchDokument> findByGesuchAndDokumentType(UUID gesuchId, DokumentTyp dokumentTyp) {
-		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuchDokument = QGesuchDokument.gesuchDokument;
-		var query = queryFactory
-				.select(gesuchDokument)
-				.from(gesuchDokument)
-				.where(gesuchDokument.gesuch.id.eq(gesuchId)
-						.and(gesuchDokument.dokumentTyp.eq(dokumentTyp)));
-		return query.stream().findFirst();
-	}
+    public Optional<GesuchDokument> findByGesuchAndDokumentType(UUID gesuchId, DokumentTyp dokumentTyp) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .select(gesuchDokument)
+            .from(gesuchDokument)
+            .where(gesuchDokument.gesuch.id.eq(gesuchId)
+                .and(gesuchDokument.dokumentTyp.eq(dokumentTyp)));
+        return query.stream().findFirst();
+    }
 
-	public Stream<GesuchDokument> findAllForGesuch(UUID gesuchId) {
-		var queryFactory = new JPAQueryFactory(entityManager);
-		var gesuchDokument = QGesuchDokument.gesuchDokument;
+    public Stream<GesuchDokument> findAllForGesuch(UUID gesuchId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
 
-		var query = queryFactory
-				.select(gesuchDokument)
-				.from(gesuchDokument)
-				.where(gesuchDokument.gesuch.id.eq(gesuchId));
-		return query.stream();
-	}
+        var query = queryFactory
+            .select(gesuchDokument)
+            .from(gesuchDokument)
+            .where(gesuchDokument.gesuch.id.eq(gesuchId));
+        return query.stream();
+    }
 }

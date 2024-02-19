@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 @Command(name = "generate", mixinStandardHelpOptions = true, version = "1.0.0",
-        description = "generate a business component")
+    description = "generate a business component")
 
 public class generatecli implements Callable<Integer> {
 

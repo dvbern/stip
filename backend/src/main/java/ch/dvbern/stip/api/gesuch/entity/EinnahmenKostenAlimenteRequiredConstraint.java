@@ -7,15 +7,15 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EinnahmenKostenAlimenteRequiredConstraintValidator.class)
 @Documented
 public @interface EinnahmenKostenAlimenteRequiredConstraint {
 
-	String message() default VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
+    String message() default VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

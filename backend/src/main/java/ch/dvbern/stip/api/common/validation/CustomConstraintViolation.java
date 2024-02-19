@@ -11,13 +11,14 @@ import static java.util.Objects.requireNonNull;
 @Getter
 public class CustomConstraintViolation {
 
+    private static final ResourceBundle VALIDATION_MESSAGE_BUNDLE =
+        ResourceBundle.getBundle(
+            "ValidationMessages",
+            Locale.GERMAN,
+            requireNonNull(currentThread().getContextClassLoader())
+        );
     private final String message;
     private final String messageTemplate;
-
-    private static final ResourceBundle VALIDATION_MESSAGE_BUNDLE =
-            ResourceBundle.getBundle("ValidationMessages",
-                    Locale.GERMAN,
-                    requireNonNull(currentThread().getContextClassLoader()));
 
     public CustomConstraintViolation(String messageTamplate) {
         this.messageTemplate = messageTamplate;

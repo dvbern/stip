@@ -7,14 +7,14 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AlimenteRequiredWhenAlimenteRegelungConstraintValidator.class)
 @Documented
 public @interface AlimenteRequiredWhenAlimenteregelungConstraint {
-	String message() default VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
+    String message() default VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

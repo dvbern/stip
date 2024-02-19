@@ -8,24 +8,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LebenslaufAusbildungUeberschneidenConstraintValidator implements ConstraintValidator<LebenslaufAusbildungUeberschneidenConstraint, GesuchFormular> {
-	@Override
-	public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
+    private static boolean isOverlapping(LebenslaufItem a, LebenslaufItem b) {
+        return !a.getBis().isBefore(b.getVon()) && !b.getBis().isBefore(a.getVon());
+    }
 
-		List<LebenslaufItem> lebenslaufItemList = gesuchFormular.getLebenslaufItems().stream().filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null).collect(
-				Collectors.toList());
+    @Override
+    public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
 
-		int n = lebenslaufItemList.size();
-		for (int i = 0; i < n - 1; i++) {
-			for (int j = i + 1; j < n; j++) {
-				if (isOverlapping(lebenslaufItemList.get(i),lebenslaufItemList.get(j))) {
-					return false; // Overlapping ranges found
-				}
-			}
-		}
-		return true;
-	}
+        List<LebenslaufItem> lebenslaufItemList = gesuchFormular.getLebenslaufItems().stream().filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null).collect(
+            Collectors.toList());
 
-	private static boolean isOverlapping(LebenslaufItem a, LebenslaufItem b) {
-		return !a.getBis().isBefore(b.getVon()) && !b.getBis().isBefore(a.getVon());
-	}
+        int n = lebenslaufItemList.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (isOverlapping(lebenslaufItemList.get(i), lebenslaufItemList.get(j))) {
+                    return false; // Overlapping ranges found
+                }
+            }
+        }
+        return true;
+    }
 }

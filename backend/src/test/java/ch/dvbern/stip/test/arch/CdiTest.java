@@ -11,12 +11,12 @@ class CdiTest {
     @Test
     void resources_are_request_scoped() {
         var rule = classes()
-                .that()
-                .resideInAPackage("..resource..")
-                .and()
-                .haveSimpleNameContaining("Resource")
-                .should()
-                .beAnnotatedWith(RequestScoped.class);
+            .that()
+            .resideInAPackage("..resource..")
+            .and()
+            .haveSimpleNameContaining("Resource")
+            .should()
+            .beAnnotatedWith(RequestScoped.class);
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }

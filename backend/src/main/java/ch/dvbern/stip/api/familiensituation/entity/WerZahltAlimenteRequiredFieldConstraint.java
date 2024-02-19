@@ -7,15 +7,15 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = WerZahltAlimenteRequiredFieldConstraintValidator.class)
 @Documented
 public @interface WerZahltAlimenteRequiredFieldConstraint {
 
-	String message() default VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE;
+    String message() default VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

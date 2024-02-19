@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(indexes = @Index(name = "IX_kind_mandant", columnList = "mandant"))
 @Getter
 @Setter
-public class Kind  extends AbstractFamilieEntity {
+public class Kind extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

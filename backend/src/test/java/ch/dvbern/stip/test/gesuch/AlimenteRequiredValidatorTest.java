@@ -17,11 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTest
 class AlimenteRequiredValidatorTest {
 
+    private final AlimenteRequiredWhenAlimenteRegelungConstraintValidator validator =
+        new AlimenteRequiredWhenAlimenteRegelungConstraintValidator();
     @Inject
     GesuchFormularMapper gesuchFormularMapper;
-
-    private final AlimenteRequiredWhenAlimenteRegelungConstraintValidator validator =
-            new AlimenteRequiredWhenAlimenteRegelungConstraintValidator();
 
     @Test
     void noAlimenteRegelungNoAlimente() {

@@ -22,11 +22,11 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
         var query = queryFactory
-                .select(gesuchsperiode)
-                .from(gesuchsperiode)
-                .where(gesuchsperiode.aufschaltdatum.before(date)
-                        .and(gesuchsperiode.gueltigkeit.gueltigBis.after(date)
-                                .or(gesuchsperiode.gueltigkeit.gueltigBis.eq(date))));
+            .select(gesuchsperiode)
+            .from(gesuchsperiode)
+            .where(gesuchsperiode.aufschaltdatum.before(date)
+                .and(gesuchsperiode.gueltigkeit.gueltigBis.after(date)
+                    .or(gesuchsperiode.gueltigkeit.gueltigBis.eq(date))));
         return query.stream();
     }
 

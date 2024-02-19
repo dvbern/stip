@@ -19,57 +19,57 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Entity
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @Table(indexes = {
-		@Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
-		@Index(name = "IX_eltern_mandant", columnList = "mandant")
+    @Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
+    @Index(name = "IX_eltern_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
 @AhvIfSwissConstraint
 public class Eltern extends AbstractPerson {
 
-	@NotNull
-	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"), nullable = false)
-	private Adresse adresse;
+    @NotNull
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"), nullable = false)
+    private Adresse adresse;
 
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = true)
-	private String sozialversicherungsnummer;
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = true)
+    private String sozialversicherungsnummer;
 
-	@NotNull
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private ElternTyp elternTyp;
+    @NotNull
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ElternTyp elternTyp;
 
-	@NotNull
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String telefonnummer;
+    @NotNull
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String telefonnummer;
 
-	@NotNull
-	@Column(nullable = false)
-	private Boolean sozialhilfebeitraegeAusbezahlt;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean sozialhilfebeitraegeAusbezahlt;
 
-	@NotNull
-	@Column(nullable = false)
-	private Boolean ausweisbFluechtling;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean ausweisbFluechtling;
 
-	@NotNull
-	@Column(nullable = false)
-	private Boolean ergaenzungsleistungAusbezahlt;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean ergaenzungsleistungAusbezahlt;
 
-	@NotNull
-	@Column(nullable = false)
-	private boolean identischerZivilrechtlicherWohnsitz = true;
+    @NotNull
+    @Column(nullable = false)
+    private boolean identischerZivilrechtlicherWohnsitz = true;
 
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = true)
-	private String identischerZivilrechtlicherWohnsitzOrt;
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = true)
+    private String identischerZivilrechtlicherWohnsitzOrt;
 
-	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-	@Column(nullable = true)
-	private String identischerZivilrechtlicherWohnsitzPLZ;
+    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Column(nullable = true)
+    private String identischerZivilrechtlicherWohnsitzPLZ;
 
-	@Column(nullable = true)
-	private UUID copyOfId;
+    @Column(nullable = true)
+    private UUID copyOfId;
 }

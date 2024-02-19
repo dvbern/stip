@@ -8,10 +8,10 @@ import static org.instancio.Select.field;
 
 public class BenutzerUpdateDtoSpecModel {
 
-	public static final Model<BenutzerUpdateDtoSpec> benutzerUpdateDtoSpecModel =
-			Instancio.of(BenutzerUpdateDtoSpec.class)
-					.set(field(BenutzerUpdateDtoSpec::getVorname), "Fritz")
-					.set(field(BenutzerUpdateDtoSpec::getNachname), "Tester")
-					.set(field(BenutzerUpdateDtoSpec::getSozialversicherungsnummer), "756.1234.5678.97")
-					.toModel();
+    public static final Model<BenutzerUpdateDtoSpec> benutzerUpdateDtoSpecModel =
+        Instancio.of(BenutzerUpdateDtoSpec.class)
+            .set(field(BenutzerUpdateDtoSpec::getVorname), "Fritz")
+            .set(field(BenutzerUpdateDtoSpec::getNachname), "Tester")
+            .set(field(BenutzerUpdateDtoSpec::getSozialversicherungsnummer), "756.1234.5678.97")
+            .toModel();
 }

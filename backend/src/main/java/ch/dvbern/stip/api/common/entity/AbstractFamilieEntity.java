@@ -22,18 +22,18 @@ import java.math.BigDecimal;
 @Setter
 public abstract class AbstractFamilieEntity extends AbstractPerson {
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Wohnsitz wohnsitz;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Wohnsitz wohnsitz;
 
-	@Column(nullable = true)
-	@DecimalMax("100.00")
-	@DecimalMin("0.00")
-	private BigDecimal wohnsitzAnteilMutter;
+    @Column(nullable = true)
+    @DecimalMax("100.00")
+    @DecimalMin("0.00")
+    private BigDecimal wohnsitzAnteilMutter;
 
-	@Column(nullable = true)
-	@DecimalMax("100.00")
-	@DecimalMin("0.00")
-	private BigDecimal wohnsitzAnteilVater;
+    @Column(nullable = true)
+    @DecimalMax("100.00")
+    @DecimalMin("0.00")
+    private BigDecimal wohnsitzAnteilVater;
 }

@@ -35,28 +35,28 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequiredArgsConstructor
 public class FallResourceImpl implements FallResource {
 
-	private final FallService fallService;
-	private final UriInfo uriInfo;
+    private final FallService fallService;
+    private final UriInfo uriInfo;
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-	@Override
-	public Response createFall(UUID benutzerId) {
-		var fall = fallService.createFall(benutzerId);
-		return Response.created(uriInfo.getAbsolutePathBuilder().path(fall.getId().toString()).build()).build();
-	}
+    @Override
+    public Response createFall(UUID benutzerId) {
+        var fall = fallService.createFall(benutzerId);
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(fall.getId().toString()).build()).build();
+    }
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-	@Override
-	public Response getFall(UUID fallId) {
-		var fall = fallService
-				.getFall(fallId)
-				.orElseThrow(NotFoundException::new);
-		return Response.ok(fall).build();
-	}
+    @Override
+    public Response getFall(UUID fallId) {
+        var fall = fallService
+            .getFall(fallId)
+            .orElseThrow(NotFoundException::new);
+        return Response.ok(fall).build();
+    }
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-	@Override
-	public Response getFallForBenutzer(UUID benutzerId) {
-		return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();
-	}
+    @Override
+    public Response getFallForBenutzer(UUID benutzerId) {
+        return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();
+    }
 }

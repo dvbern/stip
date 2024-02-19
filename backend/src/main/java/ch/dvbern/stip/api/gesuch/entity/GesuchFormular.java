@@ -53,13 +53,13 @@ import java.util.Set;
 @UniqueSvNumberConstraint
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
-        @Index(name = "IX_gesuch_formular_ausbildung_id", columnList = "ausbildung_id"),
-        @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
-        @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
-        @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
-        @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
-        @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
+    @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
+    @Index(name = "IX_gesuch_formular_ausbildung_id", columnList = "ausbildung_id"),
+    @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
+    @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
+    @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
+    @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
+    @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

@@ -31,11 +31,9 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 public class GesuchEinreichenUniqueSVNummerTest {
 
-    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-
-    private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
-
     public static final String VALID_IBAN = "CH5604835012345678009";
+    private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
+    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
     @Test
     @Order(1)
@@ -44,10 +42,10 @@ public class GesuchEinreichenUniqueSVNummerTest {
         UUID gesuchId = createFullGesuch();
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
     }
 
     @Test
@@ -57,12 +55,12 @@ public class GesuchEinreichenUniqueSVNummerTest {
         UUID gesuchId = createFullGesuch(); //neues Gesuch mit selber AHV-Nummer wird erstellt
 
         var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
-                .extract()
-                .as(ValidationReportDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+            .extract()
+            .as(ValidationReportDtoSpec.class);
 
         assertThat(response.getValidationErrors().get(0).getMessageTemplate(), is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
 
@@ -70,19 +68,19 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
     private UUID createFullGesuch() {
         var response = gesuchApiSpec.createGesuch()
-                .body(TestUtil.initGesuchCreateDto())
-                .execute(ResponseBody::prettyPeek).then();
+            .body(TestUtil.initGesuchCreateDto())
+            .execute(ResponseBody::prettyPeek).then();
 
         response.assertThat()
-                .statusCode(Response.Status.CREATED.getStatusCode());
+            .statusCode(Response.Status.CREATED.getStatusCode());
 
         var gesuchId = TestUtil.extractIdFromResponse(response);
         var gesuchTrancheId = gesuchApiSpec.getGesuch()
-                .gesuchIdPath(gesuchId)
-                .execute(ResponseBody::prettyPeek).then().extract()
-                .body()
-                .as(GesuchDtoSpec.class)
-                .getGesuchTrancheToWorkWith().getId();
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek).then().extract()
+            .body()
+            .as(GesuchDtoSpec.class)
+            .getGesuchTrancheToWorkWith().getId();
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
@@ -90,9 +88,9 @@ public class GesuchEinreichenUniqueSVNummerTest {
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
 
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
         return gesuchId;
     }
 }

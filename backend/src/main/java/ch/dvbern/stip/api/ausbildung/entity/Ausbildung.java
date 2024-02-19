@@ -20,48 +20,48 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @AusbildungEndDateMustBeAfterStartConstraint
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
-		@Index(name = "IX_ausbildung_mandant", columnList = "mandant")
+    @Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
+    @Index(name = "IX_ausbildung_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
 public class Ausbildung extends AbstractMandantEntity {
 
-	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
-	private Ausbildungsgang ausbildungsgang;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
+    private Ausbildungsgang ausbildungsgang;
 
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column
-	private String alternativeAusbildungsgang;
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column
+    private String alternativeAusbildungsgang;
 
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column
-	private String alternativeAusbildungsstaette;
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column
+    private String alternativeAusbildungsstaette;
 
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column
     private String alternativeAusbildungsland;
 
-	@NotNull
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String fachrichtung;
+    @NotNull
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String fachrichtung;
 
-	@Column(nullable = false)
-	private boolean ausbildungNichtGefunden = false;
+    @Column(nullable = false)
+    private boolean ausbildungNichtGefunden = false;
 
-	@NotNull
-	@Column(nullable = false)
-	private LocalDate ausbildungBegin;
+    @NotNull
+    @Column(nullable = false)
+    private LocalDate ausbildungBegin;
 
-	@NotNull
-	@Column(nullable = false)
+    @NotNull
+    @Column(nullable = false)
     @Future
-	private LocalDate ausbildungEnd;
+    private LocalDate ausbildungEnd;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private AusbildungsPensum pensum;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AusbildungsPensum pensum;
 }

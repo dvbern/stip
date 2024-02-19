@@ -10,6 +10,11 @@ public class StipPhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     private static final Pattern SNAKE_CASE_PATTERN = Pattern.compile("([a-z])([A-Z])");
 
+    public static String toSnakeCase(String s) {
+        final String replacement = "$1_$2";
+        return SNAKE_CASE_PATTERN.matcher(s).replaceAll(replacement).toLowerCase();
+    }
+
     @Override
     public Identifier toPhysicalCatalogName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
         return convertToSnakeCase(identifier);
@@ -41,10 +46,5 @@ public class StipPhysicalNamingStrategy implements PhysicalNamingStrategy {
         }
         final String newName = toSnakeCase(identifier.getText());
         return Identifier.toIdentifier(newName);
-    }
-
-    public static String toSnakeCase(String s) {
-        final String replacement = "$1_$2";
-        return SNAKE_CASE_PATTERN.matcher(s).replaceAll(replacement).toLowerCase();
     }
 }

@@ -17,8 +17,8 @@ import java.math.BigDecimal;
 @AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_partner_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_partner_mandant", columnList = "mandant")
+    @Index(name = "IX_partner_adresse_id", columnList = "adresse_id"),
+    @Index(name = "IX_partner_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

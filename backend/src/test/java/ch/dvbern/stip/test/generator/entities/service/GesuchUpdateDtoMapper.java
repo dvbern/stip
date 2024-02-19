@@ -10,10 +10,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class)
 public interface GesuchUpdateDtoMapper {
-	GesuchUpdateDto toEntity(GesuchUpdateDtoSpec gesuchUpdateDtoSpec);
+    GesuchUpdateDto toEntity(GesuchUpdateDtoSpec gesuchUpdateDtoSpec);
 
-	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	GesuchUpdateDto partialUpdate(
-			GesuchUpdateDtoSpec gesuchUpdateDtoSpec,
-			@MappingTarget GesuchUpdateDto gesuchUpdateDto);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    GesuchUpdateDto partialUpdate(
+        GesuchUpdateDtoSpec gesuchUpdateDtoSpec,
+        @MappingTarget GesuchUpdateDto gesuchUpdateDto);
 }

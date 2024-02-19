@@ -7,7 +7,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import org.mapstruct.*;
 
 @Mapper(config = MappingConfig.class,
-        uses = GesuchFormularMapper.class)
+    uses = GesuchFormularMapper.class)
 public interface GesuchTrancheMapper {
 
     @Mapping(source = "gueltigAb", target = "gueltigkeit.gueltigAb")

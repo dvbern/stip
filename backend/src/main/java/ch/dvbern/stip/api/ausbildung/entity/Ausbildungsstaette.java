@@ -20,16 +20,16 @@ import java.util.List;
 @Setter
 public class Ausbildungsstaette extends AbstractEntity {
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
-	private List<Ausbildungsgang> ausbildungsgaenge;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
+    private List<Ausbildungsgang> ausbildungsgaenge;
 
-	@NotNull
-	@Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String nameDe;
+    @NotNull
+    @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String nameDe;
 
-	@NotNull
-	@Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String nameFr;
+    @NotNull
+    @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String nameFr;
 }

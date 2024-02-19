@@ -10,11 +10,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(config = MappingConfig.class,
-        uses =
-                {
-                        FallMapper.class,
-                        GesuchsperiodeMapper.class
-                }
+    uses =
+        {
+            FallMapper.class,
+            GesuchsperiodeMapper.class
+        }
 )
 public interface GesuchMapper {
 

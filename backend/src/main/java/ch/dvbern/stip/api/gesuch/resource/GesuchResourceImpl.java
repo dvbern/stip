@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import org.reactivestreams.Publisher;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -49,6 +48,12 @@ public class GesuchResourceImpl implements GesuchResource {
     private final ConfigService configService;
     private final S3AsyncClient s3;
 
+    private static Buffer toBuffer(ByteBuffer bytebuffer) {
+        byte[] result = new byte[bytebuffer.remaining()];
+        bytebuffer.get(result);
+        return Buffer.buffer(result);
+    }
+
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
@@ -67,26 +72,29 @@ public class GesuchResourceImpl implements GesuchResource {
 
         String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         return Uni.createFrom()
-                .completionStage(() ->
-                        s3.putObject(
-                                gesuchDokumentService.buildPutRequest(
-                                        fileUpload,
-                                        configService.getBucketName(),
-                                        objectId),
-                                AsyncRequestBody.fromFile(fileUpload.uploadedFile())))
-                .onItem()
-                .invoke(() -> gesuchDokumentService.uploadDokument(
-                        gesuchId,
-                        dokumentTyp,
+            .completionStage(() ->
+                s3.putObject(
+                    gesuchDokumentService.buildPutRequest(
                         fileUpload,
-                        objectId))
-                .onItem()
-                .ignore()
-                .andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
-                .onFailure()
-                .invoke(throwable -> LOG.error(throwable.getMessage()))
-                .onFailure()
-                .recoverWithItem(Response.serverError().build());
+                        configService.getBucketName(),
+                        objectId
+                    ),
+                    AsyncRequestBody.fromFile(fileUpload.uploadedFile())
+                ))
+            .onItem()
+            .invoke(() -> gesuchDokumentService.uploadDokument(
+                gesuchId,
+                dokumentTyp,
+                fileUpload,
+                objectId
+            ))
+            .onItem()
+            .ignore()
+            .andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+            .onFailure()
+            .invoke(throwable -> LOG.error(throwable.getMessage()))
+            .onFailure()
+            .recoverWithItem(Response.serverError().build());
     }
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
@@ -111,7 +119,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.noContent().build();
     }
 
-
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
     @Override
     public Response gesuchEinreichen(UUID gesuchId) {
@@ -125,7 +132,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
     }
 
-
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
     @Override
     public Response gesuchNachfristBeantragen(UUID gesuchId) {
@@ -138,25 +144,23 @@ public class GesuchResourceImpl implements GesuchResource {
     public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         return RestMulti.fromUniResponse(
-                Uni.createFrom().completionStage(() -> s3.getObject(
-                        gesuchDokumentService.buildGetRequest(
-                                configService.getBucketName(),
-                                dokumentDto.getObjectId()),
-                        AsyncResponseTransformer.toPublisher())),
-                response -> Multi.createFrom()
-                        .safePublisher(AdaptersToFlow.publisher(response))
-                        .map(GesuchResourceImpl::toBuffer),
-                response -> Map.of(
-                        "Content-Disposition",
-                        List.of("attachment;filename=" + dokumentDto.getFilename()),
-                        "Content-Type",
-                        List.of("application/octet-stream")));
-    }
-
-    private static Buffer toBuffer(ByteBuffer bytebuffer) {
-        byte[] result = new byte[bytebuffer.remaining()];
-        bytebuffer.get(result);
-        return Buffer.buffer(result);
+            Uni.createFrom().completionStage(() -> s3.getObject(
+                gesuchDokumentService.buildGetRequest(
+                    configService.getBucketName(),
+                    dokumentDto.getObjectId()
+                ),
+                AsyncResponseTransformer.toPublisher()
+            )),
+            response -> Multi.createFrom()
+                .safePublisher(AdaptersToFlow.publisher(response))
+                .map(GesuchResourceImpl::toBuffer),
+            response -> Map.of(
+                "Content-Disposition",
+                List.of("attachment;filename=" + dokumentDto.getFilename()),
+                "Content-Type",
+                List.of("application/octet-stream")
+            )
+        );
     }
 
     @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})

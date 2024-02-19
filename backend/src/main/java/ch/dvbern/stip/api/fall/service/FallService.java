@@ -17,26 +17,26 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FallService {
 
-	private final FallMapper fallMapper;
-	private final FallRepository fallRepository;
+    private final FallMapper fallMapper;
+    private final FallRepository fallRepository;
 
-	private final BenutzerRepository benutzerRepository;
+    private final BenutzerRepository benutzerRepository;
 
-	@Transactional
-	public FallDto createFall(UUID benutzerId) {
-		var benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(NotFoundException::new);
-		var fall = new Fall();
-		fall.setGesuchsteller(benutzer);
-		fallRepository.persist(fall);
-		return fallMapper.toDto(fall);
-	}
+    @Transactional
+    public FallDto createFall(UUID benutzerId) {
+        var benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(NotFoundException::new);
+        var fall = new Fall();
+        fall.setGesuchsteller(benutzer);
+        fallRepository.persist(fall);
+        return fallMapper.toDto(fall);
+    }
 
-	public Optional<FallDto> getFall(UUID id) {
-		var optionalFall = fallRepository.findByIdOptional(id);
-		return optionalFall.map(fallMapper::toDto);
-	}
+    public Optional<FallDto> getFall(UUID id) {
+        var optionalFall = fallRepository.findByIdOptional(id);
+        return optionalFall.map(fallMapper::toDto);
+    }
 
-	public List<FallDto> findFaelleForBenutzer(UUID benutzerId) {
-		return fallRepository.findAllForBenutzer(benutzerId).map(fallMapper::toDto).toList();
-	}
+    public List<FallDto> findFaelleForBenutzer(UUID benutzerId) {
+        return fallRepository.findAllForBenutzer(benutzerId).map(fallMapper::toDto).toList();
+    }
 }

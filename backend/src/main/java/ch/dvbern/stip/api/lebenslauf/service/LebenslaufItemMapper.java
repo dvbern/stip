@@ -29,7 +29,7 @@ public interface LebenslaufItemMapper {
     LebenslaufItem partialUpdate(LebenslaufItemUpdateDto lebenslaufItemUpdateDto, @MappingTarget LebenslaufItem lebenslaufItem);
 
     default Set<LebenslaufItem> map(List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos, @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
-        if(lebenslaufItemUpdateDtos.isEmpty()) {
+        if (lebenslaufItemUpdateDtos.isEmpty()) {
             lebenslaufItemSet.clear();
         }
         Iterator<LebenslaufItem> iterator = lebenslaufItemSet.iterator();
@@ -42,12 +42,11 @@ public interface LebenslaufItemMapper {
         for (LebenslaufItemUpdateDto lebenslaufItemUpdateDto : lebenslaufItemUpdateDtos) {
             if (lebenslaufItemUpdateDto.getId() != null) {
                 LebenslaufItem found = lebenslaufItemSet.stream().filter(lebenslaufItem -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())).findFirst().orElseThrow(
-                        () -> new NotFoundException("LebenslaufItem Not FOUND")
+                    () -> new NotFoundException("LebenslaufItem Not FOUND")
                 );
                 lebenslaufItemSet.remove(found);
                 lebenslaufItemSet.add(partialUpdate(lebenslaufItemUpdateDto, found));
-            }
-            else {
+            } else {
                 lebenslaufItemSet.add(partialUpdate(lebenslaufItemUpdateDto, new LebenslaufItem()));
             }
         }

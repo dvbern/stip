@@ -35,30 +35,30 @@ import java.io.IOException;
 @RequestScoped
 @RequiredArgsConstructor
 public class RequestVerificationFilter implements ContainerRequestFilter {
-	private final ConfigService configService;
+    private final ConfigService configService;
 
-	@Override
-	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		if (excludeResource(containerRequestContext)) {
-			return;
-		}
-		if (isEnvAndVersionMatching(containerRequestContext)) {
-			return;
-		}
-		throw new AppErrorException("headers not available");
-	}
+    @Override
+    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+        if (excludeResource(containerRequestContext)) {
+            return;
+        }
+        if (isEnvAndVersionMatching(containerRequestContext)) {
+            return;
+        }
+        throw new AppErrorException("headers not available");
+    }
 
-	private boolean excludeResource(ContainerRequestContext req) {
-		UriInfo info = req.getUriInfo();
-		return info.getPath().contains("/config/deployment");
-	}
+    private boolean excludeResource(ContainerRequestContext req) {
+        UriInfo info = req.getUriInfo();
+        return info.getPath().contains("/config/deployment");
+    }
 
-	private boolean isEnvAndVersionMatching(ContainerRequestContext req) {
-		String environment = req.getHeaderString("environment");
-		String version = req.getHeaderString("version");
-		DeploymentConfigDto backendConfig = configService.getDeploymentConfiguration();
-		// Local not used
-		return backendConfig.getEnvironment().equals("local") || (backendConfig.getEnvironment().equals(environment)
-				&& backendConfig.getVersion().equals(version));
-	}
+    private boolean isEnvAndVersionMatching(ContainerRequestContext req) {
+        String environment = req.getHeaderString("environment");
+        String version = req.getHeaderString("version");
+        DeploymentConfigDto backendConfig = configService.getDeploymentConfiguration();
+        // Local not used
+        return backendConfig.getEnvironment().equals("local") || (backendConfig.getEnvironment().equals(environment)
+            && backendConfig.getVersion().equals(version));
+    }
 }

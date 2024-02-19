@@ -36,34 +36,34 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Getter
 @Setter
 public class Adresse extends AbstractMandantEntity {
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Land land = Land.CH;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Land land = Land.CH;
 
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = true)
-	private String coAdresse;
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = true)
+    private String coAdresse;
 
-	@NotNull
-	@NotBlank
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String strasse;
+    @NotNull
+    @NotBlank
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String strasse;
 
-	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-	@Column(nullable = true)
-	private String hausnummer;
+    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Column(nullable = true)
+    private String hausnummer;
 
-	@NotNull
-	@NotBlank
-	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-	@Column(nullable = false)
-	private String plz;
+    @NotNull
+    @NotBlank
+    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Column(nullable = false)
+    private String plz;
 
-	@NotNull
-	@NotBlank
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String ort;
+    @NotNull
+    @NotBlank
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String ort;
 }

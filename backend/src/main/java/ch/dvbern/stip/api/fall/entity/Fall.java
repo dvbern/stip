@@ -27,23 +27,23 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-		@Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-		@Index(name = "IX_fall_mandant", columnList = "mandant")
+    @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
+    @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+    @Index(name = "IX_fall_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
 public class Fall extends AbstractMandantEntity {
 
-	@Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
-			insertable = false)
-	private Long fallNummer;
+    @Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
+        insertable = false)
+    private Long fallNummer;
 
-	@OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
-	private Benutzer gesuchsteller;
+    @OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
+    private Benutzer gesuchsteller;
 
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
-	private Benutzer sachbearbeiter;
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
+    private Benutzer sachbearbeiter;
 }

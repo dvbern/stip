@@ -7,16 +7,16 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AHV_MESSAGE;
 
-@Target({ ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AhvConstraintValidator.class)
 @Documented
 public @interface AhvConstraint {
-	String message() default VALIDATION_AHV_MESSAGE;
+    String message() default VALIDATION_AHV_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-	boolean optional() default false;
+    boolean optional() default false;
 }

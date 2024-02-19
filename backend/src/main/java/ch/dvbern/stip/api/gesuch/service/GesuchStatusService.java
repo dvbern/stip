@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class GesuchStatusService {
 
-	private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
+    private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
-	public void triggerStateMachineEvent(Gesuch gesuch, GesuchStatusChangeEvent event) {
-		StateMachine<Gesuchstatus, GesuchStatusChangeEvent>
-				stateMachine = new StateMachine<>(gesuch.getGesuchStatus(), config);
-		stateMachine.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
-		gesuch.setGesuchStatus(stateMachine.getState());
-		gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now());
-	}
+    public void triggerStateMachineEvent(Gesuch gesuch, GesuchStatusChangeEvent event) {
+        StateMachine<Gesuchstatus, GesuchStatusChangeEvent>
+            stateMachine = new StateMachine<>(gesuch.getGesuchStatus(), config);
+        stateMachine.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
+        gesuch.setGesuchStatus(stateMachine.getState());
+        gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now());
+    }
 
 }

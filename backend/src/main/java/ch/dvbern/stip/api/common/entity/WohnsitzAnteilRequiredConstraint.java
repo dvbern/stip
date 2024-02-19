@@ -7,15 +7,15 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = WohnsitzAnteilRequiredConstraintValidator.class)
 @Documented
 public @interface WohnsitzAnteilRequiredConstraint {
 
-	String message() default VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
+    String message() default VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

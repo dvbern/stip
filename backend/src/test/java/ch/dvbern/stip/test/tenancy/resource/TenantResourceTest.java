@@ -25,28 +25,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TenantResourceTest {
 
+    private final TenantApiSpec api = TenantApiSpec.tenant(RequestSpecUtil.quarkusSpec());
     @ConfigProperty(name = "keycloak.url")
     String keycloakUrlString;
-
-    private final TenantApiSpec api = TenantApiSpec.tenant(RequestSpecUtil.quarkusSpec());
 
     @Test
     @TestAsGesuchsteller
     void test_get_current() throws MalformedURLException {
         final var tenant = DEFAULT_TENANT_IDENTIFIER;
         final var tenantInfo = api.getCurrentTenant()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .as(TenantInfoDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(TenantInfoDtoSpec.class);
 
         assertThat(tenantInfo.getIdentifier()).isEqualTo(tenant);
 
         final var keycloakUrl = new URL(keycloakUrlString);
 
         assertThat(new URL(tenantInfo.getClientAuth().getAuthServerUrl()))
-                .isEqualToWithSortedQueryParameters(keycloakUrl);
+            .isEqualToWithSortedQueryParameters(keycloakUrl);
     }
 }

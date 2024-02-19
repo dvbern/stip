@@ -12,30 +12,29 @@ import java.util.UUID;
 
 public final class FileUtil {
 
-	private FileUtil() {
-	}
+    private FileUtil() {
+    }
 
-	public static String generateUUIDWithFileExtension(String filename){
-		return UUID.randomUUID() + "." + FilenameUtils.getExtension(filename);
-	}
+    public static String generateUUIDWithFileExtension(String filename) {
+        return UUID.randomUUID() + "." + FilenameUtils.getExtension(filename);
+    }
 
-	public static boolean checkFileExtensionAllowed(Path filePath, List<String> extensions) {
-		Tika tika = new Tika();
-		try {
-			String mimeType = tika.detect(filePath);
-			if (extensions.contains(mimeType)) {
-				return true;
-			}
-		}
-		catch (IOException e) {
-			throw new ValidationsException("checkFileExtension failed: " + e.getMessage(), null);
-		}
-		return false;
-	}
+    public static boolean checkFileExtensionAllowed(Path filePath, List<String> extensions) {
+        Tika tika = new Tika();
+        try {
+            String mimeType = tika.detect(filePath);
+            if (extensions.contains(mimeType)) {
+                return true;
+            }
+        } catch (IOException e) {
+            throw new ValidationsException("checkFileExtension failed: " + e.getMessage(), null);
+        }
+        return false;
+    }
 
-	public static String getFileMimeType(File file) {
-		Tika tika = new Tika();
-		return tika.detect(file.getPath());
-	}
+    public static String getFileMimeType(File file) {
+        Tika tika = new Tika();
+        return tika.detect(file.getPath());
+    }
 
 }

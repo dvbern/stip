@@ -16,8 +16,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_auszahlung_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_auszahlung_mandant", columnList = "mandant")
+    @Index(name = "IX_auszahlung_adresse_id", columnList = "adresse_id"),
+    @Index(name = "IX_auszahlung_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

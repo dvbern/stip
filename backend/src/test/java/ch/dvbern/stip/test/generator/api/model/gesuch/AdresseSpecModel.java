@@ -8,9 +8,9 @@ import org.instancio.Model;
 import static org.instancio.Select.field;
 
 public final class AdresseSpecModel {
-	public static final Model<AdresseDtoSpec> adresseSpecModel =
-			Instancio.of(AdresseDtoSpec.class)
-					.set(field(AdresseDtoSpec::getLand), LandDtoSpec.CH)
-					.ignore(field(AdresseDtoSpec::getId))
-					.toModel();
+    public static final Model<AdresseDtoSpec> adresseSpecModel =
+        Instancio.of(AdresseDtoSpec.class)
+            .set(field(AdresseDtoSpec::getLand), LandDtoSpec.CH)
+            .ignore(field(AdresseDtoSpec::getId))
+            .toModel();
 }

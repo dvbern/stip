@@ -21,7 +21,7 @@ public interface KindMapper {
     Kind partialUpdate(KindUpdateDto kindUpdateDto, @MappingTarget Kind kind);
 
     default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
-        if(kindUpdateDtos.isEmpty()) {
+        if (kindUpdateDtos.isEmpty()) {
             kinder.clear();
         }
         Iterator<Kind> iterator = kinder.iterator();
@@ -34,12 +34,11 @@ public interface KindMapper {
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
                 Kind found = kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
-                        () -> new NotFoundException("Kind Not FOUND")
+                    () -> new NotFoundException("Kind Not FOUND")
                 );
                 kinder.remove(found);
                 kinder.add(partialUpdate(kindUpdateDto, found));
-            }
-            else {
+            } else {
                 kinder.add(partialUpdate(kindUpdateDto, new Kind()));
             }
         }

@@ -18,7 +18,7 @@ public class AbstractEntityListener {
 
     @PreUpdate
     public void preUpdate(AbstractEntity entity) {
-            entity.setTimestampMutiert(LocalDateTime.now());
-            entity.setUserMutiert("TODO");
+        entity.setTimestampMutiert(LocalDateTime.now());
+        entity.setUserMutiert("TODO");
     }
 }

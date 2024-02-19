@@ -9,26 +9,26 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.BUCHSTABE
 
 public class BuchstabenRangeConstraintValidator implements ConstraintValidator<BuchstabenRangeConstraint, String> {
 
-	@Override
-	public boolean isValid(String buchstabenRange, ConstraintValidatorContext constraintValidatorContext) {
+    @Override
+    public boolean isValid(String buchstabenRange, ConstraintValidatorContext constraintValidatorContext) {
 
-		if (buchstabenRange == null) {
-			return true;
-		}
-		if (!Pattern.compile(BUCHSTABEN_RANGE_VALIDATION_PATTERN).matcher(buchstabenRange).matches()) {
-			return false;
-		}
-		String[] parts = buchstabenRange.split(",");
+        if (buchstabenRange == null) {
+            return true;
+        }
+        if (!Pattern.compile(BUCHSTABEN_RANGE_VALIDATION_PATTERN).matcher(buchstabenRange).matches()) {
+            return false;
+        }
+        String[] parts = buchstabenRange.split(",");
 
-		for (String part : parts) {
-			if (part.contains("-")) {
-				char startLetter = part.charAt(0);
-				char endLetter = part.charAt(2);
-				if (startLetter >= endLetter) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+        for (String part : parts) {
+            if (part.contains("-")) {
+                char startLetter = part.charAt(0);
+                char endLetter = part.charAt(2);
+                if (startLetter >= endLetter) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

@@ -8,16 +8,16 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 public class WohnsitzAnteilRequiredConstraintValidator implements ConstraintValidator<WohnsitzAnteilRequiredConstraint, AbstractFamilieEntity> {
 
-	@Override
-	public boolean isValid(
-			AbstractFamilieEntity abstractFamilieEntity,
-			ConstraintValidatorContext constraintValidatorContext) {
-		if (abstractFamilieEntity.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
-			return abstractFamilieEntity.getWohnsitzAnteilVater() != null && abstractFamilieEntity.getWohnsitzAnteilMutter() != null;
-		}
+    @Override
+    public boolean isValid(
+        AbstractFamilieEntity abstractFamilieEntity,
+        ConstraintValidatorContext constraintValidatorContext) {
+        if (abstractFamilieEntity.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
+            return abstractFamilieEntity.getWohnsitzAnteilVater() != null && abstractFamilieEntity.getWohnsitzAnteilMutter() != null;
+        }
         constraintValidatorContext.disableDefaultConstraintViolation();
         constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE)
-                .addConstraintViolation();
+            .addConstraintViolation();
         return abstractFamilieEntity.getWohnsitzAnteilVater() == null && abstractFamilieEntity.getWohnsitzAnteilMutter() == null;
     }
 }

@@ -19,12 +19,12 @@ import static ch.dvbern.stip.test.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
 @Target(ElementType.METHOD)
 @TestSecurity(user = "gesuchsteller2", roles = ROLE_GESUCHSTELLER)
 @OidcSecurity(
-        claims = {
-                @Claim(key = "sub", value = GESUCHSTELLER_2_TEST_ID),
-                @Claim(key = CLAIM_AHV_NUMMER, value = AHV_NUMMER_VALID),
-                @Claim(key = "family_name", value = "Gesuchsteller 2"),
-                @Claim(key = "given_name", value = "Hans")
-        }
+    claims = {
+        @Claim(key = "sub", value = GESUCHSTELLER_2_TEST_ID),
+        @Claim(key = CLAIM_AHV_NUMMER, value = AHV_NUMMER_VALID),
+        @Claim(key = "family_name", value = "Gesuchsteller 2"),
+        @Claim(key = "given_name", value = "Hans")
+    }
 )
 public @interface TestAsGesuchsteller2 {
 }

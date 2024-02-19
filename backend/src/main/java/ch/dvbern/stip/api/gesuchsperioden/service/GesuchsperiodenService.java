@@ -28,9 +28,9 @@ public class GesuchsperiodenService {
 
     public Collection<GesuchsperiodeDto> getAllGesuchsperioden() {
         return this.gesuchsperiodeRepository.findAll()
-                .stream()
-                .map(gesuchsperiodeMapper::toDto)
-                .toList();
+            .stream()
+            .map(gesuchsperiodeMapper::toDto)
+            .toList();
     }
 
     public Optional<GesuchsperiodeDto> getGesuchsperiode(UUID id) {
@@ -42,8 +42,8 @@ public class GesuchsperiodenService {
 
     public Collection<GesuchsperiodeDto> getAllActive() {
         return gesuchsperiodeRepository
-                .findAllActiveForDate(LocalDate.now())
-                .map(gesuchsperiodeMapper::toDto)
-                .toList();
+            .findAllActiveForDate(LocalDate.now())
+            .map(gesuchsperiodeMapper::toDto)
+            .toList();
     }
 }

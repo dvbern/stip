@@ -39,8 +39,8 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     public Response getGesuchsperiode(UUID gesuchsperiodeId) {
         var gesuchsperiod = gesuchsperiodenService
-                .getGesuchsperiode(gesuchsperiodeId)
-                .orElseThrow(NotFoundException::new);
+            .getGesuchsperiode(gesuchsperiodeId)
+            .orElseThrow(NotFoundException::new);
 
         return Response.ok(gesuchsperiod).build();
     }

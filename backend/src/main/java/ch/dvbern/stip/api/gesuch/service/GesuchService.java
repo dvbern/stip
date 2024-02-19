@@ -54,305 +54,306 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @RequiredArgsConstructor
 public class GesuchService {
 
-	private final GesuchRepository gesuchRepository;
+    private final GesuchRepository gesuchRepository;
 
-	private final GesuchMapper gesuchMapper;
-	private final GesuchTrancheMapper gesuchTrancheMapper;
+    private final GesuchMapper gesuchMapper;
+    private final GesuchTrancheMapper gesuchTrancheMapper;
 
-	private final Validator validator;
+    private final Validator validator;
 
-	private final GesuchStatusService gesuchStatusService;
+    private final GesuchStatusService gesuchStatusService;
 
-	private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
 
-	private final GesuchsperiodenService gesuchsperiodeService;
+    private final GesuchsperiodenService gesuchsperiodeService;
 
-	@Transactional
-	public Optional<GesuchDto> findGesuch(UUID id) {
-		return gesuchRepository.findByIdOptional(id).map(this::mapWithTrancheToWorkWith);
-	}
+    @Transactional
+    public Optional<GesuchDto> findGesuch(UUID id) {
+        return gesuchRepository.findByIdOptional(id).map(this::mapWithTrancheToWorkWith);
+    }
 
-	@Transactional
-	public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
-		var gesuch = gesuchRepository.requireById(gesuchId);
-		preventUpdateVonGesuchIfReadOnly(gesuch);
-		var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
-				.orElseThrow(NotFoundException::new);
-		updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
-	}
-
-
-	private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
-		resetFieldsOnUpdate(trancheToUpdate.getGesuchFormular(), trancheUpdate.getGesuchFormular());
-		gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
-
-		Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
-		if (!violations.isEmpty()) {
-			throw new ValidationsException("Die Entität ist nicht valid", violations);
-		}
-	}
-
-	@Transactional
-	public List<GesuchDto> findAllWithPersonInAusbildung() {
-		return gesuchRepository.findAllWithFormular()
-				.filter(gesuch -> this.getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null)
-				.map(this::mapWithTrancheToWorkWith)
-				.toList();
-	}
-
-	@Transactional
-	public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
-		Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
-		createInitialGesuchTranche(gesuch);
-		gesuchRepository.persist(gesuch);
-		return mapWithTrancheToWorkWith(gesuch);
-	}
-
-	private void createInitialGesuchTranche(Gesuch gesuch) {
-		var periode = gesuchsperiodeService
-				.getGesuchsperiode(gesuch.getGesuchsperiode().getId())
-				.orElseThrow(NotFoundException::new);
-
-		var tranche =  new GesuchTranche()
-				.setGueltigkeit(new DateRange(periode.getGueltigAb(), periode.getGueltigBis()))
-				.setGesuch(gesuch);
-
-		gesuch.getGesuchTranchen().add(tranche);
-	}
-
-	@Transactional
-	public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
-		return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
-	}
-
-	@Transactional
-	public List<GesuchDto> findAllForFall(UUID fallId) {
-		return gesuchRepository.findAllForFall(fallId).map(this::mapWithTrancheToWorkWith).toList();
-	}
-
-	@Transactional
-	public void deleteGesuch(UUID gesuchId) {
-		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		preventUpdateVonGesuchIfReadOnly(gesuch);
-		gesuchRepository.delete(gesuch);
-	}
-
-	@Transactional
-	public void gesuchEinreichen(UUID gesuchId) {
-		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-
-		validateGesuchEinreichen(gesuch);
-		if (gesuchDokumentRepository.findAllForGesuch(gesuchId).findAny().isEmpty()) {
-			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
-		} else {
-			gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
-		}
-	}
-
-	@Transactional
-	public void setDokumentNachfrist(UUID gesuchId) {
-		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-		gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
-	}
-
-	public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
-		Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-
-		try {
-			validateGesuchEinreichen(gesuch);
-		} catch (ValidationsException exception) {
-			return ValidationsExceptionMapper.toDto(exception);
-		} catch (CustomValidationsException exception) {
-			return CustomValidationsExceptionMapper.toDto(exception);
-		}
-
-		return new ValidationReportDto();
-	}
-
-	private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
-		GesuchTrancheDto tranche = getCurrentGesuchTranche(gesuch);
-		GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
-		gesuchDto.setGesuchTrancheToWorkWith(tranche);
-		return gesuchDto;
-	}
-
-	private GesuchTrancheDto getCurrentGesuchTranche(Gesuch gesuch) {
-		return gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
-				.map(gesuchTrancheMapper::toDto)
-				.orElseThrow();
-	}
+    @Transactional
+    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        preventUpdateVonGesuchIfReadOnly(gesuch);
+        var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
+            .orElseThrow(NotFoundException::new);
+        updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
+    }
 
 
-	private void validateGesuchEinreichen(Gesuch gesuch) {
-		gesuch.getGesuchTranchen().forEach(tranche -> {
-				if (tranche.getGesuchFormular() == null || tranche.getGesuchFormular().getFamiliensituation() == null) {
-					throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", new HashSet<>());
-				}
-		});
+    private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
+        resetFieldsOnUpdate(trancheToUpdate.getGesuchFormular(), trancheUpdate.getGesuchFormular());
+        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
 
-		validateNoOtherGesuchEingereichtWithSameSvNumber(gesuch);
-		Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-		Set<ConstraintViolation<Gesuch>> violationsEinreichen =
-				validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-		if (!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
-			Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
-			concatenatedViolations.addAll(violationsEinreichen);
-			throw new ValidationsException(
-					"Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
-		}
-	}
+        Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+    }
 
-	private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
-		if(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null) {
-			Stream<Gesuch> gesuchStream = gesuchRepository
-					.findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer());
+    @Transactional
+    public List<GesuchDto> findAllWithPersonInAusbildung() {
+        return gesuchRepository.findAllWithFormular()
+            .filter(gesuch -> this.getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null)
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
+    }
 
-			if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
-				throw new CustomValidationsException(
-						"Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) eingereicht werden",
-						new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
-			}
-		}
-	}
+    @Transactional
+    public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
+        Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+        createInitialGesuchTranche(gesuch);
+        gesuchRepository.persist(gesuch);
+        return mapWithTrancheToWorkWith(gesuch);
+    }
 
-	private void resetFieldsOnUpdate(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (toUpdate == null || update == null) {
-			return;
-		}
+    private void createInitialGesuchTranche(Gesuch gesuch) {
+        var periode = gesuchsperiodeService
+            .getGesuchsperiode(gesuch.getGesuchsperiode().getId())
+            .orElseThrow(NotFoundException::new);
 
-		if (hasGeburtsdatumOfPersonInAusbildungChanged(toUpdate, update)) {
-			update.setLebenslaufItems(new ArrayList<>());
-		}
+        var tranche = new GesuchTranche()
+            .setGueltigkeit(new DateRange(periode.getGueltigAb(), periode.getGueltigBis()))
+            .setGesuch(gesuch);
 
-		if (hasZivilstandChangedToOnePerson(toUpdate, update)) {
-			toUpdate.setPartner(null);
-			update.setPartner(null);
-		}
-		resetAuswaertigesMittagessen(toUpdate, update);
-		resetEltern(toUpdate, update);
-		resetAlimente(toUpdate, update);
-	}
+        gesuch.getGesuchTranchen().add(tranche);
+    }
 
-	private void resetAlimente(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (hasGerichtlicheAlimenteregelungChanged(toUpdate, update)) {
-			if (toUpdate.getEinnahmenKosten() != null) {
-				toUpdate.getEinnahmenKosten().setAlimente(null);
-			}
+    @Transactional
+    public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
+        return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
+    }
 
-			if (update.getEinnahmenKosten() != null) {
-				update.getEinnahmenKosten().setAlimente(null);
-			}
-		}
-	}
+    @Transactional
+    public List<GesuchDto> findAllForFall(UUID fallId) {
+        return gesuchRepository.findAllForFall(fallId).map(this::mapWithTrancheToWorkWith).toList();
+    }
 
-	private boolean hasGerichtlicheAlimenteregelungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (update.getFamiliensituation() == null) {
-			return false;
-		}
+    @Transactional
+    public void deleteGesuch(UUID gesuchId) {
+        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+        preventUpdateVonGesuchIfReadOnly(gesuch);
+        gesuchRepository.delete(gesuch);
+    }
 
-		if (toUpdate.getFamiliensituation() == null) {
-			return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
-		}
+    @Transactional
+    public void gesuchEinreichen(UUID gesuchId) {
+        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
-		if (toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung() == null) {
-			return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
-		}
+        validateGesuchEinreichen(gesuch);
+        if (gesuchDokumentRepository.findAllForGesuch(gesuchId).findAny().isEmpty()) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
+        } else {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
+        }
+    }
 
-		return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
-				.equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
-	}
+    @Transactional
+    public void setDokumentNachfrist(UUID gesuchId) {
+        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
+    }
 
-	private void resetEltern(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (update.getElterns() == null) {
-			return;
-		}
+    public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
+        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
-		if (hasAlimenteAufteilungChangedToBoth(toUpdate, update)) {
-			update.setElterns(new ArrayList<>());
-			return;
-		}
+        try {
+            validateGesuchEinreichen(gesuch);
+        } catch (ValidationsException exception) {
+            return ValidationsExceptionMapper.toDto(exception);
+        } catch (CustomValidationsException exception) {
+            return CustomValidationsExceptionMapper.toDto(exception);
+        }
 
-		if (isElternteilVerstorbenOrUnbekannt(update)) {
-			resetVerstorbenOrUnbekannteElternteile(update);
-		}
-	}
+        return new ValidationReportDto();
+    }
 
-	private boolean isElternteilVerstorbenOrUnbekannt(GesuchFormularUpdateDto update) {
-		return update.getFamiliensituation() != null
-				&& Boolean.TRUE.equals(update.getFamiliensituation().getElternteilUnbekanntVerstorben());
-	}
+    private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
+        GesuchTrancheDto tranche = getCurrentGesuchTranche(gesuch);
+        GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
+        gesuchDto.setGesuchTrancheToWorkWith(tranche);
+        return gesuchDto;
+    }
 
-	private void resetVerstorbenOrUnbekannteElternteile(GesuchFormularUpdateDto update) {
-		if (update.getFamiliensituation().getMutterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
-			update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER);
-		}
+    private GesuchTrancheDto getCurrentGesuchTranche(Gesuch gesuch) {
+        return gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+            .map(gesuchTrancheMapper::toDto)
+            .orElseThrow();
+    }
 
-		if (update.getFamiliensituation().getVaterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
-			update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.VATER);
-		}
-	}
 
-	private void resetAuswaertigesMittagessen(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (!isUpdateToEigenerHaushalt(update)) {
-			return;
-		}
+    private void validateGesuchEinreichen(Gesuch gesuch) {
+        gesuch.getGesuchTranchen().forEach(tranche -> {
+            if (tranche.getGesuchFormular() == null || tranche.getGesuchFormular().getFamiliensituation() == null) {
+                throw new ValidationsException("Es fehlt Formular Teilen um das Gesuch einreichen zu koennen", new HashSet<>());
+            }
+        });
 
-		if (toUpdate.getEinnahmenKosten() != null) {
-			toUpdate.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
-		}
+        validateNoOtherGesuchEingereichtWithSameSvNumber(gesuch);
+        Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
+        Set<ConstraintViolation<Gesuch>> violationsEinreichen =
+            validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
+        if (!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
+            Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
+            concatenatedViolations.addAll(violationsEinreichen);
+            throw new ValidationsException(
+                "Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
+        }
+    }
 
-		if (update.getEinnahmenKosten() != null) {
-			update.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
-		}
-	}
+    private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
+        if (getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null) {
+            Stream<Gesuch> gesuchStream = gesuchRepository
+                .findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer());
 
-	private boolean hasAlimenteAufteilungChangedToBoth(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (toUpdate.getFamiliensituation() == null || update.getFamiliensituation() == null) {
-			return false;
-		}
+            if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
+                throw new CustomValidationsException(
+                    "Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) eingereicht werden",
+                    new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE)
+                );
+            }
+        }
+    }
 
-		return toUpdate.getFamiliensituation().getWerZahltAlimente() != Elternschaftsteilung.GEMEINSAM &&
-				update.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
-	}
+    private void resetFieldsOnUpdate(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (toUpdate == null || update == null) {
+            return;
+        }
 
-	private boolean hasGeburtsdatumOfPersonInAusbildungChanged(
-			GesuchFormular toUpdate,
-			GesuchFormularUpdateDto update) {
-		if (toUpdate.getPersonInAusbildung() == null
-				|| toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
-				|| update.getPersonInAusbildung() == null) {
-			return false;
-		}
+        if (hasGeburtsdatumOfPersonInAusbildungChanged(toUpdate, update)) {
+            update.setLebenslaufItems(new ArrayList<>());
+        }
 
-		return !toUpdate.getPersonInAusbildung()
-				.getGeburtsdatum()
-				.equals(update.getPersonInAusbildung().getGeburtsdatum());
-	}
+        if (hasZivilstandChangedToOnePerson(toUpdate, update)) {
+            toUpdate.setPartner(null);
+            update.setPartner(null);
+        }
+        resetAuswaertigesMittagessen(toUpdate, update);
+        resetEltern(toUpdate, update);
+        resetAlimente(toUpdate, update);
+    }
 
-	private boolean isUpdateToEigenerHaushalt(GesuchFormularUpdateDto update) {
-		if (update.getPersonInAusbildung() == null) {
-			return false;
-		}
+    private void resetAlimente(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (hasGerichtlicheAlimenteregelungChanged(toUpdate, update)) {
+            if (toUpdate.getEinnahmenKosten() != null) {
+                toUpdate.getEinnahmenKosten().setAlimente(null);
+            }
 
-		return update.getPersonInAusbildung().getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
-	}
+            if (update.getEinnahmenKosten() != null) {
+                update.getEinnahmenKosten().setAlimente(null);
+            }
+        }
+    }
 
-	private boolean hasZivilstandChangedToOnePerson(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-		if (toUpdate.getPersonInAusbildung() == null
-				|| toUpdate.getPersonInAusbildung().getZivilstand() == null
-				|| update.getPersonInAusbildung() == null
-				|| update.getPersonInAusbildung().getZivilstand() == null) {
-			return false;
-		}
+    private boolean hasGerichtlicheAlimenteregelungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (update.getFamiliensituation() == null) {
+            return false;
+        }
 
-		return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
-				!update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
-	}
+        if (toUpdate.getFamiliensituation() == null) {
+            return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
+        }
 
-	private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-		if (Gesuchstatus.READONLY_GESUCH_STATUS_LIST.contains(gesuch.getGesuchStatus())) {
-			throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
-					+ gesuch.getGesuchStatus());
-		}
-	}
+        if (toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung() == null) {
+            return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
+        }
+
+        return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
+            .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
+    }
+
+    private void resetEltern(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (update.getElterns() == null) {
+            return;
+        }
+
+        if (hasAlimenteAufteilungChangedToBoth(toUpdate, update)) {
+            update.setElterns(new ArrayList<>());
+            return;
+        }
+
+        if (isElternteilVerstorbenOrUnbekannt(update)) {
+            resetVerstorbenOrUnbekannteElternteile(update);
+        }
+    }
+
+    private boolean isElternteilVerstorbenOrUnbekannt(GesuchFormularUpdateDto update) {
+        return update.getFamiliensituation() != null
+            && Boolean.TRUE.equals(update.getFamiliensituation().getElternteilUnbekanntVerstorben());
+    }
+
+    private void resetVerstorbenOrUnbekannteElternteile(GesuchFormularUpdateDto update) {
+        if (update.getFamiliensituation().getMutterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
+            update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER);
+        }
+
+        if (update.getFamiliensituation().getVaterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
+            update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.VATER);
+        }
+    }
+
+    private void resetAuswaertigesMittagessen(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (!isUpdateToEigenerHaushalt(update)) {
+            return;
+        }
+
+        if (toUpdate.getEinnahmenKosten() != null) {
+            toUpdate.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+        }
+
+        if (update.getEinnahmenKosten() != null) {
+            update.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+        }
+    }
+
+    private boolean hasAlimenteAufteilungChangedToBoth(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (toUpdate.getFamiliensituation() == null || update.getFamiliensituation() == null) {
+            return false;
+        }
+
+        return toUpdate.getFamiliensituation().getWerZahltAlimente() != Elternschaftsteilung.GEMEINSAM &&
+            update.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
+    }
+
+    private boolean hasGeburtsdatumOfPersonInAusbildungChanged(
+        GesuchFormular toUpdate,
+        GesuchFormularUpdateDto update) {
+        if (toUpdate.getPersonInAusbildung() == null
+            || toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
+            || update.getPersonInAusbildung() == null) {
+            return false;
+        }
+
+        return !toUpdate.getPersonInAusbildung()
+            .getGeburtsdatum()
+            .equals(update.getPersonInAusbildung().getGeburtsdatum());
+    }
+
+    private boolean isUpdateToEigenerHaushalt(GesuchFormularUpdateDto update) {
+        if (update.getPersonInAusbildung() == null) {
+            return false;
+        }
+
+        return update.getPersonInAusbildung().getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+    }
+
+    private boolean hasZivilstandChangedToOnePerson(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
+        if (toUpdate.getPersonInAusbildung() == null
+            || toUpdate.getPersonInAusbildung().getZivilstand() == null
+            || update.getPersonInAusbildung() == null
+            || update.getPersonInAusbildung().getZivilstand() == null) {
+            return false;
+        }
+
+        return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
+            !update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
+    }
+
+    private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
+        if (Gesuchstatus.READONLY_GESUCH_STATUS_LIST.contains(gesuch.getGesuchStatus())) {
+            throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
+                + gesuch.getGesuchStatus());
+        }
+    }
 }

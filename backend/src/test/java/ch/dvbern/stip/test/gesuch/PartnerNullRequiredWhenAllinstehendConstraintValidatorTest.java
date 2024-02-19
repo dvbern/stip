@@ -14,47 +14,47 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
-	PartnerNullRequiredWhenAlleinstehendConstraintValidator validator =
-			new PartnerNullRequiredWhenAlleinstehendConstraintValidator();
+    PartnerNullRequiredWhenAlleinstehendConstraintValidator validator =
+        new PartnerNullRequiredWhenAlleinstehendConstraintValidator();
 
-	@Test
-	void personInAusbildungLedigGeschiedenAufgeloestOrVerwittwetAndPartnerNotNullShouldNotBeValid() {
-		Zivilstand.getZvilstandsNoPartnerschaft().forEach(zivilstand -> {
-			GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, new Partner());
-			assertThat(validator.isValid(gesuchFormular, null), is(false));
-		});
-	}
+    @NotNull
+    private static GesuchFormular preapreGesuchFormularWithZivilstand(Zivilstand zivilstand, @Nullable Partner partner) {
+        GesuchFormular gesuchFormular = new GesuchFormular()
+            .setPartner(partner)
+            .setPersonInAusbildung(new PersonInAusbildung().setZivilstand(zivilstand));
+        return gesuchFormular;
+    }
 
-	@Test
-	void personInAusbildungLedigGeschiedenAufgeloestOrVerwittwetAndPartnerNullShouldBeValid() {
-		Zivilstand.getZvilstandsNoPartnerschaft().forEach(zivilstand -> {
-			GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
-			assertThat(validator.isValid(gesuchFormular, null), is(true));
-		});
-	}
+    @Test
+    void personInAusbildungLedigGeschiedenAufgeloestOrVerwittwetAndPartnerNotNullShouldNotBeValid() {
+        Zivilstand.getZvilstandsNoPartnerschaft().forEach(zivilstand -> {
+            GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, new Partner());
+            assertThat(validator.isValid(gesuchFormular, null), is(false));
+        });
+    }
 
-	@Test
-	void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNullShouldNotBeValid() {
-		Zivilstand.getZvilstandsWithPartnerschaft().forEach(zivilstand -> {
-			GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
-			assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext()), is(false));
-		});
-	}
+    @Test
+    void personInAusbildungLedigGeschiedenAufgeloestOrVerwittwetAndPartnerNullShouldBeValid() {
+        Zivilstand.getZvilstandsNoPartnerschaft().forEach(zivilstand -> {
+            GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
+            assertThat(validator.isValid(gesuchFormular, null), is(true));
+        });
+    }
 
-	@Test
-	void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNotNullShouldBeValid() {
-		Zivilstand.getZvilstandsWithPartnerschaft().forEach(zivilstand ->  {
-			GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, new Partner());
-			assertThat(validator.isValid(gesuchFormular, null), is(true));
-		});
-	}
+    @Test
+    void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNullShouldNotBeValid() {
+        Zivilstand.getZvilstandsWithPartnerschaft().forEach(zivilstand -> {
+            GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
+            assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext()), is(false));
+        });
+    }
 
-	@NotNull
-	private static GesuchFormular preapreGesuchFormularWithZivilstand(Zivilstand zivilstand, @Nullable Partner partner) {
-		GesuchFormular gesuchFormular = new GesuchFormular()
-				.setPartner(partner)
-				.setPersonInAusbildung(new PersonInAusbildung().setZivilstand(zivilstand));
-		return gesuchFormular;
-	}
+    @Test
+    void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNotNullShouldBeValid() {
+        Zivilstand.getZvilstandsWithPartnerschaft().forEach(zivilstand -> {
+            GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, new Partner());
+            assertThat(validator.isValid(gesuchFormular, null), is(true));
+        });
+    }
 
 }

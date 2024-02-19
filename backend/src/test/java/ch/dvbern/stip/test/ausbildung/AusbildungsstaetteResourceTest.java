@@ -32,11 +32,11 @@ class AusbildungsstaetteResourceTest {
     @TestAsGesuchsteller
     void test_get_ausbildungsstaetten() {
         var res = api.getAusbildungsstaetten().execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .extract()
-                .as(AusbildungsstaetteDtoSpec[].class);
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(AusbildungsstaetteDtoSpec[].class);
 
         assertThat(res.length, greaterThanOrEqualTo(1));
     }
@@ -45,10 +45,10 @@ class AusbildungsstaetteResourceTest {
     @TestAsGesuchsteller
     void getausbildungsstaetten() {
         api.getAusbildungsstaette().ausbildungsstaetteIdPath(TestConstants.AUSBILDUNGSSTAETTE_ID)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.OK.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
 }

@@ -15,11 +15,11 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 @Target(ElementType.METHOD)
 @TestSecurity(user = "admin", roles = ROLE_ADMIN)
 @OidcSecurity(
-        claims = {
-                @Claim(key = "sub", value = "c1dd0d38-0beb-4694-af37-10bb7da5b12a"),
-                @Claim(key = "family_name", value = "Admin"),
-                @Claim(key = "given_name", value = "Hans")
-        }
+    claims = {
+        @Claim(key = "sub", value = "c1dd0d38-0beb-4694-af37-10bb7da5b12a"),
+        @Claim(key = "family_name", value = "Admin"),
+        @Claim(key = "given_name", value = "Hans")
+    }
 )
 public @interface TestAsAdmin {
 }

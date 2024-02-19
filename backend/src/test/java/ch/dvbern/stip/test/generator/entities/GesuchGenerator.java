@@ -29,99 +29,99 @@ import static org.instancio.Select.field;
 
 
 public final class GesuchGenerator {
-	private GesuchGenerator() {
-	}
+    private GesuchGenerator() {
+    }
 
-	public static GesuchUpdateDto createFullGesuch() {
-		GesuchUpdateDtoSpec gesuchFormular = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
-		return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
-	}
+    public static GesuchUpdateDto createFullGesuch() {
+        GesuchUpdateDtoSpec gesuchFormular = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+        return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
+    }
 
-	public static GesuchUpdateDto createGesuch() {
-		GesuchFormularUpdateDtoSpec gesuchFormularToWorkWith = new GesuchFormularUpdateDtoSpec();
-		gesuchFormularToWorkWith.setPersonInAusbildung(createPersonInAusbildung());
-		gesuchFormularToWorkWith.setElterns(createElterns());
-		gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
-		gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
-		gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
-		gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
-		gesuchFormularToWorkWith.setPartner(createPartner());
+    public static GesuchUpdateDto createGesuch() {
+        GesuchFormularUpdateDtoSpec gesuchFormularToWorkWith = new GesuchFormularUpdateDtoSpec();
+        gesuchFormularToWorkWith.setPersonInAusbildung(createPersonInAusbildung());
+        gesuchFormularToWorkWith.setElterns(createElterns());
+        gesuchFormularToWorkWith.setFamiliensituation(createFamiliensituation());
+        gesuchFormularToWorkWith.setEinnahmenKosten(createEinnahmeKosten());
+        gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
+        gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
+        gesuchFormularToWorkWith.setPartner(createPartner());
 
-		GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
-		gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);
+        GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
+        gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);
 
-		GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
-		gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec);
-		GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
-		return gesuchUpdateDtoMapper.toEntity(gesuchUpdateDtoSpec);
-	}
+        GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
+        gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec);
+        GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
+        return gesuchUpdateDtoMapper.toEntity(gesuchUpdateDtoSpec);
+    }
 
-	private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
-		return Instancio.of(lebenslaufItemUpdateDtoSpecModel).create();
-	}
+    private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
+        return Instancio.of(lebenslaufItemUpdateDtoSpecModel).create();
+    }
 
-	public static Gesuch initGesuch() {
-		var gesuch =  new Gesuch()
-				.setFall(new Fall())
-				.setGesuchsperiode(new Gesuchsperiode().setGueltigkeit(GUELTIGKEIT_PERIODE_23_24));
-		gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
-				.setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
-				.setGesuch(gesuch)
-				.setId(UUID.randomUUID()));
-		return gesuch;
-	}
+    public static Gesuch initGesuch() {
+        var gesuch = new Gesuch()
+            .setFall(new Fall())
+            .setGesuchsperiode(new Gesuchsperiode().setGueltigkeit(GUELTIGKEIT_PERIODE_23_24));
+        gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
+            .setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
+            .setGesuch(gesuch)
+            .setId(UUID.randomUUID()));
+        return gesuch;
+    }
 
-	public static GesuchTranche initGesuchTranche() {
-		return initGesuch().getGesuchTranchen().get(0);
-	}
+    public static GesuchTranche initGesuchTranche() {
+        return initGesuch().getGesuchTranchen().get(0);
+    }
 
-	private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
-		return Instancio.of(familiensituationUpdateDtoSpecModel)
-						.set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), true).create();
-	}
+    private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
+        return Instancio.of(familiensituationUpdateDtoSpecModel)
+            .set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), true).create();
+    }
 
-	private static List<ElternUpdateDtoSpec> createElterns() {
-		List<ElternUpdateDtoSpec> elterns = new ArrayList<>();
-		ElternUpdateDtoSpec mutter = createEltern();
-		mutter.setElternTyp(ElternTypDtoSpec.MUTTER);
-		mutter.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
-		elterns.add(mutter);
-		elterns.add(createEltern());
-		return elterns;
-	}
+    private static List<ElternUpdateDtoSpec> createElterns() {
+        List<ElternUpdateDtoSpec> elterns = new ArrayList<>();
+        ElternUpdateDtoSpec mutter = createEltern();
+        mutter.setElternTyp(ElternTypDtoSpec.MUTTER);
+        mutter.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
+        elterns.add(mutter);
+        elterns.add(createEltern());
+        return elterns;
+    }
 
-	private static ElternUpdateDtoSpec createEltern() {
-		return Instancio.of(elternUpdateDtoSpecModel).create().get(0);
-	}
+    private static ElternUpdateDtoSpec createEltern() {
+        return Instancio.of(elternUpdateDtoSpecModel).create().get(0);
+    }
 
-	private static PartnerUpdateDtoSpec createPartner() {
-		PartnerUpdateDtoSpec partnerDtoSpec = Instancio.of(partnerUpdateDtoSpecModel).create();
-		return partnerDtoSpec;
-	}
+    private static PartnerUpdateDtoSpec createPartner() {
+        PartnerUpdateDtoSpec partnerDtoSpec = Instancio.of(partnerUpdateDtoSpecModel).create();
+        return partnerDtoSpec;
+    }
 
-	private static PersonInAusbildungUpdateDtoSpec createPersonInAusbildung() {
-		PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
-				Instancio.of(personInAusbildungUpdateDtoSpecModel).create();
-		return personInAusbildungUpdateDtoSpec;
-	}
+    private static PersonInAusbildungUpdateDtoSpec createPersonInAusbildung() {
+        PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
+            Instancio.of(personInAusbildungUpdateDtoSpecModel).create();
+        return personInAusbildungUpdateDtoSpec;
+    }
 
-	private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
-		EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
-				.set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
-		return einnahmenKostenUpdateDto;
-	}
+    private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
+        EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
+            .set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
+        return einnahmenKostenUpdateDto;
+    }
 
-	private static AuszahlungUpdateDtoSpec createAuszahlung() {
-		AuszahlungUpdateDtoSpec auszahlungUpdateDto = Instancio.of(auszahlungUpdateDtoSpecModel)
-				.set(
-						field(AuszahlungUpdateDtoSpec::getIban),
-						TestConstants.IBAN_CH_NUMMER_VALID
-				)
-				.create();
-		return auszahlungUpdateDto;
-	}
+    private static AuszahlungUpdateDtoSpec createAuszahlung() {
+        AuszahlungUpdateDtoSpec auszahlungUpdateDto = Instancio.of(auszahlungUpdateDtoSpecModel)
+            .set(
+                field(AuszahlungUpdateDtoSpec::getIban),
+                TestConstants.IBAN_CH_NUMMER_VALID
+            )
+            .create();
+        return auszahlungUpdateDto;
+    }
 
-	private static GesuchTrancheUpdateDtoSpec createGesuchTranche() {
-		return Instancio.of(gesuchTrancheDtoSpecModel).create();
-	}
+    private static GesuchTrancheUpdateDtoSpec createGesuchTranche() {
+        return Instancio.of(gesuchTrancheDtoSpecModel).create();
+    }
 }

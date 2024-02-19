@@ -39,10 +39,10 @@ class GesuchsperiodeResourceTest {
         newPeriode.setGueltigBis(LocalDate.of(2023, 12, 1));
 
         api.createGesuchsperiode().body(newPeriode)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.CREATED.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
     }
 
 
@@ -51,11 +51,11 @@ class GesuchsperiodeResourceTest {
     @Order(2)
     void test_get_all() {
         var gesuchperioden = api.getGesuchsperioden()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchsperiodeDtoSpec[].class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchsperiodeDtoSpec[].class);
 
         assertThat(gesuchperioden.length, is(2));
     }

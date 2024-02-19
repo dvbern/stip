@@ -23,9 +23,9 @@ import java.util.UUID;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
-        @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
-        @Index(name = "IX_gesuch_mandant", columnList = "mandant")
+    @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
+    @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
+    @Index(name = "IX_gesuch_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
@@ -55,19 +55,19 @@ public class Gesuch extends AbstractMandantEntity {
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
 
     @NotNull
-    @Size(min=1)
+    @Size(min = 1)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst();
+            .filter(t -> t.getId().equals(id))
+            .findFirst();
     }
 
     public Optional<GesuchTranche> getGesuchTrancheValidOnDate(LocalDate date) {
-       return gesuchTranchen.stream()
-                .filter(t -> t.getGueltigkeit().contains(date))
-                .findFirst();
+        return gesuchTranchen.stream()
+            .filter(t -> t.getGueltigkeit().contains(date))
+            .findFirst();
     }
 }

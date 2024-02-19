@@ -21,7 +21,7 @@ public interface ElternMapper {
     Eltern partialUpdate(ElternUpdateDto elternUpdateDto, @MappingTarget Eltern eltern);
 
     default Set<Eltern> map(List<ElternUpdateDto> elternUpdateDtos, @MappingTarget Set<Eltern> elternSet) {
-        if(elternUpdateDtos.isEmpty()) {
+        if (elternUpdateDtos.isEmpty()) {
             elternSet.clear();
         }
         Iterator<Eltern> iterator = elternSet.iterator();
@@ -34,7 +34,7 @@ public interface ElternMapper {
         for (ElternUpdateDto elternUpdateDto : elternUpdateDtos) {
             if (elternUpdateDto.getId() != null) {
                 Eltern found = elternSet.stream().filter(eltern -> eltern.getId().equals(elternUpdateDto.getId())).findFirst().orElseThrow(
-                        () -> new NotFoundException("Eltern Not FOUND")
+                    () -> new NotFoundException("Eltern Not FOUND")
                 );
                 elternSet.remove(found);
                 elternSet.add(partialUpdate(elternUpdateDto, found));

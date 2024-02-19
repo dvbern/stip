@@ -12,8 +12,8 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_gesuch_tranche_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_gesuch_tranche_gesuch_formular_id", columnList = "gesuch_formular_id")
+    @Index(name = "IX_gesuch_tranche_gesuch_id", columnList = "gesuch_id"),
+    @Index(name = "IX_gesuch_tranche_gesuch_formular_id", columnList = "gesuch_formular_id")
 })
 @Getter
 @Setter
