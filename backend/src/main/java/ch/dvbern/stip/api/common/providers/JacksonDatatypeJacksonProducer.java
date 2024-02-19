@@ -18,10 +18,10 @@ public class JacksonDatatypeJacksonProducer implements ContextResolver<ObjectMap
 
     public JacksonDatatypeJacksonProducer() {
         this.json = JsonMapper.builder()
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .addModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .build();
+            .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .addModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .build();
     }
 
     @Override

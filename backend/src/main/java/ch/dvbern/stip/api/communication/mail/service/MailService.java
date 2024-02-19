@@ -22,95 +22,114 @@ import java.util.Locale;
 @Slf4j
 public class MailService {
 
-	@CheckedTemplate
-	static class Templates {
+    private final Mailer mailer;
+    private final ReactiveMailer reactiveMailer;
 
-		private Templates(){}
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtDe(String name, String vorname);
+    public void sendGesuchNichtKomplettEingereichtEmail(
+        String name,
+        String vorname,
+        String email,
+        Locale local) {
+        Templates.getGesuchNichtKomplettEingereichtMailTemplate(name, vorname, local.getLanguage())
+            .to(email)
+            .subject(StipMessagesResourceBundle.getMessage(
+                StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+                local))
+            .send().subscribe().asCompletionStage();
+    }
 
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtFr(String name, String vorname);
+    public void sendGesuchNichtKomplettEingereichtNachfristEmail(
+        String name,
+        String vorname,
+        String email,
+        Locale local) {
+        Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(name, vorname, local.getLanguage())
+            .to(email)
+            .subject(StipMessagesResourceBundle.getMessage(
+                StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(),
+                local))
+            .send().subscribe().asCompletionStage();
+    }
 
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(String name, String vorname);
-		private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(String name, String vorname);
+    public Uni<Void> sendEmail(String to, String subject, String htmlContent) {
+        return reactiveMailer.send(
+            Mail.withHtml(
+                to,
+                subject,
+                htmlContent
+            )
+        );
+    }
 
-		public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
-				String name,
-				String vorname,
-				String language) {
-			return language.equals("fr") ?
-					gesuchNichtKomplettEingereichtFr(name, vorname) :
-					gesuchNichtKomplettEingereichtDe(name, vorname);
-		}
+    public void sendEmailSync(String to, String subject, String htmlContent) {
+        mailer.send(
+            Mail.withHtml(
+                to,
+                subject,
+                htmlContent
+            )
+        );
+    }
 
-		public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
-				String name,
-				String vorname,
-				String language) {
-			return language.equals("fr") ?
-					gesuchNichtKomplettEingereichtNachfristFr(name, vorname) :
-					gesuchNichtKomplettEingereichtNachfristDe(name, vorname);
-		}
-	}
+    public Uni<Void> sendEmailWithAttachment(String to, String subject, String htmlContent, List<File> attachments) {
+        Mail mail = Mail.withHtml(to, subject,
+            htmlContent
+        );
+        attachments.forEach(attachment -> mail.addAttachment(
+            attachment.getName(),
+            attachment,
+            FileUtil.getFileMimeType(attachment)
+        ));
+        return reactiveMailer.send(mail);
+    }
 
-	private final Mailer mailer;
-	private final ReactiveMailer reactiveMailer;
+    public void sendEmailWithAttachmentSync(String to, String subject, String htmlContent, List<File> attachments) {
+        Mail mail = Mail.withHtml(to, subject,
+            htmlContent
+        );
+        attachments.forEach(attachment -> mail.addAttachment(
+            attachment.getName(),
+            attachment,
+            FileUtil.getFileMimeType(attachment)
+        ));
+        mailer.send(mail);
+    }
 
-	public void sendGesuchNichtKomplettEingereichtEmail(
-			String name,
-			String vorname,
-			String email,
-			Locale local) {
-		 Templates.getGesuchNichtKomplettEingereichtMailTemplate(name, vorname, local.getLanguage())
-				.to(email)
-				.subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), local))
-				.send().subscribe().asCompletionStage();
-	}
+    @CheckedTemplate
+    static class Templates {
 
-	public void sendGesuchNichtKomplettEingereichtNachfristEmail(String name, String vorname, String email, Locale local) {
-		Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(name, vorname, local.getLanguage())
-				.to(email)
-				.subject(StipMessagesResourceBundle.getMessage(StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(), local))
-				.send().subscribe().asCompletionStage();
-	}
+        private Templates() {
+        }
 
-	public Uni<Void> sendEmail(String to, String subject, String htmlContent) {
-		return reactiveMailer.send(
-				Mail.withHtml(
-						to,
-						subject,
-						htmlContent
-				)
-		);
-	}
+        private static native MailTemplateInstance gesuchNichtKomplettEingereichtDe(String name, String vorname);
 
-	public void sendEmailSync(String to, String subject, String htmlContent) {
-		mailer.send(
-				Mail.withHtml(
-						to,
-						subject,
-						htmlContent
-				)
-		);
-	}
+        private static native MailTemplateInstance gesuchNichtKomplettEingereichtFr(String name, String vorname);
 
-	public Uni<Void> sendEmailWithAttachment(String to, String subject, String htmlContent, List<File> attachments) {
-		Mail mail = Mail.withHtml(to, subject,
-				htmlContent);
-		attachments.forEach(attachment -> mail.addAttachment(
-				attachment.getName(),
-				attachment,
-				FileUtil.getFileMimeType(attachment)));
-		return reactiveMailer.send(mail);
-	}
+        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(
+            String name,
+            String vorname);
 
-	public void sendEmailWithAttachmentSync(String to, String subject, String htmlContent, List<File> attachments) {
-		Mail mail = Mail.withHtml(to, subject,
-				htmlContent);
-		attachments.forEach(attachment -> mail.addAttachment(
-				attachment.getName(),
-				attachment,
-				FileUtil.getFileMimeType(attachment)));
-		mailer.send(mail);
-	}
+        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(
+            String name,
+            String vorname);
+
+        public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
+            String name,
+            String vorname,
+            String language) {
+            return language.equals("fr") ?
+                gesuchNichtKomplettEingereichtFr(name, vorname) :
+                gesuchNichtKomplettEingereichtDe(name, vorname);
+        }
+
+        public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
+            String name,
+            String vorname,
+            String language) {
+            return language.equals("fr") ?
+                gesuchNichtKomplettEingereichtNachfristFr(name, vorname) :
+                gesuchNichtKomplettEingereichtNachfristDe(name, vorname);
+        }
+    }
 
 }

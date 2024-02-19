@@ -17,78 +17,82 @@ import static org.hamcrest.Matchers.is;
 
 class LebenslaufItemAusbildungFachrichtungConstraintValidatorTest {
 
-	LebenslaufItemAusbildungFachrichtungConstraintValidator validator =
-			new LebenslaufItemAusbildungFachrichtungConstraintValidator();
+    LebenslaufItemAusbildungFachrichtungConstraintValidator validator =
+        new LebenslaufItemAusbildungFachrichtungConstraintValidator();
 
-	@Test
-	void shouldBeValidIfBildungsartNullAndFachrichtungNull() {
-		LebenslaufItem lebenslaufItem = new LebenslaufItem()
-				.setBildungsart(null)
-				.setFachrichtung(null);
+    @NotNull
+    private static List<LebenslaufAusbildungsArt> getLebenslaufAusbildungsArtsForFachrichtung() {
+        return List.of(
+            LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
+            LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
+            LebenslaufAusbildungsArt.MASTER
+        );
+    }
 
-		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
-	}
+    @NotNull
+    private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtOfFachrichtung() {
+        return lebenslaufAusbildungsArt -> getLebenslaufAusbildungsArtsForFachrichtung().contains(
+            lebenslaufAusbildungsArt);
+    }
 
-	@Test
-	void shouldNotBeValidIfBildungsartBachelorOrMasterAndFachrichtungNull() {
-		getLebenslaufAusbildungsArtsForFachrichtung().forEach(bildungsart -> {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setFachrichtung(null);
-			assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
-		});
-	}
+    @Test
+    void shouldBeValidIfBildungsartNullAndFachrichtungNull() {
+        LebenslaufItem lebenslaufItem = new LebenslaufItem()
+            .setBildungsart(null)
+            .setFachrichtung(null);
 
-	@Test
-	void shouldBeValidIfBildungsartBachelorOrMasterAndFachrichtungNotNull() {
-		getLebenslaufAusbildungsArtsForFachrichtung().forEach(bildungsart -> {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setFachrichtung("Fachrichtung");
-			assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
-		});
-	}
+        assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+    }
 
-	@Test
-	void shouldNotBeValidIfBildungsartOtherThanBachelorOrMasterAndFachrichtungNotNull() {
-		Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtOfFachrichtung().negate())
-				.forEach(bildungsarteOtherThanBachelorOrMaster -> {
-					var context = TestUtil.initValidatorContext();
-					LebenslaufItem lebenslaufItem = new LebenslaufItem()
-							.setBildungsart(bildungsarteOtherThanBachelorOrMaster)
-							.setFachrichtung("Fachrichtung");
-					assertThat(validator.isValid(lebenslaufItem, context), is(false));
-					assertThat(context.getConstraintViolationCreationContexts().size(), is(1));
-					assertThat(context.getConstraintViolationCreationContexts().get(0).getMessage(),
-							is(VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE));
-				});
-	}
+    @Test
+    void shouldNotBeValidIfBildungsartBachelorOrMasterAndFachrichtungNull() {
+        getLebenslaufAusbildungsArtsForFachrichtung().forEach(bildungsart -> {
+            LebenslaufItem lebenslaufItem = new LebenslaufItem()
+                .setBildungsart(bildungsart)
+                .setFachrichtung(null);
+            assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
+        });
+    }
 
-	@Test
-	void shouldBeValidIfBildungsartOtherThanBachelorOrMasterAndFachrichtungNull() {
-		var bildungsartenOtherThanBachelorOrMaster = Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtOfFachrichtung().negate())
-				.toArray(LebenslaufAusbildungsArt[]::new);
+    @Test
+    void shouldBeValidIfBildungsartBachelorOrMasterAndFachrichtungNotNull() {
+        getLebenslaufAusbildungsArtsForFachrichtung().forEach(bildungsart -> {
+            LebenslaufItem lebenslaufItem = new LebenslaufItem()
+                .setBildungsart(bildungsart)
+                .setFachrichtung("Fachrichtung");
+            assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+        });
+    }
 
-		for (LebenslaufAusbildungsArt bildungsart : bildungsartenOtherThanBachelorOrMaster) {
-			LebenslaufItem lebenslaufItem = new LebenslaufItem()
-					.setBildungsart(bildungsart)
-					.setFachrichtung(null);
-			assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
-		}
-	}
+    @Test
+    void shouldNotBeValidIfBildungsartOtherThanBachelorOrMasterAndFachrichtungNotNull() {
+        Arrays.stream(LebenslaufAusbildungsArt.values())
+            .filter(isLebenslaufAusbildungsArtOfFachrichtung().negate())
+            .forEach(bildungsarteOtherThanBachelorOrMaster -> {
+                var context = TestUtil.initValidatorContext();
+                LebenslaufItem lebenslaufItem = new LebenslaufItem()
+                    .setBildungsart(bildungsarteOtherThanBachelorOrMaster)
+                    .setFachrichtung("Fachrichtung");
+                assertThat(validator.isValid(lebenslaufItem, context), is(false));
+                assertThat(context.getConstraintViolationCreationContexts().size(), is(1));
+                assertThat(
+                    context.getConstraintViolationCreationContexts().get(0).getMessage(),
+                    is(VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE)
+                );
+            });
+    }
 
-	@NotNull
-	private static List<LebenslaufAusbildungsArt> getLebenslaufAusbildungsArtsForFachrichtung() {
-		return List.of(
-				LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
-				LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
-				LebenslaufAusbildungsArt.MASTER);
-	}
+    @Test
+    void shouldBeValidIfBildungsartOtherThanBachelorOrMasterAndFachrichtungNull() {
+        var bildungsartenOtherThanBachelorOrMaster = Arrays.stream(LebenslaufAusbildungsArt.values())
+            .filter(isLebenslaufAusbildungsArtOfFachrichtung().negate())
+            .toArray(LebenslaufAusbildungsArt[]::new);
 
-	@NotNull
-	private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtOfFachrichtung() {
-		return lebenslaufAusbildungsArt -> getLebenslaufAusbildungsArtsForFachrichtung().contains(lebenslaufAusbildungsArt);
-	}
+        for (LebenslaufAusbildungsArt bildungsart : bildungsartenOtherThanBachelorOrMaster) {
+            LebenslaufItem lebenslaufItem = new LebenslaufItem()
+                .setBildungsart(bildungsart)
+                .setFachrichtung(null);
+            assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+        }
+    }
 }

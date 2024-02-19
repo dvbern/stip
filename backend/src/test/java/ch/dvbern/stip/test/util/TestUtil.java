@@ -13,13 +13,14 @@ public class TestUtil {
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
         var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
-        var idString = locationString[locationString.length-1];
+        var idString = locationString[locationString.length - 1];
         return UUID.fromString(idString);
     }
 
     public static ConstraintValidatorContextImpl initValidatorContext() {
-        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null,null,
-                ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT);
+        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null, null,
+            ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT
+        );
     }
 
     public static GesuchCreateDtoSpec initGesuchCreateDto() {

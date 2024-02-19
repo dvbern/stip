@@ -32,29 +32,35 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AusbildungsgangResourceTest {
 
-    private final AusbildungsgangApiSpec ausbildungsgangApi = AusbildungsgangApiSpec.ausbildungsgang(RequestSpecUtil.quarkusSpec());
-    private final AusbildungsstaetteApiSpec ausbildungsstaetteApiSpec = AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsgangApiSpec ausbildungsgangApi =
+        AusbildungsgangApiSpec.ausbildungsgang(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsstaetteApiSpec ausbildungsstaetteApiSpec =
+        AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
     private UUID ausbildungsgangId;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void createAusbildungsgangAsGesuchstellerForbidden() {
-        ausbildungsgangApi.createAusbildungsgang().body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create()).execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+        ausbildungsgangApi.createAusbildungsgang()
+            .body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(2)
     void createAusbildungsgangAsSachbearbeiter() {
-        var response = ausbildungsgangApi.createAusbildungsgang().body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create()).execute(ResponseBody::prettyPeek)
-                .then();
+        var response = ausbildungsgangApi.createAusbildungsgang()
+            .body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create())
+            .execute(ResponseBody::prettyPeek)
+            .then();
 
         response.assertThat()
-                .statusCode(Response.Status.CREATED.getStatusCode());
+            .statusCode(Response.Status.CREATED.getStatusCode());
 
         ausbildungsgangId = TestUtil.extractIdFromResponse(response);
     }
@@ -79,11 +85,11 @@ class AusbildungsgangResourceTest {
         ausbildungsgang.getAusbildungsstaette().setId(ausbildungsstaettes[0].getId());
 
         ausbildungsgangApi.createAusbildungsgang()
-                .body(ausbildungsgang)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.CREATED.getStatusCode());
+            .body(ausbildungsgang)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
 
         assertThat(getAusbildungsstaettenFromApi().length, is(ausbildungsstaettes.length));
     }
@@ -95,11 +101,11 @@ class AusbildungsgangResourceTest {
         var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
-                .body(ausbildunggang)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+            .body(ausbildunggang)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -109,11 +115,11 @@ class AusbildungsgangResourceTest {
         var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
-                .body(ausbildunggang)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+            .body(ausbildunggang)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -130,11 +136,11 @@ class AusbildungsgangResourceTest {
         ausbildunggang.getAusbildungsstaette().setId(ausbildungsstaettes[0].getId());
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
-                .body(ausbildunggang)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .body(ausbildunggang)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
         var updatedAussibldungsgang = getAusbildungsgangeFromAPI(ausbildungsgangId);
         var updatedAusbildungsstaette = getAusbildungsstaetteFromApi(ausbildungsstaettes[0].getId());
@@ -150,10 +156,10 @@ class AusbildungsgangResourceTest {
     @Order(8)
     void deleteAusbildungsgangAsGesuchstellerForbidden() {
         ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -161,10 +167,10 @@ class AusbildungsgangResourceTest {
     @Order(9)
     void deleteAusbildungsgangNotFound() {
         ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -174,36 +180,36 @@ class AusbildungsgangResourceTest {
         var numAusbildungsstaettenBevoreDelete = getAusbildungsstaettenFromApi().length;
 
         ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
         assertThat(getAusbildungsstaettenFromApi().length, is(numAusbildungsstaettenBevoreDelete - 1));
     }
 
     private AusbildungsstaetteDtoSpec[] getAusbildungsstaettenFromApi() {
         return ausbildungsstaetteApiSpec.getAusbildungsstaetten()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .as(AusbildungsstaetteDtoSpec[].class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .as(AusbildungsstaetteDtoSpec[].class);
     }
 
     private AusbildungsstaetteDtoSpec getAusbildungsstaetteFromApi(UUID id) {
         return ausbildungsstaetteApiSpec.getAusbildungsstaette().ausbildungsstaetteIdPath(id)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .as(AusbildungsstaetteDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .as(AusbildungsstaetteDtoSpec.class);
     }
 
     private AusbildungsgangDtoSpec getAusbildungsgangeFromAPI(UUID id) {
         return ausbildungsgangApi.getAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .as(AusbildungsgangDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .as(AusbildungsgangDtoSpec.class);
     }
 
 }

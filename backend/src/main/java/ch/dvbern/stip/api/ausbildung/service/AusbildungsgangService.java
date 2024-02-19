@@ -17,44 +17,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AusbildungsgangService {
 
-	private final AusbildungsgangRepository ausbildungsgangRepository;
+    private final AusbildungsgangRepository ausbildungsgangRepository;
 
-	private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
+    private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
 
-	private final AusbildungsgangMapper ausbildungsgangMapper;
+    private final AusbildungsgangMapper ausbildungsgangMapper;
 
-	public AusbildungsgangDto findById(UUID ausbildungsgangId) {
-		return ausbildungsgangMapper.toDto(ausbildungsgangRepository.requireById(ausbildungsgangId));
-	}
+    public AusbildungsgangDto findById(UUID ausbildungsgangId) {
+        return ausbildungsgangMapper.toDto(ausbildungsgangRepository.requireById(ausbildungsgangId));
+    }
 
-	@Transactional
-	public AusbildungsgangDto createAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangDto) {
-		Ausbildungsgang ausbildungsgang = new Ausbildungsgang();
-		persistsAusbildungsgang(ausbildungsgangDto, ausbildungsgang);
-		return ausbildungsgangMapper.toDto(ausbildungsgang);
-	}
+    @Transactional
+    public AusbildungsgangDto createAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangDto) {
+        Ausbildungsgang ausbildungsgang = new Ausbildungsgang();
+        persistsAusbildungsgang(ausbildungsgangDto, ausbildungsgang);
+        return ausbildungsgangMapper.toDto(ausbildungsgang);
+    }
 
-	@Transactional
-	public void updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
-		var ausbildungsgangToUpdate = ausbildungsgangRepository.requireById(ausbildungsgangId);
-		persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
-	}
+    @Transactional
+    public void updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
+        var ausbildungsgangToUpdate = ausbildungsgangRepository.requireById(ausbildungsgangId);
+        persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
+    }
 
-	@Transactional
-	public void deleteAusbildungsgang(UUID ausbildungsgangId) {
-		var ausbildungsgang = ausbildungsgangRepository.requireById(ausbildungsgangId);
-		ausbildungsgangRepository.delete(ausbildungsgang);
-	}
+    @Transactional
+    public void deleteAusbildungsgang(UUID ausbildungsgangId) {
+        var ausbildungsgang = ausbildungsgangRepository.requireById(ausbildungsgangId);
+        ausbildungsgangRepository.delete(ausbildungsgang);
+    }
 
-	private void persistsAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangUpdate, Ausbildungsgang ausbildungsgangToUpdate) {
-		ausbildungsgangToUpdate.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaette()));
-		ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
-		ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
-	}
+    private void persistsAusbildungsgang(
+        AusbildungsgangUpdateDto ausbildungsgangUpdate,
+        Ausbildungsgang ausbildungsgangToUpdate) {
+        ausbildungsgangToUpdate.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaette()));
+        ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
+        ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
+    }
 
-	private Ausbildungsstaette loadAusbildungsstaetteIfExists(AusbildungsstaetteUpdateDto ausbildungsstaette) {
-		return ausbildungsstaette.getId() != null ?
-				ausbildungsstaetteRepository.requireById(ausbildungsstaette.getId()) :
-				new Ausbildungsstaette();
-	}
+    private Ausbildungsstaette loadAusbildungsstaetteIfExists(AusbildungsstaetteUpdateDto ausbildungsstaette) {
+        return ausbildungsstaette.getId() != null ?
+            ausbildungsstaetteRepository.requireById(ausbildungsstaette.getId()) :
+            new Ausbildungsstaette();
+    }
 }

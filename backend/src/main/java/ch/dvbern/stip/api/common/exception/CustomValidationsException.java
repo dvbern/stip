@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class CustomValidationsException extends RuntimeException {
 
-	private final CustomConstraintViolation constraintViolation;
+    private final CustomConstraintViolation constraintViolation;
 
-	public CustomValidationsException(String message, CustomConstraintViolation constraintViolation) {
-		super(message);
-		this.constraintViolation = constraintViolation;
-	}
+    public CustomValidationsException(String message, CustomConstraintViolation constraintViolation) {
+        super(message);
+        this.constraintViolation = constraintViolation;
+    }
 }

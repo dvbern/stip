@@ -9,13 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
 public class TestDatabaseEnvironment implements QuarkusTestResourceLifecycleManager {
 
-
-    private JdbcDatabaseContainer postgres =
-            new PostgreSQLContainer<>(DockerImageName.parse("docker-registry.dvbern.ch/dockerhub/library/postgres:15.3")
-                    .asCompatibleSubstituteFor("postgres"));
+    private final JdbcDatabaseContainer postgres =
+        new PostgreSQLContainer<>(DockerImageName.parse("docker-registry.dvbern.ch/dockerhub/library/postgres:15.3")
+            .asCompatibleSubstituteFor("postgres"));
 
     @Override
     public Map<String, String> start() {
@@ -24,11 +22,11 @@ public class TestDatabaseEnvironment implements QuarkusTestResourceLifecycleMana
         String dbPassword = UUID.randomUUID().toString();
 
         postgres
-                .withDatabaseName(dbName)
-                .withUsername(dbUser)
-                .withPassword(dbPassword)
-                .withEnv("TZ", "Europe/Zurich")
-                .start();
+            .withDatabaseName(dbName)
+            .withUsername(dbUser)
+            .withPassword(dbPassword)
+            .withEnv("TZ", "Europe/Zurich")
+            .start();
 
         Map<String, String> systemProps = new HashMap<>();
         systemProps.put("quarkus.datasource.jdbc.url", postgres.getJdbcUrl());

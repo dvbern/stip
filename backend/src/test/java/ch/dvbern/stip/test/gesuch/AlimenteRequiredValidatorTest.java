@@ -17,15 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTest
 class AlimenteRequiredValidatorTest {
 
+    private final AlimenteRequiredWhenAlimenteRegelungConstraintValidator validator =
+        new AlimenteRequiredWhenAlimenteRegelungConstraintValidator();
     @Inject
     GesuchFormularMapper gesuchFormularMapper;
 
-    private final AlimenteRequiredWhenAlimenteRegelungConstraintValidator validator =
-            new AlimenteRequiredWhenAlimenteRegelungConstraintValidator();
-
     @Test
     void noAlimenteRegelungNoAlimente() {
-        GesuchFormular gesuchFormular = gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+        GesuchFormular gesuchFormular =
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(null);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
@@ -34,17 +34,18 @@ class AlimenteRequiredValidatorTest {
 
     @Test
     void alimenteRegelungNoAlimenteViolation() {
-        GesuchFormular gesuchFormular = gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+        GesuchFormular gesuchFormular =
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(null);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
-
 
         assertThat(validator.isValid(gesuchFormular, null)).isFalse();
     }
 
     @Test
     void alimenteRegelungAlimenteNoViolation() {
-        GesuchFormular gesuchFormular = gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+        GesuchFormular gesuchFormular =
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(BigDecimal.ONE);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 
@@ -53,7 +54,8 @@ class AlimenteRequiredValidatorTest {
 
     @Test
     void noAlimenteRegelungAlimenteViolation() {
-        GesuchFormular gesuchFormular = gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
+        GesuchFormular gesuchFormular =
+            gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
         gesuchFormular.getEinnahmenKosten().setAlimente(BigDecimal.ONE);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 

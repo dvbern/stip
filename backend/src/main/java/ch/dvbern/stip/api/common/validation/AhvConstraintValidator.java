@@ -4,7 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class AhvConstraintValidator implements ConstraintValidator<AhvConstraint, String> {
-	boolean optional = false;
+    boolean optional = false;
 
     AhvValidator validator;
 
@@ -12,21 +12,21 @@ public class AhvConstraintValidator implements ConstraintValidator<AhvConstraint
         validator = new AhvValidator();
     }
 
-	@Override
-	public void initialize(AhvConstraint constraintAnnotation) {
-		optional = constraintAnnotation.optional();
-	}
+    @Override
+    public void initialize(AhvConstraint constraintAnnotation) {
+        optional = constraintAnnotation.optional();
+    }
 
-	@Override
-	public boolean isValid(String ahvNummer, ConstraintValidatorContext constraintValidatorContext) {
+    @Override
+    public boolean isValid(String ahvNummer, ConstraintValidatorContext constraintValidatorContext) {
 
-		if (ahvNummer == null && !optional) {
+        if (ahvNummer == null && !optional) {
             return false;
         }
-		if (ahvNummer == null) {
+        if (ahvNummer == null) {
             return true;
         }
 
         return validator.isValid(ahvNummer);
-	}
+    }
 }

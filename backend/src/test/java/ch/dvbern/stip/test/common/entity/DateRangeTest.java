@@ -7,53 +7,56 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 class DateRangeTest {
-	private LocalDate von = LocalDate.of(2022,12,1);
-	private LocalDate bis = LocalDate.of(2023,8,31);
+    private final LocalDate von = LocalDate.of(2022, 12, 1);
+    private final LocalDate bis = LocalDate.of(2023, 8, 31);
 
-	private DateRange dateRange = new DateRange();
-	private DateRange otherDateRange = new DateRange(von, bis);
-	private DateRange sameOtherDateRange = new DateRange(von, bis);
-	@Test
-	void testDateRangeEquality(){
-		Assertions.assertEquals(false, dateRange.equals(otherDateRange));
-		Assertions.assertEquals(true, otherDateRange.equals(sameOtherDateRange));
-	}
+    private final DateRange dateRange = new DateRange();
+    private final DateRange otherDateRange = new DateRange(von, bis);
+    private final DateRange sameOtherDateRange = new DateRange(von, bis);
 
-	@Test
-	void testDateRangeHashCode(){
-		Assertions.assertNotEquals(dateRange.hashCode(), otherDateRange.hashCode());
-		Assertions.assertEquals(otherDateRange.hashCode(), sameOtherDateRange.hashCode());
-	}
+    @Test
+    void testDateRangeEquality() {
+        Assertions.assertEquals(false, dateRange.equals(otherDateRange));
+        Assertions.assertEquals(true, otherDateRange.equals(sameOtherDateRange));
+    }
 
-	@Test
-	void testDateRangeEqualitySameHashCodeEquality(){
-		Assertions.assertEquals(dateRange.equals(otherDateRange), dateRange.hashCode() == otherDateRange.hashCode());
-		Assertions.assertEquals(otherDateRange.equals(sameOtherDateRange), otherDateRange.hashCode() == sameOtherDateRange.hashCode());
-	}
+    @Test
+    void testDateRangeHashCode() {
+        Assertions.assertNotEquals(dateRange.hashCode(), otherDateRange.hashCode());
+        Assertions.assertEquals(otherDateRange.hashCode(), sameOtherDateRange.hashCode());
+    }
 
-	@Test
-	void containsOneDayBevorRange() {
-		LocalDate dateToTest = bis.plusDays(1);
-		DateRange range = new DateRange(von, bis);
-		Assertions.assertFalse(range.contains(dateToTest));
-	}
+    @Test
+    void testDateRangeEqualitySameHashCodeEquality() {
+        Assertions.assertEquals(dateRange.equals(otherDateRange), dateRange.hashCode() == otherDateRange.hashCode());
+        Assertions.assertEquals(
+            otherDateRange.equals(sameOtherDateRange),
+            otherDateRange.hashCode() == sameOtherDateRange.hashCode());
+    }
 
-	@Test
-	void containsOneDayAfterRange() {
-		LocalDate dateToTest = von.minusDays(1);
-		DateRange range = new DateRange(von, bis);
-		Assertions.assertFalse(range.contains(dateToTest));
-	}
+    @Test
+    void containsOneDayBevorRange() {
+        LocalDate dateToTest = bis.plusDays(1);
+        DateRange range = new DateRange(von, bis);
+        Assertions.assertFalse(range.contains(dateToTest));
+    }
 
-	@Test
-	void containsFirstDayOfRange() {
-		DateRange range = new DateRange(von, bis);
-		Assertions.assertTrue(range.contains(von));
-	}
+    @Test
+    void containsOneDayAfterRange() {
+        LocalDate dateToTest = von.minusDays(1);
+        DateRange range = new DateRange(von, bis);
+        Assertions.assertFalse(range.contains(dateToTest));
+    }
 
-	@Test
-	void containsLastDayOfRange() {
-		DateRange range = new DateRange(von, bis);
-		Assertions.assertTrue(range.contains(bis));
-	}
+    @Test
+    void containsFirstDayOfRange() {
+        DateRange range = new DateRange(von, bis);
+        Assertions.assertTrue(range.contains(von));
+    }
+
+    @Test
+    void containsLastDayOfRange() {
+        DateRange range = new DateRange(von, bis);
+        Assertions.assertTrue(range.contains(bis));
+    }
 }

@@ -38,113 +38,115 @@ import static org.hamcrest.Matchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
 
-	public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
-	private UUID gesuchId;
-	private UUID dokumentId;
+    private UUID gesuchId;
+    private UUID dokumentId;
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(1)
-	void test_prepare_gesuch_for_dokument() {
-		var gesuchDTO = new GesuchCreateDtoSpec();
-		gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-		gesuchDTO.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
+    @Test
+    @TestAsGesuchsteller
+    @Order(1)
+    void test_prepare_gesuch_for_dokument() {
+        var gesuchDTO = new GesuchCreateDtoSpec();
+        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
+        gesuchDTO.setGesuchsperiodeId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
 
-		var response = 	gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
-				.then();
+        var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
+            .then();
 
-		response.assertThat()
-				.statusCode(Response.Status.CREATED.getStatusCode());
+        response.assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
 
-		gesuchId = TestUtil.extractIdFromResponse(response);
-	}
+        gesuchId = TestUtil.extractIdFromResponse(response);
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(2)
-	void test_create_dokument_with_wrong_mime_type() {
-		File file = new File(TEST_XML_FILE_LOCATION);
-		given()
-				.pathParam("gesuchId", gesuchId)
-				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
-				.multiPart("fileUpload", file)
-				.when()
-				.post("/api/v1" + gesuchApiSpec.createDokument().REQ_URI)
-				.then()
-				.statusCode(Status.BAD_REQUEST.getStatusCode());
-	}
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void test_create_dokument_with_wrong_mime_type() {
+        File file = new File(TEST_XML_FILE_LOCATION);
+        gesuchApiSpec.createDokument();
+        given()
+            .pathParam("gesuchId", gesuchId)
+            .pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
+            .multiPart("fileUpload", file)
+            .when()
+            .post("/api/v1" + GesuchApiSpec.CreateDokumentOper.REQ_URI)
+            .then()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(3)
-	void test_create_dokument_for_gesuch() {
-		File file = new File(TEST_FILE_LOCATION);
-		given()
-				.pathParam("gesuchId", gesuchId)
-				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
-				.multiPart("fileUpload", file)
-				.when()
-				.post("/api/v1" + gesuchApiSpec.createDokument().REQ_URI)
-				.then()
-				.statusCode(Status.CREATED.getStatusCode());
-	}
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
+    void test_create_dokument_for_gesuch() {
+        File file = new File(TEST_FILE_LOCATION);
+        gesuchApiSpec.createDokument();
+        given()
+            .pathParam("gesuchId", gesuchId)
+            .pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
+            .multiPart("fileUpload", file)
+            .when()
+            .post("/api/v1" + GesuchApiSpec.CreateDokumentOper.REQ_URI)
+            .then()
+            .statusCode(Status.CREATED.getStatusCode());
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(4)
-	void test_list_and_read_dokument_for_gesuch() throws IOException {
-		var dokumentDtoList = gesuchApiSpec.getDokumenteForTyp()
-				.gesuchIdPath(gesuchId)
-				.dokumentTypPath(DokumentTyp.ELTERN_DOK)
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.extract()
-				.body()
-				.as(DokumentDtoSpec[].class);
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
+    void test_list_and_read_dokument_for_gesuch() throws IOException {
+        var dokumentDtoList = gesuchApiSpec.getDokumenteForTyp()
+            .gesuchIdPath(gesuchId)
+            .dokumentTypPath(DokumentTyp.ELTERN_DOK)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(DokumentDtoSpec[].class);
 
-		assertThat(dokumentDtoList.length, is(1));
+        assertThat(dokumentDtoList.length, is(1));
 
-		dokumentId = dokumentDtoList[0].getId();
+        dokumentId = dokumentDtoList[0].getId();
 
-		given()
-				.pathParam("gesuchId", gesuchId)
-				.pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
-				.pathParam("dokumentId", dokumentId)
-				.when().get("/api/v1" + GesuchApiSpec.GetDokumentOper.REQ_URI)
-				.then()
-				.statusCode(200)
-				.body(equalTo(readFileData()));
-	}
+        given()
+            .pathParam("gesuchId", gesuchId)
+            .pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+            .pathParam("dokumentId", dokumentId)
+            .when().get("/api/v1" + GesuchApiSpec.GetDokumentOper.REQ_URI)
+            .then()
+            .statusCode(200)
+            .body(equalTo(readFileData()));
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(5)
-	void test_delete_dokument() {
-		gesuchApiSpec.deleteDokument()
-				.gesuchIdPath(gesuchId)
-				.dokumentIdPath(dokumentId)
-				.dokumentTypPath(DokumentTyp.ELTERN_DOK)
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.statusCode(Status.NO_CONTENT.getStatusCode());
-	}
+    @Test
+    @TestAsGesuchsteller
+    @Order(5)
+    void test_delete_dokument() {
+        gesuchApiSpec.deleteDokument()
+            .gesuchIdPath(gesuchId)
+            .dokumentIdPath(dokumentId)
+            .dokumentTypPath(DokumentTyp.ELTERN_DOK)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(6)
-	void test_delete_gesuch() {
-		gesuchApiSpec.deleteGesuch()
-				.gesuchIdPath(gesuchId)
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Status.NO_CONTENT.getStatusCode());
-	}
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
+    void test_delete_gesuch() {
+        gesuchApiSpec.deleteGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
 
-	private String readFileData() throws IOException {
-		return Files.readString(new File(TEST_FILE_LOCATION).toPath());
-	}
+    private String readFileData() throws IOException {
+        return Files.readString(new File(TEST_FILE_LOCATION).toPath());
+    }
 }

@@ -23,41 +23,43 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FallResourceTest {
 
-	public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(1)
-	void testFindFallEndpoint() {
-		var fall = fallApiSpec.getFall().fallIdPath(TestConstants.FALL_TEST_ID).execute(ResponseBody::prettyPeek)
-				.then()
-				.extract()
-				.body()
-				.as(FallDtoSpec.class);
+    @Test
+    @TestAsGesuchsteller
+    @Order(1)
+    void testFindFallEndpoint() {
+        var fall = fallApiSpec.getFall().fallIdPath(TestConstants.FALL_TEST_ID).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(FallDtoSpec.class);
 
-		assertThat(fall, notNullValue());
-	}
+        assertThat(fall, notNullValue());
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(2)
-	void testGetFallForBenutzer() {
-		var fall = fallApiSpec.getFallForBenutzer().benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID).execute(ResponseBody::prettyPeek)
-				.then()
-				.extract()
-				.body()
-				.as(FallDtoSpec[].class);
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void testGetFallForBenutzer() {
+        var fall = fallApiSpec.getFallForBenutzer()
+            .benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(FallDtoSpec[].class);
 
-		assertThat(fall, notNullValue());
-	}
+        assertThat(fall, notNullValue());
+    }
 
-	@Test
-	@TestAsGesuchsteller
-	@Order(3)
-	void testCreateFallForBenutzer() {
-		fallApiSpec.createFall().benutzerIdPath(TestConstants.GESUCHSTELLER_2_TEST_ID).execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.CREATED.getStatusCode());
-	}
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
+    void testCreateFallForBenutzer() {
+        fallApiSpec.createFall().benutzerIdPath(TestConstants.GESUCHSTELLER_2_TEST_ID).execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
+    }
 }

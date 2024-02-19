@@ -9,12 +9,14 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
-        uses = AusbildungsgangMapper.class)
+    uses = AusbildungsgangMapper.class)
 public interface AusbildungsstaetteMapper {
     Ausbildungsstaette toEntity(AusbildungsstaetteDto ausbildungsstaetteDto);
 
     AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Ausbildungsstaette partialUpdate(Ausbildungsstaette ausbildungsstaetteDto, @MappingTarget Ausbildungsstaette ausbildungsstaette);
+    Ausbildungsstaette partialUpdate(
+        Ausbildungsstaette ausbildungsstaetteDto,
+        @MappingTarget Ausbildungsstaette ausbildungsstaette);
 }

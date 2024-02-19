@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
@@ -520,7 +520,8 @@
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt</schemaMappings>
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
+                  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -537,7 +538,8 @@
                     <returnResponse>true</returnResponse>
                     <additionalModelTypeAnnotations>@lombok.NoArgsConstructor
                       @lombok.AllArgsConstructor
-                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)</additionalModelTypeAnnotations>
+                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+                    </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                   </configOptions>
                   <typeMappings>

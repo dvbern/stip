@@ -44,12 +44,12 @@ class BenutzerResourceTest {
     @Order(1)
     void test_get_me() {
         final var benutzerDto = api.getCurrentBenutzer()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .extract()
-                .as(BenutzerDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(BenutzerDtoSpec.class);
 
         me = benutzerDto;
 
@@ -63,12 +63,12 @@ class BenutzerResourceTest {
     @Order(2)
     void test_get_me2() {
         final var benutzerDto = api.getCurrentBenutzer()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .extract()
-                .as(BenutzerDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(BenutzerDtoSpec.class);
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
@@ -84,20 +84,19 @@ class BenutzerResourceTest {
         updateDto.setBenutzereinstellungen(me.getBenutzereinstellungen());
 
         api.updateCurrentBenutzer()
-                .body(updateDto)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.ACCEPTED.getStatusCode());
-
+            .body(updateDto)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
         final var updatedBenutzer = api.getCurrentBenutzer()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Response.Status.OK.getStatusCode())
-                .extract()
-                .as(BenutzerDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(BenutzerDtoSpec.class);
 
         assertThat(updatedBenutzer.getVorname()).isEqualTo(updateDto.getVorname());
         assertThat(updatedBenutzer.getNachname()).isEqualTo(updateDto.getNachname());
@@ -114,14 +113,14 @@ class BenutzerResourceTest {
             .set(field(BenutzerUpdateDtoSpec::getBenutzereinstellungen), me.getBenutzereinstellungen())
             .create();
         api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.ACCEPTED.getStatusCode());
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
         var sachbearbeiterListe = api.getSachbearbeitende().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(BenutzerDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(BenutzerDtoSpec[].class);
         sachbearbeiterUUID = sachbearbeiterListe[0].getId();
         assertThat(sachbearbeiterListe).extracting(BenutzerDtoSpec::getNachname).contains(nachname);
     }
@@ -131,15 +130,18 @@ class BenutzerResourceTest {
     @TestAsSachbearbeiter
     void createSachbearbeiterZuordnungStammdaten() {
         final var updateDto = Instancio.of(sachbearbeiterZuordnungStammdatenDtoSpecModel).create();
-        api.createOrUpdateSachbearbeiterStammdaten().benutzerIdPath(sachbearbeiterUUID).body(updateDto).execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.ACCEPTED.getStatusCode());
+        api.createOrUpdateSachbearbeiterStammdaten()
+            .benutzerIdPath(sachbearbeiterUUID)
+            .body(updateDto)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
         var sachbearbeiterListe = api.getSachbearbeitende().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(BenutzerDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(BenutzerDtoSpec[].class);
         MatcherAssert.assertThat(sachbearbeiterListe.length, is(1));
         MatcherAssert.assertThat(sachbearbeiterListe[0].getSachbearbeiterZuordnungStammdaten(), notNullValue());
     }

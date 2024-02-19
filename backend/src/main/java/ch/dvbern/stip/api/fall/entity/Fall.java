@@ -19,7 +19,15 @@ package ch.dvbern.stip.api.fall.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -27,23 +35,23 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(indexes = {
-		@Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-		@Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-		@Index(name = "IX_fall_mandant", columnList = "mandant")
+    @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
+    @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+    @Index(name = "IX_fall_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
 public class Fall extends AbstractMandantEntity {
 
-	@Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
-			insertable = false)
-	private Long fallNummer;
+    @Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
+        insertable = false)
+    private Long fallNummer;
 
-	@OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
-	private Benutzer gesuchsteller;
+    @OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
+    private Benutzer gesuchsteller;
 
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
-	private Benutzer sachbearbeiter;
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
+    private Benutzer sachbearbeiter;
 }

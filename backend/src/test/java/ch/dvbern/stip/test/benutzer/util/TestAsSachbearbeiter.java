@@ -12,14 +12,14 @@ import java.lang.annotation.Target;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target(ElementType.METHOD)
 @TestSecurity(user = "sachbearbeiter", roles = ROLE_SACHBEARBEITER)
 @OidcSecurity(
-        claims = {
-                @Claim(key = "sub", value = "ea75c9be-35a0-4ae6-9383-a3459501596b"),
-                @Claim(key = "family_name", value = "Sachbearbeiter"),
-                @Claim(key = "given_name", value = "Hans")
-        }
+    claims = {
+        @Claim(key = "sub", value = "ea75c9be-35a0-4ae6-9383-a3459501596b"),
+        @Claim(key = "family_name", value = "Sachbearbeiter"),
+        @Claim(key = "given_name", value = "Hans")
+    }
 )
 public @interface TestAsSachbearbeiter {
 }

@@ -13,5 +13,7 @@ public interface FamiliensituationMapper {
 
     FamiliensituationDto toDto(Familiensituation familiensituation);
 
-    Familiensituation partialUpdate(FamiliensituationUpdateDto familiensituationUpdateDto, @MappingTarget Familiensituation familiensituation);
+    Familiensituation partialUpdate(
+        FamiliensituationUpdateDto familiensituationUpdateDto,
+        @MappingTarget Familiensituation familiensituation);
 }

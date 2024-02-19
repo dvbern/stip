@@ -7,15 +7,15 @@ import java.lang.annotation.*;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AusbildungNichtGefundenRequiredFieldsConstraintValidator.class)
 @Documented
 public @interface AusbildungNichtGefundenRequiredFieldsConstraint {
 
-	String message() default VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
+    String message() default VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

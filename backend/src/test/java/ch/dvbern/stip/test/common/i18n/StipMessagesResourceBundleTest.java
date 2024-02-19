@@ -18,10 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StipMessagesResourceBundleTest {
-	@Test
-	void stipMessagesResourceBundleTest() {
-		String a = StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), Locale.GERMAN);
-		String b = StipMessagesResourceBundle.getMessage(StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(), Locale.FRENCH);
-		assertThat(a).isNotEqualTo(b);
-	}
+    @Test
+    void stipMessagesResourceBundleTest() {
+        String a = StipMessagesResourceBundle.getMessage(
+            StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+            Locale.GERMAN);
+        String b = StipMessagesResourceBundle.getMessage(
+            StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+            Locale.FRENCH);
+        assertThat(a).isNotEqualTo(b);
+    }
 }

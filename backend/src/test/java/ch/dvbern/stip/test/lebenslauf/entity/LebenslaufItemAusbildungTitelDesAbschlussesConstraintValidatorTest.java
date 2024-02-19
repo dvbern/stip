@@ -16,65 +16,67 @@ import static org.hamcrest.Matchers.is;
 
 class LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidatorTest {
 
-	LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidator validator =
-			new LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidator();
+    LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidator validator =
+        new LebenslaufItemAusbildungTitelDesAbschlussesConstraintValidator();
 
-	@Test
-	void shouldBeValidIfBildungsartNullAndTitelDesAbschlussesNull() {
-		LebenslaufItem lebenslaufItem = new LebenslaufItem()
-				.setBildungsart(null)
-				.setTitelDesAbschlusses(null);
+    @NotNull
+    private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtNotAndererBildungsabschluss() {
+        return lebenslaufAusbildungsArt ->
+            lebenslaufAusbildungsArt != LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS;
+    }
 
-		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
-	}
+    @Test
+    void shouldBeValidIfBildungsartNullAndTitelDesAbschlussesNull() {
+        LebenslaufItem lebenslaufItem = new LebenslaufItem()
+            .setBildungsart(null)
+            .setTitelDesAbschlusses(null);
 
-	@Test
-	void shouldNotBeValidIfBildungsartAndererAusbildungsabschlussAndTitelDesAbschlussesNull() {
-		LebenslaufItem lebenslaufItem = new LebenslaufItem()
-				.setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
-				.setTitelDesAbschlusses(null);
-		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
-	}
+        assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+    }
 
-	@Test
-	void shouldBeValidIfBildungsartAndererAusbildungsabschlussAndTitelDesAbschlussesNotNull() {
-		LebenslaufItem lebenslaufItem = new LebenslaufItem()
-				.setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
-				.setTitelDesAbschlusses("Fachrichtung");
-		assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
-	}
+    @Test
+    void shouldNotBeValidIfBildungsartAndererAusbildungsabschlussAndTitelDesAbschlussesNull() {
+        LebenslaufItem lebenslaufItem = new LebenslaufItem()
+            .setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
+            .setTitelDesAbschlusses(null);
+        assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(false));
+    }
 
-	@Test
-	void shouldNotBeValidIfBildungsartOtherThanAndererAusbildungsabschlussAndTitelDesAbschlussesNotNull() {
-		Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
-				.forEach(bildungsart -> {
-						var context = TestUtil.initValidatorContext();
-						LebenslaufItem lebenslaufItem = new LebenslaufItem()
-							.setBildungsart(bildungsart)
-							.setTitelDesAbschlusses("Fachrichtung");
-						assertThat(validator.isValid(lebenslaufItem, context), is(false));
-						assertThat(context.getConstraintViolationCreationContexts().size(), is(1));
-						assertThat(context.getConstraintViolationCreationContexts().get(0).getMessage(),
-								is(VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE));
-				});
-	}
+    @Test
+    void shouldBeValidIfBildungsartAndererAusbildungsabschlussAndTitelDesAbschlussesNotNull() {
+        LebenslaufItem lebenslaufItem = new LebenslaufItem()
+            .setBildungsart(LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS)
+            .setTitelDesAbschlusses("Fachrichtung");
+        assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+    }
 
-	@Test
-	void shouldBeValidIfBildungsartOtherThanAndererAusbildungsabschlussAndTitelDesAbschlussesNull() {
-		Arrays.stream(LebenslaufAusbildungsArt.values())
-				.filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
-				.forEach(bildungsart -> {
-					LebenslaufItem lebenslaufItem = new LebenslaufItem()
-							.setBildungsart(bildungsart)
-							.setTitelDesAbschlusses(null);
-					assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
-				});
-	}
+    @Test
+    void shouldNotBeValidIfBildungsartOtherThanAndererAusbildungsabschlussAndTitelDesAbschlussesNotNull() {
+        Arrays.stream(LebenslaufAusbildungsArt.values())
+            .filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
+            .forEach(bildungsart -> {
+                var context = TestUtil.initValidatorContext();
+                LebenslaufItem lebenslaufItem = new LebenslaufItem()
+                    .setBildungsart(bildungsart)
+                    .setTitelDesAbschlusses("Fachrichtung");
+                assertThat(validator.isValid(lebenslaufItem, context), is(false));
+                assertThat(context.getConstraintViolationCreationContexts().size(), is(1));
+                assertThat(
+                    context.getConstraintViolationCreationContexts().get(0).getMessage(),
+                    is(VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_TITEL_DES_ABSCHLUSSES_NULL_MESSAGE)
+                );
+            });
+    }
 
-	@NotNull
-	private static Predicate<LebenslaufAusbildungsArt> isLebenslaufAusbildungsArtNotAndererBildungsabschluss() {
-		return lebenslaufAusbildungsArt ->
-				lebenslaufAusbildungsArt != LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS;
-	}
+    @Test
+    void shouldBeValidIfBildungsartOtherThanAndererAusbildungsabschlussAndTitelDesAbschlussesNull() {
+        Arrays.stream(LebenslaufAusbildungsArt.values())
+            .filter(isLebenslaufAusbildungsArtNotAndererBildungsabschluss())
+            .forEach(bildungsart -> {
+                LebenslaufItem lebenslaufItem = new LebenslaufItem()
+                    .setBildungsart(bildungsart)
+                    .setTitelDesAbschlusses(null);
+                assertThat(validator.isValid(lebenslaufItem, TestUtil.initValidatorContext()), is(true));
+            });
+    }
 }

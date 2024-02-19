@@ -11,9 +11,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant"))
 @Audited
 @Getter
 @Setter
