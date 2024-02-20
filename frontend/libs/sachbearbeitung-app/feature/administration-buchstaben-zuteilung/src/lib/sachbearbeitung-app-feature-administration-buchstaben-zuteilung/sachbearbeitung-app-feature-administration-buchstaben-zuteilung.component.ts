@@ -32,10 +32,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  SharedUtilFormService,
-  convertTempFormToRealValues,
-} from '@dv/shared/util/form';
+import { SharedUtilFormService } from '@dv/shared/util/form';
 import { createFilterableColumns } from '@dv/shared/util-fn/table-helper';
 
 import { selectSachbearbeitungAppBuchstabenZuteilungView } from './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.selector';
