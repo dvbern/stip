@@ -193,14 +193,22 @@ let browserContext: BrowserContext;
 const test = base.extend<{ cockpit: CockpitPO }>({
   cockpit: async ({ page }, use) => {
     const cockpit = new CockpitPO(page);
-
     await cockpit.goToDashBoard();
 
+    // delete if existing gesuch
+    const fallresponse = await page.waitForResponse(
+      '**/api/v1/gesuch/benutzer/*',
+    );
+    const fallbody = await fallresponse.json();
+    gesuchsId = fallbody.length > 0 ? fallbody[0].id : undefined;
+    if (gesuchsId) {
+      await apiContext.delete(`/api/v1/gesuch/${gesuchsId}`);
+      await page.reload();
+    }
+
+    // extract gesuch new gesuch id
     const requestPromise = page.waitForResponse('**/api/v1/gesuch/*');
-
     await cockpit.getGesuchNew().click();
-    await page.waitForURL('**/gesuch/person/*');
-
     const response = await requestPromise;
     const body = await response.json();
     gesuchsId = body.id;
