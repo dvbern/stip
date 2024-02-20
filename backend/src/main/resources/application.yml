@@ -18,6 +18,9 @@ quarkus:
     locations: "db/migration"
     baseline-on-migrate: true
     migrate-at-start: true
+    repair-at-start: true
+    validate-on-migrate: false
+    validate-at-start: false
   oidc:
     bern:
       auth-server-url: "${keycloak.url}/realms/bern"
