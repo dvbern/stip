@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.fall.repo;
 
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.entity.QFall;
@@ -25,23 +28,20 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-import java.util.stream.Stream;
-
 @ApplicationScoped
 @RequiredArgsConstructor
 public class FallRepository implements BaseRepository<Fall> {
 
-	private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-	public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
-		var queryFactory = new JPAQueryFactory(entityManager);
-		var fall = QFall.fall;
+    public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var fall = QFall.fall;
 
-		var query = queryFactory
-				.select(fall)
-				.from(fall)
-				.where(fall.gesuchsteller.id.eq(benutzerId).or(fall.sachbearbeiter.id.eq(benutzerId)));
-		return query.stream();
-	}
+        var query = queryFactory
+            .select(fall)
+            .from(fall)
+            .where(fall.gesuchsteller.id.eq(benutzerId).or(fall.sachbearbeiter.id.eq(benutzerId)));
+        return query.stream();
+    }
 }

@@ -9,10 +9,11 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface EinnahmenKostenMapper {
-	EinnahmenKosten toEntity(EinnahmenKostenDto einnahmenKostenDto);
+    EinnahmenKosten toEntity(EinnahmenKostenDto einnahmenKostenDto);
 
-	EinnahmenKostenDto toDto(EinnahmenKosten einnahmenKosten);
-	EinnahmenKosten partialUpdate(
-			EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
-			@MappingTarget EinnahmenKosten einnahmenKosten);
+    EinnahmenKostenDto toDto(EinnahmenKosten einnahmenKosten);
+
+    EinnahmenKosten partialUpdate(
+        EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
+        @MappingTarget EinnahmenKosten einnahmenKosten);
 }

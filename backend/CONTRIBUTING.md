@@ -1,6 +1,7 @@
 ## Contributing
 
 First off, thank you for considering contributing to thw stip-api!
+
 ### 1. Where do I go from here?
 
 If you've noticed a bug or have a question that doesn't belong on the
@@ -11,13 +12,13 @@ If not, feel free to go ahead and [make one](https://github.com/dvbern/stip-api/
 
 ### 2. Did you find a bug?
 
-* **Ensure the bug was not already reported** by searching on GitHub under 
-[Issues](https://github.com/dvbern/stip-api/issues).
+* **Ensure the bug was not already reported** by searching on GitHub under
+  [Issues](https://github.com/dvbern/stip-api/issues).
 
-* If you're unable to find an open issue addressing the problem, 
-[open a new one](https://github.com/dvbern/stip-api/issues/new). 
-Be sure to include a **title and clear description**, as much relevant information as possible, 
-and a **code sample** or an **executable test case** demonstrating the expected behavior that is not happening.
+* If you're unable to find an open issue addressing the problem,
+  [open a new one](https://github.com/dvbern/stip-api/issues/new).
+  Be sure to include a **title and clear description**, as much relevant information as possible,
+  and a **code sample** or an **executable test case** demonstrating the expected behavior that is not happening.
 
 ### 3. I can fix this!
 
@@ -37,18 +38,18 @@ git checkout -b 325-add-mynewchanges
 ### 4. Code of Conduct
 
 By being part of our development team and community, please abide the rules in our
- [Code of Conduct](CODE_OF_CONDUCT.md)! 
-Further information on how to report inapropriate behaviour by others, check the Enforcements-Section 
+[Code of Conduct](CODE_OF_CONDUCT.md)!
+Further information on how to report inapropriate behaviour by others, check the Enforcements-Section
 in said Code Of Conduct. Thank you for being a nice person!
- 
+
 ### 5. Code Styles, Guildlines & Inspections
 
-Since we're trying to keep the code structured, readable and standardised, please check out and implement our 
+Since we're trying to keep the code structured, readable and standardised, please check out and implement our
 Code Styles & Inspections if you are using IntelliJ IDEA.
 
 [Code Styles](https://raw.githubusercontent.com/dvbern/codestyles/master/src!IDE-settings!IntelliJ!DVBern-Conventions-2017-05-29.xml)
 (Add Scheme under Project Settings > Editor > Code Style)
- 
+
 [Inspections](https://raw.githubusercontent.com/dvbern/codestyles/master/src!IDE-settings!IntelliJ!DVBern_Inspections_2017_05_19.xml)
 (Add Profile under Project Settings > Editor > Inspections)
 
@@ -73,7 +74,6 @@ git push --set-upstream origin 325-add-mynewchanges
 
 Finally, go to GitHub and
 [make a Pull Request](https://help.github.com/articles/creating-a-pull-request)
-
 
 ### 7. Keeping your pull request updated
 

@@ -1,11 +1,11 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import java.util.stream.Stream;
 
 public class NoOverlapInAusbildungenConstraintValidator
     implements ConstraintValidator<NoOverlapInAusbildungenConstraint, GesuchFormular> {

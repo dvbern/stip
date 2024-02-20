@@ -21,5 +21,5 @@ public enum Wohnsitz {
     ELTERN,
     MUTTER,
     VATER,
-    EIGENER_HAUSHALT;
+    EIGENER_HAUSHALT
 }

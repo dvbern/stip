@@ -18,5 +18,5 @@
 package ch.dvbern.stip.api.common.type;
 
 public enum MandantIdentifier {
-    BERN;
+    BERN
 }

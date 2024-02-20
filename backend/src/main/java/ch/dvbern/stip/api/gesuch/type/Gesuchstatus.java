@@ -21,11 +21,11 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public enum Gesuchstatus {
-	OFFEN,
-	IN_BEARBEITUNG,
-	EINGEREICHT,
-	NICHT_KOMPLETT_EINGEREICHT,
-	NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+    OFFEN,
+    IN_BEARBEITUNG,
+    EINGEREICHT,
+    NICHT_KOMPLETT_EINGEREICHT,
+    NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
 
     public static final Set<Gesuchstatus> READONLY_GESUCH_STATUS_LIST = Set.copyOf(
         EnumSet.of(EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT_NACHFRIST)
@@ -33,7 +33,7 @@ public enum Gesuchstatus {
 
     public boolean isEingereicht() {
         return this == EINGEREICHT ||
-                this == NICHT_KOMPLETT_EINGEREICHT ||
-                this == NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+            this == NICHT_KOMPLETT_EINGEREICHT ||
+            this == NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
     }
 }

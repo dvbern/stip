@@ -61,6 +61,14 @@ quarkus:
     devservices:
       enabled: false
 
+# TODO remove this once it was deployed to UAT KSTIP-865
+'%uat':
+  quarkus:
+    flyway:
+      repair-at-start: true
+      validate-on-migrate: false
+      validate-at-start: false
+
 '%dev':
   quarkus:
     mailer:

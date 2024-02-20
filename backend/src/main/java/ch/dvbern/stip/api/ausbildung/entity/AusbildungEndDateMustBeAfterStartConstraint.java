@@ -1,14 +1,17 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.personinausbildung.entity.LandCHRequiredConstraintValidator;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.*;
-
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_ENDDATE_AFTER_STARTDATE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AusbildungEndDateMustBeAfterStartConstraintValidator.class)
 @Documented

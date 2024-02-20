@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.personinausbildung.type;
 
-import lombok.Getter;
-
 import java.util.Locale;
+
+import lombok.Getter;
 
 @Getter
 public enum Sprache {

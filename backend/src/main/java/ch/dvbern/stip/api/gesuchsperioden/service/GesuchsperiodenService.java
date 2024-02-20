@@ -1,16 +1,16 @@
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -28,9 +28,9 @@ public class GesuchsperiodenService {
 
     public Collection<GesuchsperiodeDto> getAllGesuchsperioden() {
         return this.gesuchsperiodeRepository.findAll()
-                .stream()
-                .map(gesuchsperiodeMapper::toDto)
-                .toList();
+            .stream()
+            .map(gesuchsperiodeMapper::toDto)
+            .toList();
     }
 
     public Optional<GesuchsperiodeDto> getGesuchsperiode(UUID id) {
@@ -42,8 +42,8 @@ public class GesuchsperiodenService {
 
     public Collection<GesuchsperiodeDto> getAllActive() {
         return gesuchsperiodeRepository
-                .findAllActiveForDate(LocalDate.now())
-                .map(gesuchsperiodeMapper::toDto)
-                .toList();
+            .findAllActiveForDate(LocalDate.now())
+            .map(gesuchsperiodeMapper::toDto)
+            .toList();
     }
 }

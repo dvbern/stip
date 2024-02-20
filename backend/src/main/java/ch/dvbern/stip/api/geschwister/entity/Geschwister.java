@@ -1,20 +1,23 @@
 package ch.dvbern.stip.api.geschwister.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.util.UUID;
-
 @Audited
 @Entity
-@Table(indexes = {
-        @Index(name = "IX_geschwister_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_geschwister_mandant", columnList = "mandant"))
 @Getter
 @Setter
 public class Geschwister extends AbstractFamilieEntity {
