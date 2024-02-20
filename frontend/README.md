@@ -121,18 +121,42 @@ headless and hence much easier to test.
 The main product critical flows should be covered by the `e2e` tests which provide
 the best tradeoff between effective / useful coverage and effort required to write them.
 
-### E2E
+### E2E tesing with Playwright
 
+For best developper experience, use vs code with the recommended playwright extension
+It provides many handy features, like running individual tests.
+
+#### commands to run e2e via command line
+
+Before running any e2e test, make sure the dev servers for the apps are running.
+
+to rerun a test, it might be necessary to add '--skip-nx-cache' so nx will run a test again
+
+run all tests:
+
+```bash
+npm run e2e
 ```
-// Headless
-`npm run e2e`
 
-// Visual
-`npm run e2e:gs:open`
-`npm run e2e:sb:open`
+run for specific app by adding :gs or :sb
+
+```bash
+npm run e2e:gs
 ```
 
-Preparation:
+run a test in playwrights ui mode:
+
+```bash
+npm run e2e:gs -- --ui
+```
+
+To see the test in a browser, run:
+
+```bash
+npm run e2e:gs -- --headed
+```
+
+#### Preparation:
 
 1. Copy `.env.template` to `.env`
 2. Fill the values DEV Keycloak Credentials from LastPass (`LastPass` -> `Stip E2E (DEV)`)
@@ -150,72 +174,29 @@ and then start e2e tests in GUI mode with `npm run e2e:gs:open` which will start
 
 ### Component tests
 
-Generate a new test for a library:
+Component testing is performed with Jest and [testing-library](https://testing-library.com/docs/angular-testing-library/intro/). To create a new test, just add a file ending with .test.spec (whereas unit tests end with .spec.ts) to the component you want to test.
 
-```bash
-nx g @nx/angular:cypress-component-configuration --project=your-project --build-target=your-build-configuration:build
-```
+We strongly recomment using vscode and the orta.vscode-jest extentsion for best DX.
 
-where your-project is the project name of your library and your-build-configuration is the chosen
-[build target](https://angular.io/guide/build) build target, e.g. "gesuch-app:build"
-This generates the cypress files with the necessary configurations. If you don't need the
-[fixtures folder](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Fixture-Files),
-you can remove it manually.
+#### Testing Library
 
-You then have to make the following adaptions to enable code coverage:
+Testing Library is a very lightweight solution for testing without all the implementation details. The main utilities it provides involve querying for nodes similarly to how users would find them. By working with real DOM nodes, Testing Library encourages you to write tests that closely resemble how your code is used.
 
 ```typescript
-// cypress/support/component.ts
-// add line
-import '@cypress/code-coverage/support';
-```
+describe('should display warning if not all of personInAusbildung, familiensituation, ausbildung are defined', () => {
+  it('should display warning if personInAusbildung is undefined', async () => {
+    const { queryByTestId } = await setup({
+      personInAusbildung: undefined,
+      ausbildung: createEmptyAusbildung(),
+      familiensituation: { elternVerheiratetZusammen: true },
+    });
 
-In the same directory as the _cypress.config.ts_ file, create the following file, named _coverage.webpack.ts_:
-
-```typescript
-export const setupCoverageWebpack = (paths: string[]) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(js|ts)$/,
-        loader: '@jsdevtools/coverage-istanbul-loader',
-        options: { esModules: true },
-        enforce: 'post',
-        include: paths,
-        exclude: [/\.(cy|spec)\.ts$/, /node_modules/],
-      },
-    ],
-  },
+    expect(queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning')).toBeInTheDocument();
+  });
 });
 ```
 
-Then, replace the content in _cypress.config.ts_ with:
-
-```typescript
-import { nxComponentTestingPreset } from '@nx/angular/plugins/component-testing';
-import task from '@cypress/code-coverage/task';
-import { defineConfig } from 'cypress';
-import * as path from 'path';
-
-import { setupCoverageWebpack } from './coverage.webpack';
-
-const nxPreset = nxComponentTestingPreset(__filename);
-
-export default defineConfig({
-  component: {
-    ...nxPreset,
-    devServer: {
-      ...nxPreset.devServer,
-      webpackConfig: setupCoverageWebpack([path.join(__dirname, 'src')]),
-    },
-    setupNodeEvents(on, config) {
-      task(on, config);
-      return config;
-    },
-  },
-  scrollBehavior: 'nearest',
-});
-```
+an extensive list of examples can be found [here](https://github.com/testing-library/angular-testing-library/tree/main/apps/example-app/src/app/examples)
 
 ## Troubleshooting
 

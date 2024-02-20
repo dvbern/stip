@@ -26,14 +26,5 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
-    // {
-    //   name: 'firefox',
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //     // Use prepared auth state.
-    //     storageState: GS_STORAGE_STATE,
-    //   },
-    //   dependencies: ['setup'],
-    // },
   ],
 });
