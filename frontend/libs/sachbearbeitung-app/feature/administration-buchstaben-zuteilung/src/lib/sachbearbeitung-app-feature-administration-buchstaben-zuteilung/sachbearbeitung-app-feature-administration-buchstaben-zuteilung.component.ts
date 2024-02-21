@@ -30,6 +30,7 @@ import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-materi
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUtilFormService } from '@dv/shared/util/form';
@@ -54,6 +55,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     MatCheckboxModule,
     TranslateModule,
     SharedUiLoadingComponent,
+    SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
   ],

@@ -5,6 +5,7 @@
   "shared.cancel": "Abrechen",
   "shared.accept": "Übernehmen",
   "shared.ui.loading.text": "Inhalte laden...",
+  "shared.ui.saving.text": "Wird gespeichert...",
   "shared.language.DEUTSCH": "Deutsch",
   "shared.language.FRANZOESISCH": "Französisch",
   "shared.genericError.validation": "Es wurde versucht, ungültige Werte abzuspeichern.",

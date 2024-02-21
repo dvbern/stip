@@ -5,6 +5,7 @@
   "shared.cancel": "Cancel",
   "shared.accept": "Accept",
   "shared.ui.loading.text": "Charger le contenu...",
+  "shared.ui.saving.text": "Enregistrement...",
   "shared.language.DEUTSCH": "Allemand",
   "shared.language.FRANZOESISCH": "Français",
   "shared.genericError.validation": "Une tentative d'enregistrement de valeurs non valables a été effectuée.",

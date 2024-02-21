@@ -7,12 +7,14 @@ import { Benutzer, BenutzerService } from '@dv/shared/model/gesuch';
 
 type SachbearbeiterState = {
   sachbearbeiter?: Benutzer[];
-  loading?: boolean;
+  hasLoadedOnce: boolean;
+  loading: boolean;
   error?: string;
 };
 
 const initialState: SachbearbeiterState = {
   sachbearbeiter: undefined,
+  hasLoadedOnce: false,
   loading: false,
   error: undefined,
 };
@@ -30,6 +32,7 @@ export const SachbearbeiterStore = signalStore(
       );
       patchState(store, {
         sachbearbeiter: sachbearbeiter,
+        hasLoadedOnce: true,
         loading: false,
         error: undefined,
       });

@@ -22,7 +22,8 @@ export const selectSachbearbeitungAppBuchstabenZuteilungView = () => {
             buchstabenFr: u.sachbearbeiterZuordnungStammdaten?.buchstabenFr,
           }),
         ) ?? [],
-      loading: buchstabenZuweisungStore.loading?.(),
+      hasLoadedOnce: buchstabenZuweisungStore.hasLoadedOnce(),
+      loading: buchstabenZuweisungStore.loading(),
     };
   });
 };
