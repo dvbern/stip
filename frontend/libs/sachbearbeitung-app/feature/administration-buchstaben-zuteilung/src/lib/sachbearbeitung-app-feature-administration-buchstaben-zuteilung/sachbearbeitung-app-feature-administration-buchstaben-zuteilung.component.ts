@@ -171,7 +171,12 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     const control = form.controls[id]?.controls[`buchstaben${language}`];
     const enabledControl = form.controls[id]?.controls[`enabled${language}`];
     const value = control?.value;
-    if (!control || !value || !enabledControl) {
+    if (!value) {
+      control.reset();
+      enabledControl?.setValue(false, { emitEvent: false });
+      return;
+    }
+    if (!control || !enabledControl) {
       return;
     }
     control.setValue(sortZuweisung(cleanupZuweisung(value)));
