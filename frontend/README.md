@@ -103,6 +103,15 @@ npm run lint
 
 A general overview on how the linting works in this project can be found [here](docs/linting.md).
 
+## SonarQube
+
+SonarQube is being used to ensure code quality and clean code, the Analysis is being triggered on each code check-in in the build pipeline.  
+It is possible to run the SonarQube analysis locally by adding the [SonarLint](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode) VsCode Extension and following these steps:
+
+1. Install https://docs.sonarsource.com/sonarlint/vs-code/getting-started/installation/
+2. Setup the connection to the SonarQube hosted instance: https://docs.sonarsource.com/sonarlint/vs-code/team-features/connected-mode/#connection-setup
+3. Verify if it works by commenting out some code, after a few seconds a warning should be visible.
+
 ## Testing
 
 ### Unit testing
