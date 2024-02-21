@@ -185,7 +185,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
       return {
         benutzerId,
         sachbearbeiterZuordnungStammdaten: {
-          buchstabenDe: buchstabenDe ?? (null as any),
+          buchstabenDe: buchstabenDe ?? undefined,
           buchstabenFr: buchstabenFr ?? undefined,
         },
       };
