@@ -11,20 +11,24 @@ public class BuchstabenRangeConstraintValidator implements ConstraintValidator<B
 
     @Override
     public boolean isValid(String buchstabenRange, ConstraintValidatorContext constraintValidatorContext) {
-
         if (buchstabenRange == null) {
             return true;
         }
-        if (!Pattern.compile(BUCHSTABEN_RANGE_VALIDATION_PATTERN).matcher(buchstabenRange).matches()) {
+
+        if (!BUCHSTABEN_RANGE_VALIDATION_PATTERN.matcher(buchstabenRange).matches()) {
             return false;
         }
-        String[] parts = buchstabenRange.split(",");
 
-        for (String part : parts) {
+        for (final var part : buchstabenRange.split(",")) {
             if (part.contains("-")) {
-                char startLetter = part.charAt(0);
-                char endLetter = part.charAt(2);
-                if (startLetter >= endLetter) {
+                final var ranges = part.split("-");
+                if (ranges.length != 2) {
+                    return false;
+                }
+
+                // lexicographically compares both sides of the range, if the left side is larger returns false
+                // lexicographically speaking "a > b" and "aa > a", so "SAA > SOA"
+                if (ranges[0].compareTo(ranges[1]) > 0) {
                     return false;
                 }
             }
