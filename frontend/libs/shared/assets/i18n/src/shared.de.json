@@ -64,6 +64,7 @@
   "shared.dialog.unsavedChanges.text": "Beim Verlassen dieser Seite verlieren sie alle nicht gespeicherten Eingaben.",
   "shared.dialog.unsavedChanges.cancel": "Zurück zum Formular",
   "shared.dialog.unsavedChanges.confirm": "Seite verlassen",
+  "shared.dokumente.title": "Dokumente",
 
   "shared.form.next": "Nächstes",
   "shared.form.previous": "Vorheriges",

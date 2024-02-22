@@ -64,6 +64,7 @@
   "shared.dialog.unsavedChanges.text": "En quittant cette page, vous perdrez toutes les entrées non enregistrées.",
   "shared.dialog.unsavedChanges.cancel": "Retour au formulaire",
   "shared.dialog.unsavedChanges.confirm": "Quitter la page",
+  "shared.dokumente.title": "Documents",
 
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",

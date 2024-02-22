@@ -72,10 +72,17 @@ export const EINNAHMEN_KOSTEN = {
   iconSymbolName: 'call_missed_outgoing',
 };
 
+export const DOKUMENTE = {
+  route: 'dokumente',
+  translationKey: 'shared.dokumente.title',
+  currentStepNumber: 11,
+  iconSymbolName: 'description',
+};
+
 export const ABSCHLUSS = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
-  currentStepNumber: 11,
+  currentStepNumber: 12,
   iconSymbolName: 'check_circle',
 };
 

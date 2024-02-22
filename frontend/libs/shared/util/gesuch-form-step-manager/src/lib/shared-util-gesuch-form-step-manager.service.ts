@@ -6,6 +6,7 @@ import {
   ABSCHLUSS,
   AUSBILDUNG,
   AUSZAHLUNGEN,
+  DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
@@ -37,6 +38,7 @@ const BaseSteps = [
   KINDER,
   AUSZAHLUNGEN,
   EINNAHMEN_KOSTEN,
+  DOKUMENTE,
 ];
 
 const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
