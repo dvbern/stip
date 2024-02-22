@@ -17,11 +17,15 @@ public class GesuchStatusService {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
     public void triggerStateMachineEvent(Gesuch gesuch, GesuchStatusChangeEvent event) {
-        StateMachine<Gesuchstatus, GesuchStatusChangeEvent>
-            stateMachine = new StateMachine<>(gesuch.getGesuchStatus(), config);
-        stateMachine.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
-        gesuch.setGesuchStatus(stateMachine.getState());
-        gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now());
+        final var sm = new StateMachine<>(
+            gesuch.getGesuchStatus(),
+            gesuch::getGesuchStatus,
+            s -> gesuch.setGesuchStatus(s)
+                .setGesuchStatusAenderungDatum(LocalDateTime.now()),
+            config
+        );
+
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
     }
 
 }

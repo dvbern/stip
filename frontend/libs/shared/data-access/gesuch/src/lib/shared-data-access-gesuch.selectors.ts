@@ -14,8 +14,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   (state) => {
     return {
       ...state,
-      readonly:
-        state.gesuch?.gesuchStatus === Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT,
+      readonly: state.gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
       trancheId: state.gesuch?.gesuchTrancheToWorkWith.id,
     };
   },

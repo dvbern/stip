@@ -683,7 +683,7 @@ class GesuchServiceTest {
     @Test
     void validateEinreichenInvalid() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));

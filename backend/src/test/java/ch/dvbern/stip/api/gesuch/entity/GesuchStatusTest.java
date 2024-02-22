@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -57,7 +56,8 @@ class GesuchStatusTest {
 
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
 
-        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.OFFEN);
+        assertThat(true).isEqualTo(false);
+        //        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS_);
     }
 
     @Test
@@ -84,7 +84,8 @@ class GesuchStatusTest {
             gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
                 .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.NICHT_KOMPLETT_EINGEREICHT);
+        assertThat(true).isEqualTo(false);
+        //        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.NICHT_KOMPLETT_EINGEREICHT);
     }
 
     @Test
@@ -111,7 +112,9 @@ class GesuchStatusTest {
             gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
                 .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+        //        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec
+        //        .NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+        assertThat(true).isEqualTo(false);
     }
 
     @Test

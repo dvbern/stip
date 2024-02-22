@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -43,7 +45,6 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -77,6 +78,8 @@ public class GesuchService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
 
     private final GesuchsperiodenService gesuchsperiodeService;
+
+    private final BenutzerService benutzerService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -152,17 +155,14 @@ public class GesuchService {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
         validateGesuchEinreichen(gesuch);
-        if (gesuchDokumentRepository.findAllForGesuch(gesuchId).findAny().isEmpty()) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_EVENT);
-        } else {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.GESUCH_EINREICHEN_EVENT);
-        }
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINREICHEN);
     }
 
     @Transactional
     public void setDokumentNachfrist(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.DOKUMENT_FEHLT_NACHFRIST_EVENT);
+        //        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent
+        //        .DOKUMENT_FEHLT_NACHFRIST_EVENT);
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
@@ -365,7 +365,8 @@ public class GesuchService {
     }
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-        if (Gesuchstatus.READONLY_GESUCH_STATUS_LIST.contains(gesuch.getGesuchStatus())) {
+        // TODO KSTIP-860: fix
+        if (!gesuch.getGesuchStatus().benutzerCanEdit(BenutzerTyp.GESUCHSTELLER)) {
             throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
                 + gesuch.getGesuchStatus());
         }
