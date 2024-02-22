@@ -12,6 +12,7 @@ import io.quarkus.mailer.MailTemplate.MailTemplateInstance;
 import io.quarkus.mailer.Mailer;
 import io.quarkus.mailer.reactive.ReactiveMailer;
 import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.TemplateException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -25,29 +26,18 @@ public class MailService {
     private final Mailer mailer;
     private final ReactiveMailer reactiveMailer;
 
-    public void sendGesuchNichtKomplettEingereichtEmail(
+    public void sendGesuchEingereichtEmail(
         String name,
         String vorname,
-        String email,
-        Locale local) {
-        Templates.getGesuchNichtKomplettEingereichtMailTemplate(name, vorname, local.getLanguage())
-            .to(email)
+        String receiver,
+        Locale locale
+    ) {
+        Templates.getGesuchEingereicht(name, vorname, locale.getLanguage())
+            .to(receiver)
             .subject(StipMessagesResourceBundle.getMessage(
-                StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
-                local))
-            .send().subscribe().asCompletionStage();
-    }
-
-    public void sendGesuchNichtKomplettEingereichtNachfristEmail(
-        String name,
-        String vorname,
-        String email,
-        Locale local) {
-        Templates.getGesuchNichtKomplettEingereichtNachfristTemplate(name, vorname, local.getLanguage())
-            .to(email)
-            .subject(StipMessagesResourceBundle.getMessage(
-                StipEmailMessages.NICHT_KOMPLTETT_EINGEREICHT_NACHFRIST_SUBJECT.getMessage(),
-                local))
+                StipEmailMessages.EINGEREICHT.getMessage(),
+                locale
+            ))
             .send().subscribe().asCompletionStage();
     }
 
@@ -101,35 +91,19 @@ public class MailService {
         private Templates() {
         }
 
-        private static native MailTemplateInstance gesuchNichtKomplettEingereichtDe(String name, String vorname);
+        private static native MailTemplateInstance gesuchEingereichtDe(String name, String vorname);
 
-        private static native MailTemplateInstance gesuchNichtKomplettEingereichtFr(String name, String vorname);
+        private static native MailTemplateInstance gesuchEingereichtFr(String name, String vorname);
 
-        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristDe(
-            String name,
-            String vorname);
-
-        private static native MailTemplateInstance gesuchNichtKomplettEingereichtNachfristFr(
-            String name,
-            String vorname);
-
-        public static MailTemplateInstance getGesuchNichtKomplettEingereichtMailTemplate(
-            String name,
-            String vorname,
-            String language) {
-            return language.equals("fr") ?
-                gesuchNichtKomplettEingereichtFr(name, vorname) :
-                gesuchNichtKomplettEingereichtDe(name, vorname);
-        }
-
-        public static MailTemplateInstance getGesuchNichtKomplettEingereichtNachfristTemplate(
-            String name,
-            String vorname,
-            String language) {
-            return language.equals("fr") ?
-                gesuchNichtKomplettEingereichtNachfristFr(name, vorname) :
-                gesuchNichtKomplettEingereichtNachfristDe(name, vorname);
+        public static MailTemplateInstance getGesuchEingereicht(String name, String vorname, String language) {
+            return switch (language) {
+                case "de" -> gesuchEingereichtDe(name, vorname);
+                case "fr" -> gesuchEingereichtFr(name, vorname);
+                default -> throw new TemplateException(String.format(
+                    "Es gibt kein Gesuch eingereicht mail template für die Sprache %s",
+                    language)
+                );
+            };
         }
     }
-
 }

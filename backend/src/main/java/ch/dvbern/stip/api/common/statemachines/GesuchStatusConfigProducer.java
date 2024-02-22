@@ -1,20 +1,21 @@
 package ch.dvbern.stip.api.common.statemachines;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.common.statemachines.handlers.StateChangeHandler;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.Produces;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 @Dependent
 @RequiredArgsConstructor
@@ -23,6 +24,26 @@ public class GesuchStatusConfigProducer {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
 
     private final MailService mailService;
+
+    private final Instance<StateChangeHandler> handlers;
+
+    private Optional<StateChangeHandler> getHandlerFor(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
+        return handlers.stream().filter(x -> x.handles(transition)).findFirst();
+    }
+
+    private void onStateEntry(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
+        final var gesuch = extractGesuchFromStateMachineArgs(args);
+        final var handler = getHandlerFor(transition);
+        if (handler.isPresent()) {
+            handler.get().handle(transition, gesuch);
+        } else {
+            LOG.info(
+                "Es gibt kein handler für den die Transition von {} nach {}",
+                transition.getSource(),
+                transition.getDestination()
+            );
+        }
+    }
 
     @Produces
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
@@ -86,6 +107,8 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.STIPENDIUM_AUSBEZAHLT, Gesuchstatus.STIPENDIUM_AUSBEZAHLT);
 
         config.configure(Gesuchstatus.STIPENDIUM_AUSBEZAHLT);
+        config.configure(Gesuchstatus.NEGATIVER_ENTSCHEID);
+        config.configure(Gesuchstatus.ZURUECKGEZOGEN);
 
         for (final var status : EnumSet.allOf(Gesuchstatus.class)) {
             var state = config.getRepresentation(status);
@@ -95,6 +118,7 @@ public class GesuchStatusConfigProducer {
             }
 
             state.addEntryAction(this::logTransition);
+            state.addEntryAction(this::onStateEntry);
         }
 
         return config;
@@ -115,35 +139,5 @@ public class GesuchStatusConfigProducer {
                     + "Statemachine args");
         }
         return (Gesuch) args[0];
-    }
-
-    @SuppressWarnings("java:S1135")
-    private void sendGesuchNichtKomplettEingereichtEmail(
-        @NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
-        @NonNull Object[] args
-    ) {
-        //TODO in KSTIP-530
-        GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0);
-        mailService.sendGesuchNichtKomplettEingereichtEmail(
-            gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
-            gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
-            gesuch.getGesuchFormular().getPersonInAusbildung().getEmail(),
-            gesuch.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache().getLocale()
-        );
-    }
-
-    @SuppressWarnings("java:S1135")
-    private void sendGesuchNichtKomplettEingereichtNachfristEmail(
-        @NonNull Transition<Gesuchstatus, GesuchStatusChangeEvent> transition,
-        @NonNull Object[] args
-    ) {
-        //TODO in KSTIP-530
-        GesuchTranche gesuch = extractGesuchFromStateMachineArgs(args).getGesuchTranchen().get(0);
-        mailService.sendGesuchNichtKomplettEingereichtNachfristEmail(
-            gesuch.getGesuchFormular().getPersonInAusbildung().getNachname(),
-            gesuch.getGesuchFormular().getPersonInAusbildung().getVorname(),
-            gesuch.getGesuchFormular().getPersonInAusbildung().getEmail(),
-            gesuch.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache().getLocale()
-        );
     }
 }
