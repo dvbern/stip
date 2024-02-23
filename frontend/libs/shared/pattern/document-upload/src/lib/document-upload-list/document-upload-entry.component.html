@@ -1,0 +1,58 @@
+<dv-shared-ui-icon-chip
+  class="me-2 mt-1 fs-5 reverse"
+  [class.spin]="documentSig().state === 'uploading'"
+  [ngClass]="'bg-' + documentSig().theme.type"
+>
+  <i class="material-symbols-rounded fs-6" [ngClass]="'text-' + documentSig().theme.type">
+    {{ documentSig().theme.icon }}
+  </i>
+</dv-shared-ui-icon-chip>
+<div class="d-flex flex-column flex-grow-1 w-min-content">
+  <div class="d-flex flex-row justify-content-between">
+    <span class="text-truncate filename fs-7" [title]="documentSig().file.filename">{{
+      documentSig().file.filename
+    }}</span>
+    @if (documentSig().state === 'uploading') {
+      <button
+        type="button"
+        class="dv-button-icon flex-shrink-0 cancel-icon ms-2"
+        [attr.aria-label]="'shared.cancel' | translate"
+        (click)="cancelUpload.emit({ dokumentId: documentSig().file.id })"
+      >
+        <span class="material-symbols-rounded align-middle">clear</span>
+      </button>
+    } @else {
+      <button
+        type="button"
+        class="dv-button-icon flex-shrink-0 delete-icon ms-2"
+        [attr.aria-label]="'shared.form.delete' | translate"
+        [disabled]="loadingSig()"
+        (click)="removeUpload.emit({ dokumentId: documentSig().file.id })"
+      >
+        <span class="material-symbols-rounded align-middle text-muted">delete</span>
+      </button>
+    }
+  </div>
+  <mat-progress-bar [color]="documentSig().theme.color" [value]="documentSig().progress"></mat-progress-bar>
+
+  @if (documentSig().state === 'done') {
+    <span
+      class="fs-8 fst-italic text-success"
+      translate
+      [translateParams]="{
+        date: documentSig().file.timestampErstellt | date: 'dd.MM.YYYY',
+        size: documentSig().file.filesize | filesize
+      }"
+      >shared.file.uploadDone</span
+    >
+  }
+  @if (documentSig().state === 'uploading') {
+    <span class="fs-8 fst-italic text-info" translate>shared.file.uploading</span>
+  }
+  @if (documentSig().error; as error) {
+    <span
+      class="fs-8 fst-italic text-danger text-wrap"
+      [innerHTML]="error.translationKey | translate: error.values"
+    ></span>
+  }
+</div>

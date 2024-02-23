@@ -1,0 +1,55 @@
+<h4 class="d-flex align-content-center align-self-start title">
+  <span class="p-1 me-2 text-info upload-icon material-symbols-rounded rounded-circle align-self-start">upload</span>
+  {{ data.options.titleKey | translate }}
+  <span class="flex-grow-1"></span>
+  <button type="button" class="dv-button-icon ms-2 align-self-end close" (click)="closeDialog()">
+    <span class="material-symbols-rounded align-middle">close</span>
+  </button>
+</h4>
+
+@if (showUplaodSig()) {
+  <dv-shared-ui-drop-file
+    class="p-3 bg-white d-flex align-items-center flex-column rounded-top-3 shadow border border-2 mt-4"
+    [disabled]="data.store.isLoading()"
+    [class.rounded-bottom-3]="!data.store.hasEntriesSig()"
+    (filesDropped)="handleMultipleDocumentsAdded($event)"
+  >
+    <label class="position-relative upload" [class.disabled]="data.store.isLoading()">
+      <div class="pe-none position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+        @if (data.store.isLoading()) {
+          <div class="spinner-border text-secondary my-4" role="status">
+            <span class="visually-hidden">{{ 'shared.file.downloading' | translate }}</span>
+          </div>
+        }
+      </div>
+      <div
+        class="text-center text-muted text-italic my-4 d-md-block d-none"
+        [innerHTML]="'shared.file.dropZone' | translate"
+      ></div>
+      <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
+        {{ 'shared.file.upload' | translate }}
+      </button>
+      <input
+        #fileInput
+        class="mb-2 cdk-visually-hidden"
+        type="file"
+        tabindex="-1"
+        [attr.accept]="data.store.state.allowedFormats()"
+        [attr.multiple]="data.options.multiple ? 'multiple' : null"
+        [disabled]="data.store.isLoading()"
+        (change)="handleFilInputEvent($event.target)"
+      />
+    </label>
+  </dv-shared-ui-drop-file>
+}
+
+@if (data.store.state().errorKey; as errorKey) {
+  <mat-error>{{ errorKey | translate }}</mat-error>
+}
+
+<dv-shared-pattern-document-upload-list
+  [storeSig]="data.store"
+  [hasEntriesSig]="data.store.hasEntriesSig()"
+  (cancelUpload)="data.store.cancelDocumentUpload($event.dokumentId, data.options)"
+  (removeUpload)="data.store.removeDocument($event.dokumentId, data.options)"
+></dv-shared-pattern-document-upload-list>

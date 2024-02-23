@@ -1,5 +1,13 @@
 :host {
   display: block;
+  min-width: 506px;
+
+  .close {
+    --dv-size-unit: 0.2rem;
+    appearance: none;
+    border: none;
+    background-color: transparent;
+  }
 
   .upload {
     transition: opacity 100ms ease;
@@ -13,7 +21,6 @@
   .delete-icon,
   .cancel-icon {
     font-size: 1rem;
-    --dv-size-unit: 0.15rem;
 
     &[disabled] {
       opacity: 0.5;
