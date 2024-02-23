@@ -13,11 +13,11 @@
     .icon {
       font-size: 2rem;
     }
-    &.in_bearbeitung {
+    &.in_bearbeitung_gs {
       background-color: var(--dv-blue-bg-subtle);
       color: var(--dv-blue-bg);
     }
-    &.eingereicht {
+    &.komplett_eingereicht {
       background-color: var(--dv-green-bg-subtle);
       color: var(--dv-green-bg);
     }

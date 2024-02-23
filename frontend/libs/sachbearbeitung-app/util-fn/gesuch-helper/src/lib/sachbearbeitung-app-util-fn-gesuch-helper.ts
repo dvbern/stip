@@ -1,18 +1,21 @@
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-type HandledStates = Extract<Gesuchstatus, 'IN_BEARBEITUNG' | 'EINGEREICHT'>;
+type HandledStates = Extract<
+  Gesuchstatus,
+  'IN_BEARBEITUNG_GS' | 'KOMPLETT_EINGEREICHT'
+>;
 type GesuchstatusMap<T> = { [K in HandledStates]: T };
 const STATUS_ICON_MAP: GesuchstatusMap<string> = {
-  IN_BEARBEITUNG: 'edit',
-  EINGEREICHT: 'check_box',
+  IN_BEARBEITUNG_GS: 'edit',
+  KOMPLETT_EINGEREICHT: 'check_box',
 };
 
 function toHandledState(gesuchstatus: Gesuchstatus): HandledStates {
   switch (gesuchstatus) {
-    case 'EINGEREICHT':
+    case 'KOMPLETT_EINGEREICHT':
       return gesuchstatus;
     default:
-      return 'IN_BEARBEITUNG';
+      return 'IN_BEARBEITUNG_GS';
   }
 }
 

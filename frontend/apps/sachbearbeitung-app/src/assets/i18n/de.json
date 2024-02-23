@@ -20,11 +20,8 @@
   "sachbearbeitung-app.cockpit.table.status": "Status",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Bearbeiter",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-  "sachbearbeitung-app.cockpit.status.OFFEN": "Offen",
-  "sachbearbeitung-app.cockpit.status.IN_BEARBEITUNG": "In Bearbeitung",
-  "sachbearbeitung-app.cockpit.status.EINGEREICHT": "Eingereicht",
-  "sachbearbeitung-app.cockpit.status.NICHT_KOMPLETT_EINGEREICHT": "Nicht komplett eingereicht",
-  "sachbearbeitung-app.cockpit.status.NICHT_KOMPLETT_EINGEREICHT_NACHFRIST": "Nachbefristet",
+  "sachbearbeitung-app.cockpit.status.IN_BEARBEITUNG_GS": "In Bearbeitung",
+  "sachbearbeitung-app.cockpit.status.KOMPLETT_EINGEREICHT": "Eingereicht",
 
   "sachbearbeitung-app.cockpit.status.BESCHREIBUNG_PAGINATOR_GESUCHE": "Wählen sie die Anzahl Gesuche",
 
