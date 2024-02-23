@@ -36,7 +36,10 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { createFilterableColumns } from '@dv/shared/util-fn/table-helper';
 
-import { selectSachbearbeitungAppBuchstabenZuteilungView } from './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.selector';
+import {
+  selectSachbearbeitungAppBuchstabenZuteilung,
+  selectSachbearbeitungAppBuchstabenZuteilungState,
+} from './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.selector';
 
 const CHAR = '[a-z]{1,3} ?';
 const RANGE = `${CHAR}- ?(${CHAR})?`;
@@ -75,7 +78,8 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   private elementRef = inject(ElementRef);
   private formBuilder = inject(FormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  viewSig = selectSachbearbeitungAppBuchstabenZuteilungView();
+  zuteilungSig = selectSachbearbeitungAppBuchstabenZuteilung();
+  stateSig = selectSachbearbeitungAppBuchstabenZuteilungState();
   store = inject(SachbearbeiterStore);
   filterChangedSig = signal<string | null>(null);
   displayedColumns = [
@@ -101,7 +105,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   };
 
   formSig = computed(() => {
-    const zuweisungen = this.viewSig().sachbearbeiter;
+    const zuweisungen = this.zuteilungSig();
     const createFormGroup = (z?: BuchstabenZuordnung) =>
       this.formBuilder.group({
         enabledDe: [z?.enabledDe],
@@ -126,7 +130,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
       return new MatTableDataSource([]);
     }
     const filter = this.filterChangedSig();
-    const zuweisungen = this.viewSig().sachbearbeiter;
+    const zuweisungen = this.zuteilungSig();
 
     const datasource = new MatTableDataSource(zuweisungen);
     datasource.filterPredicate = (data, filter) => {
@@ -175,6 +179,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     const value = control?.value;
     if (!value) {
       control.reset();
+      this.formUtils.setRequired(control, false);
       enabledControl?.setValue(false, { emitEvent: false });
       return;
     }

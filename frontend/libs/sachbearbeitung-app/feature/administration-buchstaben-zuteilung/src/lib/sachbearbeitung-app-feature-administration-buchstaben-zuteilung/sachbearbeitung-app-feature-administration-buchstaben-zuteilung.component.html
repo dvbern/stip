@@ -1,4 +1,4 @@
-@if (viewSig().loading && viewSig().hasLoadedOnce === false) {
+@if (stateSig().loading && stateSig().hasLoadedOnce === false) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 }
 @if (formSig(); as form) {
@@ -80,7 +80,7 @@
                 matInput
                 type="text"
                 formControlName="buchstabenFr"
-                (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"
+                (change)="normalizeZuweisung(element.benutzerId, 'Fr')"
               />
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
@@ -93,6 +93,6 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-    <dv-shared-ui-form-save [loading]="viewSig().loading"></dv-shared-ui-form-save>
+    <dv-shared-ui-form-save [loading]="stateSig().loading"></dv-shared-ui-form-save>
   </form>
 }
