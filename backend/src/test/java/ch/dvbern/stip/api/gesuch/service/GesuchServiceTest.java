@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -23,11 +24,13 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import io.quarkus.test.InjectMock;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
@@ -47,8 +51,10 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@QuarkusTest
 @Slf4j
+@QuarkusTest
+@QuarkusTestResource(TestDatabaseEnvironment.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchServiceTest {
 
     @Inject
@@ -67,6 +73,7 @@ class GesuchServiceTest {
     GesuchRepository gesuchRepository;
 
     @Test
+    @TestAsGesuchsteller
     void testVerheiratetToLedigShouldResetPartner() {
         final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, LEDIG);
@@ -75,6 +82,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testLedigToEveryOtherZivilstandShouldNotResetPartner() {
         for (var zivilstand : Zivilstand.values()) {
             if (zivilstand != LEDIG) {
@@ -86,6 +94,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testVerwitwetToEveryOtherZivilstandShouldNotResetPartner() {
         for (var zivilstand : Zivilstand.values()) {
             if (zivilstand != VERWITWET) {
@@ -97,6 +106,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testGeschiedenToEveryOtherZivilstandShouldNotResetPartner() {
         for (var zivilstand : Zivilstand.values()) {
             if (zivilstand != GESCHIEDEN_GERICHTLICH) {
@@ -109,6 +119,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testVerheiratetToKonkubinatEingetragenePartnerschaftShouldNotResetPartner() {
         for (var zivilstand : new Zivilstand[] { KONKUBINAT, EINGETRAGENE_PARTNERSCHAFT }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
@@ -118,6 +129,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testVerheiratetToGeschiedenAufgeloestVerwitwetShouldResetPartner() {
         for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
@@ -127,6 +139,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testEingetragenePartnerschaftToKonkubinatVerheiratetShouldNotResetPartner() {
         for (var zivilstand : new Zivilstand[] { KONKUBINAT, VERHEIRATET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
@@ -137,6 +150,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testEingetragenePartnerschaftToGeschiedenAufgeloestVerwitwetShouldResetPartner() {
         for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
@@ -147,6 +161,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testkonkubinatToVerheiratetEingetragenePartnerschaftShouldNotResetPartner() {
         for (var zivilstand : new Zivilstand[] { VERHEIRATET, EINGETRAGENE_PARTNERSCHAFT }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
@@ -156,6 +171,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testKonkubinatToGeschiedenAufgeloestVerwitwetShouldResetPartner() {
         for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
@@ -165,6 +181,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void testAufgeloestePartnerschaftToEveryOtherZivilstandShouldNotResetPartner() {
         for (var zivilstand : Zivilstand.values()) {
             if (zivilstand != AUFGELOESTE_PARTNERSCHAFT) {
@@ -177,6 +194,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetElternDataIfChangeFromMutterToGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         MatcherAssert.assertThat(
@@ -188,6 +206,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetElternDataIfChangeFromVaterToGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         MatcherAssert.assertThat(
@@ -199,6 +218,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetElternDataIfNoChangeGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         MatcherAssert.assertThat(
@@ -217,6 +237,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetIfElternStayZusammen() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -237,6 +258,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetIfNotUnbekanntOrVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
@@ -258,6 +280,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetMutterIfUnbekannt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -275,6 +298,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetMutterIfVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -292,6 +316,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetVaterIfUnbekannt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -309,6 +334,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetVaterIfVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -326,6 +352,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetBothIfVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -343,6 +370,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetBothIfUnbekannt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -360,6 +388,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetAlimenteIfGesetzlicheAlimenteregelungFromNoFamsitToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
 
@@ -393,6 +422,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -406,6 +436,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetAlimenteIfGesetzlicheAlimenteregelungFromFalseToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -419,6 +450,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromTrueToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         BigDecimal alimente = BigDecimal.valueOf(1000);
@@ -430,6 +462,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -443,6 +476,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetAlimenteIfGesetzlicheAlimenteregelungFromTrueToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -456,6 +490,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromFalseToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         BigDecimal alimente = BigDecimal.valueOf(1000);
@@ -467,6 +502,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNullAfterUpdate() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -487,6 +523,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNull() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
@@ -506,6 +543,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetAuswertigesMittagessenIfWohnsitzFamilie() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -538,6 +576,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetAuswertigesMittagessenIfWohnsitzMutterVater() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -562,6 +601,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetAuswertigesMittagessenIfWohnsitzEigenerHaushalt() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -594,6 +634,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void einnahmenKostenNullResetAuswertigesMittagessen() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setEinnahmenKosten(null);
@@ -622,6 +663,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetLebenslaufIfGebrutsdatumNotChanged() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -640,6 +682,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void resetLebenslaufIfGebrutsdatumChanged() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -662,6 +705,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void noResetLebenslaufIfNoUpdateOfPersonInAusbildung() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -681,6 +725,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void validateEinreichenInvalid() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
@@ -697,6 +742,7 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
     void validateEinreichenValid() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()

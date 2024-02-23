@@ -69,7 +69,6 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
-                gesuchNachfristBeantragen(),
                 getDokument(),
                 getDokumenteForTyp(),
                 getGesuch(),
@@ -102,10 +101,6 @@ public class GesuchApiSpec {
 
     public GesuchEinreichenValidierenOper gesuchEinreichenValidieren() {
         return new GesuchEinreichenValidierenOper(createReqSpec());
-    }
-
-    public GesuchNachfristBeantragenOper gesuchNachfristBeantragen() {
-        return new GesuchNachfristBeantragenOper(createReqSpec());
     }
 
     public GetDokumentOper getDokument() {
@@ -573,68 +568,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchEinreichenValidierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Einen Nachfrist von 30 Tagen beantragen fuer die Einreichung von Dokumenten
-     * 
-     *
-     * @see #gesuchIdPath  (required)
-     */
-    public static class GesuchNachfristBeantragenOper implements Oper {
-
-        public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/nachfrist";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GesuchNachfristBeantragenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * PATCH /gesuch/{gesuchId}/nachfrist
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GesuchNachfristBeantragenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GesuchNachfristBeantragenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GesuchNachfristBeantragenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

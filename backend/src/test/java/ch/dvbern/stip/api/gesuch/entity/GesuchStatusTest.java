@@ -102,24 +102,6 @@ class GesuchStatusTest {
     @Test
     @TestAsGesuchsteller
     @Order(4)
-    void testGesuchEinreichenNachfristVerlangen() {
-        gesuchApiSpec.gesuchNachfristBeantragen().gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
-        var gesuch =
-            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-                .body()
-                .as(GesuchDtoSpec.class);
-        //        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec
-        //        .NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
-        assertThat(true).isEqualTo(false);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(5)
     void testGesuchEinreichenDokumentNachfristVerlangenUpdateFailed() {
         var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecKinderModel).create();
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
