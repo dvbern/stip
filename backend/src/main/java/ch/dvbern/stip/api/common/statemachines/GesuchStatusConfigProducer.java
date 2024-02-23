@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.handlers.StateChangeHandler;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchValidatorService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachineConfig;
@@ -23,27 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 public class GesuchStatusConfigProducer {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
 
-    private final MailService mailService;
-
     private final Instance<StateChangeHandler> handlers;
 
-    private Optional<StateChangeHandler> getHandlerFor(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return handlers.stream().filter(x -> x.handles(transition)).findFirst();
-    }
-
-    private void onStateEntry(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
-        final var gesuch = extractGesuchFromStateMachineArgs(args);
-        final var handler = getHandlerFor(transition);
-        if (handler.isPresent()) {
-            handler.get().handle(transition, gesuch);
-        } else {
-            LOG.info(
-                "Es gibt kein handler für den die Transition von {} nach {}",
-                transition.getSource(),
-                transition.getDestination()
-            );
-        }
-    }
+    private final GesuchValidatorService gesuchValidatorService;
 
     @Produces
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
@@ -139,5 +121,23 @@ public class GesuchStatusConfigProducer {
                     + "Statemachine args");
         }
         return (Gesuch) args[0];
+    }
+
+    private Optional<StateChangeHandler> getHandlerFor(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
+        return handlers.stream().filter(x -> x.handles(transition)).findFirst();
+    }
+
+    private void onStateEntry(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
+        final var gesuch = extractGesuchFromStateMachineArgs(args);
+        final var handler = getHandlerFor(transition);
+        if (handler.isPresent()) {
+            handler.get().handle(transition, gesuch);
+        } else {
+            LOG.info(
+                "Es gibt kein handler für den die Transition von {} nach {}",
+                transition.getSource(),
+                transition.getDestination()
+            );
+        }
     }
 }

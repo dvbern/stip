@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.gesuch.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,9 +16,9 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;

@@ -27,7 +27,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -35,16 +34,15 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -67,18 +65,12 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class GesuchService {
 
     private final GesuchRepository gesuchRepository;
-
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
-
     private final Validator validator;
-
     private final GesuchStatusService gesuchStatusService;
-
-    private final GesuchDokumentRepository gesuchDokumentRepository;
-
     private final GesuchsperiodenService gesuchsperiodeService;
-
+    private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
 
     @Transactional
@@ -152,9 +144,10 @@ public class GesuchService {
 
     @Transactional
     public void gesuchEinreichen(UUID gesuchId) {
-        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        validateGesuchEinreichen(gesuch);
+        // No need to validate the entire Gesuch here, as it's done in the state machine
+        validateAdditionalEinreichenCriteria(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINREICHEN);
     }
 
@@ -193,6 +186,16 @@ public class GesuchService {
     }
 
     private void validateGesuchEinreichen(Gesuch gesuch) {
+        validateAdditionalEinreichenCriteria(gesuch);
+        validationService.validateGesuchForStatus(gesuch, Gesuchstatus.KOMPLETT_EINGEREICHT);
+    }
+
+    private void validateAdditionalEinreichenCriteria(Gesuch gesuch) {
+        validateGesuchTranchen(gesuch);
+        validateNoOtherGesuchEingereichtWithSameSvNumber(gesuch);
+    }
+
+    private void validateGesuchTranchen(Gesuch gesuch) {
         gesuch.getGesuchTranchen().forEach(tranche -> {
             if (tranche.getGesuchFormular() == null || tranche.getGesuchFormular().getFamiliensituation() == null) {
                 throw new ValidationsException(
@@ -200,17 +203,6 @@ public class GesuchService {
                     new HashSet<>());
             }
         });
-
-        validateNoOtherGesuchEingereichtWithSameSvNumber(gesuch);
-        Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-        Set<ConstraintViolation<Gesuch>> violationsEinreichen =
-            validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        if (!violations.isEmpty() || !violationsEinreichen.isEmpty()) {
-            Set<ConstraintViolation<Gesuch>> concatenatedViolations = new HashSet<>(violations);
-            concatenatedViolations.addAll(violationsEinreichen);
-            throw new ValidationsException(
-                "Die Entität ist nicht valid und kann damit nicht eingereicht werden: ", concatenatedViolations);
-        }
     }
 
     private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
@@ -365,8 +357,8 @@ public class GesuchService {
     }
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-        // TODO KSTIP-860: fix
-        if (!gesuch.getGesuchStatus().benutzerCanEdit(BenutzerTyp.GESUCHSTELLER)) {
+        final var currentBenutzer = benutzerService.getOrCreateCurrentBenutzer();
+        if (!gesuch.getGesuchStatus().benutzerCanEdit(currentBenutzer.getBenutzerTyp())) {
             throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
                 + gesuch.getGesuchStatus());
         }
