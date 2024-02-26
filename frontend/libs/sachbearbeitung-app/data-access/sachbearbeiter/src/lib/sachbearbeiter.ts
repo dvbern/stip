@@ -45,11 +45,11 @@ export const SachbearbeiterStore = signalStore(
         loading: true,
         error: undefined,
       });
-      for (const zuordnung of zuordnungen) {
-        await lastValueFrom(
-          benutzerService.createOrUpdateSachbearbeiterStammdaten$(zuordnung),
-        );
-      }
+      await lastValueFrom(
+        benutzerService.createOrUpdateSachbearbeiterStammdatenList$({
+          sachbearbeiterZuordnungStammdatenList: zuordnungen,
+        }),
+      );
       await loadSachbearbeiterZuweisung();
     }
 

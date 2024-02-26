@@ -195,8 +195,8 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     return Object.entries(form.controls).map(([benutzerId, group]) => {
       const { buchstabenDe, buchstabenFr } = group.getRawValue();
       return {
-        benutzerId,
-        sachbearbeiterZuordnungStammdaten: {
+        sachbearbeiter: benutzerId,
+        zuordnung: {
           buchstabenDe: buchstabenDe ?? undefined,
           buchstabenFr: buchstabenFr ?? undefined,
         },

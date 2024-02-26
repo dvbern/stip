@@ -1,8 +1,8 @@
 import { SachbearbeiterZuordnungStammdaten } from '@dv/shared/model/gesuch';
 
 export type BuchstabenZuordnungUpdate = {
-  benutzerId: string;
-  sachbearbeiterZuordnungStammdaten: SachbearbeiterZuordnungStammdaten;
+  sachbearbeiter: string;
+  zuordnung: SachbearbeiterZuordnungStammdaten;
 };
 export type BuchstabenZuordnung = {
   benutzerId: string;

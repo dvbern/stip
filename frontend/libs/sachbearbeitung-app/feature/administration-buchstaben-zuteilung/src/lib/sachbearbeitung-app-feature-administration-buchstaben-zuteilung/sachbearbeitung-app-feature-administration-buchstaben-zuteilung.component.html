@@ -80,7 +80,7 @@
                 matInput
                 type="text"
                 formControlName="buchstabenFr"
-                (change)="normalizeZuweisung(element.benutzerId, 'Fr')"
+                (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"
               />
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
