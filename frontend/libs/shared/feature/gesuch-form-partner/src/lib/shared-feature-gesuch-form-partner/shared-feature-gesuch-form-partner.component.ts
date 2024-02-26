@@ -299,6 +299,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         id: gesuchFormular?.partner?.adresse?.id,
         ...formValues.adresse,
       },
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       geburtsdatum: parseStringAndPrintForBackendLocalDate(
         formValues.geburtsdatum,
         this.languageSig(),
