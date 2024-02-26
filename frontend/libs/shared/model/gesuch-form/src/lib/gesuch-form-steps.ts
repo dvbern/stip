@@ -86,6 +86,21 @@ export const ABSCHLUSS = {
   iconSymbolName: 'check_circle',
 };
 
+export const gesuchFormSteps = {
+  PERSON,
+  AUSBILDUNG,
+  LEBENSLAUF,
+  FAMILIENSITUATION,
+  ELTERN,
+  GESCHWISTER,
+  PARTNER,
+  KINDER,
+  AUSZAHLUNGEN,
+  EINNAHMEN_KOSTEN,
+  DOKUMENTE,
+  ABSCHLUSS,
+};
+
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,

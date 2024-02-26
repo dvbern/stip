@@ -1,0 +1,29 @@
+.document-table {
+  width: 100%;
+
+  .mat-mdc-header-cell {
+    font-weight: bold;
+    font-size: 16px;
+    padding-bottom: 32px;
+  }
+
+  .mat-mdc-row {
+    &.warning {
+      background-color: var(--dv-yellow-bg-subtle);
+    }
+  }
+
+  .status-cell {
+    width: 50px;
+  }
+
+  .action-cell {
+    width: 150px;
+  }
+
+  .action-cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

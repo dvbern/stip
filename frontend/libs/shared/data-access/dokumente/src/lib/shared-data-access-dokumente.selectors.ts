@@ -1,8 +1,11 @@
 import { createSelector } from '@ngrx/store';
 
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+
 import { sharedDataAccessDokumentesFeature } from './shared-data-access-dokumente.feature';
 
 export const selectSharedDataAccessDokumentesView = createSelector(
   sharedDataAccessDokumentesFeature.selectDokumentesState,
-  (state) => ({ ...state }),
+  selectSharedDataAccessGesuchsView,
+  (state, gesuch) => ({ ...state, gesuchId: gesuch.gesuch?.id }),
 );

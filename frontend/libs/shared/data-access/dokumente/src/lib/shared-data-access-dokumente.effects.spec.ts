@@ -1,8 +1,11 @@
 import { TestScheduler } from 'rxjs/testing';
 
-import { loadDokumentes } from './shared-data-access-dokumente.effects';
+import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 
-import { SharedDataAccessDokumenteService } from './shared-data-access-dokumente.service';
+import {
+  GesuchServiceMock,
+  loadDokumentes,
+} from './shared-data-access-dokumente.effects';
 import { SharedDataAccessDokumenteApiEvents } from './shared-data-access-dokumente.events';
 
 describe('SharedDataAccessDokumente Effects', () => {
@@ -16,19 +19,15 @@ describe('SharedDataAccessDokumente Effects', () => {
 
   it('loads Dokumente effect - success', () => {
     scheduler.run(({ expectObservable, hot, cold }) => {
-      const sharedDataAccessDokumenteServiceMock = {
-        getAll: () => cold('150ms a', { a: [] }),
-      } as unknown as SharedDataAccessDokumenteService;
+      const gesuchServiceMock = {
+        getDokumente$: () => cold('150ms a', { a: [] }),
+      } as unknown as GesuchServiceMock;
 
       const eventsMock$ = hot('10ms a', {
-        // TODO replace with a trigger event (eg some page init)
-        a: SharedDataAccessDokumenteApiEvents.dummy(),
+        a: SharedEventGesuchDokumente.init(),
       });
 
-      const effectStream$ = loadDokumentes(
-        eventsMock$,
-        sharedDataAccessDokumenteServiceMock,
-      );
+      const effectStream$ = loadDokumentes(eventsMock$, gesuchServiceMock);
 
       expectObservable(effectStream$).toBe('160ms a', {
         a: SharedDataAccessDokumenteApiEvents.dokumentesLoadedSuccess({

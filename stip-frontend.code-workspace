@@ -9,8 +9,7 @@
   },
   "settings": {
     "files.exclude": {
-      "backend/**": true,
-      "contract/**": true
+      "backend/**": true
     },
     "eslint.validate": ["json"],
     "eslint.workingDirectories": ["./frontend"],
@@ -80,6 +79,14 @@
     },
     "editor.formatOnSave": true,
     "files.eol": "\n",
-    "exportall.config.relExclusion": []
+    "exportall.config.relExclusion": [],
+    "testing.openTesting": "neverOpen",
+    "jest.outputConfig": "neutral",
+    "jest.runMode": {
+      "type": "on-save",
+      "runAllTestsOnStartup": false,
+      "showInlineError": true,
+      "testFileOnly": true
+    }
   }
 }

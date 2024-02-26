@@ -13,6 +13,7 @@ import {
 } from 'rxjs';
 
 import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
@@ -106,6 +107,7 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormKinder.init,
         SharedEventGesuchFormLebenslauf.init,
         SharedEventGesuchFormEinnahmenkosten.init,
+        SharedEventGesuchDokumente.init,
         SharedEventGesuchFormAbschluss.init,
       ),
       concatLatestFrom(() => store.select(selectRouteId)),
