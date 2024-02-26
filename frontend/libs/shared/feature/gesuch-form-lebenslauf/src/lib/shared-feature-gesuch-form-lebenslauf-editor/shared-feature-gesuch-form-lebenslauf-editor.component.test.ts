@@ -79,7 +79,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           !bildungsartenWhichNeedBerufsbezeichnung.includes(ausbildungsart),
       );
 
-      for await (const bildungsart of bildungsartenWhichNeedBerufsbezeichnung) {
+      for (const bildungsart of bildungsartenWhichNeedBerufsbezeichnung) {
         await clickMatSelectOption(
           'lebenslauf-editor-ausbildungsart-select',
           bildungsart,
@@ -90,7 +90,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         ).toBeInTheDocument();
       }
 
-      for await (const bildungsart of bildsartenWhichDontNeedBerufsbezeichnung) {
+      for (const bildungsart of bildsartenWhichDontNeedBerufsbezeichnung) {
         await clickMatSelectOption(
           'lebenslauf-editor-ausbildungsart-select',
           bildungsart,

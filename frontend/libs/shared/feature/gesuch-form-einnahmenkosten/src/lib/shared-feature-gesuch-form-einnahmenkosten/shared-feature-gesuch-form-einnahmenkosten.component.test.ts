@@ -196,7 +196,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 
   describe('form validation', () => {
-    it('should be invalid if personenImHaushalt is 0', async () => {
+    it('should autocorrect if value does not reach minimum', async () => {
       const { queryByTestId, getByTestId } =
         await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       expect(
@@ -207,7 +207,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
       expect(control).toHaveValue('1');
     });
-    it('should be invalid if personenImHaushalt is negative', async () => {
+    it('should autocorrect if personenImHaushalt is negative', async () => {
       const { queryByTestId, getByTestId } =
         await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
       expect(
@@ -217,17 +217,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       await userEvent.type(control, '-2');
 
       expect(control).toHaveValue('2');
-    });
-
-    it('should be invalid if personenImHaushalt is positive', async () => {
-      const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.FAMILIE,
-      );
-      expect(
-        getByTestId('form-einnahmen-kosten-personenImHaushalt'),
-      ).toBeInTheDocument();
-      const control = getByTestId('form-einnahmen-kosten-personenImHaushalt');
-      userEvent.type(control, '1');
     });
   });
 

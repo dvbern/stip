@@ -54,13 +54,17 @@ async function setup() {
 
 describe(SharedFeatureGesuchFormEducationComponent.name, () => {
   describe('form validity', () => {
-    // beforeEach(() => {
-    //   jest.setSystemTime(new Date('2019-02-01'));
-    //   jest.useFakeTimers();
-    // });
-    // afterEach(() => {
-    //   jest.useRealTimers();
-    // });
+    /**
+     * @example usage of jest.useFakeTimers
+     *
+     * beforeEach(() => {
+     *   jest.setSystemTime(new Date('2019-02-01'));
+     *   jest.useFakeTimers();
+     * });
+     * afterEach(() => {
+     *   jest.useRealTimers();
+     * });
+     */
 
     it('should be invalid if begin is not a date', async () => {
       const { getByTestId } = await setup();
@@ -172,12 +176,12 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
 
       await checkMatCheckbox(fields.notFound);
 
-      [
+      for (const field of [
         fields.alternativ.land,
         fields.alternativ.staette,
         fields.alternativ.gang,
         fields.fachrichtung,
-      ].forEach(async (field) => {
+      ]) {
         const fieldEl = getByTestId(field);
 
         expect(fieldEl).toHaveValue('');
@@ -187,7 +191,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         fireEvent.blur(fieldEl);
 
         expect(fieldEl).toHaveClass('ng-invalid');
-      });
+      }
     });
   });
 });
