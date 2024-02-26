@@ -6,7 +6,6 @@ import java.util.Optional;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.handlers.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchValidatorService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachineConfig;
@@ -24,8 +23,6 @@ public class GesuchStatusConfigProducer {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
 
     private final Instance<StateChangeHandler> handlers;
-
-    private final GesuchValidatorService gesuchValidatorService;
 
     @Produces
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
