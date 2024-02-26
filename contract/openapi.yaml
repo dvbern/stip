@@ -810,6 +810,32 @@ paths:
                 '500':
                     $ref: '#/components/responses/ServerError'
             operationId: getSachbearbeitende
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdatenList'
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    description: Sachbearbeiter Stammdatenzuweisung updated
+                '202':
+                    description: Gesuch updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createOrUpdateSachbearbeiterStammdatenList
     '/benutzer/stammdaten/sachbearbeiter/{benutzerId}':
         get:
             tags:
@@ -2215,6 +2241,16 @@ components:
                 buchstabenFr:
                     description: ''
                     type: string
+        SachbearbeiterZuordnungStammdatenList:
+            description: ''
+            type: object
+            properties:
+                sachbearbeiter:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                zuordnung:
+                    $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                    description: ''
         Benutzereinstellungen:
           description: ''
           type: object

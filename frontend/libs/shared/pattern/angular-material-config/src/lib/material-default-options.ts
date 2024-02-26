@@ -7,7 +7,9 @@ import {
   MatFormFieldDefaultOptions,
 } from '@angular/material/form-field';
 
-export function provideMaterialDefaultOptions() {
+export function provideMaterialDefaultOptions(
+  options?: MatFormFieldDefaultOptions,
+) {
   return [
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
@@ -21,6 +23,7 @@ export function provideMaterialDefaultOptions() {
         appearance: 'outline',
         floatLabel: 'always',
         hideRequiredMarker: true,
+        ...options,
       } as MatFormFieldDefaultOptions,
     },
   ];

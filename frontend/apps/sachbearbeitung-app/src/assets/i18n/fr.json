@@ -7,6 +7,17 @@
   "sachbearbeitung-app.header.berechnung": "Calcul",
   "sachbearbeitung-app.header.back": "Retour",
 
+  "sachbearbeitung-app.admin.title": "Adinistration",
+  "sachbearbeitung-app.admin.option.ausbildungsstaette": "Centre de formation",
+  "sachbearbeitung-app.admin.option.buchstabenZuteilung": "Attribution des lettres",
+  "sachbearbeitung-app.admin.option.weitereEinstellungen": "Autres paramètres",
+  "sachbearbeitung-app.admin.option.ausbildungsstaetteTitle": "Centre de formation",
+  "sachbearbeitung-app.admin.option.buchstabenZuteilungTitle": "Distribution de lettres aux gestionnaires",
+  "sachbearbeitung-app.admin.option.weitereEinstellungenTitle": "Autres paramètres",
+
+  "sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiter": "Gestionnaire",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiterFilter": "Filtrer par gestionnaire",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",

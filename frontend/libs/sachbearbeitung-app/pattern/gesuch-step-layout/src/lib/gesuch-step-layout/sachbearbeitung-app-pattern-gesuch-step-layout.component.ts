@@ -40,7 +40,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
+export class SachbearbeitungAppPatternAdministrationLayoutComponent {
   @Input()
   step?: SharedModelGesuchFormStep;
   navClicked = new EventEmitter();

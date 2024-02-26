@@ -1,0 +1,98 @@
+@if (stateSig().loading && stateSig().hasLoadedOnce === false) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+}
+@if (formSig(); as form) {
+  <form (submit)="handleSave()" [formGroup]="form">
+    <div class="rounded-4 overflow-hidden bg-white my-3 shadow">
+      <table
+        mat-table
+        [dataSource]="zuweisungDataSourceSig()"
+        matSort
+        matSortDirection="asc"
+        matSortStart="asc"
+        matSortDisableClear
+      >
+        <caption class="cdk-visually-hidden">
+          {{
+            'sachbearbeitung-app.administration.buchstaben-zuordnung.table.description' | translate
+          }}
+        </caption>
+
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="fs-6 fw-bolder">
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiter' | translate }}
+          </th>
+          <td mat-cell class="py-1" *matCellDef="let element">{{ element.fullName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fullName-filter">
+          <th mat-header-cell *matHeaderCellDef>
+            <input
+              #filter
+              type="text"
+              (keyup)="filterChangedSig.set(filter.value)"
+              [attr.aria-label]="'sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiterFilter' | translate"
+            />
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="enabledDe">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+            <mat-checkbox
+              (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'De')"
+              formControlName="enabledDe"
+              >{{ 'shared.language.DEUTSCH' | translate }}</mat-checkbox
+            >
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="buchstabenDe">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+            <mat-form-field dvSharedUiFormField>
+              <input
+                [maskito]="zuweisungInputMask"
+                matInput
+                type="text"
+                formControlName="buchstabenDe"
+                (blur)="normalizeZuweisung(element.benutzerId, 'De')"
+              />
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="enabledFr">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+            <mat-checkbox
+              (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'Fr')"
+              formControlName="enabledFr"
+              >{{ 'shared.language.FRANZOESISCH' | translate }}</mat-checkbox
+            >
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="buchstabenFr">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+            <mat-form-field dvSharedUiFormField>
+              <input
+                [maskito]="zuweisungInputMask"
+                matInput
+                type="text"
+                formControlName="buchstabenFr"
+                (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"
+              />
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnFilters"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <dv-shared-ui-form-save [loading]="stateSig().loading"></dv-shared-ui-form-save>
+  </form>
+}
