@@ -54,7 +54,7 @@ public class Gesuch extends AbstractMandantEntity {
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Gesuchstatus gesuchStatus = Gesuchstatus.OFFEN;
+    private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     @NotNull
     @Min(0)

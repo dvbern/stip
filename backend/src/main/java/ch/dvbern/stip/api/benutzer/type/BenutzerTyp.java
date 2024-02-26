@@ -1,7 +1,14 @@
 package ch.dvbern.stip.api.benutzer.type;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum BenutzerTyp {
-    GESUCHSTELLER,
-    SACHBEARBEITER,
-    ADMIN
+    GESUCHSTELLER("Gesuchsteller"),
+    SACHBEARBEITER("Sachbearbeiter"),
+    ADMIN("Admin");
+
+    private final String roleName;
 }

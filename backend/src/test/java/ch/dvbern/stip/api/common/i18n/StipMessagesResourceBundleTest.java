@@ -19,10 +19,10 @@ class StipMessagesResourceBundleTest {
     @Test
     void stipMessagesResourceBundleTest() {
         String a = StipMessagesResourceBundle.getMessage(
-            StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+            StipEmailMessages.EINGEREICHT.getMessage(),
             Locale.GERMAN);
         String b = StipMessagesResourceBundle.getMessage(
-            StipEmailMessages.FEHLENDE_DOKUMENTE_SUBJECT.getMessage(),
+            StipEmailMessages.EINGEREICHT.getMessage(),
             Locale.FRENCH);
         assertThat(a).isNotEqualTo(b);
     }
