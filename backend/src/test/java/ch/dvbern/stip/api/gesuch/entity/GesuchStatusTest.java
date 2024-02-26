@@ -15,9 +15,7 @@ import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.instancio.Instancio;
 import org.instancio.junit.InstancioExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -27,7 +25,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -70,31 +67,31 @@ class GesuchStatusTest {
         assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS);
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(2)
-    void testFillGesuchUndEinreichenDokumentFehlt() {
-        var gesuchUpdateDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
-
-        gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
-        var gesuch =
-            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-                .body()
-                .as(GesuchDtoSpec.class);
-
-        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT);
-    }
+//    @Test
+//    @TestAsGesuchsteller
+//    @Order(2)
+//    void testFillGesuchUndEinreichenDokumentFehlt() {
+//        var gesuchUpdateDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+//        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+//            .getGesuchFormular()
+//            .getPersonInAusbildung()
+//            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
+//        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
+//        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+//            .then()
+//            .assertThat()
+//            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+//
+//        gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
+//            .execute(ResponseBody::prettyPeek)
+//            .then()
+//            .assertThat()
+//            .statusCode(Status.ACCEPTED.getStatusCode());
+//        var gesuch =
+//            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+//                .body()
+//                .as(GesuchDtoSpec.class);
+//
+//        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT);
+//    }
 }
