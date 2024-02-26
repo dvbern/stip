@@ -17,6 +17,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -137,5 +138,14 @@ public class BenutzerService {
             sachbearbeiterZuordnungStammdaten
         );
         sachbearbeiterZuordnungStammdatenRepository.persist(sachbearbeiterZuordnungStammdaten);
+    }
+
+    @Transactional
+    public void createOrUpdateSachbearbeiterStammdaten(
+        List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdaten
+    ) {
+        for (final var entry : sachbearbeiterZuordnungStammdaten) {
+            createOrUpdateSachbearbeiterStammdaten(entry.getSachbearbeiter(), entry.getZuordnung());
+        }
     }
 }

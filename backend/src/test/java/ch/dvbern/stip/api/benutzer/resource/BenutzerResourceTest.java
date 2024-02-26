@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.generator.api.model.benutzer.BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpecModel;
 import static ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpecModel;
+import static ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenListDtoSpecModel;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -148,5 +150,42 @@ class BenutzerResourceTest {
             .as(BenutzerDtoSpec[].class);
         MatcherAssert.assertThat(sachbearbeiterListe.length, is(1));
         MatcherAssert.assertThat(sachbearbeiterListe[0].getSachbearbeiterZuordnungStammdaten(), notNullValue());
+    }
+
+    @Test
+    @Order(6)
+    @TestAsSachbearbeiter
+    void createSachbearbeiterZuordnungStammdatenList() {
+        final var updateDtos = Instancio.of(sachbearbeiterZuordnungStammdatenListDtoSpecModel)
+            .stream()
+            .limit(2)
+            .toList();
+        updateDtos.get(0).setSachbearbeiter(me.getId());
+        updateDtos.get(1).setSachbearbeiter(sachbearbeiterUUID);
+
+        api.createOrUpdateSachbearbeiterStammdatenList()
+            .body(updateDtos)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
+        final var sachbearbeiterListe = api.getSachbearbeitende().execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(BenutzerDtoSpec[].class);
+
+        MatcherAssert.assertThat(sachbearbeiterListe.length, is(1));
+        MatcherAssert.assertThat(sachbearbeiterListe[0].getSachbearbeiterZuordnungStammdaten(), notNullValue());
+        final var myZuordnung = api.getSachbearbeiterStammdaten()
+            .benutzerIdPath(me.getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(SachbearbeiterZuordnungStammdatenDtoSpec.class);
+
+        MatcherAssert.assertThat(myZuordnung, notNullValue());
     }
 }
