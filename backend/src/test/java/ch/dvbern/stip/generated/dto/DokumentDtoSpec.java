@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DokumentDtoSpec.JSON_PROPERTY_FILENAME,
   DokumentDtoSpec.JSON_PROPERTY_FILEPFAD,
   DokumentDtoSpec.JSON_PROPERTY_FILESIZE,
+  DokumentDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   DokumentDtoSpec.JSON_PROPERTY_OBJECT_ID
 })
 @JsonTypeName("Dokument")
@@ -48,6 +49,9 @@ public class DokumentDtoSpec {
 
   public static final String JSON_PROPERTY_FILESIZE = "filesize";
   private String filesize;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  private String timestampErstellt;
 
   public static final String JSON_PROPERTY_OBJECT_ID = "objectId";
   private String objectId;
@@ -159,6 +163,32 @@ public class DokumentDtoSpec {
   }
 
 
+  public DokumentDtoSpec timestampErstellt(String timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+   /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+
   public DokumentDtoSpec objectId(String objectId) {
     
     this.objectId = objectId;
@@ -197,12 +227,13 @@ public class DokumentDtoSpec {
         Objects.equals(this.filename, dokument.filename) &&
         Objects.equals(this.filepfad, dokument.filepfad) &&
         Objects.equals(this.filesize, dokument.filesize) &&
+        Objects.equals(this.timestampErstellt, dokument.timestampErstellt) &&
         Objects.equals(this.objectId, dokument.objectId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, filename, filepfad, filesize, objectId);
+    return Objects.hash(id, filename, filepfad, filesize, timestampErstellt, objectId);
   }
 
   @Override
@@ -213,6 +244,7 @@ public class DokumentDtoSpec {
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filepfad: ").append(toIndentedString(filepfad)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -1,0 +1,21 @@
+<button
+  class="btn btn-outline-primary fs-3"
+  type="button"
+  [attr.aria-label]="'shared.document.upload' | translate"
+  (click)="openDialog()"
+>
+  <span class="material-symbols-rounded">upload</span>
+</button>
+@if (mainDocumentSig(); as dokument) {
+  <div class="fs-4 position-absolute indicator rounded-circle shadow pe-none bg-white">
+    <dv-shared-ui-icon-chip
+      class="reverse fs-3"
+      [class.spin]="dokument.state === 'uploading'"
+      [ngClass]="'bg-' + dokument.theme.type"
+    >
+      <i class="material-symbols-rounded fs-6" [ngClass]="'text-' + dokument.theme.type">
+        {{ dokument.theme.icon }}
+      </i>
+    </dv-shared-ui-icon-chip>
+  </div>
+}

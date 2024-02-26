@@ -19,11 +19,11 @@ $dv-size-unit: 0.25rem;
     --dv-gray-bg-subtle: #eeeeee;
 
     --dv-overridden-body-bg: #f3f3f3;
-    --dv-blue-bg: #298bef;
-    --dv-red-bg: #fe5454;
-    --dv-green-bg: #2eb85c;
-    --dv-gray-bg: #f5f5f5;
+    --dv-blue-bg: #{$blue};
+    --dv-red-bg: #{$red};
+    --dv-green-bg: #{$green};
+    --dv-gray-bg: #{$body-bg};
 
-    --dv-secondary-color: #677589;
+    --dv-secondary-color: #{$gray};
   }
 }

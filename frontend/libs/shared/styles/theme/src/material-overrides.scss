@@ -95,3 +95,20 @@ table tr.mat-mdc-row {
     cursor: pointer;
   }
 }
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-height: 2px;
+  --mdc-linear-progress-track-height: 2px;
+  --mdc-linear-progress-active-indicator-color: #{$success};
+  --mdc-linear-progress-track-color: #{lighten($success, 45%)};
+}
+
+.mat-mdc-progress-bar.mat-accent {
+  --mdc-linear-progress-active-indicator-color: #{$info};
+  --mdc-linear-progress-track-color: #{lighten($info, 35%)};
+}
+
+.mat-mdc-progress-bar.mat-warn {
+  --mdc-linear-progress-active-indicator-color: #{$warn};
+  --mdc-linear-progress-track-color: #{lighten($warn, 25%)};
+}

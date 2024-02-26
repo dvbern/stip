@@ -907,7 +907,16 @@ components:
             type: string
         DokumentTyp:
             enum:
-                - PERSON_IN_AUSBILDUNG_DOK
+                - PERSON_NIEDERLASSUNGSSTATUS_C
+                - PERSON_NIEDERLASSUNGSSTATUS_B
+                - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+                - PERSON_KESB_ERNENNUNG
+                - PERSON_MIETVERTRAG
+                - PERSON_VERMOEGENSNACHWEIS_VORJAHR
+                - PERSON_SOZIALHILFEBUDGET
+                - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
+                - PERSON_AUSWEIS
+                - PERSON_VERMOEGENSNACHWEIS
                 - AUSBILDUNG_DOK
                 - ELTERN_DOK
                 - PARTNER_DOK
@@ -1007,6 +1016,8 @@ components:
                 filepfad:
                     type: string
                 filesize:
+                    type: string
+                timestampErstellt:
                     type: string
                 objectId:
                     description: ''
