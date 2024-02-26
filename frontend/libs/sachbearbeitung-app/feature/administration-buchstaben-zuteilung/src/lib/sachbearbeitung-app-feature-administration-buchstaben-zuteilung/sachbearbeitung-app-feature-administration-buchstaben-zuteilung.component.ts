@@ -145,6 +145,10 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
 
   private afterViewInitSig = signal(false);
 
+  constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
+  }
+
   ngAfterViewInit() {
     this.afterViewInitSig.set(true);
   }
@@ -178,7 +182,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     const enabledControl = form.controls[id]?.controls[`enabled${language}`];
     const value = control?.value;
     if (!value) {
-      control.reset();
+      control.reset(undefined, { onlySelf: true });
       this.formUtils.setRequired(control, false);
       enabledControl?.setValue(false, { emitEvent: false });
       return;
