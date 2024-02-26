@@ -343,7 +343,13 @@ test.describe('Neues gesuch erstellen', () => {
 
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
-    // Step 11: Freigabe ===========================================================
+    // Step 11: Dokumente ===========================================================
+
+    await expectStepTitleToContainText('Dokumente', page);
+
+    await page.getByTestId('button-continue').click();
+
+    // Step 12: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
     const freigabePO = new FreigabePO(page);
 

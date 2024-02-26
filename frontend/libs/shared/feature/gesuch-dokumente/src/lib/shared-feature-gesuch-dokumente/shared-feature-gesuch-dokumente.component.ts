@@ -15,10 +15,12 @@ import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dok
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import {
   DOKUMENTE,
+  KINDER,
   SharedModelGesuchFormStep,
   gesuchFormSteps,
 } from '@dv/shared/model/gesuch-form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 
 type RequiredDocument = {
   documentName: string;
@@ -54,6 +56,7 @@ const requiredDocuments: RequiredDocument[] = Object.values(gesuchFormSteps)
     SharedUiLoadingComponent,
     TranslateModule,
     MatTableModule,
+    GesuchAppUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -83,10 +86,10 @@ export class SharedFeatureGesuchDokumenteComponent implements OnInit {
 
         return {
           status: !!document,
-          id: document?.id || '',
+          id: document?.id ?? '',
           objectId: requiredDocument.objectId,
           formStep: requiredDocument.formStep,
-          filename: document?.filename || '',
+          filename: document?.filename ?? '',
           documentName: requiredDocument.documentName,
         };
       },
@@ -109,5 +112,17 @@ export class SharedFeatureGesuchDokumenteComponent implements OnInit {
 
   handleDocumentDelete(id: string) {
     alert(`Delete document ${id}`);
+  }
+
+  handleContinue() {
+    const { gesuchId } = this.viewSig();
+    if (gesuchId) {
+      this.store.dispatch(
+        SharedEventGesuchDokumente.nextTriggered({
+          id: gesuchId,
+          origin: DOKUMENTE,
+        }),
+      );
+    }
   }
 }
