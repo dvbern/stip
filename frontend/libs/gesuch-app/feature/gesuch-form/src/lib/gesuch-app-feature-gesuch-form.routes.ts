@@ -4,6 +4,7 @@ import {
   ABSCHLUSS,
   AUSBILDUNG,
   AUSZAHLUNGEN,
+  DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
@@ -123,6 +124,17 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
+      ),
+  },
+  {
+    path: DOKUMENTE.route,
+    resolve: {
+      step: () => DOKUMENTE,
+    },
+    title: 'shared.dokumente.title',
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-dokumente').then(
+        (m) => m.sharedFeatureGesuchDokumenteRoutes,
       ),
   },
   {
