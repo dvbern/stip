@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   OnInit,
-  Signal,
   computed,
   effect,
   inject,
@@ -35,6 +34,7 @@ import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stam
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
   Anrede,
+  DokumentTyp,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   Niederlassungsstatus,
@@ -81,6 +81,7 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
+import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-person.selector';
 
@@ -114,7 +115,6 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
-  styleUrls: ['./shared-feature-gesuch-form-person.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormPersonComponent implements OnInit {
@@ -142,16 +142,112 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   isSozialversicherungsnummerInfoShown = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
-  auslaenderausweisDocumentOptionsSig: Signal<DocumentOptions | null> =
-    computed(() => {
+  auslaenderausweisDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const niederlassungsstatus = this.niederlassungsstatusChangedSig();
+    const getDokumentOptions = (
+      niederlassungsstatus?: Niederlassungsstatus,
+    ) => {
+      switch (niederlassungsstatus) {
+        case 'AUFENTHALTSBEWILLIGUNG_B':
+          return {
+            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
+            titleKey: 'shared.form.person.file.AUFENTHALTSBEWILLIGUNG_B',
+          };
+        case 'NIEDERLASSUNGSBEWILLIGUNG_C':
+          return {
+            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
+            titleKey: 'shared.form.person.file.NIEDERLASSUNGSBEWILLIGUNG_C',
+          };
+        case 'FLUECHTLING':
+          return {
+            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE,
+            titleKey: 'shared.form.person.file.FLUECHTLING',
+          };
+      }
+      return null;
+    };
+    const options = getDokumentOptions(niederlassungsstatus);
+    return gesuch && options
+      ? {
+          ...options,
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  vormundschaftDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const vormundschaft = this.vormundschaftChangedSig();
+    return gesuch && vormundschaft
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_KESB_ERNENNUNG,
+          titleKey: 'shared.form.person.file.VORMUNDSCHAFT',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  wohnsitzBeiDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const wohnsitzBei = this.wohnsitzBeiChangedSig();
+    return gesuch && wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_MIETVERTRAG,
+          titleKey: 'shared.form.person.file.EIGENER_HAUSHALT',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  sozialhilfebeitraegeDocumentOptionsSig = computed<DocumentOptions | null>(
+    () => {
       const gesuch = this.viewSig().gesuch;
-      return gesuch
+      const sozialhilfebeitraege = this.sozialhilfebeitraegeChangedSig();
+      return gesuch && sozialhilfebeitraege
         ? {
+            dokumentTyp: DokumentTyp.PERSON_SOZIALHILFEBUDGET,
+            titleKey: 'shared.form.person.file.SOZIALHILFE',
+            multiple: false,
             gesuchId: gesuch.id,
-            dokumentTyp: 'PERSON_IN_AUSBILDUNG_DOK',
           }
         : null;
-    });
+    },
+  );
+  zivilstandDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const zivilstand = this.zivilstandChangedSig();
+    return gesuch &&
+      zivilstand &&
+      [
+        Zivilstand.GESCHIEDEN_GERICHTLICH,
+        Zivilstand.AUFGELOESTE_PARTNERSCHAFT,
+      ].includes(zivilstand)
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG,
+          titleKey: 'shared.form.person.file.ZIVILSTAND',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  heimatortDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const eltern = this.viewSig().gesuchFormular?.elterns;
+    const plz = this.plzChangedSig();
+    return gesuch &&
+      plz &&
+      +plz <= 4000 &&
+      +plz >= 3000 &&
+      eltern?.some((e) => e.adresse.land !== 'CH')
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_AUSWEIS,
+          titleKey: 'shared.form.person.file.HEIMATORT',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
 
   form = this.formBuilder.group({
     sozialversicherungsnummer: ['', []],
@@ -194,7 +290,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         ),
       ],
     ],
-    nationalitaet: this.formBuilder.control<Land>('' as Land, {
+    nationalitaet: this.formBuilder.control(<Land | undefined>undefined, {
       validators: Validators.required,
     }),
     heimatort: [<string | undefined>undefined, [Validators.required]],
@@ -217,25 +313,33 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     }),
   });
 
-  private wohnsitzChangedSig = toSignal(
-    this.form.controls.wohnsitz.valueChanges,
-  );
-
   showWohnsitzSplitterSig = computed(() => {
     return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
   });
+
   showEinreiseDatumWarningSig = signal(false);
 
-  private nationalitaetChangedSig = toSignal(
-    this.form.controls.nationalitaet.valueChanges,
+  private wohnsitzChangedSig = toSignal(
+    this.form.controls.wohnsitz.valueChanges,
   );
-
-  showAuslaenderAusweisSig = computed(() => {
-    return (
-      this.nationalitaetChangedSig() &&
-      this.nationalitaetChangedSig() !== this.nationalitaetCH
-    );
-  });
+  private niederlassungsstatusChangedSig = toSignal(
+    this.form.controls.niederlassungsstatus.valueChanges,
+  );
+  private vormundschaftChangedSig = toSignal(
+    this.form.controls.vormundschaft.valueChanges,
+  );
+  private wohnsitzBeiChangedSig = toSignal(
+    this.form.controls.wohnsitz.valueChanges,
+  );
+  private sozialhilfebeitraegeChangedSig = toSignal(
+    this.form.controls.sozialhilfebeitraege.valueChanges,
+  );
+  private zivilstandChangedSig = toSignal(
+    this.form.controls.zivilstand.valueChanges,
+  );
+  private plzChangedSig = toSignal(
+    this.form.controls.adresse.controls.plz.valueChanges,
+  );
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -341,7 +445,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           });
         }
         // No nationality was selected
-        else if (nationalitaetChanged === undefined) {
+        else if (!sharedUtilFnTypeGuardsIsDefined(nationalitaetChanged)) {
           this.updateVisbility(this.form.controls.niederlassungsstatus, false, {
             resetOnInvisible: true,
           });
@@ -486,6 +590,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
     const values = convertTempFormToRealValues(this.form, [
+      'nationalitaet',
       'quellenbesteuert',
       'sozialhilfebeitraege',
     ]);

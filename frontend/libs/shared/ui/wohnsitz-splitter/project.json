@@ -16,15 +16,6 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
-    },
-    "component-test": {
-      "executor": "@nx/cypress:cypress",
-      "options": {
-        "cypressConfig": "libs/shared/ui/wohnsitz-splitter/cypress.config.ts",
-        "testingType": "component",
-        "skipServe": true,
-        "devServerTarget": "gesuch-app:build"
-      }
     }
   }
 }

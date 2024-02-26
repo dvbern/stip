@@ -308,10 +308,13 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
 
         if (item.type === 'TAETIGKEIT') {
           this.form.controls.bildungsart.clearValidators();
+          this.form.controls.bildungsart.updateValueAndValidity();
           this.form.controls.taetigskeitsart.setValidators(Validators.required);
+          this.form.controls.taetigskeitsart.updateValueAndValidity();
           this.form.controls.taetigkeitsBeschreibung.setValidators(
             Validators.required,
           );
+          this.form.controls.taetigkeitsBeschreibung.updateValueAndValidity();
         }
       },
       { allowSignalWrites: true },

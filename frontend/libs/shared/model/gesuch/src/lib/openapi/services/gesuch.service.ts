@@ -11,28 +11,27 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional } from '@angular/core';
 import {
   HttpClient,
+  HttpContext,
+  HttpEvent,
   HttpHeaders,
+  HttpParameterCodec,
   HttpParams,
   HttpResponse,
-  HttpEvent,
-  HttpParameterCodec,
-  HttpContext,
 } from '@angular/common/http';
-import { CustomHttpParameterCodec } from '../encoder';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { Configuration } from '../configuration';
+import { CustomHttpParameterCodec } from '../encoder';
 import { Dokument } from '../model/dokument';
 import { DokumentTyp } from '../model/dokumentTyp';
 import { Gesuch } from '../model/gesuch';
 import { GesuchCreate } from '../model/gesuchCreate';
 import { GesuchUpdate } from '../model/gesuchUpdate';
 import { ValidationReport } from '../model/validationReport';
-
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
-import { Configuration } from '../configuration';
 
 export interface GesuchServiceCreateDokumentRequestParams {
   dokumentTyp: DokumentTyp;

@@ -1,3 +1,4 @@
+import { Signal } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, distinctUntilChanged, map, merge } from 'rxjs';
 
@@ -5,12 +6,22 @@ export type ComponentWithForm =
   | {
       form: AbstractControl;
     }
+  | {
+      formSig: Signal<AbstractControl>;
+    }
   | { hasUnsavedChanges: boolean };
 
 export const hasUnsavedChanges = (component: ComponentWithForm) => {
-  return 'form' in component
-    ? component.form.dirty
-    : component.hasUnsavedChanges;
+  if ('form' in component) {
+    return component.form.dirty;
+  }
+  if ('formSig' in component) {
+    return component.formSig().dirty;
+  }
+  if ('hasUnsavedChanges' in component) {
+    return component.hasUnsavedChanges;
+  }
+  throw new Error('No form or unsaved indicator found');
 };
 
 /**

@@ -5,12 +5,17 @@
     }
   ],
   "extensions": {
-    "recommendations": ["nrwl.angular-console", "esbenp.prettier-vscode", "Orta.vscode-jest", "dbaeumer.vscode-eslint"]
+    "recommendations": [
+      "nrwl.angular-console",
+      "esbenp.prettier-vscode",
+      "Orta.vscode-jest",
+      "dbaeumer.vscode-eslint",
+      "SonarSource.sonarlint-vscode"
+    ]
   },
   "settings": {
     "files.exclude": {
-      "backend/**": true,
-      "contract/**": true
+      "backend/**": true
     },
     "eslint.validate": ["json"],
     "eslint.workingDirectories": ["./frontend"],
@@ -80,6 +85,18 @@
     },
     "editor.formatOnSave": true,
     "files.eol": "\n",
-    "exportall.config.relExclusion": []
+    "exportall.config.relExclusion": [],
+    "testing.openTesting": "neverOpen",
+    "jest.outputConfig": "neutral",
+    "jest.runMode": {
+      "type": "on-save",
+      "runAllTestsOnStartup": false,
+      "showInlineError": true,
+      "testFileOnly": true
+    },
+    "sonarlint.connectedMode.project": {
+      "connectionId": "sonarqube-next-dvbern-ch",
+      "projectKey": "stip_frontend"
+    }
   }
 }

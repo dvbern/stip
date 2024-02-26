@@ -44,7 +44,7 @@ $gesuch-app-theme: mat.define-light-theme(
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float {
   align-self: flex-start;
   --mat-mdc-form-field-floating-label-scale: 1;
-
+  --mdc-outlined-text-field-outline-color: rgba(0, 0, 0, 0.09);
   .mat-mdc-form-field-hint {
     font-size: 0.75rem;
   }
@@ -62,6 +62,19 @@ $gesuch-app-theme: mat.define-light-theme(
   .mat-mdc-form-field-hint-wrapper,
   .mat-mdc-form-field-error-wrapper {
     padding: 0;
+  }
+}
+.mat-mdc-table .mat-mdc-header-row {
+  --mat-table-header-container-height: 20px;
+}
+.mat-mdc-table {
+  .mat-mdc-header-cell {
+    border-bottom: 0;
+    padding-top: 20px;
+  }
+  .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
+    padding-bottom: 20px;
+    padding-top: 0;
   }
 }
 .mat-mdc-paginator-page-size-label {
@@ -94,4 +107,21 @@ table tr.mat-mdc-row {
   &.highlightable {
     cursor: pointer;
   }
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-height: 2px;
+  --mdc-linear-progress-track-height: 2px;
+  --mdc-linear-progress-active-indicator-color: #{$success};
+  --mdc-linear-progress-track-color: #{lighten($success, 45%)};
+}
+
+.mat-mdc-progress-bar.mat-accent {
+  --mdc-linear-progress-active-indicator-color: #{$info};
+  --mdc-linear-progress-track-color: #{lighten($info, 35%)};
+}
+
+.mat-mdc-progress-bar.mat-warn {
+  --mdc-linear-progress-active-indicator-color: #{$warn};
+  --mdc-linear-progress-track-color: #{lighten($warn, 25%)};
 }

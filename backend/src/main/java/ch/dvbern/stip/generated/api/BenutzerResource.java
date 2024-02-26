@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -28,6 +29,12 @@ public interface BenutzerResource {
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
     Response createOrUpdateSachbearbeiterStammdaten(@PathParam("benutzerId") UUID benutzerId,@Valid @NotNull SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto);
+
+    @PATCH
+    @Path("/stammdaten/sachbearbeiter")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response createOrUpdateSachbearbeiterStammdatenList(@Valid List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto);
 
     @GET
     @Path("/me")

@@ -1,0 +1,12 @@
+{
+  "name": "sachbearbeitung-app-model-administration",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/model/administration/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": ["type:model", "scope:sachbearbeitung-app"]
+}
