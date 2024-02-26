@@ -37,8 +37,8 @@ const BaseSteps = [
   PARTNER,
   KINDER,
   AUSZAHLUNGEN,
-  EINNAHMEN_KOSTEN,
   DOKUMENTE,
+  EINNAHMEN_KOSTEN,
 ];
 
 const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {

@@ -3,8 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  QueryList,
-  ViewChildren,
   computed,
   inject,
 } from '@angular/core';
@@ -16,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import {
+  DOKUMENTE,
   SharedModelGesuchFormStep,
   gesuchFormSteps,
 } from '@dv/shared/model/gesuch-form';
@@ -37,14 +36,14 @@ type DocumentTableSource = {
 };
 
 const requiredDocuments: RequiredDocument[] = Object.values(gesuchFormSteps)
-  .filter((formStep) => formStep.currentStepNumber !== 11)
-  .map((formStep) => {
-    return {
-      documentName: `Dokument-${formStep.route}`,
-      formStep,
-      objectId: `${formStep.route}.${formStep.currentStepNumber}`,
-    };
-  });
+  .filter(
+    (formStep) => formStep.currentStepNumber !== DOKUMENTE.currentStepNumber,
+  )
+  .map((formStep) => ({
+    documentName: `Dokument-${formStep.route}`,
+    formStep,
+    objectId: `${formStep.route}.${formStep.currentStepNumber}`,
+  }));
 
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',
