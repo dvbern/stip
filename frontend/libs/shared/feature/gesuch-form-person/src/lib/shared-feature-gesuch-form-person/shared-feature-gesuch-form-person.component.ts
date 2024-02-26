@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   OnInit,
-  Signal,
   computed,
   effect,
   inject,
@@ -196,7 +195,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? {
           dokumentTyp: DokumentTyp.PERSON_MIETVERTRAG,
           titleKey: 'shared.form.person.file.EIGENER_HAUSHALT',
-          multiple: true,
+          multiple: false,
           gesuchId: gesuch.id,
         }
       : null;
@@ -209,7 +208,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         ? {
             dokumentTyp: DokumentTyp.PERSON_SOZIALHILFEBUDGET,
             titleKey: 'shared.form.person.file.SOZIALHILFE',
-            multiple: true,
+            multiple: false,
             gesuchId: gesuch.id,
           }
         : null;

@@ -1,6 +1,5 @@
 :host {
   display: block;
-  min-width: 506px;
 
   .close {
     --dv-size-unit: 0.2rem;
@@ -29,5 +28,11 @@
   .upload-icon,
   .cancel-icon {
     background-color: var(--dv-blue-bg-subtle);
+  }
+}
+
+@media (min-width: 768px) {
+  :host {
+    min-width: 506px;
   }
 }

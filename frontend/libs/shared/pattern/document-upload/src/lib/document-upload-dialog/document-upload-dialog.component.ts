@@ -45,7 +45,7 @@ export class SharedPatternDocumentUploadDialogComponent {
     return !store.hasEntriesSig() || store.isLoading();
   });
 
-  @HostBinding('class') class = 'p-5';
+  @HostBinding('class') class = 'p-4 p-md-5';
 
   private newDocuments$ = new Subject<File[]>();
 
