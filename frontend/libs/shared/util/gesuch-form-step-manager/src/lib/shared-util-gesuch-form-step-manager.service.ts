@@ -18,7 +18,7 @@ import {
   SharedModelGesuchFormStep,
   isStepDisabled,
 } from '@dv/shared/model/gesuch-form';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
   route: '/',
@@ -37,8 +37,8 @@ const BaseSteps = [
   PARTNER,
   KINDER,
   AUSZAHLUNGEN,
-  DOKUMENTE,
   EINNAHMEN_KOSTEN,
+  DOKUMENTE,
 ];
 
 const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
@@ -71,10 +71,7 @@ export class SharedUtilGesuchFormStepManagerService {
     const currentIndex = steps.findIndex(
       (step) => step.currentStepNumber === origin?.currentStepNumber,
     );
-    if (
-      currentIndex === -1 ||
-      !sharedUtilFnTypeGuardsIsDefined(steps[currentIndex + 1])
-    ) {
+    if (currentIndex === -1 || !isDefined(steps[currentIndex + 1])) {
       throw new Error('Step not defined');
     }
     return steps[currentIndex + 1];

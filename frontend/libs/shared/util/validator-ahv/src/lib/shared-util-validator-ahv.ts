@@ -1,7 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const START_DIGITS = '756';
 type FieldsWithSV =
@@ -53,7 +53,7 @@ export function sharedUtilIsUniqueAhv(
   };
   delete svNummers[type];
 
-  const list = Object.values(svNummers).filter(sharedUtilFnTypeGuardsIsDefined);
+  const list = Object.values(svNummers).filter(isDefined);
   list.push(ahv);
   return new Set(list).size === list.length;
 }

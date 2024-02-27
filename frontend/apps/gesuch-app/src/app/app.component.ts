@@ -10,7 +10,6 @@ import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutz
   imports: [RouterOutlet],
   selector: 'dv-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   @HostBinding('class') klass = 'app-container shadow';

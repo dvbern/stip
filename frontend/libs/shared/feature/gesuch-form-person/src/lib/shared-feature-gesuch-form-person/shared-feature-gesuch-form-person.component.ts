@@ -81,7 +81,7 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-person.selector';
 
@@ -445,7 +445,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           });
         }
         // No nationality was selected
-        else if (!sharedUtilFnTypeGuardsIsDefined(nationalitaetChanged)) {
+        else if (!isDefined(nationalitaetChanged)) {
           this.updateVisbility(this.form.controls.niederlassungsstatus, false, {
             resetOnInvisible: true,
           });

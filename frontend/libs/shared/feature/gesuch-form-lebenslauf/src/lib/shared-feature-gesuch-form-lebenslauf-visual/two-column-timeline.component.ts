@@ -140,7 +140,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
       lebenslaufItem.taetigskeitsart !== undefined &&
       lebenslaufItem.taetigskeitsart !== null
     ) {
-      return { title: lebenslaufItem.taetigkeitsBeschreibung || '' };
+      return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
     }
     if (
       lebenslaufItem.bildungsart === 'EIDGENOESSISCHES_BERUFSATTEST' ||
@@ -170,7 +170,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     return {
       title:
         lebenslaufItem.bildungsart === 'ANDERER_BILDUNGSABSCHLUSS'
-          ? lebenslaufItem.titelDesAbschlusses || ''
+          ? lebenslaufItem.titelDesAbschlusses ?? ''
           : `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
     };
   }
