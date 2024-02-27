@@ -16,8 +16,8 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
-import io.quarkus.security.identity.SecurityIdentity;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -43,11 +43,13 @@ public class BenutzerService {
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
 
+    @Transactional
     public BenutzerDto getCurrentBenutzer() {
         return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
     }
 
     @SuppressWarnings("java:S1135")
+    @Transactional
     public Benutzer getOrCreateCurrentBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
 
@@ -59,6 +61,7 @@ public class BenutzerService {
             .findByKeycloakId(keycloakId)
             .orElseGet(this::createBenutzerFromJWT);
         benutzer = updateBenutzerTypFromJWT(benutzer);
+        benutzerRepository.persist(benutzer);
 
         return benutzer;
     }
