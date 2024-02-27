@@ -29,7 +29,7 @@ public class NoOverlapInAusbildungenConstraintValidator
         return lebenslaufItems.filter(x -> x.getBildungsart() != null).anyMatch(item -> {
             if (
                 (ausbildungStart.isBefore(item.getBis()) || ausbildungStart.isEqual(item.getBis())) &&
-                    (ausbildungEnd.isAfter(item.getVon()) || ausbildungEnd.isEqual(item.getVon()))
+                (ausbildungEnd.isAfter(item.getVon()) || ausbildungEnd.isEqual(item.getVon()))
             ) {
                 return true;
             }

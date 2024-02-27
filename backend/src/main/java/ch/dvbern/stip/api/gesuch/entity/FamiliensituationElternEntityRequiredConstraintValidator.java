@@ -26,17 +26,13 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
             }
         } else if (gesuchFormular.getElterns()
             .stream()
-            .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
-            .findAny()
-            .isPresent()) {
+            .anyMatch(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)) {
             return false;
         }
         if (isElternTeilRequired(ElternTyp.VATER, gesuchFormular.getFamiliensituation())) {
             return gesuchFormular.getElterns()
                 .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-                .findAny()
-                .isPresent();
+                .anyMatch(eltern -> eltern.getElternTyp() == ElternTyp.VATER);
         } else {
             return gesuchFormular.getElterns()
                 .stream()

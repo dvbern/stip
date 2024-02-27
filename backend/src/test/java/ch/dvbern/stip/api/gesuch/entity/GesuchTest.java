@@ -35,7 +35,7 @@ class GesuchTest {
     }
 
     @Test
-    public void getTrancheByDateNotPresent() {
+    void getTrancheByDateNotPresent() {
         var gesuch = initGesuch();
         LocalDate ausserhalbPeriode = gesuch.getGesuchsperiode().getGueltigkeit().getGueltigBis().plusDays(1);
         MatcherAssert.assertThat(gesuch.getGesuchTrancheValidOnDate(ausserhalbPeriode).isPresent(), Matchers.is(false));

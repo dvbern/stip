@@ -7,6 +7,8 @@ import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.transitions.Transition;
 
 public final class GesuchStateMachineUtil {
+    private GesuchStateMachineUtil() {}
+
     public static void addExit(
         StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config,
         Action1<Transition<Gesuchstatus, GesuchStatusChangeEvent>> action) {
