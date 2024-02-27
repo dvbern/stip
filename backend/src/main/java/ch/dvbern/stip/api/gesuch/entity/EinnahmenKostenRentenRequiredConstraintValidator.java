@@ -13,14 +13,15 @@ public class EinnahmenKostenRentenRequiredConstraintValidator
         if (gesuchFormular.getFamiliensituation() == null || gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
-        if (gesuchFormular.getFamiliensituation().getElternteilUnbekanntVerstorben() &&
-            (gesuchFormular.getFamiliensituation().getMutterUnbekanntVerstorben()
-                == ElternAbwesenheitsGrund.VERSTORBEN
-                || gesuchFormular.getFamiliensituation().getVaterUnbekanntVerstorben()
-                == ElternAbwesenheitsGrund.VERSTORBEN)) {
+
+        final var elternteilUnbekannt = gesuchFormular.getFamiliensituation().getElternteilUnbekanntVerstorben();
+        // If elternteil is unbekannt and mother or father are dead
+        if ((elternteilUnbekannt != null && elternteilUnbekannt) && (
+            gesuchFormular.getFamiliensituation().getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN ||
+            gesuchFormular.getFamiliensituation().getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN)
+        ) {
             return gesuchFormular.getEinnahmenKosten().getRenten() != null;
         }
         return true;
     }
-
 }
