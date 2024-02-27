@@ -4,7 +4,7 @@ import { addMonths, compareDesc, format, startOfMonth } from 'date-fns';
 import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { parseDateForVariant } from '@dv/shared/util/validator-date';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export const selectSharedFeatureGesuchFormEducationView = createSelector(
   selectSharedDataAccessGesuchsView,
@@ -14,7 +14,7 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
       ?.slice()
       ?.filter((item) => !item.taetigskeitsart)
       ?.map((item) => parseDateForVariant(item.bis, new Date(), 'monthYear'))
-      ?.filter(sharedUtilFnTypeGuardsIsDefined)
+      ?.filter(isDefined)
       ?.sort((dateA, dateB) => compareDesc(dateA, dateB))?.[0];
     const minEndDatum = startOfMonth(new Date());
     return {
