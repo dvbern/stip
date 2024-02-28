@@ -23,6 +23,7 @@
     "lint:sb": "nx lint sachbearbeitung-app",
     "test:gs": "nx test gesuch-app",
     "test:sb": "nx test sachbearbeitung-app",
+    "test:generators": "nx run tooling-nx-plugin:test-generators",
     "e2e": "nx run-many --target=e2e",
     "e2e:gs": "nx e2e gesuch-app-e2e",
     "e2e:sb": "nx e2e sachbearbeitung-app-e2e",
