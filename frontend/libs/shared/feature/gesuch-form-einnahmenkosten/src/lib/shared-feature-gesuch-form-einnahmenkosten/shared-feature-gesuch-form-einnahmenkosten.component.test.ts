@@ -11,14 +11,12 @@ import {
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { mockElementScrollIntoView } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-feature-gesuch-form-einnahmenkosten.component';
 
-async function setup({
-  personInAusbildung,
-  ausbildung,
-  familiensituation,
-}: GesuchFormularUpdate) {
+async function setup(gesuchFormular: GesuchFormularUpdate) {
+  mockElementScrollIntoView();
   return await render(SharedFeatureGesuchFormEinnahmenkostenComponent, {
     imports: [
       TranslateTestingModule.withTranslations({ de: {} }),
@@ -29,11 +27,7 @@ async function setup({
         initialState: {
           ausbildungsstaettes: { ausbildungsstaettes: [] },
           gesuchs: {
-            gesuchFormular: {
-              personInAusbildung,
-              ausbildung,
-              familiensituation,
-            },
+            gesuchFormular,
           },
           language: { language: 'de' },
         },
@@ -98,8 +92,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 
   describe('visibility rules for field "auswaertigeMittagessenProWoche"', () => {
-    // todo: fix this test, expectation is wrong
-    it.skip('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
+    it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
       const { queryByTestId, fixture } =
         await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
 
@@ -107,7 +100,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
       expect(
         queryByTestId('form-einnahmen-kosten-auswaertigeMittagessenProWoche'),
-      ).toBeNull();
+      ).toBeInTheDocument();
     });
 
     it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Familie"', async () => {
@@ -132,13 +125,14 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 
   describe('visibility rules for field "wohnkosten"', () => {
-    // todo: fix this test, expectation is wrong
-    it.skip('should not display wohnkosten if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
+    it('should display wohnkosten if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
       const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.EIGENER_HAUSHALT,
       );
 
-      expect(queryByTestId('form-einnahmen-kosten-wohnkosten')).toBeNull();
+      expect(
+        queryByTestId('form-einnahmen-kosten-wohnkosten'),
+      ).toBeInTheDocument();
     });
 
     it('should display wohnkosten if personInAusbildung has wohnsitz "Familie"', async () => {
@@ -164,7 +158,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
   describe('visibility rules for field "personenImHaushalt"', () => {
     // todo: fix this test, expectation is wrong
-    it.skip('should display personenImHaushalt if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
+    it('should display personenImHaushalt if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
       const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.EIGENER_HAUSHALT,
       );
@@ -222,7 +216,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
   describe('should have conditional required validation for some fields', () => {
     // test broken, reason unknown
-    it.skip('field zulagen should be optional if no kind has been specified', async () => {
+    it('field zulagen should be optional if no kind has been specified', async () => {
       const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.FAMILIE,
         {
@@ -237,7 +231,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
 
     // test broken, reason unknown
-    it.skip('field zulagen should not be optional if a kind has been specified', async () => {
+    it('field zulagen should not be optional if a kind has been specified', async () => {
       const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.FAMILIE,
         { kinds: [{} as never] },
@@ -252,13 +246,16 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
   describe('should display alimente field correctly based on current state', () => {
     // test broken, reason unknown
-    it.skip('should not display alimente field if gerichtlicheAlimentenregelung is undefined', async () => {
-      const { queryByTestId } = await setup({
+    it('should not display alimente field if gerichtlicheAlimentenregelung is undefined', async () => {
+      const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
         ausbildung: createEmptyAusbildung(),
-        familiensituation: { elternVerheiratetZusammen: true },
+        familiensituation: {
+          elternVerheiratetZusammen: true,
+        },
       });
 
+      detectChanges();
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
       ).toBeNull();
@@ -266,8 +263,8 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
 
     // test broken, reason unknown
-    it.skip('should not display alimente field if gerichtlicheAlimentenregelung is false', async () => {
-      const { queryByTestId } = await setup({
+    it('should not display alimente field if gerichtlicheAlimentenregelung is false', async () => {
+      const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
         ausbildung: createEmptyAusbildung(),
         familiensituation: {
@@ -276,6 +273,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         },
       });
 
+      detectChanges();
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
       ).toBeNull();

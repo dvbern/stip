@@ -106,7 +106,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     });
 
     // TODO: fix this test
-    it.skip('should be invalid if the begin date is after the end date', async () => {
+    it('should be invalid if the begin date is after the end date', async () => {
       const { getByTestId } = await setup();
       const beginInput = getByTestId('form-education-beginn-der-ausbildung');
       const endInput = getByTestId('form-education-ende-der-ausbildung');
@@ -120,7 +120,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       expect(getByTestId('form-education-form')).toHaveClass('ng-invalid');
       expect(
         getByTestId('form-education-form').querySelector('mat-error'),
-      ).toHaveTextContent('YearAfterStart');
+      ).toHaveTextContent('shared.form.education.form.error.monthYearAfter');
     });
 
     (

@@ -1,6 +1,12 @@
 import { screen, waitFor, within } from '@testing-library/angular';
 import { default as userEvent } from '@testing-library/user-event';
 
+export const LONG_RUNNING_TEST_TIMEOUT = 10000;
+
+export function mockElementScrollIntoView() {
+  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+}
+
 export async function clickMatSelectOption(
   selectTestId: string,
   optionText: string,
