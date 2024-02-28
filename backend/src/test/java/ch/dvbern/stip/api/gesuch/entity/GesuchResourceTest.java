@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -49,6 +51,7 @@ class GesuchResourceTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
+    private UUID gesuchFormularId;
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -142,6 +145,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -154,6 +159,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -166,6 +173,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -178,6 +187,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -190,6 +201,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -215,6 +228,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -227,6 +242,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -239,6 +256,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -262,6 +281,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -274,6 +295,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -286,6 +309,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -310,6 +335,8 @@ class GesuchResourceTest {
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems().size(), is(1));
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), is(1));
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getKinds().size(), is(1));
+
+        validatePage();
     }
 
     @Test
@@ -324,6 +351,8 @@ class GesuchResourceTest {
             .body()
             .as(GesuchDtoSpec[].class);
         assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(true));
+
+        validatePage();
     }
 
     @Test
@@ -397,6 +426,33 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    private void validatePage() {
+        if (gesuchFormularId == null) {
+            final var gesuch = gesuchApiSpec.getGesuch()
+                .gesuchIdPath(gesuchId)
+                .execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .as(GesuchDtoSpec.class);
+
+            gesuchFormularId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getId();
+        }
+
+        final var report = gesuchApiSpec
+            .validateGesuchPages()
+            .gesuchFormularIdPath(gesuchFormularId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(ValidationReportDto.class);
+
+        assertThat(report.getValidationErrors(), is(empty()));
     }
 
     private Optional<GesuchDtoSpec> findGesuchWithId(GesuchDtoSpec[] gesuche, UUID gesuchId) {

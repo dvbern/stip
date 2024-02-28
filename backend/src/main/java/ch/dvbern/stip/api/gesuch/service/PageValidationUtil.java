@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class PageValidationUtil {
     private PageValidationUtil() {}
+
     public static List<Class<?>> getGroupsFromGesuchFormular(GesuchFormular gesuch) {
         final var validationGroups = new ArrayList<Class<?>>();
         for (final var field : gesuch.getClass().getDeclaredFields()) {
@@ -25,7 +27,9 @@ public final class PageValidationUtil {
 
                 final var name = Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
                 final var getter = gesuch.getClass().getDeclaredMethod("get" + name);
-                if (getter.invoke(gesuch) == null) {
+                final var value = getter.invoke(gesuch);
+                if (value == null ||
+                    (Collection.class.isAssignableFrom(value.getClass()) && ((Collection<?>) value).isEmpty())) {
                     continue;
                 }
 
