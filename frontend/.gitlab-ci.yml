@@ -9,7 +9,8 @@ include:
       test-app-name: '*'
       context-dir: 'frontend'
       component-test-package-version: '13.6.2'
-      e2e-on: 'never'
+      allow-test-failure: 'false'
+      allow-e2e-test-failure: 'false'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.6.4'
     inputs:
