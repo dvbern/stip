@@ -23,10 +23,12 @@ import java.util.Set;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -50,10 +52,22 @@ import org.hibernate.envers.Audited;
 @Audited
 @FamiliensituationElternEntityRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @LebenslaufLuckenlosConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenAlimenteRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenRentenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenZulagenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenDarlehenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
+@EinnahmenKostenAlimenteRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@EinnahmenKostenRentenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@EinnahmenKostenZulagenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@EinnahmenKostenDarlehenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
 @AusbildungskostenStufeRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
 @LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
 @PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
@@ -101,6 +115,7 @@ public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"), nullable = true)
+    @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 
     @Valid

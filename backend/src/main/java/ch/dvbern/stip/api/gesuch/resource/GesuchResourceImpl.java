@@ -194,4 +194,10 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
         return Response.accepted().build();
     }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response validateGesuchPages(UUID gesuchId) {
+        return Response.ok(gesuchService.validatePages(gesuchId)).build();
+    }
 }

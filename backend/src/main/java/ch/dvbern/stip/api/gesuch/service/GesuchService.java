@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -72,6 +73,7 @@ public class GesuchService {
     private final GesuchsperiodenService gesuchsperiodeService;
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
+    private final GesuchFormularRepository gesuchFormularRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -163,6 +165,24 @@ public class GesuchService {
         }
 
         return new ValidationReportDto();
+    }
+
+    public ValidationReportDto validatePages(UUID gesuchFormularId) {
+        final var gesuch = gesuchFormularRepository.requireById(gesuchFormularId);
+        return validatePages(gesuch);
+    }
+
+    public ValidationReportDto validatePages(GesuchFormular gesuchFormular) {
+        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        final var violations = new HashSet<>(
+            validator.validate(
+                gesuchFormular,
+                validationGroups.toArray(new Class<?>[0])
+            )
+        );
+        violations.addAll(validator.validate(gesuchFormular));
+
+        return ValidationsExceptionMapper.constraintViolationstoDto(violations);
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {

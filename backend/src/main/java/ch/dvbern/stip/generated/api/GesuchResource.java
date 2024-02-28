@@ -90,4 +90,9 @@ public interface GesuchResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
+
+    @GET
+    @Path("/validatePages/{gesuchFormularId}")
+    @Produces({ "application/json" })
+    Response validateGesuchPages(@PathParam("gesuchFormularId") UUID gesuchFormularId);
 }
