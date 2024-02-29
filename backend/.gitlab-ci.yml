@@ -1,9 +1,7 @@
-stages: [ build, validate, test, analyze, package, deploy, mirror ]
+stages: [build, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.7.2'
-
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@v0.7.2'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@c1f7b4f4ab9ac378a6dc45fec61a5a2cc5790d84'
     inputs:
       name: build-api
       context-dir: backend

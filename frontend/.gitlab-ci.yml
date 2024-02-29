@@ -1,4 +1,4 @@
-stages: [build, validate, test, analyze, package, e2e, deploy, mirror]
+stages: [build, validate, test, analyze]
 
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@cf55885ecd45e626ce19275cc7be23f9cdde7e0d'
