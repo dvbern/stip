@@ -1,24 +1,23 @@
-stages: [build, validate, test, analyze, package, e2e, deploy, mirror]
+stages: [build, validate, test, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.6.4'
-
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@cf55885ecd45e626ce19275cc7be23f9cdde7e0d'
     inputs:
       app-name: '*-app'
       test-app-name: '*'
       context-dir: 'frontend'
       component-test-package-version: '13.6.2'
-      e2e-on: 'never'
+      allow-test-failure: 'false'
+      allow-e2e-test-failure: 'false'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.6.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.7.2'
     inputs:
       sonar-scanner: cli
       context-dir: 'frontend'
       sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
       sonar-token: "$SONAR_TOKEN_FRONTEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.6.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@845c46f8a47d12b4806d13a8bc01c2f743f35710'
     inputs:
       name: package:sachbearbeitung-app
       context-dir: frontend
@@ -28,7 +27,7 @@ include:
       build-args: |
         APP=sachbearbeitung-app
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.6.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@845c46f8a47d12b4806d13a8bc01c2f743f35710'
     inputs:
       name: package:gesuch-app
       context-dir: frontend

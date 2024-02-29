@@ -1,5 +1,5 @@
 import { provideMockStore } from '@ngrx/store/testing';
-import { render } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import {
@@ -56,7 +56,7 @@ describe(TwoColumnTimelineComponent.name, () => {
     expect(oneHasBerufsbezeichnung).toBeTruthy();
   });
 
-  it.skip('should have titelDesAbschlusses as label for item with titelDesAbschlusses', async () => {
+  it('should have titelDesAbschlusses as label for item with titelDesAbschlusses', async () => {
     const titelDesAbschlusses = 'Mein Abschluss';
     const items = [
       {
@@ -75,7 +75,7 @@ describe(TwoColumnTimelineComponent.name, () => {
     expect(oneHasTitelDesAbschlusses).toBeTruthy();
   });
 
-  it.skip('should have fachrichtung as label for item with fachrichtung', async () => {
+  it('should have fachrichtung as label for item with fachrichtung', async () => {
     const fachrichtung = 'Meine Fachbezeichnung';
     const items = [
       {
@@ -87,7 +87,7 @@ describe(TwoColumnTimelineComponent.name, () => {
     ];
     const { getAllByTestId } = await setup({ lebenslaufItems: items });
 
-    const labels = getAllByTestId('two-column-timeline-label');
+    const labels = getAllByTestId('two-column-timeline-sub-label');
     const oneHasFachrichtung = labels.some(
       (label) => label.textContent?.includes(fachrichtung),
     );
