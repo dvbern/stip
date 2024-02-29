@@ -8,7 +8,7 @@ import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-materi
 import {
   checkMatCheckbox,
   clickFirstMatSelectOption,
-  dvUserEvent,
+  prepareEvent,
 } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education.component';
@@ -67,7 +67,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     it('should be invalid if begin is not a date', async () => {
       const { getByTestId } = await setup();
       const input = getByTestId('form-education-beginn-der-ausbildung');
-      await dvUserEvent.type(input, 'gugus');
+      await prepareEvent().type(input, 'gugus');
       fireEvent.blur(input);
 
       expect(input).toHaveClass('ng-invalid');
@@ -76,7 +76,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     it('should be invalid if end is not a date', async () => {
       const { getByTestId } = await setup();
       const input = getByTestId('form-education-ende-der-ausbildung');
-      await dvUserEvent.type(input, 'gugus');
+      await prepareEvent().type(input, 'gugus');
       fireEvent.blur(input);
 
       expect(input).toHaveClass('ng-invalid');
@@ -85,7 +85,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     it('should be valid if a past date is provided for begin', async () => {
       const { getByTestId } = await setup();
       const input = getByTestId('form-education-beginn-der-ausbildung');
-      await dvUserEvent.type(input, '01.2018');
+      await prepareEvent().type(input, '01.2018');
       fireEvent.blur(input);
 
       expect(input).not.toHaveClass('ng-invalid');
@@ -95,9 +95,9 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       const { getByTestId } = await setup();
       const beginInput = getByTestId('form-education-beginn-der-ausbildung');
       const endInput = getByTestId('form-education-ende-der-ausbildung');
-      await dvUserEvent.type(beginInput, '01.2019');
+      await prepareEvent().type(beginInput, '01.2019');
       fireEvent.blur(beginInput);
-      await dvUserEvent.type(endInput, '01.2020');
+      await prepareEvent().type(endInput, '01.2020');
       fireEvent.blur(endInput);
 
       expect(beginInput).not.toHaveClass('ng-invalid');
@@ -107,9 +107,9 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       const { getByTestId } = await setup();
       const beginInput = getByTestId('form-education-beginn-der-ausbildung');
       const endInput = getByTestId('form-education-ende-der-ausbildung');
-      await dvUserEvent.type(beginInput, '01.2020');
+      await prepareEvent().type(beginInput, '01.2020');
       fireEvent.blur(beginInput);
-      await dvUserEvent.type(endInput, '01.2019');
+      await prepareEvent().type(endInput, '01.2019');
       fireEvent.blur(endInput);
 
       expect(beginInput).not.toHaveClass('ng-invalid');
@@ -130,7 +130,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       it(`should be ${expected} if end date is ${position} the current month`, async () => {
         const { getByTestId } = await setup();
         const input = getByTestId('form-education-ende-der-ausbildung');
-        await dvUserEvent.type(input, endDate);
+        await prepareEvent().type(input, endDate);
         fireEvent.blur(input);
 
         expect(input).toHaveClass(`ng-${expected}`);
@@ -168,7 +168,10 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         'mat-mdc-select-disabled',
       );
 
-      await dvUserEvent.type(getByTestId(fields.fachrichtung), 'fachrichtung1');
+      await prepareEvent().type(
+        getByTestId(fields.fachrichtung),
+        'fachrichtung1',
+      );
       expect(getByTestId(fields.fachrichtung)).toHaveValue('fachrichtung1');
 
       await checkMatCheckbox(fields.notFound);
@@ -184,7 +187,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         expect(fieldEl).toHaveValue('');
         expect(fieldEl).toBeEnabled();
 
-        await dvUserEvent.click(fieldEl);
+        await prepareEvent().click(fieldEl);
         fireEvent.blur(fieldEl);
 
         expect(fieldEl).toHaveClass('ng-invalid');
