@@ -311,7 +311,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       validators: Validators.required,
     }),
     ...addWohnsitzControls(this.formBuilder),
-    vermoegenVorjahr: [<string | undefined>undefined, []],
+    vermoegenVorjahr: [<string | undefined>undefined, [Validators.required]],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
