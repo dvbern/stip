@@ -1,6 +1,8 @@
 {
   "shared.search": "Search",
   "shared.menu": "Menu",
+  "shared.menu.workedBy": "en cours de traitement par",
+  "shared.menu.dashboard": "Dashboard",
   "shared.close": "Close",
   "shared.cancel": "Cancel",
   "shared.accept": "Accept",
