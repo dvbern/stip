@@ -1,7 +1,7 @@
 stages: [build, validate, test, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@cf55885ecd45e626ce19275cc7be23f9cdde7e0d'
+  - component: 'gitlab.dvbern.ch/scph/components/nx@bc7c17349ff381d283b6ade5a2941bc9c6899310'
     inputs:
       app-name: '*-app'
       test-app-name: '*'
@@ -9,6 +9,7 @@ include:
       component-test-package-version: '13.6.2'
       allow-test-failure: 'false'
       allow-e2e-test-failure: 'false'
+      e2e-test-stage: 'e2e'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.7.2'
     inputs:
