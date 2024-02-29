@@ -7,7 +7,7 @@
         <span class="fw-medium">Eva Mendes</span>
       </p>
 
-      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [steps]="stepsSig()" />
+      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
     </div>
 
     @if (step) {
@@ -56,7 +56,7 @@
 
   <div class="mobile-nav-content">
     <dv-shared-pattern-gesuch-step-nav
-      [steps]="stepsSig()"
+      [stepsSig]="stepsSig()"
       (navClicked)="navClicked.emit()"
     ></dv-shared-pattern-gesuch-step-nav>
   </div>
