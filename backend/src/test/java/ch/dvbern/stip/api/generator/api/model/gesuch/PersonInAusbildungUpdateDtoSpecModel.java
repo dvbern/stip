@@ -36,11 +36,9 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
                 field(PersonInAusbildungUpdateDtoSpec::getVorname),
                 gen -> gen.oneOf("Sarah", "Elijah", "Nu'ab", "André", "Özgür")
             )
-            .generate(
+            .set(
                 field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
-                gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1,
-                    1
-                ))
+                LocalDate.now().minusYears(16)
             )
             .generate(
                 field(PersonInAusbildungUpdateDtoSpec::getNachname),

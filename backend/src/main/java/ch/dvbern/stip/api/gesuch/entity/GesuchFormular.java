@@ -58,8 +58,14 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
-@FamiliensituationElternEntityRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@LebenslaufLuckenlosConstraint(groups = GesuchEinreichenValidationGroup.class)
+@FamiliensituationElternEntityRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    ElternPageValidation.class
+})
+@LebenslaufLuckenlosConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    LebenslaufItemPageValidation.class
+})
 @EinnahmenKostenAlimenteRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
