@@ -69,7 +69,7 @@ include:
       mirror-when: "always"
 
 
-  - component: 'gitlab.dvbern.ch/scph/components/nx@bc7c17349ff381d283b6ade5a2941bc9c6899310'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@cf55885ecd45e626ce19275cc7be23f9cdde7e0d'
     inputs:
       name: ".nx"
       e2e-test-package-version: '13.6.2'

@@ -93,6 +93,10 @@ export class EinnahmenKostenPO {
 
     await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
 
+    await this.elems.auswaertigeMittagessenProWoche.fill(
+      `${einnahmenKosten.auswaertigeMittagessenProWoche ?? 0}`,
+    );
+
     await this.elems.personenImHaushalt.fill(
       `${einnahmenKosten.personenImHaushalt ?? 0}`,
     );
