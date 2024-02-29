@@ -157,7 +157,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 
   describe('visibility rules for field "personenImHaushalt"', () => {
-    // todo: fix this test, expectation is wrong
     it('should display personenImHaushalt if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
       const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.EIGENER_HAUSHALT,
@@ -215,7 +214,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 
   describe('should have conditional required validation for some fields', () => {
-    // test broken, reason unknown
     it('field zulagen should be optional if no kind has been specified', async () => {
       const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.FAMILIE,
@@ -230,7 +228,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       );
     });
 
-    // test broken, reason unknown
     it('field zulagen should not be optional if a kind has been specified', async () => {
       const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
         Wohnsitz.FAMILIE,
@@ -245,7 +242,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   });
 
   describe('should display alimente field correctly based on current state', () => {
-    // test broken, reason unknown
     it('should not display alimente field if gerichtlicheAlimentenregelung is undefined', async () => {
       const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
@@ -262,7 +258,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       expect(queryByTestId('form-einnahmen-kosten-alimente')).toBeNull();
     });
 
-    // test broken, reason unknown
     it('should not display alimente field if gerichtlicheAlimentenregelung is false', async () => {
       const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
