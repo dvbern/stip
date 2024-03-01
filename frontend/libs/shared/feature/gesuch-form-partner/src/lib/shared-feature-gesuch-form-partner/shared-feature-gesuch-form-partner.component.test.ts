@@ -1,7 +1,7 @@
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
-import { default as userEvent } from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PartnerUpdate } from '@dv/shared/model/gesuch';

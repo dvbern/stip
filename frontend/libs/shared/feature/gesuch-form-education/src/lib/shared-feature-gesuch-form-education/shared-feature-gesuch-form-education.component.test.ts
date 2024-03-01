@@ -1,7 +1,6 @@
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { fireEvent, render } from '@testing-library/angular';
-import { default as userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
@@ -9,6 +8,7 @@ import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-materi
 import {
   checkMatCheckbox,
   clickFirstMatSelectOption,
+  prepareEvent,
 } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education.component';
@@ -54,22 +54,20 @@ async function setup() {
 
 describe(SharedFeatureGesuchFormEducationComponent.name, () => {
   describe('form validity', () => {
-    /**
-     * @example usage of jest.useFakeTimers
-     *
-     * beforeEach(() => {
-     *   jest.setSystemTime(new Date('2019-02-01'));
-     *   jest.useFakeTimers();
-     * });
-     * afterEach(() => {
-     *   jest.useRealTimers();
-     * });
-     */
+    beforeEach(() => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date('2019-02-01'));
+    });
+
+    afterEach(() => {
+      jest.runOnlyPendingTimers();
+      jest.useRealTimers();
+    });
 
     it('should be invalid if begin is not a date', async () => {
       const { getByTestId } = await setup();
       const input = getByTestId('form-education-beginn-der-ausbildung');
-      await userEvent.type(input, 'gugus');
+      await prepareEvent().type(input, 'gugus');
       fireEvent.blur(input);
 
       expect(input).toHaveClass('ng-invalid');
@@ -78,7 +76,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     it('should be invalid if end is not a date', async () => {
       const { getByTestId } = await setup();
       const input = getByTestId('form-education-ende-der-ausbildung');
-      await userEvent.type(input, 'gugus');
+      await prepareEvent().type(input, 'gugus');
       fireEvent.blur(input);
 
       expect(input).toHaveClass('ng-invalid');
@@ -87,7 +85,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     it('should be valid if a past date is provided for begin', async () => {
       const { getByTestId } = await setup();
       const input = getByTestId('form-education-beginn-der-ausbildung');
-      await userEvent.type(input, '01.2018');
+      await prepareEvent().type(input, '01.2018');
       fireEvent.blur(input);
 
       expect(input).not.toHaveClass('ng-invalid');
@@ -97,22 +95,21 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       const { getByTestId } = await setup();
       const beginInput = getByTestId('form-education-beginn-der-ausbildung');
       const endInput = getByTestId('form-education-ende-der-ausbildung');
-      await userEvent.type(beginInput, '01.2019');
+      await prepareEvent().type(beginInput, '01.2019');
       fireEvent.blur(beginInput);
-      await userEvent.type(endInput, '01.2020');
+      await prepareEvent().type(endInput, '01.2020');
       fireEvent.blur(endInput);
 
       expect(beginInput).not.toHaveClass('ng-invalid');
     });
 
-    // TODO: fix this test
-    it.skip('should be invalid if the begin date is after the end date', async () => {
+    it('should be invalid if the begin date is after the end date', async () => {
       const { getByTestId } = await setup();
       const beginInput = getByTestId('form-education-beginn-der-ausbildung');
       const endInput = getByTestId('form-education-ende-der-ausbildung');
-      await userEvent.type(beginInput, '01.2020');
+      await prepareEvent().type(beginInput, '01.2020');
       fireEvent.blur(beginInput);
-      await userEvent.type(endInput, '01.2019');
+      await prepareEvent().type(endInput, '01.2019');
       fireEvent.blur(endInput);
 
       expect(beginInput).not.toHaveClass('ng-invalid');
@@ -120,20 +117,20 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       expect(getByTestId('form-education-form')).toHaveClass('ng-invalid');
       expect(
         getByTestId('form-education-form').querySelector('mat-error'),
-      ).toHaveTextContent('YearAfterStart');
+      ).toHaveTextContent('shared.form.education.form.error.monthYearAfter');
     });
 
     (
       [
         ['before', '01.2019', 'invalid'],
         ['equal', '02.2019', 'invalid'],
-        // ['after', '03.2019', 'valid'], // Todo: fix fakeTime first
+        ['after', '03.2019', 'valid'],
       ] as const
     ).forEach(([position, endDate, expected]) => {
       it(`should be ${expected} if end date is ${position} the current month`, async () => {
         const { getByTestId } = await setup();
         const input = getByTestId('form-education-ende-der-ausbildung');
-        await userEvent.type(input, endDate);
+        await prepareEvent().type(input, endDate);
         fireEvent.blur(input);
 
         expect(input).toHaveClass(`ng-${expected}`);
@@ -171,7 +168,10 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         'mat-mdc-select-disabled',
       );
 
-      await userEvent.type(getByTestId(fields.fachrichtung), 'fachrichtung1');
+      await prepareEvent().type(
+        getByTestId(fields.fachrichtung),
+        'fachrichtung1',
+      );
       expect(getByTestId(fields.fachrichtung)).toHaveValue('fachrichtung1');
 
       await checkMatCheckbox(fields.notFound);
@@ -187,7 +187,7 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         expect(fieldEl).toHaveValue('');
         expect(fieldEl).toBeEnabled();
 
-        await userEvent.click(fieldEl);
+        await prepareEvent().click(fieldEl);
         fireEvent.blur(fieldEl);
 
         expect(fieldEl).toHaveClass('ng-invalid');
