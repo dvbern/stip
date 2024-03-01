@@ -28,19 +28,4 @@ public class VermoegenVorjahrRequiredConstraintValidator
 
         return pia.getVermoegenVorjahr() == null;
     }
-
-    boolean inBern(String plz) {
-        try {
-            final var plzInt = Integer.parseInt(plz);
-            // Until we have address data, PLZ that are 3xxx are in Bern
-            if (3000 <= plzInt && plzInt < 4000) {
-                return true;
-            }
-
-            return false;
-        } catch (NumberFormatException e) {
-            LOG.warn("PLZ that's not a number was passed");
-            return false;
-        }
-    }
 }

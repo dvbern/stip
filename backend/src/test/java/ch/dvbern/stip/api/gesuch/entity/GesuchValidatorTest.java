@@ -58,6 +58,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_VORNAME_NOTBLANK_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE;
@@ -81,11 +82,14 @@ class GesuchValidatorTest {
         String[] constraintMessages = { VALIDATION_NACHNAME_NOTBLANK_MESSAGE, VALIDATION_VORNAME_NOTBLANK_MESSAGE,
             VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE,
             VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE,
-            VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE };
+            VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE,
+            VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE };
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setAdresse(new Adresse());
         // Beim Land CH muss der Heimatort nicht leer sein
         personInAusbildung.getAdresse().setLand(Land.CH);
+        // Bei PLZ != 3xxx, muss das vermoegenVorjahr nicht leer sein
+        personInAusbildung.getAdresse().setPlz("7000");
         // Beim nicht IZV muessen die IZV PLZ und Ort nicht leer sein
         personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(false);
         // Beim Nationalitaet CH muesst die Niederlassungsstatus nicht gegeben werden
