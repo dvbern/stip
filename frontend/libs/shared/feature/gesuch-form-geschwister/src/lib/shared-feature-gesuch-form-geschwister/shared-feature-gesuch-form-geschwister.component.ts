@@ -1,21 +1,22 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   computed,
   inject,
-  OnInit,
 } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
-import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
-import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
+import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
+import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
 
@@ -27,6 +28,7 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
     NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,14 +36,15 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private store = inject(Store);
 
-  view$ = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
+  hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   sortedGeschwistersSig = computed(() => {
-    const originalList = this.view$().gesuchFormular?.geschwisters;
+    const originalList = this.viewSig().gesuchFormular?.geschwisters;
     return originalList
       ? [...originalList].sort((a, b) =>
           (a.vorname + ' ' + a.nachname).localeCompare(
@@ -98,7 +101,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormGeschwister.nextTriggered({
@@ -116,7 +119,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private buildUpdatedGesuchWithDeletedGeschwister(
     geschwister: GeschwisterUpdate,
   ) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const updatedGeschwisters = gesuchFormular?.geschwisters?.filter(
       (entry) => entry.id !== geschwister.id,
     );
@@ -134,7 +137,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private buildUpdatedGesuchWithUpdatedGeschwister(
     geschwister: GeschwisterUpdate,
   ) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     // update existing geschwister if found
     const updatedGeschwisters =
       gesuchFormular?.geschwisters?.map((oldGeschwister) => {

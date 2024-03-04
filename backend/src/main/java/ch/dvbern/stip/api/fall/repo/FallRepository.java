@@ -32,16 +32,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FallRepository implements BaseRepository<Fall> {
 
-	private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-	public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
-		var queryFactory = new JPAQueryFactory(entityManager);
-		var fall = QFall.fall;
+    public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var fall = QFall.fall;
 
-		var query = queryFactory
-				.select(fall)
-				.from(fall)
-				.where(fall.gesuchsteller.id.eq(benutzerId).or(fall.sachbearbeiter.id.eq(benutzerId)));
-		return query.stream();
-	}
+        var query = queryFactory
+            .select(fall)
+            .from(fall)
+            .where(fall.gesuchsteller.id.eq(benutzerId).or(fall.sachbearbeiter.id.eq(benutzerId)));
+        return query.stream();
+    }
 }

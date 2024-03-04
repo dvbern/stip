@@ -19,7 +19,12 @@ package ch.dvbern.stip.api.adresse.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,41 +36,39 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Entity
-@Table(indexes = {
-		@Index(name = "IX_adresse_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_adresse_mandant", columnList = "mandant"))
 @Audited
 @Getter
 @Setter
 public class Adresse extends AbstractMandantEntity {
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Land land = Land.CH;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Land land = Land.CH;
 
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = true)
-	private String coAdresse;
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = true)
+    private String coAdresse;
 
-	@NotNull
-	@NotBlank
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String strasse;
+    @NotNull
+    @NotBlank
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String strasse;
 
-	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-	@Column(nullable = true)
-	private String hausnummer;
+    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Column(nullable = true)
+    private String hausnummer;
 
-	@NotNull
-	@NotBlank
-	@Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-	@Column(nullable = false)
-	private String plz;
+    @NotNull
+    @NotBlank
+    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Column(nullable = false)
+    private String plz;
 
-	@NotNull
-	@NotBlank
-	@Size(max = DB_DEFAULT_MAX_LENGTH)
-	@Column(nullable = false)
-	private String ort;
+    @NotNull
+    @NotBlank
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(nullable = false)
+    private String ort;
 }

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { SachbearbeitungAppPatternGesuchStepLayoutComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-step-layout';
-import { SharedUiGesuchStepWrapperComponent } from '@dv/shared/ui/gesuch-step-wrapper';
+import { SachbearbeitungAppPatternAdministrationLayoutComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-step-layout';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
   standalone: true,
   imports: [
-    SharedUiGesuchStepWrapperComponent,
-    SachbearbeitungAppPatternGesuchStepLayoutComponent,
+    SharedUiRouterOutletWrapperComponent,
+    SachbearbeitungAppPatternAdministrationLayoutComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

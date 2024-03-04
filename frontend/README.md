@@ -32,9 +32,6 @@ Install the dependencies with `npm ci` (append `--legacy-peer-deps` or `--force`
 
 > The `--legacy-peer-deps` flag might need to used in case the dependencies available at the time of last workspace update did not fulfil their peerDependencies ranges perfectly. This might change again in the future as newer versions of the libraries are released and the `--legacy-peer-deps` flag might not be needed anymore.
 
-In order to install the dependency `@kibon/stip-contract` a DvBern internal access is needed. Follow [this](https://intra.dvbern.ch/display/DEV/GitLab%3A+NPM+Registry+verwenden) tutorial to setup the access to the private `npm` registry.  
-For external users, please uninstall the `@kibon/stip-contract` in order to use this repository. It is only required to update the models and interfaces.
-
 There are two different Apps that can be built, served, tested, etc: `gesuch-app` and `sachbearbeitung-app`. `npm run start` for example starts the GS and SB App.
 
 | Task     | Gesuch-App         | Sachbearbeitung-App | All                |
@@ -61,7 +58,7 @@ To obtain a test user it is possible to log in the administration panel on https
 
 ### TLDR local development:
 
-1. `npm ci` (check that `@kibon/stip-contract` is installable, as mentioned above)
+1. `npm ci`
 2. Ensure that the API and everything else is running:
    - https://gitlab.dvbern.ch/kibon/stip-api
 3. Ensure the [Authorization](#authorization) is configured
@@ -106,6 +103,15 @@ npm run lint
 
 A general overview on how the linting works in this project can be found [here](docs/linting.md).
 
+## SonarQube
+
+SonarQube is being used to ensure code quality and clean code, the Analysis is being triggered on each code check-in in the build pipeline.  
+It is possible to run the SonarQube analysis locally by adding the [SonarLint](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode) VsCode Extension and following these steps:
+
+1. Install https://docs.sonarsource.com/sonarlint/vs-code/getting-started/installation/
+2. Setup the connection to the SonarQube hosted instance: https://docs.sonarsource.com/sonarlint/vs-code/team-features/connected-mode/#connection-setup
+3. Verify if it works by commenting out some code, after a few seconds a warning should be visible.
+
 ## Testing
 
 ### Unit testing
@@ -124,18 +130,42 @@ headless and hence much easier to test.
 The main product critical flows should be covered by the `e2e` tests which provide
 the best tradeoff between effective / useful coverage and effort required to write them.
 
-### E2E
+### E2E tesing with Playwright
 
+For best developper experience, use vs code with the recommended playwright extension
+It provides many handy features, like running individual tests.
+
+#### commands to run e2e via command line
+
+Before running any e2e test, make sure the dev servers for the apps are running.
+
+to rerun a test, it might be necessary to add '--skip-nx-cache' so nx will run a test again
+
+run all tests:
+
+```bash
+npm run e2e
 ```
-// Headless
-`npm run e2e`
 
-// Visual
-`npm run e2e:gs:open`
-`npm run e2e:sb:open`
+run for specific app by adding :gs or :sb
+
+```bash
+npm run e2e:gs
 ```
 
-Preparation:
+run a test in playwrights ui mode:
+
+```bash
+npm run e2e:gs -- --ui
+```
+
+To see the test in a browser, run:
+
+```bash
+npm run e2e:gs -- --headed
+```
+
+#### Preparation:
 
 1. Copy `.env.template` to `.env`
 2. Fill the values DEV Keycloak Credentials from LastPass (`LastPass` -> `Stip E2E (DEV)`)
@@ -153,72 +183,29 @@ and then start e2e tests in GUI mode with `npm run e2e:gs:open` which will start
 
 ### Component tests
 
-Generate a new test for a library:
+Component testing is performed with Jest and [testing-library](https://testing-library.com/docs/angular-testing-library/intro/). To create a new test, just add a file ending with .test.spec (whereas unit tests end with .spec.ts) to the component you want to test.
 
-```bash
-nx g @nx/angular:cypress-component-configuration --project=your-project --build-target=your-build-configuration:build
-```
+We strongly recomment using vscode and the orta.vscode-jest extentsion for best DX.
 
-where your-project is the project name of your library and your-build-configuration is the chosen
-[build target](https://angular.io/guide/build) build target, e.g. "gesuch-app:build"
-This generates the cypress files with the necessary configurations. If you don't need the
-[fixtures folder](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Fixture-Files),
-you can remove it manually.
+#### Testing Library
 
-You then have to make the following adaptions to enable code coverage:
+Testing Library is a very lightweight solution for testing without all the implementation details. The main utilities it provides involve querying for nodes similarly to how users would find them. By working with real DOM nodes, Testing Library encourages you to write tests that closely resemble how your code is used.
 
 ```typescript
-// cypress/support/component.ts
-// add line
-import '@cypress/code-coverage/support';
-```
+describe('should display warning if not all of personInAusbildung, familiensituation, ausbildung are defined', () => {
+  it('should display warning if personInAusbildung is undefined', async () => {
+    const { queryByTestId } = await setup({
+      personInAusbildung: undefined,
+      ausbildung: createEmptyAusbildung(),
+      familiensituation: { elternVerheiratetZusammen: true },
+    });
 
-In the same directory as the _cypress.config.ts_ file, create the following file, named _coverage.webpack.ts_:
-
-```typescript
-export const setupCoverageWebpack = (paths: string[]) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(js|ts)$/,
-        loader: '@jsdevtools/coverage-istanbul-loader',
-        options: { esModules: true },
-        enforce: 'post',
-        include: paths,
-        exclude: [/\.(cy|spec)\.ts$/, /node_modules/],
-      },
-    ],
-  },
+    expect(queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning')).toBeInTheDocument();
+  });
 });
 ```
 
-Then, replace the content in _cypress.config.ts_ with:
-
-```typescript
-import { nxComponentTestingPreset } from '@nx/angular/plugins/component-testing';
-import task from '@cypress/code-coverage/task';
-import { defineConfig } from 'cypress';
-import * as path from 'path';
-
-import { setupCoverageWebpack } from './coverage.webpack';
-
-const nxPreset = nxComponentTestingPreset(__filename);
-
-export default defineConfig({
-  component: {
-    ...nxPreset,
-    devServer: {
-      ...nxPreset.devServer,
-      webpackConfig: setupCoverageWebpack([path.join(__dirname, 'src')]),
-    },
-    setupNodeEvents(on, config) {
-      task(on, config);
-      return config;
-    },
-  },
-  scrollBehavior: 'nearest',
-});
-```
+an extensive list of examples can be found [here](https://github.com/testing-library/angular-testing-library/tree/main/apps/example-app/src/app/examples)
 
 ## Troubleshooting
 

@@ -20,19 +20,59 @@ package ch.dvbern.stip.api.gesuch.type;
 import java.util.EnumSet;
 import java.util.Set;
 
-public enum Gesuchstatus {
-	OFFEN,
-	IN_BEARBEITUNG,
-	EINGEREICHT,
-	NICHT_KOMPLETT_EINGEREICHT,
-	NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
+import lombok.Getter;
 
-	public static Set<Gesuchstatus> readonlyGesuchStatusList =
-			EnumSet.of(EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT, NICHT_KOMPLETT_EINGEREICHT_NACHFRIST);
+@Getter
+public enum Gesuchstatus {
+    IN_BEARBEITUNG_GS,
+    KOMPLETT_EINGEREICHT,
+    BEREIT_FUER_BEARBEITUNG,
+    FEHLERHAFT,
+    IN_BEARBEITUNG_SB,
+    IN_REVIEW,
+    FEHLENDE_DOKUMENTE,
+    FEHLENDE_DOKUMENTE_NACHFRIST,
+    ZURUECKGEZOGEN,
+    ABKLAERUNG_MIT_GS,
+    IN_FREIGABE,
+    ZURUECKGEWIESEN,
+    WARTEN_AUF_UNTERSCHRIFTENBLATT,
+    NEGATIVER_ENTSCHEID,
+    VERFUEGT,
+    STIPENDIUM_AKZEPTIERT,
+    STIPENDIUM_AUSBEZAHLT;
+
+    private static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = EnumSet.of(
+        IN_BEARBEITUNG_GS,
+        KOMPLETT_EINGEREICHT,
+        ABKLAERUNG_MIT_GS,
+        FEHLENDE_DOKUMENTE,
+        FEHLENDE_DOKUMENTE_NACHFRIST
+    );
+    private static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT = EnumSet.of(
+        BEREIT_FUER_BEARBEITUNG,
+        FEHLERHAFT,
+        IN_BEARBEITUNG_SB,
+        ZURUECKGEWIESEN,
+        IN_REVIEW,
+        IN_FREIGABE,
+        WARTEN_AUF_UNTERSCHRIFTENBLATT,
+        VERFUEGT,
+        STIPENDIUM_AKZEPTIERT,
+        STIPENDIUM_AUSBEZAHLT
+    );
+    private static final Set<Gesuchstatus> ADMIN_CAN_EDIT = EnumSet.copyOf(SACHBEARBEITER_CAN_EDIT);
 
     public boolean isEingereicht() {
-        return this == EINGEREICHT ||
-                this == NICHT_KOMPLETT_EINGEREICHT ||
-                this == NICHT_KOMPLETT_EINGEREICHT_NACHFRIST;
+        return this != IN_BEARBEITUNG_GS;
+    }
+
+    public boolean benutzerCanEdit(BenutzerTyp benutzerTyp) {
+        return switch (benutzerTyp) {
+            case GESUCHSTELLER -> GESUCHSTELLER_CAN_EDIT.contains(this);
+            case SACHBEARBEITER -> SACHBEARBEITER_CAN_EDIT.contains(this);
+            case ADMIN -> ADMIN_CAN_EDIT.contains(this);
+        };
     }
 }

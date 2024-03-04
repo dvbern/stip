@@ -1,21 +1,21 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
+import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
+import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
+import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
-import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 
 export interface State {
   gesuch: SharedModelGesuch | null;

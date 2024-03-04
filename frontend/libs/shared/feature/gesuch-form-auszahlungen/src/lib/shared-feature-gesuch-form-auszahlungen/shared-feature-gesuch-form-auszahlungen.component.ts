@@ -1,11 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  OnInit,
   computed,
   effect,
-  ElementRef,
   inject,
-  OnInit,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -20,33 +20,34 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { MaskitoModule } from '@maskito/angular';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { extractIBAN } from 'ibantools';
 
-import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
-import { AUSZAHLUNGEN } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { calculateElternSituationGesuch } from '@dv/shared/util-fn/gesuch-util';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
-import { SharedUtilFormService } from '@dv/shared/util/form';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import {
   ElternUpdate,
   Kontoinhaber,
   MASK_IBAN,
   PersonInAusbildungUpdate,
 } from '@dv/shared/model/gesuch';
+import { AUSZAHLUNGEN } from '@dv/shared/model/gesuch-form';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUtilFormService } from '@dv/shared/util/form';
+import { calculateElternSituationGesuch } from '@dv/shared/util-fn/gesuch-util';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
-import { extractIBAN, ExtractIBANResult } from 'ibantools';
 import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-gesuch-form-auszahlungen.selector';
 
 @Component({
@@ -66,6 +67,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiFormAddressComponent,
     NgbAlert,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-auszahlungen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,7 +89,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     nachname: ['', [Validators.required]],
     vorname: ['', [Validators.required]],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(this.fb),
-    iban: ['', [Validators.required, this.ibanValidator()]],
+    iban: ['', [Validators.required, ibanValidator()]],
   });
 
   laenderSig = computed(() => {
@@ -98,14 +100,15 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   view = this.store.selectSignal(selectSharedFeatureGesuchFormAuszahlungenView);
 
   constructor() {
-    const kontoinhaberinChanges$ = toSignal(
+    this.formUtils.registerFormForUnsavedCheck(this);
+    const kontoinhaberinChangesSig = toSignal(
       this.form.controls.kontoinhaber.valueChanges,
     );
 
     effect(
       () => {
         const { gesuchFormular } = this.view();
-        if (sharedUtilFnTypeGuardsIsDefined(gesuchFormular)) {
+        if (isDefined(gesuchFormular)) {
           const initalValue = gesuchFormular.auszahlung;
           this.form.patchValue({
             ...initalValue,
@@ -120,7 +123,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
     effect(
       () => {
-        const kontoinhaberin = kontoinhaberinChanges$();
+        const kontoinhaberin = kontoinhaberinChangesSig();
         const { gesuchFormular } = this.view();
         this.language = this.languageSig();
         switch (kontoinhaberin) {
@@ -182,6 +185,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           origin: AUSZAHLUNGEN,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
@@ -231,32 +235,6 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     this.form.controls.adresse.enable();
   }
 
-  private ibanValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value === null || control.value === '') {
-        return null;
-      }
-      const extractIBANResult = extractIBAN('CH' + control.value);
-      if (extractIBANResult.valid && extractIBANResult.countryCode === 'CH') {
-        return null;
-      }
-      return this.constructIBANValidationErrors(extractIBANResult);
-    };
-  }
-
-  private constructIBANValidationErrors(extractIBANResult: ExtractIBANResult): {
-    invalidIBAN?: boolean;
-  } {
-    const errorObject: { invalidIBAN?: boolean } = {} as ValidationErrors;
-
-    if (!extractIBANResult.valid) {
-      errorObject.invalidIBAN = true;
-      return errorObject;
-    }
-
-    return errorObject;
-  }
-
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.view();
     const auszahlung = gesuchFormular?.auszahlung;
@@ -273,4 +251,24 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       },
     };
   }
+}
+
+export function ibanValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (control.value === null || control.value === '') {
+      return null;
+    }
+    const extractIBANResult = extractIBAN('CH' + control.value);
+    if (!extractIBANResult.valid || extractIBANResult.countryCode !== 'CH') {
+      return { invalidIBAN: true };
+    }
+    // Check IBAN is not a QR-IBAN, a QR based one, has in the first 5 digits a value between 30000 and 31999
+    if (
+      +extractIBANResult.iban.substring(4, 9) >= 30000 &&
+      +extractIBANResult.iban.substring(4, 9) <= 31999
+    ) {
+      return { qrIBAN: true };
+    }
+    return null;
+  };
 }

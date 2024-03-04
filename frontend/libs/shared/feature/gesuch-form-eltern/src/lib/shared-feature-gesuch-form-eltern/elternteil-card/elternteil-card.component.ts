@@ -5,9 +5,10 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+
 import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
@@ -30,6 +31,8 @@ export class ElternteilCardComponent {
   editTriggered = new EventEmitter<ElternUpdate>();
   @Output()
   addTriggered = new EventEmitter<ElternTyp>();
+
+  elternTypen = ElternTyp;
 
   handleClick() {
     if (this.elternteil) {

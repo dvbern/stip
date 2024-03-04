@@ -1,0 +1,10 @@
+<div
+  class="d-flex flex-grow-1 flex-column justify-content-center align-items-center col-lg-9"
+  [class.compact]="compact"
+  [class.mt-4]="!compact"
+>
+  <div class="spinner" [class.mb-3]="!compact" [class.mb-1]="compact"></div>
+  @if (loadingTextKey; as textKey) {
+    <div class="spinner-text" [class.fs-6]="compact">{{ textKey | translate }}</div>
+  }
+</div>

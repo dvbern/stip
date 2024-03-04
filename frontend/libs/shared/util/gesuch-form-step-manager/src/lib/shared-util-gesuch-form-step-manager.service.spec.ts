@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+
 import { SharedUtilGesuchFormStepManagerService } from './shared-util-gesuch-form-step-manager.service';
 
 describe('SharedUtilGesuchFormStepManagerService', () => {

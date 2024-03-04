@@ -4,11 +4,11 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  inject,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -25,16 +25,16 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import {
-  asBusyBlock,
-  asGapBlock,
-  isTimelineBusyBlock,
-  isTimelineGapBlock,
   TimelineAddCommand,
   TimelineBusyBlock,
   TimelineBusyBlockChild,
   TimelineGapBlock,
   TimelineRawItem,
   TwoColumnTimeline,
+  asBusyBlock,
+  asGapBlock,
+  isTimelineBusyBlock,
+  isTimelineGapBlock,
 } from './two-column-timeline';
 
 @Component({
@@ -92,6 +92,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
           id: lebenslaufItem.id,
           label: this.getLebenslaufItemLabel(lebenslaufItem),
           editable: true,
+          ausbildungAbgeschlossen: lebenslaufItem.ausbildungAbgeschlossen,
         }) as TimelineRawItem,
     );
 
@@ -125,6 +126,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
         },
       },
       editable: false,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem);
 
     this.timeline.fillWith(expectedSartDate, timelineRawItems);
@@ -138,7 +140,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
       lebenslaufItem.taetigskeitsart !== undefined &&
       lebenslaufItem.taetigskeitsart !== null
     ) {
-      return { title: lebenslaufItem.taetigkeitsBeschreibung || '' };
+      return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
     }
     if (
       lebenslaufItem.bildungsart === 'EIDGENOESSISCHES_BERUFSATTEST' ||
@@ -168,7 +170,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     return {
       title:
         lebenslaufItem.bildungsart === 'ANDERER_BILDUNGSABSCHLUSS'
-          ? lebenslaufItem.titelDesAbschlusses || ''
+          ? lebenslaufItem.titelDesAbschlusses ?? ''
           : `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
     };
   }

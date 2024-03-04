@@ -1,15 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
   ElementRef,
   EventEmitter,
-  inject,
-  Input,
-  OnChanges,
   Output,
-  SimpleChanges,
+  computed,
+  effect,
+  inject,
+  input,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -27,24 +25,26 @@ import { MaskitoModule } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
-  WohnsitzKanton,
-  Taetigskeitsart,
-  LebenslaufItemUpdate,
   LebenslaufAusbildungsArt,
+  LebenslaufItemUpdate,
+  Taetigskeitsart,
+  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
   createDateDependencyValidator,
   createOverlappingValidator,
@@ -53,6 +53,7 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
 
 @Component({
@@ -76,27 +77,26 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureGesuchFormLebenslaufEditorComponent
-  implements OnChanges
-{
+export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private translateService = inject(TranslateService);
 
-  @Input({ required: true }) item!: Partial<SharedModelLebenslauf>;
-  @Input({ required: true }) ausbildungen!: LebenslaufItemUpdate[];
-  @Input({ required: true }) minStartDate?: Date | null;
-  @Input({ required: true }) maxEndDate?: Date | null;
+  itemSig = input.required<Partial<SharedModelLebenslauf>>();
+  ausbildungenSig = input.required<LebenslaufItemUpdate[]>();
+  maxEndDateSig = input<Date | null>(null);
+  minStartDateSig = input<Date | null>(null);
 
   @Output() saveTriggered = new EventEmitter<LebenslaufItemUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
+  @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
 
   form = this.formBuilder.group({
     taetigkeitsBeschreibung: [
@@ -123,8 +123,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   });
 
   bildungsartSig = toSignal(this.form.controls.bildungsart.valueChanges);
-  startChanged$ = toSignal(this.form.controls.von.valueChanges);
-  endChanged$ = toSignal(this.form.controls.bis.valueChanges);
+  startChangedSig = toSignal(this.form.controls.von.valueChanges);
+  endChangedSig = toSignal(this.form.controls.bis.valueChanges);
   showBerufsbezeichnungSig = computed(
     () =>
       this.bildungsartSig() === 'EIDGENOESSISCHES_BERUFSATTEST' ||
@@ -142,17 +142,24 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
   kantonValues = this.prepareKantonValues();
 
   constructor() {
+    this.formIsUnsaved = observeUnsavedChanges(
+      this.form,
+      this.saveTriggered,
+      this.closeTriggered,
+      this.deleteTriggered,
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
-        this.startChanged$();
+        this.startChangedSig();
         this.form.controls.bis.updateValueAndValidity();
       },
       { allowSignalWrites: true },
     );
     effect(
       () => {
-        this.endChanged$();
+        this.endChangedSig();
         this.form.controls.von.updateValueAndValidity();
       },
       { allowSignalWrites: true },
@@ -189,11 +196,125 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     );
     effect(
       () => {
-        const { readonly } = this.view$();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
           );
+        }
+      },
+      { allowSignalWrites: true },
+    );
+    const previousAusbildungenSig = computed(() =>
+      this.ausbildungenSig()
+        .filter((l) => {
+          const item = this.itemSig();
+          return !item.id || l.id !== item.id;
+        })
+        .map((a) => [a.von, a.bis] as const),
+    );
+    effect(() => {
+      this.form.controls.von.clearValidators();
+      this.form.controls.von.addValidators([
+        Validators.required,
+        parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
+      ]);
+      const minStartDate = this.minStartDateSig();
+      if (minStartDate) {
+        this.form.controls.von.addValidators([
+          minDateValidatorForLocale(
+            this.languageSig(),
+            minStartDate,
+            'monthYear',
+          ),
+        ]);
+      }
+    });
+    effect(() => {
+      this.form.controls.bis.clearValidators();
+      this.form.controls.bis.addValidators([
+        Validators.required,
+        parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
+        createDateDependencyValidator(
+          'after',
+          this.form.controls.von,
+          true,
+          new Date(),
+          this.languageSig(),
+          'monthYear',
+        ),
+      ]);
+      const maxEndDate = this.maxEndDateSig();
+      if (maxEndDate) {
+        if (this.itemSig().type === 'AUSBILDUNG') {
+          this.form.controls.von.addValidators([
+            createOverlappingValidator(
+              this.form.controls.bis,
+              previousAusbildungenSig(),
+              new Date(),
+              'monthYear',
+            ),
+          ]);
+          this.form.controls.bis.addValidators([
+            createOverlappingValidator(
+              this.form.controls.von,
+              previousAusbildungenSig(),
+              new Date(),
+              'monthYear',
+            ),
+          ]);
+        }
+        this.form.controls.bis.addValidators([
+          maxDateValidatorForLocale(
+            this.languageSig(),
+            maxEndDate,
+            'monthYear',
+          ),
+        ]);
+      }
+    });
+    effect(
+      () => {
+        const item = this.itemSig();
+        if (item) {
+          this.form.controls.bildungsart.clearValidators();
+          this.form.controls.bildungsart.setValidators([
+            item.type === 'AUSBILDUNG'
+              ? Validators.required
+              : Validators.nullValidator,
+          ]);
+          this.form.controls.taetigskeitsart.clearValidators();
+          this.form.controls.taetigskeitsart.setValidators([
+            item.type === 'TAETIGKEIT'
+              ? Validators.required
+              : Validators.nullValidator,
+          ]);
+        }
+
+        this.form.patchValue(item);
+
+        if (item.von && item.bis) {
+          this.form.controls.bis.markAsTouched();
+        }
+
+        if (item.type === 'AUSBILDUNG') {
+          this.formUtils.setRequired(this.form.controls.taetigskeitsart, false);
+          this.formUtils.setRequired(
+            this.form.controls.taetigkeitsBeschreibung,
+            false,
+          );
+          this.formUtils.setRequired(this.form.controls.bildungsart, true);
+        }
+
+        if (item.type === 'TAETIGKEIT') {
+          this.form.controls.bildungsart.clearValidators();
+          this.form.controls.bildungsart.updateValueAndValidity();
+          this.form.controls.taetigskeitsart.setValidators(Validators.required);
+          this.form.controls.taetigskeitsart.updateValueAndValidity();
+          this.form.controls.taetigkeitsBeschreibung.setValidators(
+            Validators.required,
+          );
+          this.form.controls.taetigkeitsBeschreibung.updateValueAndValidity();
         }
       },
       { allowSignalWrites: true },
@@ -218,98 +339,6 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     return kantonValues;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const previousAusbildungen = this.ausbildungen
-      .filter((l) => !this.item.id || l.id !== this.item.id)
-      .map((a) => [a.von, a.bis] as const);
-    // update date validators
-    if (changes['minStartDate']) {
-      this.form.controls.von.clearValidators();
-      this.form.controls.von.addValidators([
-        Validators.required,
-        parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
-      ]);
-      if (changes['minStartDate'].currentValue) {
-        this.form.controls.von.addValidators([
-          minDateValidatorForLocale(
-            this.languageSig(),
-            changes['minStartDate'].currentValue,
-            'monthYear',
-          ),
-        ]);
-      }
-    }
-    if (changes['maxEndDate']) {
-      this.form.controls.bis.clearValidators();
-      this.form.controls.bis.addValidators([
-        Validators.required,
-        parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
-        createDateDependencyValidator(
-          'after',
-          this.form.controls.von,
-          false,
-          new Date(),
-          this.languageSig(),
-          'monthYear',
-        ),
-      ]);
-      if (changes['maxEndDate'].currentValue) {
-        if (this.item?.type === 'AUSBILDUNG') {
-          this.form.controls.bis.addValidators([
-            createOverlappingValidator(
-              this.form.controls.von,
-              previousAusbildungen,
-              new Date(),
-              'monthYear',
-            ),
-          ]);
-        }
-        this.form.controls.bis.addValidators([
-          maxDateValidatorForLocale(
-            this.languageSig(),
-            changes['maxEndDate'].currentValue,
-            'monthYear',
-          ),
-        ]);
-      }
-      if (changes['item'].currentValue) {
-        this.form.controls.bildungsart.clearValidators();
-        this.form.controls.bildungsart.setValidators([
-          this.item.type === 'AUSBILDUNG'
-            ? Validators.required
-            : Validators.nullValidator,
-        ]);
-        this.form.controls.taetigskeitsart.clearValidators();
-        this.form.controls.taetigskeitsart.setValidators([
-          this.item.type === 'TAETIGKEIT'
-            ? Validators.required
-            : Validators.nullValidator,
-        ]);
-      }
-    }
-
-    // fill form
-    this.form.patchValue(this.item);
-
-    if (this.item.von && this.item.bis) {
-      this.form.controls.bis.markAsTouched();
-    }
-
-    if (this.item.type === 'AUSBILDUNG') {
-      this.form.controls.taetigskeitsart.clearValidators();
-      this.form.controls.taetigkeitsBeschreibung.clearValidators();
-      this.form.controls.bildungsart.setValidators(Validators.required);
-    }
-
-    if (this.item.type === 'TAETIGKEIT') {
-      this.form.controls.bildungsart.clearValidators();
-      this.form.controls.taetigskeitsart.setValidators(Validators.required);
-      this.form.controls.taetigkeitsBeschreibung.setValidators(
-        Validators.required,
-      );
-    }
-  }
-
   handleSave() {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
@@ -317,14 +346,15 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
     this.onDateBlur(this.form.controls.bis);
     if (this.form.valid) {
       this.saveTriggered.emit({
-        id: this.item?.id,
+        id: this.itemSig().id,
         ...convertTempFormToRealValues(
           this.form,
-          this.item.type === 'AUSBILDUNG'
+          this.itemSig().type === 'AUSBILDUNG'
             ? ['bildungsart', 'wohnsitz', 'ausbildungAbgeschlossen']
             : ['taetigskeitsart', 'taetigkeitsBeschreibung'],
         ),
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -334,18 +364,20 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent
 
   handleCancel() {
     this.closeTriggered.emit();
+    this.form.markAsPristine();
   }
 
   handleDelete() {
-    if (this.item?.id) {
-      this.deleteTriggered.emit(this.item!.id);
+    const item = this.itemSig();
+    if (item.id) {
+      this.deleteTriggered.emit(item.id);
     }
   }
 
   onDateBlur(ctrl: FormControl) {
     return onMonthYearInputBlur(
       ctrl,
-      this.minStartDate || new Date(),
+      this.minStartDateSig() ?? new Date(),
       this.languageSig(),
     );
   }

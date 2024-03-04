@@ -1,10 +1,11 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
 import {
   SharedUiFormControlProxyDirective,
   injectTargetControl,
 } from './shared-ui-form-control-proxy.directive';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'dv-test-component',

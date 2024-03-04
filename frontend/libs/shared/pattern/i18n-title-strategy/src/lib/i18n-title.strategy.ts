@@ -1,10 +1,10 @@
-import { Title } from '@angular/platform-browser';
+import { Injectable, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { effect, inject, Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Store } from '@ngrx/store';
 import { getRouterSelectors } from '@ngrx/router-store';
+import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { withLatestFrom } from 'rxjs';
 
 const { selectTitle, selectUrl } = getRouterSelectors();

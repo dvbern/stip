@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
-import { catchError, switchMap, map } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, switchMap } from 'rxjs';
 
-import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { Land, StammdatenService } from '@dv/shared/model/gesuch';
+import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 import { SharedDataAccessStammdatenApiEvents } from './shared-data-access-stammdaten.events';
 

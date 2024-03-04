@@ -3,19 +3,20 @@ import {
   GesuchFormularUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
+
 import {
-  ELTERN,
-  isStepValid,
-  isStepDisabled,
-  PARTNER,
-  PERSON,
   AUSBILDUNG,
-  LEBENSLAUF,
   AUSZAHLUNGEN,
   EINNAHMEN_KOSTEN,
+  ELTERN,
   FAMILIENSITUATION,
   GESCHWISTER,
   KINDER,
+  LEBENSLAUF,
+  PARTNER,
+  PERSON,
+  isStepDisabled,
+  isStepValid,
 } from './gesuch-form-steps';
 import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 

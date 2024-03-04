@@ -1,23 +1,14 @@
 {
   "name": "gesuch-app-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/gesuch-app-e2e/src",
   "projectType": "application",
+  "sourceRoot": "apps/gesuch-app-e2e/src",
   "targets": {
     "e2e": {
-      "executor": "@nx/cypress:cypress",
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/apps/gesuch-app-e2e"],
       "options": {
-        "cypressConfig": "apps/gesuch-app-e2e/cypress.config.ts",
-        "devServerTarget": "gesuch-app:serve:development",
-        "testingType": "e2e"
-      },
-      "configurations": {
-        "production": {
-          "devServerTarget": "gesuch-app:serve:production"
-        },
-        "ci": {
-          "devServerTarget": "gesuch-app:serve-static"
-        }
+        "config": "apps/gesuch-app-e2e/playwright.config.ts"
       }
     },
     "lint": {

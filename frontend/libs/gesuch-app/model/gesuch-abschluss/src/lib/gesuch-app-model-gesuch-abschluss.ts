@@ -9,7 +9,7 @@ export const toAbschlussPhase = (
     return 'NOT_READY';
   }
   switch (gesuch.gesuchStatus) {
-    case 'OFFEN':
+    case 'IN_BEARBEITUNG_GS':
       return isComplete ? 'READY_TO_SEND' : 'NOT_READY';
     default:
       return 'SUBMITTED';

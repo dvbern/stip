@@ -8,16 +8,17 @@ import {
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import {
   ElternTyp,
   ElternUpdate,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
-import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
-import { selectLanguage } from '@dv/shared/data-access/language';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { ElternteilCardComponent } from './elternteil-card/elternteil-card.component';
@@ -32,6 +33,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,12 +41,13 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
 
+  hasUnsavedChanges = false;
   laenderSig = computed(() => {
-    return this.view$().laender;
+    return this.viewSig().laender;
   });
   languageSig = this.store.selectSignal(selectLanguage);
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
 
   editedElternteil?: Omit<Partial<ElternUpdate>, 'elternTyp'> &
     Required<Pick<ElternUpdate, 'elternTyp'>>;
@@ -54,7 +57,7 @@ export class SharedFeatureGesuchFormElternComponent {
     this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
     effect(
       () => {
-        const { loading, gesuch, gesuchFormular } = this.view$();
+        const { loading, gesuch, gesuchFormular } = this.viewSig();
         if (
           !loading &&
           gesuch &&
@@ -82,7 +85,7 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   handleAddElternteil(elternTyp: ElternTyp) {
-    const { gesuchFormular } = this.view$();
+    const { gesuchFormular } = this.viewSig();
     this.editedElternteil = setupElternTeil(elternTyp, gesuchFormular);
   }
 
@@ -119,7 +122,7 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormEltern.nextTriggered({
@@ -135,7 +138,8 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   private buildUpdatedGesuchWithDeletedElternteil(id: string) {
-    const { gesuch, gesuchFormular, expectMutter, expectVater } = this.view$();
+    const { gesuch, gesuchFormular, expectMutter, expectVater } =
+      this.viewSig();
     const updatedElterns = gesuchFormular?.elterns?.filter(
       (entry) =>
         entry.id !== id &&
@@ -153,7 +157,8 @@ export class SharedFeatureGesuchFormElternComponent {
   }
 
   private buildUpdatedGesuchWithUpdatedElternteil(elternteil: ElternUpdate) {
-    const { gesuch, gesuchFormular, expectMutter, expectVater } = this.view$();
+    const { gesuch, gesuchFormular, expectMutter, expectVater } =
+      this.viewSig();
     // update existing elternteil if found
     const updatedElterns =
       gesuchFormular?.elterns

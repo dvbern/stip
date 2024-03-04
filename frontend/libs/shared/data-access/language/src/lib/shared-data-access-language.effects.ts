@@ -1,12 +1,12 @@
 import { inject } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { TranslateService } from '@ngx-translate/core';
 import { map, tap } from 'rxjs';
 
 import { DEFAULT_LANGUAGE } from '@dv/shared/model/language';
 
-import { SharedDataAccessLanguageService } from './shared-data-access-language.service';
 import { SharedDataAccessLanguageEvents } from './shared-data-access-language.events';
+import { SharedDataAccessLanguageService } from './shared-data-access-language.service';
 
 export const resolveLanguageOnInit = createEffect(
   (

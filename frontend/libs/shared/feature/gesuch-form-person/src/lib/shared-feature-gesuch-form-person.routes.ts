@@ -1,12 +1,14 @@
 import { Route } from '@angular/router';
-
-import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person/shared-feature-gesuch-form-person.component';
-import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+
 import {
   sharedDataAccessStammdatenEffects,
   sharedDataAccessStammdatensFeature,
 } from '@dv/shared/data-access/stammdaten';
+import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+
+import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person/shared-feature-gesuch-form-person.component';
 
 export const gesuchAppFeatureGesuchFormPersonRoutes: Route[] = [
   {
@@ -22,6 +24,7 @@ export const gesuchAppFeatureGesuchFormPersonRoutes: Route[] = [
         path: ':id',
         title: 'shared.person.title',
         component: SharedFeatureGesuchFormPersonComponent,
+        canDeactivate: [checkUnsavedChanges],
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children

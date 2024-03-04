@@ -11,14 +11,14 @@ import jakarta.validation.Payload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AusbildungskostenStufeRequiredConstraintValidator.class)
 @Documented
-public @interface  AusbildungskostenStufeRequiredConstraint {
-	String message() default VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE;
+public @interface AusbildungskostenStufeRequiredConstraint {
+    String message() default VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

@@ -3,12 +3,18 @@ import { Tree, readProjectConfiguration } from '@nrwl/devkit';
 
 import generator from './generator';
 import { LibGeneratorSchema } from './schema';
+import { LibType } from './generator.interface';
 
 // sanity tests, for generators it's better to keep it open and flexible to allow easy extension
 // and adjustment of the logic in the future
 
 describe('lib generator', () => {
   let tree: Tree;
+  let createOptions = (name: string, type: LibType): LibGeneratorSchema => ({
+    name,
+    type,
+    scope: 'shared',
+  });
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace({ layout: 'apps-libs' });
@@ -17,12 +23,7 @@ describe('lib generator', () => {
 
   describe('model', () => {
     it('should generate model library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'model',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'model'));
       const config = readProjectConfiguration(tree, 'shared-model-example');
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/model/example/package.json')).toBeFalsy();
@@ -34,12 +35,7 @@ describe('lib generator', () => {
     });
 
     it('should generate model library (complex name - class)', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'exampleComplexName',
-        type: 'model',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('exampleComplexName', 'model'));
       const config = readProjectConfiguration(
         tree,
         'shared-model-example-complex-name',
@@ -59,12 +55,7 @@ describe('lib generator', () => {
     });
 
     it('should generate model library (complex name - dasherized)', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example-complex-name',
-        type: 'model',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example-complex-name', 'model'));
       const config = readProjectConfiguration(
         tree,
         'shared-model-example-complex-name',
@@ -83,12 +74,7 @@ describe('lib generator', () => {
 
   describe('util-fn', () => {
     it('should generate util-fn library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'util-fn',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'util-fn'));
       const config = readProjectConfiguration(tree, 'shared-util-fn-example');
       expect(config).toBeDefined();
       expect(
@@ -109,12 +95,7 @@ describe('lib generator', () => {
 
   describe('util', () => {
     it('should generate util library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'util',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'util'));
       const config = readProjectConfiguration(tree, 'shared-util-example');
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/util/example/package.json')).toBeFalsy();
@@ -136,12 +117,7 @@ describe('lib generator', () => {
 
   describe('ui', () => {
     it('should generate ui library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'ui',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'ui'));
       const config = readProjectConfiguration(tree, 'shared-ui-example');
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/ui/example/package.json')).toBeFalsy();
@@ -151,12 +127,7 @@ describe('lib generator', () => {
 
   describe('data-access', () => {
     it('should generate data-access library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'data-access',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'data-access'));
       const config = readProjectConfiguration(
         tree,
         'shared-data-access-example',
@@ -178,12 +149,7 @@ describe('lib generator', () => {
 
   describe('pattern', () => {
     it('should generate pattern library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'pattern',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'pattern'));
       const config = readProjectConfiguration(tree, 'shared-pattern-example');
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/pattern/example/lib/')).toBeFalsy();
@@ -196,12 +162,7 @@ describe('lib generator', () => {
 
   describe('feature', () => {
     it('should generate feature library', async () => {
-      const options: LibGeneratorSchema = {
-        name: 'example',
-        type: 'feature',
-        scope: 'shared',
-      };
-      await generator(tree, options);
+      await generator(tree, createOptions('example', 'feature'));
       const config = readProjectConfiguration(tree, 'shared-feature-example');
       expect(config).toBeDefined();
       expect(

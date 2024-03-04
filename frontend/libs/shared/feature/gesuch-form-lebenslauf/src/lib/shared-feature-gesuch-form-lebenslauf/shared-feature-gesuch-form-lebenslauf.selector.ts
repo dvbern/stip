@@ -1,6 +1,7 @@
+import { createSelector } from '@ngrx/store';
+
 import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { createSelector } from '@ngrx/store';
 
 export const selectSharedFeatureGesuchFormLebenslaufVew = createSelector(
   selectSharedDataAccessGesuchsView,

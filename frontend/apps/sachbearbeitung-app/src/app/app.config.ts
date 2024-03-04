@@ -1,13 +1,13 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
 
-import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 import {
-  sharedDataAccessGesuchsFeature,
   sharedDataAccessGesuchEffects,
+  sharedDataAccessGesuchsFeature,
 } from '@dv/shared/data-access/gesuch';
+import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 
 import { routes } from './app.routes';
 

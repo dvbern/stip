@@ -6,20 +6,22 @@ import org.apache.commons.lang3.StringUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 
-public class AusbildungNichtGefundenRequiredFieldsConstraintValidator implements ConstraintValidator<AusbildungNichtGefundenRequiredFieldsConstraint, Ausbildung> {
+public class AusbildungNichtGefundenRequiredFieldsConstraintValidator
+    implements ConstraintValidator<AusbildungNichtGefundenRequiredFieldsConstraint, Ausbildung> {
 
-	@Override
-	public boolean isValid(
-			Ausbildung ausbildung,
-			ConstraintValidatorContext constraintValidatorContext) {
-		if (ausbildung.isAusbildungNichtGefunden()) {
-			return StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsgang())
-					&& StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsstaette());
-		}
+    @Override
+    public boolean isValid(
+        Ausbildung ausbildung,
+        ConstraintValidatorContext constraintValidatorContext) {
+        if (ausbildung.isAusbildungNichtGefunden()) {
+            return StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsgang())
+                && StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsstaette())
+                && StringUtils.isNotEmpty(ausbildung.getAlternativeAusbildungsland());
+        }
 
-		constraintValidatorContext.disableDefaultConstraintViolation();
-		constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)
-				.addConstraintViolation();
-		return ausbildung.getAusbildungsgang() != null;
-	}
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE)
+            .addConstraintViolation();
+        return ausbildung.getAusbildungsgang() != null;
+    }
 }

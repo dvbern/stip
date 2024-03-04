@@ -1,4 +1,9 @@
 import {
+  HttpBackend,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import {
   ApplicationConfig,
   ENVIRONMENT_INITIALIZER,
   importProvidersFrom,
@@ -6,24 +11,19 @@ import {
   isDevMode,
   provideZoneChangeDetection,
 } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import {
-  provideRouter,
   Route,
+  provideRouter,
   withComponentInputBinding,
   withDisabledInitialNavigation,
   withInMemoryScrolling,
   withRouterConfig,
 } from '@angular/router';
-import {
-  HttpBackend,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { ActionReducer, provideState, provideStore, Store } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { ActionReducer, Store, provideState, provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import {
   MissingTranslationHandler,
   MissingTranslationHandlerParams,
@@ -33,35 +33,36 @@ import {
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 
 import {
+  sharedDataAccessBenutzerEffects,
+  sharedDataAccessBenutzersFeature,
+} from '@dv/shared/data-access/benutzer';
+import {
   SharedDataAccessConfigEvents,
   sharedDataAccessConfigEffects,
   sharedDataAccessConfigsFeature,
 } from '@dv/shared/data-access/config';
-import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
+import { sharedDataAccessGlobalNotificationsFeature } from '@dv/shared/data-access/global-notification';
 import {
   SharedDataAccessLanguageEvents,
   sharedDataAccessLanguageEffects,
   sharedDataAccessLanguageFeature,
 } from '@dv/shared/data-access/language';
-import { sharedDataAccessGlobalNotificationsFeature } from '@dv/shared/data-access/global-notification';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
-import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-title-strategy';
-import { provideSharedPatternNgbDatepickerAdapter } from '@dv/shared/pattern/ngb-datepicker-adapter';
-import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 import {
   sharedDataAccessStammdatenEffects,
   sharedDataAccessStammdatensFeature,
 } from '@dv/shared/data-access/stammdaten';
-import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
-import {
-  sharedDataAccessBenutzerEffects,
-  sharedDataAccessBenutzersFeature,
-} from '@dv/shared/data-access/benutzer';
 import {
   CompiletimeConfig,
   SharedModelCompiletimeConfig,
 } from '@dv/shared/model/config';
+import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
+import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import { withDvGlobalHttpErrorInterceptorFn } from '@dv/shared/pattern/http-error-interceptor';
+import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-title-strategy';
+import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
+import { provideSharedPatternNgbDatepickerAdapter } from '@dv/shared/pattern/ngb-datepicker-adapter';
+import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 
 export class ExplicitMissingTranslationHandler
   implements MissingTranslationHandler
@@ -73,10 +74,10 @@ export class ExplicitMissingTranslationHandler
 
 export function debugReducers<T>(reducer: ActionReducer<T>): ActionReducer<T> {
   return function (state, action) {
-    if (isDevMode()) {
-      console['log']('state', state);
-      console['log']('action', action);
-    }
+    // if (isDevMode()) {
+    //   console['log']('state', state);
+    //   console['log']('action', action);
+    // }
 
     return reducer(state, action);
   };
@@ -91,6 +92,7 @@ export function provideSharedPatternCore(
   return [
     // providers
     provideSharedPatternAppInitialization(),
+    provideSharedAppSettings(compileTimeConfig.appType),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(

@@ -1,14 +1,15 @@
+import { createSelector } from '@ngrx/store';
+
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import {
-  calculateElternSituationGesuch,
-  ElternSituation,
-} from '@dv/shared/util-fn/gesuch-util';
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 import {
   Kontoinhaber,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import { createSelector } from '@ngrx/store';
+import {
+  ElternSituation,
+  calculateElternSituationGesuch,
+} from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
   selectSharedDataAccessGesuchsView,

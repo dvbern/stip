@@ -1,20 +1,21 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   computed,
   inject,
-  OnInit,
 } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
-import { KINDER } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { KindUpdate } from '@dv/shared/model/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
+import { KindUpdate } from '@dv/shared/model/gesuch';
+import { KINDER } from '@dv/shared/model/gesuch-form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
 import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-gesuch-form-kind-editor/shared-feature-gesuch-form-kind-editor.component';
@@ -27,6 +28,7 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
     NgbAlert,
     SharedFeatureGesuchFormKinderEditorComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kinder.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,14 +36,15 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
 export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private store = inject(Store);
 
-  view$ = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
+  hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   sortedKinderSig = computed(() => {
-    const originalList = this.view$().gesuchFormular?.kinds;
+    const originalList = this.viewSig().gesuchFormular?.kinds;
     return originalList
       ? [...originalList].sort((a, b) =>
           (a.vorname + ' ' + a.nachname).localeCompare(
@@ -98,7 +101,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id)
       this.store.dispatch(
         SharedEventGesuchFormKinder.nextTriggered({
@@ -113,7 +116,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithDeletedKinder(kind: KindUpdate) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const updatedKinders = gesuchFormular?.kinds?.filter(
       (entry) => entry.id !== kind.id,
     );
@@ -129,7 +132,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithUpdatedKind(kind: KindUpdate) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     // update existing kind if found
     const updatedKinders =
       gesuchFormular?.kinds?.map((oldKind) => {

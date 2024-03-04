@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [

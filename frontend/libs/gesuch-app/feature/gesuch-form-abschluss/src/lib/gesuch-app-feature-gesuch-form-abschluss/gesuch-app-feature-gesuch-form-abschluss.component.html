@@ -14,7 +14,12 @@
             </div>
             <p [innerHTML]="'shared.form.abschluss.readyToSend.info' | translate"></p>
 
-            <button type="submit" class="btn btn-primary m-auto mt-4" (click)="abschliessen(gesuch.id)">
+            <button
+              type="submit"
+              class="btn btn-primary m-auto mt-4"
+              (click)="abschliessen(gesuch.id)"
+              data-testid="button-abschluss"
+            >
               {{ 'shared.form.abschluss.abschliessen' | translate }}
             </button>
           }

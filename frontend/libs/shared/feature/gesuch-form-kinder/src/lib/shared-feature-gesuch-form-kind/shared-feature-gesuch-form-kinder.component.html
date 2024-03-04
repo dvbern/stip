@@ -1,18 +1,12 @@
 <!-- loading -->
-@if (view$().loading) {
-  <div data-testid="form-kinder-loading" class="my-2 p-2 py-4 d-flex rounded shadow-sm border">
-    <div class="dv-progress-bar-indeterminate">
-      <div></div>
-    </div>
-  </div>
-}
-
-<!-- kinder editor -->
-@if (editedKind) {
+@if (viewSig().loading) {
+  <dv-shared-ui-loading data-testid="form-kinder-loading"></dv-shared-ui-loading>
+} @else if (editedKind) {
   <dv-shared-feature-gesuch-form-kinder-editor
     [kind]="editedKind"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
+    (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
   <div class="row g-4 my-2">
@@ -46,7 +40,7 @@
                       {{ parseBackendLocalDateAndPrint(kinder.geburtsdatum, languageSig()) }}
                     </td>
                     <td>
-                      @if (!view$().readonly) {
+                      @if (!viewSig().readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -58,7 +52,7 @@
                       }
                     </td>
                     <td>
-                      @if (!view$().readonly) {
+                      @if (!viewSig().readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -90,8 +84,8 @@
 
   <!-- ADD -->
   <div class="d-flex flex-column flex-md-row">
-    @if (!view$().readonly) {
-      <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()">
+    @if (!viewSig().readonly) {
+      <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()" data-testid="button-add-kind">
         {{ 'shared.form.kinder.add' | translate }}
       </button>
     }
@@ -99,7 +93,7 @@
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-primary" (click)="handleContinue()">
+    <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-continue">
       {{ 'shared.form.gonext' | translate }}
     </button>
   </dv-shared-ui-step-form-buttons>

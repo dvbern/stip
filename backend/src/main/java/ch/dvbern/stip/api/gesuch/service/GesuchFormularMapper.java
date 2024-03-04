@@ -1,49 +1,91 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
+import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
-        uses =
-                {
-                        AdresseMapper.class,
-                        PersonInAusbildungMapper.class,
-                        FamiliensituationMapper.class,
-                        AusbildungMapper.class,
-                        LebenslaufItemMapper.class,
-                        PartnerMapper.class,
-                        AuszahlungMapper.class,
-                        GeschwisterMapper.class,
-                        ElternMapper.class,
-                        KindMapper.class,
-                        EinnahmenKostenMapper.class
-                })
-public interface GesuchFormularMapper {
-    GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
+    uses =
+        {
+            AdresseMapper.class,
+            PersonInAusbildungMapper.class,
+            FamiliensituationMapper.class,
+            AusbildungMapper.class,
+            LebenslaufItemMapper.class,
+            PartnerMapper.class,
+            AuszahlungMapper.class,
+            GeschwisterMapper.class,
+            ElternMapper.class,
+            KindMapper.class,
+            EinnahmenKostenMapper.class
+        })
+public abstract class GesuchFormularMapper {
+    public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
-    GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+    public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
 
     /**
      * partial update mapper for the Gesuchssteller
-     *
-     * @param gesuchFormularUpdateDto
-     * @param gesuchFormular
-     * @return
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    GesuchFormular partialUpdate(GesuchFormularUpdateDto gesuchFormularUpdateDto, @MappingTarget GesuchFormular gesuchFormular);
+    public abstract GesuchFormular partialUpdate(
+        GesuchFormularUpdateDto gesuchFormularUpdateDto,
+        @MappingTarget GesuchFormular gesuchFormular);
+
+    @BeforeMapping
+    public void clearDataOnUpdate(
+        GesuchFormularUpdateDto gesuchFormularUpdateDto,
+        @MappingTarget GesuchFormular gesuchFormular) {
+        clearElterntOnAlimenteChange(gesuchFormularUpdateDto, gesuchFormular);
+    }
+
+    private void clearElterntOnAlimenteChange(GesuchFormularUpdateDto updateDto, GesuchFormular entity) {
+        if (entity.getFamiliensituation() == null || updateDto.getFamiliensituation() == null) {
+            return;
+        }
+
+        if (entity.getFamiliensituation().getWerZahltAlimente() == updateDto.getFamiliensituation()
+            .getWerZahltAlimente()) {
+            return;
+        }
+
+        final var werZahlt = updateDto.getFamiliensituation().getWerZahltAlimente();
+        if (werZahlt == null) {
+            return;
+        }
+
+        switch (werZahlt) {
+        case VATER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
+        case MUTTER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
+        case GEMEINSAM -> {
+            removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
+            removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
+        }
+        }
+    }
+
+    void removeElternOfTyp(List<ElternUpdateDto> eltern, ElternTyp typ) {
+        eltern.removeAll(eltern.stream().filter(x -> x.getElternTyp() == typ).toList());
+    }
 }

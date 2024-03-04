@@ -1,0 +1,20 @@
+{
+  "name": "sachbearbeitung-app-feature-administration",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/feature/administration/src",
+  "prefix": "dv",
+  "tags": ["type:feature", "scope:sachbearbeitung-app"],
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/sachbearbeitung-app/feature/administration/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

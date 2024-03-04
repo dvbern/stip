@@ -34,11 +34,11 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid Boolean sozialhilfebeitraege;
   private @Valid Boolean quellenbesteuert;
-  private @Valid Boolean digitaleKommunikation;
   private @Valid String nachname;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache korrespondenzSprache;
   private @Valid String heimatort;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
+  private @Valid LocalDate einreisedatum;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
@@ -276,25 +276,6 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public PersonInAusbildungUpdateDto digitaleKommunikation(Boolean digitaleKommunikation) {
-    this.digitaleKommunikation = digitaleKommunikation;
-    return this;
-  }
-
-  
-  @JsonProperty("digitaleKommunikation")
-  @NotNull
-  public Boolean getDigitaleKommunikation() {
-    return digitaleKommunikation;
-  }
-
-  @JsonProperty("digitaleKommunikation")
-  public void setDigitaleKommunikation(Boolean digitaleKommunikation) {
-    this.digitaleKommunikation = digitaleKommunikation;
-  }
-
-  /**
-   **/
   public PersonInAusbildungUpdateDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
@@ -366,6 +347,24 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
   @JsonProperty("niederlassungsstatus")
   public void setNiederlassungsstatus(ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus) {
     this.niederlassungsstatus = niederlassungsstatus;
+  }
+
+  /**
+   **/
+  public PersonInAusbildungUpdateDto einreisedatum(LocalDate einreisedatum) {
+    this.einreisedatum = einreisedatum;
+    return this;
+  }
+
+  
+  @JsonProperty("einreisedatum")
+  public LocalDate getEinreisedatum() {
+    return einreisedatum;
+  }
+
+  @JsonProperty("einreisedatum")
+  public void setEinreisedatum(LocalDate einreisedatum) {
+    this.einreisedatum = einreisedatum;
   }
 
   /**
@@ -503,11 +502,11 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
         Objects.equals(this.wohnsitz, personInAusbildungUpdate.wohnsitz) &&
         Objects.equals(this.sozialhilfebeitraege, personInAusbildungUpdate.sozialhilfebeitraege) &&
         Objects.equals(this.quellenbesteuert, personInAusbildungUpdate.quellenbesteuert) &&
-        Objects.equals(this.digitaleKommunikation, personInAusbildungUpdate.digitaleKommunikation) &&
         Objects.equals(this.nachname, personInAusbildungUpdate.nachname) &&
         Objects.equals(this.korrespondenzSprache, personInAusbildungUpdate.korrespondenzSprache) &&
         Objects.equals(this.heimatort, personInAusbildungUpdate.heimatort) &&
         Objects.equals(this.niederlassungsstatus, personInAusbildungUpdate.niederlassungsstatus) &&
+        Objects.equals(this.einreisedatum, personInAusbildungUpdate.einreisedatum) &&
         Objects.equals(this.zivilstand, personInAusbildungUpdate.zivilstand) &&
         Objects.equals(this.wohnsitzAnteilMutter, personInAusbildungUpdate.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, personInAusbildungUpdate.wohnsitzAnteilVater) &&
@@ -518,7 +517,7 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, quellenbesteuert, digitaleKommunikation, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, quellenbesteuert, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
   }
 
   @Override
@@ -538,11 +537,11 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    quellenbesteuert: ").append(toIndentedString(quellenbesteuert)).append("\n");
-    sb.append("    digitaleKommunikation: ").append(toIndentedString(digitaleKommunikation)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    korrespondenzSprache: ").append(toIndentedString(korrespondenzSprache)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");
+    sb.append("    einreisedatum: ").append(toIndentedString(einreisedatum)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");

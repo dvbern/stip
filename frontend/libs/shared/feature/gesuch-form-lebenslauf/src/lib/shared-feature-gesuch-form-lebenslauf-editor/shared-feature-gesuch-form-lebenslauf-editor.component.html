@@ -1,19 +1,15 @@
-<form [formGroup]="form" novalidate class="mt-4" (ngSubmit)="handleSave()">
-  @if (item.type === 'AUSBILDUNG') {
+<form [formGroup]="form" data-testid="form-lebenslauf-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+  @if (itemSig().type === 'AUSBILDUNG') {
     <div class="row g-4 my-2">
       <!-- Ausbildungsart -->
-      <mat-form-field
-        dvSharedUiFormField
-        class="col-12 col-md-6 col-xl-4"
-        data-testid="lebenslauf-editor-ausbildungsart"
-      >
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.lebenslauf.item.subtype.bildungsart' | translate }}</mat-label>
-        <mat-select formControlName="bildungsart">
+        <mat-select formControlName="bildungsart" data-testid="lebenslauf-editor-ausbildungsart-select">
           <mat-option [value]="null" disabled selected>
             {{ 'shared.form.select.empty' | translate }}
           </mat-option>
           @for (b of bildungsartValues; track trackByIndex($index)) {
-            <mat-option [value]="b">
+            <mat-option [value]="b" [attr.data-testid]="b">
               {{ 'shared.form.lebenslauf.item.subtype.bildungsart.' + b | translate }}
             </mat-option>
           }
@@ -22,46 +18,44 @@
 
       <!-- Nährere Bezeichnung (falls nötig) -->
       @if (showBerufsbezeichnungSig()) {
-        <mat-form-field
-          dvSharedUiFormField
-          class="col-12 col-md-6 col-xl-4"
-          data-testid="lebenslauf-editor-berufsbezeichnung"
-        >
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.berufsbezeichnung' | translate }}</mat-label>
-          <input matInput formControlName="berufsbezeichnung" type="text" />
+          <input
+            matInput
+            formControlName="berufsbezeichnung"
+            data-testid="lebenslauf-editor-berufsbezeichnung"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
       }
       @if (showFachrichtungSig()) {
-        <mat-form-field
-          dvSharedUiFormField
-          class="col-12 col-md-6 col-xl-4"
-          data-testid="lebenslauf-editor-fachrichtung"
-        >
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.fachrichtung' | translate }}</mat-label>
-          <input matInput formControlName="fachrichtung" type="text" />
+          <input matInput formControlName="fachrichtung" data-testid="lebenslauf-editor-fachrichtung" type="text" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
       }
       @if (showTitelDesAbschlussesSig()) {
-        <mat-form-field
-          dvSharedUiFormField
-          class="col-12 col-md-6 col-xl-4"
-          data-testid="lebenslauf-editor-titel-des-abschlusses"
-        >
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.titelDesAbschlusses' | translate }}</mat-label>
-          <input matInput formControlName="titelDesAbschlusses" type="text" />
+          <input
+            matInput
+            formControlName="titelDesAbschlusses"
+            data-testid="lebenslauf-editor-titel-des-abschlusses"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
       }
     </div>
-  } @else if (item.type === 'TAETIGKEIT') {
+  } @else if (itemSig().type === 'TAETIGKEIT') {
     <div class="row g-4 my-2">
       <mat-form-field
         dvSharedUiFormField
@@ -69,12 +63,12 @@
         data-testid="lebenslauf-editor-taetigkeitsart"
       >
         <mat-label>{{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart' | translate }}</mat-label>
-        <mat-select formControlName="taetigskeitsart">
+        <mat-select formControlName="taetigskeitsart" data-testid="lebenslauf-editor-taetigkeitsart-select">
           <mat-option [value]="null" disabled selected>
             {{ 'shared.form.select.empty' | translate }}
           </mat-option>
           @for (t of taetigskeitsartValues; track trackByIndex($index)) {
-            <mat-option [value]="t">
+            <mat-option [value]="t" [attr.data-testid]="t">
               {{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart.' + t | translate }}
             </mat-option>
           }
@@ -82,13 +76,14 @@
       </mat-form-field>
 
       <!-- Tätigkeits Beschreibung -->
-      <mat-form-field
-        dvSharedUiFormField
-        class="col-12 col-md-6 col-xl-4"
-        data-testid="lebenslauf-editor-taetigkeits-beschreibung"
-      >
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | translate }}</mat-label>
-        <input matInput formControlName="taetigkeitsBeschreibung" type="text" />
+        <input
+          matInput
+          formControlName="taetigkeitsBeschreibung"
+          data-testid="lebenslauf-editor-taetigkeitsBeschreibung"
+          type="text"
+        />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -98,10 +93,16 @@
 
   <div class="row g-4 my-2">
     <!-- START -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4" data-testid="lebenslauf-editor-beginn">
-      <mat-label>{{ 'shared.form.lebenslauf.item.start.' + item.type!.toLowerCase() | translate }}</mat-label>
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.lebenslauf.item.start.' + itemSig().type!.toLowerCase() | translate }}</mat-label>
 
-      <input matInput formControlName="von" placeholder="MM.YYYY" (blur)="onDateBlur(form.controls.von)" />
+      <input
+        matInput
+        formControlName="von"
+        data-testid="lebenslauf-editor-von"
+        placeholder="MM.YYYY"
+        (blur)="onDateBlur(form.controls.von)"
+      />
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -124,10 +125,16 @@
     </mat-form-field>
 
     <!-- ENDE -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4" data-testid="lebenslauf-editor-ende">
-      <mat-label>{{ 'shared.form.lebenslauf.item.end.' + item.type!.toLowerCase() | translate }}</mat-label>
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.lebenslauf.item.end.' + itemSig().type!.toLowerCase() | translate }}</mat-label>
 
-      <input matInput formControlName="bis" placeholder="MM.YYYY" (blur)="onDateBlur(form.controls.bis)" />
+      <input
+        matInput
+        formControlName="bis"
+        data-testid="lebenslauf-editor-bis"
+        placeholder="MM.YYYY"
+        (blur)="onDateBlur(form.controls.bis)"
+      />
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -152,14 +159,14 @@
 
   <div class="row g-4 my-2">
     <!-- Wohnsitz -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4" data-testid="lebenslauf-editor-wohnsitz">
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.lebenslauf.item.wohnsitz' | translate }}</mat-label>
-      <mat-select formControlName="wohnsitz">
+      <mat-select formControlName="wohnsitz" data-testid="lebenslauf-editor-wohnsitz">
         <mat-option [value]="null" disabled selected>
           {{ 'shared.form.select.empty' | translate }}
         </mat-option>
         @for (k of kantonValues; track trackByIndex($index)) {
-          <mat-option [value]="k">
+          <mat-option [value]="k" [attr.data-testid]="k">
             {{ 'shared.kanton.' + k | translate }}
           </mat-option>
         }
@@ -169,21 +176,24 @@
       </mat-error>
     </mat-form-field>
     <!-- Ausbildung abgeschlossen -->
-    @if (item.type === 'AUSBILDUNG') {
-      <div class="col-12 col-md-6" data-testid="lebenslauf-editor-ausbildung-abgeschlossen">
-        <mat-checkbox formControlName="ausbildungAbgeschlossen">{{
-          'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | translate
-        }}</mat-checkbox>
+    @if (itemSig().type === 'AUSBILDUNG') {
+      <div class="col-12 col-md-6">
+        <mat-checkbox
+          formControlName="ausbildungAbgeschlossen"
+          data-testid="lebenslauf-editor-ausbildung-abgeschlossen"
+          >{{ 'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | translate }}</mat-checkbox
+        >
       </div>
     }
   </div>
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    @if (item.id && !view$().readonly) {
+    @if (itemSig().id && !viewSig().readonly) {
       <button
         type="button"
         class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+        data-testid="lebenslauf-editor-delete"
         (click)="handleDelete()"
         [title]="'shared.form.lebenslaufitem.delete' | translate"
       >
@@ -192,11 +202,11 @@
       </button>
     }
 
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()">
+    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.back' | translate }}
     </button>
-    @if (!view$().readonly) {
-      <button type="submit" class="btn btn-primary">
+    @if (!viewSig().readonly) {
+      <button type="submit" class="btn btn-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | translate }}
       </button>
     }

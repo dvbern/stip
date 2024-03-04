@@ -2,20 +2,19 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  OnInit,
   computed,
   effect,
-  ElementRef,
   inject,
-  OnInit,
 } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { switchMap } from 'rxjs/operators';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -24,38 +23,40 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
+import { switchMap } from 'rxjs/operators';
 
-import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
-import { isStepDisabled, PARTNER } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import {
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   PartnerUpdate,
 } from '@dv/shared/model/gesuch';
+import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUtilCountriesService } from '@dv/shared/util/countries';
+import { SharedUtilFormService } from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
-import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
-import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
-import {
-  fromFormatedNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
-import { SharedUtilFormService } from '@dv/shared/util/form';
 
 import { selectSharedFeatureGesuchFormPartnerView } from './shared-feature-gesuch-form-partner.selector';
 
@@ -72,6 +73,7 @@ const MEDIUM_AGE_ADULT = 30;
     TranslateModule,
     SharedUiFormFieldDirective,
     SharedUiFormCountryComponent,
+    SharedUiFormAddressComponent,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -80,6 +82,7 @@ const MEDIUM_AGE_ADULT = 30;
     SharedUiFormMessageErrorDirective,
     GesuchAppUiStepFormButtonsComponent,
     MatCheckboxModule,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-partner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -138,6 +141,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   );
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         const { gesuchFormular } = this.view();
@@ -239,6 +243,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           gesuchFormular,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
@@ -268,6 +273,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
           origin: PARTNER,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
@@ -293,6 +299,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         id: gesuchFormular?.partner?.adresse?.id,
         ...formValues.adresse,
       },
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       geburtsdatum: parseStringAndPrintForBackendLocalDate(
         formValues.geburtsdatum,
         this.languageSig(),

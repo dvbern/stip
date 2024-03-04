@@ -1,6 +1,7 @@
-import { Gesuchstatus } from '@dv/shared/model/gesuch';
-import { createSelector } from '@ngrx/store';
 import { getRouterSelectors } from '@ngrx/router-store';
+import { createSelector } from '@ngrx/store';
+
+import { Gesuchstatus } from '@dv/shared/model/gesuch';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
@@ -13,8 +14,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   (state) => {
     return {
       ...state,
-      readonly:
-        state.gesuch?.gesuchStatus === Gesuchstatus.NICHT_KOMPLETT_EINGEREICHT,
+      readonly: state.gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
       trancheId: state.gesuch?.gesuchTrancheToWorkWith.id,
       cachedGesuchFormular: state.gesuchFormular ?? state.cache.gesuchFormular,
     };

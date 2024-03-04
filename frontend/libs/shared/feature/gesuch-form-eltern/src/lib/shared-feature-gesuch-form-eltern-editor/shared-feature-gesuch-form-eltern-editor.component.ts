@@ -1,59 +1,63 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   ElementRef,
   EventEmitter,
-  inject,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  effect,
+  inject,
+  signal,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoModule } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
+import { Observable } from 'rxjs';
 
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import {
+  ElternTyp,
+  ElternUpdate,
+  Land,
+  MASK_SOZIALVERSICHERUNGSNUMMER,
+  SharedModelGesuchFormular,
+} from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  ElternTyp,
-  Land,
-  ElternUpdate,
-  MASK_SOZIALVERSICHERUNGSNUMMER,
-  SharedModelGesuchFormular,
-} from '@dv/shared/model/gesuch';
-import {
-  convertTempFormToRealValues,
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
+import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
+import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
+
 import { selectSharedFeatureGesuchFormElternView } from '../shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.selector';
 
 const MAX_AGE_ADULT = 130;
@@ -92,13 +96,14 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     'elternTyp'
   > &
     Required<Pick<ElternUpdate, 'elternTyp'>>;
+  @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) gesuchFormular!: SharedModelGesuchFormular;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
-  @Input({ required: true }) laender!: Land[];
+  @Output() formIsUnsaved: Observable<boolean>;
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
 
@@ -125,7 +130,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
     ],
-    sozialversicherungsnummer: ['', []],
+    sozialversicherungsnummer: [<string | undefined>undefined, []],
     geburtsdatum: [
       '',
       [
@@ -154,15 +159,24 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     ],
   });
 
+  svnIsRequiredSig = signal(false);
+
   constructor() {
+    this.formIsUnsaved = observeUnsavedChanges(
+      this.form,
+      this.saveTriggered,
+      this.closeTriggered,
+      this.deleteTriggered,
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
-    const zivilrechtlichChanged$ = this.formUtils.signalFromChanges(
+    const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
     );
     effect(
       () => {
-        const zivilrechtlichIdentisch = zivilrechtlichChanged$() === true;
+        const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
         this.formUtils.setDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
           zivilrechtlichIdentisch,
@@ -178,9 +192,27 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
+    const landChangedSig = this.formUtils.signalFromChanges(
+      this.form.controls.adresse.controls.land,
+      { useDefault: true },
+    );
+    // make SVN required if CH
     effect(
       () => {
-        const { readonly } = this.view$();
+        const land = landChangedSig();
+        const svnIsRequired = land === 'CH';
+
+        this.formUtils.setRequired(
+          this.form.controls.sozialversicherungsnummer,
+          svnIsRequired,
+        );
+        this.svnIsRequiredSig.set(svnIsRequired);
+      },
+      { allowSignalWrites: true },
+    );
+    effect(
+      () => {
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
@@ -202,7 +234,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       });
 
       const svValidators = [
-        Validators.required,
         sharedUtilValidatorAhv(
           `eltern${capitalized(this.elternteil.elternTyp)}`,
           this.gesuchFormular,
@@ -237,6 +268,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         elternTyp: this.elternteil.elternTyp,
         geburtsdatum,
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -251,6 +283,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   }
 
   handleCancel() {
+    this.form.markAsPristine();
     this.closeTriggered.emit();
   }
 

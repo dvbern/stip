@@ -2,41 +2,39 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  OnInit,
   computed,
   effect,
-  ElementRef,
   inject,
-  OnInit,
   signal,
-  Signal,
 } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MaskitoModule } from '@maskito/angular';
 import { NgbAlert, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { isAfter, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { subYears } from 'date-fns';
 
-import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { PERSON } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
+import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
   Anrede,
+  DokumentTyp,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   Niederlassungsstatus,
@@ -45,6 +43,8 @@ import {
   Wohnsitz,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
+import { PERSON } from '@dv/shared/model/gesuch-form';
+import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
   DocumentOptions,
   SharedPatternDocumentUploadComponent,
@@ -53,32 +53,35 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
+import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
-  convertTempFormToRealValues,
+  SharedUiWohnsitzSplitterComponent,
+  addWohnsitzControls,
+  updateWohnsitzControlsState,
+  wohnsitzAnteileNumber,
+  wohnsitzAnteileString,
+} from '@dv/shared/ui/wohnsitz-splitter';
+import { SharedUtilCountriesService } from '@dv/shared/util/countries';
+import {
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
   minDateValidatorForLocale,
   onDateInputBlur,
-  parseableDateValidatorForLocale,
   parseBackendLocalDateAndPrint,
+  parseDateForVariant,
   parseStringAndPrintForBackendLocalDate,
+  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
-import {
-  addWohnsitzControls,
-  SharedUiWohnsitzSplitterComponent,
-  wohnsitzAnteileString,
-  wohnsitzAnteileNumber,
-  updateWohnsitzControlsState,
-} from '@dv/shared/ui/wohnsitz-splitter';
-import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
-import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
-import { SharedUtilCountriesService } from '@dv/shared/util/countries';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-person.selector';
 
@@ -109,6 +112,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiFormAddressComponent,
     SharedPatternDocumentUploadComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -133,20 +137,117 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   translatedLaender$ = toObservable(this.laenderSig).pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
+  appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set());
   isSozialversicherungsnummerInfoShown = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
-  auslaenderausweisDocumentOptionsSig: Signal<DocumentOptions | null> =
-    computed(() => {
+  auslaenderausweisDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const niederlassungsstatus = this.niederlassungsstatusChangedSig();
+    const getDokumentOptions = (
+      niederlassungsstatus?: Niederlassungsstatus,
+    ) => {
+      switch (niederlassungsstatus) {
+        case 'AUFENTHALTSBEWILLIGUNG_B':
+          return {
+            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
+            titleKey: 'shared.form.person.file.AUFENTHALTSBEWILLIGUNG_B',
+          };
+        case 'NIEDERLASSUNGSBEWILLIGUNG_C':
+          return {
+            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
+            titleKey: 'shared.form.person.file.NIEDERLASSUNGSBEWILLIGUNG_C',
+          };
+        case 'FLUECHTLING':
+          return {
+            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE,
+            titleKey: 'shared.form.person.file.FLUECHTLING',
+          };
+      }
+      return null;
+    };
+    const options = getDokumentOptions(niederlassungsstatus);
+    return gesuch && options
+      ? {
+          ...options,
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  vormundschaftDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const vormundschaft = this.vormundschaftChangedSig();
+    return gesuch && vormundschaft
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_KESB_ERNENNUNG,
+          titleKey: 'shared.form.person.file.VORMUNDSCHAFT',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  wohnsitzBeiDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const wohnsitzBei = this.wohnsitzBeiChangedSig();
+    return gesuch && wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_MIETVERTRAG,
+          titleKey: 'shared.form.person.file.EIGENER_HAUSHALT',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  sozialhilfebeitraegeDocumentOptionsSig = computed<DocumentOptions | null>(
+    () => {
       const gesuch = this.viewSig().gesuch;
-      return gesuch
+      const sozialhilfebeitraege = this.sozialhilfebeitraegeChangedSig();
+      return gesuch && sozialhilfebeitraege
         ? {
+            dokumentTyp: DokumentTyp.PERSON_SOZIALHILFEBUDGET,
+            titleKey: 'shared.form.person.file.SOZIALHILFE',
+            multiple: false,
             gesuchId: gesuch.id,
-            dokumentTyp: 'PERSON_IN_AUSBILDUNG_DOK',
           }
         : null;
-    });
+    },
+  );
+  zivilstandDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const zivilstand = this.zivilstandChangedSig();
+    return gesuch &&
+      zivilstand &&
+      [
+        Zivilstand.GESCHIEDEN_GERICHTLICH,
+        Zivilstand.AUFGELOESTE_PARTNERSCHAFT,
+      ].includes(zivilstand)
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG,
+          titleKey: 'shared.form.person.file.ZIVILSTAND',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
+  heimatortDocumentOptionsSig = computed<DocumentOptions | null>(() => {
+    const gesuch = this.viewSig().gesuch;
+    const eltern = this.viewSig().gesuchFormular?.elterns;
+    const plz = this.plzChangedSig();
+    return gesuch &&
+      plz &&
+      +plz <= 4000 &&
+      +plz >= 3000 &&
+      eltern?.some((e) => e.adresse.land !== 'CH')
+      ? {
+          dokumentTyp: DokumentTyp.PERSON_AUSWEIS,
+          titleKey: 'shared.form.person.file.HEIMATORT',
+          multiple: false,
+          gesuchId: gesuch.id,
+        }
+      : null;
+  });
 
   form = this.formBuilder.group({
     sozialversicherungsnummer: ['', []],
@@ -189,13 +290,17 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         ),
       ],
     ],
-    nationalitaet: this.formBuilder.control<Land>('' as Land, {
+    nationalitaet: this.formBuilder.control(<Land | undefined>undefined, {
       validators: Validators.required,
     }),
     heimatort: [<string | undefined>undefined, [Validators.required]],
     niederlassungsstatus: this.formBuilder.control<
       Niederlassungsstatus | undefined
     >(undefined, { validators: Validators.required }),
+    einreisedatum: [
+      <string | undefined>undefined,
+      [parseableDateValidatorForLocale(this.languageSig(), 'date')],
+    ],
     vormundschaft: [false, []],
     zivilstand: this.formBuilder.control<Zivilstand>('' as Zivilstand, {
       validators: Validators.required,
@@ -203,32 +308,41 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     ...addWohnsitzControls(this.formBuilder),
     quellenbesteuert: [<boolean | null>null, [Validators.required]],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
-    digitaleKommunikation: [true, []],
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
     }),
   });
 
-  private wohnsitzChangedSig = toSignal(
-    this.form.controls.wohnsitz.valueChanges,
-  );
-
   showWohnsitzSplitterSig = computed(() => {
     return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
   });
 
-  private nationalitaetChangedSig = toSignal(
-    this.form.controls.nationalitaet.valueChanges,
+  showEinreiseDatumWarningSig = signal(false);
+
+  private wohnsitzChangedSig = toSignal(
+    this.form.controls.wohnsitz.valueChanges,
+  );
+  private niederlassungsstatusChangedSig = toSignal(
+    this.form.controls.niederlassungsstatus.valueChanges,
+  );
+  private vormundschaftChangedSig = toSignal(
+    this.form.controls.vormundschaft.valueChanges,
+  );
+  private wohnsitzBeiChangedSig = toSignal(
+    this.form.controls.wohnsitz.valueChanges,
+  );
+  private sozialhilfebeitraegeChangedSig = toSignal(
+    this.form.controls.sozialhilfebeitraege.valueChanges,
+  );
+  private zivilstandChangedSig = toSignal(
+    this.form.controls.zivilstand.valueChanges,
+  );
+  private plzChangedSig = toSignal(
+    this.form.controls.adresse.controls.plz.valueChanges,
   );
 
-  showAuslaenderAusweisSig = computed(() => {
-    return (
-      this.nationalitaetChangedSig() &&
-      this.nationalitaetChangedSig() !== this.nationalitaetCH
-    );
-  });
-
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         updateWohnsitzControlsState(
@@ -268,6 +382,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             ...person,
             geburtsdatum: parseBackendLocalDateAndPrint(
               person.geburtsdatum,
+              this.languageSig(),
+            ),
+            einreisedatum: parseBackendLocalDateAndPrint(
+              person.einreisedatum,
               this.languageSig(),
             ),
           };
@@ -327,7 +445,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           });
         }
         // No nationality was selected
-        else if (nationalitaetChanged === undefined) {
+        else if (!isDefined(nationalitaetChanged)) {
           this.updateVisbility(this.form.controls.niederlassungsstatus, false, {
             resetOnInvisible: true,
           });
@@ -352,6 +470,49 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             resetOnInvisible: true,
           });
         }
+      },
+      { allowSignalWrites: true },
+    );
+
+    const niederlassungsstatusChangedSig = toSignal(
+      this.form.controls.niederlassungsstatus.valueChanges,
+    );
+    effect(
+      () => {
+        // Niederlassung B -> required einreisedatum
+        const showEinreisedatum =
+          niederlassungsstatusChangedSig() ===
+          Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B;
+        this.formUtils.setRequired(
+          this.form.controls.einreisedatum,
+          showEinreisedatum,
+        );
+        this.updateVisbility(
+          this.form.controls.einreisedatum,
+          showEinreisedatum,
+          {
+            resetOnInvisible: true,
+          },
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
+    const einreisedatumChangedSig = toSignal(
+      this.form.controls.einreisedatum.valueChanges,
+    );
+    effect(
+      () => {
+        const einreisedatum = parseDateForVariant(
+          einreisedatumChangedSig(),
+          new Date(),
+          'date',
+        );
+        this.showEinreiseDatumWarningSig.set(
+          einreisedatum
+            ? isAfter(einreisedatum, subYears(new Date(), 5))
+            : false,
+        );
       },
       { allowSignalWrites: true },
     );
@@ -389,6 +550,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           origin: PERSON,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
@@ -417,28 +579,43 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     );
   }
 
+  onEinreisedatumBlur() {
+    return onDateInputBlur(
+      this.form.controls.einreisedatum,
+      new Date(),
+      this.languageSig(),
+    );
+  }
+
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
+    const values = convertTempFormToRealValues(this.form, [
+      'nationalitaet',
+      'quellenbesteuert',
+      'sozialhilfebeitraege',
+    ]);
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith?.id,
       gesuchFormular: {
         ...gesuchFormular,
         personInAusbildung: {
-          ...convertTempFormToRealValues(this.form, [
-            'quellenbesteuert',
-            'sozialhilfebeitraege',
-          ]),
+          ...values,
           adresse: {
             id: gesuchFormular?.personInAusbildung?.adresse?.id,
-            ...this.form.getRawValue().adresse,
+            ...values.adresse,
           },
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
-            this.form.getRawValue().geburtsdatum,
+            values.geburtsdatum,
             this.languageSig(),
             subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
           )!,
-          ...wohnsitzAnteileNumber(this.form.getRawValue()),
+          einreisedatum: parseStringAndPrintForBackendLocalDate(
+            values.einreisedatum,
+            this.languageSig(),
+            new Date(),
+          ),
+          ...wohnsitzAnteileNumber(values),
         },
       },
     };
@@ -462,6 +639,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     this.hiddenFieldsSetSig.update((hiddenFieldsSet) => {
       if (visible) {
         hiddenFieldsSet.delete(formControl);
+        formControl.enable();
       } else {
         hiddenFieldsSet.add(formControl);
         formControl.disable();

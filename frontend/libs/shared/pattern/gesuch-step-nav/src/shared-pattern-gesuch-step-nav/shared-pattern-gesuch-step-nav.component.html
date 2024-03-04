@@ -5,8 +5,7 @@
       [class.btn-light]="!stepRoute.active"
       [class.shadow-none]="!stepRoute.active"
       [class.disabled]="step.disabled"
-      [routerLink]="['/', 'gesuch', step.route, view$().gesuch?.id]"
-      [routerLinkActive]="['active']"
+      [routerLink]="['/', 'gesuch', step.route, viewSig().gesuch?.id]"
       [attr.data-testid]="'step-nav-' + step.route"
     >
       <div class="position-relative d-flex align-middle me-3">

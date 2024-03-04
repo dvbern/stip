@@ -11,14 +11,14 @@ import jakarta.validation.Payload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_PARTNER_NULL_REQUIRED_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PartnerNullRequiredWhenAlleinstehendConstraintValidator.class)
 @Documented
 public @interface PartnerNullRequiredWhenAlleinstehendConstraint {
-	String message() default VALIDATION_PARTNER_NULL_REQUIRED_MESSAGE;
+    String message() default VALIDATION_PARTNER_NULL_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

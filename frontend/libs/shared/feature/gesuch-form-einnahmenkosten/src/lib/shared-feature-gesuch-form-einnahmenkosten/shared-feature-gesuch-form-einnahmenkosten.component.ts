@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,21 +9,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
-import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
-import { MaskitoModule } from '@maskito/angular';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MaskitoModule } from '@maskito/angular';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import {
   AUSBILDUNG,
   EINNAHMEN_KOSTEN,
@@ -33,28 +35,30 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
   maskitoNumber,
   maskitoPositiveNumber,
 } from '@dv/shared/util/maskito-util';
-import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import {
-  convertTempFormToRealValues,
-  SharedUtilFormService,
-} from '@dv/shared/util/form';
-import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   getDateDifference,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
+import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
+
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   standalone: true,
   imports: [
+    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -65,6 +69,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -167,11 +172,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     } as const;
   });
 
-  view$ = this.store.selectSignal(
-    selectSharedFeatureGesuchFormEinnahmenkostenView,
-  );
-
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
         const {
@@ -195,7 +197,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.controls.renten,
           !hatElternteilVerloren,
         );
-        this.setDisabledStateAndHide(this.form.controls.zulagen, !hatKinder);
+        this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,
           !willSekundarstufeZwei,
@@ -210,7 +212,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         );
         this.setDisabledStateAndHide(
           this.form.controls.auswaertigeMittagessenProWoche,
-          !wohnsitzNotEigenerHaushalt,
+          wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.wohnkosten,
@@ -231,7 +233,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     // fill form
     effect(
       () => {
-        const { einnahmenKosten } = this.view$();
+        const { einnahmenKosten } = this.viewSig();
         if (einnahmenKosten) {
           this.form.patchValue({
             ...einnahmenKosten,
@@ -261,7 +263,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
     effect(
       () => {
-        const { readonly } = this.view$();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
@@ -294,11 +296,12 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           origin: EINNAHMEN_KOSTEN,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormEinnahmenkosten.nextTriggered({
@@ -312,10 +315,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
+    const { hatKinder } = this.formStateSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'nettoerwerbseinkommen',
       'alimente',
-      'zulagen',
       'renten',
       'ausbildungskostenSekundarstufeZwei',
       'ausbildungskostenTertiaerstufe',
@@ -325,6 +328,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'verdienstRealisiert',
       'willDarlehen',
       'auswaertigeMittagessenProWoche',
+      ...(hatKinder ? ['zulagen' as const] : []),
     ]);
     return {
       gesuchId: gesuch?.id,

@@ -1,9 +1,9 @@
-import { Gesuch } from '@dv/shared/model/gesuch';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
+import { Gesuch } from '@dv/shared/model/gesuch';
 
+import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import { selectSharedDataAccessGesuchsView } from './shared-data-access-gesuch.selectors';
-import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 describe('selectSharedDataAccessGesuchsView', () => {
   it('selects view', () => {

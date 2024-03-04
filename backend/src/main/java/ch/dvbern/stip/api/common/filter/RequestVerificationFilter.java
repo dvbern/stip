@@ -17,49 +17,48 @@
 
 package ch.dvbern.stip.api.common.filter;
 
+import java.io.IOException;
+
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.PreMatching;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Provider;
-
-import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 
 @Provider
 @PreMatching
 @RequestScoped
+@RequiredArgsConstructor
 public class RequestVerificationFilter implements ContainerRequestFilter {
+    private final ConfigService configService;
 
-	@Inject
-	ConfigService configService;
+    @Override
+    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+        if (excludeResource(containerRequestContext)) {
+            return;
+        }
+        if (isEnvAndVersionMatching(containerRequestContext)) {
+            return;
+        }
+        throw new AppErrorException("headers not available");
+    }
 
-	@Override
-	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		if (excludeResource(containerRequestContext)) {
-			return;
-		}
-		if (isEnvAndVersionMatching(containerRequestContext)) {
-			return;
-		}
-		throw new AppErrorException("headers not available");
-	}
+    private boolean excludeResource(ContainerRequestContext req) {
+        UriInfo info = req.getUriInfo();
+        return info.getPath().contains("/config/deployment");
+    }
 
-	private boolean excludeResource(ContainerRequestContext req) {
-		UriInfo info = req.getUriInfo();
-		return info.getPath().contains("/config/deployment");
-	}
-
-	private boolean isEnvAndVersionMatching(ContainerRequestContext req) {
-		String environment = req.getHeaderString("environment"); // Todo Constant header shared ?
-		String version = req.getHeaderString("version");
-		DeploymentConfigDto backendConfig = configService.getDeploymentConfiguration();
-		// Local not used
-		return backendConfig.getEnvironment().equals("local") || (backendConfig.getEnvironment().equals(environment)
-				&& backendConfig.getVersion().equals(version));
-	}
+    private boolean isEnvAndVersionMatching(ContainerRequestContext req) {
+        String environment = req.getHeaderString("environment");
+        String version = req.getHeaderString("version");
+        DeploymentConfigDto backendConfig = configService.getDeploymentConfiguration();
+        // Local not used
+        return backendConfig.getEnvironment().equals("local") || (backendConfig.getEnvironment().equals(environment)
+            && backendConfig.getVersion().equals(version));
+    }
 }

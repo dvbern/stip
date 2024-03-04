@@ -17,9 +17,9 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Documented
 public @interface AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint {
 
-	String message() default VALIDATION_PARTNER_KOSTEN_FIELDS_REQUIRED_MESSAGE;
+    String message() default VALIDATION_PARTNER_KOSTEN_FIELDS_REQUIRED_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

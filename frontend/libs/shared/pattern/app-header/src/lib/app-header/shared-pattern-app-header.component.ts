@@ -1,3 +1,5 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -11,8 +13,8 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import {
   NgbDropdown,
   NgbDropdownItem,
@@ -21,12 +23,11 @@ import {
   NgbOffcanvas,
   NgbOffcanvasModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterOutlet, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
 import { KeycloakService } from 'keycloak-angular';
 
+import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
@@ -34,7 +35,6 @@ import {
 import { Language } from '@dv/shared/model/language';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
-import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
 
 @Component({
   selector: 'dv-shared-pattern-app-header',

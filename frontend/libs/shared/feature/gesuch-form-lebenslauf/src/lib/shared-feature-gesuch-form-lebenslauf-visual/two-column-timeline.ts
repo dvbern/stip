@@ -1,5 +1,3 @@
-import { isDevMode } from '@angular/core';
-import { printDateAsMonthYear } from '@dv/shared/util/validator-date';
 import { addMonths, isAfter, isBefore, isEqual, subMonths } from 'date-fns';
 
 type TimelineLabel = {
@@ -14,6 +12,7 @@ export interface TimelineRawItem {
   von: Date;
   bis: Date;
   editable: boolean;
+  ausbildungAbgeschlossen: boolean;
 }
 export interface TimelineMergedRawItem extends TimelineRawItem {
   children: TimelineRawItem[];
@@ -39,7 +38,7 @@ export class TimelineBusyBlock extends TimelineBlock {
   override col!: 'LEFT' | 'RIGHT';
   label!: TimelineLabel;
   editable!: boolean;
-
+  ausbildungAbgeschlossen!: boolean;
   children?: TimelineBusyBlockChild[];
 }
 
@@ -49,6 +48,7 @@ export class TimelineBusyBlockChild {
   von!: Date;
   bis!: Date;
   editable!: boolean;
+  ausbildungAbgeschlossen!: boolean;
 }
 
 export class TimelineGapBlock extends TimelineBlock {
@@ -121,7 +121,6 @@ export class TwoColumnTimeline {
           positionStartRow: startRow,
           positionRowSpan: 1,
         } as TimelineGapBlock);
-        debug('added start gap to output');
 
         startRow++;
       }
@@ -129,13 +128,8 @@ export class TwoColumnTimeline {
 
     // Loop
     while (inputSorted.length) {
-      debug(' *************************************** ');
-      debug('sorted input: ', JSON.stringify(inputSorted.map((c) => c.label)));
-
       //- startDate = das erste startDate der Inputlisten (beide ersten Elemente, das frühere Datum nehmen)
       const startDate = inputSorted[0].von;
-      debug('start date: ', printDateAsMonthYear(startDate));
-      debug('start row: ', startRow);
 
       // - aus beiden Listen alle Items mit diesem Startdatum in current-Left und current-Right schieben (als
       // busyBlocks mit rowspan=0) - alle in current mit diesem Startdatum erhalten positionStartRow=startRow
@@ -150,14 +144,11 @@ export class TwoColumnTimeline {
               (rawChild) => rawChild as TimelineBusyBlockChild,
             ),
           } as TimelineBusyBlock);
-          debug('moved from input to current: ', inputItem.label);
         }
       }
-      debug('current: ', JSON.stringify(current.map((c) => c.label)));
 
       // alle in current erhalten rowspan++ (fuer ungleiche Starts)
       if (current.length) {
-        debug('adding unevenStartHeight');
         for (const each of current) {
           each.positionRowSpan += unevenStartHeight;
         }
@@ -167,7 +158,6 @@ export class TwoColumnTimeline {
       if (current.length) {
         // endDate = das früheste Enddatum aus current
         let endDate = TwoColumnTimeline.getEarliestEnddate(current);
-        debug('earliest current end date: ', printDateAsMonthYear(endDate));
         let ealiestStartDateInInput = inputSorted.length
           ? TwoColumnTimeline.getEarliestStartdate(inputSorted)
           : undefined;
@@ -182,11 +172,6 @@ export class TwoColumnTimeline {
             if (isEqual(each.bis, endDate)) {
               current.splice(current.indexOf(each), 1);
               output.push(each);
-              debug(
-                'moved from current to output at row: ',
-                each.positionStartRow,
-                each.label,
-              );
             }
           }
 
@@ -199,7 +184,6 @@ export class TwoColumnTimeline {
             if (!gaplessNextBlockFound) {
               // alle in current erhalten rowspan++
               if (current.length) {
-                debug('adding abstandHeight');
                 for (const each of current) {
                   each.positionRowSpan += abstandHeight;
                 }
@@ -211,7 +195,6 @@ export class TwoColumnTimeline {
           // endDate = das früheste Enddatum aus current
           if (current.length) {
             endDate = TwoColumnTimeline.getEarliestEnddate(current);
-            debug('earliest current end date: ', printDateAsMonthYear(endDate));
             ealiestStartDateInInput = inputSorted.length
               ? TwoColumnTimeline.getEarliestStartdate(inputSorted)
               : undefined;
@@ -227,12 +210,10 @@ export class TwoColumnTimeline {
       //- wenn current leer, Input nicht leer, und kein Item in Input vorhanden mit Startdatum=endDate: Gap erstellen
       // (von-bis)
       if (!current.length && inputSorted.length) {
-        debug('current is empty');
         const latestOutputEnddate = this.getLatestEnddate(output);
         const expectedNextStart = addMonths(latestOutputEnddate, 1);
         const gaplessNextBlockFound =
           inputSorted.length && isEqual(inputSorted[0].von, expectedNextStart);
-        debug('gap found: ', !gaplessNextBlockFound);
         if (!gaplessNextBlockFound) {
           output.push({
             col: 'BOTH',
@@ -241,7 +222,6 @@ export class TwoColumnTimeline {
             positionStartRow: startRow,
             positionRowSpan: 1,
           } as TimelineGapBlock);
-          debug('added gap to output');
 
           startRow++;
         }
@@ -281,15 +261,9 @@ export class TwoColumnTimeline {
       return [];
     }
 
-    debug('****** merging overlapping items into group ********');
-
     // ALGORITHM:
 
     while (inputSorted.length) {
-      debug('**********************************************************');
-
-      debug('input: ', JSON.stringify(inputSorted.map((c) => c.label)));
-
       // start new group: copy the next item
       const groupdStarterItem = inputSorted[0];
       inputSorted.splice(0, 1);
@@ -297,7 +271,6 @@ export class TwoColumnTimeline {
         ...groupdStarterItem,
         children: [groupdStarterItem],
       } as TimelineMergedRawItem;
-      debug('started groupd with: ', groupdStarterItem.label);
 
       if (mode === 'MERGE') {
         // find all input items that overlap this range
@@ -308,14 +281,8 @@ export class TwoColumnTimeline {
           inputSorted,
         );
         while (overlapping.length) {
-          debug(
-            'found overlapping: ',
-            JSON.stringify(overlapping.map((c) => c.label)),
-          );
-
           for (const eachOverlapping of overlapping) {
             // move overlapping to group
-            debug('added child to group: ', eachOverlapping.label);
             inputSorted.splice(inputSorted.indexOf(eachOverlapping), 1);
             group.children.push(eachOverlapping);
 
@@ -326,13 +293,6 @@ export class TwoColumnTimeline {
             group.bis = isAfter(eachOverlapping.bis, group.bis)
               ? eachOverlapping.bis
               : group.bis;
-
-            debug(
-              'group date range: ',
-              printDateAsMonthYear(group.von),
-              ' ',
-              printDateAsMonthYear(group.bis),
-            );
           }
 
           // search for more overlapping items
@@ -347,11 +307,6 @@ export class TwoColumnTimeline {
 
       // move group to output
       output.push(group);
-
-      debug(
-        'finished group: ',
-        JSON.stringify(group.children.map((c) => c.label)),
-      );
     }
 
     return output;
@@ -404,9 +359,3 @@ export class TwoColumnTimeline {
       });
   }
 }
-
-const debug = (msg: string, ...args: unknown[]) => {
-  if (isDevMode()) {
-    console.log(msg, args);
-  }
-};

@@ -2,15 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   Output,
   inject,
-  Input,
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
 
@@ -38,7 +39,7 @@ export class SharedPatternGesuchStepNavComponent {
 
   route = inject(Router);
 
-  view$ = this.store.selectSignal(sharedPatternGesuchStepNavView);
+  viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
   trackByIndex(index: number): number {
     return index;

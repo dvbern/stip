@@ -1,33 +1,35 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  inject,
   OnInit,
   Signal,
+  computed,
+  inject,
 } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { addYears, setMonth, subMonths } from 'date-fns';
+import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
 
-import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
-import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
+import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   dateFromMonthYearString,
   printDateAsMonthYear,
 } from '@dv/shared/util/validator-date';
 
+import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feature-gesuch-form-lebenslauf-editor/shared-feature-gesuch-form-lebenslauf-editor.component';
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
-import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
 
 const AUSBILDUNGS_MONTH = 8; // August
+const MIN_EDUCATION_AGE = 16; // August
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
@@ -38,6 +40,7 @@ const AUSBILDUNGS_MONTH = 8; // August
     TranslateModule,
     TwoColumnTimelineComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf.component.scss'],
@@ -46,39 +49,48 @@ const AUSBILDUNGS_MONTH = 8; // August
 export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
+  hasUnsavedChanges = false;
 
-  view$ = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
 
-  minDate$: Signal<Date | null> = computed(() => {
-    const geburtsdatum =
-      this.view$().gesuchFormular?.personInAusbildung?.geburtsdatum;
-    if (geburtsdatum) {
-      const sixteenthBirthdate = setMonth(
-        addYears(Date.parse(geburtsdatum), 16),
-        AUSBILDUNGS_MONTH - 1,
-      );
-      return new Date(
-        sixteenthBirthdate.getFullYear(),
-        sixteenthBirthdate.getMonth(),
-        1,
-      );
-    }
-    return null;
-  });
+  minDatesSig: Signal<{ optional: Date; required: Date } | null> = computed(
+    () => {
+      const geburtsdatum =
+        this.viewSig().gesuchFormular?.personInAusbildung?.geburtsdatum;
+      if (geburtsdatum) {
+        const geburtsdatumDate = Date.parse(geburtsdatum);
+        const dates = [
+          // either the birthdate or the start of the current school year of the birth year
+          // if the birthdate is after the start of the school year
+          max([
+            geburtsdatumDate,
+            setMonth(geburtsdatumDate, AUSBILDUNGS_MONTH - 1),
+          ]),
+          // the start of the current school year of the birth year + 16 years
+          setMonth(
+            addYears(Date.parse(geburtsdatum), MIN_EDUCATION_AGE),
+            AUSBILDUNGS_MONTH - 1,
+          ),
+        ];
+        const [optional, required] = dates.map(startOfMonth);
+        return { optional, required };
+      }
+      return null;
+    },
+  );
 
-  maxDate$: Signal<Date | null> = computed(() => {
+  maxDateSig: Signal<Date | null> = computed(() => {
     const ausbildungStart =
-      this.view$().gesuchFormular?.ausbildung?.ausbildungBegin;
+      this.viewSig().gesuchFormular?.ausbildung?.ausbildungBegin;
     if (ausbildungStart) {
       const start = dateFromMonthYearString(ausbildungStart);
-      console.log('ausbildung start parsed: ', start);
       return start ? subMonths(start, 1) : null;
     }
     return null;
   });
 
   ausbildungenSig: Signal<LebenslaufItemUpdate[]> = computed(() => {
-    return this.view$().lebenslaufItems.filter((l) => l.bildungsart);
+    return this.viewSig().lebenslaufItems.filter((l) => l.bildungsart);
   });
 
   editedItem?: SharedModelLebenslauf;
@@ -143,7 +155,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view$();
+    const { gesuch } = this.viewSig();
     this.store.dispatch(
       SharedEventGesuchFormLebenslauf.nextTriggered({
         id: gesuch!.id!,
@@ -157,7 +169,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithDeletedItem(itemId: string) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const updatedItems = gesuchFormular?.lebenslaufItems?.filter(
       (item) => item.id !== itemId,
     );
@@ -173,7 +185,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   }
 
   private buildUpdatedGesuchWithUpdatedItem(item: LebenslaufItemUpdate) {
-    const { gesuch, gesuchFormular } = this.view$();
+    const { gesuch, gesuchFormular } = this.viewSig();
     // update existing item if found
     const updatedItems =
       gesuchFormular?.lebenslaufItems?.map((oldItem) => {

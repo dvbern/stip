@@ -5,8 +5,6 @@ import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.Objects;
-
 @ApplicationScoped
 public class OidcTenantResolver implements TenantResolver {
 
@@ -14,11 +12,12 @@ public class OidcTenantResolver implements TenantResolver {
     public static final String TENANT_IDENTIFIER_CONTEXT_NAME = "tenantId";
 
     @Override
+    @SuppressWarnings("java:S1135")
     public String resolve(RoutingContext context) {
 
         final var tenant = DEFAULT_TENANT_IDENTIFIER;
 
-        // TODO: resolve tenant based on request and implement a test for it
+        // TODO KSTIP-781: resolve tenant based on request and implement a test for it and remove SupressWarning
         context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant);
 
         return tenant;

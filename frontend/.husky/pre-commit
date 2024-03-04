@@ -1,9 +1,14 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+frontend="$(git rev-parse --show-toplevel)/frontend"
 
-cd frontend
+if ! git diff --quiet --stat HEAD -- $frontend -ne 0; then
+    . "$(dirname -- "$0")/_/husky.sh"
 
-npx lint-staged
-npm run validate
-npm run lint
-npm run test
+    cd $frontend
+
+    npx lint-staged
+    npm run validate
+    npm run lint
+    npm run test
+    npm run test:generators
+fi

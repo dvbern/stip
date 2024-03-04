@@ -11,14 +11,14 @@ import jakarta.validation.Payload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER})
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = LebenslaufLuckenlosConstraintValidator.class)
 @Documented
 public @interface LebenslaufLuckenlosConstraint {
-	String message() default VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
+    String message() default VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

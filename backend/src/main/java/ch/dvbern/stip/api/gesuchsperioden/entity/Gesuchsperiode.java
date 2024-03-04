@@ -17,22 +17,27 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.entity;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.entity.DateRange;
-import jakarta.persistence.*;
+import ch.dvbern.stip.api.common.util.DateRange;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.time.LocalDate;
-
 @Audited
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
-        @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
+    @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
+    @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
 })
 @Getter
 @Setter

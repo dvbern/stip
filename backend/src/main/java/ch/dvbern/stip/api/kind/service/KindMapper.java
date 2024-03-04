@@ -1,15 +1,16 @@
 package ch.dvbern.stip.api.kind.service;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.generated.dto.KindDto;
 import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import jakarta.ws.rs.NotFoundException;
-import org.mapstruct.*;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface KindMapper {
@@ -20,7 +21,9 @@ public interface KindMapper {
     Kind partialUpdate(KindUpdateDto kindUpdateDto, @MappingTarget Kind kind);
 
     default Set<Kind> map(List<KindUpdateDto> kindUpdateDtos, @MappingTarget Set<Kind> kinder) {
-        if(kindUpdateDtos.isEmpty()) kinder.clear();
+        if (kindUpdateDtos.isEmpty()) {
+            kinder.clear();
+        }
         Iterator<Kind> iterator = kinder.iterator();
         while (iterator.hasNext()) {
             Kind kind = iterator.next();
@@ -30,13 +33,13 @@ public interface KindMapper {
         }
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
-                Kind found = kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
+                Kind found =
+                    kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
                         () -> new NotFoundException("Kind Not FOUND")
-                );
+                    );
                 kinder.remove(found);
                 kinder.add(partialUpdate(kindUpdateDto, found));
-            }
-            else {
+            } else {
                 kinder.add(partialUpdate(kindUpdateDto, new Kind()));
             }
         }

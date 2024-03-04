@@ -1,4 +1,9 @@
-<button type="button" class="card shadow-sm border-1 w-100" (click)="handleClick()">
+<button
+  type="button"
+  [attr.data-testid]="'button-add-' + elternTyp.toLocaleLowerCase()"
+  class="card shadow-sm border-1 w-100"
+  (click)="handleClick()"
+>
   <div class="card-body text-start w-100">
     @if (elternteil; as parent) {
       <!-- display Elternteil -->

@@ -11,12 +11,12 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   ElementRef,
-  inject,
   OnInit,
-  signal,
   WritableSignal,
+  effect,
+  inject,
+  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -28,7 +28,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-navigation';
 import { MaskitoModule } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -36,28 +35,31 @@ import { Subject } from 'rxjs';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
-import { FAMILIENSITUATION } from '@dv/shared/model/gesuch-form';
-import {
-  numberToPercentString,
-  percentStringToNumber,
-  SharedUiPercentageSplitterComponent,
-} from '@dv/shared/ui/percentage-splitter';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   ElternAbwesenheitsGrund,
-  Elternschaftsteilung,
   ElternUnbekanntheitsGrund,
+  Elternschaftsteilung,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
+import { FAMILIENSITUATION } from '@dv/shared/model/gesuch-form';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
-  convertTempFormToRealValues,
+  SharedUiPercentageSplitterComponent,
+  numberToPercentString,
+  percentStringToNumber,
+} from '@dv/shared/ui/percentage-splitter';
+import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
+import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-navigation';
+import {
   SharedUtilFormService,
+  convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+
 import {
   FamiliensituationFormStep,
   FamiliensituationFormSteps,
@@ -87,6 +89,7 @@ const animationTime = 500;
     SharedUiPercentageSplitterComponent,
     GesuchAppUiStepFormButtonsComponent,
     SharedUiStepperNavigationComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],
@@ -187,6 +190,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   }
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     Object.values(this.form.controls).forEach((control) => control.disable());
     const {
       elternVerheiratetZusammen,
@@ -463,6 +467,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           origin: FAMILIENSITUATION,
         }),
       );
+      this.form.markAsPristine();
     }
   }
 

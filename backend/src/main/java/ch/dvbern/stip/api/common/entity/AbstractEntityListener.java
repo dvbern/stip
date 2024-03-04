@@ -1,8 +1,9 @@
 package ch.dvbern.stip.api.common.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import java.time.LocalDateTime;
 
 public class AbstractEntityListener {
 
@@ -17,7 +18,7 @@ public class AbstractEntityListener {
 
     @PreUpdate
     public void preUpdate(AbstractEntity entity) {
-            entity.setTimestampMutiert(LocalDateTime.now());
-            entity.setUserMutiert("TODO");
+        entity.setTimestampMutiert(LocalDateTime.now());
+        entity.setUserMutiert("TODO");
     }
 }

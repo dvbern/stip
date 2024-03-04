@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public abstract class AbstractMandantEntity extends AbstractEntity {
-	@TenantId
-	@Column(nullable = false)
-	private String mandant;
+    @TenantId
+    @Column(nullable = false)
+    private String mandant;
 }
