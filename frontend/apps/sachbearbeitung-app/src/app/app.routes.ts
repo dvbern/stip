@@ -3,33 +3,44 @@ import { Route } from '@angular/router';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
-  {
-    path: 'sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
-    loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung'
-      ).then(
-        (m) =>
-          m.sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes,
-      ),
-  },
-  {
-    path: 'sachbearbeitung-app-feature-administration',
-    loadChildren: () =>
-      import('@dv/sachbearbeitung-app/feature/administration').then(
-        (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
-      ),
-  },
-  {
-    path: 'sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
-    loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung'
-      ).then(
-        (m) =>
-          m.sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes,
-      ),
-  },
+  // @Philipp: kann man diese löschen?
+  // {
+  //   path: 'sachbearbeitung-app-feature-administration-ausbildungsstaette',
+  //   loadChildren: () =>
+  //     import(
+  //       '@dv/sachbearbeitung-app/feature/administration-ausbildungsstaette'
+  //     ).then(
+  //       (m) =>
+  //         m.sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes,
+  //     ),
+  // },
+  // {
+  //   path: 'sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
+  //   loadChildren: () =>
+  //     import(
+  //       '@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung'
+  //     ).then(
+  //       (m) =>
+  //         m.sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes,
+  //     ),
+  // },
+  // {
+  //   path: 'sachbearbeitung-app-feature-administration',
+  //   loadChildren: () =>
+  //     import('@dv/sachbearbeitung-app/feature/administration').then(
+  //       (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
+  //     ),
+  // },
+  // {
+  //   path: 'sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
+  //   loadChildren: () =>
+  //     import(
+  //       '@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung'
+  //     ).then(
+  //       (m) =>
+  //         m.sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes,
+  //     ),
+  // },
   {
     path: 'administration',
     canActivate: [hasBenutzer],
