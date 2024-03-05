@@ -25,6 +25,7 @@ public class DokumentDto  implements Serializable {
   private @Valid String filepfad;
   private @Valid String filesize;
   private @Valid String objectId;
+  private @Valid String timestampErstellt;
 
   /**
    **/
@@ -122,6 +123,24 @@ public class DokumentDto  implements Serializable {
     this.objectId = objectId;
   }
 
+  /**
+   **/
+  public DokumentDto timestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  public String getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -136,12 +155,13 @@ public class DokumentDto  implements Serializable {
         Objects.equals(this.filename, dokument.filename) &&
         Objects.equals(this.filepfad, dokument.filepfad) &&
         Objects.equals(this.filesize, dokument.filesize) &&
-        Objects.equals(this.objectId, dokument.objectId);
+        Objects.equals(this.objectId, dokument.objectId) &&
+        Objects.equals(this.timestampErstellt, dokument.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, filename, filepfad, filesize, objectId);
+    return Objects.hash(id, filename, filepfad, filesize, objectId, timestampErstellt);
   }
 
   @Override
@@ -154,6 +174,7 @@ public class DokumentDto  implements Serializable {
     sb.append("    filepfad: ").append(toIndentedString(filepfad)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
     sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

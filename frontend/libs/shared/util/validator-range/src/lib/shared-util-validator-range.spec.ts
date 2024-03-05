@@ -5,7 +5,7 @@ import { sharedUtilValidatorRange } from './shared-util-validator-range';
 describe('SharedUtilValidatorRangeService', () => {
   const min = 0;
   const max = 5;
-  const control = new FormControl(null);
+  const control = new FormControl(<number | null>null);
 
   it('should not have an error if no value is present', () => {
     control.setValue(null);
@@ -13,7 +13,7 @@ describe('SharedUtilValidatorRangeService', () => {
   });
 
   it('should have notANumber error if a NaN-text', () => {
-    control.setValue('hi');
+    control.setValue('hi' as any);
     expect(Number('hi')).toBeNaN();
     expect(runValidation(min, max, control)).toEqual({ notANumber: true });
   });
@@ -54,6 +54,6 @@ function runValidation(
   min: number,
   max: number,
   control: FormControl,
-): ValidationErrors {
+): ValidationErrors | null {
   return sharedUtilValidatorRange(min, max)(control);
 }

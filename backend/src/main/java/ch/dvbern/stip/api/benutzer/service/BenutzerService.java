@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.benutzer.service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,6 +16,8 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -40,12 +41,15 @@ public class BenutzerService {
     private final BenutzereinstellungenRepository benutzereinstellungenRepository;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
+    private final SecurityIdentity identity;
 
+    @Transactional
     public BenutzerDto getCurrentBenutzer() {
         return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
     }
 
     @SuppressWarnings("java:S1135")
+    @Transactional
     public Benutzer getOrCreateCurrentBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
 
@@ -56,24 +60,24 @@ public class BenutzerService {
         Benutzer benutzer = benutzerRepository
             .findByKeycloakId(keycloakId)
             .orElseGet(this::createBenutzerFromJWT);
-        benutzer = updateBenutzerTypFromJWT(benutzer, jsonWebToken);
+        benutzer = updateBenutzerTypFromJWT(benutzer);
+        benutzerRepository.persist(benutzer);
 
         return benutzer;
     }
 
     @Transactional
-    public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer, JsonWebToken jsonWebToken) {
-        HashSet<String> group = jsonWebToken.getClaim(Claims.groups);
-        if (!group.isEmpty()) {
-            String groupOnly = group.iterator().next().toUpperCase();
-            if (!groupOnly.equals(benutzer.getBenutzerTyp().name())) {
-                benutzer = benutzerRepository.findById(benutzer.getId());
-                benutzer.setBenutzerTyp(BenutzerTyp.valueOf(groupOnly));
-                benutzerRepository.persist(benutzer);
-            }
+    public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer) {
+        if (identity.hasRole(BenutzerTyp.GESUCHSTELLER.getRoleName())) {
+            benutzer.setBenutzerTyp(BenutzerTyp.GESUCHSTELLER);
+        } else if (identity.hasRole(BenutzerTyp.SACHBEARBEITER.getRoleName())) {
+            benutzer.setBenutzerTyp(BenutzerTyp.SACHBEARBEITER);
+        } else if (identity.hasRole(BenutzerTyp.ADMIN.getRoleName())) {
+            benutzer.setBenutzerTyp(BenutzerTyp.ADMIN);
         } else {
-            LOG.warn("Einen Benutzer ohne Rollen wuerde angemeldet, er ist per default als Gesuchsteller erlaubt");
+            LOG.error("A user without a role has signed in, they are (by default) allowed as Gesuchsteller");
         }
+
         return benutzer;
     }
 
@@ -137,5 +141,14 @@ public class BenutzerService {
             sachbearbeiterZuordnungStammdaten
         );
         sachbearbeiterZuordnungStammdatenRepository.persist(sachbearbeiterZuordnungStammdaten);
+    }
+
+    @Transactional
+    public void createOrUpdateSachbearbeiterStammdaten(
+        List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdaten
+    ) {
+        for (final var entry : sachbearbeiterZuordnungStammdaten) {
+            createOrUpdateSachbearbeiterStammdaten(entry.getSachbearbeiter(), entry.getZuordnung());
+        }
     }
 }

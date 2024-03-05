@@ -23,5 +23,8 @@ class BuchstabenRangeConstraintValidatorTest {
         assertThat(buchstabenRangeConstraintValidator.isValid("B-D,A,G", null), is(true));
         assertThat(buchstabenRangeConstraintValidator.isValid("A", null), is(true));
         assertThat(buchstabenRangeConstraintValidator.isValid("A,B", null), is(true));
+        assertThat(buchstabenRangeConstraintValidator.isValid("A,B,C", null), is(true));
+        assertThat(buchstabenRangeConstraintValidator.isValid("A-D,E,F", null), is(true));
+        assertThat(buchstabenRangeConstraintValidator.isValid("SAA-SOA", null), is(true));
     }
 }

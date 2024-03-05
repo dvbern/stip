@@ -19,7 +19,6 @@ import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abs
   standalone: true,
   imports: [TranslateModule],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
-  styleUrls: ['./gesuch-app-feature-gesuch-form-abschluss.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {

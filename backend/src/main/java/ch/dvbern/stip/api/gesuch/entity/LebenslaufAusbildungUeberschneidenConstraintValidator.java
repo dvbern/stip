@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import jakarta.validation.ConstraintValidator;
@@ -19,8 +18,7 @@ public class LebenslaufAusbildungUeberschneidenConstraintValidator
         List<LebenslaufItem> lebenslaufItemList = gesuchFormular.getLebenslaufItems()
             .stream()
             .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
-            .collect(
-                Collectors.toList());
+            .toList();
 
         int n = lebenslaufItemList.size();
         for (int i = 0; i < n - 1; i++) {

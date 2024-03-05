@@ -72,11 +72,33 @@ export const EINNAHMEN_KOSTEN = {
   iconSymbolName: 'call_missed_outgoing',
 };
 
+export const DOKUMENTE = {
+  route: 'dokumente',
+  translationKey: 'shared.dokumente.title',
+  currentStepNumber: 11,
+  iconSymbolName: 'description',
+};
+
 export const ABSCHLUSS = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
-  currentStepNumber: 11,
+  currentStepNumber: 12,
   iconSymbolName: 'check_circle',
+};
+
+export const gesuchFormSteps = {
+  PERSON,
+  AUSBILDUNG,
+  LEBENSLAUF,
+  FAMILIENSITUATION,
+  ELTERN,
+  GESCHWISTER,
+  PARTNER,
+  KINDER,
+  AUSZAHLUNGEN,
+  EINNAHMEN_KOSTEN,
+  DOKUMENTE,
+  ABSCHLUSS,
 };
 
 export const isStepDisabled = (

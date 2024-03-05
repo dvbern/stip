@@ -14,7 +14,7 @@ public interface SachbearbeiterZuordnungStammdatenMapper {
 
     SachbearbeiterZuordnungStammdatenDto toDto(SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     SachbearbeiterZuordnungStammdaten partialUpdate(
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto,
         @MappingTarget SachbearbeiterZuordnungStammdaten sachbearbeiterZuordnungStammdaten);

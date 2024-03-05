@@ -734,30 +734,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: createAusbildungsgang
             summary: Creates a new Ausbildungsgang
-    '/gesuch/{gesuchId}/nachfrist':
-        patch:
-            tags:
-                - Gesuch
-            parameters:
-                -
-                    name: gesuchId
-                    schema:
-                        $ref: '#/components/schemas/UUID'
-                    in: path
-                    required: true
-            responses:
-                '201':
-                    description: Gesuch Nachfrist erfolgreich vergeben
-                '400':
-                    $ref: '#/components/responses/BadRequest'
-                '401':
-                    $ref: '#/components/responses/Unauthorized'
-                '403':
-                    $ref: '#/components/responses/Forbidden'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-            operationId: gesuchNachfristBeantragen
-            summary: Einen Nachfrist von 30 Tagen beantragen fuer die Einreichung von Dokumenten
     '/ausbildungsstaette/{ausbildungsstaetteId}':
         get:
             tags:
@@ -810,6 +786,32 @@ paths:
                 '500':
                     $ref: '#/components/responses/ServerError'
             operationId: getSachbearbeitende
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdatenList'
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    description: Sachbearbeiter Stammdatenzuweisung updated
+                '202':
+                    description: Gesuch updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createOrUpdateSachbearbeiterStammdatenList
     '/benutzer/stammdaten/sachbearbeiter/{benutzerId}':
         get:
             tags:
@@ -907,7 +909,16 @@ components:
             type: string
         DokumentTyp:
             enum:
-                - PERSON_IN_AUSBILDUNG_DOK
+                - PERSON_NIEDERLASSUNGSSTATUS_C
+                - PERSON_NIEDERLASSUNGSSTATUS_B
+                - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+                - PERSON_KESB_ERNENNUNG
+                - PERSON_MIETVERTRAG
+                - PERSON_VERMOEGENSNACHWEIS_VORJAHR
+                - PERSON_SOZIALHILFEBUDGET
+                - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
+                - PERSON_AUSWEIS
+                - PERSON_VERMOEGENSNACHWEIS
                 - AUSBILDUNG_DOK
                 - ELTERN_DOK
                 - PARTNER_DOK
@@ -931,11 +942,23 @@ components:
             type: string
         Gesuchstatus:
             enum:
-                - OFFEN
-                - IN_BEARBEITUNG
-                - EINGEREICHT
-                - NICHT_KOMPLETT_EINGEREICHT
-                - NICHT_KOMPLETT_EINGEREICHT_NACHFRIST
+                - IN_BEARBEITUNG_GS
+                - KOMPLETT_EINGEREICHT
+                - BEREIT_FUER_BEARBEITUNG
+                - FEHLERHAFT
+                - IN_BEARBEITUNG_SB
+                - IN_REVIEW
+                - FEHLENDE_DOKUMENTE
+                - FEHLENDE_DOKUMENTE_NACHFRIST
+                - ZURUECKGEZOGEN
+                - ABKLAERUNG_MIT_GS
+                - IN_FREIGABE
+                - ZURUECKGEWIESEN
+                - WARTEN_AUF_UNTERSCHRIFTENBLATT
+                - NEGATIVER_ENTSCHEID
+                - VERFUEGT
+                - STIPENDIUM_AKZEPTIERT
+                - STIPENDIUM_AUSBEZAHLT
             type: string
         LocalDate:
             format: date
@@ -1007,6 +1030,8 @@ components:
                 filepfad:
                     type: string
                 filesize:
+                    type: string
+                timestampErstellt:
                     type: string
                 objectId:
                     description: ''
@@ -1664,7 +1689,6 @@ components:
                 - nationalitaet
                 - wohnsitz
                 - sozialhilfebeitraege
-                - quellenbesteuert
                 - korrespondenzSprache
             type: object
             properties:
@@ -1705,9 +1729,10 @@ components:
                 wohnsitzAnteilVater:
                     description: Required wenn Wohnsitz.MUTTER_VATER.
                     type: number
+                vermoegenVorjahr:
+                    description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+                    type: number
                 sozialhilfebeitraege:
-                    type: boolean
-                quellenbesteuert:
                     type: boolean
                 vormundschaft:
                     description: Required nur wenn Land = CH
@@ -2204,6 +2229,16 @@ components:
                 buchstabenFr:
                     description: ''
                     type: string
+        SachbearbeiterZuordnungStammdatenList:
+            description: ''
+            type: object
+            properties:
+                sachbearbeiter:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                zuordnung:
+                    $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                    description: ''
         Benutzereinstellungen:
           description: ''
           type: object

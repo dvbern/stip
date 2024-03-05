@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -61,6 +62,7 @@ public class BenutzerApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createOrUpdateSachbearbeiterStammdaten(),
+                createOrUpdateSachbearbeiterStammdatenList(),
                 getCurrentBenutzer(),
                 getSachbearbeitende(),
                 getSachbearbeiterStammdaten(),
@@ -70,6 +72,10 @@ public class BenutzerApiSpec {
 
     public CreateOrUpdateSachbearbeiterStammdatenOper createOrUpdateSachbearbeiterStammdaten() {
         return new CreateOrUpdateSachbearbeiterStammdatenOper(createReqSpec());
+    }
+
+    public CreateOrUpdateSachbearbeiterStammdatenListOper createOrUpdateSachbearbeiterStammdatenList() {
+        return new CreateOrUpdateSachbearbeiterStammdatenListOper(createReqSpec());
     }
 
     public GetCurrentBenutzerOper getCurrentBenutzer() {
@@ -167,6 +173,67 @@ public class BenutzerApiSpec {
          * @return operation
          */
         public CreateOrUpdateSachbearbeiterStammdatenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #body  (optional)
+     */
+    public static class CreateOrUpdateSachbearbeiterStammdatenListOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/benutzer/stammdaten/sachbearbeiter";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateOrUpdateSachbearbeiterStammdatenListOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /benutzer/stammdaten/sachbearbeiter
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param sachbearbeiterZuordnungStammdatenListDtoSpec (List&lt;SachbearbeiterZuordnungStammdatenListDtoSpec&gt;)  (optional)
+         * @return operation
+         */
+        public CreateOrUpdateSachbearbeiterStammdatenListOper body(List<SachbearbeiterZuordnungStammdatenListDtoSpec> sachbearbeiterZuordnungStammdatenListDtoSpec) {
+            reqSpec.setBody(sachbearbeiterZuordnungStammdatenListDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateOrUpdateSachbearbeiterStammdatenListOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateOrUpdateSachbearbeiterStammdatenListOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

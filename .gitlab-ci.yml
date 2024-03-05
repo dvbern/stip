@@ -18,9 +18,9 @@ frontend:
     strategy: depend
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.8.0'
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
     inputs:
       name: "deploy:dev"
       deployment-environment: "dev"
@@ -33,7 +33,7 @@ include:
       argocd-app-name: "$ARGOCD_APP"
 
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
     inputs:
       name: "deploy:uat"
       deployment-environment: "uat"
@@ -45,7 +45,7 @@ include:
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@24c4a3cb712e0022fad8d869437ef6984f6398df'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
     inputs:
       name: "deploy:prod"
       deployment-environment: "prod"
@@ -57,23 +57,19 @@ include:
       argocd-token: "$ARGOCD_TOKEN"
       argocd-app-name: "$ARGOCD_APP"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.1.6'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.8.0'
     inputs:
       review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@d6b31043c5d68cfd6b228576e3a00d7050a97c58'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@v0.8.0'
     inputs:
       git-mirror-clone-token: "$GITLAB_STIP_PULL_TOKEN"
       git-mirror-target: "dvbern/stip"
       mirror-on: "tag"
       mirror-when: "always"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-install@23fb5ca15e20adc66f4500cd855587afe1d24818'
-    inputs:
-      argocd-server: "$E2E_ARGOCD_SERVER"
-      argocd-token: "$E2E_ARGOCD_TOKEN"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@cf55885ecd45e626ce19275cc7be23f9cdde7e0d'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@v0.8.0'
     inputs:
       name: ".nx"
       e2e-test-package-version: '13.6.2'
@@ -81,6 +77,20 @@ include:
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
       e2e-test-image-version: v1.41.1-jammy
       install-e2e-test-package: 'false'
+
+.install-argocd:
+  tags: [ "zone:tz", "os:linux", "type:docker" ]
+  image:
+    name: docker-registry.dvbern.ch/devops/docker/tools/k8s/main
+    entrypoint: [ "" ]
+  variables:
+    ARGOCD_SERVER: "$E2E_ARGOCD_SERVER"
+    ARGOCD_AUTH_TOKEN: "$E2E_ARGOCD_TOKEN"
+  before_script:
+    - |
+      echo "Using ArgoCD Server at $E2E_ARGOCD_SERVER"
+      echo "$ARGOCD_SERVER"
+      curl -ksSL -o /usr/local/bin/argocd https://$E2E_ARGOCD_SERVER/download/argocd-linux-amd64
 
 start-e2e:
   stage: e2e

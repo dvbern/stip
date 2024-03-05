@@ -58,6 +58,7 @@ export * from './partnerUpdate';
 export * from './personInAusbildung';
 export * from './personInAusbildungUpdate';
 export * from './sachbearbeiterZuordnungStammdaten';
+export * from './sachbearbeiterZuordnungStammdatenList';
 export * from './sprache';
 export * from './taetigskeitsart';
 export * from './tenantAuthConfig';

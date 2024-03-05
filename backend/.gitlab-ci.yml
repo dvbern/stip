@@ -1,23 +1,21 @@
-stages: [ build, validate, test, analyze, package, deploy, mirror ]
+stages: [build, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@5ee978eeededdc1275eb9f200743ba14dfaf2c30'
-
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@v0.8.0'
     inputs:
       name: build-api
       context-dir: backend
       java-image-version: 17-jdk-alpine
       maven-goal: -Pcoverage install
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.1.4'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.7.2'
     inputs:
       sonar-scanner: maven
       context-dir: backend
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@6120775a65b6bb2eb2634da545a84a2cd62a3518'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
     inputs:
       name: api-image
       context-dir: backend

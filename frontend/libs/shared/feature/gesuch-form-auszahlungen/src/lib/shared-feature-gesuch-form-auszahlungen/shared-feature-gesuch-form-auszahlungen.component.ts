@@ -46,7 +46,7 @@ import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { calculateElternSituationGesuch } from '@dv/shared/util-fn/gesuch-util';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-gesuch-form-auszahlungen.selector';
 
@@ -108,7 +108,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     effect(
       () => {
         const { gesuchFormular } = this.view();
-        if (sharedUtilFnTypeGuardsIsDefined(gesuchFormular)) {
+        if (isDefined(gesuchFormular)) {
           const initalValue = gesuchFormular.auszahlung;
           this.form.patchValue({
             ...initalValue,

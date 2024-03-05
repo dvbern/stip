@@ -12,6 +12,13 @@ body {
   }
 }
 
+.fs-7 {
+  font-size: 0.875rem;
+}
+.fs-8 {
+  font-size: 0.75rem;
+}
+
 .btn {
   font-weight: 700;
   box-shadow:
@@ -28,7 +35,7 @@ body {
   }
 }
 
-.btn.btn-light.btn-nav {
+.btn.btn-nav {
   --dv-white-rgb: #7f7f8b;
   --dv-btn-color: #7f7f8b;
   --dv-btn-bg: transparent;
@@ -76,4 +83,8 @@ body {
 
 .card {
   --dv-card-bg: white;
+}
+
+.shadow {
+  box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.05) !important;
 }

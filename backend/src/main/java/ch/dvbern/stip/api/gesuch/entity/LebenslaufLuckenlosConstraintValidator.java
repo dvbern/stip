@@ -28,7 +28,7 @@ public class LebenslaufLuckenlosConstraintValidator
             lebenslaufItem -> dateRanges.add(new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
         );
         // Sort the Lebenslaufsitem Daterange
-        Collections.sort(dateRanges, Comparator.comparing(dateRange -> dateRange.getGueltigAb()));
+        Collections.sort(dateRanges, Comparator.comparing(DateRange::getGueltigAb));
 
         // Check if first Lebenslaufitem is After birth
         LocalDate currentDate = start;

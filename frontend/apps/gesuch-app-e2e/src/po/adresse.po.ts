@@ -32,8 +32,6 @@ export class AddressPO {
     await this.elems.plz.fill(adresse.plz);
     await this.elems.ort.fill(adresse.ort);
 
-    // await this.elems.coAdresse().type(adresse.coAdresse ?? '');
-
     await this.elems.landSelect.click();
     await this.elems.page.getByTestId(adresse.land).first().click();
   }

@@ -1,8 +1,16 @@
 package ch.dvbern.stip.api.common.validation;
 
+import java.util.regex.Pattern;
+
 public final class ValidationsConstant {
     public static final String EMAIL_VALIDATION_PATTERN = "^[a-z0-9]+[a-z0-9._-]*@[a-z0-9.-]+\\.[a-z]{2,4}$";
-    public static final String BUCHSTABEN_RANGE_VALIDATION_PATTERN = "([A-Z]-[A-Z]|[A-Z])(,([A-Z]-[A-Z]|[A-Z]))*";
+    private static final int BUCHSTABEN_RANGE_VALIDATION_MAX_LENGTH = 3;
+    public static final String BUCHSTABEN_RANGE_VALIDATION_STRING_PATTERN =
+        "([A-Z]{1,%1$s}-[A-Z]{1,%1$s}|[A-Z]{1,%1$s})(,([A-Z]{1,%1$s}-[A-Z]{1,%1$s}|[A-Z]{1,%1$s}))*".formatted(
+            BUCHSTABEN_RANGE_VALIDATION_MAX_LENGTH
+        );
+    public static final Pattern BUCHSTABEN_RANGE_VALIDATION_PATTERN =
+        Pattern.compile(BUCHSTABEN_RANGE_VALIDATION_STRING_PATTERN);
     public static final String VALIDATION_NACHNAME_NOTBLANK_MESSAGE =
         "{jakarta.validation.constraints.nachname.NotBlank.message}";
     public static final String VALIDATION_VORNAME_NOTBLANK_MESSAGE =
@@ -105,6 +113,9 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildungen.noOverlap}";
     public static final String VALIDATION_AUSBILDUNG_ENDDATE_AFTER_STARTDATE =
         "{jakarta.validation.constraints.ausbildung.endDate.after.message}";
+
+    public static final String VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.person.vermoegenVorjahr.required.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

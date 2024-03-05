@@ -22,7 +22,6 @@ setup('authenticate', async ({ page }) => {
   await page.getByLabel('Username or email').fill(username);
   await page.getByLabel('Password', { exact: true }).fill(password);
 
-  // todo: get from environment
   const responsePromise = page.waitForResponse(
     '**/realms/bern/protocol/openid-connect/token',
   );
