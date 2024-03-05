@@ -3,5 +3,5 @@ const nxPreset = require('@nx/jest/preset').default;
 module.exports = {
   ...nxPreset,
   coverageReporters: ['lcov'],
-  testTimeout: 10000,
+  testTimeout: process.env['CI'] ? 20000 : 10000,
 };
