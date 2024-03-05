@@ -7,7 +7,6 @@ const dvUserEventForMockedTimers = userEvent.setup({
     jest.runOnlyPendingTimers();
   },
 });
-export const LONG_RUNNING_TEST_TIMEOUT = 10000;
 
 /**
  * Return the correct user event depending on whether fake timers are used or not
