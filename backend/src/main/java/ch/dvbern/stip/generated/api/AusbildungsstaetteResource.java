@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import java.util.UUID;
 
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
@@ -28,4 +29,17 @@ public interface AusbildungsstaetteResource {
     @GET
     @Produces({ "application/json", "text/plain" })
     Response getAusbildungsstaetten();
+
+    @POST
+    @Consumes({"application/json", "text/plain"})
+    Response createAusbildungsstaette(@Valid @NotNull AusbildungsstaetteUpdateDto ausbildungsstaette);
+
+    @PUT
+    @Path("/{ausbildungsstaetteId}")
+    @Consumes({"application/json", "text/plain"})
+    Response updateAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId, @Valid @NotNull AusbildungsstaetteUpdateDto ausbildungsstaette);
+
+    @DELETE
+    @Path("/{ausbildungsstaetteId}")
+    Response deleteAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
 }
