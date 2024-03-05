@@ -1,6 +1,8 @@
 {
   "shared.search": "Suche",
   "shared.menu": "Menü",
+  "shared.menu.workedBy": "in Bearbeitung durch",
+  "shared.menu.dashboard": "Dashboard",
   "shared.close": "Schliesen",
   "shared.cancel": "Abrechen",
   "shared.accept": "Übernehmen",
@@ -131,7 +133,7 @@
   "shared.form.person.marital-status.label": "Zivilstand",
   "shared.form.person.marital-status.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
   "shared.form.person.guardianship.label": "Es besteht eine umfassende Beistandschaft",
-  "shared.form.person.tax-at-source.label": "Liegt eine Quellenbesteuerung vor?",
+  "shared.form.person.vermoegenVorjahr.label": "Vermögen per 31.12. des Vorjahrs",
   "shared.form.person.social-security.label": "Werden Sozialhilfebeiträge ausbezahlt?",
   "shared.form.person.digital-communication.label": "Ich erlaube die digitale Kommunikation",
   "shared.form.person.digital-communication.info": "Wenn Sie die digitale Kommunikation nicht erlauben, werden Sie ausschliesslich brieflich informiert, anstelle per E-Mail.",

@@ -304,7 +304,6 @@ function createEmptyPersonInAusbildung(): PersonInAusbildung {
     telefonnummer: '',
     wohnsitz: 'FAMILIE',
     nationalitaet: 'CH',
-    quellenbesteuert: false,
     heimatort: '',
     sozialhilfebeitraege: false,
     korrespondenzSprache: 'DEUTSCH',

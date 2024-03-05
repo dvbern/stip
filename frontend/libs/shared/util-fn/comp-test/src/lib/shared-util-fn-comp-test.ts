@@ -7,7 +7,6 @@ const dvUserEventForMockedTimers = userEvent.setup({
     jest.runOnlyPendingTimers();
   },
 });
-export const LONG_RUNNING_TEST_TIMEOUT = 10000;
 
 /**
  * Return the correct user event depending on whether fake timers are used or not
@@ -38,13 +37,7 @@ export async function clickMatSelectOption(
 }
 
 export async function clickFirstMatSelectOption(selectTestId: string) {
-  await prepareEvent().click(screen.getByTestId(selectTestId));
-  await waitFor(() =>
-    expect(screen.queryByRole('listbox')).toBeInTheDocument(),
-  );
-  const listbox = screen.getByRole('listbox');
-  const options = within(listbox).getAllByRole('option');
-  await prepareEvent().click(options[0]);
+  await clickMatSelectOptionByIndex(selectTestId, 0);
 }
 
 export async function clickMatSelectOptionByIndex(

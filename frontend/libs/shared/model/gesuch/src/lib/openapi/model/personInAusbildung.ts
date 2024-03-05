@@ -43,8 +43,11 @@ export interface PersonInAusbildung {
    * Required wenn Wohnsitz.MUTTER_VATER.
    */
   wohnsitzAnteilVater?: number;
+  /**
+   * Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+   */
+  vermoegenVorjahr?: number;
   sozialhilfebeitraege: boolean;
-  quellenbesteuert: boolean;
   /**
    * Required nur wenn Land = CH
    */

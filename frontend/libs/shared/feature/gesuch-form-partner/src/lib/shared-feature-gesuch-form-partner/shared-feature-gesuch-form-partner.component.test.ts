@@ -23,7 +23,7 @@ async function setup() {
             language: 'de',
           },
           gesuch: null,
-          gesuchFormulasr: {
+          gesuchFormular: {
             partner: {} as PartnerUpdate,
           } as GesuchFormular,
           gesuchs: [],

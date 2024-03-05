@@ -1689,7 +1689,6 @@ components:
                 - nationalitaet
                 - wohnsitz
                 - sozialhilfebeitraege
-                - quellenbesteuert
                 - korrespondenzSprache
             type: object
             properties:
@@ -1730,9 +1729,10 @@ components:
                 wohnsitzAnteilVater:
                     description: Required wenn Wohnsitz.MUTTER_VATER.
                     type: number
+                vermoegenVorjahr:
+                    description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+                    type: number
                 sozialhilfebeitraege:
-                    type: boolean
-                quellenbesteuert:
                     type: boolean
                 vormundschaft:
                     description: Required nur wenn Land = CH

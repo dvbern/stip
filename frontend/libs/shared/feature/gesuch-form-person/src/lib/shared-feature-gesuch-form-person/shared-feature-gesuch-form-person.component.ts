@@ -70,6 +70,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
@@ -142,6 +146,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   isSozialversicherungsnummerInfoShown = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
+  maskitoNumber = maskitoNumber;
   auslaenderausweisDocumentOptionsSig = computed<DocumentOptions | null>(() => {
     const gesuch = this.viewSig().gesuch;
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
@@ -306,7 +311,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       validators: Validators.required,
     }),
     ...addWohnsitzControls(this.formBuilder),
-    quellenbesteuert: [<boolean | null>null, [Validators.required]],
+    vermoegenVorjahr: [<string | undefined>undefined, [Validators.required]],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
@@ -391,6 +396,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           };
           this.form.patchValue({
             ...personForForm,
+            vermoegenVorjahr: person.vermoegenVorjahr?.toString(),
             ...wohnsitzAnteileString(person),
           });
         } else {
@@ -498,6 +504,21 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    effect(
+      () => {
+        const niederlassungsstatus = this.niederlassungsstatusChangedSig();
+        const plz = this.plzChangedSig();
+
+        this.updateVisibilityAndDisabledState(
+          this.form.controls.vermoegenVorjahr,
+          isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
+            (!!plz && !isFromBern(plz)),
+          this.viewSig().readonly,
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
     const einreisedatumChangedSig = toSignal(
       this.form.controls.einreisedatum.valueChanges,
     );
@@ -591,7 +612,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const { gesuch, gesuchFormular } = this.viewSig();
     const values = convertTempFormToRealValues(this.form, [
       'nationalitaet',
-      'quellenbesteuert',
       'sozialhilfebeitraege',
     ]);
     return {
@@ -615,6 +635,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             this.languageSig(),
             new Date(),
           ),
+          vermoegenVorjahr: fromFormatedNumber(values.vermoegenVorjahr),
           ...wohnsitzAnteileNumber(values),
         },
       },
@@ -650,4 +671,20 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       return hiddenFieldsSet;
     });
   }
+}
+
+export function isFluechtlingOrHasAusweisB(
+  niederlassungsstatus?: Niederlassungsstatus,
+) {
+  return (
+    !!niederlassungsstatus &&
+    [
+      Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B,
+      Niederlassungsstatus.FLUECHTLING,
+    ].includes(niederlassungsstatus)
+  );
+}
+
+export function isFromBern(plz?: string) {
+  return !!plz && +plz < 4000 && +plz >= 3000;
 }
