@@ -26,7 +26,6 @@ export class PersonPO {
     vorumundschaftCheckbox: Locator;
     zivilstandSelect: Locator;
     wohnsitzSelect: Locator;
-    quellenbesteuertRadio: Locator;
     sozialhilfeBeitraegeRadio: Locator;
     korrespondenzSpracheRadio: Locator;
     niederlassungsstatusSelect: Locator;
@@ -62,7 +61,6 @@ export class PersonPO {
       vorumundschaftCheckbox: page.getByTestId('form-person-vorumundschaft'),
       zivilstandSelect: page.getByTestId('form-person-zivilstand'),
       wohnsitzSelect: page.getByTestId('form-person-wohnsitz'),
-      quellenbesteuertRadio: page.getByTestId('form-person-quellenbesteuert'),
       sozialhilfeBeitraegeRadio: page.getByTestId(
         'form-person-sozialhilfeBeitraege',
       ),
@@ -110,11 +108,6 @@ export class PersonPO {
 
     await this.elems.wohnsitzSelect.click();
     await this.elems.page.getByTestId(person.wohnsitz).click();
-
-    await selectMatRadio(
-      this.elems.quellenbesteuertRadio,
-      person.quellenbesteuert,
-    );
 
     await selectMatRadio(
       this.elems.sozialhilfeBeitraegeRadio,
