@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,15 +9,18 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -24,7 +28,6 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -34,8 +37,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.instancio.Select.field;
 
@@ -49,6 +54,7 @@ class GesuchResourceTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
+    private UUID gesuchFormularId;
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -142,6 +148,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -154,6 +162,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -166,6 +176,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -178,6 +190,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -190,6 +204,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -215,6 +231,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -227,18 +245,32 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(14)
     void testUpdateGesuchAddElternEndpoint() {
+        final var vater = Instancio.of(ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel).create().get(0);
+        final var mutter = Instancio.of(ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel).create().get(0);
+        mutter.setElternTyp(ElternTypDtoSpec.MUTTER);
+        mutter.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
+
         var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecElternsModel).create();
+        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>() {{
+            add(vater);
+            add(mutter);
+        }});
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -262,6 +294,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -274,6 +308,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -286,6 +322,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
     }
 
     @Test
@@ -308,8 +346,10 @@ class GesuchResourceTest {
             is(geschwisterNameUpdateTest)
         );
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems().size(), is(1));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), is(1));
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), is(2));
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getKinds().size(), is(1));
+
+        validatePage();
     }
 
     @Test
@@ -343,17 +383,7 @@ class GesuchResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(20)
-    void testGesuchEinreichenValidationError() {
-        var validationReport = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode())
-            .extract()
-            .body()
-            .as(ValidationReportDtoSpec.class);
-        assertThat(validationReport.getValidationErrors().size(), greaterThan(0));
-
+    void testGesuchEinreichenNoValidationError() {
         var validationReportFromService = gesuchApiSpec.gesuchEinreichenValidieren().gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -363,10 +393,13 @@ class GesuchResourceTest {
             .body()
             .as(ValidationReportDtoSpec.class);
 
-        Assertions.assertThat(validationReport)
-            .usingRecursiveComparison()
-            .ignoringCollectionOrder()
-            .isEqualTo(validationReportFromService);
+        assertThat(validationReportFromService.getValidationErrors().size(), not(greaterThan(0)));
+
+        gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
     }
 
     @Test
@@ -397,6 +430,33 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    private void validatePage() {
+        if (gesuchFormularId == null) {
+            final var gesuch = gesuchApiSpec.getGesuch()
+                .gesuchIdPath(gesuchId)
+                .execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .as(GesuchDtoSpec.class);
+
+            gesuchFormularId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getId();
+        }
+
+        final var report = gesuchApiSpec
+            .validateGesuchPages()
+            .gesuchFormularIdPath(gesuchFormularId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(ValidationReportDto.class);
+
+        assertThat(report.getValidationErrors(), is(empty()));
     }
 
     private Optional<GesuchDtoSpec> findGesuchWithId(GesuchDtoSpec[] gesuche, UUID gesuchId) {

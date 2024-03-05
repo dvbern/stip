@@ -32,6 +32,6 @@ public class UniqueSvNumberConstraintValidator
     private boolean hasDuplicates(List<String> svNumbers) {
         Set<String> svNumberSet = new HashSet<>();
         return svNumbers.stream()
-            .anyMatch(number -> !svNumberSet.add(number));
+            .anyMatch(number -> !svNumberSet.add(number) && number != null);
     }
 }

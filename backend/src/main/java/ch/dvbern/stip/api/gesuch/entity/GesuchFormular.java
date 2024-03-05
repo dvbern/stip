@@ -23,10 +23,20 @@ import java.util.Set;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.ElternPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.FamiliensituationPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.GeschwisterPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -48,16 +58,46 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
-@FamiliensituationElternEntityRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@LebenslaufLuckenlosConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenAlimenteRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenRentenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenZulagenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@EinnahmenKostenDarlehenRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@AusbildungskostenStufeRequiredConstraint(groups = GesuchEinreichenValidationGroup.class)
-@LebenslaufAusbildungUeberschneidenConstraint(groups = GesuchEinreichenValidationGroup.class)
-@PartnerNullRequiredWhenAlleinstehendConstraint(groups = GesuchEinreichenValidationGroup.class)
-@AlimenteRequiredWhenAlimenteregelungConstraint(groups = GesuchEinreichenValidationGroup.class)
+@FamiliensituationElternEntityRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    ElternPageValidation.class
+})
+@LebenslaufLuckenlosConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    LebenslaufItemPageValidation.class
+})
+@EinnahmenKostenAlimenteRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@EinnahmenKostenRentenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@EinnahmenKostenZulagenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@EinnahmenKostenDarlehenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@AusbildungskostenStufeRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
+@LebenslaufAusbildungUeberschneidenConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    LebenslaufItemPageValidation.class
+})
+@PartnerNullRequiredWhenAlleinstehendConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    PartnerPageValidation.class
+})
+@AlimenteRequiredWhenAlimenteregelungConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+})
 @NoOverlapInAusbildungenConstraint
 @UniqueSvNumberConstraint
 @Entity
@@ -77,52 +117,62 @@ public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"), nullable = true)
+    @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"), nullable = true)
+    @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Ausbildung ausbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"), nullable = true)
+    @HasPageValidation(FamiliensituationPageValidation.class)
     private @Valid Familiensituation familiensituation;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
+    @HasPageValidation(PartnerPageValidation.class)
     private @Valid Partner partner;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
+    @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Auszahlung auszahlung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"), nullable = true)
+    @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("von")
+    @HasPageValidation(LebenslaufItemPageValidation.class)
     private Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
+    @HasPageValidation(GeschwisterPageValidation.class)
     private Set<Geschwister> geschwisters = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @HasPageValidation(ElternPageValidation.class)
     private Set<Eltern> elterns = new LinkedHashSet<>();
 
     @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
+    @HasPageValidation(KindPageValidation.class)
     private Set<Kind> kinds = new LinkedHashSet<>();
 }

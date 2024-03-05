@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -40,6 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchFormularDtoSpec
  */
 @JsonPropertyOrder({
+  GesuchFormularDtoSpec.JSON_PROPERTY_ID,
   GesuchFormularDtoSpec.JSON_PROPERTY_AUSBILDUNG,
   GesuchFormularDtoSpec.JSON_PROPERTY_PERSON_IN_AUSBILDUNG,
   GesuchFormularDtoSpec.JSON_PROPERTY_FAMILIENSITUATION,
@@ -54,6 +56,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("GesuchFormular")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchFormularDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
   private AusbildungDtoSpec ausbildung;
 
@@ -86,6 +91,32 @@ public class GesuchFormularDtoSpec {
 
   public GesuchFormularDtoSpec() {
   }
+
+  public GesuchFormularDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   public GesuchFormularDtoSpec ausbildung(AusbildungDtoSpec ausbildung) {
     
@@ -387,7 +418,8 @@ public class GesuchFormularDtoSpec {
       return false;
     }
     GesuchFormularDtoSpec gesuchFormular = (GesuchFormularDtoSpec) o;
-    return Objects.equals(this.ausbildung, gesuchFormular.ausbildung) &&
+    return Objects.equals(this.id, gesuchFormular.id) &&
+        Objects.equals(this.ausbildung, gesuchFormular.ausbildung) &&
         Objects.equals(this.personInAusbildung, gesuchFormular.personInAusbildung) &&
         Objects.equals(this.familiensituation, gesuchFormular.familiensituation) &&
         Objects.equals(this.partner, gesuchFormular.partner) &&
@@ -401,13 +433,14 @@ public class GesuchFormularDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten);
+    return Objects.hash(id, ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchFormularDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");

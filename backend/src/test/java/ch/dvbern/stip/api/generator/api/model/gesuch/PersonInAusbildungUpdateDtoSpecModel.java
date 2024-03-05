@@ -7,6 +7,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
+import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
 import org.instancio.Assign;
 import org.instancio.Instancio;
 import org.instancio.Model;
@@ -21,6 +22,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             .set(
                 field(PersonInAusbildungUpdateDtoSpec::getAdresse),
                 Instancio.create(AdresseSpecModel.adresseSpecModel))
+            .set(field(PersonInAusbildungUpdateDtoSpec::getZivilstand), ZivilstandDtoSpec.VERHEIRATET)
             .set(field(PersonInAusbildungUpdateDtoSpec::getIdentischerZivilrechtlicherWohnsitz), false)
             .set(field(PersonInAusbildungUpdateDtoSpec::getNationalitaet), LandDtoSpec.CH)
             .set(field(PersonInAusbildungUpdateDtoSpec::getWohnsitz), WohnsitzDtoSpec.MUTTER_VATER)
@@ -34,11 +36,9 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
                 field(PersonInAusbildungUpdateDtoSpec::getVorname),
                 gen -> gen.oneOf("Sarah", "Elijah", "Nu'ab", "André", "Özgür")
             )
-            .generate(
+            .set(
                 field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
-                gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1,
-                    1
-                ))
+                LocalDate.now().minusYears(16)
             )
             .generate(
                 field(PersonInAusbildungUpdateDtoSpec::getNachname),
