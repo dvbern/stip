@@ -54,7 +54,6 @@ class GesuchResourceTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
-    private UUID gesuchFormularId;
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -433,22 +432,9 @@ class GesuchResourceTest {
     }
 
     private void validatePage() {
-        if (gesuchFormularId == null) {
-            final var gesuch = gesuchApiSpec.getGesuch()
-                .gesuchIdPath(gesuchId)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .as(GesuchDtoSpec.class);
-
-            gesuchFormularId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getId();
-        }
-
         final var report = gesuchApiSpec
             .validateGesuchPages()
-            .gesuchFormularIdPath(gesuchFormularId)
+            .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()

@@ -79,13 +79,13 @@ public class ValidationApiSpec {
      * 
      * 
      *
-     * @see #gesuchFormularIdPath  (required)
+     * @see #gesuchIdPath  (required)
      * return ValidationReportDtoSpec
      */
     public static class ValidateGesuchPagesOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/validatePages/{gesuchFormularId}";
+        public static final String REQ_URI = "/gesuch/validatePages/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -97,7 +97,7 @@ public class ValidationApiSpec {
         }
 
         /**
-         * GET /gesuch/validatePages/{gesuchFormularId}
+         * GET /gesuch/validatePages/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -108,7 +108,7 @@ public class ValidationApiSpec {
         }
 
         /**
-         * GET /gesuch/validatePages/{gesuchFormularId}
+         * GET /gesuch/validatePages/{gesuchId}
          * @param handler handler
          * @return ValidationReportDtoSpec
          */
@@ -117,14 +117,14 @@ public class ValidationApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_FORMULAR_ID_PATH = "gesuchFormularId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param gesuchFormularId (UUID)  (required)
+         * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public ValidateGesuchPagesOper gesuchFormularIdPath(Object gesuchFormularId) {
-            reqSpec.addPathParam(GESUCH_FORMULAR_ID_PATH, gesuchFormularId);
+        public ValidateGesuchPagesOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
