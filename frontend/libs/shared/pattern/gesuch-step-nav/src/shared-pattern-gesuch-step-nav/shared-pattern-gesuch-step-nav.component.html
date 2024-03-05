@@ -1,18 +1,17 @@
-@for (step of steps; track trackByIndex($index)) {
-  @if ({ active: route.isActive(step.route, false) }; as stepRoute) {
-    <a
-      type="button"
-      class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
-      [class.btn-light]="!stepRoute.active"
-      [class.shadow-none]="!stepRoute.active"
-      [class.disabled]="step.disabled"
-      [routerLink]="['/', 'gesuch', step.route, viewSig().gesuch?.id]"
-      [attr.data-testid]="'step-nav-' + step.route"
-    >
-      <i class="material-symbols-rounded me-3">{{ step.iconSymbolName }}</i>
-      <span class="text-start">
-        {{ step.translationKey | translate }}
-      </span>
-    </a>
-  }
+@for (step of stepsViewSig(); track $index) {
+  <a
+    type="button"
+    class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+    [class.btn-light]="!step.isActive"
+    [class.shadow-none]="!step.isActive"
+    [class.active]="step.isActive"
+    [class.disabled]="step.disabled"
+    [routerLink]="['/', 'gesuch', step.route, viewSig().gesuch?.id]"
+    [attr.data-testid]="'step-nav-' + step.route"
+  >
+    <i class="material-symbols-rounded me-3">{{ step.iconSymbolName }}</i>
+    <span class="text-start">
+      {{ step.translationKey | translate }}
+    </span>
+  </a>
 }

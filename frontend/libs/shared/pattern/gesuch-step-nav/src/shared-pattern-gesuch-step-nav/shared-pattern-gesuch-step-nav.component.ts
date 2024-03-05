@@ -2,9 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   Output,
+  computed,
   inject,
+  input,
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -31,9 +32,23 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
 export class SharedPatternGesuchStepNavComponent {
   private store = inject(Store);
 
-  @Input() steps!: (SharedModelGesuchFormStep & {
-    disabled: boolean;
-  })[];
+  stepsSig = input<
+    (SharedModelGesuchFormStep & {
+      disabled: boolean;
+    })[]
+  >();
+  stepsViewSig = computed(
+    () =>
+      this.stepsSig()?.map((step) => ({
+        ...step,
+        isActive: this.route.isActive(`gesuch/${step.route}`, {
+          paths: 'subset',
+          queryParams: 'ignored',
+          fragment: 'ignored',
+          matrixParams: 'ignored',
+        }),
+      })),
+  );
   @Output() navClicked = new EventEmitter();
 
   route = inject(Router);

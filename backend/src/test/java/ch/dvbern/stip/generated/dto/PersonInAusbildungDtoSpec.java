@@ -52,8 +52,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungDtoSpec.JSON_PROPERTY_WOHNSITZ,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
+  PersonInAusbildungDtoSpec.JSON_PROPERTY_VERMOEGEN_VORJAHR,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
-  PersonInAusbildungDtoSpec.JSON_PROPERTY_QUELLENBESTEUERT,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_VORMUNDSCHAFT,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_NACHNAME,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT,
@@ -111,11 +111,11 @@ public class PersonInAusbildungDtoSpec {
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER = "wohnsitzAnteilVater";
   private BigDecimal wohnsitzAnteilVater;
 
+  public static final String JSON_PROPERTY_VERMOEGEN_VORJAHR = "vermoegenVorjahr";
+  private BigDecimal vermoegenVorjahr;
+
   public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
   private Boolean sozialhilfebeitraege;
-
-  public static final String JSON_PROPERTY_QUELLENBESTEUERT = "quellenbesteuert";
-  private Boolean quellenbesteuert;
 
   public static final String JSON_PROPERTY_VORMUNDSCHAFT = "vormundschaft";
   private Boolean vormundschaft;
@@ -551,6 +551,32 @@ public class PersonInAusbildungDtoSpec {
   }
 
 
+  public PersonInAusbildungDtoSpec vermoegenVorjahr(BigDecimal vermoegenVorjahr) {
+    
+    this.vermoegenVorjahr = vermoegenVorjahr;
+    return this;
+  }
+
+   /**
+   * Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+   * @return vermoegenVorjahr
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERMOEGEN_VORJAHR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public BigDecimal getVermoegenVorjahr() {
+    return vermoegenVorjahr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMOEGEN_VORJAHR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVermoegenVorjahr(BigDecimal vermoegenVorjahr) {
+    this.vermoegenVorjahr = vermoegenVorjahr;
+  }
+
+
   public PersonInAusbildungDtoSpec sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     
     this.sozialhilfebeitraege = sozialhilfebeitraege;
@@ -574,32 +600,6 @@ public class PersonInAusbildungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
-  }
-
-
-  public PersonInAusbildungDtoSpec quellenbesteuert(Boolean quellenbesteuert) {
-    
-    this.quellenbesteuert = quellenbesteuert;
-    return this;
-  }
-
-   /**
-   * Get quellenbesteuert
-   * @return quellenbesteuert
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_QUELLENBESTEUERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getQuellenbesteuert() {
-    return quellenbesteuert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_QUELLENBESTEUERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setQuellenbesteuert(Boolean quellenbesteuert) {
-    this.quellenbesteuert = quellenbesteuert;
   }
 
 
@@ -757,8 +757,8 @@ public class PersonInAusbildungDtoSpec {
         Objects.equals(this.wohnsitz, personInAusbildung.wohnsitz) &&
         Objects.equals(this.wohnsitzAnteilMutter, personInAusbildung.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, personInAusbildung.wohnsitzAnteilVater) &&
+        Objects.equals(this.vermoegenVorjahr, personInAusbildung.vermoegenVorjahr) &&
         Objects.equals(this.sozialhilfebeitraege, personInAusbildung.sozialhilfebeitraege) &&
-        Objects.equals(this.quellenbesteuert, personInAusbildung.quellenbesteuert) &&
         Objects.equals(this.vormundschaft, personInAusbildung.vormundschaft) &&
         Objects.equals(this.nachname, personInAusbildung.nachname) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, personInAusbildung.identischerZivilrechtlicherWohnsitzOrt) &&
@@ -768,7 +768,7 @@ public class PersonInAusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, quellenbesteuert, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, vermoegenVorjahr, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
   }
 
   @Override
@@ -791,8 +791,8 @@ public class PersonInAusbildungDtoSpec {
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    vermoegenVorjahr: ").append(toIndentedString(vermoegenVorjahr)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
-    sb.append("    quellenbesteuert: ").append(toIndentedString(quellenbesteuert)).append("\n");
     sb.append("    vormundschaft: ").append(toIndentedString(vormundschaft)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");

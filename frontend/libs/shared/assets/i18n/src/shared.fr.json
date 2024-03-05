@@ -1,6 +1,8 @@
 {
   "shared.search": "Search",
   "shared.menu": "Menu",
+  "shared.menu.workedBy": "en cours de traitement par",
+  "shared.menu.dashboard": "Dashboard",
   "shared.close": "Close",
   "shared.cancel": "Cancel",
   "shared.accept": "Accept",
@@ -130,7 +132,7 @@
   "shared.form.person.marital-status.label": "Marital status",
   "shared.form.person.marital-status.ledig.info": "If you have been in a relationship for 5 years or longer, please select \"Concubinage\".",
   "shared.form.person.guardianship.label": "Il y a une curatelle de portée générale",
-  "shared.form.person.tax-at-source.label": "Existe-t-il une imposition à la source?",
+  "shared.form.person.vermoegenVorjahr.label": "Fortune au 31.12. de l'année précédente",
   "shared.form.person.social-security.label": "Des contributions d'aide sociale sont-elles versées?",
   "shared.form.person.digital-communication.label": "I agree to receive digital communication",
   "shared.form.person.digital-communication.info": "If you do not allow digital communication, you will only be informed by letter instead of by e-mail.",

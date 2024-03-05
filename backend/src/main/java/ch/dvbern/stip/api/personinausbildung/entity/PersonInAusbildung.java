@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -27,6 +28,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +58,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @LandCHRequiredConstraint
 @NiederlassungsstatusRequiredConstraint
 @EinreisedatumRequiredIfNiederlassungsstatusConstraint
+@VermoegenVorjahrRequiredConstraint
 @Entity
 @Table(indexes = {
     @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
@@ -129,11 +132,11 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @Column(nullable = false)
-    private boolean quellenbesteuert = true;
-
-    @NotNull
-    @Column(nullable = false)
     private boolean vormundschaft = false;
+
+    @Nullable
+    @Column(nullable = true)
+    private BigDecimal vermoegenVorjahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)
