@@ -167,9 +167,17 @@ public class GesuchService {
         return new ValidationReportDto();
     }
 
-    public ValidationReportDto validatePages(UUID gesuchFormularId) {
-        final var gesuch = gesuchFormularRepository.requireById(gesuchFormularId);
+    public ValidationReportDto validatePages(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         return validatePages(gesuch);
+    }
+
+    public ValidationReportDto validatePages(final Gesuch gesuch) {
+        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular();
+
+        return validatePages(formular);
     }
 
     public ValidationReportDto validatePages(GesuchFormular gesuchFormular) {
