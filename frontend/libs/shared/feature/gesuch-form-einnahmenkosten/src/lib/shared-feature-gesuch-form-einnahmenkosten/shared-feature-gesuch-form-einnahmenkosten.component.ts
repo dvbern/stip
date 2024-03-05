@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -57,6 +58,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
   selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   standalone: true,
   imports: [
+    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -210,7 +212,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         );
         this.setDisabledStateAndHide(
           this.form.controls.auswaertigeMittagessenProWoche,
-          !wohnsitzNotEigenerHaushalt,
+          wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.wohnkosten,
