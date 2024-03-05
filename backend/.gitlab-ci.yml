@@ -1,7 +1,7 @@
 stages: [build, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@c1f7b4f4ab9ac378a6dc45fec61a5a2cc5790d84'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/maven@v0.8.0'
     inputs:
       name: build-api
       context-dir: backend
@@ -15,7 +15,7 @@ include:
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@845c46f8a47d12b4806d13a8bc01c2f743f35710'
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
     inputs:
       name: api-image
       context-dir: backend
