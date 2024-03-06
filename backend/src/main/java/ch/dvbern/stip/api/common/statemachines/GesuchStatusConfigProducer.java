@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.common.statemachines;
 
-import java.util.EnumSet;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -89,10 +88,10 @@ public class GesuchStatusConfigProducer {
         config.configure(Gesuchstatus.NEGATIVER_ENTSCHEID);
         config.configure(Gesuchstatus.ZURUECKGEZOGEN);
 
-        for (final var status : EnumSet.allOf(Gesuchstatus.class)) {
+        for (final var status : Gesuchstatus.values()) {
             var state = config.getRepresentation(status);
             if (state == null) {
-                LOG.warn("Status '{}' ist nicht in der State Machine abgebildet", status);
+                LOG.error("Status '{}' ist nicht in der State Machine abgebildet", status);
                 continue;
             }
 

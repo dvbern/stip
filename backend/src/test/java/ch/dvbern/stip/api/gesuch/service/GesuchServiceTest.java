@@ -760,6 +760,25 @@ class GesuchServiceTest {
         );
     }
 
+    @Test
+    @TestAsGesuchsteller
+    void gesuchEinreichenTest() {
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuchFormular()
+            .getAusbildung()
+            .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+
+        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
+
+        MatcherAssert.assertThat(
+            tranche.getGesuch().getGesuchStatus(),
+            Matchers.is(Gesuchstatus.KOMPLETT_EINGEREICHT)
+        );
+    }
+
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         return gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
