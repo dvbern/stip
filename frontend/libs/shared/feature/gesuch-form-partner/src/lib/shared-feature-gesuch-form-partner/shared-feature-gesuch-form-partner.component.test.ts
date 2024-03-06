@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
+import { GesuchFormular, PartnerUpdate } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { checkMatCheckbox } from '@dv/shared/util-fn/comp-test';
 
@@ -18,10 +19,22 @@ async function setup() {
     providers: [
       provideMockStore({
         initialState: {
+          language: {
+            language: 'de',
+          },
+          gesuch: null,
+          gesuchFormular: {
+            partner: {} as PartnerUpdate,
+          } as GesuchFormular,
           gesuchs: {
             cache: {
               gesuchFormular: null,
             },
+          },
+          loading: false,
+          error: undefined,
+          stammdatens: {
+            laender: [],
           },
         },
       }),

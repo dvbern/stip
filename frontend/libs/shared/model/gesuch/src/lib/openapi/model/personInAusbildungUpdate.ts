@@ -10,12 +10,12 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
-import { Anrede } from './anrede';
-import { Land } from './land';
 import { Niederlassungsstatus } from './niederlassungsstatus';
 import { Sprache } from './sprache';
-import { Wohnsitz } from './wohnsitz';
 import { Zivilstand } from './zivilstand';
+import { Anrede } from './anrede';
+import { Land } from './land';
+import { Wohnsitz } from './wohnsitz';
 
 export interface PersonInAusbildungUpdate {
   adresse: Adresse;
@@ -43,8 +43,11 @@ export interface PersonInAusbildungUpdate {
    * Required wenn Wohnsitz.MUTTER_VATER.
    */
   wohnsitzAnteilVater?: number;
+  /**
+   * Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+   */
+  vermoegenVorjahr?: number;
   sozialhilfebeitraege: boolean;
-  quellenbesteuert: boolean;
   /**
    * Required nur wenn Land = CH
    */
