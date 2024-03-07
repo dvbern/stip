@@ -81,6 +81,13 @@
   "shared.dokumente.table.delete": "Supprimer",
   "shared.dokumente.table.upload": "Télécharger",
 
+  "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.zulagen.required.message}": "Veuillez remplir le champ \"Allocations pour enfants\" dans les recettes et les coûts.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.partner.not.null.required.message}": "Veuillez remplir les informations sur le conjoint / concubin.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Veuillez remplir les informations sur les parents.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Veuillez remplir le champ \"Pensions\" dans les recettes et les coûts.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "La section \"{{section}}\" n'est pas complète.",
+
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
   "shared.form.gonext": "Continuer",

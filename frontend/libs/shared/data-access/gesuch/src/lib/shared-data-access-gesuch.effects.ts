@@ -257,6 +257,29 @@ export const removeGesuch = createEffect(
   { functional: true },
 );
 
+export const gesuchValidateSteps = createEffect(
+  (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+    return events$.pipe(
+      ofType(SharedDataAccessGesuchEvents.gesuchValidateSteps),
+      switchMap(({ id: gesuchId }) =>
+        gesuchService.validateGesuchPages$({ gesuchId }).pipe(
+          switchMap((validation) => [
+            SharedDataAccessGesuchEvents.gesuchValidationSuccess({
+              error: sharedUtilFnErrorTransformer({ error: validation }),
+            }),
+          ]),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gesuchValidationFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        ),
+      ),
+    );
+  },
+  { functional: true },
+);
+
 export const redirectToGesuchForm = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
@@ -320,6 +343,7 @@ export const sharedDataAccessGesuchEffects = {
   updateGesuch,
   updateGesuchSubform,
   removeGesuch,
+  gesuchValidateSteps,
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,

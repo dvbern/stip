@@ -20,6 +20,12 @@ describe('selectSharedDataAccessDokumentesView', () => {
       cache: {
         gesuchFormular: null,
       },
+      lastUpdate: null,
+      validations: [],
+      invalidFormularProps: {
+        lastUpdate: null,
+        validations: [],
+      },
     };
     const result = selectSharedDataAccessDokumentesView.projector(
       state,

@@ -1,4 +1,8 @@
-import { SharedModelGesuchFormular, Zivilstand } from '@dv/shared/model/gesuch';
+import {
+  SharedModelGesuchFormular,
+  SharedModelGesuchFormularProps,
+  Zivilstand,
+} from '@dv/shared/model/gesuch';
 
 import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 
@@ -136,8 +140,9 @@ export const isStepDisabled = (
 export const isStepValid = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
+  invalidProps: SharedModelGesuchFormularProps[],
 ) => {
-  const stepFieldMap: Record<string, keyof SharedModelGesuchFormular> = {
+  const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
     [PERSON.route]: 'personInAusbildung',
     [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
@@ -150,6 +155,5 @@ export const isStepValid = (
     [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
   };
   const field = stepFieldMap[step.route];
-  // TODO: add validation from API or run frontend validators somehow
-  return formular?.[field] ? true : undefined;
+  return formular?.[field] ? !invalidProps.includes(field) : undefined;
 };

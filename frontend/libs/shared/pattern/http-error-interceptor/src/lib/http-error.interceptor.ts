@@ -1,28 +1,11 @@
-import {
-  HttpContext,
-  HttpContextToken,
-  HttpHandlerFn,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { EMPTY, catchError, of, throwError } from 'rxjs';
 
 import { SharedDataAccessGlobalNotificationEvents } from '@dv/shared/data-access/global-notification';
+import { IGNORE_ERRORS } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
-
-const IGNORE_ERRORS = new HttpContextToken<boolean>(() => false);
-
-/**
- * Set this context to ignore errors in the request error interceptor
- */
-export const shouldIgnoreErrorsIf = (
-  ignore: boolean,
-  context: HttpContext = new HttpContext(),
-) => {
-  return context.set(IGNORE_ERRORS, ignore);
-};
 
 export interface DvGlobalHttpErrorInterceptorFnOptions {
   /*

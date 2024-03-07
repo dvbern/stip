@@ -13,28 +13,33 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
+  ValidationError,
 } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 export interface State {
+  validations: ValidationError[] | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   gesuchs: SharedModelGesuch[];
   cache: {
     gesuchFormular: SharedModelGesuchFormular | null;
   };
+  lastUpdate: string | null;
   loading: boolean;
   error: SharedModelError | undefined;
 }
 
 const initialState: State = {
+  validations: null,
   gesuch: null,
   gesuchFormular: null,
   gesuchs: [],
   cache: {
     gesuchFormular: null,
   },
+  lastUpdate: null,
   loading: false,
   error: undefined,
 };
@@ -143,6 +148,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       (state): State => ({
         ...state,
+        lastUpdate: new Date().toISOString(),
         loading: false,
         error: undefined,
       }),
@@ -152,7 +158,21 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess,
       (state): State => ({
         ...state,
+        lastUpdate: new Date().toISOString(),
         error: undefined,
+      }),
+    ),
+
+    on(
+      SharedDataAccessGesuchEvents.gesuchValidationSuccess,
+      (state, { error }): State => ({
+        ...state,
+        validations:
+          error.type === 'validationError'
+            ? _mock(error.validationErrors)
+            : null,
+        loading: false,
+        error: error.type === 'validationError' ? undefined : error,
       }),
     ),
 
@@ -187,4 +207,11 @@ const getGesuchFormular = (
   gesuch: SharedModelGesuch,
 ): SharedModelGesuchFormular | null => {
   return gesuch.gesuchTrancheToWorkWith.gesuchFormular ?? null;
+};
+
+const _mock = <T extends { propertyPath?: string }>(errors: T[]) => {
+  return errors.map((v) => ({
+    ...v,
+    propertyPath: v.propertyPath || ('gesuchFormular.einnahmenKosten' as const),
+  }));
 };

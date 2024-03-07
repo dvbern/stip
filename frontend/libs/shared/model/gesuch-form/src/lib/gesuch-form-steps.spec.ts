@@ -88,17 +88,14 @@ describe('GesuchFormSteps', () => {
   it.each(validationCases)(
     'route %s should be valid if %s is set',
     (step, field) => {
-      expect(isStepValid(step, { [field]: {} })).toBe(true);
+      expect(isStepValid(step, { [field]: {} }, [])).toBe(true);
     },
   );
-
-  // TODO: Add tests to check for invalid once validation is resolved
-  // <---
 
   it.each(validationCases)(
     'route %s validity should be undefined if %s is not set',
     (step, field) => {
-      expect(isStepValid(step, { [field]: null })).toBe(undefined);
+      expect(isStepValid(step, { [field]: null }, [])).toBe(undefined);
     },
   );
 });

@@ -1,19 +1,25 @@
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { Gesuch } from '@dv/shared/model/gesuch';
+import { Gesuch, SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { State, reducer } from './shared-data-access-gesuch.feature';
-import { selectSharedDataAccessGesuchsView } from './shared-data-access-gesuch.selectors';
+import {
+  getFormPropertyFromPath,
+  isFormularProp,
+  selectSharedDataAccessGesuchsView,
+} from './shared-data-access-gesuch.selectors';
 
 describe('selectSharedDataAccessGesuchsView', () => {
   it('selects view', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
+      validations: [],
       gesuchFormular: null,
       cache: {
         gesuchFormular: null,
       },
+      lastUpdate: null,
       loading: false,
       error: undefined,
     };
@@ -51,5 +57,54 @@ describe('selectSharedDataAccessGesuchsView', () => {
     expect(result.cachedGesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
+  });
+
+  it.each([
+    [null, 'personInAusbildung', false],
+    [{}, 'partner', false],
+    [{ kinds: [] }, 'kinds', true],
+    [{ kinds: [] }, 'invalid-property', false],
+  ] as [SharedModelGesuchFormular, string, boolean][])(
+    'should check if a given property is a formular prop: %s[%s] -> %s',
+    (gesuchFormular, prop, expected) => {
+      expect(isFormularProp(gesuchFormular)(prop)).toEqual(expected);
+    },
+  );
+
+  it.each([
+    [{}, undefined],
+    [{ propertyPath: '' }, undefined],
+    [{ propertyPath: 'gesuch' }, undefined],
+    [{ propertyPath: 'gesuch.personInAusbildung' }, 'personInAusbildung'],
+  ])('should get form property from path: %s -> %s', (validation, expected) => {
+    expect(getFormPropertyFromPath(validation)).toEqual(expected);
+  });
+
+  it('should select correct invalidFormularProps', () => {
+    const state: State = {
+      gesuch: null,
+      gesuchs: [],
+      validations: [
+        { message: '', messageTemplate: '', propertyPath: 'gesuch.partner' },
+        { message: '', messageTemplate: '', propertyPath: 'gesuch.kinds' },
+        { message: '', messageTemplate: '', propertyPath: 'some.invalid' },
+      ],
+      gesuchFormular: {
+        personInAusbildung: {} as any,
+        partner: {} as any,
+        kinds: [],
+      },
+      cache: {
+        gesuchFormular: null,
+      },
+      lastUpdate: null,
+      loading: false,
+      error: undefined,
+    };
+    const result = selectSharedDataAccessGesuchsView.projector(state);
+    expect(result.invalidFormularProps.validations).toEqual([
+      'partner',
+      'kinds',
+    ]);
   });
 });
