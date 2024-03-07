@@ -68,7 +68,7 @@
         {
           "type": "chrome",
           "request": "launch",
-          "name": "Stip Chrome",
+          "name": "GS Chrome",
           "url": "http://localhost:4200",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
@@ -76,8 +76,24 @@
         {
           "type": "msedge",
           "request": "launch",
-          "name": "Stip Edge",
+          "name": "GS Edge",
           "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "chrome",
+          "request": "launch",
+          "name": "SB Chrome",
+          "url": "http://localhost:4201",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "msedge",
+          "request": "launch",
+          "name": "SB Edge",
+          "url": "http://localhost:4201",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
         }
