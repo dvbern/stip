@@ -21,6 +21,7 @@ import { Partner } from './partner';
 import { LebenslaufItem } from './lebenslaufItem';
 
 export interface GesuchFormular { 
+    id?: string;
     ausbildung?: Ausbildung;
     personInAusbildung?: PersonInAusbildung;
     familiensituation?: Familiensituation;
