@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
 
@@ -13,8 +13,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
-import ch.dvbern.stip.api.gesuch.service.GesuchFormularMapper;
-import ch.dvbern.stip.api.gesuch.service.GesuchFormularMapperImpl;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
@@ -52,17 +51,17 @@ class GesuchFormularMapperTest {
         final var mapper = createMapper();
         // Partial update is needed here to "initialise" the target
         target = mapper.partialUpdate(gesuchFormular, target);
-        mapper.clearDataOnUpdate(gesuchFormular, target);
+        mapper.resetDependentDataAfterData(gesuchFormular, target);
 
         // Without werZahltAlimente set, nothing should be cleared
         assertThat(target.getElterns().size(), is(2));
 
         // Setting it so the VATER pays alimony, and then clearing on update should remove the father from the Gesuch
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        mapper.clearDataOnUpdate(gesuchFormular, target);
+        mapper.resetDependentDataAfterData(gesuchFormular, target);
 
-        assertThat(gesuchFormular.getElterns().size(), is(1));
-        assertThat(gesuchFormular.getElterns().stream().toList().get(0).getElternTyp(), is(ElternTyp.MUTTER));
+        assertThat(target.getElterns().size(), is(1));
+        assertThat(target.getElterns().stream().toList().get(0).getElternTyp(), is(ElternTyp.MUTTER));
     }
 
     GesuchFormularMapper createMapper() {

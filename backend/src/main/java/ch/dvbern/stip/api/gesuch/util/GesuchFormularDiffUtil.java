@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.util;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -116,5 +118,28 @@ public final class GesuchFormularDiffUtil {
 
         return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
                 .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
+    }
+
+    public boolean hasWerZahltAlimenteChanged(GesuchFormularUpdateDto newFormular, GesuchFormular toUpdate) {
+        if (newFormular.getFamiliensituation() == null || toUpdate.getFamiliensituation() == null) {
+            return false;
+        }
+
+		return newFormular.getFamiliensituation().getWerZahltAlimente() != toUpdate.getFamiliensituation()
+            .getWerZahltAlimente();
+	}
+
+    public boolean hasElternteilVerstorbenOrUnbekanntChanged(
+        GesuchFormularUpdateDto newFormular,
+        GesuchFormular toUpdate
+    ) {
+        if (newFormular.getFamiliensituation() == null ||
+            toUpdate.getFamiliensituation() == null) {
+            return false;
+        }
+
+        // Boxed !=
+        return !Objects.equals(newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
+            toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben());
     }
 }
