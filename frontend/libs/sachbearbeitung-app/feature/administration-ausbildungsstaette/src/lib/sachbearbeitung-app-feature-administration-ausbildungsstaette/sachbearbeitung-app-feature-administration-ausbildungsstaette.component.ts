@@ -29,11 +29,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
-import {
-  Ausbildungsgang,
-  Ausbildungsort,
-  Bildungsart,
-} from '@dv/shared/model/gesuch';
+import { Ausbildungsgang, Bildungsart } from '@dv/shared/model/gesuch';
 import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
@@ -204,7 +200,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       bezeichnungDe: '',
       bezeichnungFr: '',
       ausbildungsrichtung: Bildungsart.LEHREN_ANLEHREN,
-      ausbildungsort: '' as Ausbildungsort,
+      ausbildungsort: '',
     };
 
     this.editedAusbildungsgang = newRow;

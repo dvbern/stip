@@ -27,3 +27,13 @@
   align-items: center;
   justify-content: flex-end;
 }
+
+.ausbildungsstaette-table {
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 0;
+  }
+}
+
+.filter-form-field {
+  width: 100%;
+}

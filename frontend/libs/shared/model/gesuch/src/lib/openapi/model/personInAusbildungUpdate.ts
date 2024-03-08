@@ -10,12 +10,12 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
-import { Anrede } from './anrede';
-import { Land } from './land';
 import { Niederlassungsstatus } from './niederlassungsstatus';
 import { Sprache } from './sprache';
-import { Wohnsitz } from './wohnsitz';
 import { Zivilstand } from './zivilstand';
+import { Anrede } from './anrede';
+import { Land } from './land';
+import { Wohnsitz } from './wohnsitz';
 
 export interface PersonInAusbildungUpdate {
   adresse: Adresse;

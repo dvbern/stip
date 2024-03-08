@@ -10,6 +10,8 @@
  * Do not edit the class manually.
  */
 import { Ausbildungsgang } from './ausbildungsgang';
+import { AusbildungsstaetteAnyOf } from './ausbildungsstaetteAnyOf';
+import { AusbildungsstaetteUpdate } from './ausbildungsstaetteUpdate';
 
 export interface Ausbildungsstaette {
   /**
@@ -21,7 +23,7 @@ export interface Ausbildungsstaette {
    */
   nameDe: string;
   /**
-   *what is the alternative to this.apiKeys = configurationParameters.apiKeys;?
+   *
    */
   nameFr: string;
   id?: string;

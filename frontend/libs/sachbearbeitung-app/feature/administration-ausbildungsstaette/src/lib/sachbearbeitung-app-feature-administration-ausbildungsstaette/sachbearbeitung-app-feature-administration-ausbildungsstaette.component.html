@@ -2,7 +2,13 @@
   <div class="container card pb-4 pt-5 mt-5 shadow">
     <div class="row overflow-auto">
       <form [formGroup]="staetteForm">
-        <table class="ausbiltunsstaette-table" mat-table matSort [dataSource]="store.tableData()" multiTemplateDataRows>
+        <table
+          class="ausbildungsstaette-table"
+          mat-table
+          matSort
+          [dataSource]="store.tableData()"
+          multiTemplateDataRows
+        >
           <caption class="cdk-visually-hidden">
             {{
               'sachbearbeitung-app.admin.ausbildungsstaette.description' | translate
@@ -27,7 +33,7 @@
 
           <ng-container matColumnDef="search">
             <th [attr.colspan]="2" mat-header-cell *matHeaderCellDef>
-              <mat-form-field>
+              <mat-form-field class="filter-form-field">
                 <input #filter matInput (keyup)="filterChange(filter.value)" type="text" />
                 @if (filter.value) {
                   <button
