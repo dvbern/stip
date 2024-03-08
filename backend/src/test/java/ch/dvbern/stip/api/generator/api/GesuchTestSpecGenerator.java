@@ -166,7 +166,7 @@ public class GesuchTestSpecGenerator {
                 .set(field(PersonInAusbildungUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
                 .set(
                     field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
-                    LocalDate.now().minusMonths(2 + 3).minusYears(16)
+                    LocalDate.now().minusYears(16)
                 )
                 .set(field(PersonInAusbildungUpdateDtoSpec::getZivilstand), ZivilstandDtoSpec.VERHEIRATET)
                 .create()

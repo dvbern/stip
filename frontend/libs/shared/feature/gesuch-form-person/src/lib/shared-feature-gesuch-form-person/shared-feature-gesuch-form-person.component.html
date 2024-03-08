@@ -419,28 +419,24 @@
       }
 
       <div class="row g-4 mt-1">
-        <!-- Quellenbesteuerung -->
-        <div class="col-12 col-md-6 col-xl-4">
-          <label>{{ 'shared.form.person.tax-at-source.label' | translate }}</label>
-          <mat-radio-group
-            class="d-flex flex-column"
-            formControlName="quellenbesteuert"
-            data-testid="form-person-quellenbesteuert"
-            dvSharedUiFormField
-          >
-            <mat-radio-button data-testid="yes" [value]="true">
-              {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
-            >
-            <mat-radio-button data-testid="no" [value]="false">{{
-              'shared.form.radio.no' | translate
-            }}</mat-radio-button>
-
+        @if (!hiddenFieldsSetSig().has(form.controls.vermoegenVorjahr)) {
+          <!-- VERMOEGEN VORJAHR -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.person.vermoegenVorjahr.label' | translate }}</mat-label>
+            <input
+              type="text"
+              matInput
+              [maskito]="maskitoNumber"
+              formControlName="vermoegenVorjahr"
+              data-testid="form-person-vermoegenVorjahr"
+            />
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
-          </mat-radio-group>
-        </div>
-
+          </mat-form-field>
+        }
+      </div>
+      <div class="row g-4 mt-1">
         <!-- Sozialhilfebeitraege -->
         <div class="col-12 col-md-6 col-xl-4">
           <label>{{ 'shared.form.person.social-security.label' | translate }}</label>

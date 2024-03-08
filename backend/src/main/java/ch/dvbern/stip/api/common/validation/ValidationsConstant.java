@@ -114,6 +114,9 @@ public final class ValidationsConstant {
     public static final String VALIDATION_AUSBILDUNG_ENDDATE_AFTER_STARTDATE =
         "{jakarta.validation.constraints.ausbildung.endDate.after.message}";
 
+    public static final String VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.person.vermoegenVorjahr.required.message}";
+
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");
     }

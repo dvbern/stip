@@ -51,6 +51,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             .assign(Assign.valueOf(PersonInAusbildungUpdateDtoSpec::getWohnsitzAnteilMutter)
                 .to(PersonInAusbildungUpdateDtoSpec::getWohnsitzAnteilVater)
                 .as((BigDecimal i) -> BigDecimal.valueOf(100).subtract(i)))
+            .ignore(field(PersonInAusbildungUpdateDtoSpec::getVermoegenVorjahr))
             .toModel();
     public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecPersonInAusbildungModel =
         Instancio.of(

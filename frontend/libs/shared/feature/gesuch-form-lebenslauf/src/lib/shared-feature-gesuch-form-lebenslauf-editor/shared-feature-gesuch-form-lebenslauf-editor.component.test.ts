@@ -245,8 +245,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       ).toHaveValue('');
     });
 
-    // TODO: Fix this test
-    it.skip('should display fachrichtung if one of {BACHELOR_HOCHSCHULE_UNI, BACHELOR_FACHHOCHSCHULE, MASTER} is selected', async () => {
+    it('should display fachrichtung if one of {BACHELOR_HOCHSCHULE_UNI, BACHELOR_FACHHOCHSCHULE, MASTER} is selected', async () => {
       await setup('AUSBILDUNG');
       const bildungsartenWhichNeedFachrichtung = [
         LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
@@ -283,8 +282,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       }
     });
 
-    // TODO: Fix this test
-    it.skip('should display titelDesAbschlusses if ANDERER_BILDUNGSABSCHLUSS is selected', async () => {
+    it('should display titelDesAbschlusses if ANDERER_BILDUNGSABSCHLUSS is selected', async () => {
       await setup('AUSBILDUNG');
       const bildungsartenWhichNeedTitelDesAbschlusses = [
         LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
