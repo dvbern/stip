@@ -20,7 +20,7 @@ public class GesuchValidatorUtil {
         @NotNull final String template,
         @NotNull final String property
     ) {
-        if (context == null) {
+        if (context == null|| property.trim().isEmpty() || template.trim().isEmpty()) {
             return false;
         }
 
