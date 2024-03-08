@@ -151,4 +151,20 @@ public final class GesuchFormularDiffUtil {
         return !Objects.equals(newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
             toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben());
     }
+
+    public boolean hasWohnsitzChanged(
+        GesuchFormularUpdateDto newFormular,
+        GesuchFormular toUpdate
+    ) {
+        if (NullDiffUtil.hasNullChanged(newFormular.getPersonInAusbildung(), toUpdate.getPersonInAusbildung())) {
+            return true;
+        }
+
+        if (newFormular.getPersonInAusbildung() == null ||
+            toUpdate.getPersonInAusbildung() == null) {
+            return false;
+        }
+
+        return newFormular.getPersonInAusbildung().getWohnsitz() != toUpdate.getPersonInAusbildung().getWohnsitz();
+    }
 }
