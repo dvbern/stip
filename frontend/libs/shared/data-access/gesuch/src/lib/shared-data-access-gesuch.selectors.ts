@@ -26,7 +26,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
         validations: (state.validations ?? [])
-          .map(getFormPropertyFromPath)
+          .map((v) => v.propertyPath)
           .filter(isDefined)
           .filter(isFormularProp(currentForm)),
       },
@@ -43,12 +43,3 @@ export const isFormularProp =
     if (!gesuchFormular) return false;
     return Object.keys(gesuchFormular).includes(prop);
   };
-
-/**
- * Tries to get the form property from the given validation error
- */
-export const getFormPropertyFromPath = (validation: {
-  propertyPath?: string;
-}) => {
-  return validation.propertyPath?.split('.')[1];
-};

@@ -4,7 +4,6 @@ import { Gesuch, SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import {
-  getFormPropertyFromPath,
   isFormularProp,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
@@ -71,23 +70,14 @@ describe('selectSharedDataAccessGesuchsView', () => {
     },
   );
 
-  it.each([
-    [{}, undefined],
-    [{ propertyPath: '' }, undefined],
-    [{ propertyPath: 'gesuch' }, undefined],
-    [{ propertyPath: 'gesuch.personInAusbildung' }, 'personInAusbildung'],
-  ])('should get form property from path: %s -> %s', (validation, expected) => {
-    expect(getFormPropertyFromPath(validation)).toEqual(expected);
-  });
-
   it('should select correct invalidFormularProps', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
       validations: [
-        { message: '', messageTemplate: '', propertyPath: 'gesuch.partner' },
-        { message: '', messageTemplate: '', propertyPath: 'gesuch.kinds' },
-        { message: '', messageTemplate: '', propertyPath: 'some.invalid' },
+        { message: '', messageTemplate: '', propertyPath: 'partner' },
+        { message: '', messageTemplate: '', propertyPath: 'kinds' },
+        { message: '', messageTemplate: '', propertyPath: 'invalid' },
       ],
       gesuchFormular: {
         personInAusbildung: {} as any,

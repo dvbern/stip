@@ -168,9 +168,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state, { error }): State => ({
         ...state,
         validations:
-          error.type === 'validationError'
-            ? _mock(error.validationErrors)
-            : null,
+          error.type === 'validationError' ? error.validationErrors : null,
         loading: false,
         error: error.type === 'validationError' ? undefined : error,
       }),
@@ -207,11 +205,4 @@ const getGesuchFormular = (
   gesuch: SharedModelGesuch,
 ): SharedModelGesuchFormular | null => {
   return gesuch.gesuchTrancheToWorkWith.gesuchFormular ?? null;
-};
-
-const _mock = <T extends { propertyPath?: string }>(errors: T[]) => {
-  return errors.map((v) => ({
-    ...v,
-    propertyPath: v.propertyPath || ('gesuchFormular.einnahmenKosten' as const),
-  }));
 };
