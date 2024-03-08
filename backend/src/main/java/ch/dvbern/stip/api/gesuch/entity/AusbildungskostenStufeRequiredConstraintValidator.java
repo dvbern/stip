@@ -24,26 +24,27 @@ public class AusbildungskostenStufeRequiredConstraintValidator
         if (gesuchFormular.getAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
-        if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe()
-            == SEKUNDAR_2) {
-			if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() == null) {
-				return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
-			} else {
-				return true;
-			}
-        }
-        if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe()
-            == TERTIAER) {
-            if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenTertiaerstufe() == null) {
-                return GesuchValidatorUtil.addProperty(
-                    constraintValidatorContext,
-                    VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE,
-                    property
-                );
-            } else {
-                return true;
-            }
-        }
+        // https://support.dvbern.ch/browse/KSTIP-918
+        // if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe()
+        //     == SEKUNDAR_2) {
+        //     if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() == null) {
+        //         return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        //     } else {
+        //         return true;
+        //     }
+        // }
+        // if (gesuchFormular.getAusbildung().getAusbildungsgang().getAusbildungsrichtung().getAusbildungsstufe()
+        //     == TERTIAER) {
+        //     if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenTertiaerstufe() == null) {
+        //         return GesuchValidatorUtil.addProperty(
+        //             constraintValidatorContext,
+        //             VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE,
+        //             property
+        //         );
+        //     } else {
+        //         return true;
+        //     }
+        // }
         return true;
     }
 }
