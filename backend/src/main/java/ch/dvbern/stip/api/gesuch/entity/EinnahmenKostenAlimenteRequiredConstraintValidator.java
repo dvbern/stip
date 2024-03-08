@@ -1,10 +1,18 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenAlimenteRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenAlimenteRequiredConstraint, GesuchFormular> {
+    private String property;
+
+    @Override
+    public void initialize(EinnahmenKostenAlimenteRequiredConstraint constraintAnnotation) {
+        property = constraintAnnotation.property();
+    }
+
     @Override
     public boolean isValid(
         GesuchFormular gesuchFormular,
@@ -15,7 +23,11 @@ public class EinnahmenKostenAlimenteRequiredConstraintValidator
 
         final var alimentenregelung = gesuchFormular.getFamiliensituation().getGerichtlicheAlimentenregelung();
         if (alimentenregelung != null && alimentenregelung) {
-            return gesuchFormular.getEinnahmenKosten().getAlimente() != null;
+            if (gesuchFormular.getEinnahmenKosten().getAlimente() == null) {
+                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+            } else {
+                return true;
+            }
         }
         return true;
     }

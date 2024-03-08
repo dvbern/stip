@@ -21,4 +21,6 @@ public @interface PartnerNullRequiredWhenAlleinstehendConstraint {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    String property() default "";
 }

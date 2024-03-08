@@ -1,11 +1,19 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenRentenRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenRentenRequiredConstraint, GesuchFormular> {
+    private String property;
+
+    @Override
+    public void initialize(EinnahmenKostenRentenRequiredConstraint constraintAnnotation) {
+        property = constraintAnnotation.property();
+    }
+
     @Override
     public boolean isValid(
         GesuchFormular gesuchFormular,
@@ -20,7 +28,11 @@ public class EinnahmenKostenRentenRequiredConstraintValidator
             gesuchFormular.getFamiliensituation().getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN ||
             gesuchFormular.getFamiliensituation().getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN)
         ) {
-            return gesuchFormular.getEinnahmenKosten().getRenten() != null;
+            if (gesuchFormular.getEinnahmenKosten().getRenten() == null) {
+                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+            } else {
+                return true;
+            }
         }
         return true;
     }
