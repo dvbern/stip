@@ -10,7 +10,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class FamiliensituationElternEntityRequiredConstraintValidator
     implements ConstraintValidator<FamiliensituationElternEntityRequiredConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(FamiliensituationElternEntityRequiredConstraint constraintAnnotation) {

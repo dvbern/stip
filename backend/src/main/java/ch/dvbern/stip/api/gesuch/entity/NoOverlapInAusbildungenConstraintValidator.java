@@ -10,7 +10,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class NoOverlapInAusbildungenConstraintValidator
     implements ConstraintValidator<NoOverlapInAusbildungenConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(NoOverlapInAusbildungenConstraint constraintAnnotation) {

@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenZulagenRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenZulagenRequiredConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(EinnahmenKostenZulagenRequiredConstraint constraintAnnotation) {

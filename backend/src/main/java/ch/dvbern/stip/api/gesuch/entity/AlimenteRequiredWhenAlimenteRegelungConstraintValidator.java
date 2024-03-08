@@ -8,7 +8,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 public class AlimenteRequiredWhenAlimenteRegelungConstraintValidator
     implements ConstraintValidator<AlimenteRequiredWhenAlimenteregelungConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(AlimenteRequiredWhenAlimenteregelungConstraint constraintAnnotation) {

@@ -9,7 +9,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class LebenslaufAusbildungUeberschneidenConstraintValidator
     implements ConstraintValidator<LebenslaufAusbildungUeberschneidenConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(LebenslaufAusbildungUeberschneidenConstraint constraintAnnotation) {

@@ -10,7 +10,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 public class AusbildungskostenStufeRequiredConstraintValidator
     implements ConstraintValidator<AusbildungskostenStufeRequiredConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(AusbildungskostenStufeRequiredConstraint constraintAnnotation) {

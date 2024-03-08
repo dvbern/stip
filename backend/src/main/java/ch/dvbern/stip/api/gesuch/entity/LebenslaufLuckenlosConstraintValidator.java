@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LebenslaufLuckenlosConstraintValidator
     implements ConstraintValidator<LebenslaufLuckenlosConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(LebenslaufLuckenlosConstraint constraintAnnotation) {

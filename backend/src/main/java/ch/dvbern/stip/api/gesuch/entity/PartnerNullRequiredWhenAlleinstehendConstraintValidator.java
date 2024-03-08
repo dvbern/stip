@@ -8,7 +8,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 public class PartnerNullRequiredWhenAlleinstehendConstraintValidator
     implements ConstraintValidator<PartnerNullRequiredWhenAlleinstehendConstraint, GesuchFormular> {
-    private String property;
+    private String property = "";
 
     @Override
     public void initialize(PartnerNullRequiredWhenAlleinstehendConstraint constraintAnnotation) {
