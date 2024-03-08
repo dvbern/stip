@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.util;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.NullDiffUtil;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -121,6 +122,10 @@ public final class GesuchFormularDiffUtil {
     }
 
     public boolean hasWerZahltAlimenteChanged(GesuchFormularUpdateDto newFormular, GesuchFormular toUpdate) {
+        if (NullDiffUtil.hasNullChanged(newFormular.getFamiliensituation(), toUpdate.getFamiliensituation())) {
+            return true;
+        }
+
         if (newFormular.getFamiliensituation() == null || toUpdate.getFamiliensituation() == null) {
             return false;
         }
@@ -133,6 +138,10 @@ public final class GesuchFormularDiffUtil {
         GesuchFormularUpdateDto newFormular,
         GesuchFormular toUpdate
     ) {
+        if (NullDiffUtil.hasNullChanged(newFormular.getFamiliensituation(), toUpdate.getFamiliensituation())) {
+            return true;
+        }
+
         if (newFormular.getFamiliensituation() == null ||
             toUpdate.getFamiliensituation() == null) {
             return false;

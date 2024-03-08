@@ -77,6 +77,11 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> GesuchFormularDiffUtil.hasWerZahltAlimenteChanged(newFormular, targetFormular),
             "Clear Elternteil because werZahltAlimente changed",
             () -> {
+                final var famsit = newFormular.getFamiliensituation();
+                if (famsit == null) {
+                    return;
+                }
+
                 final var werZahlt = newFormular.getFamiliensituation().getWerZahltAlimente();
                 if (werZahlt == null) {
                     return;
@@ -95,6 +100,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     }
 
     void removeElternOfTyp(Set<Eltern> eltern, ElternTyp typ) {
+        // removeAll(list) may work slowly, but that's ok as it should only ever remove 1 item
         eltern.removeAll(eltern.stream().filter(x -> x.getElternTyp() == typ).toList());
     }
 }
