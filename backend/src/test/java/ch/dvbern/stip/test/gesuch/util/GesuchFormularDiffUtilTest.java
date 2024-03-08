@@ -154,4 +154,24 @@ class GesuchFormularDiffUtilTest {
         updated.setFamiliensituation(null);
         assertTrue(GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(updated, original));
     }
+
+    @Test
+    void hasWohnsitzChangedTest() {
+        final var originalPia = new PersonInAusbildung();
+        originalPia.setWohnsitz(Wohnsitz.FAMILIE);
+        final var original = new GesuchFormular().setPersonInAusbildung(originalPia);
+
+        final var updated = new GesuchFormularUpdateDto();
+        final var updatedPia = new PersonInAusbildungUpdateDto();
+        updatedPia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        updated.setPersonInAusbildung(updatedPia);
+
+        assertTrue(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
+
+        updatedPia.setWohnsitz(Wohnsitz.FAMILIE);
+        assertFalse(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
+
+        updated.setPersonInAusbildung(null);
+        assertTrue(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
+    }
 }

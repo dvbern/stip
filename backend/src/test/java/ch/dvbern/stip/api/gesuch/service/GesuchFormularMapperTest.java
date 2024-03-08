@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapperImpl;
 import ch.dvbern.stip.api.eltern.service.ElternMapperImpl;
@@ -19,10 +20,12 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -88,6 +91,25 @@ class GesuchFormularMapperTest {
 
         assertThat(target.getElterns().size(), is(1));
         assertThat(target.getElterns().stream().toList().get(0).getElternTyp(), is(ElternTyp.MUTTER));
+    }
+
+    @Test
+    void resetDependentDataRemovesWohnkostenTest() {
+        final var targetPia = new PersonInAusbildung();
+        targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        final var target = new GesuchFormular()
+            .setPersonInAusbildung(targetPia)
+            .setEinnahmenKosten(new EinnahmenKosten().setWohnkosten(new BigDecimal(1)));
+
+        final var update = new GesuchFormularUpdateDto();
+        final var updatePia = new PersonInAusbildungUpdateDto();
+        updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        update.setPersonInAusbildung(updatePia);
+
+        final var mapper = createMapper();
+        mapper.resetDependentDataAfterData(update, target);
+
+        assertThat(target.getEinnahmenKosten().getWohnkosten(), is(nullValue()));
     }
 
     GesuchFormularMapper createMapper() {

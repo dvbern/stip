@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -94,6 +95,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     removeElternOfTyp(targetFormular.getElterns(), ElternTyp.MUTTER);
                     removeElternOfTyp(targetFormular.getElterns(), ElternTyp.VATER);
                 }
+                }
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasWohnsitzChanged(newFormular, targetFormular),
+            "Clear Wohnkosten because wohnsitz changed",
+            () -> {
+                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
+                    targetFormular.getEinnahmenKosten().setWohnkosten(null);
                 }
             }
         );
