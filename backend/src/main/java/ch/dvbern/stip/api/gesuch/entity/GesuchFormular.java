@@ -61,44 +61,44 @@ import org.hibernate.envers.Audited;
 @FamiliensituationElternEntityRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     ElternPageValidation.class
-})
+}, property = "elterns")
 @LebenslaufLuckenlosConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     LebenslaufItemPageValidation.class
-})
+}, property = "lebenslaufItems")
 @EinnahmenKostenAlimenteRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
-})
+}, property = "einnahmenKosten")
 @EinnahmenKostenRentenRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
-})
+}, property = "einnahmenKosten")
 @EinnahmenKostenZulagenRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
-})
+}, property = "einnahmenKosten")
 @EinnahmenKostenDarlehenRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
-})
+}, property = "einnahmenKosten")
 @AusbildungskostenStufeRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
-})
+}, property = "einnahmenKosten")
 @LebenslaufAusbildungUeberschneidenConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     LebenslaufItemPageValidation.class
-})
+}, property = "lebenslaufItems")
 @PartnerNullRequiredWhenAlleinstehendConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     PartnerPageValidation.class
-})
+}, property = "partner")
 @AlimenteRequiredWhenAlimenteregelungConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
-})
-@NoOverlapInAusbildungenConstraint
+}, property = "einnahmenKosten")
+@NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity
 @Table(indexes = {

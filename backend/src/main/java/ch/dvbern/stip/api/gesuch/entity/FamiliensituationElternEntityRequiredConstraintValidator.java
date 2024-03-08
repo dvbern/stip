@@ -4,17 +4,25 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class FamiliensituationElternEntityRequiredConstraintValidator
     implements ConstraintValidator<FamiliensituationElternEntityRequiredConstraint, GesuchFormular> {
+    private String property = "";
+
+    @Override
+    public void initialize(FamiliensituationElternEntityRequiredConstraint constraintAnnotation) {
+        property = constraintAnnotation.property();
+    }
+
     @Override
     public boolean isValid(
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext) {
         if (gesuchFormular.getFamiliensituation() == null) {
-            return false;
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
         if (isElternTeilRequired(ElternTyp.MUTTER, gesuchFormular.getFamiliensituation())) {
             if (gesuchFormular.getElterns()
@@ -22,12 +30,12 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
                 .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
                 .findAny()
                 .isEmpty()) {
-                return false;
+                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
             }
         } else if (gesuchFormular.getElterns()
             .stream()
             .anyMatch(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)) {
-            return false;
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
         if (isElternTeilRequired(ElternTyp.VATER, gesuchFormular.getFamiliensituation())) {
             return gesuchFormular.getElterns()

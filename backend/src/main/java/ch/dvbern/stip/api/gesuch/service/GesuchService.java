@@ -56,6 +56,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -177,10 +178,14 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
 
+        if (formular == null) {
+            throw new NotFoundException();
+        }
+
         return validatePages(formular);
     }
 
-    public ValidationReportDto validatePages(GesuchFormular gesuchFormular) {
+    public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
         final var violations = new HashSet<>(
             validator.validate(

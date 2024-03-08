@@ -8,13 +8,17 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import jakarta.validation.constraints.NotNull;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public final class PageValidationUtil {
-    private PageValidationUtil() {}
-
-    public static List<Class<?>> getGroupsFromGesuchFormular(GesuchFormular gesuch) {
+@UtilityClass
+public class PageValidationUtil {
+    /**
+     * Gets the list of groups to apply to validate only the pages which the user has filled out.
+     * */
+    public List<Class<?>> getGroupsFromGesuchFormular(final @NotNull GesuchFormular gesuch) {
         final var validationGroups = new ArrayList<Class<?>>();
         for (final var field : gesuch.getClass().getDeclaredFields()) {
             try {

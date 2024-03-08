@@ -22,4 +22,6 @@ public @interface EinnahmenKostenRentenRequiredConstraint {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    String property() default "";
 }
