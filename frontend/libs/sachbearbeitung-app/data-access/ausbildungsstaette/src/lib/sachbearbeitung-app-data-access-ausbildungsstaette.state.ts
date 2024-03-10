@@ -52,6 +52,26 @@ export const AdminAusbildungsstaetteStore = signalStore(
   withState(initialState),
   withMethods(
     (store, ausbildungsStaetteService = inject(AusbildungsstaetteService)) => ({
+      setPaginator: (paginator: MatPaginator) => {
+        patchState(store, (state) => {
+          state.tableData.paginator = paginator;
+          return state;
+        });
+      },
+      setSort: (sort: MatSort) => {
+        patchState(store, (state) => {
+          state.tableData.sort = sort;
+          return state;
+        });
+      },
+      setFilter: (filter: string) => {
+        patchState(store, (state) => {
+          state.tableData.filter = filter;
+          return state;
+        });
+      },
+
+      // Ausbildungsstaette ==========================================================
       loadAusbildungsstaetten: rxMethod(
         pipe(
           tap(() => {
@@ -96,24 +116,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
           ),
         ),
       ),
-      setPaginator: (paginator: MatPaginator) => {
-        patchState(store, (state) => {
-          state.tableData.paginator = paginator;
-          return state;
-        });
-      },
-      setSort: (sort: MatSort) => {
-        patchState(store, (state) => {
-          state.tableData.sort = sort;
-          return state;
-        });
-      },
-      setFilter: (filter: string) => {
-        patchState(store, (state) => {
-          state.tableData.filter = filter;
-          return state;
-        });
-      },
       addAusbildungsstaetteRow: (newRow: AusbildungsstaetteTableData) => {
         patchState(store, (state) => {
           const data = [newRow, ...state.tableData.data];
@@ -123,20 +125,61 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
-      removeNewAusbildungsstaetteRow: () => {
+      removeNewAusbildungsstaetteRow: (
+        staette: AusbildungsstaetteTableData,
+      ) => {
         patchState(store, (state) => {
-          const data = state.tableData.data.slice(1);
+          const data = state.tableData.data.filter((s) => s.id !== staette.id);
 
           state.tableData.data = data;
 
           return state;
         });
       },
+      handleCreateUpdateAusbildungsstaette: (
+        staette: AusbildungsstaetteTableData,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              if (s.id === 'new') {
+                return {
+                  ...s,
+                  ...staette,
+                  id: `new-${state.ausbildungsstaetten.length + 1}`,
+                };
+              }
+
+              return {
+                ...s,
+                ...staette,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      deleteAusbildungsstaette: (staette: AusbildungsstaetteTableData) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.filter((s) => s.id !== staette.id);
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      // Ausbildungsgang  ==========================================================
       addAusbildungsgangRow: (
         ausbildungsstaetteId: string,
         newRow: Ausbildungsgang,
       ) => {
         patchState(store, (state) => {
+          // could find be more efficent?
           const data = state.tableData.data.map((staette) => {
             if (staette.id === ausbildungsstaetteId) {
               return {
@@ -157,19 +200,50 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
-      removeNewAusbildungsgangRow: (staette: AusbildungsstaetteTableData) => {
+      removeNewAusbildungsgangRow: (
+        staette: AusbildungsstaetteTableData,
+        gang: Ausbildungsgang,
+      ) => {
         patchState(store, (state) => {
-          // staette.ausbildungsgaengeCount -= 1;
-          // staette.ausbildungsgaenge?.filter((g) => g.id !== 'new');
-
           const data = state.tableData.data.map((s) => {
             if (s.id === staette.id) {
+              const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
+                (g) => g.id !== gang.id,
+              );
+
               return {
                 ...s,
                 ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
-                ausbildungsgaenge: s.ausbildungsgaenge?.filter(
-                  (g) => g.id !== 'new',
-                ),
+                ausbildungsgaenge,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      handleCreateUpdateAusbildungsgang: (
+        staette: AusbildungsstaetteTableData,
+        gang: Ausbildungsgang,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              const ausbildungsgaenge = s.ausbildungsgaenge?.map((g) => {
+                if (g.id === gang.id) {
+                  return gang;
+                }
+
+                return g;
+              });
+
+              return {
+                ...s,
+                ausbildungsgaenge,
               };
             }
 

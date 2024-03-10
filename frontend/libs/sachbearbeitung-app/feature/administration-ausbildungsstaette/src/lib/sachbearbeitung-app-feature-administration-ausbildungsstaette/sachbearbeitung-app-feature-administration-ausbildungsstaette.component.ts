@@ -17,11 +17,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorModule,
-  PageEvent,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -80,14 +76,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     this.store.setSort(this.sort);
   }
 
-  pageChange(event: PageEvent) {
-    console.log(event);
-  }
-
-  filterChange(filter: string) {
-    this.store.setFilter(filter);
-  }
-
   trackByIndex(index: number) {
     return index;
   }
@@ -114,13 +102,13 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     'actions',
   ];
 
-  expandedRow: string | null = null;
+  expandedRowId: string | null = null;
 
   editedAusbildungsstaette: AusbildungsstaetteTableData | null = null;
 
   // ausbildungsstaetteHasChanges = false;
 
-  staetteForm = this.fb.group({
+  staetteForm = this.fb.nonNullable.group({
     nameDe: [''],
     nameFr: [''],
   });
@@ -147,10 +135,10 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       return;
     }
 
-    if (this.expandedRow === staette.id) {
-      this.expandedRow = null;
+    if (this.expandedRowId === staette.id) {
+      this.expandedRowId = null;
     } else {
-      this.expandedRow = staette.id;
+      this.expandedRowId = staette.id;
     }
   }
 
@@ -159,9 +147,9 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     this.staetteForm.patchValue(ausbildungsstaette, { emitEvent: false });
   }
 
-  cancelEditAusbildungsstaette() {
+  cancelEditAusbildungsstaette(staette: AusbildungsstaetteTableData) {
     if (this.editedAusbildungsstaette?.id === 'new') {
-      this.store.removeNewAusbildungsstaetteRow();
+      this.store.removeNewAusbildungsstaetteRow(staette);
     }
 
     this.editedAusbildungsstaette = null;
@@ -170,7 +158,19 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   }
 
   saveAusbildungsstaette() {
-    this.cancelEditAusbildungsstaette();
+    if (!this.editedAusbildungsstaette) {
+      return;
+    }
+
+    const update = {
+      ...this.editedAusbildungsstaette,
+      ...this.staetteForm.value,
+    };
+
+    this.editedAusbildungsstaette = null;
+    this.staetteForm.reset();
+
+    this.store.handleCreateUpdateAusbildungsstaette(update);
   }
 
   // Ausbildungsgang ==========================================================
@@ -187,7 +187,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
 
   editedAusbildungsgang: Ausbildungsgang | null = null;
 
-  gangForm = this.fb.group({
+  gangForm = this.fb.nonNullable.group({
     bezeichnungDe: [''],
     bezeichnungFr: [''],
     ausbildungsrichtung: [''],
@@ -217,18 +217,34 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     this.gangForm.patchValue(ausbildungsgang, { emitEvent: false });
   }
 
-  cancelEditAusbildungsgang(staette: AusbildungsstaetteTableData) {
+  cancelEditAusbildungsgang(
+    staette: AusbildungsstaetteTableData,
+    gang: Ausbildungsgang,
+  ) {
     if (this.editedAusbildungsgang?.id === 'new') {
-      this.store.removeNewAusbildungsgangRow(staette);
+      this.store.removeNewAusbildungsgangRow(staette, gang);
     }
 
     this.editedAusbildungsgang = null;
-
     this.gangForm.reset();
     // this.ausbildungsstaetteHasChanges = false;
   }
 
-  saveAusbildungsgang() {
-    console.log('saveAusbildungsgang');
+  saveAusbildungsgang(staette: AusbildungsstaetteTableData) {
+    if (!this.editedAusbildungsgang) {
+      return;
+    }
+
+    const update = {
+      ...this.editedAusbildungsgang,
+      ...this.gangForm.value,
+      ausbildungsrichtung: this.gangForm.value
+        .ausbildungsrichtung as Bildungsart,
+    };
+
+    this.editedAusbildungsgang = null;
+    this.gangForm.reset();
+
+    this.store.handleCreateUpdateAusbildungsgang(staette, update);
   }
 }

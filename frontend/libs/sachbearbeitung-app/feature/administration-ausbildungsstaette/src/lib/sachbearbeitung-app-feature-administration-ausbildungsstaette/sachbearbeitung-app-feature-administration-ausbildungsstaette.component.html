@@ -1,5 +1,5 @@
 <div class="col-12">
-  <div class="container card pb-4 pt-5 mt-5 shadow">
+  <div class="container card p-3 mt-5 shadow">
     <div class="row overflow-auto">
       <form [formGroup]="staetteForm">
         <table
@@ -31,17 +31,23 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="search">
+          <ng-container matColumnDef="filter">
             <th [attr.colspan]="2" mat-header-cell *matHeaderCellDef>
               <mat-form-field class="filter-form-field">
-                <input #filter matInput (keyup)="filterChange(filter.value)" type="text" />
+                <input
+                  #filter
+                  matInput
+                  (keyup)="store.setFilter(filter.value)"
+                  type="text"
+                  [placeholder]="'sachbearbeitung-app.admin.ausbildungsstaette.filter' | translate"
+                />
                 @if (filter.value) {
                   <button
                     type="button"
                     matSuffix
                     mat-icon-button
                     aria-label="Clear"
-                    (click)="filterChange(''); filter.value = ''"
+                    (click)="store.setFilter(''); filter.value = ''"
                   >
                     <span class="material-symbols-rounded align-middle">clear</span>
                   </button>
@@ -79,16 +85,18 @@
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th class="action-cell" mat-header-cell *matHeaderCellDef>
-              <!-- add ausbildungstaette button -->
-              <button
-                [title]="'sachbearbeitung-app.admin.ausbildungsstaette.add' | translate"
-                type="button"
-                class="btn btn-link btn-sm"
-                [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                (click)="addAusbildungsstaette(); $event.stopPropagation()"
-              >
-                <i class="material-symbols-rounded fs-4">add</i>
-              </button>
+              <div class="action-cell-content">
+                <!-- add ausbildungstaette button -->
+                <button
+                  [title]="'sachbearbeitung-app.admin.ausbildungsstaette.add' | translate"
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                  (click)="addAusbildungsstaette(); $event.stopPropagation()"
+                >
+                  <i class="material-symbols-rounded fs-4">add</i>
+                </button>
+              </div>
             </th>
             <td class="action-cell" mat-cell *matCellDef="let staette">
               <div class="action-cell-content">
@@ -106,7 +114,7 @@
                     [title]="'sachbearbeitung-app.admin.ausbildungsstaette.cancel' | translate"
                     type="button"
                     class="btn btn-link btn-sm"
-                    (click)="cancelEditAusbildungsstaette(); $event.stopPropagation()"
+                    (click)="cancelEditAusbildungsstaette(staette); $event.stopPropagation()"
                   >
                     <i class="material-symbols-rounded fs-4">cancel</i>
                   </button>
@@ -134,7 +142,7 @@
                   class="btn btn-link btn-sm"
                   type="button"
                 >
-                  @if (expandedRow === staette.id) {
+                  @if (expandedRowId === staette.id) {
                     <i class="material-symbols-rounded fs-4">expand_less</i>
                   } @else {
                     <i class="material-symbols-rounded fs-4">expand_more</i>
@@ -146,11 +154,11 @@
 
           <!-- expandedDetail -->
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let staette" [attr.colspan]="displayedColumns.length">
-              <div class="detail-cell" [@detailExpand]="staette.id === expandedRow ? 'expanded' : 'collapsed'">
-                @if (staette.id === expandedRow) {
+            <td class="expander-cell" mat-cell *matCellDef="let staette" [attr.colspan]="displayedColumns.length">
+              <div class="detail-cell" [@detailExpand]="staette.id === expandedRowId ? 'expanded' : 'collapsed'">
+                @if (staette.id === expandedRowId) {
                   <form [formGroup]="gangForm">
-                    <table mat-table [dataSource]="staette.ausbildungsgaenge ?? []">
+                    <table mat-table class="child-table" [dataSource]="staette.ausbildungsgaenge ?? []">
                       <caption class="cdk-visually-hidden">
                         {{
                           'sachbearbeitung-app.admin.ausbildungsgaenge.description' | translate
@@ -248,16 +256,18 @@
                       <!-- actions -->
                       <ng-container matColumnDef="actions">
                         <th class="action-cell" mat-header-cell *matHeaderCellDef>
-                          <!-- add ausbildungsgang button -->
-                          <button
-                            [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.add' | translate"
-                            type="button"
-                            class="btn btn-link btn-sm"
-                            [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                            (click)="addAusbildungsgang(staette); $event.stopPropagation()"
-                          >
-                            <i class="material-symbols-rounded fs-4">add</i>
-                          </button>
+                          <div class="action-cell-content">
+                            <!-- add ausbildungsgang button -->
+                            <button
+                              [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.add' | translate"
+                              type="button"
+                              class="btn btn-outline-primary btn-sm"
+                              [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                              (click)="addAusbildungsgang(staette); $event.stopPropagation()"
+                            >
+                              <i class="material-symbols-rounded fs-4">add</i>
+                            </button>
+                          </div>
                         </th>
                         <td class="action-cell" mat-cell *matCellDef="let ausbildungsgang">
                           <div class="action-cell-content">
@@ -266,7 +276,7 @@
                                 [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.save' | translate"
                                 type="button"
                                 class="btn btn-link btn-sm"
-                                (click)="saveAusbildungsgang(); $event.stopPropagation()"
+                                (click)="saveAusbildungsgang(staette); $event.stopPropagation()"
                               >
                                 <i class="material-symbols-rounded fs-4">save</i>
                               </button>
@@ -274,7 +284,7 @@
                                 [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.cancel' | translate"
                                 type="button"
                                 class="btn btn-link btn-sm"
-                                (click)="cancelEditAusbildungsgang(staette); $event.stopPropagation()"
+                                (click)="cancelEditAusbildungsgang(staette, ausbildungsgang); $event.stopPropagation()"
                               >
                                 <i class="material-symbols-rounded fs-4">cancel</i>
                               </button>
@@ -303,7 +313,11 @@
 
                       <tr mat-header-row *matHeaderRowDef="displayedChildColumns"></tr>
 
-                      <tr mat-row *matRowDef="let ausbildungsgang; columns: displayedChildColumns"></tr>
+                      <tr
+                        mat-row
+                        [ngClass]="{ 'edit-row': ausbildungsgang.id === editedAusbildungsgang?.id }"
+                        *matRowDef="let ausbildungsgang; columns: displayedChildColumns"
+                      ></tr>
                     </table>
                   </form>
                 }
@@ -311,10 +325,18 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="['search']"></tr>
+          <tr class="filter-header-row" mat-header-row *matHeaderRowDef="['filter']"></tr>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-          <tr mat-row *matRowDef="let staette; columns: displayedColumns" (click)="expandRow(staette)"></tr>
+          <tr
+            mat-row
+            [ngClass]="{
+              'edit-row': staette.id === editedAusbildungsstaette?.id,
+              'expanded-row': staette.id === expandedRowId
+            }"
+            *matRowDef="let staette; columns: displayedColumns"
+            (click)="expandRow(staette)"
+          ></tr>
 
           <tr mat-row class="detail-row" *matRowDef="let staette; columns: ['expandedDetail']"></tr>
         </table>
