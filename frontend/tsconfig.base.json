@@ -99,6 +99,7 @@
       "@dv/shared/pattern/route-reuse-strategy-configurable": ["libs/shared/pattern/route-reuse-strategy-configurable/src/index.ts"],
       "@dv/shared/pattern/unsaved-guard": ["libs/shared/pattern/unsaved-guard/src/index.ts"],
       "@dv/shared/ui/comming-soon": ["libs/shared/ui/comming-soon/src/index.ts"],
+      "@dv/shared/ui/confirm-dialog": ["libs/shared/ui/confirm-dialog/src/index.ts"],
       "@dv/shared/ui/drop-file": ["libs/shared/ui/drop-file/src/index.ts"],
       "@dv/shared/ui/filesize-pipe": ["libs/shared/ui/filesize-pipe/src/index.ts"],
       "@dv/shared/ui/focusable-list": ["libs/shared/ui/focusable-list/src/index.ts"],

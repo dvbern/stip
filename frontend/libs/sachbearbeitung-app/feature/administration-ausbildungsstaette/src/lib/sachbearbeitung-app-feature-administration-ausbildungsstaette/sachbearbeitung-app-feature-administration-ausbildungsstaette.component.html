@@ -106,6 +106,7 @@
                     type="button"
                     class="btn btn-link btn-sm"
                     (click)="saveAusbildungsstaette(); $event.stopPropagation()"
+                    [disabled]="!hasUnsavedChanges"
                   >
                     <i class="material-symbols-rounded fs-4">save</i>
                   </button>
@@ -133,6 +134,7 @@
                     type="button"
                     class="btn btn-link btn-sm"
                     [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                    (click)="deleteAusbildungsstaette(staette); $event.stopPropagation()"
                   >
                     <i class="material-symbols-rounded fs-4">delete</i>
                   </button>
@@ -277,6 +279,7 @@
                                 type="button"
                                 class="btn btn-link btn-sm"
                                 (click)="saveAusbildungsgang(staette); $event.stopPropagation()"
+                                [disabled]="!hasUnsavedChanges"
                               >
                                 <i class="material-symbols-rounded fs-4">save</i>
                               </button>
@@ -303,6 +306,7 @@
                                 type="button"
                                 [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
                                 class="btn btn-link btn-sm"
+                                (click)="deleteAusbildungsgang(staette, ausbildungsgang); $event.stopPropagation()"
                               >
                                 <i class="material-symbols-rounded fs-4">delete</i>
                               </button>

@@ -255,6 +255,32 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
+      deleteAusbildungsgang: (
+        staette: AusbildungsstaetteTableData,
+        gang: Ausbildungsgang,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
+                (g) => g.id !== gang.id,
+              );
+
+              return {
+                ...s,
+                ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
+                ausbildungsgaenge,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
     }),
   ),
   withComputed(({ ausbildungsstaetten }) => ({
