@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
@@ -33,12 +34,10 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
                 field(PersonInAusbildungUpdateDtoSpec::getVorname),
                 gen -> gen.oneOf("Sarah", "Elijah", "Nu'ab", "André", "Özgür")
             )
-//            .generate(
-//                field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
-//                gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1,
-//                    1
-//                ))
-//            )
+            .set(
+                field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
+                LocalDate.now().minusYears(16)
+            )
             .generate(
                 field(PersonInAusbildungUpdateDtoSpec::getNachname),
                 gen -> gen.oneOf("Müller", "Sánchez", "Sato", "Singh", "Li", "García", "Nguyen")

@@ -27,7 +27,7 @@ public class ElternUpdateDtoSpecModel {
             .set(field(ElternUpdateDtoSpec::getElternTyp), ElternTypDtoSpec.VATER)
             .generate(
                 field(ElternUpdateDtoSpec::getGeburtsdatum),
-                gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1,
+                gen -> gen.temporal().localDate().range(LocalDate.of(1920, 1, 1), LocalDate.of(1980, 1,
                     1
                 ))
             )
