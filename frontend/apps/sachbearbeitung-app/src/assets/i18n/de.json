@@ -31,6 +31,8 @@
   "sachbearbeitung-app.admin.ausbildungsstaette.save": "Speichern",
   "sachbearbeitung-app.admin.ausbildungsstaette.cancel": "Abbrechen",
   "sachbearbeitung-app.admin.ausbildungsstaette.filter": "Filtern nach Ausbildungsstätte (De/Fr)",
+  "sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage": "Wollen Sie die Ausbildungsstätte \"{{ nameDe }}\" wirklich löschen?",
+  "sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle": "Ausbildungsstätte löschen",
 
   "sachbearbeitung-app.admin.ausbildungsgaenge.title": "Ausbildungsgänge",
   "sachbearbeitung-app.admin.ausbildungsgaenge.description": "Tabelle mit Ausbildungsgängen pro Ausbildungsstätte",
@@ -43,6 +45,8 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsrichtung": "Ausbildungsrichtung",
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsort": "Ausbildungsort",
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Abbrechen",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Wollen Sie den Ausbildungsgang \"{{ bezeichnungDe }}\" wirklich löschen?",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.deleteTitle": "Ausbildungsgang löschen",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",

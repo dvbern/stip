@@ -8,6 +8,7 @@ export interface ConfirmDialogData {
   message: string;
   confirmText: string;
   cancelText: string;
+  translationObject?: unknown;
 }
 
 @Component({
@@ -20,7 +21,7 @@ export interface ConfirmDialogData {
 })
 export class SharedUiConfirmDialogComponent {
   dialogRef = inject(MatDialogRef);
-  dialogData = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
+  dialogData = inject<ConfirmDialogData>(MAT_DIALOG_DATA, { optional: true });
 
   confirm() {
     return this.dialogRef.close(true);

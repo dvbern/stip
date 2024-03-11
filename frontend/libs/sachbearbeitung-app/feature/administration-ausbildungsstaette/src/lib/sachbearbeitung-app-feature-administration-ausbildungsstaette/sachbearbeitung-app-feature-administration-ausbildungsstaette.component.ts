@@ -93,7 +93,8 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   }
 
   constructor() {
-    merge(this.gangForm.valueChanges, this.staetteForm.valueChanges)
+    this.formUtils.registerFormForUnsavedCheck(this);
+    merge(this.gangForm.valueChanges, this.form.valueChanges)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.hasUnsavedChanges = true;
@@ -103,7 +104,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   private endEdit() {
     this.editedAusbildungsstaette = null;
     this.editedAusbildungsgang = null;
-    this.staetteForm.reset();
+    this.form.reset();
     this.gangForm.reset();
     this.hasUnsavedChanges = false;
   }
@@ -123,7 +124,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
 
   hasUnsavedChanges = false;
 
-  staetteForm = this.fb.nonNullable.group({
+  form = this.fb.nonNullable.group({
     nameDe: [''],
     nameFr: [''],
   });
@@ -159,7 +160,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
 
   editAusbildungsstaette(ausbildungsstaette: AusbildungsstaetteTableData) {
     this.editedAusbildungsstaette = ausbildungsstaette;
-    this.staetteForm.patchValue(ausbildungsstaette, { emitEvent: false });
+    this.form.patchValue(ausbildungsstaette, { emitEvent: false });
   }
 
   cancelEditAusbildungsstaette(staette: AusbildungsstaetteTableData) {
@@ -177,7 +178,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
 
     const update = {
       ...this.editedAusbildungsstaette,
-      ...this.staetteForm.value,
+      ...this.form.value,
     };
 
     this.endEdit();
@@ -190,10 +191,11 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       SharedUiConfirmDialogComponent,
       {
         data: {
-          title: 'Ausbildungsstätte Löschen',
-          message: `Wollen Sie die Ausbildungsstätte "${staette.nameDe}" wirklich löschen?`,
-          confirmText: 'Ja',
-          cancelText: 'Nein',
+          title: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle',
+          message: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage',
+          confirmText: 'shared.ui.yes',
+          cancelText: 'shared.ui.no',
+          translationObject: staette,
         },
       },
     );
@@ -288,10 +290,11 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       SharedUiConfirmDialogComponent,
       {
         data: {
-          title: 'Ausbildungsgang Löschen',
-          message: `Wollen Sie den Ausbildungsgang "${gang.bezeichnungDe}" wirklich löschen?`,
-          confirmText: 'Ja',
-          cancelText: 'Nein',
+          title: 'sachbearbeitung-app.admin.ausbildungsgaenge.deleteTitle',
+          message: 'sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage',
+          confirmText: 'shared.ui.yes',
+          cancelText: 'shared.ui.no',
+          translationObject: gang,
         },
       },
     );

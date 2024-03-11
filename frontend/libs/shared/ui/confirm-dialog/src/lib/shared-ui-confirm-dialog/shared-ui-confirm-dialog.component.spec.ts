@@ -1,6 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUiConfirmDialogComponent } from './shared-ui-confirm-dialog.component';
+import {
+  ConfirmDialogData,
+  SharedUiConfirmDialogComponent,
+} from './shared-ui-confirm-dialog.component';
+
+class MatDialogRefMock {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  close() {}
+}
+
+const dialogData: ConfirmDialogData = {
+  title: 'title',
+  message: 'message',
+  confirmText: 'confirmText',
+  cancelText: 'cancelText',
+};
 
 describe('SharedUiConfirmDialogComponent', () => {
   let component: SharedUiConfirmDialogComponent;
@@ -8,7 +29,15 @@ describe('SharedUiConfirmDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiConfirmDialogComponent],
+      imports: [
+        SharedUiConfirmDialogComponent,
+        MatDialogModule,
+        TranslateModule.forRoot(),
+      ],
+      providers: [
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+        { provide: MAT_DIALOG_DATA, useValue: dialogData },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiConfirmDialogComponent);

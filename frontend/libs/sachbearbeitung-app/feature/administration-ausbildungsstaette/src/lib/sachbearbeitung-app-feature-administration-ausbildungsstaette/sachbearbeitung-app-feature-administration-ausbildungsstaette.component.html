@@ -1,14 +1,8 @@
 <div class="col-12">
   <div class="container card p-3 mt-5 shadow">
     <div class="row overflow-auto">
-      <form [formGroup]="staetteForm">
-        <table
-          class="ausbildungsstaette-table"
-          mat-table
-          matSort
-          [dataSource]="store.tableData()"
-          multiTemplateDataRows
-        >
+      <form [formGroup]="form">
+        <table class="dv-expandable-table" mat-table matSort [dataSource]="store.tableData()" multiTemplateDataRows>
           <caption class="cdk-visually-hidden">
             {{
               'sachbearbeitung-app.admin.ausbildungsstaette.description' | translate

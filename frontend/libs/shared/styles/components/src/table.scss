@@ -28,7 +28,7 @@
   justify-content: flex-end;
 }
 
-.mat-mdc-table.ausbildungsstaette-table {
+.mat-mdc-table.dv-expandable-table {
   .mat-mdc-header-row {
     font-weight: bold;
     border-bottom: solid 1px var(--mat-table-row-item-outline-color);
@@ -114,10 +114,17 @@
     border-bottom-left-radius: var(--mdc-shape-small, 4px);
   }
 
-  .mdc-text-field--outlined .mat-mdc-form-field-infix {
-    padding: 0;
-    width: 100%;
-    min-height: unset;
+  .mdc-text-field--outlined {
+    .mat-mdc-form-field-infix {
+      padding: 0;
+      width: 100%;
+      min-height: unset;
+    }
+
+    .mat-mdc-form-field-flex {
+      align-items: center;
+      height: 100%;
+    }
   }
 
   .btn-outline-primary {

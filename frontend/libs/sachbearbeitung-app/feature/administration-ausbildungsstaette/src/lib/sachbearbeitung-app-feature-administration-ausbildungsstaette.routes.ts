@@ -24,7 +24,7 @@ export const sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes: Ro
           path: '',
           component:
             SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent,
-          // canActivate: [checkUnsavedChanges],
+          canDeactivate: [checkUnsavedChanges],
         },
       ],
     },

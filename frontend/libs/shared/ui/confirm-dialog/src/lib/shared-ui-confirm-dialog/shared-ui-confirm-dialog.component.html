@@ -7,14 +7,16 @@
   <span class="material-symbols-rounded">close</span>
 </button>
 <div class="p-4">
-  <h3 class="mb-3">{{ dialogData.title | translate }}</h3>
-  <div translate>{{ dialogData.message | translate }}</div>
+  <h3 class="mb-3">{{ dialogData?.title ?? 'shared.ui.confirmDialog.title' | translate }}</h3>
+  <div translate>
+    {{ dialogData?.message ?? 'shared.ui.confirmDialog.message' | translate: dialogData?.translationObject ?? {} }}
+  </div>
   <div class="d-flex mt-4 justify-content-end">
     <button type="button" class="btn btn-secondary" (click)="cancel()">
-      {{ dialogData.cancelText | translate }}
+      {{ dialogData?.cancelText ?? 'shared.ui.confirmDialog.cancel' | translate }}
     </button>
     <button type="button" class="btn btn-primary ms-2" (click)="confirm()">
-      {{ dialogData.confirmText | translate }}
+      {{ dialogData?.confirmText ?? 'shared.ui.confirmDialog.confirm' | translate }}
     </button>
   </div>
 </div>

@@ -21,35 +21,37 @@ import {
   AusbildungsstaetteService,
 } from '@dv/shared/model/gesuch';
 
-type AdminAusbildungsstaetteState = {
+export interface AdminAusbildungsstaetteState {
   ausbildungsstaetten: Ausbildungsstaette[];
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
   hasLoadedOnce: boolean;
   loading: boolean;
   error?: string;
-};
-
-const tableData = new MatTableDataSource<AusbildungsstaetteTableData>();
-
-tableData.filterPredicate = (data, filter) => {
-  const f = filter.trim().toLocaleLowerCase();
-
-  return (
-    data.nameDe.toLocaleLowerCase().includes(f) ||
-    data.nameFr.toLocaleLowerCase().includes(f)
-  );
-};
-
-const initialState: AdminAusbildungsstaetteState = {
-  ausbildungsstaetten: [],
-  tableData: tableData,
-  hasLoadedOnce: false,
-  loading: false,
-  error: undefined,
-};
+}
 
 export const AdminAusbildungsstaetteStore = signalStore(
-  withState(initialState),
+  withState(() => {
+    const tableData = new MatTableDataSource<AusbildungsstaetteTableData>();
+
+    tableData.filterPredicate = (data, filter) => {
+      const f = filter.trim().toLocaleLowerCase();
+
+      return (
+        data.nameDe.toLocaleLowerCase().includes(f) ||
+        data.nameFr.toLocaleLowerCase().includes(f)
+      );
+    };
+
+    const initialState: AdminAusbildungsstaetteState = {
+      ausbildungsstaetten: [],
+      tableData: tableData,
+      hasLoadedOnce: false,
+      loading: false,
+      error: undefined,
+    };
+
+    return initialState;
+  }),
   withMethods(
     (store, ausbildungsStaetteService = inject(AusbildungsstaetteService)) => ({
       setPaginator: (paginator: MatPaginator) => {
@@ -90,14 +92,15 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 next: (ausbildungsstaetten) =>
                   patchState(store, (state) => {
                     state.ausbildungsstaetten = ausbildungsstaetten;
-                    (state.tableData.data = ausbildungsstaetten.map(
+                    state.tableData.data = ausbildungsstaetten.map(
                       (ausbildungsstaette) => ({
                         ...ausbildungsstaette,
                         ausbildungsgaengeCount:
                           ausbildungsstaette.ausbildungsgaenge?.length ?? 0,
                       }),
-                    )),
-                      (state.hasLoadedOnce = true);
+                    );
+
+                    state.hasLoadedOnce = true;
 
                     return state;
                   }),

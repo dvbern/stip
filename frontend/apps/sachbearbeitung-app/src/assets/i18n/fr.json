@@ -31,6 +31,8 @@
   "sachbearbeitung-app.admin.ausbildungsstaette.save": "Sauvegarder",
   "sachbearbeitung-app.admin.ausbildungsstaette.cancel": "Annuler",
   "sachbearbeitung-app.admin.ausbildungsstaette.filter": "Filtrer par Centre de Formation (De/Fr)",
+  "sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage": "Voulez-vous vraiment supprimer le centre \"{{ nameFr }}\" ?",
+  "sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle": "Supprimer centre de formation",
 
   "sachbearbeitung-app.admin.ausbildungsgaenge.title": "Stage",
   "sachbearbeitung-app.admin.ausbildungsgaenge.description": "Table des stages au formations",
@@ -43,6 +45,8 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsrichtung": "Direction stage",
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsort": "Endroit de stage",
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Annuler",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Voulez-vous vraiment supprimer le stage \"{{ bezeichnungFr }}\" ?",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.deleteTitle": "Supprimer stage",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
