@@ -1,8 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsortDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -26,8 +25,8 @@ public class AusbildungsgangUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung;
-  private @Valid AusbildungsstaetteUpdateDto ausbildungsstaette;
-  private @Valid AusbildungsortDto ausbildungsort;
+  private @Valid UUID ausbildungsstaetteId;
+  private @Valid String ausbildungsort;
 
   /**
    * 
@@ -90,26 +89,27 @@ public class AusbildungsgangUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangUpdateDto ausbildungsstaette(AusbildungsstaetteUpdateDto ausbildungsstaette) {
-    this.ausbildungsstaette = ausbildungsstaette;
+  public AusbildungsgangUpdateDto ausbildungsstaetteId(UUID ausbildungsstaetteId) {
+    this.ausbildungsstaetteId = ausbildungsstaetteId;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsstaette")
+  @JsonProperty("ausbildungsstaetteId")
   @NotNull
-  public AusbildungsstaetteUpdateDto getAusbildungsstaette() {
-    return ausbildungsstaette;
+  public UUID getAusbildungsstaetteId() {
+    return ausbildungsstaetteId;
   }
 
-  @JsonProperty("ausbildungsstaette")
-  public void setAusbildungsstaette(AusbildungsstaetteUpdateDto ausbildungsstaette) {
-    this.ausbildungsstaette = ausbildungsstaette;
+  @JsonProperty("ausbildungsstaetteId")
+  public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
+    this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
 
   /**
+   * 
    **/
-  public AusbildungsgangUpdateDto ausbildungsort(AusbildungsortDto ausbildungsort) {
+  public AusbildungsgangUpdateDto ausbildungsort(String ausbildungsort) {
     this.ausbildungsort = ausbildungsort;
     return this;
   }
@@ -117,12 +117,12 @@ public class AusbildungsgangUpdateDto  implements Serializable {
   
   @JsonProperty("ausbildungsort")
   @NotNull
-  public AusbildungsortDto getAusbildungsort() {
+  public String getAusbildungsort() {
     return ausbildungsort;
   }
 
   @JsonProperty("ausbildungsort")
-  public void setAusbildungsort(AusbildungsortDto ausbildungsort) {
+  public void setAusbildungsort(String ausbildungsort) {
     this.ausbildungsort = ausbildungsort;
   }
 
@@ -139,13 +139,13 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     return Objects.equals(this.bezeichnungDe, ausbildungsgangUpdate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangUpdate.bezeichnungFr) &&
         Objects.equals(this.ausbildungsrichtung, ausbildungsgangUpdate.ausbildungsrichtung) &&
-        Objects.equals(this.ausbildungsstaette, ausbildungsgangUpdate.ausbildungsstaette) &&
+        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangUpdate.ausbildungsstaetteId) &&
         Objects.equals(this.ausbildungsort, ausbildungsgangUpdate.ausbildungsort);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaette, ausbildungsort);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaetteId, ausbildungsort);
   }
 
   @Override
@@ -156,7 +156,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungsrichtung: ").append(toIndentedString(ausbildungsrichtung)).append("\n");
-    sb.append("    ausbildungsstaette: ").append(toIndentedString(ausbildungsstaette)).append("\n");
+    sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("}");
     return sb.toString();

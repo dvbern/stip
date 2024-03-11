@@ -6,9 +6,9 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +28,8 @@ public class AusbildungsgangService {
     }
 
     @Transactional
-    public AusbildungsgangDto createAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangDto) {
-        Ausbildungsgang ausbildungsgang = new Ausbildungsgang();
-        persistsAusbildungsgang(ausbildungsgangDto, ausbildungsgang);
+    public AusbildungsgangDto createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangDto) {
+        Ausbildungsgang ausbildungsgang = persistsAusbildungsgang(ausbildungsgangDto);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
     }
 
@@ -49,14 +48,22 @@ public class AusbildungsgangService {
     private void persistsAusbildungsgang(
         AusbildungsgangUpdateDto ausbildungsgangUpdate,
         Ausbildungsgang ausbildungsgangToUpdate) {
-        ausbildungsgangToUpdate.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaette()));
+        ausbildungsgangToUpdate.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaetteId()));
         ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
         ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
     }
 
-    private Ausbildungsstaette loadAusbildungsstaetteIfExists(AusbildungsstaetteUpdateDto ausbildungsstaette) {
-        return ausbildungsstaette.getId() != null ?
-            ausbildungsstaetteRepository.requireById(ausbildungsstaette.getId()) :
+    private Ausbildungsgang persistsAusbildungsgang(
+        AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        Ausbildungsgang ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
+        ausbildungsgang.setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangCreateDto.getAusbildungsstaetteId()));
+        ausbildungsgangRepository.persist(ausbildungsgang);
+        return ausbildungsgang;
+    }
+
+    private Ausbildungsstaette loadAusbildungsstaetteIfExists(UUID ausbildungsstaetteId) {
+        return ausbildungsstaetteId != null ?
+            ausbildungsstaetteRepository.requireById(ausbildungsstaetteId) :
             new Ausbildungsstaette();
     }
 }

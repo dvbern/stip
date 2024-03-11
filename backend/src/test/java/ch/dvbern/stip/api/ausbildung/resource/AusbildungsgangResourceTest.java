@@ -10,12 +10,12 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungsgangApiSpec;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsortDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpecModel;
 import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpecModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -42,12 +43,14 @@ class AusbildungsgangResourceTest {
         AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
     private UUID ausbildungsgangId;
 
+    private UUID ausbildungsstaetteId;
+
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void createAusbildungsgangAsGesuchstellerForbidden() {
         ausbildungsgangApi.createAusbildungsgang()
-            .body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create())
+            .body(Instancio.of(ausbildungsgangCreateDtoSpecModel).create())
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -59,7 +62,7 @@ class AusbildungsgangResourceTest {
     @Order(2)
     void createAusbildungsgangAsSachbearbeiter() {
         var response = ausbildungsgangApi.createAusbildungsgang()
-            .body(Instancio.of(ausbildungsgangUpdateDtoSpecModel).create())
+            .body(Instancio.of(ausbildungsgangCreateDtoSpecModel).create())
             .execute(ResponseBody::prettyPeek)
             .then();
 
@@ -74,6 +77,7 @@ class AusbildungsgangResourceTest {
     @Order(3)
     void getAusbildungsgang() {
         var ausbildunggang = getAusbildungsgangeFromAPI(ausbildungsgangId);
+        ausbildungsstaetteId = ausbildunggang.getAusbildungsstaetteId();
 
         assertThat(ausbildunggang.getId(), is(ausbildungsgangId));
         assertThat(ausbildunggang.getAusbildungsstaetteId(), notNullValue());
@@ -84,9 +88,9 @@ class AusbildungsgangResourceTest {
     @Order(4)
     void createNewAusbildungsgangWithExistingAusbildungsstaette() {
         var ausbildungsstaettes = getAusbildungsstaettenFromApi();
-        var ausbildungsgang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
+        var ausbildungsgang = Instancio.of(ausbildungsgangCreateDtoSpecModel).create();
 
-        ausbildungsgang.getAusbildungsstaette().setId(ausbildungsstaettes[0].getId());
+        ausbildungsgang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());
 
         ausbildungsgangApi.createAusbildungsgang()
             .body(ausbildungsgang)
@@ -103,6 +107,7 @@ class AusbildungsgangResourceTest {
     @Order(5)
     void updateAusbildungsgangNotFound() {
         var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
+        ausbildunggang.setAusbildungsstaetteId(ausbildungsstaetteId);
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
             .body(ausbildunggang)
@@ -133,11 +138,9 @@ class AusbildungsgangResourceTest {
         var ausbildungsstaettes = getAusbildungsstaettenFromApi();
 
         var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
-        var uniArrau = "Uni Aarau";
-        ausbildunggang.setAusbildungsort(AusbildungsortDtoSpec.AARAU);
-        ausbildunggang.getAusbildungsstaette().setNameDe(uniArrau);
-        ausbildunggang.getAusbildungsstaette().setNameFr(uniArrau);
-        ausbildunggang.getAusbildungsstaette().setId(ausbildungsstaettes[0].getId());
+        final var aarau = "AARAU";
+        ausbildunggang.setAusbildungsort(aarau);
+        ausbildunggang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
             .body(ausbildunggang)
@@ -149,10 +152,8 @@ class AusbildungsgangResourceTest {
         var updatedAussibldungsgang = getAusbildungsgangeFromAPI(ausbildungsgangId);
         var updatedAusbildungsstaette = getAusbildungsstaetteFromApi(ausbildungsstaettes[0].getId());
 
-        assertThat(updatedAussibldungsgang.getAusbildungsort(), is(AusbildungsortDtoSpec.AARAU));
+        assertThat(updatedAussibldungsgang.getAusbildungsort(), is(aarau));
         assertThat(getAusbildungsstaettenFromApi().length, is(ausbildungsstaettes.length));
-        assertThat(updatedAusbildungsstaette.getNameDe(), is(uniArrau));
-        assertThat(updatedAusbildungsstaette.getNameFr(), is(uniArrau));
     }
 
     @Test
@@ -189,7 +190,11 @@ class AusbildungsgangResourceTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        assertThat(getAusbildungsstaettenFromApi().length, is(numAusbildungsstaettenBevoreDelete - 1));
+        ausbildungsgangApi.getAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+                .execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     private AusbildungsstaetteDtoSpec[] getAusbildungsstaettenFromApi() {

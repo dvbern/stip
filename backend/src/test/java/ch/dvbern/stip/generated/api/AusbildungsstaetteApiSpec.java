@@ -13,8 +13,11 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDtoSpec;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,9 +60,20 @@ public class AusbildungsstaetteApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                createAusbildungsstaette(),
+                deleteAusbildungsstaette(),
                 getAusbildungsstaette(),
-                getAusbildungsstaetten()
+                getAusbildungsstaetten(),
+                updateAusbildungsstaette()
         );
+    }
+
+    public CreateAusbildungsstaetteOper createAusbildungsstaette() {
+        return new CreateAusbildungsstaetteOper(createReqSpec());
+    }
+
+    public DeleteAusbildungsstaetteOper deleteAusbildungsstaette() {
+        return new DeleteAusbildungsstaetteOper(createReqSpec());
     }
 
     public GetAusbildungsstaetteOper getAusbildungsstaette() {
@@ -68,6 +82,10 @@ public class AusbildungsstaetteApiSpec {
 
     public GetAusbildungsstaettenOper getAusbildungsstaetten() {
         return new GetAusbildungsstaettenOper(createReqSpec());
+    }
+
+    public UpdateAusbildungsstaetteOper updateAusbildungsstaette() {
+        return new UpdateAusbildungsstaetteOper(createReqSpec());
     }
 
     /**
@@ -80,6 +98,129 @@ public class AusbildungsstaetteApiSpec {
         return this;
     }
 
+    /**
+     * 
+     * 
+     *
+     * @see #body  (optional)
+     */
+    public static class CreateAusbildungsstaetteOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/ausbildungsstaette";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /ausbildungsstaette
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param ausbildungsstaetteCreateDtoSpec (AusbildungsstaetteCreateDtoSpec)  (optional)
+         * @return operation
+         */
+        public CreateAusbildungsstaetteOper body(AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec) {
+            reqSpec.setBody(ausbildungsstaetteCreateDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Delete Ausbildungsstaette
+     * 
+     *
+     * @see #ausbildungsstaetteIdPath  (required)
+     */
+    public static class DeleteAusbildungsstaetteOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/ausbildungsstaette/{ausbildungsstaetteId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /ausbildungsstaette/{ausbildungsstaetteId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String AUSBILDUNGSSTAETTE_ID_PATH = "ausbildungsstaetteId";
+
+        /**
+         * @param ausbildungsstaetteId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteAusbildungsstaetteOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
+            reqSpec.addPathParam(AUSBILDUNGSSTAETTE_ID_PATH, ausbildungsstaetteId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * returns a Ausbildungsstaette with the given id
      * 
@@ -210,6 +351,79 @@ public class AusbildungsstaetteApiSpec {
          * @return operation
          */
         public GetAusbildungsstaettenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #ausbildungsstaetteIdPath  (required)
+     * @see #body  (optional)
+     */
+    public static class UpdateAusbildungsstaetteOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/ausbildungsstaette/{ausbildungsstaetteId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /ausbildungsstaette/{ausbildungsstaetteId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param ausbildungsstaetteUpdateDtoSpec (AusbildungsstaetteUpdateDtoSpec)  (optional)
+         * @return operation
+         */
+        public UpdateAusbildungsstaetteOper body(AusbildungsstaetteUpdateDtoSpec ausbildungsstaetteUpdateDtoSpec) {
+            reqSpec.setBody(ausbildungsstaetteUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String AUSBILDUNGSSTAETTE_ID_PATH = "ausbildungsstaetteId";
+
+        /**
+         * @param ausbildungsstaetteId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateAusbildungsstaetteOper ausbildungsstaetteIdPath(Object ausbildungsstaetteId) {
+            reqSpec.addPathParam(AUSBILDUNGSSTAETTE_ID_PATH, ausbildungsstaetteId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateAusbildungsstaetteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateAusbildungsstaetteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import ch.dvbern.stip.generated.api.AusbildungsgangResource;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -24,8 +25,8 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
 
     @Override
     @RolesAllowed(ROLE_SACHBEARBEITER)
-    public Response createAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
-        AusbildungsgangDto created = ausbildungsgangService.createAusbildungsgang(ausbildungsgangUpdateDto);
+    public Response createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        AusbildungsgangDto created = ausbildungsgangService.createAusbildungsgang(ausbildungsgangCreateDto);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(created.getId().toString()).build()).build();
     }
 

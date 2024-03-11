@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDtoSpec;
 import java.util.UUID;
@@ -124,11 +125,11 @@ public class AusbildungsgangApiSpec {
         }
 
          /**
-         * @param ausbildungsgangUpdateDtoSpec (AusbildungsgangUpdateDtoSpec)  (required)
+         * @param ausbildungsgangCreateDtoSpec (AusbildungsgangCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAusbildungsgangOper body(AusbildungsgangUpdateDtoSpec ausbildungsgangUpdateDtoSpec) {
-            reqSpec.setBody(ausbildungsgangUpdateDtoSpec);
+        public CreateAusbildungsgangOper body(AusbildungsgangCreateDtoSpec ausbildungsgangCreateDtoSpec) {
+            reqSpec.setBody(ausbildungsgangCreateDtoSpec);
             return this;
         }
 

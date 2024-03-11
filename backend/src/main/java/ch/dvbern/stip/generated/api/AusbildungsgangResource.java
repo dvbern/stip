@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public interface AusbildungsgangResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
-    Response createAusbildungsgang(@Valid @NotNull AusbildungsgangUpdateDto ausbildungsgangUpdateDto);
+    Response createAusbildungsgang(@Valid @NotNull AusbildungsgangCreateDto ausbildungsgangCreateDto);
 
     @DELETE
     @Path("/{ausbildungsgangId}")
