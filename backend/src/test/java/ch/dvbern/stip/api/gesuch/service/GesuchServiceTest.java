@@ -30,6 +30,9 @@ import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -765,9 +768,16 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    void gesuchEinreichenTest() {
+    void gesuchEinreichenTest() throws JsonProcessingException {
         final var gesuch = Instancio.of(gesuchUpdateDtoSpecFullModel).withSeed(8532).create();
         final var dto = new GesuchUpdateDtoMapperImpl().toEntity(gesuch);
+
+        // Temporarily log the DTO as json to compare between local and CI object
+        final var mapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .build();
+        final var json = mapper.writeValueAsString(dto);
+        LOG.info(json);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(dto);
         tranche.getGesuchFormular()
