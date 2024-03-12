@@ -724,16 +724,16 @@ paths:
             operationId: updateCurrentBenutzer
             summary: Update the logged-in Benutzer
     '/ausbildungsgang/{ausbildungsgangId}':
+        parameters:
+            -
+                name: ausbildungsgangId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
         get:
             tags:
                 - Ausbildungsgang
-            parameters:
-                -
-                    name: ausbildungsgangId
-                    schema:
-                        $ref: '#/components/schemas/UUID'
-                    in: path
-                    required: true
             responses:
                 '200':
                     content:
@@ -790,13 +790,6 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: deleteAusbildungsgang
             summary: delete a Ausbildungsgang
-        parameters:
-            -
-                name: ausbildungsgangId
-                schema:
-                    $ref: '#/components/schemas/UUID'
-                in: path
-                required: true
     /ausbildungsgang:
         post:
             requestBody:

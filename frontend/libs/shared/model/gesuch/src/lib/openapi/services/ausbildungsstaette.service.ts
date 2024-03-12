@@ -49,6 +49,11 @@ export interface AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams 
   ausbildungsstaetteUpdate?: AusbildungsstaetteUpdate;
 }
 
+export interface AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams {
+  ausbildungsstaetteId: string;
+  ausbildungsstaetteUpdate?: AusbildungsstaetteUpdate;
+}
+
 @Injectable({
   providedIn: 'root',
 })
