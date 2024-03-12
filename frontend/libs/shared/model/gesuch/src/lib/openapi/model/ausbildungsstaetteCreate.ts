@@ -10,14 +10,14 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
-export interface BenutzereinstellungenUpdate { 
-    id?: string;
+export interface AusbildungsstaetteCreate { 
     /**
      * 
      */
-    digitaleKommunikation?: boolean;
+    nameDe: string;
+    /**
+     * 
+     */
+    nameFr: string;
 }
 

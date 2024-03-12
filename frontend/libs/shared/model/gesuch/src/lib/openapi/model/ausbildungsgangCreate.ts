@@ -9,15 +9,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Bildungsart } from './bildungsart';
 
 /**
  * 
  */
-export interface BenutzereinstellungenUpdate { 
-    id?: string;
+export interface AusbildungsgangCreate { 
     /**
      * 
      */
-    digitaleKommunikation?: boolean;
+    bezeichnungDe: string;
+    /**
+     * 
+     */
+    bezeichnungFr: string;
+    ausbildungsrichtung: Bildungsart;
+    ausbildungsstaetteId?: string;
+    /**
+     * 
+     */
+    ausbildungsort: string;
 }
+
+
 
