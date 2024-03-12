@@ -22,7 +22,7 @@ import {
 } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
-import { ActionReducer, Store, provideState, provideStore } from '@ngrx/store';
+import { Store, provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import {
   MissingTranslationHandler,
@@ -72,18 +72,7 @@ export class ExplicitMissingTranslationHandler
   }
 }
 
-export function debugReducers<T>(reducer: ActionReducer<T>): ActionReducer<T> {
-  return function (state, action) {
-    // if (isDevMode()) {
-    //   console['log']('state', state);
-    //   console['log']('action', action);
-    // }
-
-    return reducer(state, action);
-  };
-}
-
-export const metaReducers = [debugReducers];
+export const metaReducers = [];
 
 export function provideSharedPatternCore(
   appRoutes: Route[],
