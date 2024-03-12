@@ -12,7 +12,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { map, pipe, switchMap, tap } from 'rxjs';
+import { filter, map, pipe, switchMap, tap } from 'rxjs';
 
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
 import {
@@ -84,10 +84,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
           }),
           switchMap(() =>
             ausbildungsStaetteService.getAusbildungsstaetten$().pipe(
-              map((ausbildungsstaetten) => {
-                const generated = generateRandomAusbildungsstaetten(60);
-                return [...ausbildungsstaetten, ...generated];
-              }),
               tapResponse({
                 next: (ausbildungsstaetten) =>
                   patchState(store, (state) => {
@@ -167,15 +163,36 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
-      deleteAusbildungsstaette: (staette: AusbildungsstaetteTableData) => {
-        patchState(store, (state) => {
-          const data = state.tableData.data.filter((s) => s.id !== staette.id);
+      deleteAusbildungsstaette: rxMethod<AusbildungsstaetteTableData>(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              loading: true,
+              error: undefined,
+            });
+          }),
+          switchMap((staette: AusbildungsstaetteTableData) => {
+            if (!staette.id) {
+              throw new Error('Ausbildungsstaette ID is undefined');
+            }
+            return ausbildungsStaetteService
+              .deleteAusbildungsstaette$({ ausbildungsstaetteId: staette.id })
+              .pipe(
+                tap(() => {
+                  patchState(store, (state) => {
+                    const data = state.tableData.data.filter(
+                      (s) => s.id !== staette.id,
+                    );
 
-          state.tableData.data = data;
+                    state.tableData.data = data;
 
-          return state;
-        });
-      },
+                    return state;
+                  });
+                }),
+              );
+          }),
+        ),
+      ),
       // Ausbildungsgang  ==========================================================
       addAusbildungsgangRow: (
         ausbildungsstaetteId: string,
@@ -291,11 +308,11 @@ export const AdminAusbildungsstaetteStore = signalStore(
   })),
 );
 
-function generateRandomAusbildungsstaetten(n: number): Ausbildungsstaette[] {
-  return Array.from({ length: n }, (_, i) => ({
-    id: `${i}`,
-    nameDe: `Ausbildungsstaette ${i}`,
-    nameFr: `Ausbildungsstaette ${i}`,
-    ausbildungsgaenge: [],
-  }));
-}
+// function generateRandomAusbildungsstaetten(n: number): Ausbildungsstaette[] {
+//   return Array.from({ length: n }, (_, i) => ({
+//     id: `${i}`,
+//     nameDe: `Ausbildungsstaette ${i}`,
+//     nameFr: `Ausbildungsstaette ${i}`,
+//     ausbildungsgaenge: [],
+//   }));
+// }

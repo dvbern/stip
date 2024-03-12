@@ -14,7 +14,7 @@ import { Bildungsart } from './bildungsart';
 /**
  *
  */
-export interface AusbildungsgangUpdate {
+export interface AusbildungsgangCreate {
   /**
    *
    */
@@ -24,7 +24,7 @@ export interface AusbildungsgangUpdate {
    */
   bezeichnungFr: string;
   ausbildungsrichtung: Bildungsart;
-  ausbildungsstaetteId: string;
+  ausbildungsstaetteId?: string;
   /**
    *
    */
