@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.common.statemachines.handlers;
 
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
@@ -27,7 +28,7 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
             pia.getNachname(),
             pia.getVorname(),
             pia.getEmail(),
-            pia.getKorrespondenzSprache().getLocale()
+            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
         );
     }
 }

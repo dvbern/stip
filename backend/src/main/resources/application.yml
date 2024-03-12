@@ -60,6 +60,8 @@ quarkus:
   keycloak:
     devservices:
       enabled: false
+  # Keep in Sync with AppLanguages.java
+  locales: de_CH,fr_CH
 
 '%dev':
   quarkus:

@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.common.service;
 
-import java.time.LocalDate;
-
-import jakarta.ws.rs.BadRequestException;
+import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import org.mapstruct.Mapper;
+
+import java.time.LocalDate;
 
 @DateMapper
 @Mapper(config = MappingQualifierConfig.class)
@@ -20,8 +20,7 @@ public class DateMapperImpl {
         String[] date = monthYear.split("\\.");
 
         if (date.length != 2) {
-            // TODO KSTIP-782: error handling
-            throw new BadRequestException("Invalid Date Format");
+            throw AppValidationMessage.invalidDate(monthYear).create();
         }
 
         String month = date[0].length() == 1 ? '0' + date[0] : date[0];
