@@ -33,4 +33,9 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     loadComponent: () => SharedUiCommingSoonComponent,
     data: { option: OPTION_MORE },
   },
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: OPTION_AUSBILDUNGSSTAETTE.route,
+  },
 ];

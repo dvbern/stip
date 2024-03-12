@@ -5,7 +5,6 @@ export * from './ausbildungUpdate';
 export * from './ausbildungsPensum';
 export * from './ausbildungsgang';
 export * from './ausbildungsgangUpdate';
-export * from './ausbildungsort';
 export * from './ausbildungssituation';
 export * from './ausbildungsstaette';
 export * from './ausbildungsstaetteAnyOf';

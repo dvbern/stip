@@ -1,5 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { tapResponse } from '@ngrx/operators';
 import {
@@ -10,55 +12,68 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
 import {
+  Ausbildungsgang,
   Ausbildungsstaette,
   AusbildungsstaetteService,
 } from '@dv/shared/model/gesuch';
 
-type AdminAusbildungsstaetteState = {
+export interface AdminAusbildungsstaetteState {
   ausbildungsstaetten: Ausbildungsstaette[];
+  tableData: MatTableDataSource<AusbildungsstaetteTableData>;
   hasLoadedOnce: boolean;
   loading: boolean;
   error?: string;
-};
-
-const initialState: AdminAusbildungsstaetteState = {
-  ausbildungsstaetten: [],
-  hasLoadedOnce: false,
-  loading: false,
-  error: undefined,
-};
+}
 
 export const AdminAusbildungsstaetteStore = signalStore(
-  withState(initialState),
-  // withMethods(
-  //   (store, ausbildungsStaetteService = inject(AusbildungsstaetteService)) => {
-  //     async function loadAusbildungsstaetten() {
-  //       patchState(store, {
-  //         loading: true,
-  //         error: undefined,
-  //       });
-  //       const ausbildungsstaetten = await lastValueFrom(
-  //         ausbildungsStaetteService.getAusbildungsstaetten$(),
-  //       );
-  //       patchState(store, {
-  //         ausbildungsstaetten: ausbildungsstaetten,
-  //         hasLoadedOnce: true,
-  //         loading: false,
-  //         error: undefined,
-  //       });
-  //     }
+  withState(() => {
+    const tableData = new MatTableDataSource<AusbildungsstaetteTableData>();
 
-  //     return {
-  //       loadAusbildungsstaetten,
-  //     };
-  //   },
-  // ),
+    tableData.filterPredicate = (data, filter) => {
+      const f = filter.trim().toLocaleLowerCase();
+
+      return (
+        data.nameDe.toLocaleLowerCase().includes(f) ||
+        data.nameFr.toLocaleLowerCase().includes(f)
+      );
+    };
+
+    const initialState: AdminAusbildungsstaetteState = {
+      ausbildungsstaetten: [],
+      tableData: tableData,
+      hasLoadedOnce: false,
+      loading: false,
+      error: undefined,
+    };
+
+    return initialState;
+  }),
   withMethods(
     (store, ausbildungsStaetteService = inject(AusbildungsstaetteService)) => ({
+      setPaginator: (paginator: MatPaginator) => {
+        patchState(store, (state) => {
+          state.tableData.paginator = paginator;
+          return state;
+        });
+      },
+      setSort: (sort: MatSort) => {
+        patchState(store, (state) => {
+          state.tableData.sort = sort;
+          return state;
+        });
+      },
+      setFilter: (filter: string) => {
+        patchState(store, (state) => {
+          state.tableData.filter = filter;
+          return state;
+        });
+      },
+
+      // Ausbildungsstaette ==========================================================
       loadAusbildungsstaetten: rxMethod(
         pipe(
           tap(() => {
@@ -69,11 +84,25 @@ export const AdminAusbildungsstaetteStore = signalStore(
           }),
           switchMap(() =>
             ausbildungsStaetteService.getAusbildungsstaetten$().pipe(
+              map((ausbildungsstaetten) => {
+                const generated = generateRandomAusbildungsstaetten(60);
+                return [...ausbildungsstaetten, ...generated];
+              }),
               tapResponse({
                 next: (ausbildungsstaetten) =>
-                  patchState(store, {
-                    ausbildungsstaetten: ausbildungsstaetten,
-                    hasLoadedOnce: true,
+                  patchState(store, (state) => {
+                    state.ausbildungsstaetten = ausbildungsstaetten;
+                    state.tableData.data = ausbildungsstaetten.map(
+                      (ausbildungsstaette) => ({
+                        ...ausbildungsstaette,
+                        ausbildungsgaengeCount:
+                          ausbildungsstaette.ausbildungsgaenge?.length ?? 0,
+                      }),
+                    );
+
+                    state.hasLoadedOnce = true;
+
+                    return state;
                   }),
                 error: (error: HttpErrorResponse) => {
                   patchState(store, {
@@ -90,19 +119,183 @@ export const AdminAusbildungsstaetteStore = signalStore(
           ),
         ),
       ),
+      addAusbildungsstaetteRow: (newRow: AusbildungsstaetteTableData) => {
+        patchState(store, (state) => {
+          const data = [newRow, ...state.tableData.data];
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      removeNewAusbildungsstaetteRow: (
+        staette: AusbildungsstaetteTableData,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.filter((s) => s.id !== staette.id);
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      handleCreateUpdateAusbildungsstaette: (
+        staette: AusbildungsstaetteTableData,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              if (s.id === 'new') {
+                return {
+                  ...s,
+                  ...staette,
+                  id: `new-${state.ausbildungsstaetten.length + 1}`,
+                };
+              }
+
+              return {
+                ...s,
+                ...staette,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      deleteAusbildungsstaette: (staette: AusbildungsstaetteTableData) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.filter((s) => s.id !== staette.id);
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      // Ausbildungsgang  ==========================================================
+      addAusbildungsgangRow: (
+        ausbildungsstaetteId: string,
+        newRow: Ausbildungsgang,
+      ) => {
+        patchState(store, (state) => {
+          // could find be more efficent?
+          const data = state.tableData.data.map((staette) => {
+            if (staette.id === ausbildungsstaetteId) {
+              return {
+                ...staette,
+                ausbildungsgaengeCount: staette.ausbildungsgaengeCount + 1,
+                ausbildungsgaenge: [
+                  newRow,
+                  ...(staette.ausbildungsgaenge ?? []),
+                ],
+              };
+            }
+
+            return staette;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      removeNewAusbildungsgangRow: (
+        staette: AusbildungsstaetteTableData,
+        gang: Ausbildungsgang,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
+                (g) => g.id !== gang.id,
+              );
+
+              return {
+                ...s,
+                ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
+                ausbildungsgaenge,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      handleCreateUpdateAusbildungsgang: (
+        staette: AusbildungsstaetteTableData,
+        gang: Ausbildungsgang,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              const ausbildungsgaenge = s.ausbildungsgaenge?.map((g) => {
+                if (g.id === gang.id) {
+                  return gang;
+                }
+
+                return g;
+              });
+
+              return {
+                ...s,
+                ausbildungsgaenge,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
+      deleteAusbildungsgang: (
+        staette: AusbildungsstaetteTableData,
+        gang: Ausbildungsgang,
+      ) => {
+        patchState(store, (state) => {
+          const data = state.tableData.data.map((s) => {
+            if (s.id === staette.id) {
+              const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
+                (g) => g.id !== gang.id,
+              );
+
+              return {
+                ...s,
+                ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
+                ausbildungsgaenge,
+              };
+            }
+
+            return s;
+          });
+
+          state.tableData.data = data;
+
+          return state;
+        });
+      },
     }),
   ),
   withComputed(({ ausbildungsstaetten }) => ({
-    tableData: computed(
-      () =>
-        new MatTableDataSource<AusbildungsstaetteTableData>(
-          ausbildungsstaetten().map((ausbildungsstaette) => ({
-            ...ausbildungsstaette,
-            ausbildungsgaengeCount:
-              ausbildungsstaette.ausbildungsgaenge?.length ?? 0,
-          })),
-        ),
-    ),
-    ausbildungsstaetteCount: computed(() => ausbildungsstaetten.length ?? 0),
+    ausbildungsstaetteCount: computed(() => ausbildungsstaetten().length ?? 0),
   })),
 );
+
+function generateRandomAusbildungsstaetten(n: number): Ausbildungsstaette[] {
+  return Array.from({ length: n }, (_, i) => ({
+    id: `${i}`,
+    nameDe: `Ausbildungsstaette ${i}`,
+    nameFr: `Ausbildungsstaette ${i}`,
+    ausbildungsgaenge: [],
+  }));
+}
