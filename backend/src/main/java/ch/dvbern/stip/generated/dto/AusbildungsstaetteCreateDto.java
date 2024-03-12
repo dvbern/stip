@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsstaetteCreateDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
-  private @Valid UUID id;
 
   /**
    * 
@@ -64,24 +62,6 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     this.nameFr = nameFr;
   }
 
-  /**
-   **/
-  public AusbildungsstaetteCreateDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -93,13 +73,12 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     }
     AusbildungsstaetteCreateDto ausbildungsstaetteCreate = (AusbildungsstaetteCreateDto) o;
     return Objects.equals(this.nameDe, ausbildungsstaetteCreate.nameDe) &&
-        Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr) &&
-        Objects.equals(this.id, ausbildungsstaetteCreate.id);
+        Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameDe, nameFr, id);
+    return Objects.hash(nameDe, nameFr);
   }
 
   @Override
@@ -109,7 +88,6 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
