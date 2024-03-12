@@ -103,6 +103,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> GesuchFormularDiffUtil.hasWohnsitzChanged(newFormular, targetFormular),
             "Clear Wohnkosten because wohnsitz changed",
             () -> {
+                if (newFormular.getPersonInAusbildung() == null) {
+                    return;
+                }
+
                 if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
                     targetFormular.getEinnahmenKosten().setWohnkosten(null);
                 }
