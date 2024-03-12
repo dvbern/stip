@@ -2123,8 +2123,6 @@ components:
                 nameFr:
                     description: ''
                     type: string
-                id:
-                    $ref: '#/components/schemas/UUID'
         Ausbildungsgang:
             required:
                 - ausbildungsort
