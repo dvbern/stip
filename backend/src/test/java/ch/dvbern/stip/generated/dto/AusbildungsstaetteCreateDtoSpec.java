@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -29,8 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_NAME_DE,
-  AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_NAME_FR,
-  AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_ID
+  AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_NAME_FR
 })
 @JsonTypeName("AusbildungsstaetteCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -40,9 +38,6 @@ public class AusbildungsstaetteCreateDtoSpec {
 
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
   private String nameFr;
-
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
 
   public AusbildungsstaetteCreateDtoSpec() {
   }
@@ -98,32 +93,6 @@ public class AusbildungsstaetteCreateDtoSpec {
     this.nameFr = nameFr;
   }
 
-
-  public AusbildungsstaetteCreateDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,13 +103,12 @@ public class AusbildungsstaetteCreateDtoSpec {
     }
     AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreate = (AusbildungsstaetteCreateDtoSpec) o;
     return Objects.equals(this.nameDe, ausbildungsstaetteCreate.nameDe) &&
-        Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr) &&
-        Objects.equals(this.id, ausbildungsstaetteCreate.id);
+        Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameDe, nameFr, id);
+    return Objects.hash(nameDe, nameFr);
   }
 
   @Override
@@ -149,7 +117,6 @@ public class AusbildungsstaetteCreateDtoSpec {
     sb.append("class AusbildungsstaetteCreateDtoSpec {\n");
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
