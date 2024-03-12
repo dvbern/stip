@@ -1,4 +1,5 @@
 import { ApplicationConfig } from '@angular/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
       authClientId: 'stip-sachbearbeitung-app',
       appType: 'sachbearbeitung-app',
     }),
+    provideNativeDateAdapter(),
     provideState(sharedDataAccessGesuchsFeature),
     provideEffects(sharedDataAccessGesuchEffects),
     provideAnimations(),

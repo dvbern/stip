@@ -4,6 +4,13 @@ import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
   {
+    path: 'sachbearbeitung-app-feature-gesuchsperiode',
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/gesuchsperiode').then(
+        (m) => m.sachbearbeitungAppFeatureGesuchsperiodeRoutes,
+      ),
+  },
+  {
     path: 'sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
     loadChildren: () =>
       import(

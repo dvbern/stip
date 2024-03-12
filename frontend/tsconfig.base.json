@@ -32,6 +32,7 @@
       "@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung": ["libs/sachbearbeitung-app/feature/administration-buchstaben-zuteilung/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/cockpit": ["libs/sachbearbeitung-app/feature/cockpit/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form": ["libs/sachbearbeitung-app/feature/gesuch-form/src/index.ts"],
+      "@dv/sachbearbeitung-app/feature/gesuchsperiode": ["libs/sachbearbeitung-app/feature/gesuchsperiode/src/index.ts"],
       "@dv/sachbearbeitung-app/model/administration": ["libs/sachbearbeitung-app/model/administration/src/index.ts"],
       "@dv/sachbearbeitung-app/pattern/administration-layout": ["libs/sachbearbeitung-app/pattern/administration-layout/src/index.ts"],
       "@dv/sachbearbeitung-app/pattern/gesuch-step-layout": ["libs/sachbearbeitung-app/pattern/gesuch-step-layout/src/index.ts"],
