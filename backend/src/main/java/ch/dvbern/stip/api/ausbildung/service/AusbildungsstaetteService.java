@@ -20,7 +20,7 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
 
     public AusbildungsstaetteDto findById(UUID ausbildungsstetteId) {
-        var ausbildungsstaette = ausbildungsstaetteRepository.findById(ausbildungsstetteId);
+        var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstetteId);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }
 
