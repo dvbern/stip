@@ -5,9 +5,13 @@ import { Store } from '@ngrx/store';
 import {
   catchError,
   concatMap,
+  debounceTime,
+  distinctUntilChanged,
   exhaustMap,
   filter,
   map,
+  merge,
+  skip,
   switchMap,
   tap,
 } from 'rxjs';
@@ -33,6 +37,8 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { selectRouteId } from './shared-data-access-gesuch.selectors';
+
+export const LOAD_ALL_DEBOUNCE_TIME = 300;
 
 export const loadOwnGesuchs = createEffect(
   (
@@ -65,13 +71,13 @@ export const loadOwnGesuchs = createEffect(
   },
   { functional: true },
 );
+
 export const loadAllGesuchs = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.loadAll),
+    return combineLoadAllActions$(actions$).pipe(
       filter(isDefined),
-      concatMap(() =>
-        gesuchService.getGesuche$().pipe(
+      switchMap(({ filter }) =>
+        gesuchService.getGesuche$({ showAll: filter?.showAll }).pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -355,4 +361,29 @@ const prepareFormularData = (
       },
     },
   };
+};
+
+const combineLoadAllActions$ = (actions$: Actions) => {
+  /** Used to initially load all gesuche */
+  const loadAll$ = actions$.pipe(ofType(SharedDataAccessGesuchEvents.loadAll));
+  /** Used to reload the gesuche after a filter change */
+  const loadAllDebounced$ = merge(
+    // Merge the initial load to compare the new values with the initial in distinctUntilChanged
+    loadAll$,
+    actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.loadAllDebounced),
+      debounceTime(LOAD_ALL_DEBOUNCE_TIME),
+    ),
+  );
+  return merge(
+    loadAll$,
+    loadAllDebounced$.pipe(
+      distinctUntilChanged(
+        (prev, curr) =>
+          JSON.stringify(prev.filter) === JSON.stringify(curr.filter),
+      ),
+      // skip the first value, because it's the same as the initial load
+      skip(1),
+    ),
+  );
 };

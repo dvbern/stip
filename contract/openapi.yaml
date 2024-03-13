@@ -18,6 +18,12 @@ paths:
         get:
             tags:
                 - Gesuch
+            parameters:
+                - in: query
+                  name: show-all
+                  schema:
+                    type: boolean
+                  description: Show all Gesuche
             responses:
                 '200':
                     content:

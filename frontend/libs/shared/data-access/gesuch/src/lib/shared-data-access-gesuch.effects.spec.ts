@@ -1,9 +1,13 @@
 import { Store } from '@ngrx/store';
 import { TestScheduler } from 'rxjs/testing';
 
-import { GesuchService } from '@dv/shared/model/gesuch';
+import { GesuchService, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-import { loadOwnGesuchs } from './shared-data-access-gesuch.effects';
+import {
+  LOAD_ALL_DEBOUNCE_TIME,
+  loadAllGesuchs,
+  loadOwnGesuchs,
+} from './shared-data-access-gesuch.effects';
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 describe('sharedDataAccessGesuch Effects', () => {
@@ -17,9 +21,9 @@ describe('sharedDataAccessGesuch Effects', () => {
 
   it('loads Gesuch effect - success', () => {
     scheduler.run(({ expectObservable, hot, cold }) => {
-      const gesuchServiceMock = {
+      const gesuchServiceMock = mockGesuchService({
         getGesucheForBenutzer$: () => cold('150ms a', { a: [] }),
-      } as unknown as GesuchService;
+      });
       const gesuchStoreMock = {
         select: () => cold('a', { a: '1234' }),
       } as unknown as Store;
@@ -41,4 +45,61 @@ describe('sharedDataAccessGesuch Effects', () => {
       });
     });
   });
+
+  it('loads gesuch initially and then debounced', () => {
+    scheduler.run(({ expectObservable, hot, cold }) => {
+      const gesuch1 = { id: '1' } as SharedModelGesuch;
+      const gesuch2 = { id: '2' } as SharedModelGesuch;
+
+      const gesuchServiceMock = mockGesuchService({
+        getGesuche$: (filter: { showAll: boolean }) => {
+          if (filter.showAll) {
+            return cold('a', { a: [gesuch1, gesuch2] });
+          }
+          return cold('a', { a: [gesuch1] });
+        },
+      });
+
+      const debounced = `${LOAD_ALL_DEBOUNCE_TIME}ms`;
+
+      /**
+       * (A) Initial load                                          -> should fire
+       * (B) Multiple debounced loads with same filter             -> should fire (only once)
+       * (B) Another load with same filter but after debounce time -> should not fire (as it hasn't changed)
+       * (C) Debounced load with different filter                  -> should fire
+       */
+      const actionsMock$ = hot(`abb ${debounced} --bc`, {
+        a: SharedDataAccessGesuchEvents.loadAll({}),
+        b: SharedDataAccessGesuchEvents.loadAllDebounced({
+          filter: { showAll: true },
+        }),
+        c: SharedDataAccessGesuchEvents.loadAllDebounced({}),
+      });
+
+      const effectStream$ = loadAllGesuchs(actionsMock$, gesuchServiceMock);
+
+      /**
+       * (A) Initial load
+       * (B) Only one debounced load with more gesuchs
+       * (A) Debounced load with less gesuchs again
+       */
+      expectObservable(effectStream$).toBe(
+        `a- ${debounced} b ${debounced} ---a`,
+        {
+          a: SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
+            gesuchs: [gesuch1],
+          }),
+          b: SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
+            gesuchs: [gesuch1, gesuch2],
+          }),
+        },
+      );
+    });
+  });
 });
+
+const mockGesuchService = (
+  mock: Partial<Record<keyof GesuchService, any>>,
+): GesuchService => {
+  return mock as GesuchService;
+};

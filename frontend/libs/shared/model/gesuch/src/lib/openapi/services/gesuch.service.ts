@@ -11,27 +11,28 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
+import { Inject, Injectable, Optional } from '@angular/core';
 import {
   HttpClient,
-  HttpContext,
-  HttpEvent,
   HttpHeaders,
-  HttpParameterCodec,
   HttpParams,
   HttpResponse,
+  HttpEvent,
+  HttpParameterCodec,
+  HttpContext,
 } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
-import { Configuration } from '../configuration';
-import { CustomHttpParameterCodec } from '../encoder';
 import { Dokument } from '../model/dokument';
 import { DokumentTyp } from '../model/dokumentTyp';
 import { Gesuch } from '../model/gesuch';
 import { GesuchCreate } from '../model/gesuchCreate';
 import { GesuchUpdate } from '../model/gesuchUpdate';
 import { ValidationReport } from '../model/validationReport';
+
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
+import { Configuration } from '../configuration';
 
 export interface GesuchServiceCreateDokumentRequestParams {
   dokumentTyp: DokumentTyp;
@@ -74,6 +75,11 @@ export interface GesuchServiceGetDokumenteForTypRequestParams {
 
 export interface GesuchServiceGetGesuchRequestParams {
   gesuchId: string;
+}
+
+export interface GesuchServiceGetGesucheRequestParams {
+  /** Show all Gesuche */
+  showAll?: boolean;
 }
 
 export interface GesuchServiceGetGesucheForBenutzerRequestParams {
@@ -1337,10 +1343,12 @@ export class GesuchService {
 
   /**
    * Returns all Gesuche
+   * @param requestParameters
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getGesuche$(
+    requestParameters: GesuchServiceGetGesucheRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -1349,6 +1357,7 @@ export class GesuchService {
     },
   ): Observable<Array<Gesuch>>;
   public getGesuche$(
+    requestParameters: GesuchServiceGetGesucheRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -1357,6 +1366,7 @@ export class GesuchService {
     },
   ): Observable<HttpResponse<Array<Gesuch>>>;
   public getGesuche$(
+    requestParameters: GesuchServiceGetGesucheRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -1365,6 +1375,7 @@ export class GesuchService {
     },
   ): Observable<HttpEvent<Array<Gesuch>>>;
   public getGesuche$(
+    requestParameters: GesuchServiceGetGesucheRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
     options?: {
@@ -1372,6 +1383,17 @@ export class GesuchService {
       context?: HttpContext;
     },
   ): Observable<any> {
+    const showAll = requestParameters.showAll;
+
+    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+    if (showAll !== undefined && showAll !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>showAll,
+        'show-all',
+      );
+    }
+
     let localVarHeaders = this.defaultHeaders;
 
     let localVarCredential: string | undefined;
@@ -1427,6 +1449,7 @@ export class GesuchService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

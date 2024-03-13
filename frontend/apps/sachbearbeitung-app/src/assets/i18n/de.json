@@ -21,6 +21,7 @@
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
+  "sachbearbeitung-app.cockpit.showAll": "Alle anzeigen",
   "sachbearbeitung-app.cockpit.table.description": "Übersicht aller Gesuche",
   "sachbearbeitung-app.cockpit.table.fall": "Fall",
   "sachbearbeitung-app.cockpit.table.sv-nummer": "SV-Nummer",

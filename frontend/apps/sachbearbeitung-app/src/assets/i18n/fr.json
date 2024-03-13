@@ -21,6 +21,7 @@
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
+  "sachbearbeitung-app.cockpit.showAll": "Afficher tout",
   "sachbearbeitung-app.cockpit.table.description": "Aperçu de toutes les demandes",
   "sachbearbeitung-app.cockpit.table.fall": "Cas",
   "sachbearbeitung-app.cockpit.table.sv-nummer": "Numéro AVS",
