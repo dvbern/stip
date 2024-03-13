@@ -88,6 +88,5 @@ class EinnahmenKostenValidatorTest {
             gesuchFormular,
             TestUtil.initValidatorContext()))
             .isTrue();
-        // https://support.dvbern.ch/browse/KSTIP-918 - Evtl. noch ein Invalid Test hinzufuegen falls nicht gesetzt
     }
 }
