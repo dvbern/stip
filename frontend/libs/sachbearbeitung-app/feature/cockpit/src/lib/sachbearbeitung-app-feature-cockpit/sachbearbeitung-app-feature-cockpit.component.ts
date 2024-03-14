@@ -26,9 +26,8 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
-import { countByStatus } from '@dv/sachbearbeitung-app/util-fn/gesuch-helper';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -37,12 +36,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
 import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
-
-type GesuchGroup = {
-  status: Gesuchstatus;
-  iconName: string;
-  count: number;
-};
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
@@ -100,10 +93,6 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     const dataSource = new MatTableDataSource<SharedModelGesuch>(gesuche);
     dataSource.paginator = this.paginator;
     return dataSource;
-  });
-
-  public groupsSig: Signal<GesuchGroup[]> = computed(() => {
-    return countByStatus(this.cockpitViewSig().gesuche);
   });
 
   constructor() {

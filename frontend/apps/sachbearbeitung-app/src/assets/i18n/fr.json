@@ -21,6 +21,8 @@
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
+  "sachbearbeitung-app.cockpit.alle-gesuche": "Toutes les demandes",
+  "sachbearbeitung-app.cockpit.meine-gesuche": "Mes demandes",
   "sachbearbeitung-app.cockpit.showAll": "Afficher tout",
   "sachbearbeitung-app.cockpit.table.description": "Aperçu de toutes les demandes",
   "sachbearbeitung-app.cockpit.table.fall": "Cas",
