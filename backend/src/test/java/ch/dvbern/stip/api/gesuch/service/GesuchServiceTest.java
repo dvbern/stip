@@ -229,16 +229,15 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
-            not(0));
-        var anzahlElternBevoreUpdate =
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
+            Matchers.not(0)
+        );
 
         GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.GEMEINSAM,
             Elternschaftsteilung.GEMEINSAM
         );
         assertThat(
             tranche.getGesuchFormular().getElterns().size(),
-            Matchers.is(anzahlElternBevoreUpdate)
+            Matchers.is(0)
         );
     }
 
