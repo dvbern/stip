@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -45,15 +46,19 @@ class GesuchFormularMapperTest {
                     .setRenten(new BigDecimal(1))
             );
 
-        final var updateFormular = new GesuchFormularUpdateDto();
         final var updateFamsit = new FamiliensituationUpdateDto();
         updateFamsit.setElternteilUnbekanntVerstorben(false);
+
+        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setRenten(new BigDecimal(1));
+
+        final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        mapper.resetDependentDataAfterData(updateFormular, target);
-
-        assertThat(target.getEinnahmenKosten().getRenten(), is(nullValue()));
+        mapper.resetDependentDataBeforeUpdate(updateFormular, target);
+        assertThat(updateFormular.getEinnahmenKosten().getRenten(), is(nullValue()));
     }
 
     @Test
@@ -80,17 +85,17 @@ class GesuchFormularMapperTest {
         final var mapper = createMapper();
         // Partial update is needed here to "initialise" the target
         target = mapper.partialUpdate(updateFormular, target);
-        mapper.resetDependentDataAfterData(updateFormular, target);
+        mapper.resetDependentDataBeforeUpdate(updateFormular, target);
 
         // Without werZahltAlimente set, nothing should be cleared
-        assertThat(target.getElterns().size(), is(2));
+        assertThat(updateFormular.getElterns().size(), is(2));
 
         // Setting it so the VATER pays alimony, and then clearing on update should remove the father from the Gesuch
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        mapper.resetDependentDataAfterData(updateFormular, target);
+        mapper.resetDependentDataBeforeUpdate(updateFormular, target);
 
-        assertThat(target.getElterns().size(), is(1));
-        assertThat(target.getElterns().stream().toList().get(0).getElternTyp(), is(ElternTyp.MUTTER));
+        assertThat(updateFormular.getElterns().size(), is(1));
+        assertThat(updateFormular.getElterns().stream().toList().get(0).getElternTyp(), is(ElternTyp.MUTTER));
     }
 
     @Test
@@ -101,15 +106,20 @@ class GesuchFormularMapperTest {
             .setPersonInAusbildung(targetPia)
             .setEinnahmenKosten(new EinnahmenKosten().setWohnkosten(new BigDecimal(1)));
 
-        final var update = new GesuchFormularUpdateDto();
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+
+        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setWohnkosten(new BigDecimal(1));
+
+        final var update = new GesuchFormularUpdateDto();
         update.setPersonInAusbildung(updatePia);
+        update.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        mapper.resetDependentDataAfterData(update, target);
+        mapper.resetDependentDataBeforeUpdate(update, target);
 
-        assertThat(target.getEinnahmenKosten().getWohnkosten(), is(nullValue()));
+        assertThat(update.getEinnahmenKosten().getWohnkosten(), is(nullValue()));
     }
 
     GesuchFormularMapper createMapper() {
