@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.util.Set;
+import java.util.List;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
@@ -9,7 +9,6 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
-import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -20,10 +19,11 @@ import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -57,8 +57,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         @MappingTarget GesuchFormular gesuchFormular);
 
     @Override
-    @AfterMapping
-    protected void resetDependentDataAfterData(
+    @BeforeMapping
+    protected void resetDependentDataBeforeUpdate(
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
@@ -66,11 +66,11 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(newFormular, targetFormular),
             "Clear Renten because Elternteil VERSTORBEN or UNBEKANNT",
             () -> {
-                if (targetFormular.getEinnahmenKosten() == null) {
+                if (newFormular.getEinnahmenKosten() == null) {
                     return;
                 }
 
-                targetFormular.getEinnahmenKosten().setRenten(null);
+                newFormular.getEinnahmenKosten().setRenten(null);
             }
         );
 
@@ -89,11 +89,11 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 }
 
                 switch (werZahlt) {
-                case VATER -> removeElternOfTyp(targetFormular.getElterns(), ElternTyp.VATER);
-                case MUTTER -> removeElternOfTyp(targetFormular.getElterns(), ElternTyp.MUTTER);
+                case VATER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                case MUTTER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
                 case GEMEINSAM -> {
-                    removeElternOfTyp(targetFormular.getElterns(), ElternTyp.MUTTER);
-                    removeElternOfTyp(targetFormular.getElterns(), ElternTyp.VATER);
+                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
                 }
                 }
             }
@@ -107,15 +107,15 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     return;
                 }
 
-                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-                    targetFormular.getEinnahmenKosten().setWohnkosten(null);
+                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
+                    newFormular.getEinnahmenKosten() != null) {
+                        newFormular.getEinnahmenKosten().setWohnkosten(null);
                 }
             }
         );
     }
 
-    void removeElternOfTyp(Set<Eltern> eltern, ElternTyp typ) {
-        // removeAll(list) may work slowly, but that's ok as it should only ever remove 1 item
+    void removeElternOfTyp(List<ElternUpdateDto> eltern, ElternTyp typ) {
         eltern.removeAll(eltern.stream().filter(x -> x.getElternTyp() == typ).toList());
     }
 }
