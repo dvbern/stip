@@ -12,6 +12,7 @@ import {
   Component,
   DestroyRef,
   ViewChild,
+  effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -99,6 +100,15 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       .subscribe(() => {
         this.hasUnsavedChanges = true;
       });
+
+    effect(() => {
+      const response = this.store.response();
+
+      if (response.type === 'success') {
+        // is this going to be reactive, since it is not a subscription and does not come from an input, observable or the template?
+        this.endEdit();
+      }
+    });
   }
 
   private endEdit() {
@@ -181,7 +191,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       ...this.form.value,
     };
 
-    this.endEdit();
+    // this.endEdit();
 
     this.store.handleCreateUpdateAusbildungsstaette(update);
   }

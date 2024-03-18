@@ -12,7 +12,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { filter, map, pipe, switchMap, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
 import {
@@ -21,11 +21,27 @@ import {
   AusbildungsstaetteService,
 } from '@dv/shared/model/gesuch';
 
+type ResponseInitial = {
+  type: 'initial';
+};
+
+type ResponseFailure = {
+  type: 'failure';
+  error: Error;
+};
+
+type ResponseSuccess = {
+  type: 'success';
+};
+
+type Response = ResponseInitial | ResponseFailure | ResponseSuccess;
+
 export interface AdminAusbildungsstaetteState {
   ausbildungsstaetten: Ausbildungsstaette[];
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
   hasLoadedOnce: boolean;
   loading: boolean;
+  response: Response;
   error?: string;
 }
 
@@ -44,9 +60,10 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
     const initialState: AdminAusbildungsstaetteState = {
       ausbildungsstaetten: [],
-      tableData: tableData,
+      tableData,
       hasLoadedOnce: false,
       loading: false,
+      response: { type: 'initial' },
       error: undefined,
     };
 
@@ -135,34 +152,100 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
-      handleCreateUpdateAusbildungsstaette: (
-        staette: AusbildungsstaetteTableData,
-      ) => {
-        patchState(store, (state) => {
-          const data = state.tableData.data.map((s) => {
-            if (s.id === staette.id) {
-              if (s.id === 'new') {
-                return {
-                  ...s,
-                  ...staette,
-                  id: `new-${state.ausbildungsstaetten.length + 1}`,
-                };
+      handleCreateUpdateAusbildungsstaette:
+        rxMethod<AusbildungsstaetteTableData>(
+          pipe(
+            tap(() => {
+              patchState(store, {
+                loading: true,
+                error: undefined,
+              });
+            }),
+            switchMap((staette: AusbildungsstaetteTableData) => {
+              if (!staette.id) {
+                throw new Error('Ausbildungsstaette ID is undefined');
               }
 
-              return {
-                ...s,
-                ...staette,
-              };
-            }
+              if (staette.id === 'new') {
+                return ausbildungsStaetteService
+                  .createAusbildungsstaette$({
+                    ausbildungsstaetteCreate: {
+                      nameDe: staette.nameDe,
+                      nameFr: staette.nameFr,
+                    },
+                  })
+                  .pipe(
+                    tapResponse({
+                      next: (ausbildungsstaette) => {
+                        patchState(store, (state) => {
+                          const data = [
+                            ausbildungsstaette,
+                            ...state.tableData.data,
+                          ];
 
-            return s;
-          });
+                          state.tableData.data = data;
 
-          state.tableData.data = data;
+                          return {
+                            ...state,
+                            response: { type: 'success' } as ResponseSuccess,
+                          };
+                        });
+                      },
+                      error: (error: HttpErrorResponse) => {
+                        patchState(store, {
+                          error: error.message,
+                          response: { type: 'failure', error: error },
+                        });
+                      },
+                      finalize: () => {
+                        patchState(store, {
+                          loading: false,
+                        });
+                      },
+                    }),
+                  );
+              }
 
-          return state;
-        });
-      },
+              return ausbildungsStaetteService
+                .updateAusbildungsstaette$({
+                  ausbildungsstaetteId: staette.id,
+                  ausbildungsstaetteUpdate: {
+                    nameDe: staette.nameDe,
+                    nameFr: staette.nameFr,
+                  },
+                })
+                .pipe(
+                  tapResponse({
+                    next: (ausbildungsstaette) => {
+                      patchState(store, (state) => {
+                        const data = state.tableData.data.map((s) => {
+                          if (s.id === ausbildungsstaette.id) {
+                            return ausbildungsstaette;
+                          }
+
+                          return s;
+                        });
+
+                        state.tableData.data = data;
+
+                        return state;
+                      });
+                    },
+                    error: (error: HttpErrorResponse) => {
+                      patchState(store, {
+                        error: error.message,
+                      });
+                    },
+                    finalize: () => {
+                      patchState(store, {
+                        loading: false,
+                      });
+                    },
+                  }),
+                );
+            }),
+          ),
+        ),
       deleteAusbildungsstaette: rxMethod<AusbildungsstaetteTableData>(
         pipe(
           tap(() => {
