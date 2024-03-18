@@ -1977,7 +1977,7 @@ components:
                     description: Required wenn andere ausbildungNichtGefunden = true
                     type: string
                 alternativeAusbildungsgang:
-                    description: 
+                    description:
                         Required wenn andere ausbildungNichtGefunden = true
                     type: string
         Ausbildungsstaette:
@@ -2147,6 +2147,182 @@ components:
                 - HONDRICH
                 - LE_SENTIER
             type: string
+
+        GesuchsperiodeDaten:
+            type: object
+            required:
+                - bezeichnung
+                - fiskaljahr
+                - gesuchsperiodeStart
+                - gesuchsperiodeStopp
+                - aufschaltterminStart
+                - aufschaltterminStopp
+                - einreichefristNormal
+                - einreichefristReduziert
+                - ausbKosten_SekII
+                - ausbKosten_Tertiaer
+                - b_Einkommenfreibetrag
+                - b_VermogenSatzAngerechnet
+                - b_Verpf_Auswaerts_Tagessatz
+                - elternbeteiligungssatz
+                - f_Einkommensfreibetrag
+                - f_Vermoegensfreibetrag
+                - f_VermogenSatzAngerechnet
+                - integrationszulage
+                - limite_EkFreibetrag_Integrationszulag
+                - stipLimite_Minimalstipendium
+                - person_1
+                - person_2
+                - person_3
+                - person_4
+                - person_5
+                - person_6
+                - person_7
+                - ppP_8
+                - _00_18
+                - _19_25
+                - _26_99
+                - bB_1Pers
+                - bB_2Pers
+                - bB_3Pers
+                - bB_4Pers
+                - bB_5Pers
+                - fB_1Pers
+                - fB_2Pers
+                - fB_3Pers
+                - fB_4Pers
+                - fB_5Pers
+            properties:
+                bezeichnung:
+                    description: ''
+                    type: string
+                fiskaljahr:
+                    description: ''
+                    type: string
+                gesuchsperiodeStart:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                gesuchsperiodeStopp:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                aufschaltterminStart:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                aufschaltterminStopp:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                einreichefristNormal:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                einreichefristReduziert:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                ausbKosten_SekII:
+                    description: ''
+                    type: number
+                ausbKosten_Tertiaer:
+                    description: ''
+                    type: number
+                b_Einkommenfreibetrag:
+                    description: ''
+                    type: number
+                b_VermogenSatzAngerechnet:
+                    description: ''
+                    type: number
+                b_Verpf_Auswaerts_Tagessatz:
+                    description: ''
+                    type: number
+                elternbeteiligungssatz:
+                    description: ''
+                    type: number
+                f_Einkommensfreibetrag:
+                    description: ''
+                    type: number
+                f_Vermoegensfreibetrag:
+                    description: ''
+                    type: number
+                f_VermogenSatzAngerechnet:
+                    description: ''
+                    type: number
+                integrationszulage:
+                    description: ''
+                    type: number
+                limite_EkFreibetrag_Integrationszulag:
+                    description: ''
+                    type: number
+                stipLimite_Minimalstipendium:
+                    description: ''
+                    type: number
+                person_1:
+                    description: ''
+                    type: number
+                person_2:
+                    description: ''
+                    type: number
+                person_3:
+                    description: ''
+                    type: number
+                person_4:
+                    description: ''
+                    type: number
+                person_5:
+                    description: ''
+                    type: number
+                person_6:
+                    description: ''
+                    type: number
+                person_7:
+                    description: ''
+                    type: number
+                ppP_8:
+                    description: ''
+                    type: number
+                _00_18:
+                    description: ''
+                    type: number
+                _19_25:
+                    description: ''
+                    type: number
+                _26_99:
+                    description: ''
+                    type: number
+                bB_1Pers:
+                    description: ''
+                    type: number
+                bB_2Pers:
+                    description: ''
+                    type: number
+                bB_3Pers:
+                    description: ''
+                    type: number
+                bB_4Pers:
+                    description: ''
+                    type: number
+                bB_5Pers:
+                    description: ''
+                    type: number
+                fB_1Pers:
+                    description: ''
+                    type: number
+                fB_2Pers:
+                    description: ''
+                    type: number
+                fB_3Pers:
+                    description: ''
+                    type: number
+                fB_4Pers:
+                    description: ''
+                    type: number
+                fB_5Pers:
+                    description: ''
+                    type: number
+
         AusbildungsstaetteUpdate:
             required:
                 - nameFr

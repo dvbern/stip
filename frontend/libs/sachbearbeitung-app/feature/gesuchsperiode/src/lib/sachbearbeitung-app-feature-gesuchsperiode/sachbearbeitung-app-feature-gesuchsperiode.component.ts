@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  effect,
+  inject,
+} from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -16,15 +23,19 @@ import {
   MatFormFieldModule,
   MatHint,
 } from '@angular/material/form-field';
-import { MatInput, MatLabel } from '@angular/material/input';
+import { MatInput } from '@angular/material/input';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { elementAt, from } from 'rxjs';
 
+import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUtilFormService } from '@dv/shared/util/form';
+import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuchsperiode',
@@ -36,7 +47,6 @@ import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-but
     MatFormFieldModule,
     MatHint,
     MatInput,
-    MatLabel,
     TranslateModule,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
@@ -51,8 +61,12 @@ import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-but
   styleUrl: './sachbearbeitung-app-feature-gesuchsperiode.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureGesuchsperiodeComponent {
+export class SachbearbeitungAppFeatureGesuchsperiodeComponent
+  implements OnInit
+{
   private formBuilder = inject(NonNullableFormBuilder);
+  private formUtils = inject(SharedUtilFormService);
+  private elementRef = inject(ElementRef);
   form = this.formBuilder.group({
     bezeichnung: [<string | null>null, [Validators.required]],
     fiskaljahr: [<string | null>null, [Validators.required]],
@@ -101,4 +115,76 @@ export class SachbearbeitungAppFeatureGesuchsperiodeComponent {
   });
 
   startDate = new Date();
+
+  store = inject(GesuchsperiodeStore);
+
+  ngOnInit(): void {
+    this.store.loadGesuchsperiode();
+  }
+
+  constructor() {
+    effect(() => {
+      const gesuchsperiode = this.store.currentGesuchsperiode?.();
+      if (!gesuchsperiode) {
+        return;
+      }
+      this.form.patchValue(gesuchsperiode as any);
+    });
+  }
+
+  handleSave() {
+    this.form.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
+    if (!this.form.valid) {
+      return;
+    }
+    console.log(this.form.value);
+    const value = this.form.value;
+    this.store.saveGesuchsperiode({
+      ...value,
+      ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),
+      ausbKosten_Tertiaer: fromFormatedNumber(value.ausbKosten_Tertiaer),
+      b_Einkommenfreibetrag: fromFormatedNumber(value.b_Einkommenfreibetrag),
+      b_VermogenSatzAngerechnet: fromFormatedNumber(
+        value.b_VermogenSatzAngerechnet,
+      ),
+      b_Verpf_Auswaerts_Tagessatz: fromFormatedNumber(
+        value.b_Verpf_Auswaerts_Tagessatz,
+      ),
+      elternbeteiligungssatz: fromFormatedNumber(value.elternbeteiligungssatz),
+      f_Einkommensfreibetrag: fromFormatedNumber(value.f_Einkommensfreibetrag),
+      f_Vermoegensfreibetrag: fromFormatedNumber(value.f_Vermoegensfreibetrag),
+      f_VermogenSatzAngerechnet: fromFormatedNumber(
+        value.f_VermogenSatzAngerechnet,
+      ),
+      integrationszulage: fromFormatedNumber(value.integrationszulage),
+      limite_EkFreibetrag_Integrationszulag: fromFormatedNumber(
+        value.limite_EkFreibetrag_Integrationszulag,
+      ),
+      stipLimite_Minimalstipendium: fromFormatedNumber(
+        value.stipLimite_Minimalstipendium,
+      ),
+      person_1: fromFormatedNumber(value.person_1),
+      person_2: fromFormatedNumber(value.person_2),
+      person_3: fromFormatedNumber(value.person_3),
+      person_4: fromFormatedNumber(value.person_4),
+      person_5: fromFormatedNumber(value.person_5),
+      person_6: fromFormatedNumber(value.person_6),
+      person_7: fromFormatedNumber(value.person_7),
+      ppP_8: fromFormatedNumber(value.ppP_8),
+      _00_18: fromFormatedNumber(value._00_18),
+      _19_25: fromFormatedNumber(value._19_25),
+      _26_99: fromFormatedNumber(value._19_25),
+      bB_1Pers: fromFormatedNumber(value.bB_1Pers),
+      bB_2Pers: fromFormatedNumber(value.bB_2Pers),
+      bB_3Pers: fromFormatedNumber(value.bB_3Pers),
+      bB_4Pers: fromFormatedNumber(value.bB_4Pers),
+      bB_5Pers: fromFormatedNumber(value.bB_5Pers),
+      fB_1Pers: fromFormatedNumber(value.fB_1Pers),
+      fB_2Pers: fromFormatedNumber(value.fB_2Pers),
+      fB_3Pers: fromFormatedNumber(value.fB_3Pers),
+      fB_4Pers: fromFormatedNumber(value.fB_4Pers),
+      fB_5Pers: fromFormatedNumber(value.fB_5Pers),
+    });
+  }
 }

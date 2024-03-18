@@ -1,4 +1,4 @@
-<form [formGroup]="form" data-testid="form-gesuchsperiode-form" novalidate class="mt-4">
+<form [formGroup]="form" data-testid="form-gesuchsperiode-form" (ngSubmit)="handleSave()" novalidate class="mt-4">
   <h2 class="pt-5 mb-4 m-lg-2">
     {{ 'shared.form.gesuchsperiode.metaDaten.title' | translate }}
   </h2>

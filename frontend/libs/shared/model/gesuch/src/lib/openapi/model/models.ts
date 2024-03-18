@@ -44,6 +44,7 @@ export * from './gesuchTrancheUpdate';
 export * from './gesuchUpdate';
 export * from './gesuchsperiode';
 export * from './gesuchsperiodeCreate';
+export * from './gesuchsperiodeDaten';
 export * from './gesuchstatus';
 export * from './kind';
 export * from './kindUpdate';
