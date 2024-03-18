@@ -10,6 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import {
+  FormControl,
   FormGroup,
   FormsModule,
   NonNullableFormBuilder,
@@ -30,6 +31,16 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
+import { convertTempFormToRealValues } from '@dv/shared/util/form';
+
+type AddresseFormGroup = FormGroup<{
+  coAdresse: FormControl<string | undefined>;
+  strasse: FormControl<string | undefined>;
+  hausnummer: FormControl<string | undefined>;
+  plz: FormControl<string | undefined>;
+  ort: FormControl<string | undefined>;
+  land: FormControl<Land | undefined>;
+}>;
 
 @Component({
   selector: 'dv-shared-ui-form-address',
@@ -51,7 +62,7 @@ import { SharedUtilCountriesService } from '@dv/shared/util/countries';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
-  @Input({ required: true }) group!: FormGroup;
+  @Input({ required: true }) group!: AddresseFormGroup;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) language!: string;
 
@@ -64,17 +75,24 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
 
   touchedSig = signal(false);
 
-  static buildAddressFormGroup(fb: NonNullableFormBuilder) {
+  static buildAddressFormGroup(fb: NonNullableFormBuilder): AddresseFormGroup {
     return fb.group({
-      coAdresse: ['', []],
-      strasse: ['', [Validators.required]],
-      hausnummer: ['', []],
-      plz: ['', [Validators.required]],
-      ort: ['', [Validators.required]],
-      land: fb.control<Land>('' as Land, {
-        validators: Validators.required,
-      }),
+      coAdresse: [<string | undefined>undefined, []],
+      strasse: [<string | undefined>undefined, [Validators.required]],
+      hausnummer: [<string | undefined>undefined, []],
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+      land: [
+        <Land | undefined>undefined,
+        {
+          validators: Validators.required,
+        },
+      ],
     });
+  }
+
+  static getRealValues(form: AddresseFormGroup) {
+    return convertTempFormToRealValues(form, ['strasse', 'plz', 'ort', 'land']);
   }
 
   trackByIndex(index: number) {

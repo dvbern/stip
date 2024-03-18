@@ -623,7 +623,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           ...values,
           adresse: {
             id: gesuchFormular?.personInAusbildung?.adresse?.id,
-            ...values.adresse,
+            ...SharedUiFormAddressComponent.getRealValues(
+              this.form.controls.adresse,
+            ),
           },
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
             values.geburtsdatum,
