@@ -1659,9 +1659,6 @@ components:
             required: []
             type: object
             properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                    description: ''
                 ausbildung:
                     $ref: '#/components/schemas/Ausbildung'
                     description: ''
