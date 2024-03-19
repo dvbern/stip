@@ -3,6 +3,10 @@ import { jest } from '@jest/globals';
 
 const original: any = jest.requireActual('@nx/devkit');
 
+jest.mock('prettier', () => ({
+  format: jest.fn(),
+}));
+
 jest.mock('@nx/devkit', () => ({
   ...original,
   // Ignore prettier in jest tests due to the ESM issues

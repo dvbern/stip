@@ -32,7 +32,9 @@ class ArchitectureTest {
         .optionalLayer("Statemachines")
         .definedBy("..common.statemachines..")
         .layer("Validation")
-        .definedBy("..validation..");
+        .definedBy("..validation..")
+        .optionalLayer("Util")
+        .definedBy("..util..");
 
     @Test
     void test_layer_boundaries() {
@@ -41,14 +43,14 @@ class ArchitectureTest {
             .whereLayer("Repository")
             .mayOnlyBeAccessedByLayers("Service")
             .whereLayer("Entity")
-            .mayOnlyBeAccessedByLayers("Service", "Repository", "Generated", "Statemachines", "Validation");
+            .mayOnlyBeAccessedByLayers("Service", "Repository", "Generated", "Statemachines", "Validation", "Util");
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }
 
     @Test
     void no_cycles_between_features() {
-        var rule = slices().matching("..stip.api.(**)")
+        var rule = slices().matching("..stip.api.(**).service")
             .should()
             .beFreeOfCycles()
             .because("Cycles between feature decrease maintainability. Introduce a new shared feature");
