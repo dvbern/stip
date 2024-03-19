@@ -30,7 +30,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     private BigDecimal wohnkosten;
     @Nullable
     @Column(nullable = true)
-    private BigDecimal personenImHaushalt;
+    private Boolean wgWohnen;
     @NotNull
     @Column(nullable = false)
     private Boolean verdienstRealisiert;
