@@ -23,8 +23,9 @@
         </td>
       </ng-container>
 
+      <!-- filter -->
       <ng-container matColumnDef="filter">
-        <th [attr.colspan]="2" mat-header-cell *matHeaderCellDef>
+        <th colspan="2" mat-header-cell *matHeaderCellDef>
           <mat-form-field class="filter-form-field">
             <input
               #filter
@@ -78,7 +79,6 @@
       <ng-container matColumnDef="actions">
         <th class="action-cell" mat-header-cell *matHeaderCellDef>
           <div class="action-cell-content">
-            <!-- add ausbildungstaette button -->
             <button
               [title]="'sachbearbeitung-app.admin.ausbildungsstaette.add' | translate"
               type="button"
@@ -210,7 +210,7 @@
                       @if (editedAusbildungsgang === ausbildungsgang) {
                         <mat-form-field>
                           <mat-select formControlName="ausbildungsrichtung" (click)="$event.stopPropagation()">
-                            @for (b of bildungsartValues; track trackByIndex) {
+                            @for (b of bildungsartValues; track $index) {
                               <mat-option [value]="b" [attr.data-testid]="b">
                                 {{ 'shared.form.lebenslauf.item.subtype.bildungsart.' + b | translate }}
                               </mat-option>
@@ -251,7 +251,6 @@
                   <ng-container matColumnDef="actions">
                     <th class="action-cell" mat-header-cell *matHeaderCellDef>
                       <div class="action-cell-content">
-                        <!-- add ausbildungsgang button -->
                         <button
                           [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.add' | translate"
                           type="button"
@@ -321,7 +320,7 @@
         </td>
       </ng-container>
 
-      <tr class="filter-header-row" mat-header-row *matHeaderRowDef="['filter']"></tr>
+      <tr class="filter-header-row" mat-header-row *matHeaderRowDef="filterColumns"></tr>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
       <tr
@@ -334,7 +333,7 @@
         (click)="expandRow(staette)"
       ></tr>
 
-      <tr mat-row class="detail-row" *matRowDef="let staette; columns: ['expandedDetail']"></tr>
+      <tr mat-row class="detail-row" *matRowDef="let staette; columns: detailColumn"></tr>
     </table>
   </form>
 

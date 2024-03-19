@@ -37,7 +37,7 @@ type ResponseSuccess = {
 type Response = ResponseInitial | ResponseFailure | ResponseSuccess;
 
 export interface AdminAusbildungsstaetteState {
-  ausbildungsstaetten: Ausbildungsstaette[];
+  ausbildungsstaetten: Ausbildungsstaette[]; // probably not needed, or make a deep copy, if needed
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
   hasLoadedOnce: boolean;
   loading: boolean;
@@ -176,19 +176,17 @@ export const AdminAusbildungsstaetteStore = signalStore(
                   })
                   .pipe(
                     tapResponse({
-                      next: (ausbildungsstaette) => {
+                      next: () => {
                         patchState(store, (state) => {
-                          const data = [
-                            ausbildungsstaette,
-                            ...state.tableData.data,
-                          ];
+                          const data = [staette, ...state.tableData.data]; // not working yet
 
                           state.tableData.data = data;
 
-                          return {
-                            ...state,
-                            response: { type: 'success' } as ResponseSuccess,
-                          };
+                          // return {
+                          //   ...state,
+                          //   response: { type: 'success' } as ResponseSuccess,
+                          // };
+                          return state;
                         });
                       },
                       error: (error: HttpErrorResponse) => {

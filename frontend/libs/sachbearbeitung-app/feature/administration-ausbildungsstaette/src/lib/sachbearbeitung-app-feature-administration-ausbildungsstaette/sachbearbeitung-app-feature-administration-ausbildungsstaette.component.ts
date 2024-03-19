@@ -89,10 +89,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     this.store.setSort(this.sort);
   }
 
-  trackByIndex(index: number) {
-    return index;
-  }
-
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     merge(this.gangForm.valueChanges, this.form.valueChanges)
@@ -118,6 +114,10 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     this.gangForm.reset();
     this.hasUnsavedChanges = false;
   }
+
+  filterColumns = ['filter'];
+
+  detailColumn = ['expandedDetail'];
 
   // Ausbildungsstaette ==========================================================
 
