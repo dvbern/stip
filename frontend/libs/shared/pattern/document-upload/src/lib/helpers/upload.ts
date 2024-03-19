@@ -1,7 +1,7 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, combineLatest, interval, map, takeWhile } from 'rxjs';
 
-import { DocumentState, DocumentUpload, DocumentView } from '../upload.model';
+import { DocumentUpload, DocumentView } from '../upload.model';
 
 const PROGRESS_ANIMATION_TIME = 600;
 const FORMAT_ERROR = 'shared.file.invalidFormat';
@@ -34,7 +34,7 @@ export function updateProgressFor(
 
 export function toHumanReadableError(
   name: string,
-  state: DocumentState,
+  allowTypes: string,
   status?: number,
 ) {
   return status === 400
@@ -42,7 +42,7 @@ export function toHumanReadableError(
         translationKey: FORMAT_ERROR,
         values: {
           file: name,
-          formats: state.allowedFormats
+          formats: allowTypes
             .split(',')
             .map((f) => '.' + f.split('/')[1])
             .join(', '),

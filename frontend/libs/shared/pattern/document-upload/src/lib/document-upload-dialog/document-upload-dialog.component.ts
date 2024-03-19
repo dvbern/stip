@@ -39,7 +39,7 @@ export class SharedPatternDocumentUploadDialogComponent {
 
   showUplaodSig = computed(() => {
     const { options, store } = this.data;
-    if (options.multiple) {
+    if (!options.singleUpload) {
       return true;
     }
     return !store.hasEntriesSig() || store.isLoading();
@@ -59,9 +59,9 @@ export class SharedPatternDocumentUploadDialogComponent {
   }
 
   handleMultipleDocumentsAdded(documents: File[]) {
-    const files = this.data.options.multiple
-      ? documents
-      : documents.slice(0, 1);
+    const files = this.data.options.singleUpload
+      ? documents.slice(0, 1)
+      : documents;
     this.newDocuments$.next(files);
   }
 

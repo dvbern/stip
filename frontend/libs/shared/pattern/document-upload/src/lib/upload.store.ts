@@ -15,7 +15,10 @@ import {
 } from 'rxjs/operators';
 
 import { GesuchService } from '@dv/shared/model/gesuch';
-import { shouldIgnoreErrorsIf } from '@dv/shared/pattern/http-error-interceptor';
+import {
+  noGlobalErrorsIf,
+  shouldIgnoreErrorsIf,
+} from '@dv/shared/pattern/http-error-interceptor';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 import {
@@ -28,7 +31,7 @@ import {
   notCompletedOrError,
   toHumanReadableError,
   updateProgressFor,
-} from './helpers/store';
+} from './helpers/upload';
 import { DocumentOptions, DocumentState, DocumentView } from './upload.model';
 
 @Injectable()
@@ -36,8 +39,6 @@ export class UploadStore {
   readonly state = signalState<DocumentState>({
     documents: [],
     errorKey: undefined,
-    // TODO: load allowed formats from the backend
-    allowedFormats: 'image/tiff,image/jpeg,image/png,application/pdf',
   });
 
   /**
@@ -53,7 +54,7 @@ export class UploadStore {
   isLoading = computed(() => {
     return this.state
       .documents()
-      .some((d) => !d.progress || d.progress < 100 || d.error);
+      .some((d) => (!d.progress || d.progress < 100) && !d.error);
   });
 
   /**
@@ -111,15 +112,18 @@ export class UploadStore {
     this.removeDocument$
       .pipe(
         mergeMap((action) => {
-          // Ignore http errors if the upload is already in error state
-          const hasError = !!this.state
+          const dokumentToDelete = this.state
             .documents()
-            .find((d) => d.file.id === action.dokumentId)?.error;
-          return this.documentService
-            .deleteDokument$(action, undefined, undefined, {
-              context: shouldIgnoreErrorsIf(hasError),
-            })
-            .pipe(map(() => action));
+            .find((d) => d.file.id === action.dokumentId);
+          return dokumentToDelete?.isTemporary
+            ? // If the document is temporary, just remove it from the state
+              of(action)
+            : this.documentService
+                .deleteDokument$(action, undefined, undefined, {
+                  // Ignore http errors if the upload is already in error state
+                  context: shouldIgnoreErrorsIf(!!dokumentToDelete?.error),
+                })
+                .pipe(map(() => action));
         }),
         takeUntilDestroyed(),
       )
@@ -154,10 +158,10 @@ export class UploadStore {
               documents: state.documents.map((d) =>
                 d.file.id === createTempId(action.fileUpload)
                   ? {
-                      file: d.file,
+                      ...d,
                       error: toHumanReadableError(
                         action.fileUpload.name,
-                        state,
+                        action.allowTypes,
                         status,
                       ),
                       progress: 100,
@@ -181,6 +185,7 @@ export class UploadStore {
                       objectId: '',
                       timestampErstellt: new Date().toISOString(),
                     },
+                    isTemporary: true,
                     progress: 0,
                   },
                 ],
@@ -197,6 +202,7 @@ export class UploadStore {
               });
               break;
             }
+            // On cancel (User event), remove the temporary document from the state
             case HttpEventType.User: {
               patchState(this.state, {
                 documents: this.state
@@ -262,7 +268,9 @@ export class UploadStore {
       shareReplay({ bufferSize: 1, refCount: true }),
     );
     const upload$ = this.documentService
-      .createDokument$(action, 'events')
+      .createDokument$(action, 'events', undefined, {
+        context: noGlobalErrorsIf(true),
+      })
       .pipe(shareReplay({ bufferSize: 1, refCount: true }));
     // Merge the upload stream with a fake progress stream
     const uploading$ = merge(

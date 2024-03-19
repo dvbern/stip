@@ -1,15 +1,19 @@
 import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 
-export const selectSharedFeatureGesuchFormEducationView = createSelector(
+export const selectSharedFeatureGesuchFormPersonView = createSelector(
+  selectSharedDataAccessConfigsView,
   selectSharedDataAccessGesuchsView,
   selectSharedDataAccessBenutzersView,
   selectSharedDataAccessStammdatensView,
-  (gesuchsView, benutzerView, stammdatenView) => ({
+  (config, gesuchsView, benutzerView, stammdatenView) => ({
     loading: gesuchsView.loading || stammdatenView.loading,
+    gesuchId: gesuchsView.gesuch?.id,
+    allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
     gesuch: gesuchsView.gesuch,
     gesuchFormular: gesuchsView.gesuchFormular,
     benutzerEinstellungen: {
