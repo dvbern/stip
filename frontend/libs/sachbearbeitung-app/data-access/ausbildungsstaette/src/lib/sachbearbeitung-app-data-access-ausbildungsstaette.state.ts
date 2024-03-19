@@ -23,26 +23,37 @@ import {
 
 type ResponseInitial = {
   type: 'initial';
+  data?: never;
+  error?: never;
 };
 
 type ResponseFailure = {
   type: 'failure';
+  data?: never;
   error: Error;
 };
 
-type ResponseSuccess = {
-  type: 'success';
+type ResponsePending = {
+  type: 'pending';
+  data?: never;
+  error?: never;
 };
 
-type Response = ResponseInitial | ResponseFailure | ResponseSuccess;
+type ResponseSuccess<T = unknown> = {
+  type: 'success';
+  data: T;
+  error?: never;
+};
+
+type Response<T> =
+  | ResponseInitial
+  | ResponseFailure
+  | ResponsePending
+  | ResponseSuccess<T>;
 
 export interface AdminAusbildungsstaetteState {
-  ausbildungsstaetten: Ausbildungsstaette[]; // probably not needed, or make a deep copy, if needed
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
-  hasLoadedOnce: boolean;
-  loading: boolean;
-  response: Response;
-  error?: string;
+  response: Response<Ausbildungsstaette[]>;
 }
 
 export const AdminAusbildungsstaetteStore = signalStore(
@@ -59,12 +70,8 @@ export const AdminAusbildungsstaetteStore = signalStore(
     };
 
     const initialState: AdminAusbildungsstaetteState = {
-      ausbildungsstaetten: [],
       tableData,
-      hasLoadedOnce: false,
-      loading: false,
       response: { type: 'initial' },
-      error: undefined,
     };
 
     return initialState;
@@ -95,8 +102,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
         pipe(
           tap(() => {
             patchState(store, {
-              loading: true,
-              error: undefined,
+              response: { type: 'pending' },
             });
           }),
           switchMap(() =>
@@ -104,7 +110,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
               tapResponse({
                 next: (ausbildungsstaetten) =>
                   patchState(store, (state) => {
-                    state.ausbildungsstaetten = ausbildungsstaetten;
                     state.tableData.data = ausbildungsstaetten.map(
                       (ausbildungsstaette) => ({
                         ...ausbildungsstaette,
@@ -113,18 +118,17 @@ export const AdminAusbildungsstaetteStore = signalStore(
                       }),
                     );
 
-                    state.hasLoadedOnce = true;
-
-                    return state;
+                    return {
+                      ...state,
+                      response: {
+                        type: 'success' as const,
+                        data: ausbildungsstaetten,
+                      },
+                    };
                   }),
                 error: (error: HttpErrorResponse) => {
                   patchState(store, {
-                    error: error.message,
-                  });
-                },
-                finalize: () => {
-                  patchState(store, {
-                    loading: false,
+                    response: { type: 'failure', error: error },
                   });
                 },
               }),
@@ -157,8 +161,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
           pipe(
             tap(() => {
               patchState(store, {
-                loading: true,
-                error: undefined,
+                response: { type: 'pending' },
               });
             }),
             switchMap((staette: AusbildungsstaetteTableData) => {
@@ -178,28 +181,40 @@ export const AdminAusbildungsstaetteStore = signalStore(
                     tapResponse({
                       next: () => {
                         patchState(store, (state) => {
-                          const data = [staette, ...state.tableData.data]; // not working yet
+                          const data = state.tableData.data.map((s) => {
+                            if (s.id === 'new') {
+                              return {
+                                ...s,
+                                ...staette,
+                                id: 'new-id',
+                              };
+                            }
+
+                            return s;
+                          });
 
                           state.tableData.data = data;
 
-                          // return {
-                          //   ...state,
-                          //   response: { type: 'success' } as ResponseSuccess,
-                          // };
-                          return state;
+                          return {
+                            ...state,
+                            response: {
+                              type: 'success' as const,
+                              data: state.tableData.data, //not ideal
+                            },
+                          };
                         });
                       },
                       error: (error: HttpErrorResponse) => {
                         patchState(store, {
-                          error: error.message,
                           response: { type: 'failure', error: error },
                         });
                       },
-                      finalize: () => {
-                        patchState(store, {
-                          loading: false,
-                        });
-                      },
+                      // @philip: do we need finalize? => ich denke es in disem store nicht
+                      // finalize: () => {
+                      //   patchState(store, {
+                      //     response: { type: 'initial' },
+                      //   });
+                      // },
                     }),
                   );
               }
@@ -214,11 +229,14 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 })
                 .pipe(
                   tapResponse({
-                    next: (ausbildungsstaette) => {
+                    next: () => {
                       patchState(store, (state) => {
                         const data = state.tableData.data.map((s) => {
-                          if (s.id === ausbildungsstaette.id) {
-                            return ausbildungsstaette;
+                          if (s.id === staette.id) {
+                            return {
+                              ...s,
+                              ...staette,
+                            };
                           }
 
                           return s;
@@ -226,17 +244,18 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
                         state.tableData.data = data;
 
-                        return state;
+                        return {
+                          ...state,
+                          response: {
+                            type: 'success' as const,
+                            data: state.tableData.data, //not ideal
+                          },
+                        };
                       });
                     },
                     error: (error: HttpErrorResponse) => {
                       patchState(store, {
-                        error: error.message,
-                      });
-                    },
-                    finalize: () => {
-                      patchState(store, {
-                        loading: false,
+                        response: { type: 'failure', error: error },
                       });
                     },
                   }),
@@ -248,8 +267,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
         pipe(
           tap(() => {
             patchState(store, {
-              loading: true,
-              error: undefined,
+              response: { type: 'pending' },
             });
           }),
           switchMap((staette: AusbildungsstaetteTableData) => {
@@ -384,8 +402,9 @@ export const AdminAusbildungsstaetteStore = signalStore(
       },
     }),
   ),
-  withComputed(({ ausbildungsstaetten }) => ({
-    ausbildungsstaetteCount: computed(() => ausbildungsstaetten().length ?? 0),
+  withComputed(({ tableData, response }) => ({
+    ausbildungsstaetteCount: computed(() => tableData().data.length ?? 0),
+    loading: computed(() => (response.type() === 'pending' ? true : false)),
   })),
 );
 
