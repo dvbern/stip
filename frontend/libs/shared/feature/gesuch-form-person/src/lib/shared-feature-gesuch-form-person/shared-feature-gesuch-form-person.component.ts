@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   OnInit,
-  Signal,
   computed,
   effect,
   inject,
@@ -47,7 +46,6 @@ import {
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
-  DocumentOptions,
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
@@ -152,7 +150,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
   maskitoNumber = maskitoNumber;
-  auslaenderausweisDocumentOptionsSig = computed(() => {
+  auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
     const niederlassungsstatusMap = {
       [Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B]:
@@ -163,58 +161,41 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE,
     };
     return niederlassungsstatus
-      ? this.createUploadOptionsSig(
-          niederlassungsstatusMap[niederlassungsstatus],
-        )()
+      ? niederlassungsstatusMap[niederlassungsstatus]
       : null;
   });
-  vormundschaftDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  vormundschaftDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const vormundschaft = this.vormundschaftChangedSig();
-    return gesuch && vormundschaft
-      ? this.createUploadOptionsSig(DokumentTyp.PERSON_KESB_ERNENNUNG)()
-      : null;
+    return vormundschaft ? DokumentTyp.PERSON_KESB_ERNENNUNG : null;
   });
-  wohnsitzBeiDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  wohnsitzBeiDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const wohnsitzBei = this.wohnsitzBeiChangedSig();
-    return gesuch && wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
-      ? this.createUploadOptionsSig(DokumentTyp.PERSON_MIETVERTRAG)()
+    return wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
+      ? DokumentTyp.PERSON_MIETVERTRAG
       : null;
   });
-  sozialhilfebeitraegeDocumentOptionsSig = computed<DocumentOptions | null>(
-    () => {
-      const gesuch = this.viewSig().gesuch;
-      const sozialhilfebeitraege = this.sozialhilfebeitraegeChangedSig();
-      return gesuch && sozialhilfebeitraege
-        ? this.createUploadOptionsSig(DokumentTyp.PERSON_SOZIALHILFEBUDGET)()
-        : null;
-    },
-  );
-  zivilstandDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  sozialhilfebeitraegeDocumentOptionsSig = this.createUploadOptionsSig(() => {
+    const sozialhilfebeitraege = this.sozialhilfebeitraegeChangedSig();
+    return sozialhilfebeitraege ? DokumentTyp.PERSON_SOZIALHILFEBUDGET : null;
+  });
+  zivilstandDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const zivilstand = this.zivilstandChangedSig();
-    return gesuch &&
-      zivilstand &&
+    return zivilstand &&
       [
         Zivilstand.GESCHIEDEN_GERICHTLICH,
         Zivilstand.AUFGELOESTE_PARTNERSCHAFT,
       ].includes(zivilstand)
-      ? this.createUploadOptionsSig(
-          DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG,
-        )()
+      ? DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
       : null;
   });
-  heimatortDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
-    const eltern = this.viewSig().gesuchFormular?.elterns;
+  heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
+    const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
-    return gesuch &&
-      plz &&
+    return plz &&
       +plz <= 4000 &&
       +plz >= 3000 &&
       eltern?.some((e) => e.adresse.land !== 'CH')
-      ? this.createUploadOptionsSig(DokumentTyp.PERSON_AUSWEIS)()
+      ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
 
