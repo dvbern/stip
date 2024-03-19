@@ -2,11 +2,7 @@
   <div class="container pt-4 mt-2">
     <div class="row g-4">
       <div class="col-12 col-md-6 col-lg-4 d-flex">
-        <button
-          type="button"
-          (click)="showAllToggle.toggle(); showAllChanged(showAllToggle.checked); $event.preventDefault()"
-          class="flex-grow-1 card shadow-lg"
-        >
+        <button type="button" (click)="showAllToggle.toggle()" class="flex-grow-1 card shadow-lg">
           <div class="card-body d-flex text-start w-100">
             <dv-shared-ui-icon-chip class="me-3 chip">
               <i class="icon material-symbols-rounded">person</i>
@@ -16,10 +12,15 @@
                 <h2 class="card-title">{{ gesucheDataSourceSig().data.length }}</h2>
                 <div class="flex-grow-1"></div>
                 <mat-slide-toggle
-                  [checked]="showAll()"
-                  (change)="showAllChanged($event.checked)"
                   #showAllToggle
-                ></mat-slide-toggle>
+                  class="fs-7"
+                  labelPosition="before"
+                  [checked]="showAll()"
+                  [formControl]="showAllControl"
+                  (click)="$event.stopPropagation()"
+                >
+                  {{ 'sachbearbeitung-app.cockpit.show-alle' | translate }}
+                </mat-slide-toggle>
               </div>
               @if (showAll()) {
                 <div class="text-muted">

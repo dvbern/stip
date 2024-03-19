@@ -5,7 +5,6 @@ import {
   Component,
   OnInit,
   QueryList,
-  Signal,
   ViewChild,
   ViewChildren,
   computed,
@@ -13,6 +12,8 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatPaginator,
   MatPaginatorIntl,
@@ -46,6 +47,7 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,
+    ReactiveFormsModule,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
     RouterModule,
@@ -67,9 +69,9 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   showAll = input<true | undefined>(undefined, { alias: 'show-all' });
 
   @ViewChildren(SharedUiFocusableListItemDirective)
-  public items?: QueryList<SharedUiFocusableListItemDirective>;
+  items?: QueryList<SharedUiFocusableListItemDirective>;
   @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
-  public displayedColumns = [
+  displayedColumns = [
     'fall',
     'sv-nummer',
     'nachname',
@@ -81,6 +83,9 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     'letzteAktivitaet',
   ];
 
+  // FormControl is necessary instead of (change) event binding due to an potential issue
+  // with the Angular Material SlideToggle, see https://github.com/angular/components/pull/28745
+  showAllControl = new FormControl<boolean | undefined>(this.showAll());
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
   cockpitViewSig = this.store.selectSignal(
@@ -112,6 +117,18 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
+
+    const showAllChanged = toSignal(this.showAllControl.valueChanges);
+    effect(
+      () => {
+        const showAll = showAllChanged();
+        this.router.navigate(['.'], {
+          queryParams: showAll ? { ['show-all']: showAll } : undefined,
+          replaceUrl: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   ngOnInit() {
@@ -120,12 +137,5 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
         filter: { showAll: this.showAll() },
       }),
     );
-  }
-
-  showAllChanged(showAll: boolean) {
-    this.router.navigate(['.'], {
-      queryParams: showAll ? { ['show-all']: showAll } : undefined,
-      replaceUrl: true,
-    });
   }
 }
