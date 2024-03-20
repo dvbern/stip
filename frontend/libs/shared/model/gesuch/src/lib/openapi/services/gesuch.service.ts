@@ -11,27 +11,28 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
+import { Inject, Injectable, Optional } from '@angular/core';
 import {
   HttpClient,
-  HttpContext,
-  HttpEvent,
   HttpHeaders,
-  HttpParameterCodec,
   HttpParams,
   HttpResponse,
+  HttpEvent,
+  HttpParameterCodec,
+  HttpContext,
 } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
-import { Configuration } from '../configuration';
-import { CustomHttpParameterCodec } from '../encoder';
 import { Dokument } from '../model/dokument';
 import { DokumentTyp } from '../model/dokumentTyp';
 import { Gesuch } from '../model/gesuch';
 import { GesuchCreate } from '../model/gesuchCreate';
 import { GesuchUpdate } from '../model/gesuchUpdate';
 import { ValidationReport } from '../model/validationReport';
+
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
+import { Configuration } from '../configuration';
 
 export interface GesuchServiceCreateDokumentRequestParams {
   dokumentTyp: DokumentTyp;
@@ -87,6 +88,10 @@ export interface GesuchServiceGetGesucheForFallRequestParams {
 export interface GesuchServiceUpdateGesuchRequestParams {
   gesuchId: string;
   gesuchUpdate: GesuchUpdate;
+}
+
+export interface GesuchServiceValidateGesuchPagesRequestParams {
+  gesuchId: string;
 }
 
 @Injectable({
@@ -1808,6 +1813,116 @@ export class GesuchService {
       {
         context: localVarHttpContext,
         body: gesuchUpdate,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: <any>observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param requestParameters
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public validateGesuchPages$(
+    requestParameters: GesuchServiceValidateGesuchPagesRequestParams,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext },
+  ): Observable<ValidationReport>;
+  public validateGesuchPages$(
+    requestParameters: GesuchServiceValidateGesuchPagesRequestParams,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext },
+  ): Observable<HttpResponse<ValidationReport>>;
+  public validateGesuchPages$(
+    requestParameters: GesuchServiceValidateGesuchPagesRequestParams,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext },
+  ): Observable<HttpEvent<ValidationReport>>;
+  public validateGesuchPages$(
+    requestParameters: GesuchServiceValidateGesuchPagesRequestParams,
+    observe: 'body' | 'response' | 'events' = 'body',
+    reportProgress = false,
+    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext },
+  ): Observable<any> {
+    const gesuchId = requestParameters.gesuchId;
+    if (gesuchId === null || gesuchId === undefined) {
+      throw new Error(
+        'Required parameter gesuchId was null or undefined when calling validateGesuchPages$.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (auth-uat-bern) required
+    localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+    if (localVarCredential) {
+      // using credentials
+    }
+
+    // authentication (auth-dev-bern) required
+    localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+    if (localVarCredential) {
+      // using credentials
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined =
+      options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected =
+        this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set(
+        'Accept',
+        localVarHttpHeaderAcceptSelected,
+      );
+    }
+
+    let localVarHttpContext: HttpContext | undefined =
+      options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (
+        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+      ) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    const localVarPath = `/gesuch/validatePages/${this.configuration.encodeParam(
+      {
+        name: 'gesuchId',
+        value: gesuchId,
+        in: 'path',
+        style: 'simple',
+        explode: false,
+        dataType: 'string',
+        dataFormat: 'uuid',
+      },
+    )}`;
+    return this.httpClient.request<ValidationReport>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

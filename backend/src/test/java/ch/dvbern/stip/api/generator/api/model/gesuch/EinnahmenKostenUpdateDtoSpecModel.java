@@ -11,6 +11,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
 
     public static final Model<EinnahmenKostenUpdateDtoSpec> einnahmenKostenUpdateDtoSpecModel =
         Instancio.of(EinnahmenKostenUpdateDtoSpec.class)
+            .set(field(EinnahmenKostenUpdateDtoSpec::getAlimente), null)
             .toModel();
 
     public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecEinnahmenKostenModel =
