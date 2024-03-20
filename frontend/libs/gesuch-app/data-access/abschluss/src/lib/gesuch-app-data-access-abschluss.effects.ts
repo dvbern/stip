@@ -4,9 +4,37 @@ import { catchError, switchMap } from 'rxjs';
 
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { GesuchService } from '@dv/shared/model/gesuch';
+import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 import { GesuchAppDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
+
+export const gesuchCheck = createEffect(
+  (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+    return events$.pipe(
+      ofType(GesuchAppDataAccessAbschlussApiEvents.check),
+      switchMap(({ gesuchId }) =>
+        gesuchService
+          .gesuchEinreichenValidieren$({ gesuchId }, undefined, undefined, {
+            context: shouldIgnoreErrorsIf(true),
+          })
+          .pipe(
+            switchMap((validation) => [
+              GesuchAppDataAccessAbschlussApiEvents.gesuchCheckSuccess({
+                error: sharedUtilFnErrorTransformer({ error: validation }),
+              }),
+            ]),
+            catchError((error) => [
+              GesuchAppDataAccessAbschlussApiEvents.gesuchCheckFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          ),
+      ),
+    );
+  },
+  { functional: true },
+);
 
 export const gesuchEinreichen = createEffect(
   (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
@@ -31,4 +59,7 @@ export const gesuchEinreichen = createEffect(
 );
 
 // add effects here
-export const gesuchAppDataAccessAbschlussEffects = { gesuchEinreichen };
+export const gesuchAppDataAccessAbschlussEffects = {
+  gesuchCheck,
+  gesuchEinreichen,
+};

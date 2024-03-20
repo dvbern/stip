@@ -11,9 +11,11 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -34,7 +36,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,11 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.KONKUBINAT;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -78,7 +84,7 @@ class GesuchServiceTest {
         final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, LEDIG);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
     }
 
     @Test
@@ -88,7 +94,7 @@ class GesuchServiceTest {
             if (zivilstand != LEDIG) {
                 final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
                 GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, LEDIG, zivilstand);
-                MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+                assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
             }
         }
     }
@@ -100,7 +106,7 @@ class GesuchServiceTest {
             if (zivilstand != VERWITWET) {
                 final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
                 GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERWITWET, zivilstand);
-                MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+                assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
             }
         }
     }
@@ -113,7 +119,7 @@ class GesuchServiceTest {
                 final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
                 GesuchTranche tranche =
                     updateFromZivilstandToZivilstand(gesuchUpdateDto, GESCHIEDEN_GERICHTLICH, zivilstand);
-                MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+                assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
             }
         }
     }
@@ -124,7 +130,7 @@ class GesuchServiceTest {
         for (var zivilstand : new Zivilstand[] { KONKUBINAT, EINGETRAGENE_PARTNERSCHAFT }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, zivilstand);
-            MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+            assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
         }
     }
 
@@ -134,7 +140,7 @@ class GesuchServiceTest {
         for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, zivilstand);
-            MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
+            assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
         }
     }
 
@@ -145,7 +151,7 @@ class GesuchServiceTest {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche =
                 updateFromZivilstandToZivilstand(gesuchUpdateDto, EINGETRAGENE_PARTNERSCHAFT, zivilstand);
-            MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+            assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
         }
     }
 
@@ -156,7 +162,7 @@ class GesuchServiceTest {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche =
                 updateFromZivilstandToZivilstand(gesuchUpdateDto, EINGETRAGENE_PARTNERSCHAFT, zivilstand);
-            MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
+            assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
         }
     }
 
@@ -166,7 +172,7 @@ class GesuchServiceTest {
         for (var zivilstand : new Zivilstand[] { VERHEIRATET, EINGETRAGENE_PARTNERSCHAFT }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, KONKUBINAT, zivilstand);
-            MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+            assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
         }
     }
 
@@ -176,7 +182,7 @@ class GesuchServiceTest {
         for (var zivilstand : new Zivilstand[] { GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET }) {
             final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
             GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, KONKUBINAT, zivilstand);
-            MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
+            assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
         }
     }
 
@@ -188,7 +194,7 @@ class GesuchServiceTest {
                 final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
                 GesuchTranche tranche =
                     updateFromZivilstandToZivilstand(gesuchUpdateDto, AUFGELOESTE_PARTNERSCHAFT, zivilstand);
-                MatcherAssert.assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
+                assertThat(tranche.getGesuchFormular().getPartner(), Matchers.notNullValue());
             }
         }
     }
@@ -197,40 +203,40 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     void resetElternDataIfChangeFromMutterToGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        MatcherAssert.assertThat(
+        assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
-            Matchers.not(0));
+            not(0));
         GesuchTranche tranche =
             updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.MUTTER, Elternschaftsteilung.GEMEINSAM);
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
+        assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
     }
 
     @Test
     @TestAsGesuchsteller
     void resetElternDataIfChangeFromVaterToGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        MatcherAssert.assertThat(
+        assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
-            Matchers.not(0));
+            not(0));
         GesuchTranche tranche =
             updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.VATER, Elternschaftsteilung.GEMEINSAM);
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
+        assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
     }
 
     @Test
     @TestAsGesuchsteller
     void noResetElternDataIfNoChangeGemeinsam() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        MatcherAssert.assertThat(
+        assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
-            Matchers.not(0));
+            not(0));
         var anzahlElternBevoreUpdate =
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
 
         GesuchTranche tranche = updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.GEMEINSAM,
             Elternschaftsteilung.GEMEINSAM
         );
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getElterns().size(),
             Matchers.is(anzahlElternBevoreUpdate)
         );
@@ -252,7 +258,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getElterns().size(),
             Matchers.is(anzahlElternBevoreUpdate));
     }
@@ -275,8 +281,8 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
     }
 
     @Test
@@ -293,8 +299,8 @@ class GesuchServiceTest {
             ElternAbwesenheitsGrund.UNBEKANNT,
             ElternAbwesenheitsGrund.WEDER_NOCH);
 
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
     }
 
     @Test
@@ -311,8 +317,8 @@ class GesuchServiceTest {
             ElternAbwesenheitsGrund.VERSTORBEN,
             ElternAbwesenheitsGrund.WEDER_NOCH);
 
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
     }
 
     @Test
@@ -329,8 +335,8 @@ class GesuchServiceTest {
             ElternAbwesenheitsGrund.WEDER_NOCH,
             ElternAbwesenheitsGrund.UNBEKANNT);
 
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
     }
 
     @Test
@@ -347,8 +353,8 @@ class GesuchServiceTest {
             ElternAbwesenheitsGrund.WEDER_NOCH,
             ElternAbwesenheitsGrund.VERSTORBEN);
 
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
     }
 
     @Test
@@ -365,8 +371,8 @@ class GesuchServiceTest {
             ElternAbwesenheitsGrund.VERSTORBEN,
             ElternAbwesenheitsGrund.VERSTORBEN);
 
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
     }
 
     @Test
@@ -383,8 +389,8 @@ class GesuchServiceTest {
             ElternAbwesenheitsGrund.UNBEKANNT,
             ElternAbwesenheitsGrund.UNBEKANNT);
 
-        MatcherAssert.assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
-        MatcherAssert.assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
+        assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(false));
     }
 
     @Test
@@ -418,7 +424,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
     }
 
     @Test
@@ -432,7 +438,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, true, gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
     }
 
     @Test
@@ -446,7 +452,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, true, gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
     }
 
     @Test
@@ -458,7 +464,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, true, gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
     }
 
     @Test
@@ -472,7 +478,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, false, gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
     }
 
     @Test
@@ -486,7 +492,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, false, gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
     }
 
     @Test
@@ -498,7 +504,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
 
-        MatcherAssert.assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
     }
 
     @Test
@@ -516,7 +522,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
             Matchers.is(1)
         );
@@ -536,7 +542,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
             Matchers.is(1)
         );
@@ -569,7 +575,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
             Matchers.is(1)
         );
@@ -594,7 +600,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
             Matchers.is(1)
         );
@@ -627,7 +633,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
             Matchers.nullValue()
         );
@@ -656,7 +662,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten(),
             Matchers.nullValue()
         );
@@ -668,14 +674,14 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
         );
@@ -687,7 +693,7 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
         );
@@ -698,7 +704,7 @@ class GesuchServiceTest {
             .setGeburtsdatum(LocalDate.of(2000, 10, 11));
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(0)
         );
@@ -710,7 +716,7 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
         );
@@ -718,7 +724,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
-        MatcherAssert.assertThat(
+        assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
         );
@@ -735,7 +741,7 @@ class GesuchServiceTest {
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
-        MatcherAssert.assertThat(
+        assertThat(
             reportDto.getValidationErrors().size(),
             Matchers.is(1)
         );
@@ -754,10 +760,30 @@ class GesuchServiceTest {
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
-        MatcherAssert.assertThat(
+        assertThat(
             reportDto.getValidationErrors().size(),
             Matchers.is(0)
         );
+    }
+
+    @Test
+    void pageValidation() {
+        final var gesuch = new GesuchFormular();
+        var reportDto = gesuchService.validatePages(gesuch);
+        assertThat(reportDto.getValidationErrors(), is(empty()));
+
+        gesuch.setEinnahmenKosten(new EinnahmenKosten());
+        reportDto = gesuchService.validatePages(gesuch);
+        var violationCount = reportDto.getValidationErrors().size();
+        assertThat(reportDto.getValidationErrors(), is(not(empty())));
+
+        gesuch.setFamiliensituation(
+            new Familiensituation()
+                .setElternteilUnbekanntVerstorben(true)
+                .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
+        );
+        reportDto = gesuchService.validatePages(gesuch);
+        assertThat(reportDto.getValidationErrors().size(), is(greaterThan(violationCount)));
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

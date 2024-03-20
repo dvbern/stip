@@ -26,7 +26,11 @@ async function setup() {
           gesuchFormular: {
             partner: {} as PartnerUpdate,
           } as GesuchFormular,
-          gesuchs: [],
+          gesuchs: {
+            cache: {
+              gesuchFormular: null,
+            },
+          },
           loading: false,
           error: undefined,
           stammdatens: {

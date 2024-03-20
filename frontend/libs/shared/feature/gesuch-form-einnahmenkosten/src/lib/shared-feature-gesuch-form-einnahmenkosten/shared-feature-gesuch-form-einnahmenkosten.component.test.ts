@@ -191,7 +191,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   describe('form validation', () => {
     it('should autocorrect if value does not reach minimum', async () => {
       const { queryByTestId, getByTestId } =
-        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
       expect(
         queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
       ).toBeInTheDocument();
@@ -202,7 +202,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
     it('should autocorrect if personenImHaushalt is negative', async () => {
       const { queryByTestId, getByTestId } =
-        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
       expect(
         queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
       ).toBeInTheDocument();
