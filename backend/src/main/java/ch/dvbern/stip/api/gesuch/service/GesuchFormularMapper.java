@@ -5,13 +5,16 @@ import java.util.List;
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
+import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
@@ -40,7 +43,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
             KindMapper.class,
             EinnahmenKostenMapper.class
         })
-public abstract class GesuchFormularMapper {
+public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
@@ -53,36 +56,63 @@ public abstract class GesuchFormularMapper {
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
         @MappingTarget GesuchFormular gesuchFormular);
 
+    @Override
     @BeforeMapping
-    public void clearDataOnUpdate(
-        GesuchFormularUpdateDto gesuchFormularUpdateDto,
-        @MappingTarget GesuchFormular gesuchFormular) {
-        clearElterntOnAlimenteChange(gesuchFormularUpdateDto, gesuchFormular);
-    }
+    protected void resetDependentDataBeforeUpdate(
+        final GesuchFormularUpdateDto newFormular,
+        final @MappingTarget GesuchFormular targetFormular
+    ) {
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(newFormular, targetFormular),
+            "Clear Renten because Elternteil VERSTORBEN or UNBEKANNT",
+            () -> {
+                if (newFormular.getEinnahmenKosten() == null) {
+                    return;
+                }
 
-    private void clearElterntOnAlimenteChange(GesuchFormularUpdateDto updateDto, GesuchFormular entity) {
-        if (entity.getFamiliensituation() == null || updateDto.getFamiliensituation() == null) {
-            return;
-        }
+                newFormular.getEinnahmenKosten().setRenten(null);
+            }
+        );
 
-        if (entity.getFamiliensituation().getWerZahltAlimente() == updateDto.getFamiliensituation()
-            .getWerZahltAlimente()) {
-            return;
-        }
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasWerZahltAlimenteChanged(newFormular, targetFormular),
+            "Clear Elternteil because werZahltAlimente changed",
+            () -> {
+                final var famsit = newFormular.getFamiliensituation();
+                if (famsit == null) {
+                    return;
+                }
 
-        final var werZahlt = updateDto.getFamiliensituation().getWerZahltAlimente();
-        if (werZahlt == null) {
-            return;
-        }
+                final var werZahlt = newFormular.getFamiliensituation().getWerZahltAlimente();
+                if (werZahlt == null) {
+                    return;
+                }
 
-        switch (werZahlt) {
-        case VATER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
-        case MUTTER -> removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
-        case GEMEINSAM -> {
-            removeElternOfTyp(updateDto.getElterns(), ElternTyp.MUTTER);
-            removeElternOfTyp(updateDto.getElterns(), ElternTyp.VATER);
-        }
-        }
+                switch (werZahlt) {
+                case VATER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                case MUTTER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                case GEMEINSAM -> {
+                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                }
+                }
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasWohnsitzChanged(newFormular, targetFormular),
+            "Clear Wohnkosten because wohnsitz changed",
+            () -> {
+                if (newFormular.getPersonInAusbildung() == null) {
+                    return;
+                }
+
+                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
+                    newFormular.getEinnahmenKosten() != null) {
+                        newFormular.getEinnahmenKosten().setWohnkosten(null);
+                }
+            }
+        );
     }
 
     void removeElternOfTyp(List<ElternUpdateDto> eltern, ElternTyp typ) {
