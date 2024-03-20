@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, combineLatest, map, startWith } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 import { Land } from '@dv/shared/model/gesuch';
 import {
@@ -23,6 +23,7 @@ import {
   SharedUiFormControlProxyDirective,
   injectTargetControl,
 } from '@dv/shared/ui/form-control-proxy';
+import { onTranslationChanges$ } from '@dv/shared/util-fn/translation-helper';
 
 @Component({
   selector: 'dv-shared-ui-form-country',
@@ -52,11 +53,7 @@ export class SharedUiFormCountryComponent
   private laender$ = new BehaviorSubject<string[]>([]);
 
   translatedLaender$ = combineLatest([
-    this.translate.onLangChange.pipe(
-      startWith({
-        translations: this.translate.translations[this.translate.currentLang],
-      }),
-    ),
+    onTranslationChanges$(this.translate),
     this.laender$,
   ]).pipe(
     map(([{ translations }, laender]) => {

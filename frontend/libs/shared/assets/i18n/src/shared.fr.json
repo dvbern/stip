@@ -81,6 +81,13 @@
   "shared.dokumente.table.delete": "Supprimer",
   "shared.dokumente.table.upload": "Télécharger",
 
+  "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.zulagen.required.message}": "Veuillez remplir le champ \"Allocations pour enfants\" dans les recettes et les coûts.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.partner.not.null.required.message}": "Veuillez remplir les informations sur le conjoint / concubin.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Veuillez remplir les informations sur les parents.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Veuillez remplir le champ \"Pensions\" dans les recettes et les coûts.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "La section \"{{section}}\" n'est pas complète.",
+
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
   "shared.form.gonext": "Continuer",
@@ -180,7 +187,7 @@
   "shared.form.familiensituation.vater": "Père",
   "shared.form.familiensituation.gemeinsam": "Ensemble",
   "shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label": "Les parents biologiques sont-ils mariés ou vivent-ils ensemble?",
-  "shared.form.familiensituation.gerichtliche-alimentenregelung.label": "Existe-t-il un règlement judiciaire de la pension alimentaire?",
+  "shared.form.familiensituation.gerichtliche-alimentenregelung.label": "Existe-t-il un règlement judiciaire de la pension alimentaire ou un contrat d'entretien?",
   "shared.form.familiensituation.wer-zahlt-alimente.label": "Qui paie les pensions alimentaires?",
   "shared.form.familiensituation.elternteil-verstorben-unbekannt.label": "Si l'un des parents est inconnu ou décédé?",
   "shared.form.familiensituation.elternteil-verstorben-unbekannt.unbekannt": "Inconnu",

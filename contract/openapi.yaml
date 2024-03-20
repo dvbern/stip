@@ -488,6 +488,26 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: updateGesuch
             summary: Updates the Gesuch with the given Id
+    '/gesuch/validatePages/{gesuchId}':
+        get:
+            tags:
+                - Gesuch
+                - Validation
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationReport'
+                    description: Die Validierung wurde erflogreich durchgeführt
+            operationId: validateGesuchPages
     '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
         get:
             tags:
