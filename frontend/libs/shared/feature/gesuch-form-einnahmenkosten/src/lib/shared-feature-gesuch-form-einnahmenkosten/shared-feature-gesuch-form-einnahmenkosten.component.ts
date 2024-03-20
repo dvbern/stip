@@ -180,8 +180,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           hasData,
           hatElternteilVerloren,
           hatKinder,
-          willSekundarstufeZwei,
-          willTertiaerstufe,
+          // willSekundarstufeZwei,
+          // willTertiaerstufe,
           istErwachsen,
         } = this.formStateSig();
         const {
@@ -198,14 +198,17 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           !hatElternteilVerloren,
         );
         this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
+        // KSTIP-918: use correct sekundarstufe/tertiaerstufe check once properties are available
+        // <
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,
-          !willSekundarstufeZwei,
+          false,
         );
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenTertiaerstufe,
-          !willTertiaerstufe,
+          false,
         );
+        // >
         this.setDisabledStateAndHide(
           this.form.controls.willDarlehen,
           !istErwachsen,
@@ -216,11 +219,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         );
         this.setDisabledStateAndHide(
           this.form.controls.wohnkosten,
-          !wohnsitzNotEigenerHaushalt,
+          wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.personenImHaushalt,
-          !wohnsitzNotEigenerHaushalt,
+          wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.alimente,
