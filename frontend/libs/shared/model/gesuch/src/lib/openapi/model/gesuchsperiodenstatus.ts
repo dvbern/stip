@@ -9,18 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Gesuchsperiodenstatus } from './gesuchsperiodenstatus';
 
-export interface Gesuchsperiode { 
-    id: string;
-    gueltigAb: string;
-    gueltigBis: string;
-    einreichfrist?: string;
-    aufschaltdatum?: string;
-    bezeichnungDe: string;
-    bezeichnungFr: string;
-    status: Gesuchsperiodenstatus;
-}
+export type Gesuchsperiodenstatus = 'ENTWURF' | 'AKTIV' | 'ARCHIVIERT';
 
-
+export const Gesuchsperiodenstatus = {
+    ENTWURF: 'ENTWURF' as Gesuchsperiodenstatus,
+    AKTIV: 'AKTIV' as Gesuchsperiodenstatus,
+    ARCHIVIERT: 'ARCHIVIERT' as Gesuchsperiodenstatus
+};
 

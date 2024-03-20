@@ -14,13 +14,13 @@
       >
         <caption class="cdk-visually-hidden">
           {{
-            'sachbearbeitung-app.administration.buchstaben-zuordnung.table.description' | translate
+            'sachbearbeitung-app.admin.buchstabenZuteilung.table.description' | translate
           }}
         </caption>
 
         <ng-container matColumnDef="fullName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="fs-6 fw-bolder">
-            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiter' | translate }}
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | translate }}
           </th>
           <td mat-cell class="py-1" *matCellDef="let element">{{ element.fullName }}</td>
         </ng-container>
@@ -30,7 +30,7 @@
               #filter
               type="text"
               (keyup)="filterChangedSig.set(filter.value)"
-              [attr.aria-label]="'sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiterFilter' | translate"
+              [attr.aria-label]="'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | translate"
             />
           </th>
         </ng-container>

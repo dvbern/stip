@@ -1,6 +1,7 @@
 import { format, intervalToDuration, isValid, parse, parseISO } from 'date-fns';
 
 import { Language } from '@dv/shared/model/language';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { DateFormatVariant, getFormatDef, parseDateForVariant } from '../index';
 
@@ -17,6 +18,13 @@ export function printDate(
   dateFormatVariant: DateFormatVariant,
 ) {
   return format(date, getFormatDef(locale, dateFormatVariant).niceInput);
+}
+
+export function fromBackendLocalDate(value: string | null | undefined) {
+  if (!isDefined(value)) {
+    return undefined;
+  }
+  return parseISO(value);
 }
 
 export function formatBackendLocalDate(

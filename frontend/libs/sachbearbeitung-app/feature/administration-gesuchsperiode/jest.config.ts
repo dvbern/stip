@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'sachbearbeitung-app-feature-gesuchsperiode',
+  displayName: 'sachbearbeitung-app-feature-administration-gesuchsperiode',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/feature/gesuchsperiode',
+    '../../../../coverage/libs/sachbearbeitung-app/feature/administration-gesuchsperiode',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

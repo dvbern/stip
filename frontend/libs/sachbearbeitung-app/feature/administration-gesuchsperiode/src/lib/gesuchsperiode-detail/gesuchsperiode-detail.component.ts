@@ -26,7 +26,6 @@ import {
 import { MatInput } from '@angular/material/input';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { elementAt, from } from 'rxjs';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import {
@@ -38,7 +37,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
 import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-gesuchsperiode',
+  selector: 'dv-sachbearbeitung-app-feature-gesuchsperiode-detail',
   standalone: true,
   imports: [
     CommonModule,
@@ -57,13 +56,10 @@ import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
     MatDatepickerInput,
     MatDatepickerApply,
   ],
-  templateUrl: './sachbearbeitung-app-feature-gesuchsperiode.component.html',
-  styleUrl: './sachbearbeitung-app-feature-gesuchsperiode.component.scss',
+  templateUrl: './gesuchsperiode-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureGesuchsperiodeComponent
-  implements OnInit
-{
+export class GesuchsperiodeDetailComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
@@ -138,8 +134,7 @@ export class SachbearbeitungAppFeatureGesuchsperiodeComponent
     if (!this.form.valid) {
       return;
     }
-    console.log(this.form.value);
-    const value = this.form.value;
+    const value = this.form.value as any;
     this.store.saveGesuchsperiode({
       ...value,
       ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),

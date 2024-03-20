@@ -21,16 +21,15 @@ export const OPTION_BUCHSTABEN_ZUTEILUNG = {
   iconSymbolName: 'sort_by_alpha',
 };
 
-export const OPTION_MORE = {
-  route: 'weitere-einstellungen',
-  translationKey: 'sachbearbeitung-app.admin.option.weitereEinstellungen',
-  titleTranslationKey:
-    'sachbearbeitung-app.admin.option.weitereEinstellungenTitle',
+export const OPTION_GESUCHSPERIODEN = {
+  route: 'gesuchsperioden',
+  translationKey: 'sachbearbeitung-app.admin.option.gesuchsperioden',
+  titleTranslationKey: 'sachbearbeitung-app.admin.option.gesuchsperiodenTitle',
   iconSymbolName: 'format_indent_increase',
 };
 
 export const AdminOptions = [
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
-  OPTION_MORE,
+  OPTION_GESUCHSPERIODEN,
 ];

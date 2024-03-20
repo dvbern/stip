@@ -14,7 +14,11 @@ export interface GesuchsperiodeDaten {
     /**
      * 
      */
-    bezeichnung: string;
+    bezeichnungDe: string;
+    /**
+     * 
+     */
+    bezeichnungFr: string;
     /**
      * 
      */
