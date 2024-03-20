@@ -1,22 +1,21 @@
 package ch.dvbern.stip.api.communication.mail.service;
 
-import java.io.File;
-import java.util.List;
-import java.util.Locale;
-
-import ch.dvbern.stip.api.common.i18n.StipEmailMessages;
-import ch.dvbern.stip.api.common.i18n.StipMessagesResourceBundle;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MailTemplate.MailTemplateInstance;
 import io.quarkus.mailer.Mailer;
 import io.quarkus.mailer.reactive.ReactiveMailer;
 import io.quarkus.qute.CheckedTemplate;
-import io.quarkus.qute.TemplateException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.util.List;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -24,20 +23,18 @@ import lombok.extern.slf4j.Slf4j;
 public class MailService {
 
     private final Mailer mailer;
+    private final TL tl;
     private final ReactiveMailer reactiveMailer;
 
     public void sendGesuchEingereichtEmail(
         String name,
         String vorname,
         String receiver,
-        Locale locale
+        AppLanguages language
     ) {
-        Templates.getGesuchEingereicht(name, vorname, locale.getLanguage())
+        Templates.getGesuchEingereicht(name, vorname, language)
             .to(receiver)
-            .subject(StipMessagesResourceBundle.getMessage(
-                StipEmailMessages.EINGEREICHT.getMessage(),
-                locale
-            ))
+            .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.gesuch.eingereicht"))
             .send().subscribe().asCompletionStage();
     }
 
@@ -95,14 +92,10 @@ public class MailService {
 
         private static native MailTemplateInstance gesuchEingereichtFr(String name, String vorname);
 
-        public static MailTemplateInstance getGesuchEingereicht(String name, String vorname, String language) {
+        public static MailTemplateInstance getGesuchEingereicht(String name, String vorname, AppLanguages language) {
             return switch (language) {
-                case "de" -> gesuchEingereichtDe(name, vorname);
-                case "fr" -> gesuchEingereichtFr(name, vorname);
-                default -> throw new TemplateException(String.format(
-                    "Es gibt kein Gesuch eingereicht mail template für die Sprache %s",
-                    language)
-                );
+                case FR -> gesuchEingereichtFr(name, vorname);
+                case DE -> gesuchEingereichtDe(name, vorname);
             };
         }
     }

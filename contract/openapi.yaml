@@ -2301,19 +2301,21 @@ components:
                         $ref: '#/components/schemas/ValidationReport'
             description: Die Kunde Request Daten sind ungültig
     securitySchemes:
+        Keycloak:
+        type: openIdConnect
+        description: Keycloak (DEV)
         auth-dev-bern:
-            openIdConnectUrl: 'https://auth.stip.dev.apps.test.kibon.ch/realms/bern'
+            openIdConnectUrl: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern'
             type: openIdConnect
             description: Bern (DEV)
         auth-uat-bern:
-            openIdConnectUrl: 'https://auth.stip.uat.apps.test.kibon.ch/realms/bern'
+            openIdConnectUrl: 'https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern'
             type: openIdConnect
             description: Bern (UAT)
 security:
-    -
-        auth-dev-bern: []
-    -
-        auth-uat-bern: []
+    - Keycloak: [ ]
+    - auth-dev-bern: [ ]
+    - auth-uat-bern: [ ]
 tags:
     -
         name: Ausbildungsstaette

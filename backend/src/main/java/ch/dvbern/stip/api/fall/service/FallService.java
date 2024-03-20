@@ -27,7 +27,7 @@ public class FallService {
         var benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(NotFoundException::new);
         var fall = new Fall();
         fall.setGesuchsteller(benutzer);
-        fallRepository.persist(fall);
+        fallRepository.persistAndFlush(fall);
         return fallMapper.toDto(fall);
     }
 

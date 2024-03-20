@@ -112,7 +112,7 @@ public class GesuchService {
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
-        gesuchRepository.persist(gesuch);
+        gesuchRepository.persistAndFlush(gesuch);
         return mapWithTrancheToWorkWith(gesuch);
     }
 
