@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 @Provider
 @Slf4j
 class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
-
     @Override
     public Response toResponse(ConstraintViolationException exception) {
         var violations = new ConstraintViolationParser()

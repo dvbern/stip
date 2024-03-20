@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.quarkus.exception;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.exception.AppValidationException;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import jakarta.inject.Inject;
@@ -8,12 +10,9 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
 @Provider
 @Slf4j
 class AppValidationExceptionMapper implements ExceptionMapper<AppValidationException> {
-
     @SuppressWarnings({ "ProtectedField", "java:S6813" })
     @Inject
     protected TL tl;

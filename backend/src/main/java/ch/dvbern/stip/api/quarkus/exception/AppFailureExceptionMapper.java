@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.quarkus.exception;
 
 import ch.dvbern.stip.api.common.exception.AppFailureException;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 class AppFailureExceptionMapper implements ExceptionMapper<AppFailureException> {
-
     private final TL tl;
 
     @Override

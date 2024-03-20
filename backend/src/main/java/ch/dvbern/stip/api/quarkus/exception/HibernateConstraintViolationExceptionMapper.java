@@ -10,7 +10,6 @@ import org.hibernate.exception.ConstraintViolationException;
 @Slf4j
 @Provider
 public class HibernateConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
-
     private static final String SQL_STATE_UNIQUE_CONSTRAINT_VIOLATED = "23505";
 
     @Override

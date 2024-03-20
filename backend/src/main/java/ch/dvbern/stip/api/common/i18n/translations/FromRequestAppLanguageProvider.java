@@ -8,7 +8,6 @@ import jakarta.inject.Inject;
 
 @RequestScoped
 public class FromRequestAppLanguageProvider implements AppLanguageProvider {
-
     private final HttpAcceptLanguageRequestFilter filter;
 
     @Inject

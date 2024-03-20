@@ -12,5 +12,4 @@ public class AppValidationException extends AppException {
         super(message.getI18nMessage(), ExceptionId.random(), null);
         this.clientKey = message.getClientKey();
     }
-
 }

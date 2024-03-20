@@ -1,15 +1,14 @@
 package ch.dvbern.stip.api.quarkus.exception;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.exception.ExceptionId;
 import ch.dvbern.stip.api.common.exception.FailureType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 class AppFailureErrorResponse extends AppErrorResponse {
-
     private final ExceptionId id;
     private final String summary;
 

@@ -7,11 +7,9 @@ import lombok.ToString;
 @Getter
 @ToString
 abstract class AppErrorResponse {
-
     private final FailureType type;
 
     protected AppErrorResponse(FailureType type) {
         this.type = type;
     }
-
 }

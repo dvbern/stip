@@ -1,11 +1,12 @@
 package ch.dvbern.stip.api.quarkus.exception;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationException;
 import ch.dvbern.stip.api.common.exception.ExceptionId;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -15,10 +16,7 @@ import jakarta.ws.rs.ext.Provider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
 import static ch.dvbern.stip.api.common.exception.AppFailureMessage.internalError;
-
 
 @Provider
 @Slf4j
@@ -38,7 +36,6 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
 
     @Override
     public Response toResponse(JsonMappingException exception) {
-
         try {
             Throwable cause = exception.getCause();
             if (cause instanceof ConstraintViolationException cv) {
@@ -55,7 +52,6 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
                         av.getClientKey(),
                         exception.getPath()
                     ))));
-
             }
 
             AppFailureMessage failureMessage = AppFailureMessage.jsonMapping();
@@ -64,8 +60,8 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
             var msg = tl.translate(failureMessage.getI18nMessage());
 
             return buildFailureResponse(
-                new AppFailureErrorResponse(exceptionId, msg, exception.getPath()));
-
+                new AppFailureErrorResponse(exceptionId, msg, exception.getPath())
+            );
         } catch (RuntimeException rte) {
             AppFailureMessage internalErrorMessage = internalError("null");
             ExceptionId exceptionId = internalErrorMessage.getId();
@@ -76,7 +72,6 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
                 msg,
                 "error building the validation error message, see server logfile for details"));
         }
-
     }
 
     private Response buildFailureResponse(AppFailureErrorResponse failure) {
@@ -85,7 +80,5 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
             .type(MediaType.APPLICATION_JSON_TYPE)
             .entity(failure)
             .build();
-
     }
-
 }

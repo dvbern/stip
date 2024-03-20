@@ -1,17 +1,15 @@
 package ch.dvbern.stip.api.common.exception;
 
+import java.io.Serial;
 
 import ch.dvbern.oss.commons.i18nl10n.I18nMessage;
 import ch.dvbern.stip.api.common.util.DebugUtil;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serial;
-
 @Getter
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class AppException extends RuntimeException {
-
     @Serial
     private static final long serialVersionUID = -30027164914702837L;
 
@@ -44,5 +42,4 @@ public abstract class AppException extends RuntimeException {
 
         return result;
     }
-
 }

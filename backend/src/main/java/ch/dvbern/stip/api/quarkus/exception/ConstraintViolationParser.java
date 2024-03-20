@@ -1,18 +1,17 @@
 package ch.dvbern.stip.api.quarkus.exception;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Path;
-import jakarta.validation.Path.Node;
-import org.apache.commons.lang3.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-class ConstraintViolationParser {
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Path;
+import jakarta.validation.Path.Node;
+import org.apache.commons.lang3.NotImplementedException;
 
+class ConstraintViolationParser {
     public Violation parse(ConstraintViolation<?> violation) {
         return Violation.of(
             buildPath(violation),
@@ -53,13 +52,8 @@ class ConstraintViolationParser {
         case PROPERTY:
             return buildNodePath(asList(propertyPath));
         case PARAMETER, METHOD:
-            // case CONSTRUCTOR:
-            // case CROSS_PARAMETER:
-            // case RETURN_VALUE:
-            // case CONTAINER_ELEMENT:
             List<Node> nodes = asList(propertyPath);
             List<Node> justParam = nodes.subList(2, nodes.size());
-
             return buildNodePath(justParam);
         default:
             throw new NotImplementedException(String.format(

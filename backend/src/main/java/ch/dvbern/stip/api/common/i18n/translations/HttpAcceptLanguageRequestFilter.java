@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.common.i18n.translations;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+
 import ch.dvbern.oss.commons.i18nl10n.AppLanguage;
 import ch.dvbern.oss.commons.i18nl10n.HttpAcceptLanguageHeaderParser;
 import jakarta.enterprise.context.RequestScoped;
@@ -10,15 +14,10 @@ import jakarta.ws.rs.ext.Provider;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-
 @Provider
 @PreMatching
 @RequestScoped
 public class HttpAcceptLanguageRequestFilter implements ContainerRequestFilter {
-
     private static final String ACCEPT_LANGUAGE = "Accept-Language";
 
     @Getter
@@ -40,5 +39,4 @@ public class HttpAcceptLanguageRequestFilter implements ContainerRequestFilter {
 
         appLanguage = Optional.of(headerParser.apply(acceptLanguageHeader));
     }
-
 }

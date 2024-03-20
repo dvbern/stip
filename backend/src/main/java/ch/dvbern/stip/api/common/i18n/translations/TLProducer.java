@@ -1,5 +1,10 @@
 package ch.dvbern.stip.api.common.i18n.translations;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
+import java.util.concurrent.ConcurrentHashMap;
+
 import ch.dvbern.oss.commons.i18nl10n.AppLanguage;
 import ch.dvbern.oss.commons.i18nl10n.DefaultTranslatorStrategy;
 import ch.dvbern.oss.commons.i18nl10n.Translator;
@@ -8,17 +13,11 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.ResourceBundle.Control;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static java.lang.Thread.currentThread;
 import static java.util.Objects.requireNonNull;
 
 @ApplicationScoped
 public class TLProducer {
-
     private static final String BUNDLE_BASE_NAME = "translations";
 
     private final ConcurrentHashMap<AppLanguage, ResourceBundle> bundleMap = new ConcurrentHashMap<>();
@@ -42,10 +41,10 @@ public class TLProducer {
         this.appLanguageProvider = requireNonNull(appLanguageProvider);
         this.baseName = baseName;
     }
+
     public static TLProducer defaultBundle() {
         return new TLProducer(() -> AppLanguages.DEFAULT, BUNDLE_BASE_NAME);
     }
-
 
     // should not need the @RequestScoped annotation!
     // but since the FromRequestAppLanguageProvider is @RequestScoped

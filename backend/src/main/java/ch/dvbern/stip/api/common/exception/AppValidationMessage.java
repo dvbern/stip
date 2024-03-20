@@ -19,7 +19,6 @@ public class AppValidationMessage {
         );
     }
 
-
     // This key is sent to the client in the error response
     String clientKey;
 

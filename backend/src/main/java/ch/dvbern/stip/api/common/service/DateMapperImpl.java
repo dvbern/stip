@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.common.service;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import org.mapstruct.Mapper;
-
-import java.time.LocalDate;
 
 @DateMapper
 @Mapper(config = MappingQualifierConfig.class)
@@ -14,7 +14,6 @@ public class DateMapperImpl {
         return date.getMonthValue() + "." + date.getYear();
     }
 
-    @SuppressWarnings("java:S1135")
     @MonthYearToBeginOfMonth
     public LocalDate monthYearToBeginOfMonth(String monthYear) {
         String[] date = monthYear.split("\\.");

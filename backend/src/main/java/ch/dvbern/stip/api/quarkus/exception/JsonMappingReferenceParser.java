@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.quarkus.exception;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,13 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class JsonMappingReferenceParser {
-
     @Value
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     private static class Entry {
@@ -46,5 +45,4 @@ class JsonMappingReferenceParser {
             .map(Entry::toPathEntry)
             .collect(Collectors.joining("."));
     }
-
 }

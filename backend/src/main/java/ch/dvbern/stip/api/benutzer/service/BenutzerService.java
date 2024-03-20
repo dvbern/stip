@@ -48,14 +48,12 @@ public class BenutzerService {
         return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
     }
 
-    @SuppressWarnings("java:S1135")
     @Transactional
     public Benutzer getOrCreateCurrentBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
 
         if (keycloakId == null) {
             throw AppFailureMessage.missingSubject().create();
-
         }
 
         Benutzer benutzer = benutzerRepository
