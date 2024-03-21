@@ -34,9 +34,10 @@ public class AusbildungsgangService {
     }
 
     @Transactional
-    public void updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
+    public AusbildungsgangDto updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
         var ausbildungsgangToUpdate = ausbildungsgangRepository.requireById(ausbildungsgangId);
         persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
+        return ausbildungsgangMapper.toDto(ausbildungsgangToUpdate);
     }
 
     @Transactional
