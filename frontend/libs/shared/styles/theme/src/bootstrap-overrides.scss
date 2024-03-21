@@ -28,6 +28,11 @@ body {
   &.btn-link {
     box-shadow: none;
     font-weight: normal;
+
+    &:focus-visible {
+      outline: 1px solid var(--dv-primary);
+      box-shadow: var(--dv-btn-focus-box-shadow);
+    }
   }
 
   &.dropdown-toggle {

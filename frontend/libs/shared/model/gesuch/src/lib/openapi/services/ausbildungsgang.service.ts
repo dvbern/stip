@@ -143,25 +143,37 @@ export class AusbildungsgangService {
     requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<any>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<Ausbildungsgang>;
   public createAusbildungsgang$(
     requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<HttpResponse<any>>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<HttpResponse<Ausbildungsgang>>;
   public createAusbildungsgang$(
     requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<HttpEvent<any>>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<HttpEvent<Ausbildungsgang>>;
   public createAusbildungsgang$(
     requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
   ): Observable<any> {
     const ausbildungsgangCreate = requestParameters.ausbildungsgangCreate;
     if (ausbildungsgangCreate === null || ausbildungsgangCreate === undefined) {
@@ -189,7 +201,7 @@ export class AusbildungsgangService {
       options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['text/plain'];
+      const httpHeaderAccepts: string[] = ['application/json', 'text/plain'];
       localVarHttpHeaderAcceptSelected =
         this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
@@ -231,7 +243,7 @@ export class AusbildungsgangService {
     }
 
     const localVarPath = `/ausbildungsgang`;
-    return this.httpClient.request<any>(
+    return this.httpClient.request<Ausbildungsgang>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -486,25 +498,37 @@ export class AusbildungsgangService {
     requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<any>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<Ausbildungsgang>;
   public updateAusbildungsgang$(
     requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<HttpResponse<any>>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<HttpResponse<Ausbildungsgang>>;
   public updateAusbildungsgang$(
     requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<HttpEvent<any>>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<HttpEvent<Ausbildungsgang>>;
   public updateAusbildungsgang$(
     requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
   ): Observable<any> {
     const ausbildungsgangId = requestParameters.ausbildungsgangId;
     if (ausbildungsgangId === null || ausbildungsgangId === undefined) {
@@ -538,7 +562,7 @@ export class AusbildungsgangService {
       options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['text/plain'];
+      const httpHeaderAccepts: string[] = ['application/json', 'text/plain'];
       localVarHttpHeaderAcceptSelected =
         this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
@@ -588,7 +612,7 @@ export class AusbildungsgangService {
       dataType: 'string',
       dataFormat: 'uuid',
     })}`;
-    return this.httpClient.request<any>(
+    return this.httpClient.request<Ausbildungsgang>(
       'put',
       `${this.configuration.basePath}${localVarPath}`,
       {

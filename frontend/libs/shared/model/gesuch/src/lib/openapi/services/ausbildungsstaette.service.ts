@@ -49,11 +49,6 @@ export interface AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams 
   ausbildungsstaetteUpdate?: AusbildungsstaetteUpdate;
 }
 
-export interface AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams {
-  ausbildungsstaetteId: string;
-  ausbildungsstaetteUpdate?: AusbildungsstaetteUpdate;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -148,25 +143,37 @@ export class AusbildungsstaetteService {
     requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<any>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<Ausbildungsstaette>;
   public createAusbildungsstaette$(
     requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<HttpResponse<any>>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<HttpResponse<Ausbildungsstaette>>;
   public createAusbildungsstaette$(
     requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
-  ): Observable<HttpEvent<any>>;
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
+  ): Observable<HttpEvent<Ausbildungsstaette>>;
   public createAusbildungsstaette$(
     requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
-    options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'text/plain';
+      context?: HttpContext;
+    },
   ): Observable<any> {
     const ausbildungsstaetteCreate = requestParameters.ausbildungsstaetteCreate;
 
@@ -189,7 +196,7 @@ export class AusbildungsstaetteService {
       options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['text/plain'];
+      const httpHeaderAccepts: string[] = ['application/json', 'text/plain'];
       localVarHttpHeaderAcceptSelected =
         this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
@@ -231,7 +238,7 @@ export class AusbildungsstaetteService {
     }
 
     const localVarPath = `/ausbildungsstaette`;
-    return this.httpClient.request<any>(
+    return this.httpClient.request<Ausbildungsstaette>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -590,7 +597,7 @@ export class AusbildungsstaetteService {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<any>;
+  ): Observable<Ausbildungsstaette>;
   public updateAusbildungsstaette$(
     requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
     observe?: 'response',
@@ -599,7 +606,7 @@ export class AusbildungsstaetteService {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<any>>;
+  ): Observable<HttpResponse<Ausbildungsstaette>>;
   public updateAusbildungsstaette$(
     requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
     observe?: 'events',
@@ -608,7 +615,7 @@ export class AusbildungsstaetteService {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<any>>;
+  ): Observable<HttpEvent<Ausbildungsstaette>>;
   public updateAusbildungsstaette$(
     requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
@@ -695,7 +702,7 @@ export class AusbildungsstaetteService {
       dataType: 'string',
       dataFormat: 'uuid',
     })}`;
-    return this.httpClient.request<any>(
+    return this.httpClient.request<Ausbildungsstaette>(
       'patch',
       `${this.configuration.basePath}${localVarPath}`,
       {

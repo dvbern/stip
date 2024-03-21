@@ -16,7 +16,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -84,42 +84,9 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   @ViewChild('paginator', { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
-  ngAfterViewInit() {
-    this.store.setPaginator(this.paginator);
-    this.store.setSort(this.sort);
-  }
-
-  constructor() {
-    this.formUtils.registerFormForUnsavedCheck(this);
-    merge(this.gangForm.valueChanges, this.form.valueChanges)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.hasUnsavedChanges = true;
-      });
-
-    effect(() => {
-      const response = this.store.response();
-
-      if (response.type === 'success') {
-        // is this going to be reactive, since it is not a subscription and does not come from an input, observable or the template?
-        this.endEdit();
-      }
-    });
-  }
-
-  private endEdit() {
-    this.editedAusbildungsstaette = null;
-    this.editedAusbildungsgang = null;
-    this.form.reset();
-    this.gangForm.reset();
-    this.hasUnsavedChanges = false;
-  }
-
   filterColumns = ['filter'];
 
   detailColumn = ['expandedDetail'];
-
-  // Ausbildungsstaette ==========================================================
 
   displayedColumns: string[] = [
     'nameDe',
@@ -135,9 +102,52 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   hasUnsavedChanges = false;
 
   form = this.fb.nonNullable.group({
-    nameDe: [''],
-    nameFr: [''],
+    nameDe: ['', Validators.required],
+    nameFr: ['', Validators.required],
   });
+
+  bildungsartValues = Object.values(Bildungsart);
+
+  displayedChildColumns: string[] = [
+    'bezeichnungDe',
+    'bezeichnungFr',
+    'ausbildungsrichtung',
+    'ausbildungsort',
+    'actions',
+  ];
+
+  editedAusbildungsgang: Ausbildungsgang | null = null;
+
+  gangForm = this.fb.nonNullable.group({
+    bezeichnungDe: ['', Validators.required],
+    bezeichnungFr: ['', Validators.required],
+    ausbildungsrichtung: ['', Validators.required],
+    ausbildungsort: ['', Validators.required],
+  });
+
+  constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
+    merge(this.gangForm.valueChanges, this.form.valueChanges)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.hasUnsavedChanges = true;
+      });
+
+    effect(() => {
+      const response = this.store.response();
+
+      if (response.type === 'success') {
+        this.endEdit();
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    this.store.setPaginator(this.paginator);
+    this.store.setSort(this.sort);
+  }
+
+  // Ausbildungsstaette ==========================================================
 
   addAusbildungsstaette() {
     const newRow = {
@@ -191,8 +201,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       ...this.form.value,
     };
 
-    // this.endEdit();
-
     this.store.handleCreateUpdateAusbildungsstaette(update);
   }
 
@@ -221,25 +229,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   }
 
   // Ausbildungsgang ==========================================================
-
-  bildungsartValues = Object.values(Bildungsart);
-
-  displayedChildColumns: string[] = [
-    'bezeichnungDe',
-    'bezeichnungFr',
-    'ausbildungsrichtung',
-    'ausbildungsort',
-    'actions',
-  ];
-
-  editedAusbildungsgang: Ausbildungsgang | null = null;
-
-  gangForm = this.fb.nonNullable.group({
-    bezeichnungDe: [''],
-    bezeichnungFr: [''],
-    ausbildungsrichtung: [''],
-    ausbildungsort: [''],
-  });
 
   addAusbildungsgang(staette: AusbildungsstaetteTableData) {
     const newRow = {
@@ -280,16 +269,14 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       return;
     }
 
-    const update = {
+    const gang = {
       ...this.editedAusbildungsgang,
       ...this.gangForm.value,
       ausbildungsrichtung: this.gangForm.value
         .ausbildungsrichtung as Bildungsart,
     };
 
-    this.endEdit();
-
-    this.store.handleCreateUpdateAusbildungsgang(staette, update);
+    this.store.handleCreateUpdateAusbildungsgang({ staette, gang });
   }
 
   deleteAusbildungsgang(
@@ -314,8 +301,16 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.store.deleteAusbildungsgang(staette, gang);
+          this.store.deleteAusbildungsgang({ staette, gang });
         }
       });
+  }
+
+  private endEdit() {
+    this.editedAusbildungsstaette = null;
+    this.editedAusbildungsgang = null;
+    this.form.reset();
+    this.gangForm.reset();
+    this.hasUnsavedChanges = false;
   }
 }

@@ -371,9 +371,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Ausbildungsstaette'
+                                $ref: '#/components/schemas/Ausbildungsstaette'
                     description: Ausbildungsstaette updated
                 '400':
                     $ref: '#/components/responses/BadRequest'
@@ -2043,7 +2041,7 @@ components:
                     description: Required wenn andere ausbildungNichtGefunden = true
                     type: string
                 alternativeAusbildungsgang:
-                    description: 
+                    description:
                         Required wenn andere ausbildungNichtGefunden = true
                     type: string
         Ausbildungsstaette:

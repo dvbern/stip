@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +9,7 @@ import {
   patchState,
   signalStore,
   withComputed,
+  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
@@ -17,96 +19,36 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
 import {
   Ausbildungsgang,
+  AusbildungsgangService,
   Ausbildungsstaette,
   AusbildungsstaetteService,
 } from '@dv/shared/model/gesuch';
-
-type ResponseInitial = {
-  type: 'initial';
-  data?: never;
-  error?: never;
-};
-
-const initial = () => ({
-  type: 'initial' as const,
-  data: undefined,
-  error: undefined,
-});
-
-const isInitial = (
-  response: Response<unknown>,
-): response is ResponseInitial => {
-  return response.type === 'initial';
-};
-
-type ResponseFailure = {
-  type: 'failure';
-  data?: never;
-  error: Error;
-};
-
-const failure = (error: Error) => ({
-  type: 'failure' as const,
-  data: undefined,
-  error,
-});
-
-const isFailure = (
-  response: Response<unknown>,
-): response is ResponseFailure => {
-  return response.type === 'failure';
-};
-
-type ResponsePending = {
-  type: 'pending';
-  data?: never;
-  error?: never;
-};
-
-const pending = () => ({
-  type: 'pending' as const,
-  data: undefined,
-  error: undefined,
-});
-
-const isPending = (
-  response: Response<unknown>,
-): response is ResponsePending => {
-  return response.type === 'pending';
-};
-
-type ResponseSuccess<T = unknown> = {
-  type: 'success';
-  data: T;
-  error?: never;
-};
-
-const success = <T>(data: T) => ({
-  type: 'success' as const,
-  data,
-  error: undefined,
-});
-
-const isSuccess = <T>(
-  response: Response<T>,
-): response is ResponseSuccess<T> => {
-  return response.type === 'success';
-};
-
-type Response<T> =
-  | ResponseInitial
-  | ResponseFailure
-  | ResponsePending
-  | ResponseSuccess<T>;
+import {
+  RemoteData,
+  failure,
+  initial,
+  pending,
+  success,
+} from '@dv/shared/util/remote-data';
 
 export interface AdminAusbildungsstaetteState {
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
-  response: Response<Ausbildungsstaette[]>;
+  response: RemoteData<Ausbildungsstaette[]>;
 }
 
 export const AdminAusbildungsstaetteStore = signalStore(
   withState(() => {
     const tableData = new MatTableDataSource<AusbildungsstaetteTableData>();
+
+    tableData.sortingDataAccessor = (data, sortHeaderId) => {
+      const value = data[sortHeaderId as keyof AusbildungsstaetteTableData];
+
+      if (typeof value === 'string') {
+        return value.toLocaleLowerCase();
+      }
+
+      return sortHeaderId;
+    };
 
     tableData.filterPredicate = (data, filter) => {
       const f = filter.trim().toLocaleLowerCase();
@@ -119,13 +61,17 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
     const initialState: AdminAusbildungsstaetteState = {
       tableData,
-      response: { type: 'initial' },
+      response: initial(),
     };
 
     return initialState;
   }),
   withMethods(
-    (store, ausbildungsStaetteService = inject(AusbildungsstaetteService)) => ({
+    (
+      store,
+      ausbildungsStaetteService = inject(AusbildungsstaetteService),
+      ausbildungsgangService = inject(AusbildungsgangService),
+    ) => ({
       setPaginator: (paginator: MatPaginator) => {
         patchState(store, (state) => {
           state.tableData.paginator = paginator;
@@ -149,8 +95,10 @@ export const AdminAusbildungsstaetteStore = signalStore(
       loadAusbildungsstaetten: rxMethod(
         pipe(
           tap(() => {
+            console.log('loadAusbildungsstaetten');
+
             patchState(store, {
-              response: { type: 'pending' },
+              response: pending(),
             });
           }),
           switchMap(() =>
@@ -168,24 +116,24 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
                     return {
                       ...state,
-                      response: {
-                        type: 'success' as const,
-                        data: ausbildungsstaetten,
-                      },
+                      response: success(ausbildungsstaetten),
                     };
                   }),
                 error: (error: HttpErrorResponse) => {
                   patchState(store, {
-                    response: { type: 'failure', error: error },
+                    response: failure(error),
                   });
                 },
               }),
             ),
           ),
+          takeUntilDestroyed(),
         ),
       ),
       addAusbildungsstaetteRow: (newRow: AusbildungsstaetteTableData) => {
         patchState(store, (state) => {
+          state.tableData.paginator?.firstPage();
+
           const data = [newRow, ...state.tableData.data];
 
           state.tableData.data = data;
@@ -209,7 +157,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
           pipe(
             tap(() => {
               patchState(store, {
-                response: { type: 'pending' },
+                response: pending(),
               });
             }),
             switchMap((staette: AusbildungsstaetteTableData) => {
@@ -227,14 +175,13 @@ export const AdminAusbildungsstaetteStore = signalStore(
                   })
                   .pipe(
                     tapResponse({
-                      next: () => {
+                      next: (ausbildungsstaette: Ausbildungsstaette) => {
                         patchState(store, (state) => {
                           const data = state.tableData.data.map((s) => {
                             if (s.id === 'new') {
                               return {
                                 ...s,
-                                ...staette,
-                                id: 'new-id',
+                                ...ausbildungsstaette,
                               };
                             }
 
@@ -245,24 +192,15 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
                           return {
                             ...state,
-                            response: {
-                              type: 'success' as const,
-                              data: state.tableData.data, //not ideal
-                            },
+                            response: success(data),
                           };
                         });
                       },
                       error: (error: HttpErrorResponse) => {
                         patchState(store, {
-                          response: { type: 'failure', error: error },
+                          response: failure(error),
                         });
                       },
-                      // @philip: do we need finalize? => ich denke es in disem store nicht
-                      // finalize: () => {
-                      //   patchState(store, {
-                      //     response: { type: 'initial' },
-                      //   });
-                      // },
                     }),
                   );
               }
@@ -277,13 +215,13 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 })
                 .pipe(
                   tapResponse({
-                    next: () => {
+                    next: (ausbildungsstaette: Ausbildungsstaette) => {
                       patchState(store, (state) => {
                         const data = state.tableData.data.map((s) => {
                           if (s.id === staette.id) {
                             return {
                               ...s,
-                              ...staette,
+                              ...ausbildungsstaette,
                             };
                           }
 
@@ -294,28 +232,26 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
                         return {
                           ...state,
-                          response: {
-                            type: 'success' as const,
-                            data: state.tableData.data, // not ideal
-                          },
+                          response: success(data),
                         };
                       });
                     },
                     error: (error: HttpErrorResponse) => {
                       patchState(store, {
-                        response: { type: 'failure', error: error },
+                        response: failure(error),
                       });
                     },
                   }),
                 );
             }),
+            takeUntilDestroyed(),
           ),
         ),
       deleteAusbildungsstaette: rxMethod<AusbildungsstaetteTableData>(
         pipe(
           tap(() => {
             patchState(store, {
-              response: { type: 'pending' },
+              response: pending(),
             });
           }),
           switchMap((staette: AusbildungsstaetteTableData) => {
@@ -336,21 +272,19 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
                       return {
                         ...state,
-                        response: {
-                          type: 'success' as const,
-                          data: state.tableData.data, // not ideal
-                        },
+                        response: success(data),
                       };
                     });
                   },
                   error: (error: HttpErrorResponse) => {
                     patchState(store, {
-                      response: { type: 'failure', error: error },
+                      response: failure(error),
                     });
                   },
                 }),
               );
           }),
+          takeUntilDestroyed(),
         ),
       ),
       // Ausbildungsgang  ==========================================================
@@ -359,7 +293,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
         newRow: Ausbildungsgang,
       ) => {
         patchState(store, (state) => {
-          // could find be more efficent?
           const data = state.tableData.data.map((staette) => {
             if (staette.id === ausbildungsstaetteId) {
               return {
@@ -406,74 +339,194 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
-      handleCreateUpdateAusbildungsgang: (
-        staette: AusbildungsstaetteTableData,
-        gang: Ausbildungsgang,
-      ) => {
-        patchState(store, (state) => {
-          const data = state.tableData.data.map((s) => {
-            if (s.id === staette.id) {
-              const ausbildungsgaenge = s.ausbildungsgaenge?.map((g) => {
-                if (g.id === gang.id) {
-                  return gang;
-                }
-
-                return g;
-              });
-
-              return {
-                ...s,
-                ausbildungsgaenge,
-              };
+      handleCreateUpdateAusbildungsgang: rxMethod<{
+        staette: AusbildungsstaetteTableData;
+        gang: Ausbildungsgang;
+      }>(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              response: pending(),
+            });
+          }),
+          switchMap(({ staette, gang }) => {
+            if (!staette.id) {
+              throw new Error('Ausbildungsstaette ID is undefined');
             }
 
-            return s;
-          });
+            if (gang.id === 'new') {
+              return ausbildungsgangService
+                .createAusbildungsgang$({
+                  ausbildungsgangCreate: {
+                    ausbildungsstaetteId: staette.id,
+                    ausbildungsort: gang.ausbildungsort,
+                    bezeichnungDe: gang.bezeichnungDe ?? '',
+                    bezeichnungFr: gang.bezeichnungFr ?? '',
+                    ausbildungsrichtung: gang.ausbildungsrichtung,
+                  },
+                })
+                .pipe(
+                  tapResponse({
+                    next: (gang: Ausbildungsgang) => {
+                      patchState(store, (state) => {
+                        const data = state.tableData.data.map((s) => {
+                          if (s.id === staette.id) {
+                            return {
+                              ...s,
+                              ausbildungsgaengeCount:
+                                s.ausbildungsgaengeCount + 1,
+                              ausbildungsgaenge: s.ausbildungsgaenge?.map(
+                                (g) => {
+                                  if (g.id === 'new') {
+                                    return gang;
+                                  }
 
-          state.tableData.data = data;
+                                  return g;
+                                },
+                              ),
+                            };
+                          }
 
-          return state;
-        });
-      },
-      deleteAusbildungsgang: (
-        staette: AusbildungsstaetteTableData,
-        gang: Ausbildungsgang,
-      ) => {
-        patchState(store, (state) => {
-          const data = state.tableData.data.map((s) => {
-            if (s.id === staette.id) {
-              const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
-                (g) => g.id !== gang.id,
+                          return s;
+                        });
+
+                        state.tableData.data = data;
+
+                        return {
+                          ...state,
+                          response: success(data),
+                        };
+                      });
+                    },
+                    error: (error: HttpErrorResponse) => {
+                      patchState(store, {
+                        response: failure(error),
+                      });
+                    },
+                  }),
+                );
+            }
+
+            return ausbildungsgangService
+              .updateAusbildungsgang$({
+                ausbildungsgangId: gang.id,
+                ausbildungsgangUpdate: {
+                  ausbildungsstaetteId: staette.id,
+                  ausbildungsrichtung: gang.ausbildungsrichtung,
+                  ausbildungsort: gang.ausbildungsort,
+                  bezeichnungDe: gang.bezeichnungDe ?? '',
+                  bezeichnungFr: gang.bezeichnungFr ?? '',
+                },
+              })
+              .pipe(
+                tapResponse({
+                  next: (gang: Ausbildungsgang) => {
+                    patchState(store, (state) => {
+                      const data = state.tableData.data.map((s) => {
+                        if (s.id === staette.id) {
+                          const ausbildungsgaenge = s.ausbildungsgaenge?.map(
+                            (g) => {
+                              if (g.id === gang.id) {
+                                return gang;
+                              }
+
+                              return g;
+                            },
+                          );
+
+                          return {
+                            ...s,
+                            ausbildungsgaenge,
+                          };
+                        }
+
+                        return s;
+                      });
+
+                      state.tableData.data = data;
+
+                      return {
+                        ...state,
+                        response: success(data),
+                      };
+                    });
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    patchState(store, {
+                      response: failure(error),
+                    });
+                  },
+                }),
               );
+          }),
+          takeUntilDestroyed(),
+        ),
+      ),
+      deleteAusbildungsgang: rxMethod<{
+        staette: AusbildungsstaetteTableData;
+        gang: Ausbildungsgang;
+      }>(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              response: pending(),
+            });
+          }),
+          switchMap(({ staette, gang }) => {
+            return ausbildungsgangService
+              .deleteAusbildungsgang$({ ausbildungsgangId: gang.id })
+              .pipe(
+                tapResponse({
+                  next: () => {
+                    patchState(store, (state) => {
+                      const data = state.tableData.data.map((s) => {
+                        if (s.id === staette.id) {
+                          const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
+                            (g) => g.id !== gang.id,
+                          );
 
-              return {
-                ...s,
-                ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
-                ausbildungsgaenge,
-              };
-            }
+                          return {
+                            ...s,
+                            ausbildungsgaengeCount:
+                              s.ausbildungsgaengeCount - 1,
+                            ausbildungsgaenge,
+                          };
+                        }
 
-            return s;
-          });
+                        return s;
+                      });
 
-          state.tableData.data = data;
+                      state.tableData.data = data;
 
-          return state;
-        });
-      },
+                      return {
+                        ...state,
+                        response: success(data),
+                      };
+                    });
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    patchState(store, {
+                      response: failure(error),
+                    });
+                  },
+                }),
+              );
+          }),
+          takeUntilDestroyed(),
+        ),
+      ),
     }),
   ),
   withComputed(({ tableData, response }) => ({
     ausbildungsstaetteCount: computed(() => tableData().data.length ?? 0),
-    loading: computed(() => (response.type() === 'pending' ? true : false)),
+    loading: computed(() => response.type() === 'pending'),
   })),
+  withHooks({
+    onInit(store) {
+      console.log('init');
+    },
+    onDestroy(store) {
+      console.log('destroy');
+    },
+  }),
 );
-
-// function generateRandomAusbildungsstaetten(n: number): Ausbildungsstaette[] {
-//   return Array.from({ length: n }, (_, i) => ({
-//     id: `${i}`,
-//     nameDe: `Ausbildungsstaette ${i}`,
-//     nameFr: `Ausbildungsstaette ${i}`,
-//     ausbildungsgaenge: [],
-//   }));
-// }
