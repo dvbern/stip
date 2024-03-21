@@ -94,6 +94,7 @@
     "@angular/cli": "~17.1.0",
     "@angular/compiler-cli": "~17.1.2",
     "@angular/language-service": "~17.1.2",
+    "@angular/material-date-fns-adapter": "~17.1.2",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",
     "@ngrx/eslint-plugin": "17.0.1",
     "@nx/angular": "18.0.5",

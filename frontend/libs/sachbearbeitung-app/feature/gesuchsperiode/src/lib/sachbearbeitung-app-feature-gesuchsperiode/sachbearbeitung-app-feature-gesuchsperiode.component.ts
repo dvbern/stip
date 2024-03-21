@@ -8,10 +8,12 @@ import {
   inject,
 } from '@angular/core';
 import {
+  FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import {
   MatDatepicker,
   MatDatepickerApply,
@@ -24,17 +26,21 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { elementAt, from } from 'rxjs';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
+import { Language } from '@dv/shared/model/language';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { SharedUtilFormService } from '@dv/shared/util/form';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
 import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 
 @Component({
@@ -58,6 +64,17 @@ import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
     MatDatepickerApply,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuchsperiode.component.html',
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en/GB',
+    },
+
+    // Moment can be provided globally to your app by adding `provideMomentDateAdapter`
+    // to your app config. We provide it at the component level here, due to limitations
+    // of our example generation script.
+    provideDateFnsAdapter(),
+  ],
   styleUrl: './sachbearbeitung-app-feature-gesuchsperiode.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -70,59 +87,56 @@ export class SachbearbeitungAppFeatureGesuchsperiodeComponent
   form = this.formBuilder.group({
     bezeichnung: [<string | null>null, [Validators.required]],
     fiskaljahr: [<string | null>null, [Validators.required]],
-    gesuchsperiodeStart: [<number | null>null, [Validators.required]],
-    gesuchsperiodeStopp: [<number | null>null, [Validators.required]],
-    aufschaltterminStart: [<number | null>null, [Validators.required]],
-    aufschaltterminStopp: [<number | null>null, [Validators.required]],
-    einreichefristNormal: [<number | null>null, [Validators.required]],
-    einreichefristReduziert: [<number | null>null, [Validators.required]],
-    ausbKosten_SekII: [<number | null>null, [Validators.required]],
-    ausbKosten_Tertiaer: [<number | null>null, [Validators.required]],
-    b_Einkommenfreibetrag: [<number | null>null, [Validators.required]],
-    b_VermogenSatzAngerechnet: [<number | null>null, [Validators.required]],
-    b_Verpf_Auswaerts_Tagessatz: [<number | null>null, [Validators.required]],
-    elternbeteiligungssatz: [<number | null>null, [Validators.required]],
-    f_Einkommensfreibetrag: [<number | null>null, [Validators.required]],
-    f_Vermoegensfreibetrag: [<number | null>null, [Validators.required]],
-    f_VermogenSatzAngerechnet: [<number | null>null, [Validators.required]],
-    integrationszulage: [<number | null>null, [Validators.required]],
+    gesuchsperiodeStart: [<string | null>null, [Validators.required]],
+    gesuchsperiodeStopp: [<string | null>null, [Validators.required]],
+    aufschaltterminStart: [<string | null>null, [Validators.required]],
+    aufschaltterminStopp: [<string | null>null, [Validators.required]],
+    einreichefristNormal: [<string | null>null, [Validators.required]],
+    einreichefristReduziert: [<string | null>null, [Validators.required]],
+    ausbKosten_SekII: [<string | null>null, [Validators.required]],
+    ausbKosten_Tertiaer: [<string | null>null, [Validators.required]],
+    b_Einkommenfreibetrag: [<string | null>null, [Validators.required]],
+    b_VermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
+    b_Verpf_Auswaerts_Tagessatz: [<string | null>null, [Validators.required]],
+    elternbeteiligungssatz: [<string | null>null, [Validators.required]],
+    f_Einkommensfreibetrag: [<string | null>null, [Validators.required]],
+    f_Vermoegensfreibetrag: [<string | null>null, [Validators.required]],
+    f_VermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
+    integrationszulage: [<string | null>null, [Validators.required]],
     limite_EkFreibetrag_Integrationszulag: [
-      <number | null>null,
+      <string | null>null,
       [Validators.required],
     ],
-    stipLimite_Minimalstipendium: [<number | null>null, [Validators.required]],
-    person_1: [<number | null>null, [Validators.required]],
-    person_2: [<number | null>null, [Validators.required]],
-    person_3: [<number | null>null, [Validators.required]],
-    person_4: [<number | null>null, [Validators.required]],
-    person_5: [<number | null>null, [Validators.required]],
-    person_6: [<number | null>null, [Validators.required]],
-    person_7: [<number | null>null, [Validators.required]],
-    ppP_8: [<number | null>null, [Validators.required]],
-    _00_18: [<number | null>null, [Validators.required]],
-    _19_25: [<number | null>null, [Validators.required]],
-    _26_99: [<number | null>null, [Validators.required]],
-    bB_1Pers: [<number | null>null, [Validators.required]],
-    bB_2Pers: [<number | null>null, [Validators.required]],
-    bB_3Pers: [<number | null>null, [Validators.required]],
-    bB_4Pers: [<number | null>null, [Validators.required]],
-    bB_5Pers: [<number | null>null, [Validators.required]],
-    fB_1Pers: [<number | null>null, [Validators.required]],
-    fB_2Pers: [<number | null>null, [Validators.required]],
-    fB_3Pers: [<number | null>null, [Validators.required]],
-    fB_4Pers: [<number | null>null, [Validators.required]],
-    fB_5Pers: [<number | null>null, [Validators.required]],
+    stipLimite_Minimalstipendium: [<string | null>null, [Validators.required]],
+    person_1: [<string | null>null, [Validators.required]],
+    person_2: [<string | null>null, [Validators.required]],
+    person_3: [<string | null>null, [Validators.required]],
+    person_4: [<string | null>null, [Validators.required]],
+    person_5: [<string | null>null, [Validators.required]],
+    person_6: [<string | null>null, [Validators.required]],
+    person_7: [<string | null>null, [Validators.required]],
+    ppP_8: [<string | null>null, [Validators.required]],
+    _00_18: [<string | null>null, [Validators.required]],
+    _19_25: [<string | null>null, [Validators.required]],
+    _26_99: [<string | null>null, [Validators.required]],
+    bB_1Pers: [<string | null>null, [Validators.required]],
+    bB_2Pers: [<string | null>null, [Validators.required]],
+    bB_3Pers: [<string | null>null, [Validators.required]],
+    bB_4Pers: [<string | null>null, [Validators.required]],
+    bB_5Pers: [<string | null>null, [Validators.required]],
+    fB_1Pers: [<string | null>null, [Validators.required]],
+    fB_2Pers: [<string | null>null, [Validators.required]],
+    fB_3Pers: [<string | null>null, [Validators.required]],
+    fB_4Pers: [<string | null>null, [Validators.required]],
+    fB_5Pers: [<string | null>null, [Validators.required]],
   });
 
-  startDate = new Date();
-
   store = inject(GesuchsperiodeStore);
-
   ngOnInit(): void {
     this.store.loadGesuchsperiode();
   }
 
-  constructor() {
+  constructor(private dateAdapter: DateAdapter<Date>) {
     effect(() => {
       const gesuchsperiode = this.store.currentGesuchsperiode?.();
       if (!gesuchsperiode) {
@@ -131,6 +145,9 @@ export class SachbearbeitungAppFeatureGesuchsperiodeComponent
       this.form.patchValue(gesuchsperiode as any);
     });
   }
+  useLanguage(language: Language) {
+    this.dateAdapter.setLocale(language);
+  }
 
   handleSave() {
     this.form.markAllAsTouched();
@@ -138,8 +155,7 @@ export class SachbearbeitungAppFeatureGesuchsperiodeComponent
     if (!this.form.valid) {
       return;
     }
-    console.log(this.form.value);
-    const value = this.form.value;
+    const value = convertTempFormToRealValues(this.form, 'all');
     this.store.saveGesuchsperiode({
       ...value,
       ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),

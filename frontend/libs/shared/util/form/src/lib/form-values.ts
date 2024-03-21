@@ -42,8 +42,11 @@ export function convertTempFormToRealValues<
     [K: string]: AbstractControl<unknown>;
   },
   K extends keyof T,
->(form: FormGroup<T>, required: OnlyString<K>[]) {
+>(form: FormGroup<T>, required: OnlyString<K>[] | 'all') {
   const values = form.getRawValue();
+  if (required === 'all') {
+    return values as NonNullableRecord<typeof values>;
+  }
 
   const invalidFieldConfig = required.find(
     (f) => !form.get(f)?.hasValidator(Validators.required),
