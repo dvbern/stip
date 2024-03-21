@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
@@ -62,6 +63,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
+        resetEinnahmenKosten(newFormular, targetFormular);
+        resetEltern(newFormular, targetFormular);
+        resetLebenslaufItems(newFormular, targetFormular);
+        resetPartner(newFormular, targetFormular);
+    }
+
+    void resetEinnahmenKosten(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular targetFormular
+    ) {
         resetFieldIf(
             () -> GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(newFormular, targetFormular),
             "Clear Renten because Elternteil VERSTORBEN or UNBEKANNT",
@@ -74,6 +85,50 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             }
         );
 
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasWohnsitzChanged(newFormular, targetFormular),
+            "Clear Wohnkosten because wohnsitz changed",
+            () -> {
+                if (newFormular.getPersonInAusbildung() == null) {
+                    return;
+                }
+
+                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
+                    newFormular.getEinnahmenKosten() != null) {
+                    newFormular.getEinnahmenKosten().setWohnkosten(null);
+                }
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.isUpdateToEigenerHaushalt(newFormular),
+            "Clear AuswaertigeMittagessenProWochen because Wohnsitz changed to not EIGENER_HAUSHALT",
+            () -> {
+                if (newFormular.getEinnahmenKosten() == null) {
+                    return;
+                }
+
+                newFormular.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(targetFormular, newFormular),
+            "Clear Alimente because GerichtlicheAlimenteregelung has changed",
+            () -> {
+                if (newFormular.getEinnahmenKosten() == null) {
+                    return;
+                }
+
+                newFormular.getEinnahmenKosten().setAlimente(null);
+            }
+        );
+    }
+
+    void resetEltern(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular targetFormular
+    ) {
         resetFieldIf(
             () -> GesuchFormularDiffUtil.hasWerZahltAlimenteChanged(newFormular, targetFormular),
             "Clear Elternteil because werZahltAlimente changed",
@@ -98,20 +153,27 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 }
             }
         );
+    }
 
+    void resetLebenslaufItems(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular targetFormular
+    ) {
         resetFieldIf(
-            () -> GesuchFormularDiffUtil.hasWohnsitzChanged(newFormular, targetFormular),
-            "Clear Wohnkosten because wohnsitz changed",
-            () -> {
-                if (newFormular.getPersonInAusbildung() == null) {
-                    return;
-                }
+            () -> GesuchFormularDiffUtil.hasGeburtsdatumOfPersonInAusbildungChanged(targetFormular, newFormular),
+            "Clear LebenslaufItems because Geburtsdatum has changed",
+            () -> newFormular.setLebenslaufItems(new ArrayList<>())
+        );
+    }
 
-                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
-                    newFormular.getEinnahmenKosten() != null) {
-                        newFormular.getEinnahmenKosten().setWohnkosten(null);
-                }
-            }
+    void resetPartner(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular targetFormular
+    ) {
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasZivilstandChangedToOnePerson(targetFormular, newFormular),
+            "Clear Partner because Zivilstand changed to one person",
+            () -> newFormular.setPartner(null) // TODO KSTIP-908: Check if null mapping of objects works
         );
     }
 

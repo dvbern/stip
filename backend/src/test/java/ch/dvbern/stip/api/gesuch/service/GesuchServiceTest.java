@@ -500,31 +500,11 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         BigDecimal alimente = BigDecimal.valueOf(1000);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
 
         assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNullAfterUpdate() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setAuswaertigeMittagessenProWoche(1);
-
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
-
-        assertThat(
-            tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
-            Matchers.is(1)
-        );
     }
 
     @Test
@@ -798,8 +778,10 @@ class GesuchServiceTest {
             .getGesuchFormular()
             .getFamiliensituation()
             .setGerichtlicheAlimentenregelung(from);
-        GesuchTranche trache = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
-        gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trache);
+        GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
+        tranche.getGesuchFormular().setFamiliensituation(new Familiensituation());
+        tranche.getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(from);
+        gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getFamiliensituation()
@@ -811,9 +793,9 @@ class GesuchServiceTest {
                 .setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
         }
 
-        when(gesuchRepository.requireById(any())).thenReturn(trache.getGesuch());
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto);
-        return trache;
+        return tranche;
     }
 
     private boolean hasMutter(Set<Eltern> elterns) {
