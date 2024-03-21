@@ -7,12 +7,13 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
-import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
+import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -63,9 +64,9 @@ class AusbildungsstaetteResourceTest {
                 .then();
 
         response.assertThat()
-                .statusCode(Status.CREATED.getStatusCode());
+                .statusCode(Status.OK.getStatusCode());
 
-        ausbildungsstaetteId = TestUtil.extractIdFromResponse(response);
+        ausbildungsstaetteId = extractFromBody(response).getId();
     }
 
 	@Test
@@ -136,7 +137,7 @@ class AusbildungsstaetteResourceTest {
                 .execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
-                .statusCode(Status.ACCEPTED.getStatusCode());
+                .statusCode(Status.OK.getStatusCode());
 
         var updatedAusbildungsstaette = getAusbildungsstaetteFromApi(ausbildungsstaetteId);
         assertThat(updatedAusbildungsstaette.getNameDe(), is(uniAarau));
@@ -189,4 +190,11 @@ class AusbildungsstaetteResourceTest {
                 .extract()
                 .as(AusbildungsstaetteDtoSpec.class);
     }
+
+	private AusbildungsstaetteDto extractFromBody(ValidatableResponse response) {
+		return response
+				.extract()
+				.body()
+				.as(AusbildungsstaetteDto.class);
+	}
 }

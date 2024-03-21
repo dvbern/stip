@@ -6,14 +6,15 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
-import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungsgangApiSpec;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
+import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -67,9 +68,9 @@ class AusbildungsgangResourceTest {
             .then();
 
         response.assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
 
-        ausbildungsgangId = TestUtil.extractIdFromResponse(response);
+        ausbildungsgangId = extractFromBody(response).getId();
     }
 
     @Test
@@ -97,7 +98,7 @@ class AusbildungsgangResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
 
         assertThat(getAusbildungsstaettenFromApi().length, is(ausbildungsstaettes.length));
     }
@@ -147,7 +148,7 @@ class AusbildungsgangResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
 
         var updatedAussibldungsgang = getAusbildungsgangeFromAPI(ausbildungsgangId);
         var updatedAusbildungsstaette = getAusbildungsstaetteFromApi(ausbildungsstaettes[0].getId());
@@ -219,6 +220,13 @@ class AusbildungsgangResourceTest {
             .then()
             .extract()
             .as(AusbildungsgangDtoSpec.class);
+    }
+
+    private AusbildungsgangDto extractFromBody(ValidatableResponse response) {
+        return response
+                .extract()
+                .body()
+                .as(AusbildungsgangDto.class);
     }
 
 }

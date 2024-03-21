@@ -27,7 +27,7 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
     @RolesAllowed(ROLE_SACHBEARBEITER)
     public Response createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangCreateDto) {
         AusbildungsgangDto created = ausbildungsgangService.createAusbildungsgang(ausbildungsgangCreateDto);
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(created.getId().toString()).build()).build();
+        return Response.ok(created).build();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
     @Override
     @RolesAllowed(ROLE_SACHBEARBEITER)
     public Response updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
-        ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
-        return Response.accepted().build();
+        AusbildungsgangDto updated = ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
+        return Response.ok(updated).build();
     }
 }

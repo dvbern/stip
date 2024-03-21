@@ -25,7 +25,7 @@ public interface AusbildungsstaetteResource {
 
     @POST
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response createAusbildungsstaette(@Valid AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
 
     @DELETE

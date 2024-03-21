@@ -103,6 +103,7 @@ public class AusbildungsstaetteApiSpec {
      * 
      *
      * @see #body  (optional)
+     * return AusbildungsstaetteDtoSpec
      */
     public static class CreateAusbildungsstaetteOper implements Oper {
 
@@ -115,7 +116,7 @@ public class AusbildungsstaetteApiSpec {
         public CreateAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -128,6 +129,16 @@ public class AusbildungsstaetteApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /ausbildungsstaette
+         * @param handler handler
+         * @return AusbildungsstaetteDtoSpec
+         */
+        public AusbildungsstaetteDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsstaetteDtoSpec> type = new TypeRef<AusbildungsstaetteDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**
@@ -361,6 +372,7 @@ public class AusbildungsstaetteApiSpec {
      *
      * @see #ausbildungsstaetteIdPath  (required)
      * @see #body  (optional)
+     * return List&lt;AusbildungsstaetteDtoSpec&gt;
      */
     public static class UpdateAusbildungsstaetteOper implements Oper {
 
@@ -386,6 +398,16 @@ public class AusbildungsstaetteApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /ausbildungsstaette/{ausbildungsstaetteId}
+         * @param handler handler
+         * @return List&lt;AusbildungsstaetteDtoSpec&gt;
+         */
+        public List<AusbildungsstaetteDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AusbildungsstaetteDtoSpec>> type = new TypeRef<List<AusbildungsstaetteDtoSpec>>(){};
+            return execute(handler).as(type);
         }
 
          /**

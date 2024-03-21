@@ -24,7 +24,7 @@ public interface AusbildungsgangResource {
 
     @POST
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response createAusbildungsgang(@Valid @NotNull AusbildungsgangCreateDto ausbildungsgangCreateDto);
 
     @DELETE
@@ -40,6 +40,6 @@ public interface AusbildungsgangResource {
     @PUT
     @Path("/{ausbildungsgangId}")
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response updateAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId,@Valid @NotNull AusbildungsgangUpdateDto ausbildungsgangUpdateDto);
 }
