@@ -15,6 +15,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: OPTION_BUCHSTABEN_ZUTEILUNG.route,
+    title: OPTION_BUCHSTABEN_ZUTEILUNG.titleTranslationKey,
     loadChildren: () =>
       import(
         '@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung'
@@ -25,6 +26,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   },
   {
     path: OPTION_GESUCHSPERIODEN.route,
+    title: OPTION_GESUCHSPERIODEN.titleTranslationKey,
     loadChildren: () =>
       import(
         '@dv/sachbearbeitung-app/feature/administration-gesuchsperiode'

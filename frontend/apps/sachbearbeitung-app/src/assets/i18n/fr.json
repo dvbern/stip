@@ -26,6 +26,9 @@
   "sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsjahr": "Année de demande",
   "sachbearbeitung-app.admin.gesuchsperiode.table.erstellen": "Créer",
   "sachbearbeitung-app.admin.gesuchsperiode.table.loeschen": "\"{{ bezeichnungFr }}\" supprimer",
+  "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Aperçu des années de demande/périodes de demande",
+  "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Créer une période de demande",
+  "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Période de demande",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",

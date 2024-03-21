@@ -26,6 +26,9 @@
   "sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsjahr": "Gesuchsjahr",
   "sachbearbeitung-app.admin.gesuchsperiode.table.erstellen": "Erstellen",
   "sachbearbeitung-app.admin.gesuchsperiode.table.loeschen": "\"{{ bezeichnungDe }}\" löschen",
+  "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Geuschsjahr/Gesuchsperioden Übersicht",
+  "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Gesuchsperiode erstellen",
+  "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Gesuchsperiode",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",

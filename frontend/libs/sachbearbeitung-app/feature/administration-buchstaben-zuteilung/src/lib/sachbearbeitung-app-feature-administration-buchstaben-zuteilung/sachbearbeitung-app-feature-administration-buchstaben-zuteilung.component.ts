@@ -147,6 +147,11 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    console.log('init');
+  }
+
+  ngOnDestroy() {
+    console.log('destroy');
   }
 
   ngAfterViewInit() {

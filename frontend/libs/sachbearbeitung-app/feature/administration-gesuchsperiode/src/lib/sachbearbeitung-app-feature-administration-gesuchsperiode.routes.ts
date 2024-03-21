@@ -12,9 +12,21 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
     data: { option: OPTION_GESUCHSPERIODEN },
     providers: [],
     children: [
-      { path: '', component: GesuchsperiodeOverviewComponent },
-      { path: 'new', component: GesuchsperiodeDetailComponent },
-      { path: ':id', component: GesuchsperiodeDetailComponent },
+      {
+        path: '',
+        component: GesuchsperiodeOverviewComponent,
+        title: 'sachbearbeitung-app.admin.gesuchsperiode.route.overview',
+      },
+      {
+        path: 'create',
+        component: GesuchsperiodeDetailComponent,
+        title: 'sachbearbeitung-app.admin.gesuchsperiode.route.create',
+      },
+      {
+        path: ':id',
+        component: GesuchsperiodeDetailComponent,
+        title: 'sachbearbeitung-app.admin.gesuchsperiode.route.detail',
+      },
     ],
   },
 ];

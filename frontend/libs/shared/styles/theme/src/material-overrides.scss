@@ -69,12 +69,19 @@ $gesuch-app-theme: mat.define-light-theme(
 }
 .mat-mdc-table {
   .mat-mdc-header-cell {
-    border-bottom: 0;
     padding-top: 20px;
-  }
-  .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
     padding-bottom: 20px;
-    padding-top: 0;
+  }
+  .combined-header-row {
+    .mat-mdc-header-cell {
+      border-bottom: 0;
+      padding-top: 20px;
+      padding-bottom: 0px;
+    }
+    .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
+      padding-bottom: 20px;
+      padding-top: 0;
+    }
   }
 }
 .mat-mdc-paginator-page-size-label {

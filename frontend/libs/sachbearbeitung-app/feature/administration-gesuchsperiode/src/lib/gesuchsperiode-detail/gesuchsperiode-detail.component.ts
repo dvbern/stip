@@ -8,12 +8,11 @@ import {
   inject,
 } from '@angular/core';
 import {
-  FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
 import {
   MatDatepicker,
   MatDatepickerApply,
@@ -26,22 +25,17 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import {
-  DateFnsAdapter,
-  provideDateFnsAdapter,
-} from '@angular/material-date-fns-adapter';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MaskitoModule } from '@maskito/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { elementAt, from } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
-import { Language } from '@dv/shared/model/language';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { DvDateAdapter } from '@dv/shared/util/date-adapter';
+import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -69,19 +63,12 @@ import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
     MatDatepickerApply,
   ],
   templateUrl: './gesuchsperiode-detail.component.html',
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en/GB',
-    },
-    { provide: DateAdapter, useClass: DvDateAdapter },
-  ],
+  providers: [provideDvDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchsperiodeDetailComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private dateAdapter: DateAdapter<Date> = inject(DateAdapter);
   private elementRef = inject(ElementRef);
   form = this.formBuilder.group({
     bezeichnungDe: [<string | null>null, [Validators.required]],
