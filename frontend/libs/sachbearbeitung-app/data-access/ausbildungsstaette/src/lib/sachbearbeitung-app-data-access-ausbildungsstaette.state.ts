@@ -27,10 +27,34 @@ type ResponseInitial = {
   error?: never;
 };
 
+const initial = () => ({
+  type: 'initial' as const,
+  data: undefined,
+  error: undefined,
+});
+
+const isInitial = (
+  response: Response<unknown>,
+): response is ResponseInitial => {
+  return response.type === 'initial';
+};
+
 type ResponseFailure = {
   type: 'failure';
   data?: never;
   error: Error;
+};
+
+const failure = (error: Error) => ({
+  type: 'failure' as const,
+  data: undefined,
+  error,
+});
+
+const isFailure = (
+  response: Response<unknown>,
+): response is ResponseFailure => {
+  return response.type === 'failure';
 };
 
 type ResponsePending = {
@@ -39,10 +63,34 @@ type ResponsePending = {
   error?: never;
 };
 
+const pending = () => ({
+  type: 'pending' as const,
+  data: undefined,
+  error: undefined,
+});
+
+const isPending = (
+  response: Response<unknown>,
+): response is ResponsePending => {
+  return response.type === 'pending';
+};
+
 type ResponseSuccess<T = unknown> = {
   type: 'success';
   data: T;
   error?: never;
+};
+
+const success = <T>(data: T) => ({
+  type: 'success' as const,
+  data,
+  error: undefined,
+});
+
+const isSuccess = <T>(
+  response: Response<T>,
+): response is ResponseSuccess<T> => {
+  return response.type === 'success';
 };
 
 type Response<T> =
@@ -248,7 +296,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
                           ...state,
                           response: {
                             type: 'success' as const,
-                            data: state.tableData.data, //not ideal
+                            data: state.tableData.data, // not ideal
                           },
                         };
                       });
@@ -277,16 +325,29 @@ export const AdminAusbildungsstaetteStore = signalStore(
             return ausbildungsStaetteService
               .deleteAusbildungsstaette$({ ausbildungsstaetteId: staette.id })
               .pipe(
-                tap(() => {
-                  patchState(store, (state) => {
-                    const data = state.tableData.data.filter(
-                      (s) => s.id !== staette.id,
-                    );
+                tapResponse({
+                  next: () => {
+                    patchState(store, (state) => {
+                      const data = state.tableData.data.filter(
+                        (s) => s.id !== staette.id,
+                      );
 
-                    state.tableData.data = data;
+                      state.tableData.data = data;
 
-                    return state;
-                  });
+                      return {
+                        ...state,
+                        response: {
+                          type: 'success' as const,
+                          data: state.tableData.data, // not ideal
+                        },
+                      };
+                    });
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    patchState(store, {
+                      response: { type: 'failure', error: error },
+                    });
+                  },
                 }),
               );
           }),
