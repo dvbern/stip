@@ -26,6 +26,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -53,6 +54,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
      * partial update mapper for the Gesuchssteller
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "partner", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
         @MappingTarget GesuchFormular gesuchFormular);
@@ -173,7 +175,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetFieldIf(
             () -> GesuchFormularDiffUtil.hasZivilstandChangedToOnePerson(targetFormular, newFormular),
             "Clear Partner because Zivilstand changed to one person",
-            () -> newFormular.setPartner(null) // TODO KSTIP-908: Check if null mapping of objects works
+            () -> newFormular.setPartner(null)
         );
     }
 
