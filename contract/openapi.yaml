@@ -317,7 +317,11 @@ paths:
             tags:
                 - Ausbildungsstaette
             responses:
-                '201':
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsstaette'
                     description: New Ausbildungsstaette created
                 '401':
                     $ref: '#/components/responses/Unauthorized'
@@ -363,7 +367,13 @@ paths:
             tags:
                 - Ausbildungsstaette
             responses:
-                '202':
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Ausbildungsstaette'
                     description: Ausbildungsstaette updated
                 '400':
                     $ref: '#/components/responses/BadRequest'
@@ -762,8 +772,11 @@ paths:
                 - Ausbildungsgang
             responses:
                 '200':
-                    description: |
-                        Ausbildungsgang updated
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                    description: Ausbildungsgang updated
                 '401':
                     $ref: '#/components/responses/Unauthorized'
                 '403':
@@ -801,7 +814,11 @@ paths:
             tags:
                 - Ausbildungsgang
             responses:
-                '201':
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsgang'
                     description: New Ausbildungsgang is created
                 '401':
                     $ref: '#/components/responses/Unauthorized'

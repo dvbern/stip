@@ -97,6 +97,7 @@ public class AusbildungsgangApiSpec {
      * 
      *
      * @see #body  (required)
+     * return AusbildungsgangDtoSpec
      */
     public static class CreateAusbildungsgangOper implements Oper {
 
@@ -109,7 +110,7 @@ public class AusbildungsgangApiSpec {
         public CreateAusbildungsgangOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -122,6 +123,16 @@ public class AusbildungsgangApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /ausbildungsgang
+         * @param handler handler
+         * @return AusbildungsgangDtoSpec
+         */
+        public AusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsgangDtoSpec> type = new TypeRef<AusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**
@@ -294,6 +305,7 @@ public class AusbildungsgangApiSpec {
      *
      * @see #ausbildungsgangIdPath  (required)
      * @see #body  (required)
+     * return AusbildungsgangDtoSpec
      */
     public static class UpdateAusbildungsgangOper implements Oper {
 
@@ -306,7 +318,7 @@ public class AusbildungsgangApiSpec {
         public UpdateAusbildungsgangOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -319,6 +331,16 @@ public class AusbildungsgangApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PUT /ausbildungsgang/{ausbildungsgangId}
+         * @param handler handler
+         * @return AusbildungsgangDtoSpec
+         */
+        public AusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsgangDtoSpec> type = new TypeRef<AusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**
