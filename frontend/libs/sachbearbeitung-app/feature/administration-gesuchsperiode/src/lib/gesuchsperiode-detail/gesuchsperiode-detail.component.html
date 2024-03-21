@@ -4,10 +4,18 @@
   </h2>
 
   <div class="row g-4 m-lg-2">
-    <!-- Bezeichnung -->
+    <!-- BezeichnungDe -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-      <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnung.label' | translate }}</mat-label>
-      <input formControlName="bezeichnung" data-testid="form-gesuchsperiode-bezeichnung" matInput type="text" />
+      <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnungDe.label' | translate }}</mat-label>
+      <input formControlName="bezeichnungDe" data-testid="form-gesuchsperiode-bezeichnungDe" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- BezeichnungFr -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
+      <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnungFr.label' | translate }}</mat-label>
+      <input formControlName="bezeichnungFr" data-testid="form-gesuchsperiode-bezeichnungFr" matInput type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -36,7 +44,7 @@
         [matDatepicker]="gesuchsperiodeStartDatepicker"
       />
       <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #gesuchsperiodeStartDatepicker startView="year" [startAt]="startDate"></mat-datepicker>
+      <mat-datepicker #gesuchsperiodeStartDatepicker startView="year"></mat-datepicker>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -50,10 +58,9 @@
         data-testid="form-gesuchsperiode-gesuchsperiode-stopp"
         matInput
         [matDatepicker]="gesuchsperiodeStoppDatepicker"
-        type="text"
       />
       <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStoppDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #gesuchsperiodeStoppDatepicker [startAt]="startDate"></mat-datepicker>
+      <mat-datepicker #gesuchsperiodeStoppDatepicker></mat-datepicker>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -68,10 +75,9 @@
         data-testid="form-gesuchsperiode-aufschalttermin-start"
         matInput
         [matDatepicker]="aufschaltterminStartDatepicker"
-        type="text"
       />
       <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStartDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #aufschaltterminStartDatepicker [startAt]="startDate"></mat-datepicker>
+      <mat-datepicker #aufschaltterminStartDatepicker></mat-datepicker>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -85,10 +91,9 @@
         data-testid="form-gesuchsperiode-aufschalttermin-stopp"
         matInput
         [matDatepicker]="aufschaltterminStoppDatepicker"
-        type="text"
       />
       <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStoppDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #aufschaltterminStoppDatepicker [startAt]="startDate"></mat-datepicker>
+      <mat-datepicker #aufschaltterminStoppDatepicker></mat-datepicker>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -104,10 +109,9 @@
         data-testid="form-gesuchsperiode-einreichefrist-normal"
         matInput
         [matDatepicker]="einreicherfristNormalDatepicker"
-        type="text"
       />
       <mat-datepicker-toggle matIconSuffix [for]="einreicherfristNormalDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #einreicherfristNormalDatepicker [startAt]="startDate"></mat-datepicker>
+      <mat-datepicker #einreicherfristNormalDatepicker></mat-datepicker>
       <mat-hint translate>shared.form.gesuchsperiode.einreichefristNormal.info </mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -122,10 +126,9 @@
         data-testid="form-gesuchsperiode-einreichefrist-reduziert"
         matInput
         [matDatepicker]="einreicherfristReduziertDatepicker"
-        type="text"
       />
       <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #einreicherfristReduziertDatepicker startView="year" [startAt]="startDate"></mat-datepicker>
+      <mat-datepicker #einreicherfristReduziertDatepicker startView="year"></mat-datepicker>
       <mat-hint translate> shared.form.gesuchsperiode.einreichefristReduziert.info </mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}

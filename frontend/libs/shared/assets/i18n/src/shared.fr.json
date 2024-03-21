@@ -344,7 +344,8 @@
 
 
   "shared.form.gesuchsperiode.metaDaten.title": "Méta données",
-  "shared.form.gesuchsperiode.bezeichnung.label":"Désignation",
+  "shared.form.gesuchsperiode.bezeichnungDe.label":"Désignation (DE)",
+  "shared.form.gesuchsperiode.bezeichnungFr.label": "Désignation (FR)",
   "shared.form.gesuchsperiode.fiskaljahr.label": "Année fiscale",
   "shared.form.gesuchsperiode.gesuchsperiodeStart.label":"Période de demande Début",
   "shared.form.gesuchsperiode.gesuchsperiodeStopp.label": "Période de demande Arrêt",

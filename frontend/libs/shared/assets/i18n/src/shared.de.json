@@ -344,7 +344,8 @@
   "shared.form.partner.fahrkosten.label": "Fahrkosten",
 
   "shared.form.gesuchsperiode.metaDaten.title": "Meta Daten",
-  "shared.form.gesuchsperiode.bezeichnung.label": "Bezeichnung",
+  "shared.form.gesuchsperiode.bezeichnungDe.label": "Bezeichnung (DE)",
+  "shared.form.gesuchsperiode.bezeichnungFr.label": "Bezeichnung (FR)",
   "shared.form.gesuchsperiode.fiskaljahr.label": "Fiskaljahr",
   "shared.form.gesuchsperiode.gesuchsperiodeStart.label": "Gesuchsperiode Start",
   "shared.form.gesuchsperiode.gesuchsperiodeStopp.label": "Gesuchsperiode Stopp",

@@ -129,6 +129,7 @@
       "@dv/shared/util-fn/translation-helper": ["libs/shared/util-fn/translation-helper/src/index.ts"],
       "@dv/shared/util-fn/type-guards": ["libs/shared/util-fn/type-guards/src/index.ts"],
       "@dv/shared/util/countries": ["libs/shared/util/countries/src/index.ts"],
+      "@dv/shared/util/date-adapter": ["libs/shared/util/date-adapter/src/index.ts"],
       "@dv/shared/util/form": ["libs/shared/util/form/src/index.ts"],
       "@dv/shared/util/gesuch": ["libs/shared/util/gesuch/src/index.ts"],
       "@dv/shared/util/gesuch-form-step-manager": ["libs/shared/util/gesuch-form-step-manager/src/index.ts"],
