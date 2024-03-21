@@ -39,14 +39,14 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
     @RolesAllowed(ROLE_SACHBEARBEITER)
     public Response createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaette) {
         AusbildungsstaetteDto created = ausbildungsstaetteService.createAusbildungsstaette(ausbildungsstaette);
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(created.getId().toString()).build()).build();
+        return Response.ok(created).build();
     }
 
     @Override
     @RolesAllowed(ROLE_SACHBEARBEITER)
     public Response updateAusbildungsstaette(UUID ausbildungsstaetteId, AusbildungsstaetteUpdateDto ausbildungsstaette) {
-        ausbildungsstaetteService.updateAusbildungsstaette(ausbildungsstaetteId, ausbildungsstaette);
-        return Response.accepted().build();
+        AusbildungsstaetteDto updated = ausbildungsstaetteService.updateAusbildungsstaette(ausbildungsstaetteId, ausbildungsstaette);
+        return Response.ok(updated).build();
     }
 
     @Override

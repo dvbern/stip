@@ -28,7 +28,6 @@ public class AusbildungsstaetteService {
     public Collection<AusbildungsstaetteDto> getAusbildungsstaetten() {
         return ausbildungsstaetteRepository.findAll()
             .stream()
-            .filter(staetten -> !staetten.getAusbildungsgaenge().isEmpty())
             .map(ausbildungsstaetteMapper::toDto)
             .toList();
     }
@@ -40,9 +39,10 @@ public class AusbildungsstaetteService {
     }
 
     @Transactional
-    public void updateAusbildungsstaette(UUID ausbildungsstaetteId, AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto) {
+    public AusbildungsstaetteDto updateAusbildungsstaette(UUID ausbildungsstaetteId, AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto) {
         Ausbildungsstaette ausbildungsstaetteToUpdate = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
         persistAusbildungsstaette(ausbildungsstaetteUpdateDto, ausbildungsstaetteToUpdate);
+        return ausbildungsstaetteMapper.toDto(ausbildungsstaetteToUpdate);
     }
 
     @Transactional
