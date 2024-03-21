@@ -39,6 +39,8 @@
       "titleBar.inactiveBackground": "#075fa499",
       "titleBar.inactiveForeground": "#e7e7e799"
     },
+    "prettier.configPath": "frontend/.prettierrc",
+    "prettier.ignorePath": "frontend/.prettierignore",
     "sqltools.connections": [
       {
         "previewLimit": 50,

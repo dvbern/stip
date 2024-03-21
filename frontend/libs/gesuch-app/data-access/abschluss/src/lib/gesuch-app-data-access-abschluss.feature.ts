@@ -5,12 +5,16 @@ import { SharedModelError } from '@dv/shared/model/error';
 
 import { GesuchAppDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
 
-export interface State {
+interface State {
+  checkResult:
+    | { success: boolean; error: SharedModelError | undefined }
+    | undefined;
   loading: boolean;
   error: SharedModelError | undefined;
 }
 
 const initialState: State = {
+  checkResult: { success: false, error: undefined },
   loading: false,
   error: undefined,
 };
@@ -20,9 +24,31 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
   reducer: createReducer(
     initialState,
     on(
+      GesuchAppDataAccessAbschlussApiEvents.gesuchCheckSuccess,
+      (state, { error }): State => ({
+        ...state,
+        checkResult: {
+          success: hasNoValidationErrors(error),
+          error,
+        },
+        loading: false,
+        error: error.type === 'validationError' ? undefined : error,
+      }),
+    ),
+    on(
+      GesuchAppDataAccessAbschlussApiEvents.gesuchCheckFailure,
+      (state, { error }): State => ({
+        ...state,
+        checkResult: { success: false, error },
+        loading: true,
+        error: undefined,
+      }),
+    ),
+    on(
       GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen,
       (state): State => ({
         ...state,
+        checkResult: undefined,
         loading: true,
         error: undefined,
       }),
@@ -32,6 +58,7 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
       GesuchAppDataAccessAbschlussApiEvents.abschlussSuccess,
       (state): State => ({
         ...state,
+        checkResult: undefined,
         loading: false,
         error: undefined,
       }),
@@ -40,6 +67,7 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
       GesuchAppDataAccessAbschlussApiEvents.abschlussFailure,
       (state, { error }): State => ({
         ...state,
+        checkResult: undefined,
         loading: false,
         error,
       }),
@@ -54,3 +82,7 @@ export const {
   selectLoading,
   selectError,
 } = gesuchAppDataAccessAbschlussFeature;
+
+const hasNoValidationErrors = (error: SharedModelError | undefined): boolean =>
+  !error ||
+  (error.type === 'validationError' && error.validationErrors.length === 0);

@@ -82,6 +82,13 @@
   "shared.dokumente.table.upload": "Hochladen",
   "shared.dokumente.table.status": "Status",
 
+  "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.zulagen.required.message}": "Bitte füllen Sie das Feld \"Kinderzulagen\" bei den Einnahmen & Kosten aus.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.partner.not.null.required.message}": "Bitte füllen Sie die Angaben zum Ehe- / Konkubinatspartner aus.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Bitte füllen Sie die Angaben zu den Eltern aus.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Bitte füllen Sie das Feld \"Renten\" bei den Einnahmen & Kosten aus.",
+  "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "Der Abschnitt \"{{section}}\" ist nicht vollständig.",
+
   "shared.form.next": "Nächstes",
   "shared.form.previous": "Vorheriges",
   "shared.form.gonext": "Weiter",
