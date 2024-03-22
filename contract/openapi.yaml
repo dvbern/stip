@@ -180,6 +180,134 @@ paths:
             operationId: getDeploymentConfig
             summary: Returniert der Deployment Configuration.
             description: Gibt zuerueck die Version und Stage aus das Backend
+    /gesuchsjahr:
+        get:
+            tags:
+                - Gesuchsjahr
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuchsjahr'
+                    description: Returned all Gesuchsjahre
+                401:
+                    $ref: '#/components/responses/Unauthorized'
+                403:
+                    $ref: '#/components/responses/Forbidden'
+                500:
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesuchsjahre
+            summary: Gets all Gesuchsjahre
+        post:
+            tags:
+                - Gesuchsjahr
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GesuchsjahrCreate'
+                required: true
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuchsjahr'
+                    description: Returned new created Gesuchsjahr
+                401:
+                    $ref: '#/components/responses/Unauthorized'
+                403:
+                    $ref: '#/components/responses/Forbidden'
+                500:
+                    $ref: '#/components/responses/ServerError'
+            operationId: createGesuchsjahr
+            summary: Creates a new Gesuchsjahr
+    /gesuchsjahr/{gesuchsjahrId}:
+        parameters:
+            - name: gesuchsjahrId
+              schema:
+                  $ref: '#/components/schemas/UUID'
+              in: path
+              required: true
+        get:
+            tags:
+                - Gesuchsjahr
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuchsjahr'
+                    description: Returned Gesuchsjahr
+                401:
+                    $ref: '#/components/responses/Unauthorized'
+                403:
+                    $ref: '#/components/responses/Forbidden'
+                404:
+                    $ref: '#/components/responses/NotFound'
+                500:
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesuchsjahr
+            summary: Returns a Gesuchsjahr with the given id
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GesuchsjahrUpdate'
+            tags:
+                - Gesuchsjahr
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuchsjahr'
+                    description: Returned updated Gesuchsjahr
+                401:
+                    $ref: '#/components/responses/Unauthorized'
+                403:
+                    $ref: '#/components/responses/Forbidden'
+                404:
+                    $ref: '#/components/responses/NotFound'
+                500:
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateGesuchsjahr
+            summary: Updates a Gesuchsjahr with the given id
+        delete:
+            tags:
+                - Gesuchsjahr
+            responses:
+                204:
+                    description: Gesuchsjahr deleted
+                401:
+                    $ref: '#/components/responses/Unauthorized'
+                403:
+                    $ref: '#/components/responses/Forbidden'
+                404:
+                    $ref: '#/components/responses/NotFound'
+                500:
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteGesuchsjahr
+            summary: Deletes a Gesuchsjahr with the given id
+    /gesuchsjahr/publish/{gesuchsjahrId}:
+        parameters:
+            - name: gesuchsjahrId
+              schema:
+                  $ref: '#/components/schemas/UUID'
+              in: path
+              required: true
+        patch:
+            tags:
+                - Gesuchsjahr
+            responses:
+                200:
+                    description: Gesuchsjahr published
+            operationId: publishGesuchsjahr
+            summary: Publishes a Gesuchsjahr with the given id
     /gesuchsperiode:
         get:
             tags:
@@ -986,6 +1114,11 @@ components:
                 - AKTIV
                 - ARCHIVIERT
             type: string
+        GueltigkeitStatus:
+            enum:
+                - ENTWURF
+                - PUBLIZIERT
+                - ARCHIVIERT
         LocalDate:
             format: date
             type: string
@@ -1076,6 +1209,68 @@ components:
                     type: integer
                 mandant:
                     type: string
+        Gesuchsjahr:
+            type: object
+            required:
+                - id
+                - bezeichnungDe
+                - bezeichnungFr
+                - ausbildungsjahrStart
+                - ausbildungsjahrEnde
+                - technischesJahr
+                - gueltigkeitStatus
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bezeichnungDe:
+                    type: string
+                bezeichnungFr:
+                    type: string
+                ausbildungsjahrStart:
+                    $ref: '#/components/schemas/LocalDate'
+                ausbildungsjahrEnde:
+                    $ref: '#/components/schemas/LocalDate'
+                technischesJahr:
+                    type: integer
+                gueltigkeitStatus:
+                    $ref: '#/components/schemas/GueltigkeitStatus'
+        GesuchsjahrCreate:
+            type: object
+            required:
+                - bezeichnungDe
+                - bezeichnungFr
+                - ausbildungsjahrStart
+                - ausbildungsjahrEnde
+                - technischesJahr
+                - gueltigkeitStatus
+            properties:
+                bezeichnungDe:
+                    type: string
+                bezeichnungFr:
+                    type: string
+                ausbildungsjahrStart:
+                    $ref: '#/components/schemas/LocalDate'
+                ausbildungsjahrEnde:
+                    $ref: '#/components/schemas/LocalDate'
+                technischesJahr:
+                    type: integer
+                gueltigkeitStatus:
+                    $ref: '#/components/schemas/GueltigkeitStatus'
+        GesuchsjahrUpdate:
+            type: object
+            properties:
+                bezeichnungDe:
+                    type: string
+                bezeichnungFr:
+                    type: string
+                ausbildungsjahrStart:
+                    $ref: '#/components/schemas/LocalDate'
+                ausbildungsjahrEnde:
+                    $ref: '#/components/schemas/LocalDate'
+                technischesJahr:
+                    type: integer
+                gueltigkeitStatus:
+                    $ref: '#/components/schemas/GueltigkeitStatus'
         GesuchsperiodeCreate:
             type: object
             properties:
