@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchsperiodenstatusDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,6 +25,9 @@ public class GesuchsperiodeDto  implements Serializable {
   private @Valid UUID id;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
+  private @Valid String bezeichnungDe;
+  private @Valid String bezeichnungFr;
+  private @Valid GesuchsperiodenstatusDto status;
   private @Valid LocalDate einreichfrist;
   private @Valid LocalDate aufschaltdatum;
 
@@ -86,6 +90,63 @@ public class GesuchsperiodeDto  implements Serializable {
 
   /**
    **/
+  public GesuchsperiodeDto bezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
+    return this;
+  }
+
+  
+  @JsonProperty("bezeichnungDe")
+  @NotNull
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
+  }
+
+  @JsonProperty("bezeichnungDe")
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto bezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
+    return this;
+  }
+
+  
+  @JsonProperty("bezeichnungFr")
+  @NotNull
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
+  }
+
+  @JsonProperty("bezeichnungFr")
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto status(GesuchsperiodenstatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  @NotNull
+  public GesuchsperiodenstatusDto getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(GesuchsperiodenstatusDto status) {
+    this.status = status;
+  }
+
+  /**
+   **/
   public GesuchsperiodeDto einreichfrist(LocalDate einreichfrist) {
     this.einreichfrist = einreichfrist;
     return this;
@@ -133,13 +194,16 @@ public class GesuchsperiodeDto  implements Serializable {
     return Objects.equals(this.id, gesuchsperiode.id) &&
         Objects.equals(this.gueltigAb, gesuchsperiode.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchsperiode.gueltigBis) &&
+        Objects.equals(this.bezeichnungDe, gesuchsperiode.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, gesuchsperiode.bezeichnungFr) &&
+        Objects.equals(this.status, gesuchsperiode.status) &&
         Objects.equals(this.einreichfrist, gesuchsperiode.einreichfrist) &&
         Objects.equals(this.aufschaltdatum, gesuchsperiode.aufschaltdatum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum);
+    return Objects.hash(id, gueltigAb, gueltigBis, bezeichnungDe, bezeichnungFr, status, einreichfrist, aufschaltdatum);
   }
 
   @Override
@@ -150,6 +214,9 @@ public class GesuchsperiodeDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
     sb.append("}");
