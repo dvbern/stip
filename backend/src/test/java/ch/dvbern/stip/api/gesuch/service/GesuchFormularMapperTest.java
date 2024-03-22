@@ -184,6 +184,32 @@ class GesuchFormularMapperTest {
     }
 
     @Test
+    void resetDependentDataRemovesWgWohnendTest() {
+        final var targetPia = new PersonInAusbildung();
+        targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        final var target = new GesuchFormular()
+            .setPersonInAusbildung(targetPia)
+            .setEinnahmenKosten(new EinnahmenKosten().setWgWohnend(true));
+
+        final var updatePia = new PersonInAusbildungUpdateDto();
+        updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+
+        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setWgWohnend(true);
+
+        final var update = new GesuchFormularUpdateDto();
+        update.setPersonInAusbildung(updatePia);
+        update.setEinnahmenKosten(updateEinnahmenKosten);
+
+        final var mapper = createMapper();
+
+        mapper.resetEinnahmenKosten(update, target);
+
+        mapper.resetDependentDataBeforeUpdate(update, target);
+        assertThat(update.getEinnahmenKosten().getWgWohnend(), is(nullValue()));
+    }
+
+    @Test
     void resetLebenslaufItemsClearsLebenslaufItems() {
         // Arrange
         final var updatePia = new PersonInAusbildungUpdateDto();

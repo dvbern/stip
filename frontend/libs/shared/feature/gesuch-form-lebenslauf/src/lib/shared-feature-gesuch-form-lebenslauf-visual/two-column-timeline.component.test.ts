@@ -1,5 +1,5 @@
 import { provideMockStore } from '@ngrx/store/testing';
-import { render, screen } from '@testing-library/angular';
+import { render } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import {

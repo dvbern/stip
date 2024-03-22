@@ -77,6 +77,30 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormular targetFormular
     ) {
         resetFieldIf(
+            () -> GesuchFormularDiffUtil.isUpdateToEigenerHaushalt(newFormular),
+            "Clear AuswaertigeMittagessenProWochen because Wohnsitz changed to not EIGENER_HAUSHALT",
+            () -> {
+                if (newFormular.getEinnahmenKosten() == null) {
+                    return;
+                }
+
+                newFormular.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(targetFormular, newFormular),
+            "Clear Alimente because GerichtlicheAlimenteregelung has changed",
+            () -> {
+                if (newFormular.getEinnahmenKosten() == null) {
+                    return;
+                }
+
+                newFormular.getEinnahmenKosten().setAlimente(null);
+            }
+        );
+
+        resetFieldIf(
             () -> GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(newFormular, targetFormular),
             "Clear Renten because Elternteil VERSTORBEN or UNBEKANNT",
             () -> {
@@ -98,32 +122,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
                 if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
                     newFormular.getEinnahmenKosten() != null) {
-                    newFormular.getEinnahmenKosten().setWohnkosten(null);
+                        newFormular.getEinnahmenKosten().setWohnkosten(null);
+                        newFormular.getEinnahmenKosten().setWgWohnend(null);
                 }
-            }
-        );
-
-        resetFieldIf(
-            () -> GesuchFormularDiffUtil.isUpdateToEigenerHaushalt(newFormular),
-            "Clear AuswaertigeMittagessenProWochen because Wohnsitz changed to not EIGENER_HAUSHALT",
-            () -> {
-                if (newFormular.getEinnahmenKosten() == null) {
-                    return;
-                }
-
-                newFormular.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
-            }
-        );
-
-        resetFieldIf(
-            () -> GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(targetFormular, newFormular),
-            "Clear Alimente because GerichtlicheAlimenteregelung has changed",
-            () -> {
-                if (newFormular.getEinnahmenKosten() == null) {
-                    return;
-                }
-
-                newFormular.getEinnahmenKosten().setAlimente(null);
             }
         );
     }

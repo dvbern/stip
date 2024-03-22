@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 
 @Component({
@@ -13,6 +14,7 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
     SharedPatternAppHeaderComponent,
     SharedUiSearchComponent,
     TranslateModule,
+    GlobalNotificationsComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',
   styleUrls: ['./sachbearbeitung-app-pattern-overview-layout.component.scss'],
