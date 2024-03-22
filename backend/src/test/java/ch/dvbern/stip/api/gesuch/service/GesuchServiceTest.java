@@ -36,7 +36,6 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.instancio.junit.Seed;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -763,7 +762,6 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Seed(8532)
     void gesuchEinreichenTest() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
