@@ -1,4 +1,8 @@
-import { SharedModelGesuchFormular, Zivilstand } from '@dv/shared/model/gesuch';
+import {
+  SharedModelGesuchFormular,
+  SharedModelGesuchFormularProps,
+  Zivilstand,
+} from '@dv/shared/model/gesuch';
 
 import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 
@@ -131,4 +135,25 @@ export const isStepDisabled = (
     );
   }
   return false;
+};
+
+export const isStepValid = (
+  step: SharedModelGesuchFormStep,
+  formular: SharedModelGesuchFormular | null,
+  invalidProps: SharedModelGesuchFormularProps[],
+) => {
+  const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
+    [PERSON.route]: 'personInAusbildung',
+    [AUSBILDUNG.route]: 'ausbildung',
+    [LEBENSLAUF.route]: 'lebenslaufItems',
+    [FAMILIENSITUATION.route]: 'familiensituation',
+    [ELTERN.route]: 'elterns',
+    [GESCHWISTER.route]: 'geschwisters',
+    [PARTNER.route]: 'partner',
+    [KINDER.route]: 'kinds',
+    [AUSZAHLUNGEN.route]: 'auszahlung',
+    [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  };
+  const field = stepFieldMap[step.route];
+  return formular?.[field] ? !invalidProps.includes(field) : undefined;
 };

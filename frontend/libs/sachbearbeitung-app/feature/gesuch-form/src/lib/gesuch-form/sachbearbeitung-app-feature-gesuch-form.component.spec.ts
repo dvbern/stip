@@ -13,7 +13,10 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         provideMockStore({
-          initialState: { gesuchs: { gesuchFormular: {} } },
+          initialState: {
+            gesuchs: { gesuchFormular: {} },
+            globalNotifications: { globalNotificationsById: {} },
+          },
         }),
         provideSharedPatternJestTestSetup(),
       ],

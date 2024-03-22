@@ -8,6 +8,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -88,5 +89,24 @@ class EinnahmenKostenValidatorTest {
             gesuchFormular,
             TestUtil.initValidatorContext()))
             .isTrue();
+    }
+
+    @Test
+    void wohnkostenRequiredTest() {
+        final var validator = new EinnahmenKostenWohnkostenRequiredConstraintValidator();
+
+        final var pia = new PersonInAusbildung();
+        pia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        final var gesuch = new GesuchFormular()
+            .setPersonInAusbildung(pia)
+            .setEinnahmenKosten(
+                new EinnahmenKosten()
+                    .setWohnkosten(null)
+            );
+
+        assertThat(validator.isValid(gesuch, null)).isFalse();
+
+        gesuch.getEinnahmenKosten().setWohnkosten(new BigDecimal(1));
+        assertThat(validator.isValid(gesuch, null)).isTrue();
     }
 }

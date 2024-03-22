@@ -3,14 +3,21 @@ import { selectGesuchAppDataAccessAbschlusssView } from './gesuch-app-data-acces
 describe('selectGesuchAppDataAccessAbschlusssView', () => {
   it('selects view', () => {
     const state = {
-      gesuch: null,
       abschlussPhase: 'NOT_READY',
-      loading: false,
+      canAbschliessen: undefined,
+      canCheck: true,
+      checkResult: undefined,
       error: undefined,
+      gesuch: null,
+      lastUpdate: null,
+      loading: false,
+      validations: [],
     };
     const result = selectGesuchAppDataAccessAbschlusssView.projector(
       state,
       null,
+      null,
+      [],
     );
     expect(result).toEqual(state);
   });

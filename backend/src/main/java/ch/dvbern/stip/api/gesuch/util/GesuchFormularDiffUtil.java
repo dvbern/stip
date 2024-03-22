@@ -1,6 +1,9 @@
 package ch.dvbern.stip.api.gesuch.util;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.NullDiffUtil;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -116,5 +119,52 @@ public final class GesuchFormularDiffUtil {
 
         return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
                 .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
+    }
+
+    public boolean hasWerZahltAlimenteChanged(GesuchFormularUpdateDto newFormular, GesuchFormular toUpdate) {
+        if (NullDiffUtil.hasNullChanged(newFormular.getFamiliensituation(), toUpdate.getFamiliensituation())) {
+            return true;
+        }
+
+        if (newFormular.getFamiliensituation() == null || toUpdate.getFamiliensituation() == null) {
+            return false;
+        }
+
+		return newFormular.getFamiliensituation().getWerZahltAlimente() != toUpdate.getFamiliensituation()
+            .getWerZahltAlimente();
+	}
+
+    public boolean hasElternteilVerstorbenOrUnbekanntChanged(
+        GesuchFormularUpdateDto newFormular,
+        GesuchFormular toUpdate
+    ) {
+        if (NullDiffUtil.hasNullChanged(newFormular.getFamiliensituation(), toUpdate.getFamiliensituation())) {
+            return true;
+        }
+
+        if (newFormular.getFamiliensituation() == null ||
+            toUpdate.getFamiliensituation() == null) {
+            return false;
+        }
+
+        // Boxed !=
+        return !Objects.equals(newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
+            toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben());
+    }
+
+    public boolean hasWohnsitzChanged(
+        GesuchFormularUpdateDto newFormular,
+        GesuchFormular toUpdate
+    ) {
+        if (NullDiffUtil.hasNullChanged(newFormular.getPersonInAusbildung(), toUpdate.getPersonInAusbildung())) {
+            return true;
+        }
+
+        if (newFormular.getPersonInAusbildung() == null ||
+            toUpdate.getPersonInAusbildung() == null) {
+            return false;
+        }
+
+        return newFormular.getPersonInAusbildung().getWohnsitz() != toUpdate.getPersonInAusbildung().getWohnsitz();
     }
 }

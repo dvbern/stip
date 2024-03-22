@@ -97,13 +97,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
     fahrkosten: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
-    personenImHaushalt: [<string | null>null, [Validators.required]],
     verdienstRealisiert: [<boolean | null>null, [Validators.required]],
-    willDarlehen: [<boolean | null>null, [Validators.required]],
+    willDarlehen: [<boolean | undefined>undefined, [Validators.required]],
     auswaertigeMittagessenProWoche: [
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 5)],
     ],
+    wgWohnend: [<boolean | null>null, [Validators.required]],
   });
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormEinnahmenkostenView,
@@ -180,8 +180,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           hasData,
           hatElternteilVerloren,
           hatKinder,
-          willSekundarstufeZwei,
-          willTertiaerstufe,
+          // willSekundarstufeZwei,
+          // willTertiaerstufe,
           istErwachsen,
         } = this.formStateSig();
         const {
@@ -198,33 +198,36 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           !hatElternteilVerloren,
         );
         this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
+        // KSTIP-918: use correct sekundarstufe/tertiaerstufe check once properties are available
+        // <
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,
-          !willSekundarstufeZwei,
+          false,
         );
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenTertiaerstufe,
-          !willTertiaerstufe,
+          false,
         );
+        // >
         this.setDisabledStateAndHide(
           this.form.controls.willDarlehen,
           !istErwachsen,
         );
         this.setDisabledStateAndHide(
           this.form.controls.auswaertigeMittagessenProWoche,
-          wohnsitzNotEigenerHaushalt,
+          !wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.wohnkosten,
-          !wohnsitzNotEigenerHaushalt,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.personenImHaushalt,
-          !wohnsitzNotEigenerHaushalt,
+          wohnsitzNotEigenerHaushalt,
         );
         this.setDisabledStateAndHide(
           this.form.controls.alimente,
           !existiertGerichtlicheAlimentenregelung,
+        );
+        this.setDisabledStateAndHide(
+          this.form.controls.wgWohnend,
+          wohnsitzNotEigenerHaushalt,
         );
       },
       { allowSignalWrites: true },
@@ -252,7 +255,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
               einnahmenKosten.ausbildungskostenTertiaerstufe?.toString(),
             fahrkosten: einnahmenKosten.fahrkosten.toString(),
             wohnkosten: einnahmenKosten.wohnkosten?.toString(),
-            personenImHaushalt: einnahmenKosten.personenImHaushalt?.toString(),
           });
         } else {
           this.form.reset();
@@ -324,9 +326,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'ausbildungskostenTertiaerstufe',
       'fahrkosten',
       'wohnkosten',
-      'personenImHaushalt',
+      'wgWohnend',
       'verdienstRealisiert',
-      'willDarlehen',
       'auswaertigeMittagessenProWoche',
       ...(hatKinder ? ['zulagen' as const] : []),
     ]);
@@ -356,7 +357,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ),
           fahrkosten: fromFormatedNumber(formValues.fahrkosten),
           wohnkosten: fromFormatedNumber(formValues.wohnkosten),
-          personenImHaushalt: fromFormatedNumber(formValues.personenImHaushalt),
         },
       },
     };
@@ -377,4 +377,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       return setToUpdate;
     });
   }
+
+  protected readonly PERSON = PERSON;
 }

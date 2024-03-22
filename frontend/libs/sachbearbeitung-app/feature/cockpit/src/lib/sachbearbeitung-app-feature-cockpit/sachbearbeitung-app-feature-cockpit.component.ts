@@ -96,6 +96,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     const gesuche = this.cockpitViewSig().gesuche;
 
     const dataSource = new MatTableDataSource<SharedModelGesuch>(gesuche);
+
     dataSource.paginator = this.paginator;
     return dataSource;
   });

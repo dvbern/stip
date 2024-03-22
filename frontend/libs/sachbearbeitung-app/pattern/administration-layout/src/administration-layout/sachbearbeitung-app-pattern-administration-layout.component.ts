@@ -14,6 +14,7 @@ import {
   AdminOptions,
 } from '@dv/sachbearbeitung-app/model/administration';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 
@@ -27,6 +28,7 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
     SharedUiSearchComponent,
     SharedPatternAppHeaderComponent,
     SharedUiIconChipComponent,
+    GlobalNotificationsComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-administration-layout.component.html',
