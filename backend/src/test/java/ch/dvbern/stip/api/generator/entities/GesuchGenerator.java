@@ -13,6 +13,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternAbwesenheitsGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
@@ -86,7 +87,10 @@ public final class GesuchGenerator {
 
     private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
         return Instancio.of(familiensituationUpdateDtoSpecModel)
-            .set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), true).create();
+            .set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), true)
+            .set(field(FamiliensituationUpdateDtoSpec::getVaterUnbekanntVerstorben), ElternAbwesenheitsGrundDtoSpec.WEDER_NOCH)
+            .set(field(FamiliensituationUpdateDtoSpec::getMutterUnbekanntVerstorben), ElternAbwesenheitsGrundDtoSpec.WEDER_NOCH)
+            .create();
     }
 
     private static List<ElternUpdateDtoSpec> createElterns() {

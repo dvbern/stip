@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -249,7 +250,7 @@ class GesuchServiceTest {
             .getGesuchFormular()
             .getFamiliensituation()
             .setElternVerheiratetZusammen(true);
-        var anzahlElternBevoreUpdate =
+        var anzahlElternBeforeUpdate =
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size();
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
@@ -259,13 +260,22 @@ class GesuchServiceTest {
 
         assertThat(
             tranche.getGesuchFormular().getElterns().size(),
-            Matchers.is(anzahlElternBevoreUpdate));
+            Matchers.is(anzahlElternBeforeUpdate));
     }
 
     @Test
     @TestAsGesuchsteller
     void noResetIfNotUnbekanntOrVerstorben() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         tranche.getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
@@ -500,7 +510,10 @@ class GesuchServiceTest {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         BigDecimal alimente = BigDecimal.valueOf(1000);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setGerichtlicheAlimentenregelung(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getFamiliensituation()
+            .setGerichtlicheAlimentenregelung(false);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
 
@@ -729,6 +742,16 @@ class GesuchServiceTest {
     @Test
     @TestAsGesuchsteller
     void validateEinreichenValid() {
+        final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
+        final var famsit = new FamiliensituationUpdateDto();
+        famsit.setElternVerheiratetZusammen(false);
+        famsit.setGerichtlicheAlimentenregelung(false);
+        famsit.setElternteilUnbekanntVerstorben(true);
+        famsit.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
+
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
@@ -739,7 +762,11 @@ class GesuchServiceTest {
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
-        assertThat(
+        MatcherAssert.assertThat(
+            reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getElterns()
+                .size(),
             reportDto.getValidationErrors().size(),
             Matchers.is(0)
         );

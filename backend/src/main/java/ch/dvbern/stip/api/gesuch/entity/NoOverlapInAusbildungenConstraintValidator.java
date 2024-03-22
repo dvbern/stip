@@ -28,7 +28,7 @@ public class NoOverlapInAusbildungenConstraintValidator
             return true;
         }
 
-        if (gesuchFormular.getLebenslaufItems() == null || gesuchFormular.getLebenslaufItems().size() <= 1) {
+        if (gesuchFormular.getLebenslaufItems() == null) {
             return true;
         }
 

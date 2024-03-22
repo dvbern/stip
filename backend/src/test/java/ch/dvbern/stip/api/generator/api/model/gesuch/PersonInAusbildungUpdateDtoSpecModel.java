@@ -28,6 +28,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             .set(field(PersonInAusbildungUpdateDtoSpec::getWohnsitz), WohnsitzDtoSpec.MUTTER_VATER)
             .set(field(PersonInAusbildungUpdateDtoSpec::getNiederlassungsstatus), null)
             .set(field(PersonInAusbildungUpdateDtoSpec::getEmail), "valid@mailbucket.dvbern.ch")
+            .set(field(PersonInAusbildungUpdateDtoSpec::getZivilstand), ZivilstandDtoSpec.VERHEIRATET)
             .set(
                 field(PersonInAusbildungUpdateDtoSpec::getSozialversicherungsnummer),
                 AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG

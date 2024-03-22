@@ -8,8 +8,10 @@ import java.util.Locale;
 
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternAbwesenheitsGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
@@ -42,6 +44,7 @@ import static ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUp
 import static ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+import static org.instancio.Select.all;
 import static org.instancio.Select.field;
 
 public class GesuchTestSpecGenerator {
@@ -173,7 +176,10 @@ public class GesuchTestSpecGenerator {
         )
         .set(
             field(GesuchFormularUpdateDtoSpec::getFamiliensituation),
-            Instancio.create(familiensituationUpdateDtoSpecModel)
+            Instancio.of(familiensituationUpdateDtoSpecModel)
+                .set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), true)
+                .ignore(all(ElternAbwesenheitsGrundDtoSpec.class))
+                .create()
         )
         .set(
             field(GesuchFormularUpdateDtoSpec::getAusbildung),

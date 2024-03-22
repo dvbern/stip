@@ -13,6 +13,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
@@ -54,7 +55,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
      * partial update mapper for the Gesuchssteller
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "partner", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(target = "partner", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
         @MappingTarget GesuchFormular gesuchFormular);
@@ -155,6 +156,28 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 }
             }
         );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(newFormular, targetFormular),
+            "Clear Eltern because ElternteilUnbekanntVerstorben changed",
+            () -> {
+                if (newFormular.getFamiliensituation() == null) {
+                    return;
+                }
+
+                if (newFormular.getFamiliensituation().getMutterUnbekanntVerstorben() != null &&
+                    newFormular.getFamiliensituation().getMutterUnbekanntVerstorben()
+                        != ElternAbwesenheitsGrund.WEDER_NOCH) {
+                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                }
+
+                if (newFormular.getFamiliensituation().getVaterUnbekanntVerstorben() != null &&
+                    newFormular.getFamiliensituation().getVaterUnbekanntVerstorben()
+                        != ElternAbwesenheitsGrund.WEDER_NOCH) {
+                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                }
+            }
+        );
     }
 
     void resetLebenslaufItems(
@@ -175,11 +198,18 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetFieldIf(
             () -> GesuchFormularDiffUtil.hasZivilstandChangedToOnePerson(targetFormular, newFormular),
             "Clear Partner because Zivilstand changed to one person",
-            () -> newFormular.setPartner(null)
+            () -> {
+                targetFormular.setPartner(null);
+                newFormular.setPartner(null);
+            }
         );
     }
 
-    void removeElternOfTyp(List<ElternUpdateDto> eltern, ElternTyp typ) {
+    void removeElternOfTyp(final List<ElternUpdateDto> eltern, final ElternTyp typ) {
+        if (eltern == null) {
+            return;
+        }
+
         eltern.removeAll(eltern.stream().filter(x -> x.getElternTyp() == typ).toList());
     }
 }
