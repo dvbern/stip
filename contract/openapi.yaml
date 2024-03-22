@@ -580,6 +580,26 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: updateGesuch
             summary: Updates the Gesuch with the given Id
+    '/gesuch/validatePages/{gesuchId}':
+        get:
+            tags:
+                - Gesuch
+                - Validation
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationReport'
+                    description: Die Validierung wurde erflogreich durchgeführt
+            operationId: validateGesuchPages
     '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
         get:
             tags:
@@ -1753,7 +1773,6 @@ components:
                 - nationalitaet
                 - wohnsitz
                 - sozialhilfebeitraege
-                - quellenbesteuert
                 - korrespondenzSprache
             type: object
             properties:
@@ -1794,9 +1813,10 @@ components:
                 wohnsitzAnteilVater:
                     description: Required wenn Wohnsitz.MUTTER_VATER.
                     type: number
+                vermoegenVorjahr:
+                    description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+                    type: number
                 sozialhilfebeitraege:
-                    type: boolean
-                quellenbesteuert:
                     type: boolean
                 vormundschaft:
                     description: Required nur wenn Land = CH
@@ -2251,18 +2271,16 @@ components:
             description: Die Kunde Request Daten sind ungültig
     securitySchemes:
         auth-dev-bern:
-            openIdConnectUrl: 'https://auth.stip.dev.apps.test.kibon.ch/realms/bern'
+            openIdConnectUrl: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern'
             type: openIdConnect
             description: Bern (DEV)
         auth-uat-bern:
-            openIdConnectUrl: 'https://auth.stip.uat.apps.test.kibon.ch/realms/bern'
+            openIdConnectUrl: 'https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern'
             type: openIdConnect
             description: Bern (UAT)
 security:
-    -
-        auth-dev-bern: []
-    -
-        auth-uat-bern: []
+    - auth-dev-bern: [ ]
+    - auth-uat-bern: [ ]
 tags:
     -
         name: Ausbildungsstaette

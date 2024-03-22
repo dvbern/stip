@@ -13,22 +13,33 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
+  ValidationError,
 } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 export interface State {
+  validations: ValidationError[] | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   gesuchs: SharedModelGesuch[];
+  cache: {
+    gesuchFormular: SharedModelGesuchFormular | null;
+  };
+  lastUpdate: string | null;
   loading: boolean;
   error: SharedModelError | undefined;
 }
 
 const initialState: State = {
+  validations: null,
   gesuch: null,
   gesuchFormular: null,
   gesuchs: [],
+  cache: {
+    gesuchFormular: null,
+  },
+  lastUpdate: null,
   loading: false,
   error: undefined,
 };
@@ -43,6 +54,12 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         gesuchs: [],
+        // Allow cached gesuchFormular to be used if gesuchFormular is null
+        // (e.g. while navigating between steps and the navbar shouldn't be updated)
+        cache: {
+          ...state.cache,
+          gesuchFormular: null,
+        },
       }),
     ),
 
@@ -111,13 +128,19 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.gesuchLoadedSuccess,
-      (state, { gesuch }): State => ({
-        ...state,
-        gesuch,
-        gesuchFormular: getGesuchFormular(gesuch),
-        loading: false,
-        error: undefined,
-      }),
+      (state, { gesuch }): State => {
+        const gesuchFormular = getGesuchFormular(gesuch);
+        return {
+          ...state,
+          gesuch,
+          gesuchFormular: gesuchFormular,
+          cache: {
+            gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
+          },
+          loading: false,
+          error: undefined,
+        };
+      },
     ),
 
     on(
@@ -125,6 +148,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       (state): State => ({
         ...state,
+        lastUpdate: new Date().toISOString(),
         loading: false,
         error: undefined,
       }),
@@ -134,7 +158,19 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess,
       (state): State => ({
         ...state,
+        lastUpdate: new Date().toISOString(),
         error: undefined,
+      }),
+    ),
+
+    on(
+      SharedDataAccessGesuchEvents.gesuchValidationSuccess,
+      (state, { error }): State => ({
+        ...state,
+        validations:
+          error.type === 'validationError' ? error.validationErrors : null,
+        loading: false,
+        error: error.type === 'validationError' ? undefined : error,
       }),
     ),
 

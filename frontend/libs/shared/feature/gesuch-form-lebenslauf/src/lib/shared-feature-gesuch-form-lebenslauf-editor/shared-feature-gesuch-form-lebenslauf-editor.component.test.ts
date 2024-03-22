@@ -10,10 +10,7 @@ import {
   LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
-import {
-  LONG_RUNNING_TEST_TIMEOUT,
-  clickMatSelectOption,
-} from '@dv/shared/util-fn/comp-test';
+import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';
 
@@ -68,46 +65,40 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       ).toBeNull();
     });
 
-    it(
-      'should display berufsbezeichnung if one of {EIDGENOESSISCHES_BERUFSATTEST, EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS} is selected',
-      async () => {
-        const { queryByTestId } = await setup('AUSBILDUNG');
+    it('should display berufsbezeichnung if one of {EIDGENOESSISCHES_BERUFSATTEST, EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS} is selected', async () => {
+      const { queryByTestId } = await setup('AUSBILDUNG');
 
-        const bildungsartenWhichNeedBerufsbezeichnung = [
-          LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
-          LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS,
-        ];
-        const bildsartenWhichDontNeedBerufsbezeichnung = Object.values(
-          LebenslaufAusbildungsArt,
-        ).filter(
-          (ausbildungsart) =>
-            !bildungsartenWhichNeedBerufsbezeichnung.includes(ausbildungsart),
+      const bildungsartenWhichNeedBerufsbezeichnung = [
+        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
+        LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS,
+      ];
+      const bildsartenWhichDontNeedBerufsbezeichnung = Object.values(
+        LebenslaufAusbildungsArt,
+      ).filter(
+        (ausbildungsart) =>
+          !bildungsartenWhichNeedBerufsbezeichnung.includes(ausbildungsart),
+      );
+
+      for (const bildungsart of bildungsartenWhichNeedBerufsbezeichnung) {
+        await clickMatSelectOption(
+          'lebenslauf-editor-ausbildungsart-select',
+          bildungsart,
         );
 
-        for (const bildungsart of bildungsartenWhichNeedBerufsbezeichnung) {
-          await clickMatSelectOption(
-            'lebenslauf-editor-ausbildungsart-select',
-            bildungsart,
-          );
+        expect(
+          queryByTestId('lebenslauf-editor-berufsbezeichnung'),
+        ).toBeInTheDocument();
+      }
 
-          expect(
-            queryByTestId('lebenslauf-editor-berufsbezeichnung'),
-          ).toBeInTheDocument();
-        }
+      for (const bildungsart of bildsartenWhichDontNeedBerufsbezeichnung) {
+        await clickMatSelectOption(
+          'lebenslauf-editor-ausbildungsart-select',
+          bildungsart,
+        );
 
-        for (const bildungsart of bildsartenWhichDontNeedBerufsbezeichnung) {
-          await clickMatSelectOption(
-            'lebenslauf-editor-ausbildungsart-select',
-            bildungsart,
-          );
-
-          expect(
-            queryByTestId('lebenslauf-editor-berufsbezeichnung'),
-          ).toBeNull();
-        }
-      },
-      LONG_RUNNING_TEST_TIMEOUT,
-    );
+        expect(queryByTestId('lebenslauf-editor-berufsbezeichnung')).toBeNull();
+      }
+    });
 
     it('should reset berufsbezeichnung if field is hidden', async () => {
       await setup('AUSBILDUNG');
@@ -254,85 +245,77 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       ).toHaveValue('');
     });
 
-    it(
-      'should display fachrichtung if one of {BACHELOR_HOCHSCHULE_UNI, BACHELOR_FACHHOCHSCHULE, MASTER} is selected',
-      async () => {
-        await setup('AUSBILDUNG');
-        const bildungsartenWhichNeedFachrichtung = [
-          LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
-          LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
-          LebenslaufAusbildungsArt.MASTER,
-        ];
-        const bildungsartenWhichDontNeedFachrichtung = Object.values(
-          LebenslaufAusbildungsArt,
-        ).filter(
-          (ausbildungsart) =>
-            !bildungsartenWhichNeedFachrichtung.includes(ausbildungsart),
+    it('should display fachrichtung if one of {BACHELOR_HOCHSCHULE_UNI, BACHELOR_FACHHOCHSCHULE, MASTER} is selected', async () => {
+      await setup('AUSBILDUNG');
+      const bildungsartenWhichNeedFachrichtung = [
+        LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
+        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
+        LebenslaufAusbildungsArt.MASTER,
+      ];
+      const bildungsartenWhichDontNeedFachrichtung = Object.values(
+        LebenslaufAusbildungsArt,
+      ).filter(
+        (ausbildungsart) =>
+          !bildungsartenWhichNeedFachrichtung.includes(ausbildungsart),
+      );
+
+      for (const bildungsart of bildungsartenWhichDontNeedFachrichtung) {
+        await clickMatSelectOption(
+          'lebenslauf-editor-ausbildungsart-select',
+          bildungsart,
         );
 
-        for (const bildungsart of bildungsartenWhichDontNeedFachrichtung) {
-          await clickMatSelectOption(
-            'lebenslauf-editor-ausbildungsart-select',
-            bildungsart,
-          );
+        expect(
+          screen.queryByTestId('lebenslauf-editor-fachrichtung'),
+        ).toBeNull();
+      }
 
-          expect(
-            screen.queryByTestId('lebenslauf-editor-fachrichtung'),
-          ).toBeNull();
-        }
-
-        for (const bildungsart of bildungsartenWhichNeedFachrichtung) {
-          await clickMatSelectOption(
-            'lebenslauf-editor-ausbildungsart-select',
-            bildungsart,
-          );
-
-          expect(
-            screen.queryByTestId('lebenslauf-editor-fachrichtung'),
-          ).toBeInTheDocument();
-        }
-      },
-      LONG_RUNNING_TEST_TIMEOUT,
-    );
-
-    it(
-      'should display titelDesAbschlusses if ANDERER_BILDUNGSABSCHLUSS is selected',
-      async () => {
-        await setup('AUSBILDUNG');
-        const bildungsartenWhichNeedTitelDesAbschlusses = [
-          LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
-        ];
-        const bildungsartenWhichDontNeedTitelDesAbschlusses = Object.values(
-          LebenslaufAusbildungsArt,
-        ).filter(
-          (ausbildungsart) =>
-            !bildungsartenWhichNeedTitelDesAbschlusses.includes(ausbildungsart),
+      for (const bildungsart of bildungsartenWhichNeedFachrichtung) {
+        await clickMatSelectOption(
+          'lebenslauf-editor-ausbildungsart-select',
+          bildungsart,
         );
 
-        for (const bildungsart of bildungsartenWhichDontNeedTitelDesAbschlusses) {
-          await clickMatSelectOption(
-            'lebenslauf-editor-ausbildungsart-select',
-            bildungsart,
-          );
+        expect(
+          screen.queryByTestId('lebenslauf-editor-fachrichtung'),
+        ).toBeInTheDocument();
+      }
+    });
 
-          expect(
-            screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-          ).toBeNull();
-        }
+    it('should display titelDesAbschlusses if ANDERER_BILDUNGSABSCHLUSS is selected', async () => {
+      await setup('AUSBILDUNG');
+      const bildungsartenWhichNeedTitelDesAbschlusses = [
+        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
+      ];
+      const bildungsartenWhichDontNeedTitelDesAbschlusses = Object.values(
+        LebenslaufAusbildungsArt,
+      ).filter(
+        (ausbildungsart) =>
+          !bildungsartenWhichNeedTitelDesAbschlusses.includes(ausbildungsart),
+      );
 
-        for (const bildungsart of bildungsartenWhichNeedTitelDesAbschlusses) {
-          await clickMatSelectOption(
-            'lebenslauf-editor-ausbildungsart-select',
-            bildungsart,
-          );
+      for (const bildungsart of bildungsartenWhichDontNeedTitelDesAbschlusses) {
+        await clickMatSelectOption(
+          'lebenslauf-editor-ausbildungsart-select',
+          bildungsart,
+        );
 
-          expect(
-            screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-          ).toBeInTheDocument();
-        }
-      },
-      LONG_RUNNING_TEST_TIMEOUT,
-    );
+        expect(
+          screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
+        ).toBeNull();
+      }
+
+      for (const bildungsart of bildungsartenWhichNeedTitelDesAbschlusses) {
+        await clickMatSelectOption(
+          'lebenslauf-editor-ausbildungsart-select',
+          bildungsart,
+        );
+
+        expect(
+          screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
+        ).toBeInTheDocument();
+      }
+    });
   });
 
   describe('new TAETIGKEIT', () => {

@@ -46,7 +46,7 @@ const adresse: Adresse = {
 };
 
 const person: PersonInAusbildung = {
-  sozialversicherungsnummer: '756.1111.1111.13',
+  sozialversicherungsnummer: '756.7357.7357.00',
   anrede: 'HERR',
   nachname: 'Muster',
   vorname: 'Max',
@@ -58,12 +58,12 @@ const person: PersonInAusbildung = {
   nationalitaet: 'CH',
   heimatort: 'Bern',
   zivilstand: 'LEDIG',
-  wohnsitz: 'FAMILIE',
-  quellenbesteuert: false,
+  wohnsitz: 'EIGENER_HAUSHALT',
   sozialhilfebeitraege: false,
   korrespondenzSprache: 'DEUTSCH',
 };
 
+const thisMonth = format(new Date(), 'MM.yyyy');
 const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
 const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
 
@@ -89,7 +89,7 @@ const ausbildung1: LebenslaufItem = {
 const ausbildung2: LebenslaufItem = {
   bildungsart: 'FACHMATURITAET',
   von: '08.2020',
-  bis: '01.2024',
+  bis: thisMonth,
   wohnsitz: 'BE',
   ausbildungAbgeschlossen: false,
   id: '',
@@ -118,6 +118,7 @@ const einnahmenKosten: EinnahmenKosten = {
   verdienstRealisiert: false,
   wohnkosten: 1000,
   ausbildungskostenSekundarstufeZwei: 1000,
+  ausbildungskostenTertiaerstufe: 1300,
   zulagen: 250,
   personenImHaushalt: 3,
   auswaertigeMittagessenProWoche: 5,

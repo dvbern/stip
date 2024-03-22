@@ -372,7 +372,7 @@ public class AusbildungsstaetteApiSpec {
      *
      * @see #ausbildungsstaetteIdPath  (required)
      * @see #body  (optional)
-     * return List&lt;AusbildungsstaetteDtoSpec&gt;
+     * return AusbildungsstaetteDtoSpec
      */
     public static class UpdateAusbildungsstaetteOper implements Oper {
 
@@ -403,10 +403,10 @@ public class AusbildungsstaetteApiSpec {
         /**
          * PATCH /ausbildungsstaette/{ausbildungsstaetteId}
          * @param handler handler
-         * @return List&lt;AusbildungsstaetteDtoSpec&gt;
+         * @return AusbildungsstaetteDtoSpec
          */
-        public List<AusbildungsstaetteDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<AusbildungsstaetteDtoSpec>> type = new TypeRef<List<AusbildungsstaetteDtoSpec>>(){};
+        public AusbildungsstaetteDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsstaetteDtoSpec> type = new TypeRef<AusbildungsstaetteDtoSpec>(){};
             return execute(handler).as(type);
         }
 

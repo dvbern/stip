@@ -14,7 +14,20 @@
             </div>
             <p [innerHTML]="'shared.form.abschluss.readyToSend.info' | translate"></p>
 
+            @for (message of validationMessagesSig(); track message) {
+              @if (message) {
+                <ngb-alert class="w-100" type="warning" [dismissible]="false">
+                  {{ message.key | translate: message.params }}
+                </ngb-alert>
+              }
+            }
+            @if (viewSig().canAbschliessen === false && validationMessagesSig().length === 0) {
+              <ngb-alert class="w-100" type="danger" [dismissible]="false">
+                {{ defaultErrorKey | translate }}
+              </ngb-alert>
+            }
             <button
+              [disabled]="validationMessagesSig().length > 0 || !viewSig().canAbschliessen"
               type="submit"
               class="btn btn-primary m-auto mt-4"
               (click)="abschliessen(gesuch.id)"

@@ -22,7 +22,7 @@ public class GesuchsperiodenService {
     @Transactional
     public GesuchsperiodeDto createGesuchsperiode(GesuchsperiodeCreateDto createDto) {
         var newEntity = gesuchsperiodeMapper.toEntity(createDto);
-        gesuchsperiodeRepository.persist(newEntity);
+        gesuchsperiodeRepository.persistAndFlush(newEntity);
         return gesuchsperiodeMapper.toDto(newEntity);
     }
 

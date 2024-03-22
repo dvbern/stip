@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.common.service;
 
 import java.time.LocalDate;
 
-import jakarta.ws.rs.BadRequestException;
+import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import org.mapstruct.Mapper;
 
 @DateMapper
@@ -14,14 +14,12 @@ public class DateMapperImpl {
         return date.getMonthValue() + "." + date.getYear();
     }
 
-    @SuppressWarnings("java:S1135")
     @MonthYearToBeginOfMonth
     public LocalDate monthYearToBeginOfMonth(String monthYear) {
         String[] date = monthYear.split("\\.");
 
         if (date.length != 2) {
-            // TODO KSTIP-782: error handling
-            throw new BadRequestException("Invalid Date Format");
+            throw AppValidationMessage.invalidDate(monthYear).create();
         }
 
         String month = date[0].length() == 1 ? '0' + date[0] : date[0];
