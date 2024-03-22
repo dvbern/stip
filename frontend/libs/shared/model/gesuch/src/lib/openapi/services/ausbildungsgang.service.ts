@@ -24,35 +24,34 @@ import {
 import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
-import { Ausbildungsstaette } from '../model/ausbildungsstaette';
-import { AusbildungsstaetteCreate } from '../model/ausbildungsstaetteCreate';
-import { AusbildungsstaetteUpdate } from '../model/ausbildungsstaetteUpdate';
-import { ValidationReport } from '../model/validationReport';
+import { Ausbildungsgang } from '../model/ausbildungsgang';
+import { AusbildungsgangCreate } from '../model/ausbildungsgangCreate';
+import { AusbildungsgangUpdate } from '../model/ausbildungsgangUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
 
-export interface AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams {
-  ausbildungsstaetteCreate?: AusbildungsstaetteCreate;
+export interface AusbildungsgangServiceCreateAusbildungsgangRequestParams {
+  ausbildungsgangCreate: AusbildungsgangCreate;
 }
 
-export interface AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams {
-  ausbildungsstaetteId: string;
+export interface AusbildungsgangServiceDeleteAusbildungsgangRequestParams {
+  ausbildungsgangId: string;
 }
 
-export interface AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams {
-  ausbildungsstaetteId: string;
+export interface AusbildungsgangServiceGetAusbildungsgangRequestParams {
+  ausbildungsgangId: string;
 }
 
-export interface AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams {
-  ausbildungsstaetteId: string;
-  ausbildungsstaetteUpdate?: AusbildungsstaetteUpdate;
+export interface AusbildungsgangServiceUpdateAusbildungsgangRequestParams {
+  ausbildungsgangId: string;
+  ausbildungsgangUpdate: AusbildungsgangUpdate;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class AusbildungsstaetteService {
+export class AusbildungsgangService {
   protected basePath = '/api/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -135,39 +134,40 @@ export class AusbildungsstaetteService {
   }
 
   /**
+   * Creates a new Ausbildungsgang
    * @param requestParameters
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
+  public createAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<Ausbildungsstaette>;
-  public createAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
+  ): Observable<Ausbildungsgang>;
+  public createAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<Ausbildungsstaette>>;
-  public createAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
+  ): Observable<HttpResponse<Ausbildungsgang>>;
+  public createAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<Ausbildungsstaette>>;
-  public createAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams,
+  ): Observable<HttpEvent<Ausbildungsgang>>;
+  public createAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceCreateAusbildungsgangRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
     options?: {
@@ -175,7 +175,12 @@ export class AusbildungsstaetteService {
       context?: HttpContext;
     },
   ): Observable<any> {
-    const ausbildungsstaetteCreate = requestParameters.ausbildungsstaetteCreate;
+    const ausbildungsgangCreate = requestParameters.ausbildungsgangCreate;
+    if (ausbildungsgangCreate === null || ausbildungsgangCreate === undefined) {
+      throw new Error(
+        'Required parameter ausbildungsgangCreate was null or undefined when calling createAusbildungsgang$.',
+      );
+    }
 
     let localVarHeaders = this.defaultHeaders;
 
@@ -237,13 +242,13 @@ export class AusbildungsstaetteService {
       }
     }
 
-    const localVarPath = `/ausbildungsstaette`;
-    return this.httpClient.request<Ausbildungsstaette>(
+    const localVarPath = `/ausbildungsgang`;
+    return this.httpClient.request<Ausbildungsgang>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: ausbildungsstaetteCreate,
+        body: ausbildungsgangCreate,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -254,39 +259,39 @@ export class AusbildungsstaetteService {
   }
 
   /**
-   * Delete Ausbildungsstaette
+   * delete a Ausbildungsgang
    * @param requestParameters
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams,
+  public deleteAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceDeleteAusbildungsgangRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
   ): Observable<any>;
-  public deleteAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams,
+  public deleteAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceDeleteAusbildungsgangRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
   ): Observable<HttpResponse<any>>;
-  public deleteAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams,
+  public deleteAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceDeleteAusbildungsgangRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
   ): Observable<HttpEvent<any>>;
-  public deleteAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceDeleteAusbildungsstaetteRequestParams,
+  public deleteAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceDeleteAusbildungsgangRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
     options?: { httpHeaderAccept?: 'text/plain'; context?: HttpContext },
   ): Observable<any> {
-    const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
-    if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+    const ausbildungsgangId = requestParameters.ausbildungsgangId;
+    if (ausbildungsgangId === null || ausbildungsgangId === undefined) {
       throw new Error(
-        'Required parameter ausbildungsstaetteId was null or undefined when calling deleteAusbildungsstaette$.',
+        'Required parameter ausbildungsgangId was null or undefined when calling deleteAusbildungsgang$.',
       );
     }
 
@@ -339,9 +344,9 @@ export class AusbildungsstaetteService {
       }
     }
 
-    const localVarPath = `/ausbildungsstaette/${this.configuration.encodeParam({
-      name: 'ausbildungsstaetteId',
-      value: ausbildungsstaetteId,
+    const localVarPath = `/ausbildungsgang/${this.configuration.encodeParam({
+      name: 'ausbildungsgangId',
+      value: ausbildungsgangId,
       in: 'path',
       style: 'simple',
       explode: false,
@@ -363,40 +368,40 @@ export class AusbildungsstaetteService {
   }
 
   /**
-   * returns a Ausbildungsstaette with the given id
+   * return der Ausbildungsgang
    * @param requestParameters
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams,
+  public getAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceGetAusbildungsgangRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<Ausbildungsstaette>;
-  public getAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams,
+  ): Observable<Ausbildungsgang>;
+  public getAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceGetAusbildungsgangRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<Ausbildungsstaette>>;
-  public getAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams,
+  ): Observable<HttpResponse<Ausbildungsgang>>;
+  public getAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceGetAusbildungsgangRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<Ausbildungsstaette>>;
-  public getAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceGetAusbildungsstaetteRequestParams,
+  ): Observable<HttpEvent<Ausbildungsgang>>;
+  public getAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceGetAusbildungsgangRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
     options?: {
@@ -404,10 +409,10 @@ export class AusbildungsstaetteService {
       context?: HttpContext;
     },
   ): Observable<any> {
-    const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
-    if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+    const ausbildungsgangId = requestParameters.ausbildungsgangId;
+    if (ausbildungsgangId === null || ausbildungsgangId === undefined) {
       throw new Error(
-        'Required parameter ausbildungsstaetteId was null or undefined when calling getAusbildungsstaette$.',
+        'Required parameter ausbildungsgangId was null or undefined when calling getAusbildungsgang$.',
       );
     }
 
@@ -460,16 +465,16 @@ export class AusbildungsstaetteService {
       }
     }
 
-    const localVarPath = `/ausbildungsstaette/${this.configuration.encodeParam({
-      name: 'ausbildungsstaetteId',
-      value: ausbildungsstaetteId,
+    const localVarPath = `/ausbildungsgang/${this.configuration.encodeParam({
+      name: 'ausbildungsgangId',
+      value: ausbildungsgangId,
       in: 'path',
       style: 'simple',
       explode: false,
       dataType: 'string',
       dataFormat: 'uuid',
     })}`;
-    return this.httpClient.request<Ausbildungsstaette>(
+    return this.httpClient.request<Ausbildungsgang>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -484,140 +489,40 @@ export class AusbildungsstaetteService {
   }
 
   /**
-   * Returniert alle Ausbildungsstaette zur Verfuegung.
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getAusbildungsstaetten$(
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'text/plain';
-      context?: HttpContext;
-    },
-  ): Observable<Array<Ausbildungsstaette>>;
-  public getAusbildungsstaetten$(
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'text/plain';
-      context?: HttpContext;
-    },
-  ): Observable<HttpResponse<Array<Ausbildungsstaette>>>;
-  public getAusbildungsstaetten$(
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'text/plain';
-      context?: HttpContext;
-    },
-  ): Observable<HttpEvent<Array<Ausbildungsstaette>>>;
-  public getAusbildungsstaetten$(
-    observe: 'body' | 'response' | 'events' = 'body',
-    reportProgress = false,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'text/plain';
-      context?: HttpContext;
-    },
-  ): Observable<any> {
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (auth-uat-bern) required
-    localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
-    if (localVarCredential) {
-      // using credentials
-    }
-
-    // authentication (auth-dev-bern) required
-    localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
-    if (localVarCredential) {
-      // using credentials
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'text/plain'];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected,
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    const localVarPath = `/ausbildungsstaette`;
-    return this.httpClient.request<Array<Ausbildungsstaette>>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: <any>observe,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
+   * Updates a Ausbildungsgang with the given ID
    * @param requestParameters
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public updateAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
+  public updateAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<Ausbildungsstaette>;
-  public updateAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
+  ): Observable<Ausbildungsgang>;
+  public updateAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<Ausbildungsstaette>>;
-  public updateAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
+  ): Observable<HttpResponse<Ausbildungsgang>>;
+  public updateAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'text/plain';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<Ausbildungsstaette>>;
-  public updateAusbildungsstaette$(
-    requestParameters: AusbildungsstaetteServiceUpdateAusbildungsstaetteRequestParams,
+  ): Observable<HttpEvent<Ausbildungsgang>>;
+  public updateAusbildungsgang$(
+    requestParameters: AusbildungsgangServiceUpdateAusbildungsgangRequestParams,
     observe: 'body' | 'response' | 'events' = 'body',
     reportProgress = false,
     options?: {
@@ -625,13 +530,18 @@ export class AusbildungsstaetteService {
       context?: HttpContext;
     },
   ): Observable<any> {
-    const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
-    if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+    const ausbildungsgangId = requestParameters.ausbildungsgangId;
+    if (ausbildungsgangId === null || ausbildungsgangId === undefined) {
       throw new Error(
-        'Required parameter ausbildungsstaetteId was null or undefined when calling updateAusbildungsstaette$.',
+        'Required parameter ausbildungsgangId was null or undefined when calling updateAusbildungsgang$.',
       );
     }
-    const ausbildungsstaetteUpdate = requestParameters.ausbildungsstaetteUpdate;
+    const ausbildungsgangUpdate = requestParameters.ausbildungsgangUpdate;
+    if (ausbildungsgangUpdate === null || ausbildungsgangUpdate === undefined) {
+      throw new Error(
+        'Required parameter ausbildungsgangUpdate was null or undefined when calling updateAusbildungsgang$.',
+      );
+    }
 
     let localVarHeaders = this.defaultHeaders;
 
@@ -693,21 +603,21 @@ export class AusbildungsstaetteService {
       }
     }
 
-    const localVarPath = `/ausbildungsstaette/${this.configuration.encodeParam({
-      name: 'ausbildungsstaetteId',
-      value: ausbildungsstaetteId,
+    const localVarPath = `/ausbildungsgang/${this.configuration.encodeParam({
+      name: 'ausbildungsgangId',
+      value: ausbildungsgangId,
       in: 'path',
       style: 'simple',
       explode: false,
       dataType: 'string',
       dataFormat: 'uuid',
     })}`;
-    return this.httpClient.request<Ausbildungsstaette>(
-      'patch',
+    return this.httpClient.request<Ausbildungsgang>(
+      'put',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: ausbildungsstaetteUpdate,
+        body: ausbildungsgangUpdate,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

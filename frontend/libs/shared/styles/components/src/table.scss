@@ -127,7 +127,12 @@
     }
   }
 
-  .btn-outline-primary {
+  .btn-link {
+    text-decoration: none;
+  }
+
+  .btn-outline-primary,
+  .btn-link {
     display: flex;
     align-items: center;
     padding: 0.4rem;

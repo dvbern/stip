@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +9,7 @@ import {
   patchState,
   signalStore,
   withComputed,
+  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
@@ -17,37 +19,36 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
 import {
   Ausbildungsgang,
+  AusbildungsgangService,
   Ausbildungsstaette,
   AusbildungsstaetteService,
 } from '@dv/shared/model/gesuch';
-
-type ResponseInitial = {
-  type: 'initial';
-};
-
-type ResponseFailure = {
-  type: 'failure';
-  error: Error;
-};
-
-type ResponseSuccess = {
-  type: 'success';
-};
-
-type Response = ResponseInitial | ResponseFailure | ResponseSuccess;
+import {
+  RemoteData,
+  failure,
+  initial,
+  pending,
+  success,
+} from '@dv/shared/util/remote-data';
 
 export interface AdminAusbildungsstaetteState {
-  ausbildungsstaetten: Ausbildungsstaette[]; // probably not needed, or make a deep copy, if needed
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
-  hasLoadedOnce: boolean;
-  loading: boolean;
-  response: Response;
-  error?: string;
+  response: RemoteData<Ausbildungsstaette[]>;
 }
 
 export const AdminAusbildungsstaetteStore = signalStore(
   withState(() => {
     const tableData = new MatTableDataSource<AusbildungsstaetteTableData>();
+
+    tableData.sortingDataAccessor = (data, sortHeaderId) => {
+      const value = data[sortHeaderId as keyof AusbildungsstaetteTableData];
+
+      if (typeof value === 'string') {
+        return value.toLocaleLowerCase();
+      }
+
+      return sortHeaderId;
+    };
 
     tableData.filterPredicate = (data, filter) => {
       const f = filter.trim().toLocaleLowerCase();
@@ -59,18 +60,18 @@ export const AdminAusbildungsstaetteStore = signalStore(
     };
 
     const initialState: AdminAusbildungsstaetteState = {
-      ausbildungsstaetten: [],
       tableData,
-      hasLoadedOnce: false,
-      loading: false,
-      response: { type: 'initial' },
-      error: undefined,
+      response: initial(),
     };
 
     return initialState;
   }),
   withMethods(
-    (store, ausbildungsStaetteService = inject(AusbildungsstaetteService)) => ({
+    (
+      store,
+      ausbildungsStaetteService = inject(AusbildungsstaetteService),
+      ausbildungsgangService = inject(AusbildungsgangService),
+    ) => ({
       setPaginator: (paginator: MatPaginator) => {
         patchState(store, (state) => {
           state.tableData.paginator = paginator;
@@ -94,9 +95,10 @@ export const AdminAusbildungsstaetteStore = signalStore(
       loadAusbildungsstaetten: rxMethod(
         pipe(
           tap(() => {
+            console.log('loadAusbildungsstaetten');
+
             patchState(store, {
-              loading: true,
-              error: undefined,
+              response: pending(),
             });
           }),
           switchMap(() =>
@@ -104,7 +106,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
               tapResponse({
                 next: (ausbildungsstaetten) =>
                   patchState(store, (state) => {
-                    state.ausbildungsstaetten = ausbildungsstaetten;
                     state.tableData.data = ausbildungsstaetten.map(
                       (ausbildungsstaette) => ({
                         ...ausbildungsstaette,
@@ -113,27 +114,26 @@ export const AdminAusbildungsstaetteStore = signalStore(
                       }),
                     );
 
-                    state.hasLoadedOnce = true;
-
-                    return state;
+                    return {
+                      ...state,
+                      response: success(ausbildungsstaetten),
+                    };
                   }),
                 error: (error: HttpErrorResponse) => {
                   patchState(store, {
-                    error: error.message,
-                  });
-                },
-                finalize: () => {
-                  patchState(store, {
-                    loading: false,
+                    response: failure(error),
                   });
                 },
               }),
             ),
           ),
+          takeUntilDestroyed(),
         ),
       ),
       addAusbildungsstaetteRow: (newRow: AusbildungsstaetteTableData) => {
         patchState(store, (state) => {
+          state.tableData.paginator?.firstPage();
+
           const data = [newRow, ...state.tableData.data];
 
           state.tableData.data = data;
@@ -157,8 +157,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
           pipe(
             tap(() => {
               patchState(store, {
-                loading: true,
-                error: undefined,
+                response: pending(),
               });
             }),
             switchMap((staette: AusbildungsstaetteTableData) => {
@@ -176,28 +175,30 @@ export const AdminAusbildungsstaetteStore = signalStore(
                   })
                   .pipe(
                     tapResponse({
-                      next: () => {
+                      next: (ausbildungsstaette: Ausbildungsstaette) => {
                         patchState(store, (state) => {
-                          const data = [staette, ...state.tableData.data]; // not working yet
+                          const data = state.tableData.data.map((s) => {
+                            if (s.id === 'new') {
+                              return {
+                                ...s,
+                                ...ausbildungsstaette,
+                              };
+                            }
+
+                            return s;
+                          });
 
                           state.tableData.data = data;
 
-                          // return {
-                          //   ...state,
-                          //   response: { type: 'success' } as ResponseSuccess,
-                          // };
-                          return state;
+                          return {
+                            ...state,
+                            response: success(data),
+                          };
                         });
                       },
                       error: (error: HttpErrorResponse) => {
                         patchState(store, {
-                          error: error.message,
-                          response: { type: 'failure', error: error },
-                        });
-                      },
-                      finalize: () => {
-                        patchState(store, {
-                          loading: false,
+                          response: failure(error),
                         });
                       },
                     }),
@@ -214,11 +215,14 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 })
                 .pipe(
                   tapResponse({
-                    next: (ausbildungsstaette) => {
+                    next: (ausbildungsstaette: Ausbildungsstaette) => {
                       patchState(store, (state) => {
                         const data = state.tableData.data.map((s) => {
-                          if (s.id === ausbildungsstaette.id) {
-                            return ausbildungsstaette;
+                          if (s.id === staette.id) {
+                            return {
+                              ...s,
+                              ...ausbildungsstaette,
+                            };
                           }
 
                           return s;
@@ -226,30 +230,28 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
                         state.tableData.data = data;
 
-                        return state;
+                        return {
+                          ...state,
+                          response: success(data),
+                        };
                       });
                     },
                     error: (error: HttpErrorResponse) => {
                       patchState(store, {
-                        error: error.message,
-                      });
-                    },
-                    finalize: () => {
-                      patchState(store, {
-                        loading: false,
+                        response: failure(error),
                       });
                     },
                   }),
                 );
             }),
+            takeUntilDestroyed(),
           ),
         ),
       deleteAusbildungsstaette: rxMethod<AusbildungsstaetteTableData>(
         pipe(
           tap(() => {
             patchState(store, {
-              loading: true,
-              error: undefined,
+              response: pending(),
             });
           }),
           switchMap((staette: AusbildungsstaetteTableData) => {
@@ -259,19 +261,30 @@ export const AdminAusbildungsstaetteStore = signalStore(
             return ausbildungsStaetteService
               .deleteAusbildungsstaette$({ ausbildungsstaetteId: staette.id })
               .pipe(
-                tap(() => {
-                  patchState(store, (state) => {
-                    const data = state.tableData.data.filter(
-                      (s) => s.id !== staette.id,
-                    );
+                tapResponse({
+                  next: () => {
+                    patchState(store, (state) => {
+                      const data = state.tableData.data.filter(
+                        (s) => s.id !== staette.id,
+                      );
 
-                    state.tableData.data = data;
+                      state.tableData.data = data;
 
-                    return state;
-                  });
+                      return {
+                        ...state,
+                        response: success(data),
+                      };
+                    });
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    patchState(store, {
+                      response: failure(error),
+                    });
+                  },
                 }),
               );
           }),
+          takeUntilDestroyed(),
         ),
       ),
       // Ausbildungsgang  ==========================================================
@@ -280,7 +293,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
         newRow: Ausbildungsgang,
       ) => {
         patchState(store, (state) => {
-          // could find be more efficent?
           const data = state.tableData.data.map((staette) => {
             if (staette.id === ausbildungsstaetteId) {
               return {
@@ -327,73 +339,194 @@ export const AdminAusbildungsstaetteStore = signalStore(
           return state;
         });
       },
-      handleCreateUpdateAusbildungsgang: (
-        staette: AusbildungsstaetteTableData,
-        gang: Ausbildungsgang,
-      ) => {
-        patchState(store, (state) => {
-          const data = state.tableData.data.map((s) => {
-            if (s.id === staette.id) {
-              const ausbildungsgaenge = s.ausbildungsgaenge?.map((g) => {
-                if (g.id === gang.id) {
-                  return gang;
-                }
-
-                return g;
-              });
-
-              return {
-                ...s,
-                ausbildungsgaenge,
-              };
+      handleCreateUpdateAusbildungsgang: rxMethod<{
+        staette: AusbildungsstaetteTableData;
+        gang: Ausbildungsgang;
+      }>(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              response: pending(),
+            });
+          }),
+          switchMap(({ staette, gang }) => {
+            if (!staette.id) {
+              throw new Error('Ausbildungsstaette ID is undefined');
             }
 
-            return s;
-          });
+            if (gang.id === 'new') {
+              return ausbildungsgangService
+                .createAusbildungsgang$({
+                  ausbildungsgangCreate: {
+                    ausbildungsstaetteId: staette.id,
+                    ausbildungsort: gang.ausbildungsort,
+                    bezeichnungDe: gang.bezeichnungDe ?? '',
+                    bezeichnungFr: gang.bezeichnungFr ?? '',
+                    ausbildungsrichtung: gang.ausbildungsrichtung,
+                  },
+                })
+                .pipe(
+                  tapResponse({
+                    next: (gang: Ausbildungsgang) => {
+                      patchState(store, (state) => {
+                        const data = state.tableData.data.map((s) => {
+                          if (s.id === staette.id) {
+                            return {
+                              ...s,
+                              ausbildungsgaengeCount:
+                                s.ausbildungsgaengeCount + 1,
+                              ausbildungsgaenge: s.ausbildungsgaenge?.map(
+                                (g) => {
+                                  if (g.id === 'new') {
+                                    return gang;
+                                  }
 
-          state.tableData.data = data;
+                                  return g;
+                                },
+                              ),
+                            };
+                          }
 
-          return state;
-        });
-      },
-      deleteAusbildungsgang: (
-        staette: AusbildungsstaetteTableData,
-        gang: Ausbildungsgang,
-      ) => {
-        patchState(store, (state) => {
-          const data = state.tableData.data.map((s) => {
-            if (s.id === staette.id) {
-              const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
-                (g) => g.id !== gang.id,
+                          return s;
+                        });
+
+                        state.tableData.data = data;
+
+                        return {
+                          ...state,
+                          response: success(data),
+                        };
+                      });
+                    },
+                    error: (error: HttpErrorResponse) => {
+                      patchState(store, {
+                        response: failure(error),
+                      });
+                    },
+                  }),
+                );
+            }
+
+            return ausbildungsgangService
+              .updateAusbildungsgang$({
+                ausbildungsgangId: gang.id,
+                ausbildungsgangUpdate: {
+                  ausbildungsstaetteId: staette.id,
+                  ausbildungsrichtung: gang.ausbildungsrichtung,
+                  ausbildungsort: gang.ausbildungsort,
+                  bezeichnungDe: gang.bezeichnungDe ?? '',
+                  bezeichnungFr: gang.bezeichnungFr ?? '',
+                },
+              })
+              .pipe(
+                tapResponse({
+                  next: (gang: Ausbildungsgang) => {
+                    patchState(store, (state) => {
+                      const data = state.tableData.data.map((s) => {
+                        if (s.id === staette.id) {
+                          const ausbildungsgaenge = s.ausbildungsgaenge?.map(
+                            (g) => {
+                              if (g.id === gang.id) {
+                                return gang;
+                              }
+
+                              return g;
+                            },
+                          );
+
+                          return {
+                            ...s,
+                            ausbildungsgaenge,
+                          };
+                        }
+
+                        return s;
+                      });
+
+                      state.tableData.data = data;
+
+                      return {
+                        ...state,
+                        response: success(data),
+                      };
+                    });
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    patchState(store, {
+                      response: failure(error),
+                    });
+                  },
+                }),
               );
+          }),
+          takeUntilDestroyed(),
+        ),
+      ),
+      deleteAusbildungsgang: rxMethod<{
+        staette: AusbildungsstaetteTableData;
+        gang: Ausbildungsgang;
+      }>(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              response: pending(),
+            });
+          }),
+          switchMap(({ staette, gang }) => {
+            return ausbildungsgangService
+              .deleteAusbildungsgang$({ ausbildungsgangId: gang.id })
+              .pipe(
+                tapResponse({
+                  next: () => {
+                    patchState(store, (state) => {
+                      const data = state.tableData.data.map((s) => {
+                        if (s.id === staette.id) {
+                          const ausbildungsgaenge = s.ausbildungsgaenge?.filter(
+                            (g) => g.id !== gang.id,
+                          );
 
-              return {
-                ...s,
-                ausbildungsgaengeCount: s.ausbildungsgaengeCount - 1,
-                ausbildungsgaenge,
-              };
-            }
+                          return {
+                            ...s,
+                            ausbildungsgaengeCount:
+                              s.ausbildungsgaengeCount - 1,
+                            ausbildungsgaenge,
+                          };
+                        }
 
-            return s;
-          });
+                        return s;
+                      });
 
-          state.tableData.data = data;
+                      state.tableData.data = data;
 
-          return state;
-        });
-      },
+                      return {
+                        ...state,
+                        response: success(data),
+                      };
+                    });
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    patchState(store, {
+                      response: failure(error),
+                    });
+                  },
+                }),
+              );
+          }),
+          takeUntilDestroyed(),
+        ),
+      ),
     }),
   ),
-  withComputed(({ ausbildungsstaetten }) => ({
-    ausbildungsstaetteCount: computed(() => ausbildungsstaetten().length ?? 0),
+  withComputed(({ tableData, response }) => ({
+    ausbildungsstaetteCount: computed(() => tableData().data.length ?? 0),
+    loading: computed(() => response.type() === 'pending'),
   })),
+  withHooks({
+    onInit(store) {
+      console.log('init');
+    },
+    onDestroy(store) {
+      console.log('destroy');
+    },
+  }),
 );
-
-// function generateRandomAusbildungsstaetten(n: number): Ausbildungsstaette[] {
-//   return Array.from({ length: n }, (_, i) => ({
-//     id: `${i}`,
-//     nameDe: `Ausbildungsstaette ${i}`,
-//     nameFr: `Ausbildungsstaette ${i}`,
-//     ausbildungsgaenge: [],
-//   }));
-// }
