@@ -133,6 +133,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showAllControl.setValue(this.showAll());
     this.store.dispatch(
       SharedDataAccessGesuchEvents.loadAll({
         filter: { showAll: this.showAll() },
