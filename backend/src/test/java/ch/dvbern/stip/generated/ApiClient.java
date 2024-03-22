@@ -63,6 +63,9 @@ public class ApiClient {
     public TenantApiSpec tenant() {
         return TenantApiSpec.tenant(config.reqSpecSupplier);
     }
+    public ValidationApiSpec validation() {
+        return ValidationApiSpec.validation(config.reqSpecSupplier);
+    }
 
     public static class Config {
         private Supplier<RequestSpecBuilder> reqSpecSupplier = () -> new RequestSpecBuilder()

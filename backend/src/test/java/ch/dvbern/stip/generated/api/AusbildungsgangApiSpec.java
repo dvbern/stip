@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDtoSpec;
 import java.util.UUID;
@@ -96,6 +97,7 @@ public class AusbildungsgangApiSpec {
      * 
      *
      * @see #body  (required)
+     * return AusbildungsgangDtoSpec
      */
     public static class CreateAusbildungsgangOper implements Oper {
 
@@ -108,7 +110,7 @@ public class AusbildungsgangApiSpec {
         public CreateAusbildungsgangOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -123,12 +125,22 @@ public class AusbildungsgangApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
+        /**
+         * POST /ausbildungsgang
+         * @param handler handler
+         * @return AusbildungsgangDtoSpec
+         */
+        public AusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsgangDtoSpec> type = new TypeRef<AusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
          /**
-         * @param ausbildungsgangUpdateDtoSpec (AusbildungsgangUpdateDtoSpec)  (required)
+         * @param ausbildungsgangCreateDtoSpec (AusbildungsgangCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAusbildungsgangOper body(AusbildungsgangUpdateDtoSpec ausbildungsgangUpdateDtoSpec) {
-            reqSpec.setBody(ausbildungsgangUpdateDtoSpec);
+        public CreateAusbildungsgangOper body(AusbildungsgangCreateDtoSpec ausbildungsgangCreateDtoSpec) {
+            reqSpec.setBody(ausbildungsgangCreateDtoSpec);
             return this;
         }
 
@@ -293,6 +305,7 @@ public class AusbildungsgangApiSpec {
      *
      * @see #ausbildungsgangIdPath  (required)
      * @see #body  (required)
+     * return AusbildungsgangDtoSpec
      */
     public static class UpdateAusbildungsgangOper implements Oper {
 
@@ -305,7 +318,7 @@ public class AusbildungsgangApiSpec {
         public UpdateAusbildungsgangOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -318,6 +331,16 @@ public class AusbildungsgangApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PUT /ausbildungsgang/{ausbildungsgangId}
+         * @param handler handler
+         * @return AusbildungsgangDtoSpec
+         */
+        public AusbildungsgangDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungsgangDtoSpec> type = new TypeRef<AusbildungsgangDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**

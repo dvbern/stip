@@ -70,3 +70,14 @@ $card-border-radius: 8px;
 $card-border-width: 0;
 $card-spacer-y: 1.5rem;
 $card-spacer-x: 1.5rem;
+
+$theme-colors: (
+  'primary': #4e4e4e,
+  'secondary': white,
+  'success': #81be06,
+  'danger': #ea161f,
+  'warning': #fe7e55,
+  'info': #298bef,
+  'light': white,
+  'dark': black,
+);

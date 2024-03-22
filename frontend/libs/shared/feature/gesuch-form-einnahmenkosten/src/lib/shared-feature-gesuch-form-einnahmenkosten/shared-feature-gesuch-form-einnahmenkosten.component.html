@@ -201,6 +201,7 @@
           </mat-error>
         </mat-form-field>
       </div>
+
       @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
         <div class="row g-4 mt-1">
           <!-- WOHNKOSTEN -->
@@ -241,25 +242,29 @@
           </mat-form-field>
         </div>
       }
-      @if (!hiddenFieldsSetSig().has(form.controls.personenImHaushalt)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.wgWohnend)) {
         <div class="row g-4 mt-1">
-          <!-- PERSONEN_IM_HAUSHALT -->
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.personenImHaushalt.label' | translate }}</mat-label>
-            <input
-              formControlName="personenImHaushalt"
-              data-testid="form-einnahmen-kosten-personenImHaushalt"
-              matInput
-              type="text"
-              [maskito]="maskitoPositiveNumber"
-            />
-            <mat-hint translate>shared.form.einnahmenkosten.personenImHaushalt.info</mat-hint>
+          <!-- WG WOHNEND -->
+          <mat-radio-group
+            class="d-flex flex-column"
+            formControlName="wgWohnend"
+            data-testid="form-einnahmen-kosten-wgWohnend"
+            dvSharedUiFormField
+          >
+            <mat-label>{{ 'shared.form.einnahmenkosten.wgWohnend.label' | translate }}</mat-label>
+            <mat-radio-button data-testid="yes" [value]="true">
+              {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
+            >
+            <mat-radio-button data-testid="no" [value]="false">{{
+              'shared.form.radio.no' | translate
+            }}</mat-radio-button>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
-          </mat-form-field>
+          </mat-radio-group>
         </div>
       }
+
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.einnahmenkosten.general.title' | translate }}
       </h3>

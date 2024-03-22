@@ -26,7 +26,11 @@ async function setup() {
           gesuchFormular: {
             personInAusbildung: {} as PersonInAusbildung,
           } as GesuchFormular,
-          gesuchs: [],
+          gesuchs: {
+            cache: {
+              gesuchFormular: null,
+            },
+          },
         },
       }),
       provideSharedAppSettings('gesuch-app'),
