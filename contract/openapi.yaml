@@ -2301,9 +2301,6 @@ components:
                         $ref: '#/components/schemas/ValidationReport'
             description: Die Kunde Request Daten sind ungültig
     securitySchemes:
-        Keycloak:
-        type: openIdConnect
-        description: Keycloak (DEV)
         auth-dev-bern:
             openIdConnectUrl: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern'
             type: openIdConnect
@@ -2313,7 +2310,6 @@ components:
             type: openIdConnect
             description: Bern (UAT)
 security:
-    - Keycloak: [ ]
     - auth-dev-bern: [ ]
     - auth-uat-bern: [ ]
 tags:
