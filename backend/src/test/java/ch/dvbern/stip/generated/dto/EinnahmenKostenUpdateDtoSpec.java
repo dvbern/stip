@@ -39,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN_TERTIAERSTUFE,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
-  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_PERSONEN_IM_HAUSHALT,
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WG_WOHNEND,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_VERDIENST_REALISIERT,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WILL_DARLEHEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE
@@ -80,8 +80,8 @@ public class EinnahmenKostenUpdateDtoSpec {
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
   private BigDecimal wohnkosten;
 
-  public static final String JSON_PROPERTY_PERSONEN_IM_HAUSHALT = "personenImHaushalt";
-  private BigDecimal personenImHaushalt;
+  public static final String JSON_PROPERTY_WG_WOHNEND = "wgWohnend";
+  private Boolean wgWohnend;
 
   public static final String JSON_PROPERTY_VERDIENST_REALISIERT = "verdienstRealisiert";
   private Boolean verdienstRealisiert;
@@ -381,29 +381,29 @@ public class EinnahmenKostenUpdateDtoSpec {
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec personenImHaushalt(BigDecimal personenImHaushalt) {
+  public EinnahmenKostenUpdateDtoSpec wgWohnend(Boolean wgWohnend) {
     
-    this.personenImHaushalt = personenImHaushalt;
+    this.wgWohnend = wgWohnend;
     return this;
   }
 
    /**
-   * Get personenImHaushalt
-   * @return personenImHaushalt
+   * Required nur wenn Person eigener Haushalt hat
+   * @return wgWohnend
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PERSONEN_IM_HAUSHALT)
+  @JsonProperty(JSON_PROPERTY_WG_WOHNEND)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getPersonenImHaushalt() {
-    return personenImHaushalt;
+  public Boolean getWgWohnend() {
+    return wgWohnend;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN_IM_HAUSHALT)
+  @JsonProperty(JSON_PROPERTY_WG_WOHNEND)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPersonenImHaushalt(BigDecimal personenImHaushalt) {
-    this.personenImHaushalt = personenImHaushalt;
+  public void setWgWohnend(Boolean wgWohnend) {
+    this.wgWohnend = wgWohnend;
   }
 
 
@@ -504,7 +504,7 @@ public class EinnahmenKostenUpdateDtoSpec {
         Objects.equals(this.ausbildungskostenTertiaerstufe, einnahmenKostenUpdate.ausbildungskostenTertiaerstufe) &&
         Objects.equals(this.fahrkosten, einnahmenKostenUpdate.fahrkosten) &&
         Objects.equals(this.wohnkosten, einnahmenKostenUpdate.wohnkosten) &&
-        Objects.equals(this.personenImHaushalt, einnahmenKostenUpdate.personenImHaushalt) &&
+        Objects.equals(this.wgWohnend, einnahmenKostenUpdate.wgWohnend) &&
         Objects.equals(this.verdienstRealisiert, einnahmenKostenUpdate.verdienstRealisiert) &&
         Objects.equals(this.willDarlehen, einnahmenKostenUpdate.willDarlehen) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche);
@@ -512,7 +512,7 @@ public class EinnahmenKostenUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, personenImHaushalt, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche);
   }
 
   @Override
@@ -530,7 +530,7 @@ public class EinnahmenKostenUpdateDtoSpec {
     sb.append("    ausbildungskostenTertiaerstufe: ").append(toIndentedString(ausbildungskostenTertiaerstufe)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
-    sb.append("    personenImHaushalt: ").append(toIndentedString(personenImHaushalt)).append("\n");
+    sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");

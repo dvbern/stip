@@ -1,7 +1,10 @@
 package ch.dvbern.stip.test.gesuch.util;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -9,8 +12,6 @@ import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -108,5 +109,69 @@ class GesuchFormularDiffUtilTest {
         // Test when GerichtlicheAlimentenregelung not set in update
         update.getFamiliensituation().setGerichtlicheAlimentenregelung(null);
         assertTrue(GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(original, update));
+    }
+
+    @Test
+    void hasWerZahltAlimenteChangedTest() {
+        final var original = new GesuchFormular()
+            .setFamiliensituation(
+                new Familiensituation()
+                    .setWerZahltAlimente(Elternschaftsteilung.VATER)
+            );
+
+        final var updated = new GesuchFormularUpdateDto();
+        final var updatedFamsit = new FamiliensituationUpdateDto();
+        updatedFamsit.setWerZahltAlimente(Elternschaftsteilung.MUTTER);
+        updated.setFamiliensituation(updatedFamsit);
+
+        assertTrue(GesuchFormularDiffUtil.hasWerZahltAlimenteChanged(updated, original));
+
+        updatedFamsit.setWerZahltAlimente(Elternschaftsteilung.VATER);
+        assertFalse(GesuchFormularDiffUtil.hasWerZahltAlimenteChanged(updated, original));
+
+        updated.setFamiliensituation(null);
+        assertTrue(GesuchFormularDiffUtil.hasWerZahltAlimenteChanged(updated, original));
+    }
+
+    @Test
+    void hasElternteilVerstorbenOrUnbekanntChangedTest() {
+        final var original = new GesuchFormular()
+            .setFamiliensituation(
+                new Familiensituation()
+                    .setElternteilUnbekanntVerstorben(false)
+            );
+
+        final var updated = new GesuchFormularUpdateDto();
+        final var updatedFamsit = new FamiliensituationUpdateDto();
+        updatedFamsit.setElternteilUnbekanntVerstorben(true);
+        updated.setFamiliensituation(updatedFamsit);
+
+        assertTrue(GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(updated, original));
+
+        updatedFamsit.setElternteilUnbekanntVerstorben(false);
+        assertFalse(GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(updated, original));
+
+        updated.setFamiliensituation(null);
+        assertTrue(GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(updated, original));
+    }
+
+    @Test
+    void hasWohnsitzChangedTest() {
+        final var originalPia = new PersonInAusbildung();
+        originalPia.setWohnsitz(Wohnsitz.FAMILIE);
+        final var original = new GesuchFormular().setPersonInAusbildung(originalPia);
+
+        final var updated = new GesuchFormularUpdateDto();
+        final var updatedPia = new PersonInAusbildungUpdateDto();
+        updatedPia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        updated.setPersonInAusbildung(updatedPia);
+
+        assertTrue(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
+
+        updatedPia.setWohnsitz(Wohnsitz.FAMILIE);
+        assertFalse(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
+
+        updated.setPersonInAusbildung(null);
+        assertTrue(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
     }
 }

@@ -1949,8 +1949,9 @@ components:
                     type: number
                 wohnkosten:
                     type: number
-                personenImHaushalt:
-                    type: number
+                wgWohnend:
+                    description: Required nur wenn Person eigener Haushalt hat
+                    type: boolean
                 verdienstRealisiert:
                     type: boolean
                 willDarlehen:
@@ -1997,7 +1998,7 @@ components:
                     description: Required wenn andere ausbildungNichtGefunden = true
                     type: string
                 alternativeAusbildungsgang:
-                    description: 
+                    description:
                         Required wenn andere ausbildungNichtGefunden = true
                     type: string
         Ausbildungsstaette:
