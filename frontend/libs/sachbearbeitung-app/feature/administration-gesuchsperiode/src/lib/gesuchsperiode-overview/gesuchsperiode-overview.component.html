@@ -69,7 +69,14 @@
         >
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
-        <tr mat-row *matRowDef="let gesuchsperiode; columns: displayedColumns"></tr>
+        <tr
+          mat-row
+          dvSharedUiFocusableListItem
+          tabindex="-1"
+          class="highlightable"
+          *matRowDef="let gesuchsperiode; columns: displayedColumns"
+          [routerLink]="['.', gesuchsperiode.id]"
+        ></tr>
       </table>
     </div>
   }

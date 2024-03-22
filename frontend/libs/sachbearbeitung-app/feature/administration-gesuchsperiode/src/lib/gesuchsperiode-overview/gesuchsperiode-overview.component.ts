@@ -7,9 +7,11 @@ import {
   inject,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
+import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
@@ -20,9 +22,11 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
   imports: [
     CommonModule,
     MatTableModule,
+    RouterLink,
     TranslateModule,
     TranslatedPropertyPipe,
     TypeSafeMatCellDefDirective,
+    SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
   ],
   templateUrl: './gesuchsperiode-overview.component.html',
