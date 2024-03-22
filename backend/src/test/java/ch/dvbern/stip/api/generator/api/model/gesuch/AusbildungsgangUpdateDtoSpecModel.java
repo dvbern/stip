@@ -1,18 +1,16 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.BildungsartDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
-
-import static org.instancio.Select.field;
 
 public class AusbildungsgangUpdateDtoSpecModel {
-    public static final Model<AusbildungsgangUpdateDtoSpec> ausbildungsgangUpdateDtoSpecModel =
-        Instancio.of(AusbildungsgangUpdateDtoSpec.class)
-            .set(field(AusbildungsgangUpdateDtoSpec::getBezeichnungDe), "Bachelor Informatik")
-            .set(field(AusbildungsgangUpdateDtoSpec::getBezeichnungFr), "Bachelor Informatik")
-            .set(field(AusbildungsgangUpdateDtoSpec::getAusbildungsrichtung), BildungsartDtoSpec.UNIVERSITAETEN_ETH)
-            .ignore(field(AusbildungsgangUpdateDtoSpec::getAusbildungsstaetteId))
-            .toModel();
+    public static final AusbildungsgangUpdateDtoSpec ausbildungsgangUpdateDtoSpec =
+        TestUtil.createUpdateDtoSpec(AusbildungsgangUpdateDtoSpec::new, (model, faker) -> {
+            model.setBezeichnungDe("Bachelor Informatik");
+            model.setBezeichnungFr("Bachelor Informatik");
+            model.setAusbildungsrichtung(BildungsartDtoSpec.UNIVERSITAETEN_ETH);
+            model.setAusbildungsstaetteId(AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec.getId());
+            model.setAusbildungsort("Bern");
+        });
 }

@@ -1,17 +1,19 @@
 package ch.dvbern.stip.api.generator.api.model.benutzer;
 
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
+import ch.dvbern.stip.generated.dto.BenutzereinstellungenUpdateDtoSpec;
 
-import static org.instancio.Select.field;
+import java.util.UUID;
 
 public class BenutzerUpdateDtoSpecModel {
-
-    public static final Model<BenutzerUpdateDtoSpec> benutzerUpdateDtoSpecModel =
-        Instancio.of(BenutzerUpdateDtoSpec.class)
-            .set(field(BenutzerUpdateDtoSpec::getVorname), "Fritz")
-            .set(field(BenutzerUpdateDtoSpec::getNachname), "Tester")
-            .set(field(BenutzerUpdateDtoSpec::getSozialversicherungsnummer), "756.1234.5678.97")
-            .toModel();
+    public static final BenutzerUpdateDtoSpec benutzerUpdateDtoSpec =
+        TestUtil.createUpdateDtoSpec(BenutzerUpdateDtoSpec::new, (model, faker) -> {
+            model.setVorname("Fritz");
+            model.setNachname("Tester");
+            model.setSozialversicherungsnummer("756.1234.5678.97");
+            model.setBenutzereinstellungen(new BenutzereinstellungenUpdateDtoSpec());
+            model.getBenutzereinstellungen().setId(UUID.fromString(faker.internet().uuid()));
+            model.getBenutzereinstellungen().setDigitaleKommunikation(faker.bool().bool());
+        });
 }
