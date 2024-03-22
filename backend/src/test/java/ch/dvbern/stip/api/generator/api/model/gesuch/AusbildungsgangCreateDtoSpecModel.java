@@ -14,7 +14,11 @@ public class AusbildungsgangCreateDtoSpecModel {
 			Instancio.of(AusbildungsgangCreateDtoSpec.class)
 					.set(field(AusbildungsgangCreateDtoSpec::getBezeichnungDe), "Bachelor Informatik")
 					.set(field(AusbildungsgangCreateDtoSpec::getBezeichnungFr), "Bachelor Informatik")
-					.set(field(AusbildungsgangCreateDtoSpec::getAusbildungsrichtung), BildungsartDtoSpec.UNIVERSITAETEN_ETH)
-					.set(field(AusbildungsgangCreateDtoSpec::getAusbildungsstaetteId), UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"))
+					.set(
+							field(AusbildungsgangCreateDtoSpec::getAusbildungsrichtung),
+							BildungsartDtoSpec.UNIVERSITAETEN_ETH)
+					.set(
+							field(AusbildungsgangCreateDtoSpec::getAusbildungsstaetteId),
+							UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"))
 					.toModel();
 }

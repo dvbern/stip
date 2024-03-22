@@ -101,11 +101,11 @@ class AusbildungsstaetteResourceTest {
         var ausbildungsstaette = Instancio.of(ausbildungsstaetteUpdateDtoSpecModel).create();
 
         api.updateAusbildungsstaette().ausbildungsstaetteIdPath(UUID.randomUUID())
-                .body(ausbildungsstaette)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.NOT_FOUND.getStatusCode());
+			.body(ausbildungsstaette)
+			.execute(ResponseBody::prettyPeek)
+			.then()
+			.assertThat()
+			.statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     @Test

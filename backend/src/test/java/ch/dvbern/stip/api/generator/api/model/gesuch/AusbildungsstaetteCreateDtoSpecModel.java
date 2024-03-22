@@ -8,8 +8,8 @@ import static org.instancio.Select.field;
 
 public class AusbildungsstaetteCreateDtoSpecModel {
 	public static final Model<AusbildungsstaetteCreateDtoSpec> ausbildungsstaetteCreateDtoSpecModel =
-			Instancio.of(AusbildungsstaetteCreateDtoSpec.class)
-					.set(field(AusbildungsstaetteCreateDtoSpec::getNameDe), "Uni Bern")
-					.set(field(AusbildungsstaetteCreateDtoSpec::getNameFr), "Uni Bern")
-					.toModel();
+		Instancio.of(AusbildungsstaetteCreateDtoSpec.class)
+			.set(field(AusbildungsstaetteCreateDtoSpec::getNameDe), "Uni Bern")
+			.set(field(AusbildungsstaetteCreateDtoSpec::getNameFr), "Uni Bern")
+			.toModel();
 }

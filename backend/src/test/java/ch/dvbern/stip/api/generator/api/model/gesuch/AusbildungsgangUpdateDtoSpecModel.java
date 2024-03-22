@@ -14,8 +14,5 @@ public class AusbildungsgangUpdateDtoSpecModel {
             .set(field(AusbildungsgangUpdateDtoSpec::getBezeichnungFr), "Bachelor Informatik")
             .set(field(AusbildungsgangUpdateDtoSpec::getAusbildungsrichtung), BildungsartDtoSpec.UNIVERSITAETEN_ETH)
             .ignore(field(AusbildungsgangUpdateDtoSpec::getAusbildungsstaetteId))
-//            .set(
-//                field(AusbildungsgangUpdateDtoSpec::getAusbildungsstaetteId),
-//                Instancio.of(AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpecModel).create())
             .toModel();
 }
