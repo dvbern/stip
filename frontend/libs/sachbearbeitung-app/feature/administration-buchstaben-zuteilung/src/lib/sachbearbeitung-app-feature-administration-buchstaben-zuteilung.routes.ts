@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 
 import { SachbearbeiterStore } from '@dv/sachbearbeitung-app/data-access/sachbearbeiter';
 import { OPTION_BUCHSTABEN_ZUTEILUNG } from '@dv/sachbearbeitung-app/model/administration';
-import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 
 import { SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent } from './sachbearbeitung-app-feature-administration-buchstaben-zuteilung/sachbearbeitung-app-feature-administration-buchstaben-zuteilung.component';
 
@@ -20,12 +20,11 @@ export const sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes: R
       },
       providers: [SachbearbeiterStore],
       children: [
-        {
+        routeWithUnsavedChangesGuard({
           path: '',
           component:
             SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent,
-          canDeactivate: [checkUnsavedChanges],
-        },
+        }),
       ],
     },
   ];
