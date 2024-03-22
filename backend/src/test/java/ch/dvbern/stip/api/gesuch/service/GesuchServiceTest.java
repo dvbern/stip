@@ -762,7 +762,7 @@ class GesuchServiceTest {
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
-        MatcherAssert.assertThat(
+        assertThat(
             reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
                 .getGesuchFormular()
                 .getElterns()
