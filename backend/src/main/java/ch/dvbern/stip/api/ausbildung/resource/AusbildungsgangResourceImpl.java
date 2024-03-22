@@ -5,6 +5,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.generated.api.AusbildungsgangResource;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -23,9 +24,9 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
 
     @Override
     @RolesAllowed(ROLE_SACHBEARBEITER)
-    public Response createAusbildungsgang(AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
-        AusbildungsgangDto created = ausbildungsgangService.createAusbildungsgang(ausbildungsgangUpdateDto);
-        return CreatedResponseBuilder.of(created.getId(), AusbildungsgangResource.class).build();
+    public Response createAusbildungsgang(AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        AusbildungsgangDto created = ausbildungsgangService.createAusbildungsgang(ausbildungsgangCreateDto);
+        return Response.ok(created).build();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
     @Override
     @RolesAllowed(ROLE_SACHBEARBEITER)
     public Response updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
-        ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
-        return Response.accepted().build();
+        AusbildungsgangDto updated = ausbildungsgangService.updateAusbildungsgang(ausbildungsgangId, ausbildungsgangUpdateDto);
+        return Response.ok(updated).build();
     }
 }

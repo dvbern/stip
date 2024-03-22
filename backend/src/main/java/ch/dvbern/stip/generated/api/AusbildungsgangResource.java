@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
 import java.util.UUID;
@@ -23,8 +24,8 @@ public interface AusbildungsgangResource {
 
     @POST
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
-    Response createAusbildungsgang(@Valid @NotNull AusbildungsgangUpdateDto ausbildungsgangUpdateDto);
+    @Produces({ "application/json", "text/plain" })
+    Response createAusbildungsgang(@Valid @NotNull AusbildungsgangCreateDto ausbildungsgangCreateDto);
 
     @DELETE
     @Path("/{ausbildungsgangId}")
@@ -39,6 +40,6 @@ public interface AusbildungsgangResource {
     @PUT
     @Path("/{ausbildungsgangId}")
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response updateAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId,@Valid @NotNull AusbildungsgangUpdateDto ausbildungsgangUpdateDto);
 }
