@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -17,8 +19,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -84,10 +84,6 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .getGesuchTrancheToWorkWith().getId();
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung()
