@@ -30,10 +30,12 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternGesuchStepNavComponent {
+  @Output() navClicked = new EventEmitter();
   private store = inject(Store);
 
   stepsSig = input<
     (SharedModelGesuchFormStep & {
+      valid?: boolean;
       disabled: boolean;
     })[]
   >();
@@ -49,11 +51,9 @@ export class SharedPatternGesuchStepNavComponent {
         }),
       })),
   );
-  @Output() navClicked = new EventEmitter();
+  viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
   route = inject(Router);
-
-  viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
   trackByIndex(index: number): number {
     return index;

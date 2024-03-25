@@ -2,11 +2,19 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenDarlehenRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenDarlehenRequiredConstraint, GesuchFormular> {
+    private String property = "";
+
+    @Override
+    public void initialize(EinnahmenKostenDarlehenRequiredConstraint constraintAnnotation) {
+        property = constraintAnnotation.property();
+    }
+
     private static boolean isVolljaehrig(LocalDate geburtsdatum) {
         if (geburtsdatum == null) {
             return false;
@@ -23,7 +31,11 @@ public class EinnahmenKostenDarlehenRequiredConstraintValidator
             return true;
         }
         if (isVolljaehrig(gesuchFormular.getPersonInAusbildung().getGeburtsdatum())) {
-            return gesuchFormular.getEinnahmenKosten().getWillDarlehen() != null;
+            if (gesuchFormular.getEinnahmenKosten().getWillDarlehen() == null) {
+                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+            } else {
+                return true;
+            }
         }
         return true;
     }

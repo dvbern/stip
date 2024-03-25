@@ -8,6 +8,9 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Extends<T, _U extends T> = T;
 
+export const GENERIC_REQUIRED_ERROR =
+  '{jakarta.validation.constraints.NotNull.message}';
+
 export const ValidationError = z.object({
   messageTemplate: z.string(),
   message: z.string(),

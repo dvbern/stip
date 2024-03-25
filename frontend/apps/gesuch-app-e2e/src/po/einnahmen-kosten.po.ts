@@ -89,9 +89,17 @@ export class EinnahmenKostenPO {
       `${einnahmenKosten.ausbildungskostenSekundarstufeZwei ?? 0}`,
     );
 
+    await this.elems.ausbildungskostenTertiaerstufe.fill(
+      `${einnahmenKosten.ausbildungskostenTertiaerstufe ?? 0}`,
+    );
+
     await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
 
     await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
+
+    await this.elems.auswaertigeMittagessenProWoche.fill(
+      `${einnahmenKosten.auswaertigeMittagessenProWoche ?? 0}`,
+    );
 
     await this.elems.personenImHaushalt.fill(
       `${einnahmenKosten.personenImHaushalt ?? 0}`,

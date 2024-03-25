@@ -13,6 +13,7 @@ import { SharedDataAccessGlobalNotificationEvents } from '@dv/shared/data-access
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 const IGNORE_ERRORS = new HttpContextToken<boolean>(() => false);
+const NO_GLOBAL_ERRORS = new HttpContextToken<boolean>(() => false);
 
 /**
  * Set this context to ignore errors in the request error interceptor
@@ -22,6 +23,16 @@ export const shouldIgnoreErrorsIf = (
   context: HttpContext = new HttpContext(),
 ) => {
   return context.set(IGNORE_ERRORS, ignore);
+};
+
+/**
+ * Set this context to ignore global errors in the request error interceptor
+ */
+export const noGlobalErrorsIf = (
+  ignore: boolean,
+  context: HttpContext = new HttpContext(),
+) => {
+  return context.set(NO_GLOBAL_ERRORS, ignore);
 };
 
 export interface DvGlobalHttpErrorInterceptorFnOptions {
@@ -53,12 +64,15 @@ export function withDvGlobalHttpErrorInterceptorFn({
           if (req.context.get(IGNORE_ERRORS)) {
             return of(new HttpResponse({}));
           }
+
           const storableError = JSON.parse(JSON.stringify(error));
-          store.dispatch(
-            SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
-              errors: [sharedUtilFnErrorTransformer(storableError)],
-            }),
-          );
+          if (!req.context.get(NO_GLOBAL_ERRORS)) {
+            store.dispatch(
+              SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
+                errors: [sharedUtilFnErrorTransformer(storableError)],
+              }),
+            );
+          }
 
           if (type === 'globalOnly') {
             return EMPTY; // global errors only. Effects will never fail, no local catchErrors are reached

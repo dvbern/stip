@@ -12,6 +12,7 @@ import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.benutzereinstellungen.repo.BenutzereinstellungenRepository;
+import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
@@ -20,7 +21,6 @@ import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -48,20 +48,19 @@ public class BenutzerService {
         return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
     }
 
-    @SuppressWarnings("java:S1135")
     @Transactional
     public Benutzer getOrCreateCurrentBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
 
         if (keycloakId == null) {
-            // TODO KSTIP-782: use error handling and remove SuppressWarnings
-            throw new BadRequestException();
+            throw AppFailureMessage.missingSubject().create();
         }
+
         Benutzer benutzer = benutzerRepository
             .findByKeycloakId(keycloakId)
             .orElseGet(this::createBenutzerFromJWT);
         benutzer = updateBenutzerTypFromJWT(benutzer);
-        benutzerRepository.persist(benutzer);
+        benutzerRepository.persistAndFlush(benutzer);
 
         return benutzer;
     }
@@ -91,7 +90,7 @@ public class BenutzerService {
         newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
         newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
 
-        benutzerRepository.persist(newBenutzer);
+        benutzerRepository.persistAndFlush(newBenutzer);
         return newBenutzer;
     }
 
@@ -108,11 +107,9 @@ public class BenutzerService {
     public List<BenutzerDto> getAllSachbearbeitendeMitZuordnungStammdaten() {
         List<BenutzerDto> benutzerDtoList =
             benutzerRepository.findByBenutzerTyp(BenutzerTyp.SACHBEARBEITER).map(benutzerMapper::toDto).toList();
-        benutzerDtoList.forEach(benutzerDto -> {
-            sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerDto.getId())
-                .ifPresent(sachbearbeiterZuordnungStammdaten -> benutzerDto.setSachbearbeiterZuordnungStammdaten(
-                    sachbearbeiterZuordnungStammdatenMapper.toDto(sachbearbeiterZuordnungStammdaten)));
-        });
+        benutzerDtoList.forEach(benutzerDto -> sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerDto.getId())
+            .ifPresent(sachbearbeiterZuordnungStammdaten -> benutzerDto.setSachbearbeiterZuordnungStammdaten(
+                sachbearbeiterZuordnungStammdatenMapper.toDto(sachbearbeiterZuordnungStammdaten))));
         return benutzerDtoList;
     }
 

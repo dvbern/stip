@@ -1,5 +1,8 @@
 # Add files here to ignore them from prettier formatting
-/dist
-/coverage
-/.nx/cache
 .angular
+.nx/cache
+coverage
+deploy
+dist
+libs/shared/model/gesuch/src/lib/openapi/
+libs/tooling/nx-plugin/src/generators/lib/files/

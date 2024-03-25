@@ -1,21 +1,41 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.dto.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
-import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
-import org.instancio.Assign;
-import org.instancio.Instancio;
-import org.instancio.Model;
-
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
-import static org.instancio.Select.field;
 
 public final class PersonInAusbildungUpdateDtoSpecModel {
+    public static final PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
+        TestUtil.createUpdateDtoSpec(PersonInAusbildungUpdateDtoSpec::new, (model, faker) -> {
+            model.setAdresse(AdresseSpecModel.adresseDtoSpec);
+            model.setIdentischerZivilrechtlicherWohnsitz(false);
+            model.setNationalitaet(LandDtoSpec.CH);
+            model.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
+            model.setNiederlassungsstatus(null);
+            model.setEmail("valid@mailbucket.dvbern.ch");
+            model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
+            model.setVorname(faker.name().firstName());
+            model.setNachname(faker.name().lastName());
+            model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1, 1)));
+            model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
+            model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
+            model.setAnrede(TestUtil.getRandomElementFromArray(AnredeDtoSpec.values()));
+            model.setTelefonnummer(faker.phoneNumber().cellPhone());
+            model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1980, 1, 1), LocalDate.of(2000, 1, 1)));
+            model.setHeimatort(faker.address().cityName());
+            model.setZivilstand(TestUtil.getRandomElementFromArray(ZivilstandDtoSpec.values()));
+            model.setSozialhilfebeitraege(faker.bool().bool());
+            model.setVormundschaft(faker.bool().bool());
+            model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");
+            model.setIdentischerZivilrechtlicherWohnsitzPLZ("3000");
+            model.setKorrespondenzSprache(TestUtil.getRandomElementFromArray(SpracheDtoSpec.values()));
+        });
 
+<<<<<<< HEAD
     public static final Model<PersonInAusbildungUpdateDtoSpec> personInAusbildungUpdateDtoSpecModel =
         Instancio.of(PersonInAusbildungUpdateDtoSpec.class)
             .set(
@@ -68,4 +88,8 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             .ignore(field(GesuchFormularUpdateDtoSpec::getKinds))
             .ignore(field(GesuchFormularUpdateDtoSpec::getPartner))
             .toModel();
+=======
+    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPersonInAusbildung =
+        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setPersonInAusbildung(personInAusbildungUpdateDtoSpec));
+>>>>>>> feature/KSTIP-919
 }

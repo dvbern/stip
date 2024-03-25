@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -42,7 +43,6 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @Slf4j
 public class GesuchResourceImpl implements GesuchResource {
 
-    private final UriInfo uriInfo;
     private final GesuchService gesuchService;
     private final GesuchDokumentService gesuchDokumentService;
     private final ConfigService configService;
@@ -101,7 +101,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
         GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(created.getId().toString()).build()).build();
+        return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
@@ -193,5 +193,11 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
         return Response.accepted().build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response validateGesuchPages(UUID gesuchId) {
+        return Response.ok(gesuchService.validatePages(gesuchId)).build();
     }
 }

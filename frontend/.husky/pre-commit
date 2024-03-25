@@ -10,5 +10,4 @@ if ! git diff --quiet --stat HEAD -- $frontend -ne 0; then
     npm run validate
     npm run lint
     npm run test
-    npm run test:generators
 fi

@@ -78,5 +78,13 @@
     "@nx/angular:service": {
       "flat": false
     }
-  }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ]
 }

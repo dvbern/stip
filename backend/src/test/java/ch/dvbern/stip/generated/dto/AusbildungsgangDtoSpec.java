@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AusbildungsortDtoSpec;
 import ch.dvbern.stip.generated.dto.BildungsartDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -53,7 +52,7 @@ public class AusbildungsgangDtoSpec {
   private BildungsartDtoSpec ausbildungsrichtung;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
-  private AusbildungsortDtoSpec ausbildungsort;
+  private String ausbildungsort;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID = "ausbildungsstaetteId";
   private UUID ausbildungsstaetteId;
@@ -165,28 +164,28 @@ public class AusbildungsgangDtoSpec {
   }
 
 
-  public AusbildungsgangDtoSpec ausbildungsort(AusbildungsortDtoSpec ausbildungsort) {
+  public AusbildungsgangDtoSpec ausbildungsort(String ausbildungsort) {
     
     this.ausbildungsort = ausbildungsort;
     return this;
   }
 
    /**
-   * Get ausbildungsort
+   * 
    * @return ausbildungsort
   **/
   @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public AusbildungsortDtoSpec getAusbildungsort() {
+  public String getAusbildungsort() {
     return ausbildungsort;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsort(AusbildungsortDtoSpec ausbildungsort) {
+  public void setAusbildungsort(String ausbildungsort) {
     this.ausbildungsort = ausbildungsort;
   }
 

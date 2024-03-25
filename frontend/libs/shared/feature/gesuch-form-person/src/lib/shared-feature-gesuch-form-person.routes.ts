@@ -6,7 +6,7 @@ import {
   sharedDataAccessStammdatenEffects,
   sharedDataAccessStammdatensFeature,
 } from '@dv/shared/data-access/stammdaten';
-import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
+import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person/shared-feature-gesuch-form-person.component';
 
@@ -20,12 +20,11 @@ export const gesuchAppFeatureGesuchFormPersonRoutes: Route[] = [
       provideEffects(sharedDataAccessStammdatenEffects),
     ],
     children: [
-      {
+      routeWithUnsavedChangesGuard({
         path: ':id',
         title: 'shared.person.title',
         component: SharedFeatureGesuchFormPersonComponent,
-        canDeactivate: [checkUnsavedChanges],
-      },
+      }),
       // add more routes here (siblings)
       // it is also possible to add nested routes as children
       // of this feature root component (or even lazy loaded sub features)
