@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public class ElternUpdateDtoSpecModel {
     public static List<ElternUpdateDtoSpec> elternUpdateDtoSpecs(final int amount) {

@@ -772,6 +772,25 @@ class GesuchServiceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
+    void gesuchEinreichenTest() {
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuchFormular()
+            .getAusbildung()
+            .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+
+        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
+
+        assertThat(
+            tranche.getGesuch().getGesuchStatus(),
+            Matchers.is(Gesuchstatus.KOMPLETT_EINGEREICHT)
+        );
+    }
+
+    @Test
     void pageValidation() {
         final var gesuch = new GesuchFormular();
         var reportDto = gesuchService.validatePages(gesuch);
