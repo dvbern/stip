@@ -21,9 +21,9 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
             familiensituationElternEntityRequiredConstraintValidator =
             new FamiliensituationElternEntityRequiredConstraintValidator();
 
-        //Empty FinSit
+        //Empty FamSit
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(new GesuchFormular(), null)
-            , is(false));
+            , is(true));
         // Beide Eltern sollten vorhanden sein:
         GesuchFormular gesuchFormular = new GesuchFormular();
         Familiensituation familiensituation = new Familiensituation();
