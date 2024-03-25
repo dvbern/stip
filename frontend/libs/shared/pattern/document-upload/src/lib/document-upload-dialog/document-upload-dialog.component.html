@@ -34,8 +34,8 @@
         class="mb-2 cdk-visually-hidden"
         type="file"
         tabindex="-1"
-        [attr.accept]="data.store.state.allowedFormats()"
-        [attr.multiple]="data.options.multiple ? 'multiple' : null"
+        [attr.accept]="data.options.allowTypes"
+        [attr.multiple]="data.options.singleUpload ? null : 'multiple'"
         [disabled]="data.store.isLoading()"
         (change)="handleFilInputEvent($event.target)"
       />

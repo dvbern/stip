@@ -5,6 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -13,7 +21,6 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternAbwesenheitsGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
@@ -24,26 +31,15 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
-import org.instancio.Instancio;
 
-import static ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator.gesuchTrancheDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
-import static org.instancio.Select.field;
 
 public final class GesuchGenerator {
     private GesuchGenerator() {
     }
 
     public static GesuchUpdateDto createFullGesuch() {
-        GesuchUpdateDtoSpec gesuchFormular = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
+        GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
         return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
     }
 
@@ -67,7 +63,7 @@ public final class GesuchGenerator {
     }
 
     private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
-        return Instancio.of(lebenslaufItemUpdateDtoSpecModel).create();
+        return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs;
     }
 
     public static Gesuch initGesuch() {
@@ -86,11 +82,9 @@ public final class GesuchGenerator {
     }
 
     private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
-        return Instancio.of(familiensituationUpdateDtoSpecModel)
-            .set(field(FamiliensituationUpdateDtoSpec::getElternVerheiratetZusammen), true)
-            .set(field(FamiliensituationUpdateDtoSpec::getVaterUnbekanntVerstorben), ElternAbwesenheitsGrundDtoSpec.WEDER_NOCH)
-            .set(field(FamiliensituationUpdateDtoSpec::getMutterUnbekanntVerstorben), ElternAbwesenheitsGrundDtoSpec.WEDER_NOCH)
-            .create();
+        final var familienSituationUpdateDto = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec;
+        familienSituationUpdateDto.setElternVerheiratetZusammen(true);
+        return familienSituationUpdateDto;
     }
 
     private static List<ElternUpdateDtoSpec> createElterns() {
@@ -104,37 +98,31 @@ public final class GesuchGenerator {
     }
 
     private static ElternUpdateDtoSpec createEltern() {
-        return Instancio.of(elternUpdateDtoSpecModel).create().get(0);
+        return ElternUpdateDtoSpecModel.elternUpdateDtoSpecs().get(0);
     }
 
     private static PartnerUpdateDtoSpec createPartner() {
-        PartnerUpdateDtoSpec partnerDtoSpec = Instancio.of(partnerUpdateDtoSpecModel).create();
+        PartnerUpdateDtoSpec partnerDtoSpec = PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec;
         return partnerDtoSpec;
     }
 
     private static PersonInAusbildungUpdateDtoSpec createPersonInAusbildung() {
-        PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
-            Instancio.of(personInAusbildungUpdateDtoSpecModel).create();
-        return personInAusbildungUpdateDtoSpec;
+        return PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec;
     }
 
     private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
-        EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = Instancio.of(einnahmenKostenUpdateDtoSpecModel)
-            .set(field(EinnahmenKostenUpdateDtoSpec::getVerdienstRealisiert), false).create();
+        EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec;
+        einnahmenKostenUpdateDto.setVerdienstRealisiert(false);
         return einnahmenKostenUpdateDto;
     }
 
     private static AuszahlungUpdateDtoSpec createAuszahlung() {
-        AuszahlungUpdateDtoSpec auszahlungUpdateDto = Instancio.of(auszahlungUpdateDtoSpecModel)
-            .set(
-                field(AuszahlungUpdateDtoSpec::getIban),
-                TestConstants.IBAN_CH_NUMMER_VALID
-            )
-            .create();
+        AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec;
+        auszahlungUpdateDto.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         return auszahlungUpdateDto;
     }
 
     private static GesuchTrancheUpdateDtoSpec createGesuchTranche() {
-        return Instancio.of(gesuchTrancheDtoSpecModel).create();
+        return GesuchTestSpecGenerator.gesuchTrancheDtoSpec();
     }
 }
