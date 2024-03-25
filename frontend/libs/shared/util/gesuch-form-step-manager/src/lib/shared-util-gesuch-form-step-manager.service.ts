@@ -1,7 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 
 import { AppType, SharedModelCompiletimeConfig } from '@dv/shared/model/config';
-import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
+import {
+  GesuchFormularUpdate,
+  SharedModelGesuchFormularProps,
+} from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
@@ -17,6 +20,7 @@ import {
   PERSON,
   SharedModelGesuchFormStep,
   isStepDisabled,
+  isStepValid,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -51,19 +55,36 @@ const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
 })
 export class SharedUtilGesuchFormStepManagerService {
   private compiletimeConfig = inject(SharedModelCompiletimeConfig);
-  getAllSteps(gesuchFormular: GesuchFormularUpdate | null) {
+  /**
+   * Returns all steps for the current app type
+   *
+   * Adds valid and disabled properties to the steps depending on the formular state
+   */
+  getAllSteps(
+    gesuchFormular: GesuchFormularUpdate | null,
+    invalidProps: SharedModelGesuchFormularProps[] = [],
+  ) {
     const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
       'sachbearbeitung-app': BaseSteps,
       'gesuch-app': [...BaseSteps, ABSCHLUSS],
     };
     return steps[this.compiletimeConfig.appType].map((step) => ({
       ...step,
+      valid: isStepValid(step, gesuchFormular, invalidProps),
       disabled: isStepDisabled(step, gesuchFormular),
     }));
   }
+
+  /**
+   * Returns the total number of steps
+   */
   getTotalSteps(gesuchFormular: GesuchFormularUpdate | null): number {
     return this.getAllSteps(gesuchFormular).length;
   }
+
+  /**
+   * Returns the next step depending on the origin step
+   */
   getNext(origin?: SharedModelGesuchFormStep): SharedModelGesuchFormStep {
     const steps = [...StepFlow[this.compiletimeConfig.appType]].sort(
       (s1, s2) => s1.currentStepNumber - s2.currentStepNumber,

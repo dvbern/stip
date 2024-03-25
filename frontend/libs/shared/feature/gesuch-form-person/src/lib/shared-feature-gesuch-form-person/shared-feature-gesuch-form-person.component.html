@@ -265,11 +265,6 @@
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
           </mat-form-field>
-
-          <!-- Auslaenderausweis -->
-          @if (auslaenderausweisDocumentOptionsSig(); as options) {
-            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-          }
         </div>
 
         <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->
@@ -303,6 +298,11 @@
             >
               <span class="material-symbols-rounded"> info </span>
             </button>
+
+            <!-- Auslaenderausweis -->
+            @if (auslaenderausweisDocumentOptionsSig(); as options) {
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+            }
           </div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {

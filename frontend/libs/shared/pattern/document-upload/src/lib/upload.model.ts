@@ -1,14 +1,16 @@
 import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
 
 export interface DocumentOptions {
-  multiple: boolean;
+  singleUpload: boolean;
   titleKey: string;
   gesuchId: string;
+  allowTypes: string;
   dokumentTyp: DokumentTyp;
 }
 
 export interface DocumentUpload {
   file: Dokument;
+  isTemporary?: boolean;
   progress?: number;
   error?: { translationKey: string; values?: unknown };
 }
@@ -24,5 +26,4 @@ export interface DocumentView extends DocumentUpload {
 export interface DocumentState {
   documents: DocumentUpload[];
   errorKey?: string;
-  allowedFormats: string;
 }

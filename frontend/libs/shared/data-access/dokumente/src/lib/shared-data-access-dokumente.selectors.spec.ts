@@ -16,6 +16,16 @@ describe('selectSharedDataAccessDokumentesView', () => {
       error: undefined,
       readonly: false,
       trancheId: '',
+      cachedGesuchFormular: null,
+      cache: {
+        gesuchFormular: null,
+      },
+      lastUpdate: null,
+      validations: [],
+      invalidFormularProps: {
+        lastUpdate: null,
+        validations: [],
+      },
     };
     const result = selectSharedDataAccessDokumentesView.projector(
       state,

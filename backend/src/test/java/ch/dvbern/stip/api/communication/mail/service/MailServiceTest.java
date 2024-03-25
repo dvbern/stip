@@ -1,13 +1,7 @@
 package ch.dvbern.stip.api.communication.mail.service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import ch.dvbern.stip.api.common.i18n.StipEmailMessages;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.ext.mail.MailMessage;
@@ -16,6 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,22 +127,22 @@ class MailServiceTest {
 
     @Test
     void sendEingereichtTemplate() {
-        mailService.sendGesuchEingereichtEmail("", "", TEST_EMAIL, Locale.GERMAN);
+        mailService.sendGesuchEingereichtEmail("", "", TEST_EMAIL, AppLanguages.DE);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
         MailMessage actual = sent.get(0);
         actual.getSubject();
         assertThat(actual.getSubject()).isNotBlank();
-        assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.EINGEREICHT.getMessage());
+        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle().forAppLanguage(AppLanguages.DE).translate("stip.gesuch.eingereicht"));
         assertThat(actual.getHtml()).contains(TEST_EMAIL_DE_STRING);
 
-        mailService.sendGesuchEingereichtEmail("", "", TEST_EMAIL, Locale.FRENCH);
+        mailService.sendGesuchEingereichtEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
         sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(2, sent.size());
         actual = sent.get(1);
         actual.getSubject();
         assertThat(actual.getSubject()).isNotBlank();
-        assertThat(actual.getSubject()).isNotEqualTo(StipEmailMessages.EINGEREICHT.getMessage());
+        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle().forAppLanguage(AppLanguages.FR).translate("stip.gesuch.eingereicht"));
         assertThat(actual.getHtml()).doesNotContain(TEST_EMAIL_DE_STRING);
     }
 }

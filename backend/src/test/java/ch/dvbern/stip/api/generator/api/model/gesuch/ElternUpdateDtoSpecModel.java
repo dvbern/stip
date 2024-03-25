@@ -17,7 +17,7 @@ import static org.instancio.Select.field;
 public class ElternUpdateDtoSpecModel {
 
     public static final Model<List<ElternUpdateDtoSpec>> elternUpdateDtoSpecModel =
-        Instancio.ofList(ElternUpdateDtoSpec.class).size(1)
+        Instancio.ofList(ElternUpdateDtoSpec.class).size(2)
             .ignore(field(ElternUpdateDtoSpec::getId))
             .set(field(ElternUpdateDtoSpec::getAdresse), Instancio.create(AdresseSpecModel.adresseSpecModel))
             .set(

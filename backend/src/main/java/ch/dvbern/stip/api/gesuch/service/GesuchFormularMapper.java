@@ -110,6 +110,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
                     newFormular.getEinnahmenKosten() != null) {
                         newFormular.getEinnahmenKosten().setWohnkosten(null);
+                        newFormular.getEinnahmenKosten().setWgWohnend(null);
                 }
             }
         );
