@@ -1,37 +1,21 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import ch.dvbern.stip.api.util.TestConstants;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
-
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
-import static org.instancio.Select.field;
+import ch.dvbern.stip.generated.dto.KontoinhaberDtoSpec;
 
 public final class AuszahlungUpdateDtoSpecModel {
+    public static final AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec =
+        TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model, faker) -> {
+            model.setAdresse(AdresseSpecModel.adresseDtoSpec);
+            model.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
+            model.setVorname(faker.name().firstName());
+            model.setNachname(faker.name().lastName());
+            model.setKontoinhaber(TestUtil.getRandomElementFromArray(KontoinhaberDtoSpec.values()));
+        });
 
-    public static final Model<AuszahlungUpdateDtoSpec> auszahlungUpdateDtoSpecModel =
-        Instancio.of(AuszahlungUpdateDtoSpec.class)
-            .set(field(AuszahlungUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
-            .set(field(AuszahlungUpdateDtoSpec::getIban), TestConstants.IBAN_CH_NUMMER_VALID)
-            .toModel();
-
-    public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecAuszahlungModel =
-        Instancio.of(
-                GesuchFormularUpdateDtoSpec.class)
-            .set(
-                field(GesuchFormularUpdateDtoSpec::getAuszahlung),
-                Instancio.create(auszahlungUpdateDtoSpecModel)
-            )
-            .ignore(field(GesuchFormularUpdateDtoSpec::getFamiliensituation))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getElterns))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getGeschwisters))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getLebenslaufItems))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getAusbildung))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getKinds))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getPartner))
-            .toModel();
+    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAuszahlung =
+        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec));
 }
