@@ -25,6 +25,7 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { extractIBAN } from 'ibantools';
+import { distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -34,6 +35,7 @@ import {
   Kontoinhaber,
   MASK_IBAN,
   PersonInAusbildungUpdate,
+  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNGEN } from '@dv/shared/model/gesuch-form';
 import {
@@ -82,7 +84,6 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
 
   MASK_IBAN = MASK_IBAN;
-  language = 'de';
   step = AUSZAHLUNGEN;
 
   form = this.fb.group({
@@ -112,7 +113,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     const kontoinhaberinChangesSig = toSignal(
-      this.form.controls.kontoinhaber.valueChanges,
+      this.form.controls.kontoinhaber.valueChanges.pipe(
+        distinctUntilChanged(),
+        shareReplay({ bufferSize: 1, refCount: true }),
+      ),
     );
 
     effect(
@@ -120,12 +124,19 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         const { gesuchFormular } = this.view();
         if (isDefined(gesuchFormular)) {
           const initalValue = gesuchFormular.auszahlung;
-          this.form.patchValue({
-            ...initalValue,
-            iban: initalValue?.iban?.substring(2), // Land-Prefix loeschen
-          });
-        } else {
-          this.form.reset();
+          this.form.patchValue(
+            {
+              ...initalValue,
+              iban: initalValue?.iban?.substring(2), // Land-Prefix loeschen
+            },
+            { emitEvent: false },
+          );
+          if (initalValue) {
+            this.handleKontoinhaberinChanged(
+              initalValue?.kontoinhaber,
+              gesuchFormular,
+            );
+          }
         }
       },
       { allowSignalWrites: true },
@@ -134,38 +145,14 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     effect(
       () => {
         const kontoinhaberin = kontoinhaberinChangesSig();
-        const { gesuchFormular } = this.view();
-        this.language = this.languageSig();
-        this.form.reset(
-          {
-            kontoinhaber: kontoinhaberin,
-          },
-          { emitEvent: false },
-        );
-        switch (kontoinhaberin) {
-          case Kontoinhaber.GESUCHSTELLER:
-            this.setValuesFrom(gesuchFormular?.personInAusbildung);
-            this.disableNameAndAdresse();
-            break;
-          case Kontoinhaber.VATER: {
-            this.setValuesFrom(
-              calculateElternSituationGesuch(gesuchFormular).vater,
-            );
-            this.disableNameAndAdresse();
-            break;
-          }
-          case Kontoinhaber.MUTTER:
-            this.setValuesFrom(
-              calculateElternSituationGesuch(gesuchFormular).mutter,
-            );
-            this.disableNameAndAdresse();
-            break;
-          case Kontoinhaber.ANDERE:
-          case Kontoinhaber.SOZIALDIENST_INSTITUTION:
-          default:
-            this.enableNameAndAdresse();
-            break;
+        if (kontoinhaberin === undefined) {
+          return;
         }
+        const { gesuchFormular } = this.view();
+        this.form.reset({
+          kontoinhaber: kontoinhaberin,
+        });
+        this.handleKontoinhaberinChanged(kontoinhaberin, gesuchFormular);
       },
       { allowSignalWrites: true },
     );
@@ -223,16 +210,49 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     return index;
   }
 
+  private handleKontoinhaberinChanged(
+    kontoinhaberin: Kontoinhaber,
+    gesuchFormular: SharedModelGesuchFormular | null,
+  ): void {
+    switch (kontoinhaberin) {
+      case Kontoinhaber.GESUCHSTELLER:
+        this.setValuesFrom(gesuchFormular?.personInAusbildung);
+        this.disableNameAndAdresse();
+        break;
+      case Kontoinhaber.VATER: {
+        this.setValuesFrom(
+          calculateElternSituationGesuch(gesuchFormular).vater,
+        );
+        this.disableNameAndAdresse();
+        break;
+      }
+      case Kontoinhaber.MUTTER:
+        this.setValuesFrom(
+          calculateElternSituationGesuch(gesuchFormular).mutter,
+        );
+        this.disableNameAndAdresse();
+        break;
+      case Kontoinhaber.ANDERE:
+      case Kontoinhaber.SOZIALDIENST_INSTITUTION:
+      default:
+        this.enableNameAndAdresse();
+        break;
+    }
+  }
+
   private setValuesFrom(
     valuesFrom: PersonInAusbildungUpdate | ElternUpdate | undefined,
   ): void {
     if (valuesFrom) {
-      this.form.patchValue({
-        ...valuesFrom,
-        adresseId: valuesFrom.adresse?.id,
-      });
+      this.form.patchValue(
+        {
+          ...valuesFrom,
+          adresseId: valuesFrom.adresse?.id,
+        },
+        { emitEvent: false },
+      );
     } else {
-      this.form.reset();
+      this.form.reset(undefined, { emitEvent: false });
     }
   }
 
