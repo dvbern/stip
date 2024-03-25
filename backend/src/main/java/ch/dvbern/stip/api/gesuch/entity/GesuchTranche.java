@@ -37,7 +37,7 @@ public class GesuchTranche extends AbstractEntity {
     private @Valid GesuchFormular gesuchFormular;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_tranche_gesuch_id"), nullable = false)
     private Gesuch gesuch;
 }
