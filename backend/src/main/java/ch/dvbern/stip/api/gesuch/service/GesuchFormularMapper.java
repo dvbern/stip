@@ -27,7 +27,6 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -55,7 +54,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
      * partial update mapper for the Gesuchssteller
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "partner", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
         @MappingTarget GesuchFormular gesuchFormular);
