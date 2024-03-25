@@ -187,6 +187,7 @@
   "shared.form.education.form.error.monthYearAfter": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
+  "shared.form.person.file.AUSBILDUNGSSTAETTE": "Confirmation de la centre de formation",
 
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",
@@ -212,6 +213,7 @@
   "shared.form.familiensituation.obhutsaufteilung.label": "Répartition de la garde",
   "shared.form.familiensituation.obhutsaufteilung.mutter": "Mère",
   "shared.form.familiensituation.obhutsaufteilung.vater": "Père",
+  "shared.form.familiensituation.file.ALIMENTENREGELUNG": "Règlement de la pension alimentaire",
 
   "shared.eltern.title": "Parent",
   "shared.form.eltern.mutter.title": "mère",

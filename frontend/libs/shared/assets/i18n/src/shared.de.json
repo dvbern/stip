@@ -188,6 +188,7 @@
   "shared.form.education.form.error.monthYearAfter": "Das Enddatum muss nach dem {{ date }} sein",
   "shared.form.education.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
   "shared.form.education.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
+  "shared.form.person.file.AUSBILDUNGSSTAETTE": "Bestätigung der Ausbildungsstätte",
 
   "shared.familiensituation.title": "Familiensituation",
   "shared.form.familiensituation.mutter": "Mutter",
@@ -213,6 +214,12 @@
   "shared.form.familiensituation.obhutsaufteilung.label": "Obhutsaufteilung",
   "shared.form.familiensituation.obhutsaufteilung.mutter": "Mutter",
   "shared.form.familiensituation.obhutsaufteilung.vater": "Vater",
+  "shared.form.familiensituation.file.ALIMENTENREGELUNG": "Gerichtliche Alimentenregelung oder Unterhaltsvertrag",
+  "shared.form.familiensituation.file.GEBURTSSCHEIN": "Geburtsschein",
+  "shared.form.familiensituation.file.VATERSCHAFTSANERKENNUNG": "Vaterschaftsanerkennung",
+  "shared.form.familiensituation.file.TRENNUNGKONVENTION": "Trennungsvereinbarung oder Scheidungsurteil",
+  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_VATER": "Begründungsschreiben",
+  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER": "Begründungsschreiben",
 
   "shared.eltern.title": "Eltern",
   "shared.form.eltern.mutter.title": "Angaben Mutter",

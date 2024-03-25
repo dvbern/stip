@@ -1,4 +1,4 @@
-@if (view().loading) {
+@if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-family-loading"></dv-shared-ui-loading>
 } @else {
   <form [formGroup]="form" data-testid="form-family-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
@@ -45,7 +45,7 @@
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
           [@inOutPaneAnimation]="stateSig()['ALIMENTENREGELUNG'] ?? 'hidden'"
         >
-          <div class="row g-4 mt-3">
+          <div class="row g-4 mt-3 flex-nowrap">
             <mat-radio-group
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
@@ -64,6 +64,19 @@
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
             </mat-radio-group>
+
+            @if (vaterschaftsanerkennungDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+            @if (trennungsvereinbarungDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
           </div>
           @if (form.controls.werZahltAlimente.enabled) {
             <div class="row g-4 mt-3 col-xl-8">
@@ -168,7 +181,7 @@
             </div>
           }
           @if (form.controls.mutterUnbekanntGrund.enabled) {
-            <div class="row g-4 mt-3">
+            <div class="row g-4 mt-3 flex-nowrap">
               <mat-radio-group
                 formControlName="mutterUnbekanntGrund"
                 data-testid="form-family-mutterUnbekanntGrund"
@@ -198,6 +211,13 @@
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
               </mat-radio-group>
+
+              @if (mutterUnbekanntDocumentSig(); as options) {
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+              }
             </div>
           }
           @if (
@@ -276,6 +296,25 @@
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
               </mat-radio-group>
+
+              @if (vaterUnbekanntDocumentSig(); as options) {
+                <div class="d-flex gap-2 align-items-center">
+                  <dv-shared-pattern-document-upload
+                    class="flex-shrink-1"
+                    [optionsSig]="options"
+                  ></dv-shared-pattern-document-upload>
+                  <label>{{ 'shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_VATER' | translate }}</label>
+                </div>
+              }
+              @if (geburstscheinDocumentSig(); as options) {
+                <div class="d-flex gap-2 align-items-center">
+                  <dv-shared-pattern-document-upload
+                    class="flex-shrink-1"
+                    [optionsSig]="options"
+                  ></dv-shared-pattern-document-upload>
+                  <label>{{ 'shared.form.familiensituation.file.GEBURTSSCHEIN' | translate }}</label>
+                </div>
+              }
             </div>
           }
           @if (
@@ -370,7 +409,7 @@
     </div>
     <!-- buttons -->
     <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
-      @if (!view().readonly) {
+      @if (!viewSig().readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>
