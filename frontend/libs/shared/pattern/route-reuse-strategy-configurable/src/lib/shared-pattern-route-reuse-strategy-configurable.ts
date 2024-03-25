@@ -23,9 +23,6 @@ export function provideSharedPatternRouteReuseStrategyConfigurable() {
 }
 
 export class SharedPatternRouteReuseStrategyConfigurable extends BaseRouteReuseStrategy {
-  constructor() {
-    super();
-  }
   override shouldReuseRoute(
     future: ActivatedRouteSnapshot,
     curr: ActivatedRouteSnapshot,

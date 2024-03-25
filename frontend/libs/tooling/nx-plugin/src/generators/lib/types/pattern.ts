@@ -9,7 +9,6 @@ import { updateTsConfig } from './helpers/tsconfig';
 export function patternTypeFactory(
   options: NormalizedSchema,
 ): LibTypeGenerator {
-  const { scope } = options;
   return {
     libGenerator: libraryGenerator,
     libDefaultOptions: {
