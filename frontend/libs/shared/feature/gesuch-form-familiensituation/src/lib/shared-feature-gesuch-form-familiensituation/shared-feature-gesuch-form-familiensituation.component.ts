@@ -251,15 +251,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
       : null;
   });
 
-  // For childern PIA
-  // gerichtilcheAlimentenregelungDocumentSig = this.createUploadOptionsSig(() => {
-  //
-  //
-  //   return gerichtlicheAlimentenregelung
-  //     ? DokumentTyp.FAMILIENSITUATION_ALIMENTENREGELUNG
-  //     : null;
-  // });
-
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormFamiliensituation.init());
   }

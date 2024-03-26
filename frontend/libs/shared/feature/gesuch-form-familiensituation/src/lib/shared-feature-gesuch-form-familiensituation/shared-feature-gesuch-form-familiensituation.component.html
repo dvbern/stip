@@ -45,7 +45,7 @@
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
           [@inOutPaneAnimation]="stateSig()['ALIMENTENREGELUNG'] ?? 'hidden'"
         >
-          <div class="row g-4 mt-3 flex-nowrap">
+          <div class="row g-4 mt-3">
             <mat-radio-group
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
@@ -66,16 +66,22 @@
             </mat-radio-group>
 
             @if (vaterschaftsanerkennungDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
+              <div class="d-flex gap-2 align-items-center">
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+                <label>{{ 'shared.form.familiensituation.file.VATERSCHAFTSANERKENNUNG' | translate }}</label>
+              </div>
             }
             @if (trennungsvereinbarungDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
+              <div class="d-flex gap-2 align-items-center">
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+                <label>{{ 'shared.form.familiensituation.file.TRENNUNGSKONVENTION' | translate }}</label>
+              </div>
             }
           </div>
           @if (form.controls.werZahltAlimente.enabled) {
