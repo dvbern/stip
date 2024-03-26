@@ -347,6 +347,7 @@
   "shared.form.gesuchsperiode.bezeichnungDe.label":"Désignation (DE)",
   "shared.form.gesuchsperiode.bezeichnungFr.label": "Désignation (FR)",
   "shared.form.gesuchsperiode.fiskaljahr.label": "Année fiscale",
+  "shared.form.gesuchsperiode.gesuchsjahr.label": "Année de la demande",
   "shared.form.gesuchsperiode.gesuchsperiodeStart.label":"Période de demande Début",
   "shared.form.gesuchsperiode.gesuchsperiodeStopp.label": "Période de demande Arrêt",
   "shared.form.gesuchsperiode.aufschaltterminStart.label":"Date de mise en service Début",
@@ -392,6 +393,10 @@
   "shared.form.gesuchsperiode.FB_5+Pers.label":"FB_5+Pers",
   "shared.form.gesuchsperiode.einreichefristNormal.info": "Date limite de dépôt pour une bourse complète",
   "shared.form.gesuchsperiode.einreichefristReduziert.info":"Date limite de dépôt des demandes de bourses réduites",
+
+  "shared.form.gesuchsjahr.bezeichnungDe.label": "Désignation(DE)",
+  "shared.form.gesuchsjahr.bezeichnungFr.label": "Désignation(FR)",
+  "shared.form.gesuchsjahr.jahr.label": "Année",
 
   "shared.abschluss.title": "Validation",
   "shared.form.abschluss.notReady": "Vous ne pouvez valider la demande que lorsque vous avez rempli tous les champs obligatoires.",

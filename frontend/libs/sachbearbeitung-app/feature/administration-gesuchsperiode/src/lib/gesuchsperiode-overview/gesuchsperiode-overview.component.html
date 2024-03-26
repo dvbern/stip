@@ -79,5 +79,81 @@
         ></tr>
       </table>
     </div>
+
+    <div class="mt-4 shadow rounded-4 overflow-hidden">
+      <table mat-table [dataSource]="source">
+        <caption class="cdk-visually-hidden">
+          {{
+            'sachbearbeitung-app.admin.gesuchsjahr.table.description' | translate
+          }}
+        </caption>
+
+        <ng-container matColumnDef="bezeichnung">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: source" class="fw-bold">
+            {{ gesuchsjahr | translatedProp: 'bezeichnung' : translate.currentLang }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gesuchsjahr">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let ausbilduingsjahr; dataSource: source">
+            {{ ausbilduingsjahr.ausbildungsjahr }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.status' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: source">
+            {{ gesuchsjahr.status }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gesuchsjahr">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.gesuchsjahr' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: source">
+            {{ gesuchsjahr.gesuchsjahr }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <button type="button" class="btn btn-outline-dark d-flex lh-1 align-items-center">
+              <i class="material-symbols-rounded fs-5 me-2">add</i>
+              {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.erstellen' | translate }}
+            </button>
+          </th>
+          <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: source">
+            <div class="d-flex">
+              <button
+                type="button"
+                class="btn btn-link me-2"
+                [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | translate: gesuchsjahr"
+              >
+                <i class="material-symbols-rounded fs-5">delete</i>
+              </button>
+            </div>
+          </td></ng-container
+        >
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+        <tr
+          mat-row
+          dvSharedUiFocusableListItem
+          tabindex="-1"
+          class="highlightable"
+          *matRowDef="let gesuchsjahr; columns: displayedColumns"
+          [routerLink]="['.', gesuchsjahr.id]"
+        ></tr>
+      </table>
+    </div>
   }
 }

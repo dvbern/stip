@@ -347,6 +347,7 @@
   "shared.form.gesuchsperiode.bezeichnungDe.label": "Bezeichnung (DE)",
   "shared.form.gesuchsperiode.bezeichnungFr.label": "Bezeichnung (FR)",
   "shared.form.gesuchsperiode.fiskaljahr.label": "Fiskaljahr",
+  "shared.form.gesuchsperiode.gesuchsjahr.label": "Gesuchsjahr",
   "shared.form.gesuchsperiode.gesuchsperiodeStart.label": "Gesuchsperiode Start",
   "shared.form.gesuchsperiode.gesuchsperiodeStopp.label": "Gesuchsperiode Stopp",
   "shared.form.gesuchsperiode.aufschaltterminStart.label": "Aufschalttermin Start",
@@ -392,6 +393,10 @@
   "shared.form.gesuchsperiode.FB_5+Pers.label": "FB_5+Pers",
   "shared.form.gesuchsperiode.einreichefristNormal.info": "Einreichefrist für volles Stipendium",
   "shared.form.gesuchsperiode.einreichefristReduziert.info": "Einreichefrist für reduziertes Stipendium",
+
+  "shared.form.gesuchsjahr.bezeichnungDe.label": "Bezeichnung(DE)",
+  "shared.form.gesuchsjahr.bezeichnungFr.label": "Bezeichnung(FR)",
+  "shared.form.gesuchsjahr.jahr.label": "Jahr",
 
   "shared.abschluss.title": "Freigabe",
   "shared.form.abschluss.notReady": "Sie können das Gesuch erst freigeben wenn sie alle Pflichfelder ausgefüllt haben.",

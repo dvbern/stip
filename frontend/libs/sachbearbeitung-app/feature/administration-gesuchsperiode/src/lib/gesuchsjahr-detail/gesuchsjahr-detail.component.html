@@ -1,0 +1,42 @@
+<form [formGroup]="form" data-testid="form-gesuchsjahr-form" (ngSubmit)="handleSave()" novalidate class="mt-4">
+  <h2 class="pt-5 mb-4 m-lg-2">
+    {{ 'shared.form.gesuchsjahr.metaDaten.title' | translate }}
+  </h2>
+
+  <div class="row g-4 m-lg-2">
+    <div class="row g-4 mt-1 m-lg-2">
+      <!-- BezeichnungDe -->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
+        <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | translate }}</mat-label>
+        <input formControlName="bezeichnungDe" data-testid="form-gesuchsjahr-bezeichnungDe" matInput type="text" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <!-- BezeichnungFr -->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
+        <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | translate }}</mat-label>
+        <input formControlName="bezeichnungFr" data-testid="form-gesuchsjahr-bezeichnungFr" matInput type="text" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row g-4 mt-1 m-lg-2">
+      <!-- Jahr -->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
+        <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | translate }}</mat-label>
+        <input formControlName="jahr" data-testid="form-gesuchsjahr-jahr" matInput type="text" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <dv-shared-ui-step-form-buttons>
+      <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+        {{ 'shared.form.save-and-continue' | translate }}
+      </button>
+    </dv-shared-ui-step-form-buttons>
+  </div>
+</form>

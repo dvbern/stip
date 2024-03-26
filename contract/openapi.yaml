@@ -2384,6 +2384,7 @@ components:
                 - bezeichnungDe
                 - bezeichnungFr
                 - fiskaljahr
+                - gesuchsjahr
                 - gesuchsperiodeStart
                 - gesuchsperiodeStopp
                 - aufschaltterminStart
@@ -2431,6 +2432,9 @@ components:
                     description: ''
                     type: string
                 fiskaljahr:
+                    description: ''
+                    type: string
+                gesuchsjahr:
                     description: ''
                     type: string
                 gesuchsperiodeStart:

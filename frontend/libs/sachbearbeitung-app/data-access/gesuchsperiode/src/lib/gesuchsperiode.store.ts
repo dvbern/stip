@@ -9,6 +9,7 @@ import {
 import { BehaviorSubject, lastValueFrom, map, of, take } from 'rxjs';
 
 import {
+  Gesuchsjahr,
   Gesuchsperiode,
   GesuchsperiodeDaten,
   GesuchsperiodeService,
@@ -21,6 +22,7 @@ import {
 type GesuchsperiodeState = {
   gesuchsperioden: Gesuchsperiode[];
   currentGesuchsperiode?: GesuchsperiodeDaten;
+  currentGesuchsJahr?: Gesuchsjahr;
   hasLoadedOnce: boolean;
   loading: boolean;
   error?: string;
@@ -153,6 +155,7 @@ const ____mockdata: GesuchsperiodeDaten = {
   f_Vermoegensfreibetrag: 0,
   f_VermogenSatzAngerechnet: 0,
   fiskaljahr: 'awd',
+  gesuchsjahr: 'afn',
   gesuchsperiodeStart: new Date().toISOString(),
   gesuchsperiodeStopp: new Date().toISOString(),
   integrationszulage: 0,

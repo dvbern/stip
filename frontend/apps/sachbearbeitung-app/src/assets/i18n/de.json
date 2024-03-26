@@ -30,6 +30,18 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Gesuchsperiode erstellen",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Gesuchsperiode",
 
+
+  "sachbearbeitung-app.admin.gesuchsjahr.table.description": "Übersicht aller Gesuchsjahrn",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung": "Bezeichnung",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr": "Ausbilduingsjahr",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.status": "Status",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.technischesJahr": "Technisches Jahr",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.erstellen": "Erstellen",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.loeschen": "\"{{ bezeichnungDe }}\" löschen",
+  "sachbearbeitung-app.admin.gesuchsjahr.route.overview": "Geuschsjahr/Gesuchsjahrn Übersicht",
+  "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Gesuchsjahr erstellen",
+  "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Gesuchsperiode",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",

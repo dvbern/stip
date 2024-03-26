@@ -74,6 +74,7 @@ export class GesuchsperiodeDetailComponent implements OnInit {
     bezeichnungDe: [<string | null>null, [Validators.required]],
     bezeichnungFr: [<string | null>null, [Validators.required]],
     fiskaljahr: [<string | null>null, [Validators.required]],
+    gesuchsjahr: [<string | null>null, [Validators.required]],
     gesuchsperiodeStart: [<string | null>null, [Validators.required]],
     gesuchsperiodeStopp: [<string | null>null, [Validators.required]],
     aufschaltterminStart: [<string | null>null, [Validators.required]],
