@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.common.util.FileUtil;
+import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -16,7 +17,6 @@ import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -25,7 +25,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
@@ -57,12 +56,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
-
-        if (fileUpload.fileName() == null || fileUpload.fileName().isEmpty()) {
-            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
-        }
-
-        if (fileUpload.contentType() == null || fileUpload.contentType().isEmpty()) {
+        if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
@@ -99,9 +93,26 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
-    public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
-        GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
-        return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
+    public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
+        DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
+        return RestMulti.fromUniResponse(
+            Uni.createFrom().completionStage(() -> s3.getObject(
+                gesuchDokumentService.buildGetRequest(
+                    configService.getBucketName(),
+                    dokumentDto.getObjectId()
+                ),
+                AsyncResponseTransformer.toPublisher()
+            )),
+            response -> Multi.createFrom()
+                .safePublisher(AdaptersToFlow.publisher(response))
+                .map(GesuchResourceImpl::toBuffer),
+            response -> Map.of(
+                "Content-Disposition",
+                List.of("attachment;filename=" + dokumentDto.getFilename()),
+                "Content-Type",
+                List.of("application/octet-stream")
+            )
+        );
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
@@ -109,6 +120,13 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
         gesuchDokumentService.deleteDokument(dokumentId);
         return Response.noContent().build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
+        GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
+        return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
@@ -130,30 +148,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response gesuchEinreichenValidieren(UUID gesuchId) {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
-    }
-
-    @Override
-    @Blocking
-    public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
-        DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
-        return RestMulti.fromUniResponse(
-            Uni.createFrom().completionStage(() -> s3.getObject(
-                gesuchDokumentService.buildGetRequest(
-                    configService.getBucketName(),
-                    dokumentDto.getObjectId()
-                ),
-                AsyncResponseTransformer.toPublisher()
-            )),
-            response -> Multi.createFrom()
-                .safePublisher(AdaptersToFlow.publisher(response))
-                .map(GesuchResourceImpl::toBuffer),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + dokumentDto.getFilename()),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
-        );
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })

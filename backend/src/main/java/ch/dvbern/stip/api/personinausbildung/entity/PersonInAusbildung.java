@@ -24,6 +24,8 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
+import ch.dvbern.stip.api.common.validation.RequiresDocumentIf;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -117,6 +119,18 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
+    @RequiresDocumentIf(
+        valueIs = {
+            "AUFENTHALTSBEWILLIGUNG_B",
+            "NIEDERLASSUNGSBEWILLIGUNG_C",
+            "FLUECHTLING"
+        },
+        documentTypes = {
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+        }
+    )
     private Niederlassungsstatus niederlassungsstatus;
 
     @Column(nullable = true)

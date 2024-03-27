@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.util;
 
+import java.util.Collection;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,18 @@ public class GesuchValidatorUtil {
         context.buildConstraintViolationWithTemplate(template)
             .addPropertyNode(property)
             .addConstraintViolation();
+
+        return false;
+    }
+
+    public boolean addProperty(
+        final @Nullable ConstraintValidatorContext context,
+        final @NotNull String template,
+        final @NotNull Collection<String> properties
+    ) {
+        for (final var property : properties) {
+            addProperty(context, template, property);
+        }
 
         return false;
     }
