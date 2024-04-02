@@ -86,7 +86,6 @@ public class GesuchService {
 
     private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
-
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
