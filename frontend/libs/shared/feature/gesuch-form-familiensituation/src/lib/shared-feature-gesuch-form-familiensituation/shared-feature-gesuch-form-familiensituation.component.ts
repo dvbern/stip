@@ -13,7 +13,6 @@ import {
   Component,
   ElementRef,
   OnInit,
-  Signal,
   WritableSignal,
   effect,
   inject,
@@ -215,31 +214,23 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
       : null;
   });
 
-  vaterschaftsanerkennungDocumentSig = this.createUploadOptionsSig(() => {
-    const gerichtlicheAlimentenregelung =
-      this.gerichtlicheAlimentenregelungSig();
-
-    return gerichtlicheAlimentenregelung
-      ? DokumentTyp.FAMILIENSITUATION_VATERSCHAFTSANERKENNUNG
-      : null;
-  });
-
   vaterUnbekanntDocumentSig = this.createUploadOptionsSig(() => {
     const vaterUnbekanntGrund = this.vaterUnbekanntGrundSig();
 
-    return vaterUnbekanntGrund ===
+    if (
+      vaterUnbekanntGrund ===
       ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT
-      ? DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
-      : null;
-  });
+    ) {
+      return DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER;
+    }
 
-  geburstscheinDocumentSig = this.createUploadOptionsSig(() => {
-    const vaterUnbekanntGrund = this.vaterUnbekanntGrundSig();
+    if (
+      vaterUnbekanntGrund === ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG
+    ) {
+      return DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN;
+    }
 
-    return vaterUnbekanntGrund ===
-      ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT
-      ? DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
-      : null;
+    return null;
   });
 
   mutterUnbekanntDocumentSig = this.createUploadOptionsSig(() => {

@@ -9,6 +9,8 @@ export const selectSharedFeatureGesuchFormPartnerView = createSelector(
   (gesuchsView, stammdatenView) => ({
     loading: gesuchsView.loading || stammdatenView.loading,
     gesuch: gesuchsView.gesuch,
+    gesuchId: gesuchsView.gesuch?.id,
+    allowTypes: gesuchsView.allowTypes,
     gesuchFormular: gesuchsView.gesuchFormular,
     laender: stammdatenView.laender,
     readonly: gesuchsView.readonly,

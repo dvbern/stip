@@ -51,7 +51,7 @@
             @if (form.controls.ausbildungsstaette.value) {
               <button
                 type="button"
-                matSuffixdb
+                matSuffix
                 mat-icon-button
                 aria-label="Clear"
                 (click)="form.controls.ausbildungsstaette.reset()"
@@ -69,10 +69,6 @@
               }
             </mat-autocomplete>
           </mat-form-field>
-
-          @if (ausbildungsStaetteDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-          }
         </div>
       } @else {
         <!-- Alternatives AUSBILDUNGSLAND -->

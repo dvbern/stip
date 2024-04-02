@@ -32,9 +32,14 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
+  DokumentTyp,
   GeschwisterUpdate,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -79,6 +84,7 @@ const MEDIUM_AGE = 20;
     MaskitoModule,
     SharedUiWohnsitzSplitterComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -133,6 +139,22 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
 
   showWohnsitzSplitterSig = computed(() => {
     return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+  });
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
+  ausbildungssituationSig = toSignal(
+    this.form.controls.ausbildungssituation.valueChanges,
+  );
+
+  ausbildungssituationDocumetSig = this.createUploadOptionsSig(() => {
+    const ausbildungssituation = this.ausbildungssituationSig();
+
+    console.log('ausbildungssituation', ausbildungssituation);
+
+    return ausbildungssituation === Ausbildungssituation.IN_AUSBILDUNG
+      ? DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+      : null;
   });
 
   constructor() {

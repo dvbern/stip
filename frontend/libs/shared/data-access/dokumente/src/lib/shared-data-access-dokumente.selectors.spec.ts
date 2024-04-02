@@ -9,6 +9,8 @@ describe('selectSharedDataAccessDokumentesView', () => {
       error: undefined,
     };
     const gesuch = {
+      gesuchId: undefined,
+      allowTypes: undefined,
       gesuch: null,
       gesuchs: [],
       gesuchFormular: null,

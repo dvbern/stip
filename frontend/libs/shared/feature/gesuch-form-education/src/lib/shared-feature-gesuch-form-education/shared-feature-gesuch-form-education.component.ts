@@ -39,13 +39,9 @@ import {
   AusbildungsPensum,
   Ausbildungsgang,
   Ausbildungsstaette,
-  DokumentTyp,
 } from '@dv/shared/model/gesuch';
 import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
-import {
-  SharedPatternDocumentUploadComponent,
-  createUploadOptionsFactory,
-} from '@dv/shared/pattern/document-upload';
+import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -121,8 +117,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormEducationView);
 
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
-
   ausbildungsLandSig = toSignal(
     this.form.controls.ausbildungsland.valueChanges,
   );
@@ -175,13 +169,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
           };
         }) ?? []
     );
-  });
-
-  ausbildungsStaetteDocumentSig = this.createUploadOptionsSig(() => {
-    const ausbildungsstaette = this.ausbildungsstaetteSig();
-    return ausbildungsstaette
-      ? DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
-      : null;
   });
 
   constructor() {

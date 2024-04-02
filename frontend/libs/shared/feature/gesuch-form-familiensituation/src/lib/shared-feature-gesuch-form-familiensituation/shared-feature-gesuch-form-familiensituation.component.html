@@ -49,40 +49,31 @@
             <mat-radio-group
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
-              class="d-flex flex-column"
+              class="col-12"
             >
               <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
-              <mat-radio-button data-testid="yes" [value]="true">{{
-                'shared.form.radio.yes' | translate
-              }}</mat-radio-button>
+              <div class="d-flex gap-2 col-12 col-md-6 col-xl-8 pe-4">
+                <div class="d-flex flex-column">
+                  <mat-radio-button data-testid="yes" [value]="true">{{
+                    'shared.form.radio.yes' | translate
+                  }}</mat-radio-button>
 
-              <mat-radio-button data-testid="no" [value]="false">{{
-                'shared.form.radio.no' | translate
-              }}</mat-radio-button>
+                  <mat-radio-button data-testid="no" [value]="false">{{
+                    'shared.form.radio.no' | translate
+                  }}</mat-radio-button>
+                </div>
 
+                @if (trennungsvereinbarungDocumentSig(); as options) {
+                  <dv-shared-pattern-document-upload
+                    class="flex-shrink-1 ms-auto align-self-center"
+                    [optionsSig]="options"
+                  ></dv-shared-pattern-document-upload>
+                }
+              </div>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
             </mat-radio-group>
-
-            @if (vaterschaftsanerkennungDocumentSig(); as options) {
-              <div class="d-flex gap-2 align-items-center">
-                <dv-shared-pattern-document-upload
-                  class="flex-shrink-1"
-                  [optionsSig]="options"
-                ></dv-shared-pattern-document-upload>
-                <label>{{ 'shared.form.familiensituation.file.VATERSCHAFTSANERKENNUNG' | translate }}</label>
-              </div>
-            }
-            @if (trennungsvereinbarungDocumentSig(); as options) {
-              <div class="d-flex gap-2 align-items-center">
-                <dv-shared-pattern-document-upload
-                  class="flex-shrink-1"
-                  [optionsSig]="options"
-                ></dv-shared-pattern-document-upload>
-                <label>{{ 'shared.form.familiensituation.file.TRENNUNGSKONVENTION' | translate }}</label>
-              </div>
-            }
           </div>
           @if (form.controls.werZahltAlimente.enabled) {
             <div class="row g-4 mt-3 col-xl-8">
@@ -195,35 +186,36 @@
                 class="d-flex flex-column"
               >
                 <label>{{ 'shared.form.familiensituation.mutter-unbekannt-reason.label' | translate }}</label>
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort' | translate
-                  }}</mat-radio-button
-                >
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
-                      | translate
-                  }}</mat-radio-button
-                >
-
+                <div class="d-flex gap-2 col-12 col-md-6 col-xl-8 pe-4">
+                  <div class="d-flex flex-column">
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                  </div>
+                  @if (mutterUnbekanntDocumentSig(); as options) {
+                    <dv-shared-pattern-document-upload
+                      class="flex-shrink-1 ms-auto align-self-center"
+                      [optionsSig]="options"
+                    ></dv-shared-pattern-document-upload>
+                  }
+                </div>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
               </mat-radio-group>
-
-              @if (mutterUnbekanntDocumentSig(); as options) {
-                <dv-shared-pattern-document-upload
-                  class="flex-shrink-1"
-                  [optionsSig]="options"
-                ></dv-shared-pattern-document-upload>
-              }
             </div>
           }
           @if (
@@ -277,50 +269,40 @@
                 formControlName="vaterUnbekanntGrund"
                 data-testid="form-family-vaterUnbekanntGrund"
                 dvSharedUiFormField
-                class="d-flex flex-column"
+                class="col-12"
               >
                 <label>{{ 'shared.form.familiensituation.vater-unbekannt-reason.label' | translate }}</label>
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort' | translate
-                  }}</mat-radio-button
-                >
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung'
-                      | translate
-                  }}</mat-radio-button
-                >
+                <div class="d-flex gap-2 col-12 col-md-6 col-xl-8 pe-4">
+                  <div class="d-flex flex-column">
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                  </div>
+                  @if (vaterUnbekanntDocumentSig(); as options) {
+                    <dv-shared-pattern-document-upload
+                      class="flex-shrink-1 ms-auto align-self-center"
+                      [optionsSig]="options"
+                    ></dv-shared-pattern-document-upload>
+                  }
+                </div>
 
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
               </mat-radio-group>
-
-              @if (vaterUnbekanntDocumentSig(); as options) {
-                <div class="d-flex gap-2 align-items-center">
-                  <dv-shared-pattern-document-upload
-                    class="flex-shrink-1"
-                    [optionsSig]="options"
-                  ></dv-shared-pattern-document-upload>
-                  <label>{{ 'shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_VATER' | translate }}</label>
-                </div>
-              }
-              @if (geburstscheinDocumentSig(); as options) {
-                <div class="d-flex gap-2 align-items-center">
-                  <dv-shared-pattern-document-upload
-                    class="flex-shrink-1"
-                    [optionsSig]="options"
-                  ></dv-shared-pattern-document-upload>
-                  <label>{{ 'shared.form.familiensituation.file.GEBURTSSCHEIN' | translate }}</label>
-                </div>
-              }
             </div>
           }
           @if (

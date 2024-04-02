@@ -176,36 +176,34 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     this.form.controls.sozialhilfebeitraegeAusbezahlt.valueChanges,
   );
 
+  ausweisbFluechtlingSig = toSignal(
+    this.form.controls.ausweisbFluechtling.valueChanges,
+  );
+
   lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
     const elternTyp = this.elternteil.elternTyp;
+    const fluechtling = this.ausweisbFluechtlingSig();
 
-    if (elternTyp === ElternTyp.MUTTER) {
-      return DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER;
+    if (fluechtling) {
+      return DokumentTyp[`ELTERN_LOHNABRECHNUNG_VERMOEGEN_${elternTyp}`];
     }
 
-    return DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER;
+    return null;
   });
 
-  mietvertragHypothekarzinsabrechnungDocumentSig = this.createUploadOptionsSig(
-    () => {
-      const elternTyp = this.elternteil.elternTyp;
-
-      if (elternTyp === ElternTyp.MUTTER) {
-        return DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER;
-      }
-
-      return DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER;
-    },
+  plzChangedSig = toSignal(
+    this.form.controls.adresse.controls.plz.valueChanges,
   );
 
   steuerunterlagenDocumentSig = this.createUploadOptionsSig(() => {
+    const plz = this.plzChangedSig();
     const elternTyp = this.elternteil.elternTyp;
 
-    if (elternTyp === ElternTyp.MUTTER) {
-      return DokumentTyp.ELTERN_STEUERUNTERLAGEN_MUTTER;
+    if (!isFromBern(plz)) {
+      return DokumentTyp[`ELTERN_STEUERUNTERLAGEN_${elternTyp}`];
     }
 
-    return DokumentTyp.ELTERN_STEUERUNTERLAGEN_VATER;
+    return null;
   });
 
   ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
@@ -369,4 +367,12 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       this.languageSig(),
     );
   }
+}
+
+function isFromBern(plz?: string) {
+  if (!plz) {
+    return true;
+  }
+
+  return !!plz && plz.startsWith('3');
 }
