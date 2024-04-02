@@ -1,4 +1,5 @@
-import { input } from '@angular/core';
+import { InputSignal, input } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render, screen } from '@testing-library/angular';
@@ -14,9 +15,25 @@ import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';
 
+type Inputs = {
+  itemSig: InputSignal<Partial<SharedModelLebenslauf>>;
+  ausbildungenSig: InputSignal<LebenslaufItemUpdate[]>;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function setup(type: SharedModelLebenslauf['type']) {
+  const componentProperties: Inputs = {} as any;
   return await render(SharedFeatureGesuchFormLebenslaufEditorComponent, {
+    configureTestBed: (testBed) => {
+      testBed.runInInjectionContext(() => {
+        componentProperties.itemSig = input({
+          type,
+        } as Partial<SharedModelLebenslauf>);
+        componentProperties.ausbildungenSig = input(
+          [] as LebenslaufItemUpdate[],
+        );
+      });
+    },
     imports: [
       TranslateTestingModule.withTranslations({}),
       NoopAnimationsModule,
@@ -30,10 +47,7 @@ async function setup(type: SharedModelLebenslauf['type']) {
         },
       }),
     ],
-    componentProperties: {
-      itemSig: input({ type } as Partial<SharedModelLebenslauf>),
-      ausbildungenSig: input([] as LebenslaufItemUpdate[]),
-    },
+    componentProperties,
   });
 }
 

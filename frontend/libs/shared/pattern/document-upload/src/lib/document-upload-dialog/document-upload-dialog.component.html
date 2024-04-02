@@ -48,8 +48,8 @@
 }
 
 <dv-shared-pattern-document-upload-list
+  [uploadViewSig]="uploadViewSig()"
   [storeSig]="data.store"
-  [hasEntriesSig]="data.store.hasEntriesSig()"
   (cancelUpload)="data.store.cancelDocumentUpload($event.dokumentId, data.options)"
   (removeUpload)="data.store.removeDocument($event.dokumentId, data.options)"
 ></dv-shared-pattern-document-upload-list>
