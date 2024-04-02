@@ -370,7 +370,7 @@ paths:
                 '200':
                     content:
                         application/json:
-                            schema:
+                            schema: 
                                 $ref: '#/components/schemas/Ausbildungsstaette'
                     description: Ausbildungsstaette updated
                 '400':
@@ -1003,6 +1003,42 @@ components:
                 - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
                 - PERSON_AUSWEIS
                 - PERSON_VERMOEGENSNACHWEIS
+                - AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+                - FAMILIENSITUATION_GEBURTSSCHEIN
+                - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
+                - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
+                - FAMILIENSITUATION_TRENNUNGSKONVENTION
+                - FAMILIENSITUATION_VATERSCHAFTSANERKENNUNG
+                - FAMILIENSITUATION_ALIMENTENREGELUNG
+                - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
+                - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+                - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+                - ELTERN_SOZIALHILFEBUDGET_VATER
+                - ELTERN_STEUERUNTERLAGEN_VATER
+                - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
+                - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+                - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+                - ELTERN_SOZIALHILFEBUDGET_MUTTER
+                - ELTERN_STEUERUNTERLAGEN_MUTTER
+                - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+                - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+                - PARNTER_AUSBILUNG_LOHNABRECHNUNG
+                - PARTNER_ERGAENZUNGSLEISTUNGEN
+                - PARTNER_BELEG_OV_ABONNEMENT
+                - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
+                - AUSZAHLUNG_VOLLMACHT
+                - EK_BELEG_ALIMENTE
+                - EK_BELEG_KINDERZULAGEN
+                - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+                - EK_BELEG_BEZAHLTE_RENTEN
+                - EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+                - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+                - EK_BELEG_OV_ABONNEMENT
+                - EK_MIETVERTRAG
+                - EK_BELEG_BETREUUNGSKOSTEN_KINDER
+                - EK_LOHNABRECHNUNG
+                - EK_STEUERVERANLAGUNG
+                - EK_VERDIENST
                 - AUSBILDUNG_DOK
                 - ELTERN_DOK
                 - PARTNER_DOK
