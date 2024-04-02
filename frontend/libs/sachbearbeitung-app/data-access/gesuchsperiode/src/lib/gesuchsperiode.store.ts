@@ -10,6 +10,7 @@ import { BehaviorSubject, lastValueFrom, map, of, take } from 'rxjs';
 
 import {
   Gesuchsjahr,
+  GesuchsjahrService,
   Gesuchsperiode,
   GesuchsperiodeDaten,
   GesuchsperiodeService,
@@ -20,6 +21,7 @@ import {
 } from '@dv/shared/util/validator-date';
 
 type GesuchsperiodeState = {
+  gesuchsjahre: Gesuchsjahr[];
   gesuchsperioden: Gesuchsperiode[];
   currentGesuchsperiode?: GesuchsperiodeDaten;
   currentGesuchsJahr?: Gesuchsjahr;
@@ -52,7 +54,9 @@ export class MockGesuchsperiodenService {
 }
 
 const initialState: GesuchsperiodeState = {
+  gesuchsjahre: [],
   gesuchsperioden: [],
+  currentGesuchsJahr: undefined,
   currentGesuchsperiode: undefined,
   hasLoadedOnce: false,
   loading: false,
@@ -62,8 +66,12 @@ export const GesuchsperiodeStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods(
-    (store, gesuchsperiodeService = inject(MockGesuchsperiodenService)) => {
-      async function loadGesuchsperioden() {
+    (
+      store,
+      gesuchsperiodeService = inject(MockGesuchsperiodenService),
+      gesuchjahrService = inject(GesuchsjahrService),
+    ) => {
+      async function loadOverview() {
         patchState(store, {
           loading: true,
           error: undefined,
@@ -71,8 +79,13 @@ export const GesuchsperiodeStore = signalStore(
         const gesuchsperioden = await lastValueFrom(
           gesuchsperiodeService.getGesuchsperioden$(),
         );
+
+        const gesuchsjahre = await lastValueFrom(
+          gesuchjahrService.getGesuchsjahre$(),
+        );
         patchState(store, {
           gesuchsperioden,
+          gesuchsjahre,
           hasLoadedOnce: true,
           loading: false,
           error: undefined,
@@ -88,6 +101,7 @@ export const GesuchsperiodeStore = signalStore(
         );
         patchState(store, {
           currentGesuchsperiode: gesuchsperiode,
+
           hasLoadedOnce: false,
           loading: false,
           error: undefined,
@@ -106,7 +120,7 @@ export const GesuchsperiodeStore = signalStore(
         await loadGesuchsperiode();
       }
       return {
-        loadGesuchsperioden,
+        loadOverview,
         loadGesuchsperiode,
         saveGesuchsperiode,
       };
@@ -126,31 +140,41 @@ export const GesuchsperiodeStore = signalStore(
   })),
 );
 
+const ____mockdatata: Gesuchsjahr = {
+  id: 'a',
+  bezeichnungDe: 'SA',
+  bezeichnungFr: 'LA',
+  technischesJahr: 2922,
+  ausbildungsjahrEnde: 'wadc',
+  ausbildungsjahrStart: 'anjsd',
+  gueltigkeitStatus: 'ARCHIVIERT',
+};
+
 const ____mockdata: GesuchsperiodeDaten = {
-  _00_18: 3,
-  _19_25: 65,
-  _26_99: 3,
+  kinder_00_18: 3,
+  jugendliche_erwachsene_19_25: 65,
+  erwachsene_26_99: 3,
   aufschaltterminStopp: new Date().toISOString(),
   ausbKosten_SekII: 43,
   ausbKosten_Tertiaer: 20,
-  bB_1Pers: 1,
-  bB_2Pers: 2,
-  bB_3Pers: 3,
-  bB_4Pers: 5,
-  bB_5Pers: 5,
-  b_Einkommenfreibetrag: 3,
-  b_VermogenSatzAngerechnet: 2,
-  b_Verpf_Auswaerts_Tagessatz: 2,
+  wohnkosten_fam_1pers: 1,
+  wohnkosten_fam_2pers: 2,
+  wohnkosten_fam_3pers: 3,
+  wohnkosten_fam_4pers: 5,
+  wohnkosten_fam_5pluspers: 5,
+  freibetrag_vermögen: 3,
+  freibetrag_erwerbseinkommen: 2,
+  einkommensfreibetrag: 2,
   bezeichnungDe: '1a',
   bezeichnungFr: '2b',
   einreichefristNormal: new Date().toISOString(),
   einreichefristReduziert: new Date().toISOString(),
   elternbeteiligungssatz: 23,
-  fB_1Pers: 20,
-  fB_2Pers: 40,
-  fB_3Pers: 0,
-  fB_4Pers: 0,
-  fB_5Pers: 0,
+  wohnkosten_persoenlich_1pers: 20,
+  wohnkosten_persoenlich_2pers: 40,
+  wohnkosten_persoenlich_3pers: 0,
+  wohnkosten_persoenlich_4pers: 0,
+  wohnkosten_persoenlich_5pluspers: 0,
   f_Einkommensfreibetrag: 0,
   f_Vermoegensfreibetrag: 0,
   f_VermogenSatzAngerechnet: 0,
@@ -161,13 +185,13 @@ const ____mockdata: GesuchsperiodeDaten = {
   integrationszulage: 0,
   limite_EkFreibetrag_Integrationszulag: 0,
   person_1: 0,
-  person_2: 0,
-  person_3: 0,
-  person_4: 0,
-  person_5: 0,
-  person_6: 0,
-  person_7: 0,
-  ppP_8: 0,
+  personen_2: 0,
+  personen_3: 0,
+  personen_4: 0,
+  personen_5: 0,
+  personen_6: 0,
+  personen_7: 0,
+  proWeiterePerson: 0,
   stipLimite_Minimalstipendium: 0,
   aufschaltterminStart: new Date().toISOString(),
 };

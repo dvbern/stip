@@ -35,7 +35,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   private @Valid BigDecimal bEinkommenfreibetrag;
   private @Valid BigDecimal bVermogenSatzAngerechnet;
   private @Valid BigDecimal bVerpfAuswaertsTagessatz;
-  private @Valid BigDecimal elternbeteiligungssatz;
+  private @Valid BigDecimal ;
   private @Valid BigDecimal fEinkommensfreibetrag;
   private @Valid BigDecimal fVermoegensfreibetrag;
   private @Valid BigDecimal fVermogenSatzAngerechnet;
@@ -50,9 +50,9 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   private @Valid BigDecimal person6;
   private @Valid BigDecimal person7;
   private @Valid BigDecimal ppP8;
-  private @Valid BigDecimal _00_18;
-  private @Valid BigDecimal _19_25;
-  private @Valid BigDecimal _26_99;
+  private @Valid BigDecimal kinder_00_18;
+  private @Valid BigDecimal jugendliche_erwachsene_19_25;
+  private @Valid BigDecimal erwachsene_26_99;
   private @Valid BigDecimal bB1Pers;
   private @Valid BigDecimal bB2Pers;
   private @Valid BigDecimal bB3Pers;
@@ -65,14 +65,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   private @Valid BigDecimal fB5Pers;
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungDe")
   @NotNull
   public String getBezeichnungDe() {
@@ -85,14 +85,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungFr")
   @NotNull
   public String getBezeichnungFr() {
@@ -105,14 +105,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fiskaljahr(String fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
     return this;
   }
 
-  
+
   @JsonProperty("fiskaljahr")
   @NotNull
   public String getFiskaljahr() {
@@ -132,7 +132,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiodeStart")
   @NotNull
   public LocalDate getGesuchsperiodeStart() {
@@ -152,7 +152,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiodeStopp")
   @NotNull
   public LocalDate getGesuchsperiodeStopp() {
@@ -172,7 +172,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("aufschaltterminStart")
   @NotNull
   public LocalDate getAufschaltterminStart() {
@@ -192,7 +192,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("aufschaltterminStopp")
   @NotNull
   public LocalDate getAufschaltterminStopp() {
@@ -212,7 +212,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einreichefristNormal")
   @NotNull
   public LocalDate getEinreichefristNormal() {
@@ -232,7 +232,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einreichefristReduziert")
   @NotNull
   public LocalDate getEinreichefristReduziert() {
@@ -245,14 +245,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto ausbKostenSekII(BigDecimal ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
     return this;
   }
 
-  
+
   @JsonProperty("ausbKosten_SekII")
   @NotNull
   public BigDecimal getAusbKostenSekII() {
@@ -265,14 +265,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto ausbKostenTertiaer(BigDecimal ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
     return this;
   }
 
-  
+
   @JsonProperty("ausbKosten_Tertiaer")
   @NotNull
   public BigDecimal getAusbKostenTertiaer() {
@@ -285,74 +285,74 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bEinkommenfreibetrag(BigDecimal bEinkommenfreibetrag) {
     this.bEinkommenfreibetrag = bEinkommenfreibetrag;
     return this;
   }
 
-  
-  @JsonProperty("b_Einkommenfreibetrag")
+
+  @JsonProperty("freibetrag_vermögen")
   @NotNull
   public BigDecimal getbEinkommenfreibetrag() {
     return bEinkommenfreibetrag;
   }
 
-  @JsonProperty("b_Einkommenfreibetrag")
+  @JsonProperty("freibetrag_vermögen")
   public void setbEinkommenfreibetrag(BigDecimal bEinkommenfreibetrag) {
     this.bEinkommenfreibetrag = bEinkommenfreibetrag;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bVermogenSatzAngerechnet(BigDecimal bVermogenSatzAngerechnet) {
     this.bVermogenSatzAngerechnet = bVermogenSatzAngerechnet;
     return this;
   }
 
-  
-  @JsonProperty("b_VermogenSatzAngerechnet")
+
+  @JsonProperty("freibetrag_erwerbseinkommen")
   @NotNull
   public BigDecimal getbVermogenSatzAngerechnet() {
     return bVermogenSatzAngerechnet;
   }
 
-  @JsonProperty("b_VermogenSatzAngerechnet")
+  @JsonProperty("freibetrag_erwerbseinkommen")
   public void setbVermogenSatzAngerechnet(BigDecimal bVermogenSatzAngerechnet) {
     this.bVermogenSatzAngerechnet = bVermogenSatzAngerechnet;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bVerpfAuswaertsTagessatz(BigDecimal bVerpfAuswaertsTagessatz) {
     this.bVerpfAuswaertsTagessatz = bVerpfAuswaertsTagessatz;
     return this;
   }
 
-  
-  @JsonProperty("b_Verpf_Auswaerts_Tagessatz")
+
+  @JsonProperty("einkommensfreibetrag")
   @NotNull
   public BigDecimal getbVerpfAuswaertsTagessatz() {
     return bVerpfAuswaertsTagessatz;
   }
 
-  @JsonProperty("b_Verpf_Auswaerts_Tagessatz")
+  @JsonProperty("einkommensfreibetrag")
   public void setbVerpfAuswaertsTagessatz(BigDecimal bVerpfAuswaertsTagessatz) {
     this.bVerpfAuswaertsTagessatz = bVerpfAuswaertsTagessatz;
   }
 
   /**
-   * 
+   *
    **/
-  public GesuchsperiodeDatenDto elternbeteiligungssatz(BigDecimal elternbeteiligungssatz) {
+  public GesuchsperiodeDatenDto (BigDecimal elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
     return this;
   }
 
-  
+
   @JsonProperty("elternbeteiligungssatz")
   @NotNull
   public BigDecimal getElternbeteiligungssatz() {
@@ -365,14 +365,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fEinkommensfreibetrag(BigDecimal fEinkommensfreibetrag) {
     this.fEinkommensfreibetrag = fEinkommensfreibetrag;
     return this;
   }
 
-  
+
   @JsonProperty("f_Einkommensfreibetrag")
   @NotNull
   public BigDecimal getfEinkommensfreibetrag() {
@@ -385,14 +385,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fVermoegensfreibetrag(BigDecimal fVermoegensfreibetrag) {
     this.fVermoegensfreibetrag = fVermoegensfreibetrag;
     return this;
   }
 
-  
+
   @JsonProperty("f_Vermoegensfreibetrag")
   @NotNull
   public BigDecimal getfVermoegensfreibetrag() {
@@ -405,14 +405,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fVermogenSatzAngerechnet(BigDecimal fVermogenSatzAngerechnet) {
     this.fVermogenSatzAngerechnet = fVermogenSatzAngerechnet;
     return this;
   }
 
-  
+
   @JsonProperty("f_VermogenSatzAngerechnet")
   @NotNull
   public BigDecimal getfVermogenSatzAngerechnet() {
@@ -425,14 +425,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto integrationszulage(BigDecimal integrationszulage) {
     this.integrationszulage = integrationszulage;
     return this;
   }
 
-  
+
   @JsonProperty("integrationszulage")
   @NotNull
   public BigDecimal getIntegrationszulage() {
@@ -445,14 +445,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto limiteEkFreibetragIntegrationszulag(BigDecimal limiteEkFreibetragIntegrationszulag) {
     this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
     return this;
   }
 
-  
+
   @JsonProperty("limite_EkFreibetrag_Integrationszulag")
   @NotNull
   public BigDecimal getLimiteEkFreibetragIntegrationszulag() {
@@ -465,14 +465,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto stipLimiteMinimalstipendium(BigDecimal stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
     return this;
   }
 
-  
+
   @JsonProperty("stipLimite_Minimalstipendium")
   @NotNull
   public BigDecimal getStipLimiteMinimalstipendium() {
@@ -485,14 +485,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person1(BigDecimal person1) {
     this.person1 = person1;
     return this;
   }
 
-  
+
   @JsonProperty("person_1")
   @NotNull
   public BigDecimal getPerson1() {
@@ -505,401 +505,401 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person2(BigDecimal person2) {
     this.person2 = person2;
     return this;
   }
 
-  
-  @JsonProperty("person_2")
+
+  @JsonProperty("personen_2")
   @NotNull
   public BigDecimal getPerson2() {
     return person2;
   }
 
-  @JsonProperty("person_2")
+  @JsonProperty("personen_2")
   public void setPerson2(BigDecimal person2) {
     this.person2 = person2;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person3(BigDecimal person3) {
     this.person3 = person3;
     return this;
   }
 
-  
-  @JsonProperty("person_3")
+
+  @JsonProperty("personen_3")
   @NotNull
   public BigDecimal getPerson3() {
     return person3;
   }
 
-  @JsonProperty("person_3")
+  @JsonProperty("personen_3")
   public void setPerson3(BigDecimal person3) {
     this.person3 = person3;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person4(BigDecimal person4) {
     this.person4 = person4;
     return this;
   }
 
-  
-  @JsonProperty("person_4")
+
+  @JsonProperty("personen_4")
   @NotNull
   public BigDecimal getPerson4() {
     return person4;
   }
 
-  @JsonProperty("person_4")
+  @JsonProperty("personen_4")
   public void setPerson4(BigDecimal person4) {
     this.person4 = person4;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person5(BigDecimal person5) {
     this.person5 = person5;
     return this;
   }
 
-  
-  @JsonProperty("person_5")
+
+  @JsonProperty("personen_5")
   @NotNull
   public BigDecimal getPerson5() {
     return person5;
   }
 
-  @JsonProperty("person_5")
+  @JsonProperty("personen_5")
   public void setPerson5(BigDecimal person5) {
     this.person5 = person5;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person6(BigDecimal person6) {
     this.person6 = person6;
     return this;
   }
 
-  
-  @JsonProperty("person_6")
+
+  @JsonProperty("personen_6")
   @NotNull
   public BigDecimal getPerson6() {
     return person6;
   }
 
-  @JsonProperty("person_6")
+  @JsonProperty("personen_6")
   public void setPerson6(BigDecimal person6) {
     this.person6 = person6;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto person7(BigDecimal person7) {
     this.person7 = person7;
     return this;
   }
 
-  
-  @JsonProperty("person_7")
+
+  @JsonProperty("personen_7")
   @NotNull
   public BigDecimal getPerson7() {
     return person7;
   }
 
-  @JsonProperty("person_7")
+  @JsonProperty("personen_7")
   public void setPerson7(BigDecimal person7) {
     this.person7 = person7;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto ppP8(BigDecimal ppP8) {
     this.ppP8 = ppP8;
     return this;
   }
 
-  
-  @JsonProperty("ppP_8")
+
+  @JsonProperty("proWeiterePerson")
   @NotNull
   public BigDecimal getPpP8() {
     return ppP8;
   }
 
-  @JsonProperty("ppP_8")
+  @JsonProperty("proWeiterePerson")
   public void setPpP8(BigDecimal ppP8) {
     this.ppP8 = ppP8;
   }
 
   /**
-   * 
+   *
    **/
-  public GesuchsperiodeDatenDto _00_18(BigDecimal _00_18) {
-    this._00_18 = _00_18;
+  public GesuchsperiodeDatenDto kinder_00_18(BigDecimal kinder_00_18) {
+    this.kinder_00_18 = kinder_00_18;
     return this;
   }
 
-  
-  @JsonProperty("_00_18")
+
+  @JsonProperty("kinder_00_18")
   @NotNull
   public BigDecimal get0018() {
-    return _00_18;
+    return kinder_00_18;
   }
 
-  @JsonProperty("_00_18")
-  public void set0018(BigDecimal _00_18) {
-    this._00_18 = _00_18;
+  @JsonProperty("kinder_00_18")
+  public void set0018(BigDecimal kinder_00_18) {
+    this.kinder_00_18 = kinder_00_18;
   }
 
   /**
-   * 
+   *
    **/
-  public GesuchsperiodeDatenDto _19_25(BigDecimal _19_25) {
-    this._19_25 = _19_25;
+  public GesuchsperiodeDatenDto jugendliche_erwachsene_19_25(BigDecimal jugendliche_erwachsene_19_25) {
+    this.jugendliche_erwachsene_19_25 = jugendliche_erwachsene_19_25;
     return this;
   }
 
-  
-  @JsonProperty("_19_25")
+
+  @JsonProperty("jugendliche_erwachsene_19_25")
   @NotNull
   public BigDecimal get1925() {
-    return _19_25;
+    return jugendliche_erwachsene_19_25;
   }
 
-  @JsonProperty("_19_25")
-  public void set1925(BigDecimal _19_25) {
-    this._19_25 = _19_25;
+  @JsonProperty("jugendliche_erwachsene_19_25")
+  public void set1925(BigDecimal jugendliche_erwachsene_19_25) {
+    this.jugendliche_erwachsene_19_25 = jugendliche_erwachsene_19_25;
   }
 
   /**
-   * 
+   *
    **/
-  public GesuchsperiodeDatenDto _26_99(BigDecimal _26_99) {
-    this._26_99 = _26_99;
+  public GesuchsperiodeDatenDto erwachsene_26_99(BigDecimal erwachsene_26_99) {
+    this.erwachsene_26_99 = erwachsene_26_99;
     return this;
   }
 
-  
-  @JsonProperty("_26_99")
+
+  @JsonProperty("erwachsene_26_99")
   @NotNull
   public BigDecimal get2699() {
-    return _26_99;
+    return erwachsene_26_99;
   }
 
-  @JsonProperty("_26_99")
-  public void set2699(BigDecimal _26_99) {
-    this._26_99 = _26_99;
+  @JsonProperty("erwachsene_26_99")
+  public void set2699(BigDecimal erwachsene_26_99) {
+    this.erwachsene_26_99 = erwachsene_26_99;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bB1Pers(BigDecimal bB1Pers) {
     this.bB1Pers = bB1Pers;
     return this;
   }
 
-  
-  @JsonProperty("bB_1Pers")
+
+  @JsonProperty("wohnkosten_fam_1pers")
   @NotNull
   public BigDecimal getbB1Pers() {
     return bB1Pers;
   }
 
-  @JsonProperty("bB_1Pers")
+  @JsonProperty("wohnkosten_fam_1pers")
   public void setbB1Pers(BigDecimal bB1Pers) {
     this.bB1Pers = bB1Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bB2Pers(BigDecimal bB2Pers) {
     this.bB2Pers = bB2Pers;
     return this;
   }
 
-  
-  @JsonProperty("bB_2Pers")
+
+  @JsonProperty("wohnkosten_fam_2pers")
   @NotNull
   public BigDecimal getbB2Pers() {
     return bB2Pers;
   }
 
-  @JsonProperty("bB_2Pers")
+  @JsonProperty("wohnkosten_fam_2pers")
   public void setbB2Pers(BigDecimal bB2Pers) {
     this.bB2Pers = bB2Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bB3Pers(BigDecimal bB3Pers) {
     this.bB3Pers = bB3Pers;
     return this;
   }
 
-  
-  @JsonProperty("bB_3Pers")
+
+  @JsonProperty("wohnkosten_fam_3pers")
   @NotNull
   public BigDecimal getbB3Pers() {
     return bB3Pers;
   }
 
-  @JsonProperty("bB_3Pers")
+  @JsonProperty("wohnkosten_fam_3pers")
   public void setbB3Pers(BigDecimal bB3Pers) {
     this.bB3Pers = bB3Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bB4Pers(BigDecimal bB4Pers) {
     this.bB4Pers = bB4Pers;
     return this;
   }
 
-  
-  @JsonProperty("bB_4Pers")
+
+  @JsonProperty("wohnkosten_fam_4pers")
   @NotNull
   public BigDecimal getbB4Pers() {
     return bB4Pers;
   }
 
-  @JsonProperty("bB_4Pers")
+  @JsonProperty("wohnkosten_fam_4pers")
   public void setbB4Pers(BigDecimal bB4Pers) {
     this.bB4Pers = bB4Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto bB5Pers(BigDecimal bB5Pers) {
     this.bB5Pers = bB5Pers;
     return this;
   }
 
-  
-  @JsonProperty("bB_5Pers")
+
+  @JsonProperty("wohnkosten_fam_5pluspers")
   @NotNull
   public BigDecimal getbB5Pers() {
     return bB5Pers;
   }
 
-  @JsonProperty("bB_5Pers")
+  @JsonProperty("wohnkosten_fam_5pluspers")
   public void setbB5Pers(BigDecimal bB5Pers) {
     this.bB5Pers = bB5Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fB1Pers(BigDecimal fB1Pers) {
     this.fB1Pers = fB1Pers;
     return this;
   }
 
-  
-  @JsonProperty("fB_1Pers")
+
+  @JsonProperty("wohnkosten_persoenlich_1pers")
   @NotNull
   public BigDecimal getfB1Pers() {
     return fB1Pers;
   }
 
-  @JsonProperty("fB_1Pers")
+  @JsonProperty("wohnkosten_persoenlich_1pers")
   public void setfB1Pers(BigDecimal fB1Pers) {
     this.fB1Pers = fB1Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fB2Pers(BigDecimal fB2Pers) {
     this.fB2Pers = fB2Pers;
     return this;
   }
 
-  
-  @JsonProperty("fB_2Pers")
+
+  @JsonProperty("wohnkosten_persoenlich_2pers")
   @NotNull
   public BigDecimal getfB2Pers() {
     return fB2Pers;
   }
 
-  @JsonProperty("fB_2Pers")
+  @JsonProperty("wohnkosten_persoenlich_2pers")
   public void setfB2Pers(BigDecimal fB2Pers) {
     this.fB2Pers = fB2Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fB3Pers(BigDecimal fB3Pers) {
     this.fB3Pers = fB3Pers;
     return this;
   }
 
-  
-  @JsonProperty("fB_3Pers")
+
+  @JsonProperty("wohnkosten_persoenlich_3pers")
   @NotNull
   public BigDecimal getfB3Pers() {
     return fB3Pers;
   }
 
-  @JsonProperty("fB_3Pers")
+  @JsonProperty("wohnkosten_persoenlich_3pers")
   public void setfB3Pers(BigDecimal fB3Pers) {
     this.fB3Pers = fB3Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fB4Pers(BigDecimal fB4Pers) {
     this.fB4Pers = fB4Pers;
     return this;
   }
 
-  
-  @JsonProperty("fB_4Pers")
+
+  @JsonProperty("wohnkosten_persoenlich_4pers")
   @NotNull
   public BigDecimal getfB4Pers() {
     return fB4Pers;
   }
 
-  @JsonProperty("fB_4Pers")
+  @JsonProperty("wohnkosten_persoenlich_4pers")
   public void setfB4Pers(BigDecimal fB4Pers) {
     this.fB4Pers = fB4Pers;
   }
 
   /**
-   * 
+   *
    **/
   public GesuchsperiodeDatenDto fB5Pers(BigDecimal fB5Pers) {
     this.fB5Pers = fB5Pers;
     return this;
   }
 
-  
-  @JsonProperty("fB_5Pers")
+
+  @JsonProperty("wohnkosten_persoenlich_5pluspers")
   @NotNull
   public BigDecimal getfB5Pers() {
     return fB5Pers;
   }
 
-  @JsonProperty("fB_5Pers")
+  @JsonProperty("wohnkosten_persoenlich_5pluspers")
   public void setfB5Pers(BigDecimal fB5Pers) {
     this.fB5Pers = fB5Pers;
   }
@@ -943,9 +943,9 @@ public class GesuchsperiodeDatenDto  implements Serializable {
         Objects.equals(this.person6, gesuchsperiodeDaten.person6) &&
         Objects.equals(this.person7, gesuchsperiodeDaten.person7) &&
         Objects.equals(this.ppP8, gesuchsperiodeDaten.ppP8) &&
-        Objects.equals(this._00_18, gesuchsperiodeDaten._00_18) &&
-        Objects.equals(this._19_25, gesuchsperiodeDaten._19_25) &&
-        Objects.equals(this._26_99, gesuchsperiodeDaten._26_99) &&
+        Objects.equals(this.kinder_00_18, gesuchsperiodeDaten.kinder_00_18) &&
+        Objects.equals(this.jugendliche_erwachsene_19_25, gesuchsperiodeDaten.jugendliche_erwachsene_19_25) &&
+        Objects.equals(this.erwachsene_26_99, gesuchsperiodeDaten.erwachsene_26_99) &&
         Objects.equals(this.bB1Pers, gesuchsperiodeDaten.bB1Pers) &&
         Objects.equals(this.bB2Pers, gesuchsperiodeDaten.bB2Pers) &&
         Objects.equals(this.bB3Pers, gesuchsperiodeDaten.bB3Pers) &&
@@ -960,14 +960,14 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, bEinkommenfreibetrag, bVermogenSatzAngerechnet, bVerpfAuswaertsTagessatz, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, person2, person3, person4, person5, person6, person7, ppP8, _00_18, _19_25, _26_99, bB1Pers, bB2Pers, bB3Pers, bB4Pers, bB5Pers, fB1Pers, fB2Pers, fB3Pers, fB4Pers, fB5Pers);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, bEinkommenfreibetrag, bVermogenSatzAngerechnet, bVerpfAuswaertsTagessatz, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, person2, person3, person4, person5, person6, person7, ppP8, kinder_00_18, jugendliche_erwachsene_19_25, erwachsene_26_99, bB1Pers, bB2Pers, bB3Pers, bB4Pers, bB5Pers, fB1Pers, fB2Pers, fB3Pers, fB4Pers, fB5Pers);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeDatenDto {\n");
-    
+
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
@@ -997,9 +997,9 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     sb.append("    person6: ").append(toIndentedString(person6)).append("\n");
     sb.append("    person7: ").append(toIndentedString(person7)).append("\n");
     sb.append("    ppP8: ").append(toIndentedString(ppP8)).append("\n");
-    sb.append("    _00_18: ").append(toIndentedString(_00_18)).append("\n");
-    sb.append("    _19_25: ").append(toIndentedString(_19_25)).append("\n");
-    sb.append("    _26_99: ").append(toIndentedString(_26_99)).append("\n");
+    sb.append("    kinder_00_18: ").append(toIndentedString(kinder_00_18)).append("\n");
+    sb.append("    jugendliche_erwachsene_19_25: ").append(toIndentedString(jugendliche_erwachsene_19_25)).append("\n");
+    sb.append("    erwachsene_26_99: ").append(toIndentedString(erwachsene_26_99)).append("\n");
     sb.append("    bB1Pers: ").append(toIndentedString(bB1Pers)).append("\n");
     sb.append("    bB2Pers: ").append(toIndentedString(bB2Pers)).append("\n");
     sb.append("    bB3Pers: ").append(toIndentedString(bB3Pers)).append("\n");

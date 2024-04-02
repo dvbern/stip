@@ -30,6 +30,18 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Période de demande",
 
+  "sachbearbeitung-app.admin.gesuchsjahr.title": "Année de la demande",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.description": "Aperçu des périodes de demande",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung": "Désignation",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr": "Année de formation",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.status": "État",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.technischesJahr": "Année technique",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.erstellen": "Créer",
+  "sachbearbeitung-app.admin.gesuchsjahr.table.loeschen": "\"{{ bezeichnungFr }}\" supprimer",
+  "sachbearbeitung-app.admin.gesuchsjahr.route.overview": "Aperçu des années de demande/périodes de demande",
+  "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Créer une période de demande",
+  "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Période de demande",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",

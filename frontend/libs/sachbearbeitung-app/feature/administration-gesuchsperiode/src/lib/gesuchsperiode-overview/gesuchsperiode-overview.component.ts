@@ -36,21 +36,36 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
   store = inject(GesuchsperiodeStore);
   translate = inject(TranslateService);
 
-  displayedColumns: string[] = [
+  displayedColumnsGesuchsperiode: string[] = [
     'bezeichnung',
     'gesuchsperiode',
     'status',
     'gesuchsjahr',
     'actions',
   ];
+
+  displayedColumnsGesuchsjahr: string[] = [
+    'bezeichnung',
+    'ausbildungsjahr',
+    'technischesJahr',
+    'status',
+    'actions',
+  ];
+
+  displayedColumnsGesuchsJahr: string[] = [''];
   gesuchsperiodenDatasourceSig = computed(() => {
     const gesuchsperioden = this.store.gesuchperiodenListView();
-    console.log('gesuchsperioden', gesuchsperioden);
     const datasource = new MatTableDataSource(gesuchsperioden);
     return datasource;
   });
 
+  gesuchsJahrDatasourceSig = computed(() => {
+    const gesuchsjahre = this.store.gesuchsjahre;
+    const datasource = new MatTableDataSource(gesuchsjahre());
+    return datasource;
+  });
+
   ngOnInit(): void {
-    this.store.loadGesuchsperioden();
+    this.store.loadOverview();
   }
 }

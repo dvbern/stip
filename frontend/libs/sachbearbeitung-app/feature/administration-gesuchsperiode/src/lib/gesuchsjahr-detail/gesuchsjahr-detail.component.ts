@@ -24,7 +24,6 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -33,12 +32,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
-import {
-  SharedUtilFormService,
-  convertTempFormToRealValues,
-} from '@dv/shared/util/form';
-import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
+import { SharedUtilFormService } from '@dv/shared/util/form';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuchsjahr-detail',

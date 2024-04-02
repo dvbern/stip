@@ -2393,9 +2393,9 @@ components:
                 - einreichefristReduziert
                 - ausbKosten_SekII
                 - ausbKosten_Tertiaer
-                - b_Einkommenfreibetrag
-                - b_VermogenSatzAngerechnet
-                - b_Verpf_Auswaerts_Tagessatz
+                - freibetrag_vermögen
+                - freibetrag_erwerbseinkommen
+                - einkommensfreibetrag
                 - elternbeteiligungssatz
                 - f_Einkommensfreibetrag
                 - f_Vermoegensfreibetrag
@@ -2404,26 +2404,26 @@ components:
                 - limite_EkFreibetrag_Integrationszulag
                 - stipLimite_Minimalstipendium
                 - person_1
-                - person_2
-                - person_3
-                - person_4
-                - person_5
-                - person_6
-                - person_7
-                - ppP_8
-                - _00_18
-                - _19_25
-                - _26_99
-                - bB_1Pers
-                - bB_2Pers
-                - bB_3Pers
-                - bB_4Pers
-                - bB_5Pers
-                - fB_1Pers
-                - fB_2Pers
-                - fB_3Pers
-                - fB_4Pers
-                - fB_5Pers
+                - personen_2
+                - personen_3
+                - personen_4
+                - personen_5
+                - personen_6
+                - personen_7
+                - proWeiterePerson
+                - kinder_00_18
+                - jugendliche_erwachsene_19_25
+                - erwachsene_26_99
+                - wohnkosten_fam_1pers
+                - wohnkosten_fam_2pers
+                - wohnkosten_fam_3pers
+                - wohnkosten_fam_4pers
+                - wohnkosten_fam_5pluspers
+                - wohnkosten_persoenlich_1pers
+                - wohnkosten_persoenlich_2pers
+                - wohnkosten_persoenlich_3pers
+                - wohnkosten_persoenlich_4pers
+                - wohnkosten_persoenlich_5pluspers
             properties:
                 bezeichnungDe:
                     description: ''
@@ -2467,13 +2467,13 @@ components:
                 ausbKosten_Tertiaer:
                     description: ''
                     type: number
-                b_Einkommenfreibetrag:
+                freibetrag_vermögen:
                     description: ''
                     type: number
-                b_VermogenSatzAngerechnet:
+                freibetrag_erwerbseinkommen:
                     description: ''
                     type: number
-                b_Verpf_Auswaerts_Tagessatz:
+                einkommensfreibetrag:
                     description: ''
                     type: number
                 elternbeteiligungssatz:
@@ -2500,64 +2500,64 @@ components:
                 person_1:
                     description: ''
                     type: number
-                person_2:
+                personen_2:
                     description: ''
                     type: number
-                person_3:
+                personen_3:
                     description: ''
                     type: number
-                person_4:
+                personen_4:
                     description: ''
                     type: number
-                person_5:
+                personen_5:
                     description: ''
                     type: number
-                person_6:
+                personen_6:
                     description: ''
                     type: number
-                person_7:
+                personen_7:
                     description: ''
                     type: number
-                ppP_8:
+                proWeiterePerson:
                     description: ''
                     type: number
-                _00_18:
+                kinder_00_18:
                     description: ''
                     type: number
-                _19_25:
+                jugendliche_erwachsene_19_25:
                     description: ''
                     type: number
-                _26_99:
+                erwachsene_26_99:
                     description: ''
                     type: number
-                bB_1Pers:
+                wohnkosten_fam_1pers:
                     description: ''
                     type: number
-                bB_2Pers:
+                wohnkosten_fam_2pers:
                     description: ''
                     type: number
-                bB_3Pers:
+                wohnkosten_fam_3pers:
                     description: ''
                     type: number
-                bB_4Pers:
+                wohnkosten_fam_4pers:
                     description: ''
                     type: number
-                bB_5Pers:
+                wohnkosten_fam_5pluspers:
                     description: ''
                     type: number
-                fB_1Pers:
+                wohnkosten_persoenlich_1pers:
                     description: ''
                     type: number
-                fB_2Pers:
+                wohnkosten_persoenlich_2pers:
                     description: ''
                     type: number
-                fB_3Pers:
+                wohnkosten_persoenlich_3pers:
                     description: ''
                     type: number
-                fB_4Pers:
+                wohnkosten_persoenlich_4pers:
                     description: ''
                     type: number
-                fB_5Pers:
+                wohnkosten_persoenlich_5pluspers:
                     description: ''
                     type: number
 
