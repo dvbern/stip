@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,11 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
      * Returns a list of distinct {@link DokumentTyp} that are present for a {@link GesuchFormular} that are in the
 	 * given types
      */
-    public Stream<DokumentTyp> findAllForGesuchFormularWithType(final UUID gesuchFormularId, final List<DokumentTyp> types) {
+    public Stream<DokumentTyp> findAllForGesuchFormularWithType(final UUID gesuchFormularId, final @Nonnull List<DokumentTyp> types) {
+        if (gesuchFormularId == null || types.isEmpty()) {
+            return Stream.empty();
+        }
+
         final var gesuchDokument = QGesuchDokument.gesuchDokument;
         final var gesuch = QGesuch.gesuch;
         final var gesuchTranche = QGesuchTranche.gesuchTranche;

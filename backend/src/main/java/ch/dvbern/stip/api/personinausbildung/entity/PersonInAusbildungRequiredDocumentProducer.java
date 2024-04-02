@@ -28,7 +28,7 @@ public class PersonInAusbildungRequiredDocumentProducer implements RequiredDocum
         final var niederlassungsstatus = formular.getPersonInAusbildung().getNiederlassungsstatus();
         if (MAP.containsKey(niederlassungsstatus)) {
             return ImmutablePair.of(
-                "personInAusbildung.niederlassungsstatus",
+                "personInAusbildung",
                 List.of(MAP.get(niederlassungsstatus))
             );
         }
