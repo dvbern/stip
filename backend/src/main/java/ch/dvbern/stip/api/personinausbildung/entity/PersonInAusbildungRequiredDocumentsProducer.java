@@ -37,7 +37,7 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
         final var niederlassungsstatus = pia.getNiederlassungsstatus();
-        if (niederlassungsstatusMap.containsKey(niederlassungsstatus)) {
+        if (niederlassungsstatus != null && niederlassungsstatusMap.containsKey(niederlassungsstatus)) {
             requiredDocs.add(niederlassungsstatusMap.get(niederlassungsstatus));
         }
 
