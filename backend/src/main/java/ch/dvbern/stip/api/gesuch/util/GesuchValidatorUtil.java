@@ -34,7 +34,7 @@ public class GesuchValidatorUtil {
         return false;
     }
 
-    public boolean addProperty(
+    public boolean addProperties(
         final @Nullable ConstraintValidatorContext context,
         final @Nonnull String template,
         final @Nonnull Collection<String> properties

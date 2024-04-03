@@ -13,6 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 
@@ -33,10 +34,10 @@ public class DocumentsRequiredConstraintValidator
             .toList();
 
         if (!filtered.isEmpty()) {
-            return GesuchValidatorUtil.addProperty(
+            return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
-                filtered.toString()
+                filtered
             );
         }
 
