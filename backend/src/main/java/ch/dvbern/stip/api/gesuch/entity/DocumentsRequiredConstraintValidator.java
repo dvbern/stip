@@ -29,7 +29,7 @@ public class DocumentsRequiredConstraintValidator
 
         final var filtered = requiredDocs.stream()
             .filter(x -> x.getRight().stream().anyMatch(y -> !dokumenteOfType.contains(y)))
-//            .map(Pair::getLeft)
+            .map(Pair::getLeft)
             .toList();
 
         if (!filtered.isEmpty()) {
