@@ -24,7 +24,7 @@ public abstract class EntityUpdateMapper<S, T extends AbstractEntity> {
      * @param source the source object that was mapped
      * @param target the target object that was updated
      */
-    protected abstract void resetDependentDataBeforeUpdate(S source, @MappingTarget T target);
+    protected abstract void resetDependentDataBeforeUpdate(final S source, @MappingTarget final T target);
 
     /**
      * Resets a field if a condition is met. If the condition specified by the {@code checkCondition}

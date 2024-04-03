@@ -15,7 +15,6 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -28,13 +27,13 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -42,7 +41,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.instancio.Select.field;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -104,7 +102,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void updateWithNotExistingGesuchTranche() {
-        var gesuchUpdateDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildungModel).create();
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -116,7 +114,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(5)
     void testUpdateGesuchEndpointAusbildung() {
-        var gesuchUpdateDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildungModel).create();
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -141,9 +139,13 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(7)
     void testUpdateGesuchEndpointPersonInAusbildung() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildungModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2);
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -155,9 +157,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(8)
     void testUpdateGesuchEndpointFamiliensituation() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituationModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituation;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -169,9 +171,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(9)
     void testUpdateGesuchEndpointPartner() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartnerModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -183,9 +185,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(10)
     void testUpdateGesuchEndpointAuszahlung() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlungModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlung;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -197,9 +199,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(11)
     void testUpdateGesuchEndpointAddGeschwister() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -215,18 +217,18 @@ class GesuchResourceTest {
             gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
                 .as(GesuchDtoSpec.class);
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwisterModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular()
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular()
             .getGeschwisters()
             .get(0)
             .setId(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).getId());
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getGeschwisters()
             .get(0)
             .setNachname(geschwisterNameUpdateTest);
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -238,9 +240,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(13)
     void testUpdateGesuchAddLebenslaufEndpoint() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecLebenslaufModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecLebenslauf;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -252,12 +254,12 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(14)
     void testUpdateGesuchAddElternEndpoint() {
-        final var vater = Instancio.of(ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel).create().get(0);
-        final var mutter = Instancio.of(ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel).create().get(0);
+        final var vater = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs().get(0);
+        final var mutter = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs().get(0);
         mutter.setElternTyp(ElternTypDtoSpec.MUTTER);
         mutter.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
 
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecElternsModel).create();
+        var gesuchUpdatDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns;
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>() {{
             add(vater);
             add(mutter);
@@ -276,14 +278,13 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(14)
     void testUpdateGesuchAddForeignEltern() {
-        var gesuchUpdateDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecElternsModel).create();
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns;
         final var elternteile = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns();
 
         for (final var elternteil : elternteile) {
             elternteil.setSozialversicherungsnummer(null);
-            final var newAdresse = Instancio.of(AdresseSpecModel.adresseSpecModel)
-                .set(field(AdresseDtoSpec::getLand), LandDtoSpec.DE)
-                .create();
+            final var newAdresse = AdresseSpecModel.adresseDtoSpec;
+            newAdresse.setLand(LandDtoSpec.DE);
             elternteil.setAdresse(newAdresse);
         }
 
@@ -301,9 +302,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(15)
     void testUpdateGesuchEndpointAddEinnahmenKoster() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKostenModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -315,9 +316,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(16)
     void testUpdateGesuchEndpointAddKind() {
-        var gesuchUpdatDTO = Instancio.of(GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinderModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinder;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -392,7 +393,11 @@ class GesuchResourceTest {
             .body()
             .as(ValidationReportDtoSpec.class);
 
-        assertThat(validationReportFromService.getValidationErrors().size(), not(greaterThan(0)));
+        assertThat(
+            validationReportFromService.getValidationErrors().toString(),
+            validationReportFromService.getValidationErrors().size(),
+            not(greaterThan(0))
+        );
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)

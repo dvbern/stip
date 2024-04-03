@@ -22,7 +22,7 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext) {
         if (gesuchFormular.getFamiliensituation() == null) {
-            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+            return true;
         }
         if (isElternTeilRequired(ElternTyp.MUTTER, gesuchFormular.getFamiliensituation())) {
             if (gesuchFormular.getElterns()

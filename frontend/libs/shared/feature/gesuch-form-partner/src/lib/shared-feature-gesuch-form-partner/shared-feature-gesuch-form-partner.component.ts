@@ -325,7 +325,9 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       ...formValues,
       adresse: {
         id: gesuchFormular?.partner?.adresse?.id,
-        ...formValues.adresse,
+        ...SharedUiFormAddressComponent.getRealValues(
+          this.form.controls.adresse,
+        ),
       },
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       geburtsdatum: parseStringAndPrintForBackendLocalDate(

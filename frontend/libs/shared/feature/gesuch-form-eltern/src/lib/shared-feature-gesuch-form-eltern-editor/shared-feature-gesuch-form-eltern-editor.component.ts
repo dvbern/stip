@@ -334,7 +334,9 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       this.saveTriggered.emit({
         ...formValues,
         adresse: {
-          ...formValues.adresse,
+          ...SharedUiFormAddressComponent.getRealValues(
+            this.form.controls.adresse,
+          ),
           id: this.elternteil.adresse?.id,
         },
         id: this.elternteil.id,

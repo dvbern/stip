@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { EMPTY, catchError, of, throwError } from 'rxjs';
 
 import { SharedDataAccessGlobalNotificationEvents } from '@dv/shared/data-access/global-notification';
+import { IGNORE_NOT_FOUND_ERRORS } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 const IGNORE_ERRORS = new HttpContextToken<boolean>(() => false);
@@ -66,10 +67,18 @@ export function withDvGlobalHttpErrorInterceptorFn({
           }
 
           const storableError = JSON.parse(JSON.stringify(error));
+          const errorToDispatch = sharedUtilFnErrorTransformer(storableError);
+          if (
+            req.context.get(IGNORE_NOT_FOUND_ERRORS) &&
+            errorToDispatch.status === 404
+          ) {
+            return of(new HttpResponse({}));
+          }
+
           if (!req.context.get(NO_GLOBAL_ERRORS)) {
             store.dispatch(
               SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
-                errors: [sharedUtilFnErrorTransformer(storableError)],
+                errors: [errorToDispatch],
               }),
             );
           }

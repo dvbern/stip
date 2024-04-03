@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -31,12 +30,8 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
-import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -47,7 +42,6 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -91,7 +85,6 @@ public class GesuchService {
     }
 
     private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
-        resetFieldsOnUpdate(trancheToUpdate.getGesuchFormular(), trancheUpdate.getGesuchFormular());
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
 
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
@@ -246,140 +239,6 @@ public class GesuchService {
                 );
             }
         }
-    }
-
-    private void resetFieldsOnUpdate(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (toUpdate == null || update == null) {
-            return;
-        }
-
-        if (hasGeburtsdatumOfPersonInAusbildungChanged(toUpdate, update)) {
-            update.setLebenslaufItems(new ArrayList<>());
-        }
-
-        if (hasZivilstandChangedToOnePerson(toUpdate, update)) {
-            toUpdate.setPartner(null);
-            update.setPartner(null);
-        }
-        resetAuswaertigesMittagessen(toUpdate, update);
-        resetEltern(toUpdate, update);
-        resetAlimente(toUpdate, update);
-    }
-
-    private void resetAlimente(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (hasGerichtlicheAlimenteregelungChanged(toUpdate, update)) {
-            if (toUpdate.getEinnahmenKosten() != null) {
-                toUpdate.getEinnahmenKosten().setAlimente(null);
-            }
-
-            if (update.getEinnahmenKosten() != null) {
-                update.getEinnahmenKosten().setAlimente(null);
-            }
-        }
-    }
-
-    private boolean hasGerichtlicheAlimenteregelungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (update.getFamiliensituation() == null) {
-            return false;
-        }
-
-        if (toUpdate.getFamiliensituation() == null) {
-            return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
-        }
-
-        if (toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung() == null) {
-            return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
-        }
-
-        return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
-            .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
-    }
-
-    private void resetEltern(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (update.getElterns() == null) {
-            return;
-        }
-
-        if (hasAlimenteAufteilungChangedToBoth(toUpdate, update)) {
-            update.setElterns(new ArrayList<>());
-            return;
-        }
-
-        if (isElternteilVerstorbenOrUnbekannt(update)) {
-            resetVerstorbenOrUnbekannteElternteile(update);
-        }
-    }
-
-    private boolean isElternteilVerstorbenOrUnbekannt(GesuchFormularUpdateDto update) {
-        return update.getFamiliensituation() != null
-            && Boolean.TRUE.equals(update.getFamiliensituation().getElternteilUnbekanntVerstorben());
-    }
-
-    private void resetVerstorbenOrUnbekannteElternteile(GesuchFormularUpdateDto update) {
-        if (update.getFamiliensituation().getMutterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
-            update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER);
-        }
-
-        if (update.getFamiliensituation().getVaterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH) {
-            update.getElterns().removeIf(eltern -> eltern.getElternTyp() == ElternTyp.VATER);
-        }
-    }
-
-    private void resetAuswaertigesMittagessen(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (!isUpdateToEigenerHaushalt(update)) {
-            return;
-        }
-
-        if (toUpdate.getEinnahmenKosten() != null) {
-            toUpdate.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
-        }
-
-        if (update.getEinnahmenKosten() != null) {
-            update.getEinnahmenKosten().setAuswaertigeMittagessenProWoche(null);
-        }
-    }
-
-    private boolean hasAlimenteAufteilungChangedToBoth(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (toUpdate.getFamiliensituation() == null || update.getFamiliensituation() == null) {
-            return false;
-        }
-
-        return toUpdate.getFamiliensituation().getWerZahltAlimente() != Elternschaftsteilung.GEMEINSAM &&
-            update.getFamiliensituation().getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM;
-    }
-
-    private boolean hasGeburtsdatumOfPersonInAusbildungChanged(
-        GesuchFormular toUpdate,
-        GesuchFormularUpdateDto update) {
-        if (toUpdate.getPersonInAusbildung() == null
-            || toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
-            || update.getPersonInAusbildung() == null) {
-            return false;
-        }
-
-        return !toUpdate.getPersonInAusbildung()
-            .getGeburtsdatum()
-            .equals(update.getPersonInAusbildung().getGeburtsdatum());
-    }
-
-    private boolean isUpdateToEigenerHaushalt(GesuchFormularUpdateDto update) {
-        if (update.getPersonInAusbildung() == null) {
-            return false;
-        }
-
-        return update.getPersonInAusbildung().getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
-    }
-
-    private boolean hasZivilstandChangedToOnePerson(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (toUpdate.getPersonInAusbildung() == null
-            || toUpdate.getPersonInAusbildung().getZivilstand() == null
-            || update.getPersonInAusbildung() == null
-            || update.getPersonInAusbildung().getZivilstand() == null) {
-            return false;
-        }
-
-        return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
-            !update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
     }
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {

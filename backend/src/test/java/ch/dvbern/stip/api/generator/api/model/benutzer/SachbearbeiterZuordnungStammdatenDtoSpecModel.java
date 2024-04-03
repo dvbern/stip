@@ -1,25 +1,25 @@
 package ch.dvbern.stip.api.generator.api.model.benutzer;
 
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
 
-import static org.instancio.Select.field;
+import java.util.List;
+import java.util.UUID;
 
 public class SachbearbeiterZuordnungStammdatenDtoSpecModel {
-    public static final Model<SachbearbeiterZuordnungStammdatenDtoSpec> sachbearbeiterZuordnungStammdatenDtoSpecModel =
-        Instancio.of(SachbearbeiterZuordnungStammdatenDtoSpec.class)
-            .set(field(SachbearbeiterZuordnungStammdatenDtoSpec::getBuchstabenDe), "A-D")
-            .set(field(SachbearbeiterZuordnungStammdatenDtoSpec::getBuchstabenFr), "A-C,E")
-            .toModel();
+    public static List<SachbearbeiterZuordnungStammdatenListDtoSpec> sachbearbeiterZuordnungStammdatenListDtoSpecs(final int amount) {
+        return TestUtil.createUpdateDtoSpecs(SachbearbeiterZuordnungStammdatenListDtoSpec::new, (model, faker) -> {
+            model.setSachbearbeiter(UUID.fromString(faker.internet().uuid()));
+            model.setZuordnung(sachbearbeiterZuordnungStammdatenDtoSpec);
+        }, amount);
+    }
 
-    public static final Model<SachbearbeiterZuordnungStammdatenListDtoSpec>
-        sachbearbeiterZuordnungStammdatenListDtoSpecModel =
-        Instancio.of(SachbearbeiterZuordnungStammdatenListDtoSpec.class)
-            .set(
-                field(SachbearbeiterZuordnungStammdatenListDtoSpec::getZuordnung),
-                Instancio.of(sachbearbeiterZuordnungStammdatenDtoSpecModel).create()
-            )
-            .toModel();
+    public static final SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdatenDtoSpec =
+        TestUtil.createUpdateDtoSpec(SachbearbeiterZuordnungStammdatenDtoSpec::new, (model, faker) -> {
+            model.setBuchstabenDe("A-D");
+            model.setBuchstabenFr("A-C,E");
+        });
+
+    public static final List<SachbearbeiterZuordnungStammdatenListDtoSpec> sachbearbeiterZuordnungStammdatenListDtoSpecs = sachbearbeiterZuordnungStammdatenListDtoSpecs(1);
 }

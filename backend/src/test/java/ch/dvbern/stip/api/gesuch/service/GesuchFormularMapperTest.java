@@ -1,6 +1,8 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
@@ -22,10 +24,13 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
+import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +40,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 class GesuchFormularMapperTest {
     @Test
-    void resetDependentDataRemovesRentenTest() {
+    void resetEinnahmenKostenRemovesRenten() {
         final var target = new GesuchFormular()
             .setFamiliensituation(
                 new Familiensituation()
@@ -57,12 +62,12 @@ class GesuchFormularMapperTest {
         updateFormular.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        mapper.resetDependentDataBeforeUpdate(updateFormular, target);
+        mapper.resetEinnahmenKosten(updateFormular, target);
         assertThat(updateFormular.getEinnahmenKosten().getRenten(), is(nullValue()));
     }
 
     @Test
-    void resetDependentDataRemovesVater() {
+    void resetElternRemovesVaterTest() {
         // Arrange
         final var elterns = new ArrayList<ElternUpdateDto>();
         final var vater = new ElternUpdateDto();
@@ -85,21 +90,21 @@ class GesuchFormularMapperTest {
         final var mapper = createMapper();
         // Partial update is needed here to "initialise" the target
         target = mapper.partialUpdate(updateFormular, target);
-        mapper.resetDependentDataBeforeUpdate(updateFormular, target);
+        mapper.resetEltern(updateFormular, target);
 
         // Without werZahltAlimente set, nothing should be cleared
         assertThat(updateFormular.getElterns().size(), is(2));
 
         // Setting it so the VATER pays alimony, and then clearing on update should remove the father from the Gesuch
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        mapper.resetDependentDataBeforeUpdate(updateFormular, target);
+        mapper.resetEltern(updateFormular, target);
 
         assertThat(updateFormular.getElterns().size(), is(1));
         assertThat(updateFormular.getElterns().stream().toList().get(0).getElternTyp(), is(ElternTyp.MUTTER));
     }
 
     @Test
-    void resetDependentDataRemovesWohnkostenTest() {
+    void resetEinnahmenKostenRemovesWohnkostenTest() {
         final var targetPia = new PersonInAusbildung();
         targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         final var target = new GesuchFormular()
@@ -117,9 +122,65 @@ class GesuchFormularMapperTest {
         update.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        mapper.resetDependentDataBeforeUpdate(update, target);
+        mapper.resetEinnahmenKosten(update, target);
 
         assertThat(update.getEinnahmenKosten().getWohnkosten(), is(nullValue()));
+    }
+
+    @Test
+    void resetEinnahmenKostenRemovesAlimenteTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setGerichtlicheAlimentenregelung(true);
+
+        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setAlimente(new BigDecimal(1));
+
+        final var update = new GesuchFormularUpdateDto();
+        update.setFamiliensituation(updateFamsit);
+        update.setEinnahmenKosten(updateEinnahmenKosten);
+
+        final var mapper = createMapper();
+        final var target = new GesuchFormular();
+
+        // Initialise target
+        mapper.partialUpdate(update, target);
+
+        updateFamsit.setGerichtlicheAlimentenregelung(false);
+
+        // Act
+        mapper.resetEinnahmenKosten(update, target);
+
+        // Assert
+        assertThat(update.getEinnahmenKosten().getAlimente(), is(nullValue()));
+    }
+
+    @Test
+    void resetEinnahmenKostenRemovesAuswaertigeMittagessenTest() {
+        // Arrange
+        final var updatePia = new PersonInAusbildungUpdateDto();
+        updatePia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+
+        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setAuswaertigeMittagessenProWoche(1);
+
+        final var update = new GesuchFormularUpdateDto();
+        update.setPersonInAusbildung(updatePia);
+        update.setEinnahmenKosten(updateEinnahmenKosten);
+
+        final var mapper = createMapper();
+        final var target = new GesuchFormular();
+
+        // Initialise target
+        mapper.partialUpdate(update, target);
+
+        updatePia.setWohnsitz(Wohnsitz.FAMILIE);
+
+        // Act
+        mapper.resetEinnahmenKosten(update, target);
+
+        // Assert
+        assertThat(update.getEinnahmenKosten().getAuswaertigeMittagessenProWoche(), is(nullValue()));
     }
 
     @Test
@@ -141,9 +202,71 @@ class GesuchFormularMapperTest {
         update.setEinnahmenKosten(updateEinnahmenKosten);
 
         final var mapper = createMapper();
-        mapper.resetDependentDataBeforeUpdate(update, target);
 
+        mapper.resetEinnahmenKosten(update, target);
+
+        mapper.resetDependentDataBeforeUpdate(update, target);
         assertThat(update.getEinnahmenKosten().getWgWohnend(), is(nullValue()));
+    }
+
+    @Test
+    void resetLebenslaufItemsClearsLebenslaufItems() {
+        // Arrange
+        final var updatePia = new PersonInAusbildungUpdateDto();
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(20));
+
+        final var dateFormatter = DateTimeFormatter.ofPattern("MM.yyyy");
+        final var updateLebenslaufItem = new LebenslaufItemUpdateDto();
+        updateLebenslaufItem.setVon(LocalDate.now().minusMonths(1).format(dateFormatter));
+        updateLebenslaufItem.setBis(LocalDate.now().plusMonths(1).format(dateFormatter));
+
+        final var updateLebenslaufItems = new ArrayList<LebenslaufItemUpdateDto>();
+        updateLebenslaufItems.add(updateLebenslaufItem);
+
+        final var update = new GesuchFormularUpdateDto();
+        update.setPersonInAusbildung(updatePia);
+        update.setLebenslaufItems(updateLebenslaufItems);
+
+        final var mapper = createMapper();
+        final var target = new GesuchFormular();
+
+        // Initialise target
+        mapper.partialUpdate(update, target);
+
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(10));
+
+        // Act
+        mapper.resetLebenslaufItems(update, target);
+
+        // Assert
+        assertThat(update.getLebenslaufItems().size(), is(0));
+    }
+
+    @Test
+    void resetPartnerClearsPartnerTest() {
+        // Arrange
+        final var updatePia = new PersonInAusbildungUpdateDto();
+        updatePia.setZivilstand(Zivilstand.KONKUBINAT);
+
+        final var updatePartner = new PartnerUpdateDto();
+
+        final var update = new GesuchFormularUpdateDto();
+        update.setPersonInAusbildung(updatePia);
+        update.setPartner(updatePartner);
+
+        final var mapper = createMapper();
+        final var target = new GesuchFormular();
+
+        // Initialise target
+        mapper.partialUpdate(update, target);
+
+        updatePia.setZivilstand(Zivilstand.LEDIG);
+
+        // Act
+        mapper.resetPartner(update, target);
+
+        // Assert
+        assertThat(update.getPartner(), is(nullValue()));
     }
 
     GesuchFormularMapper createMapper() {

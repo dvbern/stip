@@ -69,7 +69,7 @@ class GesuchFormularDiffUtilTest {
         gesuchFormularUpdateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
         gesuchFormularUpdateDto.getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
 
-        // Test the 'isUpdateToEigenerHaushalt' method.
+        // Test the 'isUpdateToNotEigenerHaushalt' method.
         boolean isUpdated = GesuchFormularDiffUtil.isUpdateToEigenerHaushalt(gesuchFormularUpdateDto);
         assertTrue(isUpdated, "Expected true when 'Wohnsitz' is set to 'EIGENER_HAUSHALT' but it returned false.");
     }
@@ -82,7 +82,7 @@ class GesuchFormularDiffUtilTest {
         gesuchFormularUpdateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
         gesuchFormularUpdateDto.getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
 
-        // Test the 'isUpdateToEigenerHaushalt' method.
+        // Test the 'isUpdateToNotEigenerHaushalt' method.
         boolean isUpdated = GesuchFormularDiffUtil.isUpdateToEigenerHaushalt(gesuchFormularUpdateDto);
         assertFalse(isUpdated, "Expected false when 'Wohnsitz' is not set to 'EIGENER_HAUSHALT' but it returned true.");
     }

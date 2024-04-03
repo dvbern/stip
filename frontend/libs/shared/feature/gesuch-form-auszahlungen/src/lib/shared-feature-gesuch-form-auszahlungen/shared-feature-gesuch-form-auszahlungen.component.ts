@@ -25,6 +25,7 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { extractIBAN } from 'ibantools';
+import { distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -35,6 +36,7 @@ import {
   Kontoinhaber,
   MASK_IBAN,
   PersonInAusbildungUpdate,
+  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNGEN } from '@dv/shared/model/gesuch-form';
 import {
@@ -49,7 +51,10 @@ import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { SharedUtilFormService } from '@dv/shared/util/form';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
 import { calculateElternSituationGesuch } from '@dv/shared/util-fn/gesuch-util';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -85,17 +90,23 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
 
   MASK_IBAN = MASK_IBAN;
-  language = 'de';
   step = AUSZAHLUNGEN;
 
   form = this.fb.group({
-    kontoinhaber: this.fb.control<Kontoinhaber>('' as Kontoinhaber, {
-      validators: Validators.required,
-    }),
-    nachname: ['', [Validators.required]],
-    vorname: ['', [Validators.required]],
+    adresseId: [<string | undefined>undefined, []],
+    kontoinhaber: [
+      <Kontoinhaber | undefined>undefined,
+      {
+        validators: Validators.required,
+      },
+    ],
+    nachname: [<string | undefined>undefined, [Validators.required]],
+    vorname: [<string | undefined>undefined, [Validators.required]],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(this.fb),
-    iban: ['', [Validators.required, ibanValidator()]],
+    iban: [
+      <string | undefined>undefined,
+      [Validators.required, ibanValidator()],
+    ],
   });
 
   laenderSig = computed(() => {
@@ -115,7 +126,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   );
 
   abtretungserklaerungDocumentSig = this.createUploadOptionsSig(() => {
-    const kontoinhaber = this.kontoinhaberChangesSig();
+    const kontoinhaberChanged = this.kontoinhaberChangesSig();
+    const { gesuchFormular } = this.viewSig();
+    const kontoinhaber =
+      kontoinhaberChanged ?? gesuchFormular?.auszahlung?.kontoinhaber;
 
     if (kontoinhaber === Kontoinhaber.SOZIALDIENST_INSTITUTION) {
       return DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG;
@@ -127,7 +141,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     const kontoinhaberinChangesSig = toSignal(
-      this.form.controls.kontoinhaber.valueChanges,
+      this.form.controls.kontoinhaber.valueChanges.pipe(
+        distinctUntilChanged(),
+        shareReplay({ bufferSize: 1, refCount: true }),
+      ),
     );
 
     effect(
@@ -135,12 +152,19 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         const { gesuchFormular } = this.viewSig();
         if (isDefined(gesuchFormular)) {
           const initalValue = gesuchFormular.auszahlung;
-          this.form.patchValue({
-            ...initalValue,
-            iban: initalValue?.iban?.substring(2), // Land-Prefix loeschen
-          });
-        } else {
-          this.form.reset();
+          this.form.patchValue(
+            {
+              ...initalValue,
+              iban: initalValue?.iban?.substring(2), // Land-Prefix loeschen
+            },
+            { emitEvent: false },
+          );
+          if (initalValue) {
+            this.handleKontoinhaberinChanged(
+              initalValue?.kontoinhaber,
+              gesuchFormular,
+            );
+          }
         }
       },
       { allowSignalWrites: true },
@@ -149,31 +173,14 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     effect(
       () => {
         const kontoinhaberin = kontoinhaberinChangesSig();
-        const { gesuchFormular } = this.viewSig();
-        this.language = this.languageSig();
-        switch (kontoinhaberin) {
-          case Kontoinhaber.GESUCHSTELLER:
-            this.setValuesFrom(gesuchFormular?.personInAusbildung);
-            this.disableNameAndAdresse();
-            break;
-          case Kontoinhaber.VATER:
-            this.setValuesFrom(
-              calculateElternSituationGesuch(gesuchFormular).vater,
-            );
-            this.disableNameAndAdresse();
-            break;
-          case Kontoinhaber.MUTTER:
-            this.setValuesFrom(
-              calculateElternSituationGesuch(gesuchFormular).mutter,
-            );
-            this.disableNameAndAdresse();
-            break;
-          case Kontoinhaber.ANDERE:
-          case Kontoinhaber.SOZIALDIENST_INSTITUTION:
-          default:
-            this.enableNameAndAdresse();
-            break;
+        if (kontoinhaberin === undefined) {
+          return;
         }
+        const { gesuchFormular } = this.viewSig();
+        this.form.reset({
+          kontoinhaber: kontoinhaberin,
+        });
+        this.handleKontoinhaberinChanged(kontoinhaberin, gesuchFormular);
       },
       { allowSignalWrites: true },
     );
@@ -231,13 +238,49 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     return index;
   }
 
+  private handleKontoinhaberinChanged(
+    kontoinhaberin: Kontoinhaber,
+    gesuchFormular: SharedModelGesuchFormular | null,
+  ): void {
+    switch (kontoinhaberin) {
+      case Kontoinhaber.GESUCHSTELLER:
+        this.setValuesFrom(gesuchFormular?.personInAusbildung);
+        this.disableNameAndAdresse();
+        break;
+      case Kontoinhaber.VATER: {
+        this.setValuesFrom(
+          calculateElternSituationGesuch(gesuchFormular).vater,
+        );
+        this.disableNameAndAdresse();
+        break;
+      }
+      case Kontoinhaber.MUTTER:
+        this.setValuesFrom(
+          calculateElternSituationGesuch(gesuchFormular).mutter,
+        );
+        this.disableNameAndAdresse();
+        break;
+      case Kontoinhaber.ANDERE:
+      case Kontoinhaber.SOZIALDIENST_INSTITUTION:
+      default:
+        this.enableNameAndAdresse();
+        break;
+    }
+  }
+
   private setValuesFrom(
     valuesFrom: PersonInAusbildungUpdate | ElternUpdate | undefined,
   ): void {
     if (valuesFrom) {
-      this.form.patchValue(valuesFrom);
+      this.form.patchValue(
+        {
+          ...valuesFrom,
+          adresseId: valuesFrom.adresse?.id,
+        },
+        { emitEvent: false },
+      );
     } else {
-      this.form.reset();
+      this.form.reset(undefined, { emitEvent: false });
     }
   }
 
@@ -263,6 +306,15 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
     const auszahlung = gesuchFormular?.auszahlung;
+    const formularData = convertTempFormToRealValues(this.form, [
+      'iban',
+      'kontoinhaber',
+      'nachname',
+      'vorname',
+    ]);
+    const addressData = SharedUiFormAddressComponent.getRealValues(
+      this.form.controls['adresse'],
+    );
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
@@ -270,7 +322,20 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         ...gesuchFormular,
         auszahlung: {
           ...auszahlung,
-          ...this.form.getRawValue(),
+          ...formularData,
+          adresseId: undefined,
+          adresse: {
+            ...addressData,
+            id: formularData.adresseId,
+          },
+          /** Or only send id?
+           * @example
+          adresse: (formularData.adresseId
+            ? {
+                id: formularData.adresseId,
+              }
+            : addressData) as any,
+           */
           iban: 'CH' + this.form.getRawValue().iban,
         },
       },
