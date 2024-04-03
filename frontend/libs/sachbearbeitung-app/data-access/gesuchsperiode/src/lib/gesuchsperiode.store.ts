@@ -6,7 +6,7 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { BehaviorSubject, lastValueFrom, map, of, take } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, map, take } from 'rxjs';
 
 import {
   Gesuchsjahr,
@@ -14,6 +14,8 @@ import {
   Gesuchsperiode,
   GesuchsperiodeDaten,
   GesuchsperiodeService,
+  GesuchsperiodeUpdate,
+  GesuchsperiodeWithDaten,
 } from '@dv/shared/model/gesuch';
 import {
   formatBackendLocalDate,
@@ -23,7 +25,7 @@ import {
 type GesuchsperiodeState = {
   gesuchsjahre: Gesuchsjahr[];
   gesuchsperioden: Gesuchsperiode[];
-  currentGesuchsperiode?: GesuchsperiodeDaten;
+  currentGesuchsperiode?: GesuchsperiodeWithDaten;
   currentGesuchsJahr?: Gesuchsjahr;
   hasLoadedOnce: boolean;
   loading: boolean;
@@ -32,24 +34,24 @@ type GesuchsperiodeState = {
 
 @Injectable({ providedIn: 'root' })
 export class MockGesuchsperiodenService {
-  private gesuchsperiode = new BehaviorSubject<GesuchsperiodeDaten | undefined>(
-    ____mockdata,
-  );
+  private gesuchsperiode$ = new BehaviorSubject<
+    GesuchsperiodeWithDaten | undefined
+  >(____mockdata);
   private originalService = inject(GesuchsperiodeService);
 
   getGesuchsperioden$() {
-    return this.originalService
-      .getGesuchsperioden$()
-      .pipe(map((list) => list.map(____mockGesuchperiode)));
+    return this.originalService.getGesuchsperioden$();
   }
 
-  getGesuchsperiode$() {
-    return this.gesuchsperiode.pipe(take(1));
+  getGesuchsperiode$(_param: { gesuchsperiodeId: string }) {
+    return this.gesuchsperiode$.pipe(take(1));
   }
 
-  saveGesuchsperiode$(gesuchsperiodenDaten: GesuchsperiodeDaten) {
-    this.gesuchsperiode.next(gesuchsperiodenDaten);
-    return of('');
+  saveGesuchsperiode$(gesuchsperiodenDaten: GesuchsperiodeUpdate) {
+    return this.gesuchsperiode$.pipe(
+      take(1),
+      map((p) => ({ ...p, ...gesuchsperiodenDaten })),
+    );
   }
 }
 
@@ -91,13 +93,13 @@ export const GesuchsperiodeStore = signalStore(
           error: undefined,
         });
       }
-      async function loadGesuchsperiode() {
+      async function loadGesuchsperiode(id: string) {
         patchState(store, {
           loading: true,
           error: undefined,
         });
         const gesuchsperiode = await lastValueFrom(
-          gesuchsperiodeService.getGesuchsperiode$(),
+          gesuchsperiodeService.getGesuchsperiode$({ gesuchsperiodeId: id }),
         );
         patchState(store, {
           currentGesuchsperiode: gesuchsperiode,
@@ -108,6 +110,7 @@ export const GesuchsperiodeStore = signalStore(
         });
       }
       async function saveGesuchsperiode(
+        id: string,
         gesuchsperiodenDaten: GesuchsperiodeDaten,
       ) {
         patchState(store, {
@@ -117,7 +120,7 @@ export const GesuchsperiodeStore = signalStore(
         await lastValueFrom(
           gesuchsperiodeService.saveGesuchsperiode$(gesuchsperiodenDaten),
         );
-        await loadGesuchsperiode();
+        await loadGesuchsperiode(id);
       }
       return {
         loadOverview,
@@ -137,20 +140,18 @@ export const GesuchsperiodeStore = signalStore(
         gesuchsjahr: fromBackendLocalDate(g.aufschaltdatum)?.getFullYear(),
       }));
     }),
+    gesuchsjahreListView: computed(() => {
+      return store.gesuchsjahre().map((g) => ({
+        ...g,
+        ausbildungsjahr: `${g.technischesJahr}/${(g.technischesJahr + 1)
+          .toString()
+          .slice(-2)}`,
+      }));
+    }),
   })),
 );
 
-const ____mockdatata: Gesuchsjahr = {
-  id: 'a',
-  bezeichnungDe: 'SA',
-  bezeichnungFr: 'LA',
-  technischesJahr: 2922,
-  ausbildungsjahrEnde: 'wadc',
-  ausbildungsjahrStart: 'anjsd',
-  gueltigkeitStatus: 'ARCHIVIERT',
-};
-
-const ____mockdata: GesuchsperiodeDaten = {
+const ____mockdata: GesuchsperiodeWithDaten = {
   kinder_00_18: 3,
   jugendliche_erwachsene_19_25: 65,
   erwachsene_26_99: 3,
@@ -162,7 +163,7 @@ const ____mockdata: GesuchsperiodeDaten = {
   wohnkosten_fam_3pers: 3,
   wohnkosten_fam_4pers: 5,
   wohnkosten_fam_5pluspers: 5,
-  freibetrag_vermögen: 3,
+  freibetrag_vermoegen: 3,
   freibetrag_erwerbseinkommen: 2,
   einkommensfreibetrag: 2,
   bezeichnungDe: '1a',
@@ -194,37 +195,10 @@ const ____mockdata: GesuchsperiodeDaten = {
   proWeiterePerson: 0,
   stipLimite_Minimalstipendium: 0,
   aufschaltterminStart: new Date().toISOString(),
-};
-
-const ____mockGesuchperiode = (g: Gesuchsperiode): Gesuchsperiode => {
-  const aufschaltdatum = g.aufschaltdatum
-    ? fromBackendLocalDate(g.aufschaltdatum)
-    : new Date();
-  const einreichefrist = fromBackendLocalDate(g.einreichfrist);
-
-  if (!aufschaltdatum || !einreichefrist) {
-    return {
-      ...g,
-      bezeichnungDe: 'TBD',
-      bezeichnungFr: 'TBD',
-      status: 'ARCHIVIERT',
-    };
-  }
-
-  const periode = {
-    ...g,
-    bezeichnungDe: `${
-      aufschaltdatum.getMonth() + 1 > 6 ? 'Herbst' : 'Frühling'
-    } ${aufschaltdatum.getFullYear()}`,
-    bezeichnungFr: `${
-      aufschaltdatum.getMonth() + 1 > 6 ? 'Automne' : 'Printemps'
-    } ${aufschaltdatum.getFullYear()}`,
-  };
-  if (!periode.einreichfrist || einreichefrist > new Date()) {
-    return { ...periode, status: 'AKTIV' };
-  }
-  if (new Date(periode.gueltigBis) < new Date()) {
-    return { ...periode, status: 'ARCHIVIERT' };
-  }
-  return { ...periode, status: 'AKTIV' };
+  gueltigAb: new Date().toISOString(),
+  gueltigBis: new Date().toISOString(),
+  id: 'a',
+  status: 'PUBLIZIERT',
+  aufschaltdatum: new Date().toISOString(),
+  einreichfrist: new Date().toISOString(),
 };

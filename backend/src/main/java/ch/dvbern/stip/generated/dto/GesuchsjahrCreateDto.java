@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.GueltigkeitStatusDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -23,8 +22,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchsjahrCreateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid LocalDate ausbildungsjahrStart;
-  private @Valid LocalDate ausbildungsjahrEnde;
   private @Valid Integer technischesJahr;
   private @Valid GueltigkeitStatusDto gueltigkeitStatus;
 
@@ -64,44 +61,6 @@ public class GesuchsjahrCreateDto  implements Serializable {
   @JsonProperty("bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
-  }
-
-  /**
-   **/
-  public GesuchsjahrCreateDto ausbildungsjahrStart(LocalDate ausbildungsjahrStart) {
-    this.ausbildungsjahrStart = ausbildungsjahrStart;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsjahrStart")
-  @NotNull
-  public LocalDate getAusbildungsjahrStart() {
-    return ausbildungsjahrStart;
-  }
-
-  @JsonProperty("ausbildungsjahrStart")
-  public void setAusbildungsjahrStart(LocalDate ausbildungsjahrStart) {
-    this.ausbildungsjahrStart = ausbildungsjahrStart;
-  }
-
-  /**
-   **/
-  public GesuchsjahrCreateDto ausbildungsjahrEnde(LocalDate ausbildungsjahrEnde) {
-    this.ausbildungsjahrEnde = ausbildungsjahrEnde;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsjahrEnde")
-  @NotNull
-  public LocalDate getAusbildungsjahrEnde() {
-    return ausbildungsjahrEnde;
-  }
-
-  @JsonProperty("ausbildungsjahrEnde")
-  public void setAusbildungsjahrEnde(LocalDate ausbildungsjahrEnde) {
-    this.ausbildungsjahrEnde = ausbildungsjahrEnde;
   }
 
   /**
@@ -154,15 +113,13 @@ public class GesuchsjahrCreateDto  implements Serializable {
     GesuchsjahrCreateDto gesuchsjahrCreate = (GesuchsjahrCreateDto) o;
     return Objects.equals(this.bezeichnungDe, gesuchsjahrCreate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsjahrCreate.bezeichnungFr) &&
-        Objects.equals(this.ausbildungsjahrStart, gesuchsjahrCreate.ausbildungsjahrStart) &&
-        Objects.equals(this.ausbildungsjahrEnde, gesuchsjahrCreate.ausbildungsjahrEnde) &&
         Objects.equals(this.technischesJahr, gesuchsjahrCreate.technischesJahr) &&
         Objects.equals(this.gueltigkeitStatus, gesuchsjahrCreate.gueltigkeitStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsjahrStart, ausbildungsjahrEnde, technischesJahr, gueltigkeitStatus);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, technischesJahr, gueltigkeitStatus);
   }
 
   @Override
@@ -172,8 +129,6 @@ public class GesuchsjahrCreateDto  implements Serializable {
     
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    ausbildungsjahrStart: ").append(toIndentedString(ausbildungsjahrStart)).append("\n");
-    sb.append("    ausbildungsjahrEnde: ").append(toIndentedString(ausbildungsjahrEnde)).append("\n");
     sb.append("    technischesJahr: ").append(toIndentedString(technischesJahr)).append("\n");
     sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("}");

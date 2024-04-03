@@ -1273,8 +1273,6 @@ components:
                 - id
                 - bezeichnungDe
                 - bezeichnungFr
-                - ausbildungsjahrStart
-                - ausbildungsjahrEnde
                 - technischesJahr
                 - gueltigkeitStatus
             properties:
@@ -1284,10 +1282,6 @@ components:
                     type: string
                 bezeichnungFr:
                     type: string
-                ausbildungsjahrStart:
-                    $ref: '#/components/schemas/LocalDate'
-                ausbildungsjahrEnde:
-                    $ref: '#/components/schemas/LocalDate'
                 technischesJahr:
                     type: integer
                 gueltigkeitStatus:
@@ -1297,8 +1291,6 @@ components:
             required:
                 - bezeichnungDe
                 - bezeichnungFr
-                - ausbildungsjahrStart
-                - ausbildungsjahrEnde
                 - technischesJahr
                 - gueltigkeitStatus
             properties:
@@ -1306,10 +1298,6 @@ components:
                     type: string
                 bezeichnungFr:
                     type: string
-                ausbildungsjahrStart:
-                    $ref: '#/components/schemas/LocalDate'
-                ausbildungsjahrEnde:
-                    $ref: '#/components/schemas/LocalDate'
                 technischesJahr:
                     type: integer
                 gueltigkeitStatus:
@@ -1321,10 +1309,6 @@ components:
                     type: string
                 bezeichnungFr:
                     type: string
-                ausbildungsjahrStart:
-                    $ref: '#/components/schemas/LocalDate'
-                ausbildungsjahrEnde:
-                    $ref: '#/components/schemas/LocalDate'
                 technischesJahr:
                     type: integer
                 gueltigkeitStatus:
@@ -2447,7 +2431,7 @@ components:
                 ausbKosten_Tertiaer:
                     description: ''
                     type: number
-                freibetrag_vermögen:
+                freibetrag_vermoegen:
                     description: ''
                     type: number
                 freibetrag_erwerbseinkommen:

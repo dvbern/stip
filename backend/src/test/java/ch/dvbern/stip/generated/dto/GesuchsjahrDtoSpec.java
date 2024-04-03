@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -33,8 +32,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsjahrDtoSpec.JSON_PROPERTY_ID,
   GesuchsjahrDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   GesuchsjahrDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
-  GesuchsjahrDtoSpec.JSON_PROPERTY_AUSBILDUNGSJAHR_START,
-  GesuchsjahrDtoSpec.JSON_PROPERTY_AUSBILDUNGSJAHR_ENDE,
   GesuchsjahrDtoSpec.JSON_PROPERTY_TECHNISCHES_JAHR,
   GesuchsjahrDtoSpec.JSON_PROPERTY_GUELTIGKEIT_STATUS
 })
@@ -49,12 +46,6 @@ public class GesuchsjahrDtoSpec {
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
   private String bezeichnungFr;
-
-  public static final String JSON_PROPERTY_AUSBILDUNGSJAHR_START = "ausbildungsjahrStart";
-  private LocalDate ausbildungsjahrStart;
-
-  public static final String JSON_PROPERTY_AUSBILDUNGSJAHR_ENDE = "ausbildungsjahrEnde";
-  private LocalDate ausbildungsjahrEnde;
 
   public static final String JSON_PROPERTY_TECHNISCHES_JAHR = "technischesJahr";
   private Integer technischesJahr;
@@ -143,58 +134,6 @@ public class GesuchsjahrDtoSpec {
   }
 
 
-  public GesuchsjahrDtoSpec ausbildungsjahrStart(LocalDate ausbildungsjahrStart) {
-    
-    this.ausbildungsjahrStart = ausbildungsjahrStart;
-    return this;
-  }
-
-   /**
-   * Get ausbildungsjahrStart
-   * @return ausbildungsjahrStart
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSJAHR_START)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getAusbildungsjahrStart() {
-    return ausbildungsjahrStart;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSJAHR_START)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsjahrStart(LocalDate ausbildungsjahrStart) {
-    this.ausbildungsjahrStart = ausbildungsjahrStart;
-  }
-
-
-  public GesuchsjahrDtoSpec ausbildungsjahrEnde(LocalDate ausbildungsjahrEnde) {
-    
-    this.ausbildungsjahrEnde = ausbildungsjahrEnde;
-    return this;
-  }
-
-   /**
-   * Get ausbildungsjahrEnde
-   * @return ausbildungsjahrEnde
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSJAHR_ENDE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getAusbildungsjahrEnde() {
-    return ausbildungsjahrEnde;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSJAHR_ENDE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsjahrEnde(LocalDate ausbildungsjahrEnde) {
-    this.ausbildungsjahrEnde = ausbildungsjahrEnde;
-  }
-
-
   public GesuchsjahrDtoSpec technischesJahr(Integer technischesJahr) {
     
     this.technischesJahr = technischesJahr;
@@ -258,15 +197,13 @@ public class GesuchsjahrDtoSpec {
     return Objects.equals(this.id, gesuchsjahr.id) &&
         Objects.equals(this.bezeichnungDe, gesuchsjahr.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsjahr.bezeichnungFr) &&
-        Objects.equals(this.ausbildungsjahrStart, gesuchsjahr.ausbildungsjahrStart) &&
-        Objects.equals(this.ausbildungsjahrEnde, gesuchsjahr.ausbildungsjahrEnde) &&
         Objects.equals(this.technischesJahr, gesuchsjahr.technischesJahr) &&
         Objects.equals(this.gueltigkeitStatus, gesuchsjahr.gueltigkeitStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungsjahrStart, ausbildungsjahrEnde, technischesJahr, gueltigkeitStatus);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, technischesJahr, gueltigkeitStatus);
   }
 
   @Override
@@ -276,8 +213,6 @@ public class GesuchsjahrDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    ausbildungsjahrStart: ").append(toIndentedString(ausbildungsjahrStart)).append("\n");
-    sb.append("    ausbildungsjahrEnde: ").append(toIndentedString(ausbildungsjahrEnde)).append("\n");
     sb.append("    technischesJahr: ").append(toIndentedString(technischesJahr)).append("\n");
     sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("}");

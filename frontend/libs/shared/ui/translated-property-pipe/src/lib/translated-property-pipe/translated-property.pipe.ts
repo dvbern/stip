@@ -13,7 +13,7 @@ type OnlyKeysWithDeOrFr<T> = {
   name: 'translatedProp',
 })
 export class TranslatedPropertyPipe implements PipeTransform {
-  transform<T extends Record<string, unknown>, K extends OnlyKeysWithDeOrFr<T>>(
+  transform<T extends { [key in K]: unknown }, K extends OnlyKeysWithDeOrFr<T>>(
     value: T,
     property: NameOfTranslated<K>,
     language: string,

@@ -73,11 +73,14 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "einreichefrist_reduziert")
     private LocalDate einreichefristReduziert;
 
-    @Column(nullable = false, name = "ausb_kosten_sek_ii")
+    @Column(nullable = false, name = "ausbkosten_sek_ii")
     private Integer ausbKosten_SekII;
 
-    @Column(nullable = false, name = "ausb_kosten_tertiaer")
+    @Column(nullable = false, name = "ausbkosten_tertiaer")
     private Integer ausbKosten_Tertiaer;
+
+    @Column(nullable = false, name = "freibetrag_vermoegen")
+    private Integer freibetrag_vermoegen;
 
     @Column(nullable = false, name = "freibetrag_erwerbseinkommen")
     private Integer freibetrag_erwerbseinkommen;
@@ -139,19 +142,34 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "erwachsene_26_99")
     private Integer erwachsene_26_99;
 
-    @Column(nullable = false, name = "wohnkosten_fam_1_pers")
+    @Column(nullable = false, name = "wohnkosten_fam_1pers")
     private Integer wohnkosten_fam_1pers;
 
-    @Column(nullable = false, name = "wohnkosten_fam_2_pers")
+    @Column(nullable = false, name = "wohnkosten_fam_2pers")
     private Integer wohnkosten_fam_2pers;
 
-    @Column(nullable = false, name = "wohnkosten_fam_3_pers")
+    @Column(nullable = false, name = "wohnkosten_fam_3pers")
     private Integer wohnkosten_fam_3pers;
 
-    @Column(nullable = false, name = "wohnkosten_fam_4_pers")
+    @Column(nullable = false, name = "wohnkosten_fam_4pers")
     private Integer wohnkosten_fam_4pers;
 
-    @Column(nullable = false, name = "wohnkosten_persoenlich_5_pluspers")
+    @Column(nullable = false, name = "wohnkosten_fam_5pluspers")
+    private Integer wohnkosten_fam_5pluspers;
+
+    @Column(nullable = false, name = "wohnkosten_persoenlich_1pers")
+    private Integer wohnkosten_persoenlich_1pers;
+
+    @Column(nullable = false, name = "wohnkosten_persoenlich_2pers")
+    private Integer wohnkosten_persoenlich_2pers;
+
+    @Column(nullable = false, name = "wohnkosten_persoenlich_3pers")
+    private Integer wohnkosten_persoenlich_3pers;
+
+    @Column(nullable = false, name = "wohnkosten_persoenlich_4pers")
+    private Integer wohnkosten_persoenlich_4pers;
+
+    @Column(nullable = false, name = "wohnkosten_persoenlich_5pluspers")
     private Integer wohnkosten_persoenlich_5pluspers;
 
     @NotNull

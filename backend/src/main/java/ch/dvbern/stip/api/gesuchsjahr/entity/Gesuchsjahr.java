@@ -10,6 +10,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
+@Table(indexes = @Index(name = "IX_gesuchsjahr_mandant", columnList = "mandant"))
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,21 +34,6 @@ public class Gesuchsjahr extends AbstractMandantEntity {
 
 	@Column(name = "bezeichnung_fr")
 	private String bezeichnungFr;
-
-	@Embedded
-	@NotNull
-	@Valid
-	@AttributeOverrides({
-			@AttributeOverride(
-					name = "gueltigAb",
-					column = @Column(name = "ausbildungsjahr_start")
-			),
-			@AttributeOverride(
-					name = "gueltigBis",
-					column = @Column(name = "ausbildungsjahr_ende")
-			)
-	})
-	private DateRange ausbildungsjahr;
 
 	@Column(name = "technisches_jahr")
 	private Integer technischesJahr;

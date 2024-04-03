@@ -39,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER,
-  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_FREIBETRAG_VERMöGEN,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_FREIBETRAG_VERMOEGEN,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
@@ -104,8 +104,8 @@ public class GesuchsperiodeDatenDtoSpec {
   public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
   private BigDecimal ausbKostenTertiaer;
 
-  public static final String JSON_PROPERTY_FREIBETRAG_VERMöGEN = "freibetrag_vermögen";
-  private BigDecimal freibetragVermögen;
+  public static final String JSON_PROPERTY_FREIBETRAG_VERMOEGEN = "freibetrag_vermoegen";
+  private BigDecimal freibetragVermoegen;
 
   public static final String JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN = "freibetrag_erwerbseinkommen";
   private BigDecimal freibetragErwerbseinkommen;
@@ -460,29 +460,29 @@ public class GesuchsperiodeDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeDatenDtoSpec freibetragVermögen(BigDecimal freibetragVermögen) {
+  public GesuchsperiodeDatenDtoSpec freibetragVermoegen(BigDecimal freibetragVermoegen) {
     
-    this.freibetragVermögen = freibetragVermögen;
+    this.freibetragVermoegen = freibetragVermoegen;
     return this;
   }
 
    /**
    * 
-   * @return freibetragVermögen
+   * @return freibetragVermoegen
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMöGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getFreibetragVermögen() {
-    return freibetragVermögen;
+  public BigDecimal getFreibetragVermoegen() {
+    return freibetragVermoegen;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMöGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFreibetragVermögen(BigDecimal freibetragVermögen) {
-    this.freibetragVermögen = freibetragVermögen;
+  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFreibetragVermoegen(BigDecimal freibetragVermoegen) {
+    this.freibetragVermoegen = freibetragVermoegen;
   }
 
 
@@ -1284,7 +1284,7 @@ public class GesuchsperiodeDatenDtoSpec {
         Objects.equals(this.einreichefristReduziert, gesuchsperiodeDaten.einreichefristReduziert) &&
         Objects.equals(this.ausbKostenSekII, gesuchsperiodeDaten.ausbKostenSekII) &&
         Objects.equals(this.ausbKostenTertiaer, gesuchsperiodeDaten.ausbKostenTertiaer) &&
-        Objects.equals(this.freibetragVermögen, gesuchsperiodeDaten.freibetragVermögen) &&
+        Objects.equals(this.freibetragVermoegen, gesuchsperiodeDaten.freibetragVermoegen) &&
         Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeDaten.freibetragErwerbseinkommen) &&
         Objects.equals(this.einkommensfreibetrag, gesuchsperiodeDaten.einkommensfreibetrag) &&
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeDaten.elternbeteiligungssatz) &&
@@ -1319,7 +1319,7 @@ public class GesuchsperiodeDatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermögen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
+    return Objects.hash(fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
   }
 
   @Override
@@ -1336,7 +1336,7 @@ public class GesuchsperiodeDatenDtoSpec {
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
     sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
-    sb.append("    freibetragVermögen: ").append(toIndentedString(freibetragVermögen)).append("\n");
+    sb.append("    freibetragVermoegen: ").append(toIndentedString(freibetragVermoegen)).append("\n");
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");

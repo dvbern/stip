@@ -52,7 +52,13 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
     'actions',
   ];
 
-  displayedColumnsGesuchsJahr: string[] = [''];
+  displayedColumnsGesuchsJahr: string[] = [
+    'bezeichnung',
+    'gesuchsjahr',
+    'status',
+    'technischesJahr',
+    'actions',
+  ];
   gesuchsperiodenDatasourceSig = computed(() => {
     const gesuchsperioden = this.store.gesuchperiodenListView();
     const datasource = new MatTableDataSource(gesuchsperioden);
@@ -60,8 +66,8 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
   });
 
   gesuchsJahrDatasourceSig = computed(() => {
-    const gesuchsjahre = this.store.gesuchsjahre;
-    const datasource = new MatTableDataSource(gesuchsjahre());
+    const gesuchsjahre = this.store.gesuchsjahreListView();
+    const datasource = new MatTableDataSource(gesuchsjahre);
     return datasource;
   });
 

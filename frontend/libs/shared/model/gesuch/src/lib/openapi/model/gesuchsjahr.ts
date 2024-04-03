@@ -15,8 +15,6 @@ export interface Gesuchsjahr {
     id: string;
     bezeichnungDe: string;
     bezeichnungFr: string;
-    ausbildungsjahrStart: string;
-    ausbildungsjahrEnde: string;
     technischesJahr: number;
     gueltigkeitStatus: GueltigkeitStatus;
 }

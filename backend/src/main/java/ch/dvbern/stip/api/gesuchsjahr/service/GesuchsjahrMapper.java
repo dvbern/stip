@@ -13,17 +13,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class)
 public interface GesuchsjahrMapper {
-
-	@Mapping(source = "ausbildungsjahrStart", target = "ausbildungsjahr.gueltigAb")
-	@Mapping(source = "ausbildungsjahrEnde", target = "ausbildungsjahr.gueltigBis")
 	Gesuchsjahr toEntity(GesuchsjahrCreateDto gesuchsjahrDto);
 
-	@Mapping(source = "ausbildungsjahrStart", target = "ausbildungsjahr.gueltigAb")
-	@Mapping(source = "ausbildungsjahrEnde", target = "ausbildungsjahr.gueltigBis")
 	Gesuchsjahr toEntity(GesuchsjahrUpdateDto gesuchsjahrDto);
 
-	@Mapping(source = "ausbildungsjahr.gueltigAb", target = "ausbildungsjahrStart")
-	@Mapping(source = "ausbildungsjahr.gueltigBis", target = "ausbildungsjahrEnde")
 	GesuchsjahrDto toDto(Gesuchsjahr gesuchsjahr);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

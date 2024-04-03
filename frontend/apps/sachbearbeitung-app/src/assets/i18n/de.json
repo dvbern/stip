@@ -30,7 +30,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Gesuchsperiode erstellen",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Gesuchsperiode",
 
-  "sachbearbeitung-app.admin.gesuchsjahr.title": "Gesuchsjahr",
+  "sachbearbeitung-app.admin.gesuchsjahr.title": "Gesuchsjahre",
   "sachbearbeitung-app.admin.gesuchsjahr.table.description": "Übersicht aller Gesuchsjahrn",
   "sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung": "Bezeichnung",
   "sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr": "Ausbilduingsjahr",

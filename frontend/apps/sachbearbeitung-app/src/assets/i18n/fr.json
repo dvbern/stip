@@ -30,7 +30,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Période de demande",
 
-  "sachbearbeitung-app.admin.gesuchsjahr.title": "Année de la demande",
+  "sachbearbeitung-app.admin.gesuchsjahr.title": "Périodes de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.table.description": "Aperçu des périodes de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung": "Désignation",
   "sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr": "Année de formation",

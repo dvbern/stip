@@ -14,8 +14,6 @@ import { GueltigkeitStatus } from './gueltigkeitStatus';
 export interface GesuchsjahrUpdate { 
     bezeichnungDe?: string;
     bezeichnungFr?: string;
-    ausbildungsjahrStart?: string;
-    ausbildungsjahrEnde?: string;
     technischesJahr?: number;
     gueltigkeitStatus?: GueltigkeitStatus;
 }

@@ -3,16 +3,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnInit,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DateAdapter } from '@angular/material/core';
 import {
   MatDatepicker,
   MatDatepickerApply,
@@ -25,7 +24,6 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -66,10 +64,12 @@ import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
   providers: [provideDvDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchsperiodeDetailComponent implements OnInit {
+export class GesuchsperiodeDetailComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
+  id = input.required<string>();
+
   form = this.formBuilder.group({
     bezeichnungDe: [<string | null>null, [Validators.required]],
     bezeichnungFr: [<string | null>null, [Validators.required]],
@@ -83,7 +83,7 @@ export class GesuchsperiodeDetailComponent implements OnInit {
     einreichefristReduziert: [<string | null>null, [Validators.required]],
     ausbKosten_SekII: [<string | null>null, [Validators.required]],
     ausbKosten_Tertiaer: [<string | null>null, [Validators.required]],
-    freibetrag_vermögen: [<string | null>null, [Validators.required]],
+    freibetrag_vermoegen: [<string | null>null, [Validators.required]],
     freibetrag_erwerbseinkommen: [<string | null>null, [Validators.required]],
     einkommensfreibetrag: [<string | null>null, [Validators.required]],
     elternbeteiligungssatz: [<string | null>null, [Validators.required]],
@@ -124,17 +124,68 @@ export class GesuchsperiodeDetailComponent implements OnInit {
 
   store = inject(GesuchsperiodeStore);
 
-  ngOnInit(): void {
-    this.store.loadGesuchsperiode();
-  }
-
   constructor() {
+    effect(
+      () => {
+        this.store.loadGesuchsperiode(this.id());
+      },
+      { allowSignalWrites: true },
+    );
     effect(() => {
       const gesuchsperiode = this.store.currentGesuchsperiode?.();
       if (!gesuchsperiode) {
         return;
       }
-      this.form.patchValue(gesuchsperiode as any);
+      this.form.patchValue({
+        ...gesuchsperiode,
+        ausbKosten_SekII: gesuchsperiode.ausbKosten_SekII.toString(),
+        ausbKosten_Tertiaer: gesuchsperiode.ausbKosten_Tertiaer.toString(),
+        freibetrag_vermoegen: gesuchsperiode.freibetrag_vermoegen.toString(),
+        freibetrag_erwerbseinkommen:
+          gesuchsperiode.freibetrag_erwerbseinkommen.toString(),
+        elternbeteiligungssatz:
+          gesuchsperiode.elternbeteiligungssatz.toString(),
+        einkommensfreibetrag: gesuchsperiode.einkommensfreibetrag.toString(),
+        f_Einkommensfreibetrag:
+          gesuchsperiode.f_Einkommensfreibetrag.toString(),
+        f_Vermoegensfreibetrag:
+          gesuchsperiode.f_Vermoegensfreibetrag.toString(),
+        f_VermogenSatzAngerechnet:
+          gesuchsperiode.f_VermogenSatzAngerechnet.toString(),
+        integrationszulage: gesuchsperiode.integrationszulage.toString(),
+        limite_EkFreibetrag_Integrationszulag:
+          gesuchsperiode.limite_EkFreibetrag_Integrationszulag.toString(),
+        stipLimite_Minimalstipendium:
+          gesuchsperiode.stipLimite_Minimalstipendium.toString(),
+        person_1: gesuchsperiode.person_1.toString(),
+        personen_2: gesuchsperiode.personen_2.toString(),
+        personen_3: gesuchsperiode.personen_3.toString(),
+        personen_4: gesuchsperiode.personen_4.toString(),
+        personen_5: gesuchsperiode.personen_5.toString(),
+        personen_6: gesuchsperiode.personen_6.toString(),
+        personen_7: gesuchsperiode.personen_7.toString(),
+        proWeiterePerson: gesuchsperiode.proWeiterePerson.toString(),
+        kinder_00_18: gesuchsperiode.kinder_00_18.toString(),
+        jugendliche_erwachsene_19_25:
+          gesuchsperiode.jugendliche_erwachsene_19_25.toString(),
+        erwachsene_26_99: gesuchsperiode.erwachsene_26_99.toString(),
+        wohnkosten_fam_1pers: gesuchsperiode.wohnkosten_fam_1pers.toString(),
+        wohnkosten_fam_2pers: gesuchsperiode.wohnkosten_fam_2pers.toString(),
+        wohnkosten_fam_3pers: gesuchsperiode.wohnkosten_fam_3pers.toString(),
+        wohnkosten_fam_4pers: gesuchsperiode.wohnkosten_fam_4pers.toString(),
+        wohnkosten_fam_5pluspers:
+          gesuchsperiode.wohnkosten_fam_5pluspers.toString(),
+        wohnkosten_persoenlich_1pers:
+          gesuchsperiode.wohnkosten_persoenlich_1pers.toString(),
+        wohnkosten_persoenlich_2pers:
+          gesuchsperiode.wohnkosten_persoenlich_2pers.toString(),
+        wohnkosten_persoenlich_3pers:
+          gesuchsperiode.wohnkosten_persoenlich_3pers.toString(),
+        wohnkosten_persoenlich_4pers:
+          gesuchsperiode.wohnkosten_persoenlich_4pers.toString(),
+        wohnkosten_persoenlich_5pluspers:
+          gesuchsperiode.wohnkosten_persoenlich_5pluspers.toString(),
+      });
     });
   }
 
@@ -145,11 +196,11 @@ export class GesuchsperiodeDetailComponent implements OnInit {
       return;
     }
     const value = convertTempFormToRealValues(this.form, 'all');
-    this.store.saveGesuchsperiode({
+    this.store.saveGesuchsperiode(this.id(), {
       ...value,
       ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),
       ausbKosten_Tertiaer: fromFormatedNumber(value.ausbKosten_Tertiaer),
-      freibetrag_vermögen: fromFormatedNumber(value.freibetrag_vermögen),
+      freibetrag_vermoegen: fromFormatedNumber(value.freibetrag_vermoegen),
       freibetrag_erwerbseinkommen: fromFormatedNumber(
         value.freibetrag_erwerbseinkommen,
       ),

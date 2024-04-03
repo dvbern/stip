@@ -58,7 +58,7 @@ export interface GesuchsperiodeCreate {
     /**
      * 
      */
-    freibetrag_vermgen?: number;
+    freibetrag_vermoegen: number;
     /**
      * 
      */

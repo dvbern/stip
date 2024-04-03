@@ -1,630 +1,650 @@
 <form [formGroup]="form" data-testid="form-gesuchsperiode-form" (ngSubmit)="handleSave()" novalidate class="mt-4">
-  <h2 class="pt-5 mb-4 m-lg-2">
+  <h3 class="pt-5 mb-4">
     {{ 'shared.form.gesuchsperiode.metaDaten.title' | translate }}
-  </h2>
+  </h3>
 
-  <div class="row g-4 m-lg-2">
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- BezeichnungDe -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnungDe.label' | translate }}</mat-label>
-        <input formControlName="bezeichnungDe" data-testid="form-gesuchsperiode-bezeichnungDe" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-      <!-- BezeichnungFr -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnungFr.label' | translate }}</mat-label>
-        <input formControlName="bezeichnungFr" data-testid="form-gesuchsperiode-bezeichnungFr" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Fiskaljahr -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.fiskaljahr.label' | translate }}</mat-label>
-        <input formControlName="fiskaljahr" data-testid="form-gesuchsperiode-fiskaljahr" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4">
+    <!-- BezeichnungDe -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnungDe.label' | translate }}</mat-label>
+      <input formControlName="bezeichnungDe" data-testid="form-gesuchsperiode-bezeichnungDe" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- BezeichnungFr -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.bezeichnungFr.label' | translate }}</mat-label>
+      <input formControlName="bezeichnungFr" data-testid="form-gesuchsperiode-bezeichnungFr" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Gesuchsjahr -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
-        <input formControlName="gesuchsjahr" data-testid="form-gesuchsperiode-gesuchsjahr" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Gesuchsperiode Start -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>
-          {{ 'shared.form.gesuchsperiode.gesuchsperiodeStart.label' | translate }}
-        </mat-label>
-        <input
-          data-testid="form-gesuchsperiode-start"
-          formControlName="gesuchsperiodeStart"
-          matInput
-          type="type"
-          [matDatepicker]="gesuchsperiodeStartDatepicker"
-        />
-        <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #gesuchsperiodeStartDatepicker startView="year"></mat-datepicker>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4 mt-1">
+    <!-- Fiskaljahr -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.fiskaljahr.label' | translate }}</mat-label>
+      <input formControlName="fiskaljahr" data-testid="form-gesuchsperiode-fiskaljahr" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Gesuchsperiode Stopp -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.gesuchsperiodeStopp.label' | translate }}</mat-label>
-        <input
-          formControlName="gesuchsperiodeStopp"
-          data-testid="form-gesuchsperiode-gesuchsperiode-stopp"
-          matInput
-          [matDatepicker]="gesuchsperiodeStoppDatepicker"
-        />
-        <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStoppDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #gesuchsperiodeStoppDatepicker></mat-datepicker>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Aufschalttermin Start -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.aufschaltterminStart.label' | translate }}</mat-label>
-        <input
-          formControlName="aufschaltterminStart"
-          data-testid="form-gesuchsperiode-aufschalttermin-start"
-          matInput
-          [matDatepicker]="aufschaltterminStartDatepicker"
-        />
-        <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStartDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #aufschaltterminStartDatepicker></mat-datepicker>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Gesuchsjahr -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
+      <input formControlName="gesuchsjahr" data-testid="form-gesuchsperiode-gesuchsjahr" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Aufschalttermin Stopp -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.aufschaltterminStopp.label' | translate }}</mat-label>
-        <input
-          formControlName="aufschaltterminStopp"
-          data-testid="form-gesuchsperiode-aufschalttermin-stopp"
-          matInput
-          [matDatepicker]="aufschaltterminStoppDatepicker"
-        />
-        <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStoppDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #aufschaltterminStoppDatepicker></mat-datepicker>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+  <div class="row g-4 mt-1">
+    <!-- Gesuchsperiode Start -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>
+        {{ 'shared.form.gesuchsperiode.gesuchsperiodeStart.label' | translate }}
+      </mat-label>
+      <input
+        data-testid="form-gesuchsperiode-start"
+        formControlName="gesuchsperiodeStart"
+        matInput
+        type="type"
+        [matDatepicker]="gesuchsperiodeStartDatepicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #gesuchsperiodeStartDatepicker startView="year"></mat-datepicker>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Einreichefrist Normal -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.einreichefristNormal.label' | translate }}</mat-label>
-        <input
-          formControlName="einreichefristNormal"
-          data-testid="form-gesuchsperiode-einreichefrist-normal"
-          matInput
-          [matDatepicker]="einreicherfristNormalDatepicker"
-        />
-        <mat-datepicker-toggle matIconSuffix [for]="einreicherfristNormalDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #einreicherfristNormalDatepicker></mat-datepicker>
-        <mat-hint translate> shared.form.gesuchsperiode.einreichefristNormal.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Gesuchsperiode Stopp -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.gesuchsperiodeStopp.label' | translate }}</mat-label>
+      <input
+        formControlName="gesuchsperiodeStopp"
+        data-testid="form-gesuchsperiode-gesuchsperiode-stopp"
+        matInput
+        [matDatepicker]="gesuchsperiodeStoppDatepicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStoppDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #gesuchsperiodeStoppDatepicker></mat-datepicker>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Einreichefrist Reduziert -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.einreichefristReduziert.label' | translate }}</mat-label>
-        <input
-          formControlName="einreichefristReduziert"
-          data-testid="form-gesuchsperiode-einreichefrist-reduziert"
-          matInput
-          [matDatepicker]="einreicherfristReduziertDatepicker"
-        />
-        <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #einreicherfristReduziertDatepicker startView="year"></mat-datepicker>
-        <mat-hint translate> shared.form.gesuchsperiode.einreichefristReduziert.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+  <div class="row g-4 mt-1">
+    <!-- Aufschalttermin Start -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.aufschaltterminStart.label' | translate }}</mat-label>
+      <input
+        formControlName="aufschaltterminStart"
+        data-testid="form-gesuchsperiode-aufschalttermin-start"
+        matInput
+        [matDatepicker]="aufschaltterminStartDatepicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStartDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #aufschaltterminStartDatepicker></mat-datepicker>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-    <!-- Ausbildungskosten (pers. Budget) -->
-    <h2 class="pt-5 mb-4 m-lg-2">
-      {{ 'shared.form.gesuchsperiode.ausbildungskosten.title' | translate }}
-    </h2>
-    <div class="row g-4 m-lg-2">
-      <!-- Sekundarstufe II -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
-        <input
-          formControlName="ausbKosten_SekII"
-          data-testid="form-gesuchsperiode-AusbKosten_SekII"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Aufschalttermin Stopp -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.aufschaltterminStopp.label' | translate }}</mat-label>
+      <input
+        formControlName="aufschaltterminStopp"
+        data-testid="form-gesuchsperiode-aufschalttermin-stopp"
+        matInput
+        [matDatepicker]="aufschaltterminStoppDatepicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStoppDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #aufschaltterminStoppDatepicker></mat-datepicker>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Teritärstufe -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
-        <input
-          formControlName="ausbKosten_Tertiaer"
-          data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <!-- Stammdaten -->
-    <h2 class="pt-5 mb-4 m-lg-2">
-      {{ 'shared.form.gesuchsperiode.stammdaten.title' | translate }}
-    </h2>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Freibetrag Vermögen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>
-          {{ 'shared.form.gesuchsperiode.freibetrag_vermögen.label' | translate }}
-        </mat-label>
-        <mat-hint translate> shared.form.gesuchsperiode.freibetrag_vermögen.info </mat-hint>
-        <input
-          data-testid="form-gesuchsperiode-freibetrag_vermögen"
-          formControlName="freibetrag_vermögen"
-          matInput
-          type="type"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4 mt-1">
+    <!-- Einreichefrist Normal -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.einreichefristNormal.label' | translate }}</mat-label>
+      <input
+        formControlName="einreichefristNormal"
+        data-testid="form-gesuchsperiode-einreichefrist-normal"
+        matInput
+        [matDatepicker]="einreicherfristNormalDatepicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="einreicherfristNormalDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #einreicherfristNormalDatepicker></mat-datepicker>
+      <mat-hint translate> shared.form.gesuchsperiode.einreichefristNormal.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Freibetrag Erwerbseinkommen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.freibetrag_erwerbseinkommen.label' | translate }}</mat-label>
-        <input
-          formControlName="freibetrag_erwerbseinkommen"
-          data-testid="form-gesuchsperiode-freibetrag_erwerbseinkommen"
-          matInput
-          type="text"
-        />
-        <mat-hint translate> shared.form.gesuchsperiode.freibetrag_erwerbseinkommen.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Einkommensfreibetrag -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.einkommensfreibetrag.label' | translate }}</mat-label>
-        <input
-          formControlName="einkommensfreibetrag"
-          data-testid="form-gesuchsperiode-einkommensfreibetrag"
-          matInput
-          type="text"
-        />
-        <mat-hint translate> shared.form.gesuchsperiode.einkommensfreibetrag.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Einreichefrist Reduziert -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.einreichefristReduziert.label' | translate }}</mat-label>
+      <input
+        formControlName="einreichefristReduziert"
+        data-testid="form-gesuchsperiode-einreichefrist-reduziert"
+        matInput
+        [matDatepicker]="einreicherfristReduziertDatepicker"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #einreicherfristReduziertDatepicker startView="year"></mat-datepicker>
+      <mat-hint translate> shared.form.gesuchsperiode.einreichefristReduziert.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Elternbeteiligungssatz -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.elternbeteiligungssatz.label' | translate }}</mat-label>
-        <input
-          formControlName="elternbeteiligungssatz"
-          data-testid="form-gesuchsperiode-elternbeteiligungssatz"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+  <!-- Ausbildungskosten (pers. Budget) -->
+  <h3 class="pt-5 mb-4">
+    {{ 'shared.form.gesuchsperiode.ausbildungskosten.title' | translate }}
+  </h3>
 
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- F_Einkommensfreibetrag -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.f_Einkommensfreibetrag.label' | translate }}</mat-label>
-        <input
-          formControlName="f_Einkommensfreibetrag"
-          data-testid="form-gesuchsperiode-f_Einkommensfreibetrag"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4">
+    <!-- Sekundarstufe II -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
+      <input
+        formControlName="ausbKosten_SekII"
+        data-testid="form-gesuchsperiode-AusbKosten_SekII"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- F_Vermoegensfreibetrag -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.f_Vermoegensfreibetrag.label' | translate }}</mat-label>
-        <input
-          formControlName="f_Vermoegensfreibetrag"
-          data-testid="form-gesuchsperiode-f_Vermoegensfreibetrag"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- F_VermogenSatzAngerechnet -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.f_VermogenSatzAngerechnet.label' | translate }}</mat-label>
-        <input
-          formControlName="f_VermogenSatzAngerechnet"
-          data-testid="form-gesuchsperiode-f_VermogenSatzAngerechnet"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Teritärstufe -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
+      <input
+        formControlName="ausbKosten_Tertiaer"
+        data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Integrationszulage -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.integrationszulage.label' | translate }}</mat-label>
-        <input
-          formControlName="integrationszulage"
-          data-testid="form-gesuchsperiode-integrationszulage"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Limite_EkFreibetrag_Integrationszulag -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label
-          >{{ 'shared.form.gesuchsperiode.limite_EkFreibetrag_Integrationszulag.label' | translate }}
-        </mat-label>
-        <input
-          formControlName="limite_EkFreibetrag_Integrationszulag"
-          data-testid="form-gesuchsperiode-limite_EkFreibetrag_Integrationszulag"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <!-- Stammdaten -->
+  <h3 class="pt-5 mb-4">
+    {{ 'shared.form.gesuchsperiode.stammdaten.title' | translate }}
+  </h3>
 
-      <!-- StipLimite_Minimalstipendium -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.stipLimite_Minimalstipendium.label' | translate }}</mat-label>
-        <input
-          formControlName="stipLimite_Minimalstipendium"
-          data-testid="form-gesuchsperiode-stipLimite_Minimalstipendium"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <!-- Grundbedarf -->
-    <h3 class="pt-5 mb-4 m-lg-2">
-      {{ 'shared.form.gesuchsperiode.grundbedarf.title' | translate }}
-    </h3>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 1 Person -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.1_Person.label' | translate }}</mat-label>
-        <input formControlName="person_1" data-testid="form-gesuchsperiode-1_Person" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4">
+    <!-- Freibetrag Vermögen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>
+        {{ 'shared.form.gesuchsperiode.freibetrag_vermoegen.label' | translate }}
+      </mat-label>
+      <mat-hint translate> shared.form.gesuchsperiode.freibetrag_vermoegen.info </mat-hint>
+      <input
+        data-testid="form-gesuchsperiode-freibetrag_vermoegen"
+        formControlName="freibetrag_vermoegen"
+        matInput
+        type="type"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- 2 Personen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.2_Personen.label' | translate }}</mat-label>
-        <input formControlName="personen_2" data-testid="form-gesuchsperiode-2_Personen" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 3 Personen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.3_Personen.label' | translate }}</mat-label>
-        <input formControlName="personen_3" data-testid="form-gesuchsperiode-3_Personen" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Freibetrag Erwerbseinkommen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.freibetrag_erwerbseinkommen.label' | translate }}</mat-label>
+      <input
+        formControlName="freibetrag_erwerbseinkommen"
+        data-testid="form-gesuchsperiode-freibetrag_erwerbseinkommen"
+        matInput
+        type="text"
+      />
+      <mat-hint translate> shared.form.gesuchsperiode.freibetrag_erwerbseinkommen.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- 4 Personen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.4_Personen.label' | translate }}</mat-label>
-        <input formControlName="personen_4" data-testid="form-gesuchsperiode-4_Personen" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 5_Personen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.5_Personen.label' | translate }}</mat-label>
-        <input formControlName="personen_5" data-testid="form-gesuchsperiode-5_Personen" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4 mt-1">
+    <!-- Einkommensfreibetrag -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.einkommensfreibetrag.label' | translate }}</mat-label>
+      <input
+        formControlName="einkommensfreibetrag"
+        data-testid="form-gesuchsperiode-einkommensfreibetrag"
+        matInput
+        type="text"
+      />
+      <mat-hint translate> shared.form.gesuchsperiode.einkommensfreibetrag.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- 6 Personen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.6_Personen.label' | translate }}</mat-label>
-        <input formControlName="personen_6" data-testid="form-gesuchsperiode-6_Personen" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 7 Personen -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.7_Personen.label' | translate }}</mat-label>
-        <input formControlName="personen_7" data-testid="form-gesuchsperiode-7_Personen" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <!-- Elternbeteiligungssatz -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.elternbeteiligungssatz.label' | translate }}</mat-label>
+      <input
+        formControlName="elternbeteiligungssatz"
+        data-testid="form-gesuchsperiode-elternbeteiligungssatz"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
-      <!-- Pro weitere Person -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.proWeiterePerson.label' | translate }}</mat-label>
-        <input
-          formControlName="proWeiterePerson"
-          data-testid="form-gesuchsperiode-proWeiterePerson"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <!-- Medizinische Grundversorgung -->
-    <h3 class="pt-5 mb-4 m-lg-2">
-      {{ 'shared.form.gesuchsperiode.medizinische_grundversorgung.title' | translate }}
-    </h3>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Kinder 00-18 -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.kinder-00-18.label' | translate }}</mat-label>
-        <input formControlName="kinder_00_18" data-testid="form-gesuchsperiode-erwachsene-00-18" matInput type="text" />
-        <mat-hint translate> shared.form.gesuchsperiode.erwachsene-00-18.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="row g-4 mt-1">
+    <!-- F_Einkommensfreibetrag -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.f_Einkommensfreibetrag.label' | translate }}</mat-label>
+      <input
+        formControlName="f_Einkommensfreibetrag"
+        data-testid="form-gesuchsperiode-f_Einkommensfreibetrag"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Jugendliche Erwachsene 19-25 -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.jugendliche-erwachsene-19-25.label' | translate }}</mat-label>
-        <input
-          formControlName="jugendliche_erwachsene_19_25"
-          data-testid="form-gesuchsperiode-jugendliche-erwachsene-19-25"
-          matInput
-          type="text"
-        />
-        <mat-hint translate> shared.form.gesuchsperiode.erwachsene-19-25.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- Erwachsene 26-99 -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.erwachsene-26-99.label' | translate }}</mat-label>
-        <input
-          formControlName="erwachseneerwachsene_26_99"
-          data-testid="form-gesuchsperiode-erwachsene-26-99"
-          matInput
-          type="text"
-        />
-        <mat-hint translate> shared.form.gesuchsperiode.erwachsene-26-99.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <!-- Wohnkosten (Familienbudget) -->
-    <h3 class="pt-5 mb-4 m-lg-2">
+    <!-- F_Vermoegensfreibetrag -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.f_Vermoegensfreibetrag.label' | translate }}</mat-label>
+      <input
+        formControlName="f_Vermoegensfreibetrag"
+        data-testid="form-gesuchsperiode-f_Vermoegensfreibetrag"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- F_VermogenSatzAngerechnet -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.f_VermogenSatzAngerechnet.label' | translate }}</mat-label>
+      <input
+        formControlName="f_VermogenSatzAngerechnet"
+        data-testid="form-gesuchsperiode-f_VermogenSatzAngerechnet"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Integrationszulage -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.integrationszulage.label' | translate }}</mat-label>
+      <input
+        formControlName="integrationszulage"
+        data-testid="form-gesuchsperiode-integrationszulage"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- Limite_EkFreibetrag_Integrationszulag -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.limite_EkFreibetrag_Integrationszulag.label' | translate }} </mat-label>
+      <input
+        formControlName="limite_EkFreibetrag_Integrationszulag"
+        data-testid="form-gesuchsperiode-limite_EkFreibetrag_Integrationszulag"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- StipLimite_Minimalstipendium -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.stipLimite_Minimalstipendium.label' | translate }}</mat-label>
+      <input
+        formControlName="stipLimite_Minimalstipendium"
+        data-testid="form-gesuchsperiode-stipLimite_Minimalstipendium"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Grundbedarf -->
+  <h3 class="pt-5 mb-4">
+    {{ 'shared.form.gesuchsperiode.grundbedarf.title' | translate }}
+  </h3>
+
+  <div class="row g-4">
+    <!-- 1 Person -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.1_Person.label' | translate }}</mat-label>
+      <input formControlName="person_1" data-testid="form-gesuchsperiode-1_Person" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 2 Personen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.2_Personen.label' | translate }}</mat-label>
+      <input formControlName="personen_2" data-testid="form-gesuchsperiode-2_Personen" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 3 Personen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.3_Personen.label' | translate }}</mat-label>
+      <input formControlName="personen_3" data-testid="form-gesuchsperiode-3_Personen" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 4 Personen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.4_Personen.label' | translate }}</mat-label>
+      <input formControlName="personen_4" data-testid="form-gesuchsperiode-4_Personen" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 5_Personen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.5_Personen.label' | translate }}</mat-label>
+      <input formControlName="personen_5" data-testid="form-gesuchsperiode-5_Personen" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 6 Personen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.6_Personen.label' | translate }}</mat-label>
+      <input formControlName="personen_6" data-testid="form-gesuchsperiode-6_Personen" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 7 Personen -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.7_Personen.label' | translate }}</mat-label>
+      <input formControlName="personen_7" data-testid="form-gesuchsperiode-7_Personen" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Pro weitere Person -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.proWeiterePerson.label' | translate }}</mat-label>
+      <input
+        formControlName="proWeiterePerson"
+        data-testid="form-gesuchsperiode-proWeiterePerson"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Medizinische Grundversorgung -->
+  <h3 class="pt-5 mb-4">
+    {{ 'shared.form.gesuchsperiode.medizinische_grundversorgung.title' | translate }}
+  </h3>
+
+  <div class="row g-4">
+    <!-- Kinder 00-18 -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.kinder-00-18.label' | translate }}</mat-label>
+      <input formControlName="kinder_00_18" data-testid="form-gesuchsperiode-erwachsene-00-18" matInput type="text" />
+      <mat-hint translate> shared.form.gesuchsperiode.erwachsene-00-18.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Jugendliche Erwachsene 19-25 -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.jugendliche-erwachsene-19-25.label' | translate }}</mat-label>
+      <input
+        formControlName="jugendliche_erwachsene_19_25"
+        data-testid="form-gesuchsperiode-jugendliche-erwachsene-19-25"
+        matInput
+        type="text"
+      />
+      <mat-hint translate> shared.form.gesuchsperiode.erwachsene-19-25.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- Erwachsene 26-99 -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.erwachsene-26-99.label' | translate }}</mat-label>
+      <input
+        formControlName="erwachsene_26_99"
+        data-testid="form-gesuchsperiode-erwachsene-26-99"
+        matInput
+        type="text"
+      />
+      <mat-hint translate> shared.form.gesuchsperiode.erwachsene-26-99.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Wohnkosten (Familienbudget) -->
+  <h3 class="pt-5 mb-4">
+    {{ 'shared.form.gesuchsperiode.wohnkosten-familienbudget.title' | translate }}
+  </h3>
+
+  <div class="row g-4">
+    <!-- 1 Person (2 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten_fam_1pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_fam_1pers"
+        data-testid="form-gesuchsperiode-wohnkosten_fam_1pers"
+        matInput
+        type="text"
+      />
+      <mat-hint translate> shared.form.gesuchsperiode.wohnkosten_fam_1pers.info </mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 2 Person (3 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten_fam_2pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_fam_2pers"
+        data-testid="form-gesuchsperiode-wohnkosten_fam_2pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 3 Person (4 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten_fam_3pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_fam_3pers"
+        data-testid="form-gesuchsperiode-wohnkosten_fam_3pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 4 Person (5 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-fam-4pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_fam_4pers"
+        data-testid="form-gesuchsperiode-wohnkosten-fam-4pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 5+ Personen (5+ Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-fam-5+pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_fam_5pluspers"
+        data-testid="form-gesuchsperiode-wohnkosten-fam-5+pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Wohnkosten (Persönliches Budget) -->
+    <h3 class="pt-5 mb-4">
       {{ 'shared.form.gesuchsperiode.wohnkosten-familienbudget.title' | translate }}
     </h3>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 1 Person (2 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten_fam_1pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_fam_1pers"
-          data-testid="form-gesuchsperiode-wohnkosten_fam_1pers"
-          matInput
-          type="text"
-        />
-        <mat-hint translate> shared.form.gesuchsperiode.wohnkosten_fam_1pers.info </mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- 2 Person (3 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten_fam_2pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_fam_2pers"
-          data-testid="form-gesuchsperiode-wohnkosten_fam_2pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 3 Person (4 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten_fam_3pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_fam_3pers"
-          data-testid="form-gesuchsperiode-wohnkosten_fam_3pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- 4 Person (5 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-fam-4pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_fam_4pers"
-          data-testid="form-gesuchsperiode-wohnkosten-fam-4pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 5+ Personen (5+ Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-fam-5+pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_fam_5pluspers"
-          data-testid="form-gesuchsperiode-wohnkosten-fam-5+pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-      <!-- Wohnkosten (Persönliches Budget) -->
-      <h3 class="pt-5 mb-4 m-lg-2">
-        {{ 'shared.form.gesuchsperiode.wohnkosten-familienbudget.title' | translate }}
-      </h3>
-      <!-- 1 Person (2 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-1pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_persoenlich_1pers"
-          data-testid="form-gesuchsperiode-wohnkosten-persoenlich-1pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 2 Person (3 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-2pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_persoenlich_2pers"
-          data-testid="form-gesuchsperiode-FB_2Pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- 3 Person (4 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-3pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_persoenlich_3pers"
-          data-testid="form-gesuchsperiode-FB_3Pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mt-1 m-lg-2">
-      <!-- 4 Person (5 Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-4pers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_persoenlich_4pers"
-          data-testid="form-gesuchsperiode-FB_4Pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- 5 Person (5+ Zimmer) -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
-        <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-5pluspers.label' | translate }}</mat-label>
-        <input
-          formControlName="wohnkosten_persoenlich_5pluspers"
-          data-testid="form-gesuchsperiode-FB_5+Pers"
-          matInput
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <dv-shared-ui-step-form-buttons>
-      <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
-        {{ 'shared.form.save-and-continue' | translate }}
-      </button>
-    </dv-shared-ui-step-form-buttons>
+    <!-- 1 Person (2 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-1pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_persoenlich_1pers"
+        data-testid="form-gesuchsperiode-wohnkosten-persoenlich-1pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
   </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 2 Person (3 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-2pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_persoenlich_2pers"
+        data-testid="form-gesuchsperiode-FB_2Pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 3 Person (4 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-3pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_persoenlich_3pers"
+        data-testid="form-gesuchsperiode-FB_3Pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <!-- 4 Person (5 Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-4pers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_persoenlich_4pers"
+        data-testid="form-gesuchsperiode-FB_4Pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- 5 Person (5+ Zimmer) -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.gesuchsperiode.wohnkosten-persoenlich-5pluspers.label' | translate }}</mat-label>
+      <input
+        formControlName="wohnkosten_persoenlich_5pluspers"
+        data-testid="form-gesuchsperiode-FB_5+Pers"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <dv-shared-ui-step-form-buttons>
+    <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+      {{ 'shared.form.save-and-continue' | translate }}
+    </button>
+  </dv-shared-ui-step-form-buttons>
 </form>
