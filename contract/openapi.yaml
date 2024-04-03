@@ -335,7 +335,7 @@ paths:
                 - Gesuchsperiode
             responses:
                 '201':
-                    description: Created `Gesuchsperiode`
+                    description: Gesuchsperiode created
                 '401':
                     $ref: '#/components/responses/Unauthorized'
                 '403':
@@ -1108,12 +1108,6 @@ components:
                 - STIPENDIUM_AKZEPTIERT
                 - STIPENDIUM_AUSBEZAHLT
             type: string
-        Gesuchsperiodenstatus:
-            enum:
-                - ENTWURF
-                - AKTIV
-                - ARCHIVIERT
-            type: string
         GueltigkeitStatus:
             enum:
                 - ENTWURF
@@ -1271,17 +1265,6 @@ components:
                     type: integer
                 gueltigkeitStatus:
                     $ref: '#/components/schemas/GueltigkeitStatus'
-        GesuchsperiodeCreate:
-            type: object
-            properties:
-                gueltigAb:
-                    $ref: '#/components/schemas/LocalDate'
-                gueltigBis:
-                    $ref: '#/components/schemas/LocalDate'
-                einreichfrist:
-                    $ref: '#/components/schemas/LocalDate'
-                aufschaltdatum:
-                    $ref: '#/components/schemas/LocalDate'
         DokumentCreate:
             required:
                 - fileUpload
@@ -1679,46 +1662,6 @@ components:
                     type: object
                 -
                     $ref: '#/components/schemas/PersonInAusbildungUpdate'
-        Gesuchsperiode:
-            required:
-                - id
-                - gueltigAb
-                - gueltigBis
-                - bezeichnungDe
-                - bezeichnungFr
-                - status
-            type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                gueltigAb:
-                    $ref: '#/components/schemas/LocalDate'
-                gueltigBis:
-                    $ref: '#/components/schemas/LocalDate'
-                einreichfrist:
-                    $ref: '#/components/schemas/LocalDate'
-                aufschaltdatum:
-                    $ref: '#/components/schemas/LocalDate'
-                    example: '2022-12-12'
-                bezeichnungDe:
-                    type: string
-                bezeichnungFr:
-                    type: string
-                status:
-                    $ref: '#/components/schemas/Gesuchsperiodenstatus'
-            example:
-                -
-                    id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
-                    gueltigAb: '2022-02-01'
-                    gueltigBis: '2023-01-31'
-                    einreichfrist: '2022-06-30'
-                    aufschaltdatum: '2022-06-01'
-                -
-                    id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
-                    gueltigAb: '2022-02-01'
-                    gueltigBis: '2023-01-31'
-                    einreichfrist: '2022-06-30'
-                    aufschaltdatum: '2022-06-01'
         ElternTyp:
             description: ''
             enum:
@@ -2377,12 +2320,96 @@ components:
                 - HONDRICH
                 - LE_SENTIER
             type: string
-
+        GesuchsperiodeWithDaten:
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+                - bezeichnungDe
+                - bezeichnungFr
+                - status
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bezeichnungDe:
+                    type: string
+                bezeichnungFr:
+                    type: string
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                status:
+                    $ref: '#/components/schemas/GueltigkeitStatus'
+            allOf:
+                - $ref: '#/components/schemas/GesuchsperiodeDaten'
+        Gesuchsperiode:
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+                - bezeichnungDe
+                - bezeichnungFr
+                - status
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bezeichnungDe:
+                    type: string
+                bezeichnungFr:
+                    type: string
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                status:
+                    $ref: '#/components/schemas/GueltigkeitStatus'
+        GesuchsperiodeCreate:
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+                - bezeichnungDe
+                - bezeichnungFr
+                - status
+            type: object
+            properties:
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'
+            allOf:
+                - $ref: '#/components/schemas/GesuchsperiodeDaten'
+        GesuchsperiodeUpdate:
+            type: object
+            properties:
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'
+            allOf:
+                - $ref: '#/components/schemas/GesuchsperiodeDaten'
         GesuchsperiodeDaten:
             type: object
             required:
-                - bezeichnungDe
-                - bezeichnungFr
                 - fiskaljahr
                 - gesuchsjahr
                 - gesuchsperiodeStart
@@ -2425,12 +2452,6 @@ components:
                 - wohnkosten_persoenlich_4pers
                 - wohnkosten_persoenlich_5pluspers
             properties:
-                bezeichnungDe:
-                    description: ''
-                    type: string
-                bezeichnungFr:
-                    description: ''
-                    type: string
                 fiskaljahr:
                     description: ''
                     type: string

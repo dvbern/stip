@@ -39,6 +39,9 @@ public class GesuchsjahrService {
 
 	public GesuchsjahrDto updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
 		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+		if (gesuchsjahr.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
+			throw new UnsupportedOperationException("Cannot update a Gesuchsjahr with GueltigkeitStatus PUBLIZIERT");
+		}
 		gesuchsjahr = gesuchsjahrMapper.partialUpdate(gesuchsjahrUpdateDto, gesuchsjahr);
 		gesuchsjahrRepository.persist(gesuchsjahr);
 		return gesuchsjahrMapper.toDto(gesuchsjahr);

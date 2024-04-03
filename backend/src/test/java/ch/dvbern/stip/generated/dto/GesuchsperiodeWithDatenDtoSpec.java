@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -22,62 +23,76 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * GesuchsperiodeCreateDtoSpec
+ * GesuchsperiodeWithDatenDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GUELTIG_AB,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINREICHFRIST,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUFSCHALTDATUM,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FISKALJAHR,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_STOPP,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_STOPP,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FREIBETRAG_VERMöGEN,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_F_EINKOMMENSFREIBETRAG,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_F_VERMOEGENSFREIBETRAG,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_F_VERMOGEN_SATZ_ANGERECHNET,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSON1,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN2,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN3,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN4,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN5,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN6,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN7,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PRO_WEITERE_PERSON,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_KINDER0018,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ERWACHSENE2699,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM1PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM2PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM3PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM4PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ID,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GUELTIG_AB,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_EINREICHFRIST,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_AUFSCHALTDATUM,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_STATUS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FISKALJAHR,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_STOPP,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_STOPP,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FREIBETRAG_VERMöGEN,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_F_EINKOMMENSFREIBETRAG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_F_VERMOEGENSFREIBETRAG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_F_VERMOGEN_SATZ_ANGERECHNET,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSON1,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN2,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN3,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN4,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN5,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN6,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PERSONEN7,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PRO_WEITERE_PERSON,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_KINDER0018,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ERWACHSENE2699,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM1PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM2PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM3PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM4PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS
 })
-@JsonTypeName("GesuchsperiodeCreate")
+@JsonTypeName("GesuchsperiodeWithDaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class GesuchsperiodeCreateDtoSpec {
+public class GesuchsperiodeWithDatenDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
+  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  private String bezeichnungDe;
+
+  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  private String bezeichnungFr;
+
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
   private LocalDate gueltigAb;
 
@@ -89,6 +104,9 @@ public class GesuchsperiodeCreateDtoSpec {
 
   public static final String JSON_PROPERTY_AUFSCHALTDATUM = "aufschaltdatum";
   private LocalDate aufschaltdatum;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private GueltigkeitStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_FISKALJAHR = "fiskaljahr";
   private String fiskaljahr;
@@ -213,10 +231,88 @@ public class GesuchsperiodeCreateDtoSpec {
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS = "wohnkosten_persoenlich_5pluspers";
   private BigDecimal wohnkostenPersoenlich5pluspers;
 
-  public GesuchsperiodeCreateDtoSpec() {
+  public GesuchsperiodeWithDatenDtoSpec() {
   }
 
-  public GesuchsperiodeCreateDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public GesuchsperiodeWithDatenDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+
+  public GesuchsperiodeWithDatenDtoSpec bezeichnungDe(String bezeichnungDe) {
+    
+    this.bezeichnungDe = bezeichnungDe;
+    return this;
+  }
+
+   /**
+   * Get bezeichnungDe
+   * @return bezeichnungDe
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
+  }
+
+
+  public GesuchsperiodeWithDatenDtoSpec bezeichnungFr(String bezeichnungFr) {
+    
+    this.bezeichnungFr = bezeichnungFr;
+    return this;
+  }
+
+   /**
+   * Get bezeichnungFr
+   * @return bezeichnungFr
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
+  }
+
+
+  public GesuchsperiodeWithDatenDtoSpec gueltigAb(LocalDate gueltigAb) {
     
     this.gueltigAb = gueltigAb;
     return this;
@@ -242,7 +338,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec gueltigBis(LocalDate gueltigBis) {
+  public GesuchsperiodeWithDatenDtoSpec gueltigBis(LocalDate gueltigBis) {
     
     this.gueltigBis = gueltigBis;
     return this;
@@ -268,7 +364,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec einreichfrist(LocalDate einreichfrist) {
+  public GesuchsperiodeWithDatenDtoSpec einreichfrist(LocalDate einreichfrist) {
     
     this.einreichfrist = einreichfrist;
     return this;
@@ -294,7 +390,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec aufschaltdatum(LocalDate aufschaltdatum) {
+  public GesuchsperiodeWithDatenDtoSpec aufschaltdatum(LocalDate aufschaltdatum) {
     
     this.aufschaltdatum = aufschaltdatum;
     return this;
@@ -320,7 +416,33 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec fiskaljahr(String fiskaljahr) {
+  public GesuchsperiodeWithDatenDtoSpec status(GueltigkeitStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GueltigkeitStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(GueltigkeitStatusDtoSpec status) {
+    this.status = status;
+  }
+
+
+  public GesuchsperiodeWithDatenDtoSpec fiskaljahr(String fiskaljahr) {
     
     this.fiskaljahr = fiskaljahr;
     return this;
@@ -346,7 +468,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec gesuchsjahr(String gesuchsjahr) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsjahr(String gesuchsjahr) {
     
     this.gesuchsjahr = gesuchsjahr;
     return this;
@@ -372,7 +494,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
     
     this.gesuchsperiodeStart = gesuchsperiodeStart;
     return this;
@@ -398,7 +520,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
     
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
     return this;
@@ -424,7 +546,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec aufschaltterminStart(LocalDate aufschaltterminStart) {
+  public GesuchsperiodeWithDatenDtoSpec aufschaltterminStart(LocalDate aufschaltterminStart) {
     
     this.aufschaltterminStart = aufschaltterminStart;
     return this;
@@ -450,7 +572,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec aufschaltterminStopp(LocalDate aufschaltterminStopp) {
+  public GesuchsperiodeWithDatenDtoSpec aufschaltterminStopp(LocalDate aufschaltterminStopp) {
     
     this.aufschaltterminStopp = aufschaltterminStopp;
     return this;
@@ -476,7 +598,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
+  public GesuchsperiodeWithDatenDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
     
     this.einreichefristNormal = einreichefristNormal;
     return this;
@@ -502,7 +624,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec einreichefristReduziert(LocalDate einreichefristReduziert) {
+  public GesuchsperiodeWithDatenDtoSpec einreichefristReduziert(LocalDate einreichefristReduziert) {
     
     this.einreichefristReduziert = einreichefristReduziert;
     return this;
@@ -528,7 +650,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec ausbKostenSekII(BigDecimal ausbKostenSekII) {
+  public GesuchsperiodeWithDatenDtoSpec ausbKostenSekII(BigDecimal ausbKostenSekII) {
     
     this.ausbKostenSekII = ausbKostenSekII;
     return this;
@@ -554,7 +676,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec ausbKostenTertiaer(BigDecimal ausbKostenTertiaer) {
+  public GesuchsperiodeWithDatenDtoSpec ausbKostenTertiaer(BigDecimal ausbKostenTertiaer) {
     
     this.ausbKostenTertiaer = ausbKostenTertiaer;
     return this;
@@ -580,7 +702,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec freibetragVermögen(BigDecimal freibetragVermögen) {
+  public GesuchsperiodeWithDatenDtoSpec freibetragVermögen(BigDecimal freibetragVermögen) {
     
     this.freibetragVermögen = freibetragVermögen;
     return this;
@@ -606,7 +728,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec freibetragErwerbseinkommen(BigDecimal freibetragErwerbseinkommen) {
+  public GesuchsperiodeWithDatenDtoSpec freibetragErwerbseinkommen(BigDecimal freibetragErwerbseinkommen) {
     
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
     return this;
@@ -632,7 +754,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec einkommensfreibetrag(BigDecimal einkommensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec einkommensfreibetrag(BigDecimal einkommensfreibetrag) {
     
     this.einkommensfreibetrag = einkommensfreibetrag;
     return this;
@@ -658,7 +780,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec elternbeteiligungssatz(BigDecimal elternbeteiligungssatz) {
+  public GesuchsperiodeWithDatenDtoSpec elternbeteiligungssatz(BigDecimal elternbeteiligungssatz) {
     
     this.elternbeteiligungssatz = elternbeteiligungssatz;
     return this;
@@ -684,7 +806,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec fEinkommensfreibetrag(BigDecimal fEinkommensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec fEinkommensfreibetrag(BigDecimal fEinkommensfreibetrag) {
     
     this.fEinkommensfreibetrag = fEinkommensfreibetrag;
     return this;
@@ -710,7 +832,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec fVermoegensfreibetrag(BigDecimal fVermoegensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec fVermoegensfreibetrag(BigDecimal fVermoegensfreibetrag) {
     
     this.fVermoegensfreibetrag = fVermoegensfreibetrag;
     return this;
@@ -736,7 +858,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec fVermogenSatzAngerechnet(BigDecimal fVermogenSatzAngerechnet) {
+  public GesuchsperiodeWithDatenDtoSpec fVermogenSatzAngerechnet(BigDecimal fVermogenSatzAngerechnet) {
     
     this.fVermogenSatzAngerechnet = fVermogenSatzAngerechnet;
     return this;
@@ -762,7 +884,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec integrationszulage(BigDecimal integrationszulage) {
+  public GesuchsperiodeWithDatenDtoSpec integrationszulage(BigDecimal integrationszulage) {
     
     this.integrationszulage = integrationszulage;
     return this;
@@ -788,7 +910,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec limiteEkFreibetragIntegrationszulag(BigDecimal limiteEkFreibetragIntegrationszulag) {
+  public GesuchsperiodeWithDatenDtoSpec limiteEkFreibetragIntegrationszulag(BigDecimal limiteEkFreibetragIntegrationszulag) {
     
     this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
     return this;
@@ -814,7 +936,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec stipLimiteMinimalstipendium(BigDecimal stipLimiteMinimalstipendium) {
+  public GesuchsperiodeWithDatenDtoSpec stipLimiteMinimalstipendium(BigDecimal stipLimiteMinimalstipendium) {
     
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
     return this;
@@ -840,7 +962,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec person1(BigDecimal person1) {
+  public GesuchsperiodeWithDatenDtoSpec person1(BigDecimal person1) {
     
     this.person1 = person1;
     return this;
@@ -866,7 +988,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec personen2(BigDecimal personen2) {
+  public GesuchsperiodeWithDatenDtoSpec personen2(BigDecimal personen2) {
     
     this.personen2 = personen2;
     return this;
@@ -892,7 +1014,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec personen3(BigDecimal personen3) {
+  public GesuchsperiodeWithDatenDtoSpec personen3(BigDecimal personen3) {
     
     this.personen3 = personen3;
     return this;
@@ -918,7 +1040,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec personen4(BigDecimal personen4) {
+  public GesuchsperiodeWithDatenDtoSpec personen4(BigDecimal personen4) {
     
     this.personen4 = personen4;
     return this;
@@ -944,7 +1066,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec personen5(BigDecimal personen5) {
+  public GesuchsperiodeWithDatenDtoSpec personen5(BigDecimal personen5) {
     
     this.personen5 = personen5;
     return this;
@@ -970,7 +1092,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec personen6(BigDecimal personen6) {
+  public GesuchsperiodeWithDatenDtoSpec personen6(BigDecimal personen6) {
     
     this.personen6 = personen6;
     return this;
@@ -996,7 +1118,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec personen7(BigDecimal personen7) {
+  public GesuchsperiodeWithDatenDtoSpec personen7(BigDecimal personen7) {
     
     this.personen7 = personen7;
     return this;
@@ -1022,7 +1144,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec proWeiterePerson(BigDecimal proWeiterePerson) {
+  public GesuchsperiodeWithDatenDtoSpec proWeiterePerson(BigDecimal proWeiterePerson) {
     
     this.proWeiterePerson = proWeiterePerson;
     return this;
@@ -1048,7 +1170,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec kinder0018(BigDecimal kinder0018) {
+  public GesuchsperiodeWithDatenDtoSpec kinder0018(BigDecimal kinder0018) {
     
     this.kinder0018 = kinder0018;
     return this;
@@ -1074,7 +1196,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec jugendlicheErwachsene1925(BigDecimal jugendlicheErwachsene1925) {
+  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1925(BigDecimal jugendlicheErwachsene1925) {
     
     this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
     return this;
@@ -1100,7 +1222,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec erwachsene2699(BigDecimal erwachsene2699) {
+  public GesuchsperiodeWithDatenDtoSpec erwachsene2699(BigDecimal erwachsene2699) {
     
     this.erwachsene2699 = erwachsene2699;
     return this;
@@ -1126,7 +1248,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenFam1pers(BigDecimal wohnkostenFam1pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam1pers(BigDecimal wohnkostenFam1pers) {
     
     this.wohnkostenFam1pers = wohnkostenFam1pers;
     return this;
@@ -1152,7 +1274,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenFam2pers(BigDecimal wohnkostenFam2pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam2pers(BigDecimal wohnkostenFam2pers) {
     
     this.wohnkostenFam2pers = wohnkostenFam2pers;
     return this;
@@ -1178,7 +1300,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenFam3pers(BigDecimal wohnkostenFam3pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam3pers(BigDecimal wohnkostenFam3pers) {
     
     this.wohnkostenFam3pers = wohnkostenFam3pers;
     return this;
@@ -1204,7 +1326,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenFam4pers(BigDecimal wohnkostenFam4pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam4pers(BigDecimal wohnkostenFam4pers) {
     
     this.wohnkostenFam4pers = wohnkostenFam4pers;
     return this;
@@ -1230,7 +1352,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenFam5pluspers(BigDecimal wohnkostenFam5pluspers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam5pluspers(BigDecimal wohnkostenFam5pluspers) {
     
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
     return this;
@@ -1256,7 +1378,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich1pers(BigDecimal wohnkostenPersoenlich1pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich1pers(BigDecimal wohnkostenPersoenlich1pers) {
     
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
     return this;
@@ -1282,7 +1404,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich2pers(BigDecimal wohnkostenPersoenlich2pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich2pers(BigDecimal wohnkostenPersoenlich2pers) {
     
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
     return this;
@@ -1308,7 +1430,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich3pers(BigDecimal wohnkostenPersoenlich3pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich3pers(BigDecimal wohnkostenPersoenlich3pers) {
     
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
     return this;
@@ -1334,7 +1456,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich4pers(BigDecimal wohnkostenPersoenlich4pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich4pers(BigDecimal wohnkostenPersoenlich4pers) {
     
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
     return this;
@@ -1360,7 +1482,7 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich5pluspers(BigDecimal wohnkostenPersoenlich5pluspers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich5pluspers(BigDecimal wohnkostenPersoenlich5pluspers) {
     
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
     return this;
@@ -1393,67 +1515,75 @@ public class GesuchsperiodeCreateDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GesuchsperiodeCreateDtoSpec gesuchsperiodeCreate = (GesuchsperiodeCreateDtoSpec) o;
-    return Objects.equals(this.gueltigAb, gesuchsperiodeCreate.gueltigAb) &&
-        Objects.equals(this.gueltigBis, gesuchsperiodeCreate.gueltigBis) &&
-        Objects.equals(this.einreichfrist, gesuchsperiodeCreate.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeCreate.aufschaltdatum) &&
-        Objects.equals(this.fiskaljahr, gesuchsperiodeCreate.fiskaljahr) &&
-        Objects.equals(this.gesuchsjahr, gesuchsperiodeCreate.gesuchsjahr) &&
-        Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeCreate.gesuchsperiodeStart) &&
-        Objects.equals(this.gesuchsperiodeStopp, gesuchsperiodeCreate.gesuchsperiodeStopp) &&
-        Objects.equals(this.aufschaltterminStart, gesuchsperiodeCreate.aufschaltterminStart) &&
-        Objects.equals(this.aufschaltterminStopp, gesuchsperiodeCreate.aufschaltterminStopp) &&
-        Objects.equals(this.einreichefristNormal, gesuchsperiodeCreate.einreichefristNormal) &&
-        Objects.equals(this.einreichefristReduziert, gesuchsperiodeCreate.einreichefristReduziert) &&
-        Objects.equals(this.ausbKostenSekII, gesuchsperiodeCreate.ausbKostenSekII) &&
-        Objects.equals(this.ausbKostenTertiaer, gesuchsperiodeCreate.ausbKostenTertiaer) &&
-        Objects.equals(this.freibetragVermögen, gesuchsperiodeCreate.freibetragVermögen) &&
-        Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeCreate.freibetragErwerbseinkommen) &&
-        Objects.equals(this.einkommensfreibetrag, gesuchsperiodeCreate.einkommensfreibetrag) &&
-        Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeCreate.elternbeteiligungssatz) &&
-        Objects.equals(this.fEinkommensfreibetrag, gesuchsperiodeCreate.fEinkommensfreibetrag) &&
-        Objects.equals(this.fVermoegensfreibetrag, gesuchsperiodeCreate.fVermoegensfreibetrag) &&
-        Objects.equals(this.fVermogenSatzAngerechnet, gesuchsperiodeCreate.fVermogenSatzAngerechnet) &&
-        Objects.equals(this.integrationszulage, gesuchsperiodeCreate.integrationszulage) &&
-        Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeCreate.limiteEkFreibetragIntegrationszulag) &&
-        Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeCreate.stipLimiteMinimalstipendium) &&
-        Objects.equals(this.person1, gesuchsperiodeCreate.person1) &&
-        Objects.equals(this.personen2, gesuchsperiodeCreate.personen2) &&
-        Objects.equals(this.personen3, gesuchsperiodeCreate.personen3) &&
-        Objects.equals(this.personen4, gesuchsperiodeCreate.personen4) &&
-        Objects.equals(this.personen5, gesuchsperiodeCreate.personen5) &&
-        Objects.equals(this.personen6, gesuchsperiodeCreate.personen6) &&
-        Objects.equals(this.personen7, gesuchsperiodeCreate.personen7) &&
-        Objects.equals(this.proWeiterePerson, gesuchsperiodeCreate.proWeiterePerson) &&
-        Objects.equals(this.kinder0018, gesuchsperiodeCreate.kinder0018) &&
-        Objects.equals(this.jugendlicheErwachsene1925, gesuchsperiodeCreate.jugendlicheErwachsene1925) &&
-        Objects.equals(this.erwachsene2699, gesuchsperiodeCreate.erwachsene2699) &&
-        Objects.equals(this.wohnkostenFam1pers, gesuchsperiodeCreate.wohnkostenFam1pers) &&
-        Objects.equals(this.wohnkostenFam2pers, gesuchsperiodeCreate.wohnkostenFam2pers) &&
-        Objects.equals(this.wohnkostenFam3pers, gesuchsperiodeCreate.wohnkostenFam3pers) &&
-        Objects.equals(this.wohnkostenFam4pers, gesuchsperiodeCreate.wohnkostenFam4pers) &&
-        Objects.equals(this.wohnkostenFam5pluspers, gesuchsperiodeCreate.wohnkostenFam5pluspers) &&
-        Objects.equals(this.wohnkostenPersoenlich1pers, gesuchsperiodeCreate.wohnkostenPersoenlich1pers) &&
-        Objects.equals(this.wohnkostenPersoenlich2pers, gesuchsperiodeCreate.wohnkostenPersoenlich2pers) &&
-        Objects.equals(this.wohnkostenPersoenlich3pers, gesuchsperiodeCreate.wohnkostenPersoenlich3pers) &&
-        Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeCreate.wohnkostenPersoenlich4pers) &&
-        Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeCreate.wohnkostenPersoenlich5pluspers);
+    GesuchsperiodeWithDatenDtoSpec gesuchsperiodeWithDaten = (GesuchsperiodeWithDatenDtoSpec) o;
+    return Objects.equals(this.id, gesuchsperiodeWithDaten.id) &&
+        Objects.equals(this.bezeichnungDe, gesuchsperiodeWithDaten.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, gesuchsperiodeWithDaten.bezeichnungFr) &&
+        Objects.equals(this.gueltigAb, gesuchsperiodeWithDaten.gueltigAb) &&
+        Objects.equals(this.gueltigBis, gesuchsperiodeWithDaten.gueltigBis) &&
+        Objects.equals(this.einreichfrist, gesuchsperiodeWithDaten.einreichfrist) &&
+        Objects.equals(this.aufschaltdatum, gesuchsperiodeWithDaten.aufschaltdatum) &&
+        Objects.equals(this.status, gesuchsperiodeWithDaten.status) &&
+        Objects.equals(this.fiskaljahr, gesuchsperiodeWithDaten.fiskaljahr) &&
+        Objects.equals(this.gesuchsjahr, gesuchsperiodeWithDaten.gesuchsjahr) &&
+        Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeWithDaten.gesuchsperiodeStart) &&
+        Objects.equals(this.gesuchsperiodeStopp, gesuchsperiodeWithDaten.gesuchsperiodeStopp) &&
+        Objects.equals(this.aufschaltterminStart, gesuchsperiodeWithDaten.aufschaltterminStart) &&
+        Objects.equals(this.aufschaltterminStopp, gesuchsperiodeWithDaten.aufschaltterminStopp) &&
+        Objects.equals(this.einreichefristNormal, gesuchsperiodeWithDaten.einreichefristNormal) &&
+        Objects.equals(this.einreichefristReduziert, gesuchsperiodeWithDaten.einreichefristReduziert) &&
+        Objects.equals(this.ausbKostenSekII, gesuchsperiodeWithDaten.ausbKostenSekII) &&
+        Objects.equals(this.ausbKostenTertiaer, gesuchsperiodeWithDaten.ausbKostenTertiaer) &&
+        Objects.equals(this.freibetragVermögen, gesuchsperiodeWithDaten.freibetragVermögen) &&
+        Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeWithDaten.freibetragErwerbseinkommen) &&
+        Objects.equals(this.einkommensfreibetrag, gesuchsperiodeWithDaten.einkommensfreibetrag) &&
+        Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeWithDaten.elternbeteiligungssatz) &&
+        Objects.equals(this.fEinkommensfreibetrag, gesuchsperiodeWithDaten.fEinkommensfreibetrag) &&
+        Objects.equals(this.fVermoegensfreibetrag, gesuchsperiodeWithDaten.fVermoegensfreibetrag) &&
+        Objects.equals(this.fVermogenSatzAngerechnet, gesuchsperiodeWithDaten.fVermogenSatzAngerechnet) &&
+        Objects.equals(this.integrationszulage, gesuchsperiodeWithDaten.integrationszulage) &&
+        Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeWithDaten.limiteEkFreibetragIntegrationszulag) &&
+        Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeWithDaten.stipLimiteMinimalstipendium) &&
+        Objects.equals(this.person1, gesuchsperiodeWithDaten.person1) &&
+        Objects.equals(this.personen2, gesuchsperiodeWithDaten.personen2) &&
+        Objects.equals(this.personen3, gesuchsperiodeWithDaten.personen3) &&
+        Objects.equals(this.personen4, gesuchsperiodeWithDaten.personen4) &&
+        Objects.equals(this.personen5, gesuchsperiodeWithDaten.personen5) &&
+        Objects.equals(this.personen6, gesuchsperiodeWithDaten.personen6) &&
+        Objects.equals(this.personen7, gesuchsperiodeWithDaten.personen7) &&
+        Objects.equals(this.proWeiterePerson, gesuchsperiodeWithDaten.proWeiterePerson) &&
+        Objects.equals(this.kinder0018, gesuchsperiodeWithDaten.kinder0018) &&
+        Objects.equals(this.jugendlicheErwachsene1925, gesuchsperiodeWithDaten.jugendlicheErwachsene1925) &&
+        Objects.equals(this.erwachsene2699, gesuchsperiodeWithDaten.erwachsene2699) &&
+        Objects.equals(this.wohnkostenFam1pers, gesuchsperiodeWithDaten.wohnkostenFam1pers) &&
+        Objects.equals(this.wohnkostenFam2pers, gesuchsperiodeWithDaten.wohnkostenFam2pers) &&
+        Objects.equals(this.wohnkostenFam3pers, gesuchsperiodeWithDaten.wohnkostenFam3pers) &&
+        Objects.equals(this.wohnkostenFam4pers, gesuchsperiodeWithDaten.wohnkostenFam4pers) &&
+        Objects.equals(this.wohnkostenFam5pluspers, gesuchsperiodeWithDaten.wohnkostenFam5pluspers) &&
+        Objects.equals(this.wohnkostenPersoenlich1pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich1pers) &&
+        Objects.equals(this.wohnkostenPersoenlich2pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich2pers) &&
+        Objects.equals(this.wohnkostenPersoenlich3pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich3pers) &&
+        Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich4pers) &&
+        Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeWithDaten.wohnkostenPersoenlich5pluspers);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermögen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, status, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermögen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GesuchsperiodeCreateDtoSpec {\n");
+    sb.append("class GesuchsperiodeWithDatenDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");

@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.GesuchsperiodenstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,12 +31,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchsperiodeDtoSpec.JSON_PROPERTY_ID,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHFRIST,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_AUFSCHALTDATUM,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_STATUS
 })
 @JsonTypeName("Gesuchsperiode")
@@ -44,6 +44,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchsperiodeDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  private String bezeichnungDe;
+
+  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
   private LocalDate gueltigAb;
@@ -57,14 +63,8 @@ public class GesuchsperiodeDtoSpec {
   public static final String JSON_PROPERTY_AUFSCHALTDATUM = "aufschaltdatum";
   private LocalDate aufschaltdatum;
 
-  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
-  private String bezeichnungDe;
-
-  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
-  private String bezeichnungFr;
-
   public static final String JSON_PROPERTY_STATUS = "status";
-  private GesuchsperiodenstatusDtoSpec status;
+  private GueltigkeitStatusDtoSpec status;
 
   public GesuchsperiodeDtoSpec() {
   }
@@ -92,6 +92,58 @@ public class GesuchsperiodeDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public GesuchsperiodeDtoSpec bezeichnungDe(String bezeichnungDe) {
+    
+    this.bezeichnungDe = bezeichnungDe;
+    return this;
+  }
+
+   /**
+   * Get bezeichnungDe
+   * @return bezeichnungDe
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
+  }
+
+
+  public GesuchsperiodeDtoSpec bezeichnungFr(String bezeichnungFr) {
+    
+    this.bezeichnungFr = bezeichnungFr;
+    return this;
+  }
+
+   /**
+   * Get bezeichnungFr
+   * @return bezeichnungFr
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
   }
 
 
@@ -199,59 +251,7 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  public GesuchsperiodeDtoSpec bezeichnungDe(String bezeichnungDe) {
-    
-    this.bezeichnungDe = bezeichnungDe;
-    return this;
-  }
-
-   /**
-   * Get bezeichnungDe
-   * @return bezeichnungDe
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getBezeichnungDe() {
-    return bezeichnungDe;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
-  }
-
-
-  public GesuchsperiodeDtoSpec bezeichnungFr(String bezeichnungFr) {
-    
-    this.bezeichnungFr = bezeichnungFr;
-    return this;
-  }
-
-   /**
-   * Get bezeichnungFr
-   * @return bezeichnungFr
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getBezeichnungFr() {
-    return bezeichnungFr;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
-  }
-
-
-  public GesuchsperiodeDtoSpec status(GesuchsperiodenstatusDtoSpec status) {
+  public GesuchsperiodeDtoSpec status(GueltigkeitStatusDtoSpec status) {
     
     this.status = status;
     return this;
@@ -265,14 +265,14 @@ public class GesuchsperiodeDtoSpec {
   @JsonProperty(JSON_PROPERTY_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public GesuchsperiodenstatusDtoSpec getStatus() {
+  public GueltigkeitStatusDtoSpec getStatus() {
     return status;
   }
 
 
   @JsonProperty(JSON_PROPERTY_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(GesuchsperiodenstatusDtoSpec status) {
+  public void setStatus(GueltigkeitStatusDtoSpec status) {
     this.status = status;
   }
 
@@ -286,18 +286,18 @@ public class GesuchsperiodeDtoSpec {
     }
     GesuchsperiodeDtoSpec gesuchsperiode = (GesuchsperiodeDtoSpec) o;
     return Objects.equals(this.id, gesuchsperiode.id) &&
+        Objects.equals(this.bezeichnungDe, gesuchsperiode.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, gesuchsperiode.bezeichnungFr) &&
         Objects.equals(this.gueltigAb, gesuchsperiode.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchsperiode.gueltigBis) &&
         Objects.equals(this.einreichfrist, gesuchsperiode.einreichfrist) &&
         Objects.equals(this.aufschaltdatum, gesuchsperiode.aufschaltdatum) &&
-        Objects.equals(this.bezeichnungDe, gesuchsperiode.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, gesuchsperiode.bezeichnungFr) &&
         Objects.equals(this.status, gesuchsperiode.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, bezeichnungDe, bezeichnungFr, status);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, status);
   }
 
   @Override
@@ -305,12 +305,12 @@ public class GesuchsperiodeDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
-    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
-    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
