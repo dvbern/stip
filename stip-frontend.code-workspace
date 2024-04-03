@@ -39,6 +39,7 @@
       "titleBar.inactiveBackground": "#075fa499",
       "titleBar.inactiveForeground": "#e7e7e799"
     },
+    "peacock.color": "#075fa4",
     "prettier.configPath": "frontend/.prettierrc",
     "prettier.ignorePath": "frontend/.prettierignore",
     "sqltools.connections": [
@@ -70,7 +71,7 @@
         {
           "type": "chrome",
           "request": "launch",
-          "name": "Stip Chrome",
+          "name": "GS Chrome",
           "url": "http://localhost:4200",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
@@ -78,8 +79,24 @@
         {
           "type": "msedge",
           "request": "launch",
-          "name": "Stip Edge",
+          "name": "GS Edge",
           "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "chrome",
+          "request": "launch",
+          "name": "SB Chrome",
+          "url": "http://localhost:4201",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "msedge",
+          "request": "launch",
+          "name": "SB Edge",
+          "url": "http://localhost:4201",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
         }

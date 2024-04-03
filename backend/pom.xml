@@ -34,6 +34,7 @@
     </sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
+    <javafaker.version>1.0.2</javafaker.version>
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
   </properties>
@@ -254,9 +255,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.instancio</groupId>
-      <artifactId>instancio-junit</artifactId>
-      <version>3.3.0</version>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>${javafaker.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -268,6 +269,11 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.13.0</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.dvbern.oss.commons-i18n-l10n</groupId>
+      <artifactId>dvb-commons-i18n-l10n-api</artifactId>
+      <version>0.0.2</version>
     </dependency>
   </dependencies>
   <build>

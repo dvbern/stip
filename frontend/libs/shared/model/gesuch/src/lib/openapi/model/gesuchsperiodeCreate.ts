@@ -11,9 +11,173 @@
  */
 
 export interface GesuchsperiodeCreate { 
-    gueltigAb?: string;
-    gueltigBis?: string;
+    gueltigAb: string;
+    gueltigBis: string;
     einreichfrist?: string;
     aufschaltdatum?: string;
+    /**
+     * 
+     */
+    fiskaljahr: string;
+    /**
+     * 
+     */
+    gesuchsjahr: string;
+    /**
+     * dd.MM.YYYY
+     */
+    gesuchsperiodeStart: string;
+    /**
+     * dd.MM.YYYY
+     */
+    gesuchsperiodeStopp: string;
+    /**
+     * dd.MM.YYYY
+     */
+    aufschaltterminStart: string;
+    /**
+     * dd.MM.YYYY
+     */
+    aufschaltterminStopp: string;
+    /**
+     * dd.MM.YYYY
+     */
+    einreichefristNormal: string;
+    /**
+     * dd.MM.YYYY
+     */
+    einreichefristReduziert: string;
+    /**
+     * 
+     */
+    ausbKosten_SekII: number;
+    /**
+     * 
+     */
+    ausbKosten_Tertiaer: number;
+    /**
+     * 
+     */
+    freibetrag_vermgen?: number;
+    /**
+     * 
+     */
+    freibetrag_erwerbseinkommen: number;
+    /**
+     * 
+     */
+    einkommensfreibetrag: number;
+    /**
+     * 
+     */
+    elternbeteiligungssatz: number;
+    /**
+     * 
+     */
+    f_Einkommensfreibetrag: number;
+    /**
+     * 
+     */
+    f_Vermoegensfreibetrag: number;
+    /**
+     * 
+     */
+    f_VermogenSatzAngerechnet: number;
+    /**
+     * 
+     */
+    integrationszulage: number;
+    /**
+     * 
+     */
+    limite_EkFreibetrag_Integrationszulag: number;
+    /**
+     * 
+     */
+    stipLimite_Minimalstipendium: number;
+    /**
+     * 
+     */
+    person_1: number;
+    /**
+     * 
+     */
+    personen_2: number;
+    /**
+     * 
+     */
+    personen_3: number;
+    /**
+     * 
+     */
+    personen_4: number;
+    /**
+     * 
+     */
+    personen_5: number;
+    /**
+     * 
+     */
+    personen_6: number;
+    /**
+     * 
+     */
+    personen_7: number;
+    /**
+     * 
+     */
+    proWeiterePerson: number;
+    /**
+     * 
+     */
+    kinder_00_18: number;
+    /**
+     * 
+     */
+    jugendliche_erwachsene_19_25: number;
+    /**
+     * 
+     */
+    erwachsene_26_99: number;
+    /**
+     * 
+     */
+    wohnkosten_fam_1pers: number;
+    /**
+     * 
+     */
+    wohnkosten_fam_2pers: number;
+    /**
+     * 
+     */
+    wohnkosten_fam_3pers: number;
+    /**
+     * 
+     */
+    wohnkosten_fam_4pers: number;
+    /**
+     * 
+     */
+    wohnkosten_fam_5pluspers: number;
+    /**
+     * 
+     */
+    wohnkosten_persoenlich_1pers: number;
+    /**
+     * 
+     */
+    wohnkosten_persoenlich_2pers: number;
+    /**
+     * 
+     */
+    wohnkosten_persoenlich_3pers: number;
+    /**
+     * 
+     */
+    wohnkosten_persoenlich_4pers: number;
+    /**
+     * 
+     */
+    wohnkosten_persoenlich_5pluspers: number;
 }
 

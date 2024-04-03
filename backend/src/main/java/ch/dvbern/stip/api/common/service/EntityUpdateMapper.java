@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.common.service;
 
+import java.util.function.BooleanSupplier;
+
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.MappingTarget;
-
-import java.util.function.BooleanSupplier;
 
 /**
  * This abstract class serves as a base class for entity update mappers. It provides methods that can be overridden
@@ -24,7 +24,7 @@ public abstract class EntityUpdateMapper<S, T extends AbstractEntity> {
      * @param source the source object that was mapped
      * @param target the target object that was updated
      */
-    protected abstract void resetDependentDataAfterData(S source, @MappingTarget T target);
+    protected abstract void resetDependentDataBeforeUpdate(final S source, @MappingTarget final T target);
 
     /**
      * Resets a field if a condition is met. If the condition specified by the {@code checkCondition}

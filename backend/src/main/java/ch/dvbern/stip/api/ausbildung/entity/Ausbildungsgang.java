@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.ausbildung.type.Ausbildungsort;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.Bildungsart;
 import jakarta.persistence.CascadeType;
@@ -37,9 +36,8 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Ausbildungsort ausbildungsort;
+    private String ausbildungsort;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

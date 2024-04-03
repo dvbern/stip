@@ -28,11 +28,11 @@ public class NoOverlapInAusbildungenConstraintValidator
             return true;
         }
 
-        if (hasOverlap(ausbildung, gesuchFormular.getLebenslaufItems().stream())) {
-            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
-        } else {
+        if (gesuchFormular.getLebenslaufItems() == null) {
             return true;
         }
+
+        return !hasOverlap(ausbildung, gesuchFormular.getLebenslaufItems().stream());
     }
 
     public boolean hasOverlap(final Ausbildung ausbildung, final Stream<LebenslaufItem> lebenslaufItems) {

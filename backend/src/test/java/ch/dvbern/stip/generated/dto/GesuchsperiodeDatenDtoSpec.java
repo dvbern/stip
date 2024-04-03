@@ -470,9 +470,9 @@ public class GesuchsperiodeDatenDtoSpec {
    * 
    * @return freibetragVermögen
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMöGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getFreibetragVermögen() {
     return freibetragVermögen;
@@ -480,7 +480,7 @@ public class GesuchsperiodeDatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMöGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setFreibetragVermögen(BigDecimal freibetragVermögen) {
     this.freibetragVermögen = freibetragVermögen;
   }

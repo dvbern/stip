@@ -1,9 +1,3 @@
-// TODO how to generate with OpenAPI?
-export interface SharedModelDeploymentConfig {
-  environment?: string;
-  version?: string;
-}
-
 export type AppType = `${'gesuch' | 'sachbearbeitung'}-app`;
 export type CompiletimeConfig = Pick<
   SharedModelCompiletimeConfig,

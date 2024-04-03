@@ -1,248 +1,151 @@
 package ch.dvbern.stip.api.generator.api;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.KindUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.TestConstants;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
+import org.junit.jupiter.api.Test;
 
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel.adresseSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildungModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlungModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKostenModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel.elternUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElternsModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituationModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecModel.geschwisterUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecGeschwistersModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.KindUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecKinderModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.KindUpdateDtoSpecModel.kinderUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecLebenslaufModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPartnerModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel.partnerUpdateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildungModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpecModel;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
-import static org.instancio.Select.field;
 
 public class GesuchTestSpecGenerator {
+    public static GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec() {
+        final var model = new GesuchTrancheUpdateDtoSpec();
+        model.setId(UUID.randomUUID());
+        return model;
+    }
 
-    public static final Model<GesuchTrancheUpdateDtoSpec> gesuchTrancheDtoSpecModel =
-        Instancio.of(GesuchTrancheUpdateDtoSpec.class).toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecPersonInAusbildungModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecPersonInAusbildungModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecFamiliensituationModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecFamiliensituationModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecPartnerModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecPartnerModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecAusbildungModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecAusbildungModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecAuszahlungModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecAuszahlungModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecGeschwisterModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecGeschwistersModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecLebenslaufModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecLebenslaufModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecElternsModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecElternsModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecEinnahmenKostenModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecEinnahmenKostenModel))
-                    .create()
-            )
-            .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecKinderModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecKinderModel))
-                    .create()
-            )
-            .toModel();
-    private static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecModelFull = Instancio.of(
-            GesuchFormularUpdateDtoSpec.class)
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung),
-            Instancio.of(personInAusbildungUpdateDtoSpecModel)
-                .set(field(PersonInAusbildungUpdateDtoSpec::getAdresse), Instancio.create(adresseSpecModel))
-                .set(
-                    field(PersonInAusbildungUpdateDtoSpec::getGeburtsdatum),
-                    LocalDate.now().minusYears(16)
-                )
-                .set(field(PersonInAusbildungUpdateDtoSpec::getZivilstand), ZivilstandDtoSpec.VERHEIRATET)
-                .create()
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getFamiliensituation),
-            Instancio.create(familiensituationUpdateDtoSpecModel)
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getAusbildung),
-            Instancio.create(ausbildungUpdateDtoSpecModel)
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getPartner),
-            Instancio.create(partnerUpdateDtoSpecModel)
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getAuszahlung),
-            Instancio.create(auszahlungUpdateDtoSpecModel)
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getGeschwisters),
-            Instancio.create(geschwisterUpdateDtoSpecModel)
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getLebenslaufItems),
-            Instancio.of(lebenslaufItemUpdateDtoSpecModel)
-                .set(
-                    field(LebenslaufItemUpdateDtoSpec::getVon),
-                    LocalDate.now().minusMonths(2 + 4).with(firstDayOfMonth())
-                        .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
-                )
-                .set(
-                    field(LebenslaufItemUpdateDtoSpec::getBis),
-                    LocalDate.now().minusMonths(2).with(lastDayOfMonth())
-                        .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN))
-                )
-                .create()
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getElterns),
-            Arrays.asList(
-                Instancio.of(elternUpdateDtoSpecModel)
-                    .set(field(ElternUpdateDtoSpec::getElternTyp), ElternTypDtoSpec.VATER)
-                    .create()
-                    .get(0),
-                Instancio.of(elternUpdateDtoSpecModel)
-                    .set(field(ElternUpdateDtoSpec::getElternTyp), ElternTypDtoSpec.MUTTER)
-                    .set(
-                        field(ElternUpdateDtoSpec::getSozialversicherungsnummer),
-                        TestConstants.AHV_NUMMER_VALID_MUTTER
-                    )
-                    .create()
-                    .get(0)
-            )
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten),
-            Instancio.of(einnahmenKostenUpdateDtoSpecModel)
-                .set(field(EinnahmenKostenUpdateDtoSpec::getZulagen), BigDecimal.TEN)
-                .set(field(EinnahmenKostenUpdateDtoSpec::getAlimente), null).create()
-        )
-        .set(
-            field(GesuchFormularUpdateDtoSpec::getKinds),
-            Instancio.create(kinderUpdateDtoSpecModel)
-        )
-        .toModel();
-    public static final Model<GesuchUpdateDtoSpec> gesuchUpdateDtoSpecFullModel =
-        Instancio.of(GesuchUpdateDtoSpec.class)
-            .set(
-                field(GesuchUpdateDtoSpec::getGesuchTrancheToWorkWith),
-                Instancio.of(gesuchTrancheDtoSpecModel)
-                    .set(
-                        field(GesuchTrancheUpdateDtoSpec::getGesuchFormular),
-                        Instancio.create(gesuchFormularUpdateDtoSpecModelFull))
-                    .create()
-            )
-            .toModel();
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecPersonInAusbildung =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildung);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecFamiliensituation =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituation);
+        });
+
+    @Test
+    void test() {
+        var foo = gesuchUpdateDtoSpecAusbildung;
+        System.out.println();
+    }
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecPartner =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(PartnerUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPartner);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecGeschwister =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(GeschwisterUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecGeschwisters);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecLebenslauf =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(LebenslaufItemUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecLebenslauf);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecElterns =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecEinnahmenKosten =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKosten);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecKinder =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(KindUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecKinder);
+        });
+
+    private static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecFull =
+        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> {
+            model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec);
+            model.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+            model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
+
+            model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec);
+            model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec);
+            model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec);
+            model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec);
+
+            model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs
+                .stream()
+                .peek(li -> {
+                    li.setVon(LocalDate.now().minusMonths(2 + 4).with(firstDayOfMonth())
+                        .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN)));
+                    li.setBis(LocalDate.now().minusMonths(2).with(lastDayOfMonth())
+                        .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN)));
+                })
+                .toList()
+            );
+
+            model.setElterns(ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2));
+            model.getElterns().get(0).setElternTyp(ElternTypDtoSpec.VATER);
+            model.getElterns().get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
+            model.getElterns().get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
+            model.getElterns().get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
+
+            model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec);
+            model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecFull =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(gesuchFormularUpdateDtoSpecFull);
+        });
 }

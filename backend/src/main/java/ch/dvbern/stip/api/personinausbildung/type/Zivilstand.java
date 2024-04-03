@@ -29,16 +29,16 @@ public enum Zivilstand {
     AUFGELOESTE_PARTNERSCHAFT,
     VERWITWET;
 
-    public static List<Zivilstand> getZvilstandsNoPartnerschaft() {
+    public static List<Zivilstand> getZivilstandsNoPartnerschaft() {
         return Arrays.asList(LEDIG, GESCHIEDEN_GERICHTLICH, AUFGELOESTE_PARTNERSCHAFT, VERWITWET);
     }
 
-    public static List<Zivilstand> getZvilstandsWithPartnerschaft() {
+    public static List<Zivilstand> getZivilstandsWithPartnerschaft() {
         return Arrays.asList(VERHEIRATET, KONKUBINAT, EINGETRAGENE_PARTNERSCHAFT);
     }
 
     public boolean hasPartnerschaft() {
-        return getZvilstandsWithPartnerschaft().contains(this);
+        return getZivilstandsWithPartnerschaft().contains(this);
     }
 
 }

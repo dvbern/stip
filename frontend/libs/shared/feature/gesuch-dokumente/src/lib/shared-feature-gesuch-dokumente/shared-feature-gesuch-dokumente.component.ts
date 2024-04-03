@@ -15,7 +15,6 @@ import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dok
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import {
   DOKUMENTE,
-  KINDER,
   SharedModelGesuchFormStep,
   gesuchFormSteps,
 } from '@dv/shared/model/gesuch-form';

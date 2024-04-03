@@ -1,37 +1,27 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
-import org.instancio.Instancio;
-import org.instancio.Model;
+
+import java.time.LocalDate;
 
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
-import static org.instancio.Select.field;
 
-public final class PartnerUpdateDtoSpecModel {
+public class PartnerUpdateDtoSpecModel {
+    public static final PartnerUpdateDtoSpec partnerUpdateDtoSpec =
+        TestUtil.createUpdateDtoSpec(ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec::new, (model, faker) -> {
+            model.setVorname(faker.name().firstName());
+            model.setNachname(faker.name().lastName());
+            model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1990, 1, 1), LocalDate.of(2002, 1, 1)));
+            model.setAdresse(AdresseSpecModel.adresseDtoSpec);
+            model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
+            model.setAusbildungMitEinkommenOderErwerbstaetig(true);
+            model.setFahrkosten(TestUtil.getRandomBigDecimal());
+            model.setJahreseinkommen(TestUtil.getRandomBigDecimal());
+            model.setVerpflegungskosten(TestUtil.getRandomBigDecimal());
+        });
 
-    public static final Model<PartnerUpdateDtoSpec> partnerUpdateDtoSpecModel =
-        Instancio.of(PartnerUpdateDtoSpec.class)
-            .set(field(PartnerUpdateDtoSpec::getAdresse), Instancio.create(AdresseSpecModel.adresseSpecModel))
-            .set(field(PartnerUpdateDtoSpec::getSozialversicherungsnummer), AHV_NUMMER_VALID_PARTNER)
-            .set(field(PartnerUpdateDtoSpec::getAusbildungMitEinkommenOderErwerbstaetig), true)
-            .toModel();
-
-    public static final Model<GesuchFormularUpdateDtoSpec> gesuchFormularUpdateDtoSpecPartnerModel =
-        Instancio.of(
-                GesuchFormularUpdateDtoSpec.class)
-            .set(
-                field(GesuchFormularUpdateDtoSpec::getPartner),
-                Instancio.create(partnerUpdateDtoSpecModel)
-            )
-            .ignore(field(GesuchFormularUpdateDtoSpec::getFamiliensituation))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getElterns))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getGeschwisters))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getLebenslaufItems))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getEinnahmenKosten))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getAuszahlung))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getPersonInAusbildung))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getKinds))
-            .ignore(field(GesuchFormularUpdateDtoSpec::getAusbildung))
-            .toModel();
+    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPartner =
+        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setPartner(partnerUpdateDtoSpec));
 }

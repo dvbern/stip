@@ -14,4 +14,14 @@ public class ValidationsException extends RuntimeException {
         super(message);
         this.violations = new HashSet<>(violations);
     }
+
+    @Override
+    public String toString() {
+        final var sb = new StringBuilder();
+        this.violations.forEach(x -> {
+            sb.append(x.getMessage());
+        });
+
+        return sb.toString();
+    }
 }

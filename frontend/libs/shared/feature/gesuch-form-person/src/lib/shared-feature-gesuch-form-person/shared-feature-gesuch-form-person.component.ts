@@ -46,8 +46,8 @@ import {
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
-  DocumentOptions,
   SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
@@ -87,7 +87,7 @@ import {
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
-import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-gesuch-form-person.selector';
+import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
 
 const MIN_AGE_GESUCHSSTELLER = 10;
 const MAX_AGE_GESUCHSSTELLER = 130;
@@ -135,7 +135,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly wohnsitzValues = Object.values(Wohnsitz);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
   languageSig = this.store.selectSignal(selectLanguage);
-  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormEducationView);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
   updateValidity$ = new Subject<unknown>();
   laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
@@ -147,110 +150,52 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
   maskitoNumber = maskitoNumber;
-  auslaenderausweisDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
-    const getDokumentOptions = (
-      niederlassungsstatus?: Niederlassungsstatus,
-    ) => {
-      switch (niederlassungsstatus) {
-        case 'AUFENTHALTSBEWILLIGUNG_B':
-          return {
-            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
-            titleKey: 'shared.form.person.file.AUFENTHALTSBEWILLIGUNG_B',
-          };
-        case 'NIEDERLASSUNGSBEWILLIGUNG_C':
-          return {
-            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
-            titleKey: 'shared.form.person.file.NIEDERLASSUNGSBEWILLIGUNG_C',
-          };
-        case 'FLUECHTLING':
-          return {
-            dokumentTyp: DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE,
-            titleKey: 'shared.form.person.file.FLUECHTLING',
-          };
-      }
-      return null;
+    const niederlassungsstatusMap = {
+      [Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B]:
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
+      [Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C]:
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
+      [Niederlassungsstatus.FLUECHTLING]:
+        DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE,
     };
-    const options = getDokumentOptions(niederlassungsstatus);
-    return gesuch && options
-      ? {
-          ...options,
-          multiple: false,
-          gesuchId: gesuch.id,
-        }
+    return niederlassungsstatus
+      ? niederlassungsstatusMap[niederlassungsstatus]
       : null;
   });
-  vormundschaftDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  vormundschaftDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const vormundschaft = this.vormundschaftChangedSig();
-    return gesuch && vormundschaft
-      ? {
-          dokumentTyp: DokumentTyp.PERSON_KESB_ERNENNUNG,
-          titleKey: 'shared.form.person.file.VORMUNDSCHAFT',
-          multiple: false,
-          gesuchId: gesuch.id,
-        }
-      : null;
+    return vormundschaft ? DokumentTyp.PERSON_KESB_ERNENNUNG : null;
   });
-  wohnsitzBeiDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  wohnsitzBeiDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const wohnsitzBei = this.wohnsitzBeiChangedSig();
-    return gesuch && wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
-      ? {
-          dokumentTyp: DokumentTyp.PERSON_MIETVERTRAG,
-          titleKey: 'shared.form.person.file.EIGENER_HAUSHALT',
-          multiple: false,
-          gesuchId: gesuch.id,
-        }
+    return wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
+      ? DokumentTyp.PERSON_MIETVERTRAG
       : null;
   });
-  sozialhilfebeitraegeDocumentOptionsSig = computed<DocumentOptions | null>(
-    () => {
-      const gesuch = this.viewSig().gesuch;
-      const sozialhilfebeitraege = this.sozialhilfebeitraegeChangedSig();
-      return gesuch && sozialhilfebeitraege
-        ? {
-            dokumentTyp: DokumentTyp.PERSON_SOZIALHILFEBUDGET,
-            titleKey: 'shared.form.person.file.SOZIALHILFE',
-            multiple: false,
-            gesuchId: gesuch.id,
-          }
-        : null;
-    },
-  );
-  zivilstandDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
+  sozialhilfebeitraegeDocumentOptionsSig = this.createUploadOptionsSig(() => {
+    const sozialhilfebeitraege = this.sozialhilfebeitraegeChangedSig();
+    return sozialhilfebeitraege ? DokumentTyp.PERSON_SOZIALHILFEBUDGET : null;
+  });
+  zivilstandDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const zivilstand = this.zivilstandChangedSig();
-    return gesuch &&
-      zivilstand &&
+    return zivilstand &&
       [
         Zivilstand.GESCHIEDEN_GERICHTLICH,
         Zivilstand.AUFGELOESTE_PARTNERSCHAFT,
       ].includes(zivilstand)
-      ? {
-          dokumentTyp: DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG,
-          titleKey: 'shared.form.person.file.ZIVILSTAND',
-          multiple: false,
-          gesuchId: gesuch.id,
-        }
+      ? DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
       : null;
   });
-  heimatortDocumentOptionsSig = computed<DocumentOptions | null>(() => {
-    const gesuch = this.viewSig().gesuch;
-    const eltern = this.viewSig().gesuchFormular?.elterns;
+  heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
+    const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
-    return gesuch &&
-      plz &&
+    return plz &&
       +plz <= 4000 &&
       +plz >= 3000 &&
       eltern?.some((e) => e.adresse.land !== 'CH')
-      ? {
-          dokumentTyp: DokumentTyp.PERSON_AUSWEIS,
-          titleKey: 'shared.form.person.file.HEIMATORT',
-          multiple: false,
-          gesuchId: gesuch.id,
-        }
+      ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
 
@@ -623,7 +568,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           ...values,
           adresse: {
             id: gesuchFormular?.personInAusbildung?.adresse?.id,
-            ...values.adresse,
+            ...SharedUiFormAddressComponent.getRealValues(
+              this.form.controls.adresse,
+            ),
           },
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
             values.geburtsdatum,

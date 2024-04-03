@@ -23,7 +23,7 @@ export class EinnahmenKostenPO {
     fahrkosten: Locator;
     wohnkosten: Locator;
     auswaertigeMittagessenProWoche: Locator;
-    personenImHaushalt: Locator;
+    wgWohnend: Locator;
     verdienstRealisiert: Locator;
     willDarlehen: Locator;
 
@@ -65,9 +65,7 @@ export class EinnahmenKostenPO {
       auswaertigeMittagessenProWoche: page.getByTestId(
         'form-einnahmen-kosten-auswaertigeMittagessenProWoche',
       ),
-      personenImHaushalt: page.getByTestId(
-        'form-einnahmen-kosten-personenImHaushalt',
-      ),
+      wgWohnend: page.getByTestId('form-einnahmen-kosten-wgWohnend'),
       verdienstRealisiert: page.getByTestId(
         'form-einnahmen-kosten-verdienstRealisiert',
       ),
@@ -97,12 +95,9 @@ export class EinnahmenKostenPO {
 
     await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
 
-    await this.elems.auswaertigeMittagessenProWoche.fill(
-      `${einnahmenKosten.auswaertigeMittagessenProWoche ?? 0}`,
-    );
-
-    await this.elems.personenImHaushalt.fill(
-      `${einnahmenKosten.personenImHaushalt ?? 0}`,
+    await selectMatRadio(
+      this.elems.wgWohnend,
+      einnahmenKosten.wgWohnend ?? false,
     );
 
     await selectMatRadio(

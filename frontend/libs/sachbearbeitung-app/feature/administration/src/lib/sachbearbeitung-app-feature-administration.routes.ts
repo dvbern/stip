@@ -10,8 +10,13 @@ import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   {
     path: OPTION_AUSBILDUNGSSTAETTE.route,
-    loadComponent: () => SharedUiCommingSoonComponent,
-    data: { option: OPTION_AUSBILDUNGSSTAETTE },
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-ausbildungsstaette'
+      ).then(
+        (m) =>
+          m.sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes,
+      ),
   },
   {
     path: OPTION_BUCHSTABEN_ZUTEILUNG.route,
@@ -31,5 +36,10 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
       import(
         '@dv/sachbearbeitung-app/feature/administration-gesuchsperiode'
       ).then((m) => m.sachbearbeitungAppFeatureGesuchsperiodeRoutes),
+  },
+  {
+    path: '',
+    pathMatch: 'prefix',
+    redirectTo: OPTION_AUSBILDUNGSSTAETTE.route,
   },
 ];

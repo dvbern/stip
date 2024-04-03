@@ -55,11 +55,13 @@ async function setupWithPreparedGesuchWithWohnsitz(
 describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   describe('should display warning if not all of personInAusbildung, familiensituation, ausbildung are defined', () => {
     it('should display warning if personInAusbildung is undefined', async () => {
-      const { queryByTestId } = await setup({
+      const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: undefined,
         ausbildung: createEmptyAusbildung(),
         familiensituation: { elternVerheiratetZusammen: true },
       });
+
+      detectChanges();
 
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
@@ -67,11 +69,13 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
 
     it('should display warning if ausbildung is undefined', async () => {
-      const { queryByTestId } = await setup({
+      const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
         ausbildung: undefined,
         familiensituation: { elternVerheiratetZusammen: true },
       });
+
+      detectChanges();
 
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
@@ -79,11 +83,13 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
 
     it('should display warning if familiensituation is undefined', async () => {
-      const { queryByTestId } = await setup({
+      const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
         ausbildung: createEmptyAusbildung(),
         familiensituation: undefined,
       });
+
+      detectChanges();
 
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
@@ -93,30 +99,32 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
   describe('visibility rules for field "auswaertigeMittagessenProWoche"', () => {
     it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
-      const { queryByTestId, fixture } =
+      const { queryByTestId, detectChanges } =
         await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
 
-      await fixture.whenStable();
+      detectChanges();
+
+      expect(
+        queryByTestId('form-einnahmen-kosten-auswaertigeMittagessenProWoche'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Familie"', async () => {
+      const { queryByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
+
+      detectChanges();
 
       expect(
         queryByTestId('form-einnahmen-kosten-auswaertigeMittagessenProWoche'),
       ).toBeInTheDocument();
     });
 
-    it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Familie"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.FAMILIE,
-      );
+    it('should display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Mutter Vater"', async () => {
+      const { queryByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.MUTTER_VATER);
 
-      expect(
-        queryByTestId('form-einnahmen-kosten-auswaertigeMittagessenProWoche'),
-      ).toBeInTheDocument();
-    });
-
-    it('should not display auswaertigeMittagessenProWoche if personInAusbildung has wohnsitz "Mutter Vater"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.MUTTER_VATER,
-      );
+      detectChanges();
 
       expect(
         queryByTestId('form-einnahmen-kosten-auswaertigeMittagessenProWoche'),
@@ -126,90 +134,60 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
   describe('visibility rules for field "wohnkosten"', () => {
     it('should display wohnkosten if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.EIGENER_HAUSHALT,
-      );
+      const { queryByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+
+      detectChanges();
 
       expect(
         queryByTestId('form-einnahmen-kosten-wohnkosten'),
       ).toBeInTheDocument();
     });
 
-    it('should display wohnkosten if personInAusbildung has wohnsitz "Familie"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.FAMILIE,
-      );
+    it('should not display wohnkosten if personInAusbildung has wohnsitz "Familie"', async () => {
+      const { queryByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
+
+      detectChanges();
 
       expect(
         queryByTestId('form-einnahmen-kosten-wohnkosten'),
-      ).toBeInTheDocument();
+      ).not.toBeInTheDocument();
     });
 
-    it('should display wohnkosten if personInAusbildung has wohnsitz "Mutter Vater"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.MUTTER_VATER,
-      );
+    it('should not display wohnkosten if personInAusbildung has wohnsitz "Mutter Vater"', async () => {
+      const { queryByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.MUTTER_VATER);
+
+      detectChanges();
 
       expect(
         queryByTestId('form-einnahmen-kosten-wohnkosten'),
-      ).toBeInTheDocument();
+      ).not.toBeInTheDocument();
     });
   });
 
-  describe('visibility rules for field "personenImHaushalt"', () => {
-    it('should display personenImHaushalt if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.EIGENER_HAUSHALT,
-      );
-
-      expect(
-        queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
-      ).toBeInTheDocument();
-    });
-
-    it('should display personenImHaushalt if personInAusbildung has wohnsitz "Familie"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.FAMILIE,
-      );
-
-      expect(
-        queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
-      ).toBeInTheDocument();
-    });
-
-    it('should display personenImHaushalt if personInAusbildung has wohnsitz "Mutter Vater"', async () => {
-      const { queryByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.MUTTER_VATER,
-      );
-
-      expect(
-        queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
-      ).toBeInTheDocument();
-    });
-  });
-
-  describe('form validation', () => {
-    it('should autocorrect if value does not reach minimum', async () => {
-      const { queryByTestId, getByTestId } =
+  describe('visibility rules for field "wgWohnend"', () => {
+    it('should display wgWohnend if personInAusbildung has wohnsitz "eigener Haushalt"', async () => {
+      const { queryByTestId, detectChanges } =
         await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-      expect(
-        queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
-      ).toBeInTheDocument();
-      const control = getByTestId('form-einnahmen-kosten-personenImHaushalt');
-      await userEvent.type(control, '0');
 
-      expect(control).toHaveValue('1');
+      detectChanges();
+
+      expect(
+        queryByTestId('form-einnahmen-kosten-wgWohnend'),
+      ).toBeInTheDocument();
     });
-    it('should autocorrect if personenImHaushalt is negative', async () => {
-      const { queryByTestId, getByTestId } =
-        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-      expect(
-        queryByTestId('form-einnahmen-kosten-personenImHaushalt'),
-      ).toBeInTheDocument();
-      const control = getByTestId('form-einnahmen-kosten-personenImHaushalt');
-      await userEvent.type(control, '-2');
 
-      expect(control).toHaveValue('2');
+    it('should not display wgWohnend if personInAusbildung has wohnsitz "Familie"', async () => {
+      const { queryByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE);
+
+      detectChanges();
+
+      expect(
+        queryByTestId('form-einnahmen-kosten-wgWohnend'),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -252,6 +230,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       });
 
       detectChanges();
+
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
       ).toBeNull();
@@ -269,6 +248,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       });
 
       detectChanges();
+
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
       ).toBeNull();
@@ -276,7 +256,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
 
     it('should display alimente field if gerichtlicheAlimentenregelung is true', async () => {
-      const { queryByTestId } = await setup({
+      const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: createEmptyPersonInAusbildung(),
         ausbildung: createEmptyAusbildung(),
         familiensituation: {
@@ -284,6 +264,8 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
           gerichtlicheAlimentenregelung: true,
         },
       });
+
+      detectChanges();
 
       expect(
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),

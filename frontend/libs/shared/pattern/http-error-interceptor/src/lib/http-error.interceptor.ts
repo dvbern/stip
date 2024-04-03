@@ -1,11 +1,40 @@
-import { HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpContext,
+  HttpContextToken,
+  HttpHandlerFn,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { EMPTY, catchError, of, throwError } from 'rxjs';
 
 import { SharedDataAccessGlobalNotificationEvents } from '@dv/shared/data-access/global-notification';
-import { IGNORE_ERRORS, IGNORE_NOT_FOUND_ERRORS } from '@dv/shared/util/http';
+import { IGNORE_NOT_FOUND_ERRORS } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
+
+const IGNORE_ERRORS = new HttpContextToken<boolean>(() => false);
+const NO_GLOBAL_ERRORS = new HttpContextToken<boolean>(() => false);
+
+/**
+ * Set this context to ignore errors in the request error interceptor
+ */
+export const shouldIgnoreErrorsIf = (
+  ignore: boolean,
+  context: HttpContext = new HttpContext(),
+) => {
+  return context.set(IGNORE_ERRORS, ignore);
+};
+
+/**
+ * Set this context to ignore global errors in the request error interceptor
+ */
+export const noGlobalErrorsIf = (
+  ignore: boolean,
+  context: HttpContext = new HttpContext(),
+) => {
+  return context.set(NO_GLOBAL_ERRORS, ignore);
+};
 
 export interface DvGlobalHttpErrorInterceptorFnOptions {
   /*
@@ -36,6 +65,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
           if (req.context.get(IGNORE_ERRORS)) {
             return of(new HttpResponse({}));
           }
+
           const storableError = JSON.parse(JSON.stringify(error));
           const errorToDispatch = sharedUtilFnErrorTransformer(storableError);
           if (
@@ -44,11 +74,14 @@ export function withDvGlobalHttpErrorInterceptorFn({
           ) {
             return of(new HttpResponse({}));
           }
-          store.dispatch(
-            SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
-              errors: [errorToDispatch],
-            }),
-          );
+
+          if (!req.context.get(NO_GLOBAL_ERRORS)) {
+            store.dispatch(
+              SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
+                errors: [errorToDispatch],
+              }),
+            );
+          }
 
           if (type === 'globalOnly') {
             return EMPTY; // global errors only. Effects will never fail, no local catchErrors are reached

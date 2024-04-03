@@ -31,7 +31,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid LocalDate einreichefristReduziert;
   private @Valid BigDecimal ausbKostenSekII;
   private @Valid BigDecimal ausbKostenTertiaer;
-  private @Valid BigDecimal freibetragVermögen;
   private @Valid BigDecimal freibetragErwerbseinkommen;
   private @Valid BigDecimal einkommensfreibetrag;
   private @Valid BigDecimal elternbeteiligungssatz;
@@ -66,6 +65,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid LocalDate gueltigBis;
   private @Valid LocalDate einreichfrist;
   private @Valid LocalDate aufschaltdatum;
+  private @Valid BigDecimal freibetragVermögen;
 
   /**
    * 
@@ -265,26 +265,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   @JsonProperty("ausbKosten_Tertiaer")
   public void setAusbKostenTertiaer(BigDecimal ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
-  }
-
-  /**
-   * 
-   **/
-  public GesuchsperiodeUpdateDto freibetragVermögen(BigDecimal freibetragVermögen) {
-    this.freibetragVermögen = freibetragVermögen;
-    return this;
-  }
-
-  
-  @JsonProperty("freibetrag_vermögen")
-  @NotNull
-  public BigDecimal getFreibetragVermögen() {
-    return freibetragVermögen;
-  }
-
-  @JsonProperty("freibetrag_vermögen")
-  public void setFreibetragVermögen(BigDecimal freibetragVermögen) {
-    this.freibetragVermögen = freibetragVermögen;
   }
 
   /**
@@ -959,6 +939,25 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     this.aufschaltdatum = aufschaltdatum;
   }
 
+  /**
+   * 
+   **/
+  public GesuchsperiodeUpdateDto freibetragVermögen(BigDecimal freibetragVermögen) {
+    this.freibetragVermögen = freibetragVermögen;
+    return this;
+  }
+
+  
+  @JsonProperty("freibetrag_vermögen")
+  public BigDecimal getFreibetragVermögen() {
+    return freibetragVermögen;
+  }
+
+  @JsonProperty("freibetrag_vermögen")
+  public void setFreibetragVermögen(BigDecimal freibetragVermögen) {
+    this.freibetragVermögen = freibetragVermögen;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -979,7 +978,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
         Objects.equals(this.einreichefristReduziert, gesuchsperiodeUpdate.einreichefristReduziert) &&
         Objects.equals(this.ausbKostenSekII, gesuchsperiodeUpdate.ausbKostenSekII) &&
         Objects.equals(this.ausbKostenTertiaer, gesuchsperiodeUpdate.ausbKostenTertiaer) &&
-        Objects.equals(this.freibetragVermögen, gesuchsperiodeUpdate.freibetragVermögen) &&
         Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeUpdate.freibetragErwerbseinkommen) &&
         Objects.equals(this.einkommensfreibetrag, gesuchsperiodeUpdate.einkommensfreibetrag) &&
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeUpdate.elternbeteiligungssatz) &&
@@ -1013,12 +1011,13 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
         Objects.equals(this.gueltigAb, gesuchsperiodeUpdate.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchsperiodeUpdate.gueltigBis) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeUpdate.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeUpdate.aufschaltdatum);
+        Objects.equals(this.aufschaltdatum, gesuchsperiodeUpdate.aufschaltdatum) &&
+        Objects.equals(this.freibetragVermögen, gesuchsperiodeUpdate.freibetragVermögen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermögen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum);
+    return Objects.hash(fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, freibetragVermögen);
   }
 
   @Override
@@ -1036,7 +1035,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
     sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
-    sb.append("    freibetragVermögen: ").append(toIndentedString(freibetragVermögen)).append("\n");
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
@@ -1071,6 +1069,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
+    sb.append("    freibetragVermögen: ").append(toIndentedString(freibetragVermögen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -62,6 +62,7 @@
     "@ngrx/component-store": "17.0.1",
     "@ngrx/effects": "17.0.1",
     "@ngrx/entity": "17.0.1",
+    "@ngrx/operators": "^17.1.1",
     "@ngrx/router-store": "17.0.1",
     "@ngrx/signals": "^17.0.1",
     "@ngrx/store": "17.0.1",
