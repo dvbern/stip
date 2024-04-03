@@ -190,6 +190,7 @@
         <mat-label>
           {{ 'shared.form.gesuchsperiode.freibetrag_vermögen.label' | translate }}
         </mat-label>
+        <mat-hint translate> shared.form.gesuchsperiode.freibetrag_vermögen.info </mat-hint>
         <input
           data-testid="form-gesuchsperiode-freibetrag_vermögen"
           formControlName="freibetrag_vermögen"
@@ -210,6 +211,7 @@
           matInput
           type="text"
         />
+        <mat-hint translate> shared.form.gesuchsperiode.freibetrag_erwerbseinkommen.info </mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -225,6 +227,7 @@
           matInput
           type="text"
         />
+        <mat-hint translate> shared.form.gesuchsperiode.einkommensfreibetrag.info </mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
