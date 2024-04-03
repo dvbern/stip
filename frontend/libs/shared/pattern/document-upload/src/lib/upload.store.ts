@@ -5,11 +5,11 @@ import { patchState, signalState } from '@ngrx/signals';
 import { Subject, merge, of } from 'rxjs';
 import {
   catchError,
+  exhaustMap,
   filter,
   map,
   mergeMap,
   shareReplay,
-  switchMap,
   take,
   takeUntil,
 } from 'rxjs/operators';
@@ -91,7 +91,7 @@ export class UploadStore {
   constructor() {
     this.loadDocuments$
       .pipe(
-        switchMap((options) =>
+        exhaustMap((options) =>
           this.documentService.getDokumenteForTyp$(options),
         ),
         takeUntilDestroyed(),
