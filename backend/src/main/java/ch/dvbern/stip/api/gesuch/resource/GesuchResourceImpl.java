@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -93,6 +94,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
+    @Blocking
     public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         return RestMulti.fromUniResponse(
