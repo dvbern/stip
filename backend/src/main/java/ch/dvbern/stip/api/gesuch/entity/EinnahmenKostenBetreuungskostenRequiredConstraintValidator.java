@@ -15,22 +15,22 @@ public class EinnahmenKostenBetreuungskostenRequiredConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular value, ConstraintValidatorContext context) {
-		if (value.getKinds().isEmpty()) {
-			return true;
-		}
+        if (value.getKinds().isEmpty()) {
+            return true;
+        }
 
-		final var ek = value.getEinnahmenKosten();
-		if (ek == null) {
-			return true;
-		}
+        final var ek = value.getEinnahmenKosten();
+        if (ek == null) {
+            return true;
+        }
 
-		if (ek.getBetreuungskostenKinder() == null) {
-			return GesuchValidatorUtil.addProperty(
-				context,
-				property
-			);
-		}
+        if (ek.getBetreuungskostenKinder() == null) {
+            return GesuchValidatorUtil.addProperty(
+                context,
+                property
+            );
+        }
 
-		return true;
+        return true;
     }
 }
