@@ -5,6 +5,7 @@
 // colors
 $black: #000;
 $red: #fe5454;
+$yellow: #ffc107;
 $blue: #298bef;
 $green: #2eb85c;
 $darkgray: #4e4e4e;
@@ -72,12 +73,12 @@ $card-spacer-y: 1.5rem;
 $card-spacer-x: 1.5rem;
 
 $theme-colors: (
-  'primary': #4e4e4e,
+  'primary': $darkgray,
   'secondary': white,
-  'success': #81be06,
-  'danger': #ea161f,
-  'warning': #fe7e55,
-  'info': #298bef,
+  'success': $green,
+  'danger': $red,
+  'warning': $yellow,
+  'info': $blue,
   'light': white,
   'dark': black,
 );

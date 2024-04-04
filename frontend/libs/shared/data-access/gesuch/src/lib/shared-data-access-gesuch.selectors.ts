@@ -5,6 +5,7 @@ import {
   Gesuchstatus,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -25,10 +26,16 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       cachedGesuchFormular: currentForm,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
-        validations: (state.validations ?? [])
-          .map((v) => v.propertyPath)
-          .filter(isDefined)
-          .filter(isFormularProp(currentForm)),
+        validations: {
+          errors: transformValidationMessage(
+            state.validations?.errors,
+            currentForm,
+          ),
+          warnings: transformValidationMessage(
+            state.validations?.warnings,
+            currentForm,
+          ),
+        },
       },
     };
   },
@@ -43,3 +50,13 @@ export const isFormularProp =
     if (!gesuchFormular) return false;
     return Object.keys(gesuchFormular).includes(prop);
   };
+
+const transformValidationMessage = (
+  messages?: ValidationMessage[],
+  currentForm?: SharedModelGesuchFormular | null,
+) => {
+  return messages
+    ?.map((m) => m.propertyPath)
+    .filter(isDefined)
+    .filter(isFormularProp(currentForm ?? null));
+};

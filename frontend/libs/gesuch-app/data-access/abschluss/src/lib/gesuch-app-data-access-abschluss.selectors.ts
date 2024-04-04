@@ -13,7 +13,7 @@ export const selectGesuchAppDataAccessAbschlusssView = createSelector(
   sharedDataAccessGesuchsFeature.selectValidations,
   (state, gesuch, lastUpdate, validations) => {
     const checkValidationErrors = getValidationErrors(state.checkResult?.error);
-    const allValidations = (validations ?? []).concat(
+    const allValidations = (validations?.errors ?? []).concat(
       checkValidationErrors ?? [],
     );
     return {
@@ -21,7 +21,7 @@ export const selectGesuchAppDataAccessAbschlusssView = createSelector(
       gesuch,
       lastUpdate,
       validations: allValidations,
-      canCheck: validations?.length === 0,
+      canCheck: validations?.errors?.length === 0,
       canAbschliessen: state.checkResult?.success,
       abschlussPhase: toAbschlussPhase(gesuch, true),
     };
