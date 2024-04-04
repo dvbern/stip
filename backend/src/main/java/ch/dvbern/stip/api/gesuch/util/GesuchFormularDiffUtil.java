@@ -134,4 +134,15 @@ public final class GesuchFormularDiffUtil {
 
         return newFormular.getPersonInAusbildung().getWohnsitz() != toUpdate.getPersonInAusbildung().getWohnsitz();
     }
+
+    public boolean hasKinderChanged(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular toUpdate
+    ) {
+        if (newFormular.getKinds() == null || toUpdate.getKinds() == null) {
+            return false;
+        }
+
+        return newFormular.getKinds().size() != toUpdate.getKinds().size();
+    }
 }

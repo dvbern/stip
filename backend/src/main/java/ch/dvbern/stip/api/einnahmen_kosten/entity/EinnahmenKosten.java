@@ -54,5 +54,6 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     private Boolean willDarlehen;
     @Column
     private Integer auswaertigeMittagessenProWoche;
-
+    @Column
+    private BigDecimal betreuungskostenKinder;
 }

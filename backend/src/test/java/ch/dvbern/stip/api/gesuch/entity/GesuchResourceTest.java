@@ -301,8 +301,8 @@ class GesuchResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(15)
-    void testUpdateGesuchEndpointAddEinnahmenKoster() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+    void testUpdateGesuchEndpointAddKind() {
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinder;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -315,8 +315,8 @@ class GesuchResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(16)
-    void testUpdateGesuchEndpointAddKind() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinder;
+    void testUpdateGesuchEndpointAddEinnahmenKoster() {
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
