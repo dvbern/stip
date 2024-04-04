@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -53,9 +52,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_F_EINKOMMENSFREIBETRAG,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_F_VERMOEGENSFREIBETRAG,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_F_VERMOGEN_SATZ_ANGERECHNET,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_VERMOEGENSFREIBETRAG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM,
@@ -133,103 +131,100 @@ public class GesuchsperiodeWithDatenDtoSpec {
   private LocalDate einreichefristReduziert;
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I = "ausbKosten_SekII";
-  private BigDecimal ausbKostenSekII;
+  private Integer ausbKostenSekII;
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
-  private BigDecimal ausbKostenTertiaer;
+  private Integer ausbKostenTertiaer;
 
   public static final String JSON_PROPERTY_FREIBETRAG_VERMOEGEN = "freibetrag_vermoegen";
-  private BigDecimal freibetragVermoegen;
+  private Integer freibetragVermoegen;
 
   public static final String JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN = "freibetrag_erwerbseinkommen";
-  private BigDecimal freibetragErwerbseinkommen;
+  private Integer freibetragErwerbseinkommen;
 
   public static final String JSON_PROPERTY_EINKOMMENSFREIBETRAG = "einkommensfreibetrag";
-  private BigDecimal einkommensfreibetrag;
+  private Integer einkommensfreibetrag;
 
   public static final String JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ = "elternbeteiligungssatz";
-  private BigDecimal elternbeteiligungssatz;
+  private Integer elternbeteiligungssatz;
 
-  public static final String JSON_PROPERTY_F_EINKOMMENSFREIBETRAG = "f_Einkommensfreibetrag";
-  private BigDecimal fEinkommensfreibetrag;
+  public static final String JSON_PROPERTY_VERMOEGENSFREIBETRAG = "vermoegensfreibetrag";
+  private Integer vermoegensfreibetrag;
 
-  public static final String JSON_PROPERTY_F_VERMOEGENSFREIBETRAG = "f_Vermoegensfreibetrag";
-  private BigDecimal fVermoegensfreibetrag;
-
-  public static final String JSON_PROPERTY_F_VERMOGEN_SATZ_ANGERECHNET = "f_VermogenSatzAngerechnet";
-  private BigDecimal fVermogenSatzAngerechnet;
+  public static final String JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET = "vermogenSatzAngerechnet";
+  private Integer vermogenSatzAngerechnet;
 
   public static final String JSON_PROPERTY_INTEGRATIONSZULAGE = "integrationszulage";
-  private BigDecimal integrationszulage;
+  private Integer integrationszulage;
 
   public static final String JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG = "limite_EkFreibetrag_Integrationszulag";
-  private BigDecimal limiteEkFreibetragIntegrationszulag;
+  private Integer limiteEkFreibetragIntegrationszulag;
 
   public static final String JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM = "stipLimite_Minimalstipendium";
-  private BigDecimal stipLimiteMinimalstipendium;
+  private Integer stipLimiteMinimalstipendium;
 
   public static final String JSON_PROPERTY_PERSON1 = "person_1";
-  private BigDecimal person1;
+  private Integer person1;
 
   public static final String JSON_PROPERTY_PERSONEN2 = "personen_2";
-  private BigDecimal personen2;
+  private Integer personen2;
 
   public static final String JSON_PROPERTY_PERSONEN3 = "personen_3";
-  private BigDecimal personen3;
+  private Integer personen3;
 
   public static final String JSON_PROPERTY_PERSONEN4 = "personen_4";
-  private BigDecimal personen4;
+  private Integer personen4;
 
   public static final String JSON_PROPERTY_PERSONEN5 = "personen_5";
-  private BigDecimal personen5;
+  private Integer personen5;
 
   public static final String JSON_PROPERTY_PERSONEN6 = "personen_6";
-  private BigDecimal personen6;
+  private Integer personen6;
 
   public static final String JSON_PROPERTY_PERSONEN7 = "personen_7";
-  private BigDecimal personen7;
+  private Integer personen7;
 
   public static final String JSON_PROPERTY_PRO_WEITERE_PERSON = "proWeiterePerson";
-  private BigDecimal proWeiterePerson;
+  private Integer proWeiterePerson;
 
   public static final String JSON_PROPERTY_KINDER0018 = "kinder_00_18";
-  private BigDecimal kinder0018;
+  private Integer kinder0018;
 
   public static final String JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925 = "jugendliche_erwachsene_19_25";
-  private BigDecimal jugendlicheErwachsene1925;
+  private Integer jugendlicheErwachsene1925;
 
   public static final String JSON_PROPERTY_ERWACHSENE2699 = "erwachsene_26_99";
-  private BigDecimal erwachsene2699;
+  private Integer erwachsene2699;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM1PERS = "wohnkosten_fam_1pers";
-  private BigDecimal wohnkostenFam1pers;
+  private Integer wohnkostenFam1pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM2PERS = "wohnkosten_fam_2pers";
-  private BigDecimal wohnkostenFam2pers;
+  private Integer wohnkostenFam2pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM3PERS = "wohnkosten_fam_3pers";
-  private BigDecimal wohnkostenFam3pers;
+  private Integer wohnkostenFam3pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM4PERS = "wohnkosten_fam_4pers";
-  private BigDecimal wohnkostenFam4pers;
+  private Integer wohnkostenFam4pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS = "wohnkosten_fam_5pluspers";
-  private BigDecimal wohnkostenFam5pluspers;
+  private Integer wohnkostenFam5pluspers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS = "wohnkosten_persoenlich_1pers";
-  private BigDecimal wohnkostenPersoenlich1pers;
+  private Integer wohnkostenPersoenlich1pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS = "wohnkosten_persoenlich_2pers";
-  private BigDecimal wohnkostenPersoenlich2pers;
+  private Integer wohnkostenPersoenlich2pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS = "wohnkosten_persoenlich_3pers";
-  private BigDecimal wohnkostenPersoenlich3pers;
+  private Integer wohnkostenPersoenlich3pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS = "wohnkosten_persoenlich_4pers";
-  private BigDecimal wohnkostenPersoenlich4pers;
+  private Integer wohnkostenPersoenlich4pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS = "wohnkosten_persoenlich_5pluspers";
-  private BigDecimal wohnkostenPersoenlich5pluspers;
+  private Integer wohnkostenPersoenlich5pluspers;
 
   public GesuchsperiodeWithDatenDtoSpec() {
   }
@@ -650,7 +645,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec ausbKostenSekII(BigDecimal ausbKostenSekII) {
+  public GesuchsperiodeWithDatenDtoSpec ausbKostenSekII(Integer ausbKostenSekII) {
     
     this.ausbKostenSekII = ausbKostenSekII;
     return this;
@@ -664,19 +659,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getAusbKostenSekII() {
+  public Integer getAusbKostenSekII() {
     return ausbKostenSekII;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbKostenSekII(BigDecimal ausbKostenSekII) {
+  public void setAusbKostenSekII(Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec ausbKostenTertiaer(BigDecimal ausbKostenTertiaer) {
+  public GesuchsperiodeWithDatenDtoSpec ausbKostenTertiaer(Integer ausbKostenTertiaer) {
     
     this.ausbKostenTertiaer = ausbKostenTertiaer;
     return this;
@@ -690,19 +685,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getAusbKostenTertiaer() {
+  public Integer getAusbKostenTertiaer() {
     return ausbKostenTertiaer;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbKostenTertiaer(BigDecimal ausbKostenTertiaer) {
+  public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec freibetragVermoegen(BigDecimal freibetragVermoegen) {
+  public GesuchsperiodeWithDatenDtoSpec freibetragVermoegen(Integer freibetragVermoegen) {
     
     this.freibetragVermoegen = freibetragVermoegen;
     return this;
@@ -716,19 +711,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getFreibetragVermoegen() {
+  public Integer getFreibetragVermoegen() {
     return freibetragVermoegen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreibetragVermoegen(BigDecimal freibetragVermoegen) {
+  public void setFreibetragVermoegen(Integer freibetragVermoegen) {
     this.freibetragVermoegen = freibetragVermoegen;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec freibetragErwerbseinkommen(BigDecimal freibetragErwerbseinkommen) {
+  public GesuchsperiodeWithDatenDtoSpec freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
     
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
     return this;
@@ -742,19 +737,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getFreibetragErwerbseinkommen() {
+  public Integer getFreibetragErwerbseinkommen() {
     return freibetragErwerbseinkommen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreibetragErwerbseinkommen(BigDecimal freibetragErwerbseinkommen) {
+  public void setFreibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec einkommensfreibetrag(BigDecimal einkommensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec einkommensfreibetrag(Integer einkommensfreibetrag) {
     
     this.einkommensfreibetrag = einkommensfreibetrag;
     return this;
@@ -768,19 +763,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getEinkommensfreibetrag() {
+  public Integer getEinkommensfreibetrag() {
     return einkommensfreibetrag;
   }
 
 
   @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinkommensfreibetrag(BigDecimal einkommensfreibetrag) {
+  public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec elternbeteiligungssatz(BigDecimal elternbeteiligungssatz) {
+  public GesuchsperiodeWithDatenDtoSpec elternbeteiligungssatz(Integer elternbeteiligungssatz) {
     
     this.elternbeteiligungssatz = elternbeteiligungssatz;
     return this;
@@ -794,97 +789,71 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getElternbeteiligungssatz() {
+  public Integer getElternbeteiligungssatz() {
     return elternbeteiligungssatz;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setElternbeteiligungssatz(BigDecimal elternbeteiligungssatz) {
+  public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec fEinkommensfreibetrag(BigDecimal fEinkommensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec vermoegensfreibetrag(Integer vermoegensfreibetrag) {
     
-    this.fEinkommensfreibetrag = fEinkommensfreibetrag;
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
     return this;
   }
 
    /**
    * 
-   * @return fEinkommensfreibetrag
+   * @return vermoegensfreibetrag
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_F_EINKOMMENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getfEinkommensfreibetrag() {
-    return fEinkommensfreibetrag;
+  public Integer getVermoegensfreibetrag() {
+    return vermoegensfreibetrag;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_F_EINKOMMENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setfEinkommensfreibetrag(BigDecimal fEinkommensfreibetrag) {
-    this.fEinkommensfreibetrag = fEinkommensfreibetrag;
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec fVermoegensfreibetrag(BigDecimal fVermoegensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
     
-    this.fVermoegensfreibetrag = fVermoegensfreibetrag;
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
     return this;
   }
 
    /**
    * 
-   * @return fVermoegensfreibetrag
+   * @return vermogenSatzAngerechnet
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_F_VERMOEGENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getfVermoegensfreibetrag() {
-    return fVermoegensfreibetrag;
+  public Integer getVermogenSatzAngerechnet() {
+    return vermogenSatzAngerechnet;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_F_VERMOEGENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setfVermoegensfreibetrag(BigDecimal fVermoegensfreibetrag) {
-    this.fVermoegensfreibetrag = fVermoegensfreibetrag;
+  @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec fVermogenSatzAngerechnet(BigDecimal fVermogenSatzAngerechnet) {
-    
-    this.fVermogenSatzAngerechnet = fVermogenSatzAngerechnet;
-    return this;
-  }
-
-   /**
-   * 
-   * @return fVermogenSatzAngerechnet
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_F_VERMOGEN_SATZ_ANGERECHNET)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public BigDecimal getfVermogenSatzAngerechnet() {
-    return fVermogenSatzAngerechnet;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_F_VERMOGEN_SATZ_ANGERECHNET)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setfVermogenSatzAngerechnet(BigDecimal fVermogenSatzAngerechnet) {
-    this.fVermogenSatzAngerechnet = fVermogenSatzAngerechnet;
-  }
-
-
-  public GesuchsperiodeWithDatenDtoSpec integrationszulage(BigDecimal integrationszulage) {
+  public GesuchsperiodeWithDatenDtoSpec integrationszulage(Integer integrationszulage) {
     
     this.integrationszulage = integrationszulage;
     return this;
@@ -898,19 +867,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getIntegrationszulage() {
+  public Integer getIntegrationszulage() {
     return integrationszulage;
   }
 
 
   @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIntegrationszulage(BigDecimal integrationszulage) {
+  public void setIntegrationszulage(Integer integrationszulage) {
     this.integrationszulage = integrationszulage;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec limiteEkFreibetragIntegrationszulag(BigDecimal limiteEkFreibetragIntegrationszulag) {
+  public GesuchsperiodeWithDatenDtoSpec limiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
     
     this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
     return this;
@@ -924,19 +893,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getLimiteEkFreibetragIntegrationszulag() {
+  public Integer getLimiteEkFreibetragIntegrationszulag() {
     return limiteEkFreibetragIntegrationszulag;
   }
 
 
   @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLimiteEkFreibetragIntegrationszulag(BigDecimal limiteEkFreibetragIntegrationszulag) {
+  public void setLimiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
     this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec stipLimiteMinimalstipendium(BigDecimal stipLimiteMinimalstipendium) {
+  public GesuchsperiodeWithDatenDtoSpec stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
     
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
     return this;
@@ -950,19 +919,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getStipLimiteMinimalstipendium() {
+  public Integer getStipLimiteMinimalstipendium() {
     return stipLimiteMinimalstipendium;
   }
 
 
   @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStipLimiteMinimalstipendium(BigDecimal stipLimiteMinimalstipendium) {
+  public void setStipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec person1(BigDecimal person1) {
+  public GesuchsperiodeWithDatenDtoSpec person1(Integer person1) {
     
     this.person1 = person1;
     return this;
@@ -976,19 +945,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSON1)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPerson1() {
+  public Integer getPerson1() {
     return person1;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSON1)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPerson1(BigDecimal person1) {
+  public void setPerson1(Integer person1) {
     this.person1 = person1;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec personen2(BigDecimal personen2) {
+  public GesuchsperiodeWithDatenDtoSpec personen2(Integer personen2) {
     
     this.personen2 = personen2;
     return this;
@@ -1002,19 +971,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSONEN2)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPersonen2() {
+  public Integer getPersonen2() {
     return personen2;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSONEN2)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen2(BigDecimal personen2) {
+  public void setPersonen2(Integer personen2) {
     this.personen2 = personen2;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec personen3(BigDecimal personen3) {
+  public GesuchsperiodeWithDatenDtoSpec personen3(Integer personen3) {
     
     this.personen3 = personen3;
     return this;
@@ -1028,19 +997,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSONEN3)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPersonen3() {
+  public Integer getPersonen3() {
     return personen3;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSONEN3)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen3(BigDecimal personen3) {
+  public void setPersonen3(Integer personen3) {
     this.personen3 = personen3;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec personen4(BigDecimal personen4) {
+  public GesuchsperiodeWithDatenDtoSpec personen4(Integer personen4) {
     
     this.personen4 = personen4;
     return this;
@@ -1054,19 +1023,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSONEN4)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPersonen4() {
+  public Integer getPersonen4() {
     return personen4;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSONEN4)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen4(BigDecimal personen4) {
+  public void setPersonen4(Integer personen4) {
     this.personen4 = personen4;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec personen5(BigDecimal personen5) {
+  public GesuchsperiodeWithDatenDtoSpec personen5(Integer personen5) {
     
     this.personen5 = personen5;
     return this;
@@ -1080,19 +1049,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSONEN5)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPersonen5() {
+  public Integer getPersonen5() {
     return personen5;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSONEN5)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen5(BigDecimal personen5) {
+  public void setPersonen5(Integer personen5) {
     this.personen5 = personen5;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec personen6(BigDecimal personen6) {
+  public GesuchsperiodeWithDatenDtoSpec personen6(Integer personen6) {
     
     this.personen6 = personen6;
     return this;
@@ -1106,19 +1075,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSONEN6)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPersonen6() {
+  public Integer getPersonen6() {
     return personen6;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSONEN6)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen6(BigDecimal personen6) {
+  public void setPersonen6(Integer personen6) {
     this.personen6 = personen6;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec personen7(BigDecimal personen7) {
+  public GesuchsperiodeWithDatenDtoSpec personen7(Integer personen7) {
     
     this.personen7 = personen7;
     return this;
@@ -1132,19 +1101,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PERSONEN7)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getPersonen7() {
+  public Integer getPersonen7() {
     return personen7;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PERSONEN7)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen7(BigDecimal personen7) {
+  public void setPersonen7(Integer personen7) {
     this.personen7 = personen7;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec proWeiterePerson(BigDecimal proWeiterePerson) {
+  public GesuchsperiodeWithDatenDtoSpec proWeiterePerson(Integer proWeiterePerson) {
     
     this.proWeiterePerson = proWeiterePerson;
     return this;
@@ -1158,19 +1127,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_PRO_WEITERE_PERSON)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getProWeiterePerson() {
+  public Integer getProWeiterePerson() {
     return proWeiterePerson;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PRO_WEITERE_PERSON)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setProWeiterePerson(BigDecimal proWeiterePerson) {
+  public void setProWeiterePerson(Integer proWeiterePerson) {
     this.proWeiterePerson = proWeiterePerson;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec kinder0018(BigDecimal kinder0018) {
+  public GesuchsperiodeWithDatenDtoSpec kinder0018(Integer kinder0018) {
     
     this.kinder0018 = kinder0018;
     return this;
@@ -1184,19 +1153,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_KINDER0018)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getKinder0018() {
+  public Integer getKinder0018() {
     return kinder0018;
   }
 
 
   @JsonProperty(JSON_PROPERTY_KINDER0018)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKinder0018(BigDecimal kinder0018) {
+  public void setKinder0018(Integer kinder0018) {
     this.kinder0018 = kinder0018;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1925(BigDecimal jugendlicheErwachsene1925) {
+  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
     
     this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
     return this;
@@ -1210,19 +1179,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getJugendlicheErwachsene1925() {
+  public Integer getJugendlicheErwachsene1925() {
     return jugendlicheErwachsene1925;
   }
 
 
   @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setJugendlicheErwachsene1925(BigDecimal jugendlicheErwachsene1925) {
+  public void setJugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
     this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec erwachsene2699(BigDecimal erwachsene2699) {
+  public GesuchsperiodeWithDatenDtoSpec erwachsene2699(Integer erwachsene2699) {
     
     this.erwachsene2699 = erwachsene2699;
     return this;
@@ -1236,19 +1205,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_ERWACHSENE2699)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getErwachsene2699() {
+  public Integer getErwachsene2699() {
     return erwachsene2699;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ERWACHSENE2699)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setErwachsene2699(BigDecimal erwachsene2699) {
+  public void setErwachsene2699(Integer erwachsene2699) {
     this.erwachsene2699 = erwachsene2699;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam1pers(BigDecimal wohnkostenFam1pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam1pers(Integer wohnkostenFam1pers) {
     
     this.wohnkostenFam1pers = wohnkostenFam1pers;
     return this;
@@ -1262,19 +1231,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM1PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenFam1pers() {
+  public Integer getWohnkostenFam1pers() {
     return wohnkostenFam1pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM1PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam1pers(BigDecimal wohnkostenFam1pers) {
+  public void setWohnkostenFam1pers(Integer wohnkostenFam1pers) {
     this.wohnkostenFam1pers = wohnkostenFam1pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam2pers(BigDecimal wohnkostenFam2pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam2pers(Integer wohnkostenFam2pers) {
     
     this.wohnkostenFam2pers = wohnkostenFam2pers;
     return this;
@@ -1288,19 +1257,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM2PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenFam2pers() {
+  public Integer getWohnkostenFam2pers() {
     return wohnkostenFam2pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM2PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam2pers(BigDecimal wohnkostenFam2pers) {
+  public void setWohnkostenFam2pers(Integer wohnkostenFam2pers) {
     this.wohnkostenFam2pers = wohnkostenFam2pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam3pers(BigDecimal wohnkostenFam3pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam3pers(Integer wohnkostenFam3pers) {
     
     this.wohnkostenFam3pers = wohnkostenFam3pers;
     return this;
@@ -1314,19 +1283,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM3PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenFam3pers() {
+  public Integer getWohnkostenFam3pers() {
     return wohnkostenFam3pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM3PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam3pers(BigDecimal wohnkostenFam3pers) {
+  public void setWohnkostenFam3pers(Integer wohnkostenFam3pers) {
     this.wohnkostenFam3pers = wohnkostenFam3pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam4pers(BigDecimal wohnkostenFam4pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam4pers(Integer wohnkostenFam4pers) {
     
     this.wohnkostenFam4pers = wohnkostenFam4pers;
     return this;
@@ -1340,19 +1309,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM4PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenFam4pers() {
+  public Integer getWohnkostenFam4pers() {
     return wohnkostenFam4pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM4PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam4pers(BigDecimal wohnkostenFam4pers) {
+  public void setWohnkostenFam4pers(Integer wohnkostenFam4pers) {
     this.wohnkostenFam4pers = wohnkostenFam4pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam5pluspers(BigDecimal wohnkostenFam5pluspers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
     
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
     return this;
@@ -1366,19 +1335,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenFam5pluspers() {
+  public Integer getWohnkostenFam5pluspers() {
     return wohnkostenFam5pluspers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam5pluspers(BigDecimal wohnkostenFam5pluspers) {
+  public void setWohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich1pers(BigDecimal wohnkostenPersoenlich1pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
     
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
     return this;
@@ -1392,19 +1361,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenPersoenlich1pers() {
+  public Integer getWohnkostenPersoenlich1pers() {
     return wohnkostenPersoenlich1pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich1pers(BigDecimal wohnkostenPersoenlich1pers) {
+  public void setWohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich2pers(BigDecimal wohnkostenPersoenlich2pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
     
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
     return this;
@@ -1418,19 +1387,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenPersoenlich2pers() {
+  public Integer getWohnkostenPersoenlich2pers() {
     return wohnkostenPersoenlich2pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich2pers(BigDecimal wohnkostenPersoenlich2pers) {
+  public void setWohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich3pers(BigDecimal wohnkostenPersoenlich3pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
     
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
     return this;
@@ -1444,19 +1413,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenPersoenlich3pers() {
+  public Integer getWohnkostenPersoenlich3pers() {
     return wohnkostenPersoenlich3pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich3pers(BigDecimal wohnkostenPersoenlich3pers) {
+  public void setWohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich4pers(BigDecimal wohnkostenPersoenlich4pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
     
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
     return this;
@@ -1470,19 +1439,19 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenPersoenlich4pers() {
+  public Integer getWohnkostenPersoenlich4pers() {
     return wohnkostenPersoenlich4pers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich4pers(BigDecimal wohnkostenPersoenlich4pers) {
+  public void setWohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich5pluspers(BigDecimal wohnkostenPersoenlich5pluspers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
     
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
     return this;
@@ -1496,14 +1465,14 @@ public class GesuchsperiodeWithDatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnkostenPersoenlich5pluspers() {
+  public Integer getWohnkostenPersoenlich5pluspers() {
     return wohnkostenPersoenlich5pluspers;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich5pluspers(BigDecimal wohnkostenPersoenlich5pluspers) {
+  public void setWohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
   }
 
@@ -1538,9 +1507,8 @@ public class GesuchsperiodeWithDatenDtoSpec {
         Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeWithDaten.freibetragErwerbseinkommen) &&
         Objects.equals(this.einkommensfreibetrag, gesuchsperiodeWithDaten.einkommensfreibetrag) &&
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeWithDaten.elternbeteiligungssatz) &&
-        Objects.equals(this.fEinkommensfreibetrag, gesuchsperiodeWithDaten.fEinkommensfreibetrag) &&
-        Objects.equals(this.fVermoegensfreibetrag, gesuchsperiodeWithDaten.fVermoegensfreibetrag) &&
-        Objects.equals(this.fVermogenSatzAngerechnet, gesuchsperiodeWithDaten.fVermogenSatzAngerechnet) &&
+        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeWithDaten.vermoegensfreibetrag) &&
+        Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeWithDaten.vermogenSatzAngerechnet) &&
         Objects.equals(this.integrationszulage, gesuchsperiodeWithDaten.integrationszulage) &&
         Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeWithDaten.limiteEkFreibetragIntegrationszulag) &&
         Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeWithDaten.stipLimiteMinimalstipendium) &&
@@ -1569,7 +1537,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, status, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, fEinkommensfreibetrag, fVermoegensfreibetrag, fVermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, status, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
   }
 
   @Override
@@ -1598,9 +1566,8 @@ public class GesuchsperiodeWithDatenDtoSpec {
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
-    sb.append("    fEinkommensfreibetrag: ").append(toIndentedString(fEinkommensfreibetrag)).append("\n");
-    sb.append("    fVermoegensfreibetrag: ").append(toIndentedString(fVermoegensfreibetrag)).append("\n");
-    sb.append("    fVermogenSatzAngerechnet: ").append(toIndentedString(fVermogenSatzAngerechnet)).append("\n");
+    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
+    sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
     sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");

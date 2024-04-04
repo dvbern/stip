@@ -74,16 +74,16 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     private LocalDate einreichefristReduziert;
 
     @Column(nullable = false, name = "ausbkosten_sek_ii")
-    private Integer ausbKosten_SekII;
+    private Integer ausbKostenSekII;
 
     @Column(nullable = false, name = "ausbkosten_tertiaer")
-    private Integer ausbKosten_Tertiaer;
+    private Integer ausbKostenTertiaer;
 
     @Column(nullable = false, name = "freibetrag_vermoegen")
-    private Integer freibetrag_vermoegen;
+    private Integer freibetragVermoegen;
 
     @Column(nullable = false, name = "freibetrag_erwerbseinkommen")
-    private Integer freibetrag_erwerbseinkommen;
+    private Integer freibetragErwerbseinkommen;
 
     @Column(nullable = false, name = "einkommensfreibetrag")
     private Integer einkommensfreibetrag;
@@ -91,86 +91,83 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "elternbeteiligungssatz")
     private Integer elternbeteiligungssatz;
 
-    @Column(nullable = false, name = "f_einkommensfreibetrag")
-    private Integer f_Einkommensfreibetrag;
+    @Column(nullable = false, name = "vermoegensfreibetrag")
+    private Integer vermoegensfreibetrag;
 
-    @Column(nullable = false, name = "f_vermoegensfreibetrag")
-    private Integer f_Vermoegensfreibetrag;
-
-    @Column(nullable = false, name = "f_vermogen_satz_angerechnet")
-    private Integer f_VermogenSatzAngerechnet;
+    @Column(nullable = false, name = "vermogen_satz_angerechnet")
+    private Integer vermogenSatzAngerechnet;
 
     @Column(nullable = false, name = "integrationszulage")
     private Integer integrationszulage;
 
     @Column(nullable = false, name = "limite_ek_freibetrag_integrationszulag")
-    private Integer limite_EkFreibetrag_Integrationszulag;
+    private Integer limiteEkFreibetragIntegrationszulag;
 
     @Column(nullable = false, name = "stip_limite_minimalstipendium")
-    private Integer stipLimite_Minimalstipendium;
+    private Integer stipLimiteMinimalstipendium;
 
     @Column(nullable = false, name = "person_1")
-    private Integer person_1;
+    private Integer person1;
 
     @Column(nullable = false, name = "personen_2")
-    private Integer personen_2;
+    private Integer personen2;
 
     @Column(nullable = false, name = "personen_3")
-    private Integer personen_3;
+    private Integer personen3;
 
     @Column(nullable = false, name = "personen_4")
-    private Integer personen_4;
+    private Integer personen4;
 
     @Column(nullable = false, name = "personen_5")
-    private Integer personen_5;
+    private Integer personen5;
 
     @Column(nullable = false, name = "personen_6")
-    private Integer personen_6;
+    private Integer personen6;
 
     @Column(nullable = false, name = "personen_7")
-    private Integer personen_7;
+    private Integer personen7;
 
     @Column(nullable = false, name = "pro_weitere_person")
     private Integer proWeiterePerson;
 
     @Column(nullable = false, name = "kinder_00_18")
-    private Integer kinder_00_18;
+    private Integer kinder0018;
 
     @Column(nullable = false, name = "jugendliche_erwachsene_19_25")
-    private Integer jugendliche_erwachsene_19_25;
+    private Integer jugendlicheErwachsene1925;
 
     @Column(nullable = false, name = "erwachsene_26_99")
-    private Integer erwachsene_26_99;
+    private Integer erwachsene2699;
 
     @Column(nullable = false, name = "wohnkosten_fam_1pers")
-    private Integer wohnkosten_fam_1pers;
+    private Integer wohnkostenFam1pers;
 
     @Column(nullable = false, name = "wohnkosten_fam_2pers")
-    private Integer wohnkosten_fam_2pers;
+    private Integer wohnkostenFam2pers;
 
     @Column(nullable = false, name = "wohnkosten_fam_3pers")
-    private Integer wohnkosten_fam_3pers;
+    private Integer wohnkostenFam3pers;
 
     @Column(nullable = false, name = "wohnkosten_fam_4pers")
-    private Integer wohnkosten_fam_4pers;
+    private Integer wohnkostenFam4pers;
 
     @Column(nullable = false, name = "wohnkosten_fam_5pluspers")
-    private Integer wohnkosten_fam_5pluspers;
+    private Integer wohnkostenFam5pluspers;
 
     @Column(nullable = false, name = "wohnkosten_persoenlich_1pers")
-    private Integer wohnkosten_persoenlich_1pers;
+    private Integer wohnkostenPersoenlich1pers;
 
     @Column(nullable = false, name = "wohnkosten_persoenlich_2pers")
-    private Integer wohnkosten_persoenlich_2pers;
+    private Integer wohnkostenPersoenlich2pers;
 
     @Column(nullable = false, name = "wohnkosten_persoenlich_3pers")
-    private Integer wohnkosten_persoenlich_3pers;
+    private Integer wohnkostenPersoenlich3pers;
 
     @Column(nullable = false, name = "wohnkosten_persoenlich_4pers")
-    private Integer wohnkosten_persoenlich_4pers;
+    private Integer wohnkostenPersoenlich4pers;
 
     @Column(nullable = false, name = "wohnkosten_persoenlich_5pluspers")
-    private Integer wohnkosten_persoenlich_5pluspers;
+    private Integer wohnkostenPersoenlich5pluspers;
 
     @NotNull
     @Embedded

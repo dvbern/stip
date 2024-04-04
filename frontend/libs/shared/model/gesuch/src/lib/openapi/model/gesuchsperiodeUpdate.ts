@@ -18,6 +18,14 @@ export interface GesuchsperiodeUpdate {
     /**
      * 
      */
+    bezeichnungDe: string;
+    /**
+     * 
+     */
+    bezeichnungFr: string;
+    /**
+     * 
+     */
     fiskaljahr: string;
     /**
      * 
@@ -74,15 +82,11 @@ export interface GesuchsperiodeUpdate {
     /**
      * 
      */
-    f_Einkommensfreibetrag: number;
+    vermoegensfreibetrag?: number;
     /**
      * 
      */
-    f_Vermoegensfreibetrag: number;
-    /**
-     * 
-     */
-    f_VermogenSatzAngerechnet: number;
+    vermogenSatzAngerechnet?: number;
     /**
      * 
      */

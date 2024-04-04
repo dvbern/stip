@@ -2353,6 +2353,8 @@ components:
         GesuchsperiodeDaten:
             type: object
             required:
+                - bezeichnungDe
+                - bezeichnungFr
                 - fiskaljahr
                 - gesuchsjahr
                 - gesuchsperiodeStart
@@ -2395,6 +2397,12 @@ components:
                 - wohnkosten_persoenlich_4pers
                 - wohnkosten_persoenlich_5pluspers
             properties:
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
                 fiskaljahr:
                     description: ''
                     type: string
@@ -2427,103 +2435,100 @@ components:
                     type: string
                 ausbKosten_SekII:
                     description: ''
-                    type: number
+                    type: integer
                 ausbKosten_Tertiaer:
                     description: ''
-                    type: number
+                    type: integer
                 freibetrag_vermoegen:
                     description: ''
-                    type: number
+                    type: integer
                 freibetrag_erwerbseinkommen:
                     description: ''
-                    type: number
+                    type: integer
                 einkommensfreibetrag:
                     description: ''
-                    type: number
+                    type: integer
                 elternbeteiligungssatz:
                     description: ''
-                    type: number
-                f_Einkommensfreibetrag:
+                    type: integer
+                vermoegensfreibetrag:
                     description: ''
-                    type: number
-                f_Vermoegensfreibetrag:
+                    type: integer
+                vermogenSatzAngerechnet:
                     description: ''
-                    type: number
-                f_VermogenSatzAngerechnet:
-                    description: ''
-                    type: number
+                    type: integer
                 integrationszulage:
                     description: ''
-                    type: number
+                    type: integer
                 limite_EkFreibetrag_Integrationszulag:
                     description: ''
-                    type: number
+                    type: integer
                 stipLimite_Minimalstipendium:
                     description: ''
-                    type: number
+                    type: integer
                 person_1:
                     description: ''
-                    type: number
+                    type: integer
                 personen_2:
                     description: ''
-                    type: number
+                    type: integer
                 personen_3:
                     description: ''
-                    type: number
+                    type: integer
                 personen_4:
                     description: ''
-                    type: number
+                    type: integer
                 personen_5:
                     description: ''
-                    type: number
+                    type: integer
                 personen_6:
                     description: ''
-                    type: number
+                    type: integer
                 personen_7:
                     description: ''
-                    type: number
+                    type: integer
                 proWeiterePerson:
                     description: ''
-                    type: number
+                    type: integer
                 kinder_00_18:
                     description: ''
-                    type: number
+                    type: integer
                 jugendliche_erwachsene_19_25:
                     description: ''
-                    type: number
+                    type: integer
                 erwachsene_26_99:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_fam_1pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_fam_2pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_fam_3pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_fam_4pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_fam_5pluspers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_persoenlich_1pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_persoenlich_2pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_persoenlich_3pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_persoenlich_4pers:
                     description: ''
-                    type: number
+                    type: integer
                 wohnkosten_persoenlich_5pluspers:
                     description: ''
-                    type: number
+                    type: integer
 
         AusbildungsstaetteUpdate:
             required:

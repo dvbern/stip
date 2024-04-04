@@ -79,15 +79,11 @@ export interface GesuchsperiodeWithDaten {
     /**
      * 
      */
-    f_Einkommensfreibetrag: number;
+    vermoegensfreibetrag?: number;
     /**
      * 
      */
-    f_Vermoegensfreibetrag: number;
-    /**
-     * 
-     */
-    f_VermogenSatzAngerechnet: number;
+    vermogenSatzAngerechnet?: number;
     /**
      * 
      */
