@@ -191,7 +191,7 @@ public class GesuchService {
         );
         violations.addAll(validator.validate(gesuchFormular));
 
-        return ValidationsExceptionMapper.constraintViolationstoDto(violations);
+        return ValidationsExceptionMapper.toDto(violations);
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {

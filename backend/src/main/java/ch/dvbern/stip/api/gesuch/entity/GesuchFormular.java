@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
+import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -104,8 +105,10 @@ import org.hibernate.envers.Audited;
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
 @DocumentsRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
     DocumentsRequiredValidationGroup.class
+}, payload = Severity.Warning.class)
+@DocumentsRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class
 })
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint

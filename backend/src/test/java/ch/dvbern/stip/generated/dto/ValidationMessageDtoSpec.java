@@ -24,16 +24,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * ValidationErrorDtoSpec
+ * 
  */
 @JsonPropertyOrder({
-  ValidationErrorDtoSpec.JSON_PROPERTY_PROPERTY_PATH,
-  ValidationErrorDtoSpec.JSON_PROPERTY_MESSAGE_TEMPLATE,
-  ValidationErrorDtoSpec.JSON_PROPERTY_MESSAGE
+  ValidationMessageDtoSpec.JSON_PROPERTY_PROPERTY_PATH,
+  ValidationMessageDtoSpec.JSON_PROPERTY_MESSAGE_TEMPLATE,
+  ValidationMessageDtoSpec.JSON_PROPERTY_MESSAGE
 })
-@JsonTypeName("ValidationError")
+@JsonTypeName("ValidationMessage")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class ValidationErrorDtoSpec {
+public class ValidationMessageDtoSpec {
   public static final String JSON_PROPERTY_PROPERTY_PATH = "propertyPath";
   private String propertyPath;
 
@@ -43,10 +43,10 @@ public class ValidationErrorDtoSpec {
   public static final String JSON_PROPERTY_MESSAGE = "message";
   private String message;
 
-  public ValidationErrorDtoSpec() {
+  public ValidationMessageDtoSpec() {
   }
 
-  public ValidationErrorDtoSpec propertyPath(String propertyPath) {
+  public ValidationMessageDtoSpec propertyPath(String propertyPath) {
     
     this.propertyPath = propertyPath;
     return this;
@@ -72,7 +72,7 @@ public class ValidationErrorDtoSpec {
   }
 
 
-  public ValidationErrorDtoSpec messageTemplate(String messageTemplate) {
+  public ValidationMessageDtoSpec messageTemplate(String messageTemplate) {
     
     this.messageTemplate = messageTemplate;
     return this;
@@ -98,7 +98,7 @@ public class ValidationErrorDtoSpec {
   }
 
 
-  public ValidationErrorDtoSpec message(String message) {
+  public ValidationMessageDtoSpec message(String message) {
     
     this.message = message;
     return this;
@@ -131,10 +131,10 @@ public class ValidationErrorDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ValidationErrorDtoSpec validationError = (ValidationErrorDtoSpec) o;
-    return Objects.equals(this.propertyPath, validationError.propertyPath) &&
-        Objects.equals(this.messageTemplate, validationError.messageTemplate) &&
-        Objects.equals(this.message, validationError.message);
+    ValidationMessageDtoSpec validationMessage = (ValidationMessageDtoSpec) o;
+    return Objects.equals(this.propertyPath, validationMessage.propertyPath) &&
+        Objects.equals(this.messageTemplate, validationMessage.messageTemplate) &&
+        Objects.equals(this.message, validationMessage.message);
   }
 
   @Override
@@ -145,7 +145,7 @@ public class ValidationErrorDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ValidationErrorDtoSpec {\n");
+    sb.append("class ValidationMessageDtoSpec {\n");
     sb.append("    propertyPath: ").append(toIndentedString(propertyPath)).append("\n");
     sb.append("    messageTemplate: ").append(toIndentedString(messageTemplate)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");

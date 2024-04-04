@@ -10,7 +10,10 @@
  * Do not edit the class manually.
  */
 
-export interface ValidationError { 
+/**
+ * 
+ */
+export interface ValidationMessage { 
     /**
      * 
      */

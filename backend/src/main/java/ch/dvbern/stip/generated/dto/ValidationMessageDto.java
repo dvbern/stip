@@ -11,14 +11,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+/**
+ * 
+ **/
 
-
-@JsonTypeName("ValidationError")
+@JsonTypeName("ValidationMessage")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class ValidationErrorDto  implements Serializable {
+public class ValidationMessageDto  implements Serializable {
   private @Valid String messageTemplate;
   private @Valid String message;
   private @Valid String propertyPath;
@@ -26,7 +28,7 @@ public class ValidationErrorDto  implements Serializable {
   /**
    * 
    **/
-  public ValidationErrorDto messageTemplate(String messageTemplate) {
+  public ValidationMessageDto messageTemplate(String messageTemplate) {
     this.messageTemplate = messageTemplate;
     return this;
   }
@@ -46,7 +48,7 @@ public class ValidationErrorDto  implements Serializable {
   /**
    * 
    **/
-  public ValidationErrorDto message(String message) {
+  public ValidationMessageDto message(String message) {
     this.message = message;
     return this;
   }
@@ -66,7 +68,7 @@ public class ValidationErrorDto  implements Serializable {
   /**
    * 
    **/
-  public ValidationErrorDto propertyPath(String propertyPath) {
+  public ValidationMessageDto propertyPath(String propertyPath) {
     this.propertyPath = propertyPath;
     return this;
   }
@@ -91,10 +93,10 @@ public class ValidationErrorDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ValidationErrorDto validationError = (ValidationErrorDto) o;
-    return Objects.equals(this.messageTemplate, validationError.messageTemplate) &&
-        Objects.equals(this.message, validationError.message) &&
-        Objects.equals(this.propertyPath, validationError.propertyPath);
+    ValidationMessageDto validationMessage = (ValidationMessageDto) o;
+    return Objects.equals(this.messageTemplate, validationMessage.messageTemplate) &&
+        Objects.equals(this.message, validationMessage.message) &&
+        Objects.equals(this.propertyPath, validationMessage.propertyPath);
   }
 
   @Override
@@ -105,7 +107,7 @@ public class ValidationErrorDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ValidationErrorDto {\n");
+    sb.append("class ValidationMessageDto {\n");
     
     sb.append("    messageTemplate: ").append(toIndentedString(messageTemplate)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");

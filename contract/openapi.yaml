@@ -1945,7 +1945,12 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/ValidationError'
-        ValidationError:
+                validationWarnings:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ValidationWarning'
+        ValidationMessage:
             description: ''
             required:
                 - message
@@ -1961,6 +1966,12 @@ components:
                 message:
                     description: ''
                     type: string
+        ValidationWarning:
+            allOf:
+                - $ref: '#/components/schemas/ValidationMessage'
+        ValidationError:
+            allOf:
+                - $ref: '#/components/schemas/ValidationMessage'
         TenantInfo:
             title: Root Type for TenantInfo
             description: Client Application Info about a `Tenant`
