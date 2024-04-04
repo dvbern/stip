@@ -67,7 +67,6 @@
   "shared.form.error.maxDateFuture": "La date est trop éloignée dans le temps",
   "shared.form.error.email": "L'adresse e-mail est invalide",
   "shared.form.error.telefonnummer": "Le numéro de téléphone est invalide",
-  "shared.form.dokumente.title": "Autres Documents",
   "shared.weiterangaben": "Plus de détails",
   "shared.table.paginator.itemsPerPage": "Nombre d'éléments par page",
   "shared.table.paginator.nextPage": "Page suivante",

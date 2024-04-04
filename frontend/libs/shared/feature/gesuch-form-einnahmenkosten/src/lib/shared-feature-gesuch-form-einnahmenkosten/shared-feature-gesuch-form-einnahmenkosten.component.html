@@ -209,7 +209,7 @@
         <div class="row g-4">
           <!-- AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI -->
           @if (!form.controls.ausbildungskostenSekundarstufeZwei.disabled) {
-            <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
               <mat-label>{{
                 'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.label' | translate
               }}</mat-label>
@@ -231,7 +231,7 @@
       <div class="row g-4 mt-1">
         <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
         @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ 'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label' | translate }}</mat-label>
             <input
               formControlName="ausbildungskostenTertiaerstufe"
@@ -304,7 +304,7 @@
       @if (!hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche)) {
         <div class="row g-4 mt-1">
           <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ 'shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label' | translate }}</mat-label>
             <input
               formControlName="auswaertigeMittagessenProWoche"
@@ -359,7 +359,7 @@
             dvSharedUiFormField
           >
             <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
-            <div class="d-flex gap-2 col-12 col-md-9 col-xl-6 pe-3">
+            <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-6 pe-md-3 justify-content-between">
               <div class="d-flex flex-column">
                 <mat-radio-button data-testid="yes" [value]="true">
                   {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
@@ -370,7 +370,7 @@
               </div>
               @if (verdienstRealisiertDocumentSig(); as options) {
                 <dv-shared-pattern-document-upload
-                  class="flex-shrink-1 ms-auto align-self-center"
+                  class="flex-shrink-1 mt-2"
                   [optionsSig]="options"
                 ></dv-shared-pattern-document-upload>
               }
@@ -384,7 +384,7 @@
       <div class="row g-4 mt-1">
         <!-- WILL_DARLEHEN -->
         @if (!hiddenFieldsSetSig().has(form.controls.willDarlehen)) {
-          <div class="col-12 col-md-9 col-xl-6">
+          <div class="col-12 col-md-6 col-xl-6">
             <mat-radio-group
               class="d-flex flex-column"
               formControlName="willDarlehen"

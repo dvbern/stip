@@ -168,7 +168,7 @@
           (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
           '.label' | translate
       }}</label>
-      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-4">
+      <div class="d-flex gap-2 flex-wrap col-12 col-md-6 col-xl-4 pe-md-3 justify-content-between">
         <div class="d-flex flex-column">
           <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | translate
@@ -177,7 +177,7 @@
         </div>
         @if (lohnabrechnungVermoegenDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
-            class="flex-shrink-1 ms-auto align-self-center"
+            class="flex-shrink-1 mt-2"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
         }
@@ -196,7 +196,7 @@
       class="col-12"
     >
       <label>{{ 'shared.form.eltern.ergaenzungsleistungAusbezahlt.label' | translate }}</label>
-      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-4">
+      <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-4 pe-md-3 justify-content-between">
         <div class="d-flex flex-column">
           <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | translate
@@ -205,7 +205,7 @@
         </div>
         @if (ergaenzungsleistungenDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
-            class="flex-shrink-1 ms-auto align-self-center"
+            class="flex-shrink-1 mt-2"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
         }
@@ -224,7 +224,7 @@
       class="col-12"
     >
       <label>{{ 'shared.form.eltern.sozialhilfebeitraegeAusbezahlt.label' | translate }}</label>
-      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-4">
+      <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-4 pe-md-3 justify-content-between">
         <div class="d-flex flex-column">
           <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | translate
@@ -233,7 +233,7 @@
         </div>
         @if (sozialhilfeDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
-            class="flex-shrink-1 ms-auto align-self-center"
+            class="flex-shrink-1 mt-2"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
         }
@@ -243,23 +243,6 @@
       </mat-error>
     </mat-radio-group>
   </div>
-
-  <!-- <h3 class="pt-5">{{ 'shared.form.dokumente.title' | translate }}</h3>
-
-  <div class="row g-4 my-2">
-    @if (mietvertragHypothekarzinsabrechnungDocumentSig(); as options) {
-      <div class="d-flex gap-2 align-items-center">
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-        <label>{{
-          'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_' +
-            (elternteil.elternTyp === ElternTyp.MUTTER ? 'MUTTER' : 'VATER') | translate
-        }}</label>
-      </div>
-    }
-  </div> -->
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons>

@@ -131,7 +131,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
     const kontoinhaber =
       kontoinhaberChanged ?? gesuchFormular?.auszahlung?.kontoinhaber;
 
-    if (kontoinhaber === Kontoinhaber.SOZIALDIENST_INSTITUTION) {
+    if (
+      kontoinhaber === Kontoinhaber.SOZIALDIENST_INSTITUTION ||
+      kontoinhaber === Kontoinhaber.ANDERE
+    ) {
       return DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG;
     }
 

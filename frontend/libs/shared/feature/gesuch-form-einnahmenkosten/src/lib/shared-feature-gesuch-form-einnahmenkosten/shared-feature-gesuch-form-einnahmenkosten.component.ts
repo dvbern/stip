@@ -186,9 +186,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   );
 
   nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
-    const nettoerwerbseinkommen = parseInt(
+    const nettoerwerbseinkommen = fromFormatedNumber(
       this.nettoerwerbseinkommenSig() ?? '0',
-      10,
     );
 
     return nettoerwerbseinkommen > 0 ? DokumentTyp.EK_LOHNABRECHNUNG : null;
@@ -197,7 +196,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   alimenteSig = toSignal(this.form.controls.alimente.valueChanges);
 
   alimenteDocumentSig = this.createUploadOptionsSig(() => {
-    const alimente = parseInt(this.alimenteSig() ?? '0', 10);
+    const alimente = fromFormatedNumber(this.alimenteSig() ?? '0');
 
     return alimente > 0 ? DokumentTyp.EK_BELEG_ALIMENTE : null;
   });
@@ -205,7 +204,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   zulagenSig = toSignal(this.form.controls.zulagen.valueChanges);
 
   zulagenDocumentSig = this.createUploadOptionsSig(() => {
-    const zulagen = parseInt(this.zulagenSig() ?? '0', 10);
+    const zulagen = fromFormatedNumber(this.zulagenSig() ?? '0');
 
     return zulagen > 0 ? DokumentTyp.EK_BELEG_KINDERZULAGEN : null;
   });
@@ -213,7 +212,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   rentenSig = toSignal(this.form.controls.renten.valueChanges);
 
   rentenDocumentSig = this.createUploadOptionsSig(() => {
-    const renten = parseInt(this.rentenSig() ?? '0', 10);
+    const renten = fromFormatedNumber(this.rentenSig() ?? '0');
 
     return renten > 0 ? DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN : null;
   });
@@ -221,7 +220,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   eoLeistungenSig = toSignal(this.form.controls.eoLeistungen.valueChanges);
 
   eoLeistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const eoLeistungen = parseInt(this.eoLeistungenSig() ?? '0', 10);
+    const eoLeistungen = fromFormatedNumber(this.eoLeistungenSig() ?? '0');
 
     return eoLeistungen > 0
       ? DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
@@ -233,9 +232,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   );
 
   ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const ergaenzungsleistungen = parseInt(
+    const ergaenzungsleistungen = fromFormatedNumber(
       this.ergaenzungsleistungenSig() ?? '0',
-      10,
     );
 
     return ergaenzungsleistungen > 0
@@ -246,7 +244,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   beitraegeSig = toSignal(this.form.controls.beitraege.valueChanges);
 
   beitraegeDocumentSig = this.createUploadOptionsSig(() => {
-    const beitraege = parseInt(this.beitraegeSig() ?? '0', 10);
+    const beitraege = fromFormatedNumber(this.beitraegeSig() ?? '0');
 
     return beitraege > 0
       ? DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION
@@ -256,7 +254,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
 
   fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const fahrkosten = parseInt(this.fahrkostenSig() ?? '0', 10);
+    const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
 
     return fahrkosten > 0 ? DokumentTyp.EK_BELEG_OV_ABONNEMENT : null;
   });
@@ -264,7 +262,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   wohnkostenSig = toSignal(this.form.controls.wohnkosten.valueChanges);
 
   wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const wohnkosten = parseInt(this.wohnkostenSig() ?? '0', 10);
+    const wohnkosten = fromFormatedNumber(this.wohnkostenSig() ?? '0');
 
     return wohnkosten > 0 ? DokumentTyp.EK_MIETVERTRAG : null;
   });

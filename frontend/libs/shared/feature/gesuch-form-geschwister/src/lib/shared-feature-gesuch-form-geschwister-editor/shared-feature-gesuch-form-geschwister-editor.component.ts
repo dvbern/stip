@@ -147,10 +147,8 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     this.form.controls.ausbildungssituation.valueChanges,
   );
 
-  ausbildungssituationDocumetSig = this.createUploadOptionsSig(() => {
+  ausbildungssituationDocumentSig = this.createUploadOptionsSig(() => {
     const ausbildungssituation = this.ausbildungssituationSig();
-
-    console.log('ausbildungssituation', ausbildungssituation);
 
     return ausbildungssituation === Ausbildungssituation.IN_AUSBILDUNG
       ? DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE

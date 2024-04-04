@@ -52,7 +52,7 @@
               class="col-12"
             >
               <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
-              <div class="d-flex gap-2 col-12 col-md-6 col-xl-8 pe-4">
+              <div class="d-flex gap-2 flex-wrap justify-content-between">
                 <div class="d-flex flex-column">
                   <mat-radio-button data-testid="yes" [value]="true">{{
                     'shared.form.radio.yes' | translate
@@ -65,7 +65,7 @@
 
                 @if (trennungsvereinbarungDocumentSig(); as options) {
                   <dv-shared-pattern-document-upload
-                    class="flex-shrink-1 ms-auto align-self-center"
+                    class="flex-shrink-1 mt-2"
                     [optionsSig]="options"
                   ></dv-shared-pattern-document-upload>
                 }
@@ -76,7 +76,7 @@
             </mat-radio-group>
           </div>
           @if (form.controls.werZahltAlimente.enabled) {
-            <div class="row g-4 mt-3 col-xl-8">
+            <div class="row g-4 mt-3">
               <mat-form-field dvSharedUiFormField>
                 <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | translate }}</mat-label>
                 <mat-select formControlName="werZahltAlimente" data-testid="form-family-werZahltAlimente">
@@ -186,7 +186,7 @@
                 class="d-flex flex-column"
               >
                 <label>{{ 'shared.form.familiensituation.mutter-unbekannt-reason.label' | translate }}</label>
-                <div class="d-flex gap-2 col-12 col-md-6 col-xl-8 pe-4">
+                <div class="d-flex gap-2 flex-wrap justify-content-between">
                   <div class="d-flex flex-column">
                     <mat-radio-button
                       [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
@@ -207,7 +207,7 @@
                   </div>
                   @if (mutterUnbekanntDocumentSig(); as options) {
                     <dv-shared-pattern-document-upload
-                      class="flex-shrink-1 ms-auto align-self-center"
+                      class="flex-shrink-1 mt-2"
                       [optionsSig]="options"
                     ></dv-shared-pattern-document-upload>
                   }
@@ -272,7 +272,7 @@
                 class="col-12"
               >
                 <label>{{ 'shared.form.familiensituation.vater-unbekannt-reason.label' | translate }}</label>
-                <div class="d-flex gap-2 col-12 col-md-6 col-xl-8 pe-4">
+                <div class="d-flex gap-2 flex-wrap justify-content-between">
                   <div class="d-flex flex-column">
                     <mat-radio-button
                       [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
@@ -293,7 +293,7 @@
                   </div>
                   @if (vaterUnbekanntDocumentSig(); as options) {
                     <dv-shared-pattern-document-upload
-                      class="flex-shrink-1 ms-auto align-self-center"
+                      class="flex-shrink-1 mt-2"
                       [optionsSig]="options"
                     ></dv-shared-pattern-document-upload>
                   }

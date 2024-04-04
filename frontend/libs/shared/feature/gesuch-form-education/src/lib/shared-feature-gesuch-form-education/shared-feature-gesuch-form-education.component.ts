@@ -41,7 +41,6 @@ import {
   Ausbildungsstaette,
 } from '@dv/shared/model/gesuch';
 import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
-import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -81,7 +80,6 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MaskitoModule,
     GesuchAppUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
-    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-education.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

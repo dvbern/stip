@@ -155,7 +155,9 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
 
   jahreseinkommenDocumentSig = this.createUploadOptionsSig(() => {
-    const jahreseinkommen = parseInt(this.jahreseinkommenSig() ?? '0');
+    const jahreseinkommen = fromFormatedNumber(
+      this.jahreseinkommenSig() ?? '0',
+    );
 
     return jahreseinkommen > 0
       ? DokumentTyp.PARNTER_AUSBILUNG_LOHNABRECHNUNG
@@ -163,7 +165,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   });
 
   fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const fahrkosten = parseInt(this.fahrkostenSig() ?? '0');
+    const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
 
     return fahrkosten > 0 ? DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT : null;
   });

@@ -80,10 +80,10 @@
       formControlName="ausbildungssituation"
       data-testid="form-geschwister-ausbildungssituation"
       dvSharedUiFormField
-      class="col-12"
+      class="col-12 col-xl-8"
     >
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | translate }}</label>
-      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-3">
+      <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
         <div class="d-flex flex-column">
           @for (a of ausbildungssituationValues; track trackByIndex($index)) {
             <mat-radio-button [attr.data-testid]="a" [value]="a">{{
@@ -92,9 +92,9 @@
           }
         </div>
 
-        @if (ausbildungssituationDocumetSig(); as options) {
+        @if (ausbildungssituationDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
-            class="flex-shrink-1 ms-auto"
+            class="flex-shrink-1 mt-2"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
         }
