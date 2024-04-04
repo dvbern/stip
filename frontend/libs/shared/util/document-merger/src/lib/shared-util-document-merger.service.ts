@@ -42,9 +42,39 @@ export class SharedUtilDocumentMergerService {
       });
     });
 
-    const pdf = new jsPDF();
+    const pdf = new jsPDF('p', 'pt', 'a4', true);
+    const margin = 10;
+    const pdfWidth = pdf.internal.pageSize.getWidth() - margin * 2;
+    const pdfHeight = pdf.internal.pageSize.getHeight() - margin * 2;
+
     results.forEach((result, index) => {
-      pdf.addImage(result, 'JPEG', 0, 0, 100, 100);
+      const imgProps = pdf.getImageProperties(result);
+
+      let imgHeight = imgProps.height;
+      let imgWidth = imgProps.width;
+
+      // Contain image within pdf or scale down if necessary
+      if (imgWidth > pdfWidth) {
+        const scale = pdfWidth / imgWidth;
+        imgWidth *= scale;
+        imgHeight *= scale;
+      }
+      if (imgHeight > pdfHeight) {
+        const scale = pdfHeight / imgHeight;
+        imgWidth *= scale;
+        imgHeight *= scale;
+      }
+
+      pdf.addImage(
+        result,
+        'JPEG',
+        margin,
+        margin,
+        imgWidth,
+        imgHeight,
+        `image-${index}`,
+        'FAST',
+      );
       if (index !== results.length - 1) {
         pdf.addPage();
       }
