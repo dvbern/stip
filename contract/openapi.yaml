@@ -2367,11 +2367,10 @@ components:
                 - ausbKosten_Tertiaer
                 - freibetrag_vermoegen
                 - freibetrag_erwerbseinkommen
-                - einkommensfreibetrag
                 - elternbeteiligungssatz
-                - f_Einkommensfreibetrag
-                - f_Vermoegensfreibetrag
-                - f_VermogenSatzAngerechnet
+                - einkommensfreibetrag
+                - vermoegensfreibetrag
+                - vermogenSatzAngerechnet
                 - integrationszulage
                 - limite_EkFreibetrag_Integrationszulag
                 - stipLimite_Minimalstipendium
