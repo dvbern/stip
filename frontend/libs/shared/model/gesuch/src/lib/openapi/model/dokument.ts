@@ -13,7 +13,7 @@
 export interface Dokument { 
     id: string;
     filename: string;
-    filepfad: string;
+    filepath: string;
     filesize: string;
     timestampErstellt?: string;
     /**
