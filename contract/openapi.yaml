@@ -1,2275 +1,2338 @@
 openapi: 3.0.3
 info:
-  title: STIP API
-  version: '1.0'
-  license:
-    name: GNU AGPLv3
-    url: 'https://www.gnu.org/licenses/agpl.txt'
+    title: STIP API
+    version: '1.0'
+    license:
+        name: GNU AGPLv3
+        url: 'https://www.gnu.org/licenses/agpl.txt'
 servers:
-  - url: 'http://localhost:{port}/api/v1'
-    description: ''
-    variables:
-      port:
-        default: '8080'
+    -
+        url: 'http://localhost:{port}/api/v1'
         description: ''
+        variables:
+            port:
+                default: '8080'
+                description: ''
 paths:
-  /gesuch:
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: |
-            Returns all Gesuche
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuche
-      summary: Returns all Gesuche
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GesuchCreate'
-        required: true
-      tags:
-        - Gesuch
-      responses:
-        '201':
-          description: New Gesuch is created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createGesuch
-      summary: Creates a new Gesuch
-  '/gesuch/{gesuchId}/dokument/{dokumentTyp}':
-    get:
-      tags:
-        - Gesuch
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Dokument'
-          description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getDokumenteForTyp
-      summary: Returniert der GesuchDokument mit der gegebene Id und alle Dokument die dazu gehoeren.
-    post:
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/DokumentCreate'
-        required: true
-      tags:
-        - Gesuch
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createDokument
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/fall/{fallId}':
-    get:
-      tags:
-        - Fall
-      parameters:
-        - name: fallId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Fall'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getFall
-      summary: Returniert der Fall mit der gegebene Id.
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-  /config/deployment:
-    get:
-      tags:
-        - Configuration
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeploymentConfig'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getDeploymentConfig
-      summary: Returniert der Deployment Configuration.
-      description: Gibt zuerueck die Version und Stage aus das Backend
-  /gesuchsperiode:
-    get:
-      tags:
-        - Gesuchsperiode
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuchsperiode'
-          description: Get `Gesuchsperiode`
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchsperioden
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GesuchsperiodeCreate'
-        required: true
-      tags:
-        - Gesuchsperiode
-      responses:
-        '201':
-          description: Created `Gesuchsperiode`
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createGesuchsperiode
-  /gesuchsperiode/aktive:
-    get:
-      tags:
-        - Gesuchsperiode
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuchsperiode'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAktiveGesuchsperioden
-      summary: Get all active Gesuchsperioden
-  '/gesuchsperiode/{gesuchsperiodeId}':
-    get:
-      tags:
-        - Gesuchsperiode
-      parameters:
-        - name: gesuchsperiodeId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Gesuchsperiode'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchsperiode
-      summary: Returniert der Gesuchsperiode mit der gegebene Id.
-  /stammdaten/land:
-    get:
-      tags:
-        - Stammdaten
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getLaender
-      summary: Returns a List of LandCode
-  /ausbildungsstaette:
-    get:
-      tags:
-        - Ausbildungsstaette
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ausbildungsstaette'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungsstaetten
-      summary: Returniert alle Ausbildungsstaette zur Verfuegung.
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AusbildungsstaetteCreate'
-      tags:
-        - Ausbildungsstaette
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildungsstaette'
-          description: New Ausbildungsstaette created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createAusbildungsstaette
-  '/ausbildungsstaette/{ausbildungsstaetteId}':
-    parameters:
-      - name: ausbildungsstaetteId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Ausbildungsstaette
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildungsstaette'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungsstaette
-      summary: returns a Ausbildungsstaette with the given id
-    patch:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AusbildungsstaetteUpdate'
-      tags:
-        - Ausbildungsstaette
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildungsstaette'
-          description: Ausbildungsstaette updated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateAusbildungsstaette
-    delete:
-      tags:
-        - Ausbildungsstaette
-      responses:
-        '204':
-          description: Ausbildungsstaette deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteAusbildungsstaette
-      summary: Delete Ausbildungsstaette
-  '/gesuch/benutzer/{benutzerId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Gesuchstellende
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForBenutzer
-      summary: Get all Gesuch for Benutzende
-    parameters:
-      - name: benutzerId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-  '/fall/benutzer/{benutzerId}':
-    get:
-      tags:
-        - Fall
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Fall'
-          description: Return der Fall des Benutzende
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getFallForBenutzer
-      summary: Get alle Fälle für den gegebene Benutzende
-    post:
-      tags:
-        - Fall
-      responses:
-        '201':
-          description: New Fall created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createFall
-    parameters:
-      - name: benutzerId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-  '/gesuch/fall/{fallId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Fall
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForFall
-      summary: Return alle Gesuche die gehören zu dieser Fall
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-  '/gesuch/{gesuchId}':
-    get:
-      tags:
-        - Gesuch
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Gesuch'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuch
-      summary: Returns the Gesuch with the given Id
-    delete:
-      tags:
-        - Gesuch
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '204':
-          description: |
-            Gesuch deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteGesuch
-      summary: delete a Gesuch
-    patch:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GesuchUpdate'
-        required: true
-      tags:
-        - Gesuch
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '202':
-          description: Gesuch updated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateGesuch
-      summary: Updates the Gesuch with the given Id
-  '/gesuch/validatePages/{gesuchId}':
-    get:
-      tags:
-        - Gesuch
-        - Validation
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationReport'
-          description: Die Validierung wurde erflogreich durchgeführt
-      operationId: validateGesuchPages
-  '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: File returned
-      operationId: getDokument
-      summary: get Dokument
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-    delete:
-      tags:
-        - Gesuch
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '204':
-          description: |
-            Dokument deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteDokument
-      summary: deletes a Dokument
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-      - name: dokumentTyp
-        schema:
-          $ref: '#/components/schemas/DokumentTyp'
-        in: path
-        required: true
-      - name: dokumentId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-  '/gesuch/{gesuchId}/einreichen':
-    patch:
-      tags:
-        - Gesuch
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '201':
-          description: Gesuch eingereicht
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichen
-      summary: Das Gesuch einreichen
-  /tenant/current:
-    get:
-      tags:
-        - Tenant
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TenantInfo'
-          description: Tenant
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getCurrentTenant
-      summary: Current Tenant
-      description: '`Tenant` based on the current Request'
-  /benutzer/me:
-    get:
-      tags:
-        - Benutzer
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Benutzer'
-          description: Current Benutzer
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getCurrentBenutzer
-      summary: Get the logged-in Benutzer
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BenutzerUpdate'
-        required: true
-      tags:
-        - Benutzer
-      responses:
-        '202':
-          description: Updated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateCurrentBenutzer
-      summary: Update the logged-in Benutzer
-  '/ausbildungsgang/{ausbildungsgangId}':
-    parameters:
-      - name: ausbildungsgangId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Ausbildungsgang
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildungsgang'
-          description: OK
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungsgang
-      summary: return der Ausbildungsgang
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AusbildungsgangUpdate'
-        required: true
-      tags:
-        - Ausbildungsgang
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildungsgang'
-          description: Ausbildungsgang updated
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateAusbildungsgang
-      summary: Updates a Ausbildungsgang with the given ID
-    delete:
-      tags:
-        - Ausbildungsgang
-      responses:
-        '204':
-          description: Ausbildungsgang deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteAusbildungsgang
-      summary: delete a Ausbildungsgang
-  /ausbildungsgang:
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AusbildungsgangCreate'
-        required: true
-      tags:
-        - Ausbildungsgang
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildungsgang'
-          description: New Ausbildungsgang is created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createAusbildungsgang
-      summary: Creates a new Ausbildungsgang
-  /benutzer/stammdaten/sachbearbeiter:
-    get:
-      tags:
-        - Benutzer
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Benutzer'
-          description: >-
-            Return a list of all Sachbearbeiter with their Sachbearbeiter Zuordnung Stammdaten
-            when exist
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getSachbearbeitende
-    patch:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdatenList'
-      tags:
-        - Benutzer
-      responses:
-        '200':
-          description: Sachbearbeiter Stammdatenzuweisung updated
-        '202':
-          description: Gesuch updated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createOrUpdateSachbearbeiterStammdatenList
-  '/benutzer/stammdaten/sachbearbeiter/{benutzerId}':
-    get:
-      tags:
-        - Benutzer
-      parameters:
-        - name: benutzerId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
-          description: Return the Stammdaten for the given Benutzer when exist
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getSachbearbeiterStammdaten
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
-        required: true
-      tags:
-        - Benutzer
-      parameters:
-        - name: benutzerId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          description: Sachbearbeiter Stammdaten created / updated
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createOrUpdateSachbearbeiterStammdaten
-  '/gesuch/{gesuchId}/einreichen/validieren':
-    get:
-      tags:
-        - Gesuch
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationReport'
-          description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichenValidieren
-      summary: Das Gesuch Einreichen Validation Report generieren
+    /gesuch:
+        get:
+            tags:
+                - Gesuch
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuch'
+                    description: |
+                        Returns all Gesuche
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesuche
+            summary: Returns all Gesuche
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GesuchCreate'
+                required: true
+            tags:
+                - Gesuch
+            responses:
+                '201':
+                    description: New Gesuch is created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createGesuch
+            summary: Creates a new Gesuch
+    '/gesuch/{gesuchId}/dokument/{dokumentTyp}':
+        get:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: dokumentTyp
+                    schema:
+                        $ref: '#/components/schemas/DokumentTyp'
+                    in: path
+                    required: true
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Dokument'
+                    description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getDokumenteForTyp
+            summary: Returniert der GesuchDokument mit der gegebene Id und alle Dokument die dazu gehoeren.
+        post:
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            $ref: '#/components/schemas/DokumentCreate'
+                required: true
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: dokumentTyp
+                    schema:
+                        $ref: '#/components/schemas/DokumentTyp'
+                    in: path
+                    required: true
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createDokument
+            x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+    '/fall/{fallId}':
+        get:
+            tags:
+                - Fall
+            parameters:
+                -
+                    name: fallId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Fall'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getFall
+            summary: Returniert der Fall mit der gegebene Id.
+        parameters:
+            -
+                name: fallId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+    /config/deployment:
+        get:
+            tags:
+                - Configuration
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeploymentConfig'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getDeploymentConfig
+            summary: Returniert der Deployment Configuration.
+            description: Gibt zuerueck die Version und Stage aus das Backend
+    /gesuchsperiode:
+        get:
+            tags:
+                - Gesuchsperiode
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuchsperiode'
+                    description: Get `Gesuchsperiode`
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesuchsperioden
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GesuchsperiodeCreate'
+                required: true
+            tags:
+                - Gesuchsperiode
+            responses:
+                '201':
+                    description: Created `Gesuchsperiode`
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createGesuchsperiode
+    /gesuchsperiode/aktive:
+        get:
+            tags:
+                - Gesuchsperiode
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuchsperiode'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getAktiveGesuchsperioden
+            summary: Get all active Gesuchsperioden
+    '/gesuchsperiode/{gesuchsperiodeId}':
+        get:
+            tags:
+                - Gesuchsperiode
+            parameters:
+                -
+                    name: gesuchsperiodeId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuchsperiode'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesuchsperiode
+            summary: Returniert der Gesuchsperiode mit der gegebene Id.
+    /stammdaten/land:
+        get:
+            tags:
+                - Stammdaten
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getLaender
+            summary: Returns a List of LandCode
+    /ausbildungsstaette:
+        get:
+            tags:
+                - Ausbildungsstaette
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getAusbildungsstaetten
+            summary: Returniert alle Ausbildungsstaette zur Verfuegung.
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsstaetteCreate'
+            tags:
+                - Ausbildungsstaette
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: New Ausbildungsstaette created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createAusbildungsstaette
+    '/ausbildungsstaette/{ausbildungsstaetteId}':
+        parameters:
+            -
+                name: ausbildungsstaetteId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+        get:
+            tags:
+                - Ausbildungsstaette
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getAusbildungsstaette
+            summary: returns a Ausbildungsstaette with the given id
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+            tags:
+                - Ausbildungsstaette
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema: 
+                                $ref: '#/components/schemas/Ausbildungsstaette'
+                    description: Ausbildungsstaette updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateAusbildungsstaette
+        delete:
+            tags:
+                - Ausbildungsstaette
+            responses:
+                '204':
+                    description: Ausbildungsstaette deleted
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteAusbildungsstaette
+            summary: Delete Ausbildungsstaette
+    '/gesuch/benutzer/{benutzerId}':
+        get:
+            tags:
+                - Gesuch
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuch'
+                    description: Return alle Gesuche die gehoeren zu dieser Gesuchstellende
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesucheForBenutzer
+            summary: Get all Gesuch for Benutzende
+        parameters:
+            -
+                name: benutzerId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+    '/fall/benutzer/{benutzerId}':
+        get:
+            tags:
+                - Fall
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Fall'
+                    description: Return der Fall des Benutzende
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getFallForBenutzer
+            summary: Get alle Fälle für den gegebene Benutzende
+        post:
+            tags:
+                - Fall
+            responses:
+                '201':
+                    description: New Fall created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createFall
+        parameters:
+            -
+                name: benutzerId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+    '/gesuch/fall/{fallId}':
+        get:
+            tags:
+                - Gesuch
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuch'
+                    description: Return alle Gesuche die gehoeren zu dieser Fall
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesucheForFall
+            summary: Return alle Gesuche die gehören zu dieser Fall
+        parameters:
+            -
+                name: fallId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+    '/gesuch/{gesuchId}':
+        get:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuch'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getGesuch
+            summary: Returns the Gesuch with the given Id
+        delete:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '204':
+                    description: |
+                        Gesuch deleted
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteGesuch
+            summary: delete a Gesuch
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GesuchUpdate'
+                required: true
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '202':
+                    description: Gesuch updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateGesuch
+            summary: Updates the Gesuch with the given Id
+    '/gesuch/validatePages/{gesuchId}':
+        get:
+            tags:
+                - Gesuch
+                - Validation
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationReport'
+                    description: Die Validierung wurde erflogreich durchgeführt
+            operationId: validateGesuchPages
+    '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
+        get:
+            tags:
+                - Gesuch
+            responses:
+                '200':
+                    content:
+                        application/octet-stream:
+                            schema:
+                                format: binary
+                                type: string
+                    description: File returned
+            operationId: getDokument
+            summary: get Dokument
+            x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+        delete:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: dokumentTyp
+                    schema:
+                        $ref: '#/components/schemas/DokumentTyp'
+                    in: path
+                    required: true
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '204':
+                    description: |
+                        Dokument deleted
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteDokument
+            summary: deletes a Dokument
+        parameters:
+            -
+                name: gesuchId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+            -
+                name: dokumentTyp
+                schema:
+                    $ref: '#/components/schemas/DokumentTyp'
+                in: path
+                required: true
+            -
+                name: dokumentId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+    '/gesuch/{gesuchId}/einreichen':
+        patch:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '201':
+                    description: Gesuch eingereicht
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: gesuchEinreichen
+            summary: Das Gesuch einreichen
+    /tenant/current:
+        get:
+            tags:
+                - Tenant
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TenantInfo'
+                    description: Tenant
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getCurrentTenant
+            summary: Current Tenant
+            description: '`Tenant` based on the current Request'
+    /benutzer/me:
+        get:
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Benutzer'
+                    description: Current Benutzer
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getCurrentBenutzer
+            summary: Get the logged-in Benutzer
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/BenutzerUpdate'
+                required: true
+            tags:
+                - Benutzer
+            responses:
+                '202':
+                    description: Updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateCurrentBenutzer
+            summary: Update the logged-in Benutzer
+    '/ausbildungsgang/{ausbildungsgangId}':
+        parameters:
+            -
+                name: ausbildungsgangId
+                schema:
+                    $ref: '#/components/schemas/UUID'
+                in: path
+                required: true
+        get:
+            tags:
+                - Ausbildungsgang
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                    description: OK
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getAusbildungsgang
+            summary: return der Ausbildungsgang
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsgangUpdate'
+                required: true
+            tags:
+                - Ausbildungsgang
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                    description: Ausbildungsgang updated
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateAusbildungsgang
+            summary: Updates a Ausbildungsgang with the given ID
+        delete:
+            tags:
+                - Ausbildungsgang
+            responses:
+                '204':
+                    description: Ausbildungsgang deleted
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: deleteAusbildungsgang
+            summary: delete a Ausbildungsgang
+    /ausbildungsgang:
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AusbildungsgangCreate'
+                required: true
+            tags:
+                - Ausbildungsgang
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                    description: New Ausbildungsgang is created
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createAusbildungsgang
+            summary: Creates a new Ausbildungsgang
+    /benutzer/stammdaten/sachbearbeiter:
+        get:
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Benutzer'
+                    description: >-
+                        Return a list of all Sachbearbeiter with their Sachbearbeiter Zuordnung Stammdaten
+                        when exist
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getSachbearbeitende
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdatenList'
+            tags:
+                - Benutzer
+            responses:
+                '200':
+                    description: Sachbearbeiter Stammdatenzuweisung updated
+                '202':
+                    description: Gesuch updated
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createOrUpdateSachbearbeiterStammdatenList
+    '/benutzer/stammdaten/sachbearbeiter/{benutzerId}':
+        get:
+            tags:
+                - Benutzer
+            parameters:
+                -
+                    name: benutzerId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                    description: Return the Stammdaten for the given Benutzer when exist
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: getSachbearbeiterStammdaten
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                required: true
+            tags:
+                - Benutzer
+            parameters:
+                -
+                    name: benutzerId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    description: Sachbearbeiter Stammdaten created / updated
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: createOrUpdateSachbearbeiterStammdaten
+    '/gesuch/{gesuchId}/einreichen/validieren':
+        get:
+            tags:
+                - Gesuch
+            parameters:
+                -
+                    name: gesuchId
+                    schema:
+                        $ref: '#/components/schemas/UUID'
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationReport'
+                    description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '404':
+                    $ref: '#/components/responses/NotFound'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+            operationId: gesuchEinreichenValidieren
+            summary: Das Gesuch Einreichen Validation Report generieren
 components:
-  schemas:
-    Anrede:
-      enum:
-        - HERR
-        - FRAU
-      type: string
-    AusbildungsPensum:
-      enum:
-        - VOLLZEIT
-        - TEILZEIT
-      type: string
-    DokumentTyp:
-      enum:
-        - PERSON_NIEDERLASSUNGSSTATUS_C
-        - PERSON_NIEDERLASSUNGSSTATUS_B
-        - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
-        - PERSON_KESB_ERNENNUNG
-        - PERSON_MIETVERTRAG
-        - PERSON_VERMOEGENSNACHWEIS_VORJAHR
-        - PERSON_SOZIALHILFEBUDGET
-        - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
-        - PERSON_AUSWEIS
-        - PERSON_VERMOEGENSNACHWEIS
-        - FAMILIENSITUATION_GEBURTSSCHEIN
-        - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
-        - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
-        - FAMILIENSITUATION_TRENNUNGSKONVENTION
-        - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
-        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-        - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-        - ELTERN_SOZIALHILFEBUDGET_VATER
-        - ELTERN_STEUERUNTERLAGEN_VATER
-        - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
-        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
-        - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        - ELTERN_SOZIALHILFEBUDGET_MUTTER
-        - ELTERN_STEUERUNTERLAGEN_MUTTER
-        - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
-        - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
-        - PARNTER_AUSBILUNG_LOHNABRECHNUNG
-        - PARTNER_BELEG_OV_ABONNEMENT
-        - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
-        - EK_BELEG_ALIMENTE
-        - EK_BELEG_KINDERZULAGEN
-        - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
-        - EK_BELEG_BEZAHLTE_RENTEN
-        - EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
-        - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
-        - EK_BELEG_OV_ABONNEMENT
-        - EK_MIETVERTRAG
-        - EK_BELEG_BETREUUNGSKOSTEN_KINDER
-        - EK_LOHNABRECHNUNG
-        - EK_VERDIENST
-        - AUSBILDUNG_DOK
-        - ELTERN_DOK
-        - PARTNER_DOK
-      type: string
-    ElternAbwesenheitsGrund:
-      enum:
-        - VERSTORBEN
-        - UNBEKANNT
-        - WEDER_NOCH
-      type: string
-    ElternUnbekanntheitsGrund:
-      enum:
-        - UNBEKANNTER_AUFENTHALTSORT
-        - FEHLENDE_ANERKENNUNG
-      type: string
-    Elternschaftsteilung:
-      enum:
-        - MUTTER
-        - VATER
-        - GEMEINSAM
-      type: string
-    Gesuchstatus:
-      enum:
-        - IN_BEARBEITUNG_GS
-        - KOMPLETT_EINGEREICHT
-        - BEREIT_FUER_BEARBEITUNG
-        - FEHLERHAFT
-        - IN_BEARBEITUNG_SB
-        - IN_REVIEW
-        - FEHLENDE_DOKUMENTE
-        - FEHLENDE_DOKUMENTE_NACHFRIST
-        - ZURUECKGEZOGEN
-        - ABKLAERUNG_MIT_GS
-        - IN_FREIGABE
-        - ZURUECKGEWIESEN
-        - WARTEN_AUF_UNTERSCHRIFTENBLATT
-        - NEGATIVER_ENTSCHEID
-        - VERFUEGT
-        - STIPENDIUM_AKZEPTIERT
-        - STIPENDIUM_AUSBEZAHLT
-      type: string
-    LocalDate:
-      format: date
-      type: string
-      example: '2022-03-10'
-    Niederlassungsstatus:
-      enum:
-        - NIEDERLASSUNGSBEWILLIGUNG_C
-        - AUFENTHALTSBEWILLIGUNG_B
-        - FLUECHTLING
-      type: string
-    Zivilstand:
-      enum:
-        - LEDIG
-        - VERHEIRATET
-        - KONKUBINAT
-        - EINGETRAGENE_PARTNERSCHAFT
-        - GESCHIEDEN_GERICHTLICH
-        - AUFGELOESTE_PARTNERSCHAFT
-        - VERWITWET
-      type: string
-    Adresse:
-      required:
-        - land
-        - strasse
-        - plz
-        - ort
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        land:
-          $ref: '#/components/schemas/Land'
-        coAdresse:
-          type: string
-        strasse:
-          type: string
-        hausnummer:
-          type: string
-        plz:
-          type: string
-        ort:
-          type: string
-    DeploymentConfig:
-      type: object
-      properties:
-        environment:
-          type: string
-        version:
-          type: string
-        allowedMimeTypes:
-          description: ''
-          type: array
-          items:
+    schemas:
+        Anrede:
+            enum:
+                - HERR
+                - FRAU
             type: string
-    Dokument:
-      required:
-        - id
-        - filename
-        - filepfad
-        - filesize
-        - objectId
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        filename:
-          type: string
-        filepfad:
-          type: string
-        filesize:
-          type: string
-        timestampErstellt:
-          type: string
-        objectId:
+        AusbildungsPensum:
+            enum:
+                - VOLLZEIT
+                - TEILZEIT
+            type: string
+        DokumentTyp:
+            enum:
+                - PERSON_NIEDERLASSUNGSSTATUS_C
+                - PERSON_NIEDERLASSUNGSSTATUS_B
+                - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+                - PERSON_KESB_ERNENNUNG
+                - PERSON_MIETVERTRAG
+                - PERSON_VERMOEGENSNACHWEIS_VORJAHR
+                - PERSON_SOZIALHILFEBUDGET
+                - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
+                - PERSON_AUSWEIS
+                - PERSON_VERMOEGENSNACHWEIS
+                - FAMILIENSITUATION_GEBURTSSCHEIN
+                - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
+                - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
+                - FAMILIENSITUATION_TRENNUNGSKONVENTION
+                - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
+                - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+                - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+                - ELTERN_SOZIALHILFEBUDGET_VATER
+                - ELTERN_STEUERUNTERLAGEN_VATER
+                - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
+                - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+                - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+                - ELTERN_SOZIALHILFEBUDGET_MUTTER
+                - ELTERN_STEUERUNTERLAGEN_MUTTER
+                - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+                - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+                - PARNTER_AUSBILUNG_LOHNABRECHNUNG
+                - PARTNER_BELEG_OV_ABONNEMENT
+                - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
+                - EK_BELEG_ALIMENTE
+                - EK_BELEG_KINDERZULAGEN
+                - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+                - EK_BELEG_BEZAHLTE_RENTEN
+                - EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+                - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+                - EK_BELEG_OV_ABONNEMENT
+                - EK_MIETVERTRAG
+                - EK_BELEG_BETREUUNGSKOSTEN_KINDER
+                - EK_LOHNABRECHNUNG
+                - EK_VERDIENST
+                - AUSBILDUNG_DOK
+                - ELTERN_DOK
+                - PARTNER_DOK
+            type: string
+        ElternAbwesenheitsGrund:
+            enum:
+                - VERSTORBEN
+                - UNBEKANNT
+                - WEDER_NOCH
+            type: string
+        ElternUnbekanntheitsGrund:
+            enum:
+                - UNBEKANNTER_AUFENTHALTSORT
+                - FEHLENDE_ANERKENNUNG
+            type: string
+        Elternschaftsteilung:
+            enum:
+                - MUTTER
+                - VATER
+                - GEMEINSAM
+            type: string
+        Gesuchstatus:
+            enum:
+                - IN_BEARBEITUNG_GS
+                - KOMPLETT_EINGEREICHT
+                - BEREIT_FUER_BEARBEITUNG
+                - FEHLERHAFT
+                - IN_BEARBEITUNG_SB
+                - IN_REVIEW
+                - FEHLENDE_DOKUMENTE
+                - FEHLENDE_DOKUMENTE_NACHFRIST
+                - ZURUECKGEZOGEN
+                - ABKLAERUNG_MIT_GS
+                - IN_FREIGABE
+                - ZURUECKGEWIESEN
+                - WARTEN_AUF_UNTERSCHRIFTENBLATT
+                - NEGATIVER_ENTSCHEID
+                - VERFUEGT
+                - STIPENDIUM_AKZEPTIERT
+                - STIPENDIUM_AUSBEZAHLT
+            type: string
+        LocalDate:
+            format: date
+            type: string
+            example: '2022-03-10'
+        Niederlassungsstatus:
+            enum:
+                - NIEDERLASSUNGSBEWILLIGUNG_C
+                - AUFENTHALTSBEWILLIGUNG_B
+                - FLUECHTLING
+            type: string
+        Zivilstand:
+            enum:
+                - LEDIG
+                - VERHEIRATET
+                - KONKUBINAT
+                - EINGETRAGENE_PARTNERSCHAFT
+                - GESCHIEDEN_GERICHTLICH
+                - AUFGELOESTE_PARTNERSCHAFT
+                - VERWITWET
+            type: string
+        Adresse:
+            required:
+                - land
+                - strasse
+                - plz
+                - ort
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                land:
+                    $ref: '#/components/schemas/Land'
+                coAdresse:
+                    type: string
+                strasse:
+                    type: string
+                hausnummer:
+                    type: string
+                plz:
+                    type: string
+                ort:
+                    type: string
+        DeploymentConfig:
+            type: object
+            properties:
+                environment:
+                    type: string
+                version:
+                    type: string
+                allowedMimeTypes:
+                    description: ''
+                    type: array
+                    items:
+                        type: string
+        Dokument:
+            required:
+                - id
+                - filename
+                - filepfad
+                - filesize
+                - objectId
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                filename:
+                    type: string
+                filepfad:
+                    type: string
+                filesize:
+                    type: string
+                timestampErstellt:
+                    type: string
+                objectId:
+                    description: ''
+                    type: string
+        Fall:
+            required:
+                - id
+                - fallNummer
+                - mandant
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                fallNummer:
+                    format: int64
+                    type: integer
+                mandant:
+                    type: string
+        GesuchsperiodeCreate:
+            type: object
+            properties:
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'
+        DokumentCreate:
+            required:
+                - fileUpload
+            type: object
+            properties:
+                fileUpload:
+                    $ref: '#/components/schemas/FileUpload'
+        UUID:
+            format: uuid
+            type: string
+        LebenslaufItemUpdate:
+            title: Root Type for Lebenslauf
+            description: ''
+            required:
+                - bis
+                - von
+                - wohnsitz
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                bildungsart:
+                    $ref: '#/components/schemas/LebenslaufAusbildungsArt'
+                    description: Required wenn taetigkeitsart = null
+                von:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                bis:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                wohnsitz:
+                    $ref: '#/components/schemas/WohnsitzKanton'
+                    description: ''
+                ausbildungAbgeschlossen:
+                    description: ''
+                    type: boolean
+                berufsbezeichnung:
+                    description: >-
+                        Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder
+                        'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
+                    type: string
+                fachrichtung:
+                    description: >-
+                        Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE"
+                        oder "MASTER"
+                    type: string
+                titelDesAbschlusses:
+                    description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
+                    type: string
+                taetigskeitsart:
+                    $ref: '#/components/schemas/Taetigskeitsart'
+                    description: Required wenn bildungsart = null
+                taetigkeitsBeschreibung:
+                    description: Required wenn taetigkeitsart != null
+                    type: string
+        FamiliensituationUpdate:
+            required:
+                - elternVerheiratetZusammen
+            type: object
+            properties:
+                elternVerheiratetZusammen:
+                    type: boolean
+                elternteilUnbekanntVerstorben:
+                    type: boolean
+                gerichtlicheAlimentenregelung:
+                    type: boolean
+                mutterUnbekanntVerstorben:
+                    $ref: '#/components/schemas/ElternAbwesenheitsGrund'
+                mutterUnbekanntGrund:
+                    $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
+                mutterWiederverheiratet:
+                    type: boolean
+                vaterUnbekanntVerstorben:
+                    $ref: '#/components/schemas/ElternAbwesenheitsGrund'
+                vaterUnbekanntGrund:
+                    $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
+                vaterWiederverheiratet:
+                    type: boolean
+                sorgerecht:
+                    $ref: '#/components/schemas/Elternschaftsteilung'
+                obhut:
+                    $ref: '#/components/schemas/Elternschaftsteilung'
+                obhutMutter:
+                    description: Required nur wenn obhut = GEMEINSAM
+                    type: number
+                obhutVater:
+                    description: Required nur wenn obhut = GEMEINSAM
+                    type: number
+                werZahltAlimente:
+                    $ref: '#/components/schemas/Elternschaftsteilung'
+                    description: Required nur wenn gerichtlicheAlimentenregelung = true
+        Ausbildungssituation:
+            description: ''
+            enum:
+                - VORSCHULPFLICHTIG
+                - SCHULPFLICHTIG
+                - IN_AUSBILDUNG
+                - KEINE
+            type: string
+        GeschwisterUpdate:
+            title: Root Type for Geschwister
+            description: ''
+            required:
+                - wohnsitz
+                - vorname
+                - nachname
+                - geburtsdatum
+                - ausbildungssituation
+            type: object
+            properties:
+                vorname:
+                    type: string
+                geburtsdatum:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                wohnsitz:
+                    $ref: '#/components/schemas/Wohnsitz'
+                ausbildungssituation:
+                    $ref: '#/components/schemas/Ausbildungssituation'
+                id:
+                    $ref: '#/components/schemas/UUID'
+                wohnsitzAnteilMutter:
+                    description: Required wenn Wohnsitz.MUTTER_VATER.
+                    type: number
+                wohnsitzAnteilVater:
+                    description: Required wenn Wohnsitz.MUTTER_VATER.
+                    type: number
+                nachname:
+                    type: string
+        PartnerUpdate:
+            required:
+                - adresse
+                - nachname
+                - vorname
+                - geburtsdatum
+                - sozialversicherungsnummer
+            type: object
+            properties:
+                adresse:
+                    $ref: '#/components/schemas/Adresse'
+                vorname:
+                    type: string
+                geburtsdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: dd.MM.YYYY
+                sozialversicherungsnummer:
+                    description: ''
+                    type: string
+                nachname:
+                    type: string
+                ausbildungMitEinkommenOderErwerbstaetig:
+                    type: boolean
+                jahreseinkommen:
+                    description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
+                    type: number
+                fahrkosten:
+                    description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
+                    type: number
+                verpflegungskosten:
+                    description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
+                    type: number
+        KindUpdate:
+            title: Root Type for Geschwister
+            description: ''
+            required:
+                - wohnsitz
+                - vorname
+                - nachname
+                - geburtsdatum
+                - ausbildungssituation
+            type: object
+            properties:
+                vorname:
+                    type: string
+                geburtsdatum:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                wohnsitz:
+                    $ref: '#/components/schemas/Wohnsitz'
+                ausbildungssituation:
+                    $ref: '#/components/schemas/Ausbildungssituation'
+                id:
+                    $ref: '#/components/schemas/UUID'
+                wohnsitzAnteilMutter:
+                    description: Required wenn Wohnsitz.MUTTER_VATER.
+                    type: number
+                wohnsitzAnteilVater:
+                    description: Required wenn Wohnsitz.MUTTER_VATER.
+                    type: number
+                nachname:
+                    type: string
+        Auszahlung:
+            title: Root Type for Auszahlung
+            description: ''
+            type: object
+            allOf:
+                -
+                    type: object
+                -
+                    $ref: '#/components/schemas/AuszahlungUpdate'
+        AuszahlungUpdate:
+            title: Root Type for Auszahlung
+            description: ''
+            required:
+                - adresse
+                - iban
+                - nachname
+                - vorname
+                - kontoinhaber
+            type: object
+            properties:
+                vorname:
+                    type: string
+                adresse:
+                    $ref: '#/components/schemas/Adresse'
+                    properties:
+                        coAdresse:
+                            type: string
+                        strasse:
+                            type: string
+                        hausnummer:
+                            type: string
+                        plz:
+                            type: string
+                        ort:
+                            type: string
+                        land:
+                            type: string
+                iban:
+                    type: string
+                nachname:
+                    type: string
+                kontoinhaber:
+                    $ref: '#/components/schemas/Kontoinhaber'
+        Gesuch:
+            description: ''
+            required:
+                - fall
+                - gesuchsperiode
+                - gesuchStatus
+                - gesuchNummer
+                - id
+                - aenderungsdatum
+                - gesuchTrancheToWorkWith
+                - gesuchTrancheToWorkWith
+            type: object
+            properties:
+                fall:
+                    $ref: '#/components/schemas/Fall'
+                    description: ''
+                gesuchsperiode:
+                    $ref: '#/components/schemas/Gesuchsperiode'
+                    description: ''
+                gesuchStatus:
+                    $ref: '#/components/schemas/Gesuchstatus'
+                    description: ''
+                gesuchNummer:
+                    format: int32
+                    description: ''
+                    type: integer
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                aenderungsdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: Datum wann das Gesuch zu letzt geändert wurde
+                bearbeiter:
+                    description: Zuständiger Sachbearbeiter des Gesuchs
+                    type: string
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTranche'
+                    description: ''
+        GesuchCreate:
+            required:
+                - fallId
+                - gesuchsperiodeId
+            type: object
+            properties:
+                fallId:
+                    $ref: '#/components/schemas/UUID'
+                gesuchsperiodeId:
+                    $ref: '#/components/schemas/UUID'
+        GesuchUpdate:
+            description: ''
+            required:
+                - gesuchTrancheToWorkWith
+            type: object
+            properties:
+                gesuchTrancheToWorkWith:
+                    $ref: '#/components/schemas/GesuchTrancheUpdate'
+                    description: ''
+        Land:
+            enum:
+                - CH
+                - DE
+                - FR
+                - IT
+            type: string
+        Sprache:
+            description: ''
+            enum:
+                - DEUTSCH
+                - FRANZOESISCH
+            type: string
+        WohnsitzKanton:
+            description: ''
+            enum:
+                - AG
+                - AI
+                - AR
+                - BL
+                - BS
+                - BE
+                - FR
+                - GE
+                - GL
+                - GR
+                - JU
+                - LU
+                - NE
+                - NW
+                - OW
+                - SG
+                - SH
+                - SZ
+                - SO
+                - TI
+                - TG
+                - UR
+                - VD
+                - VS
+                - ZG
+                - ZH
+                - AUSLAND
+            type: string
+        Ausbildung:
+            type: object
+            allOf:
+                -
+                    type: object
+                -
+                    $ref: '#/components/schemas/AusbildungUpdate'
+        Familiensituation:
+            type: object
+            allOf:
+                -
+                    type: object
+                -
+                    $ref: '#/components/schemas/FamiliensituationUpdate'
+        Taetigskeitsart:
+            enum:
+                - ERWERBSTAETIGKEIT
+                - ANDERE_TAETIGKEIT
+            type: string
+        Bildungsart:
+            description: ''
+            enum:
+                - GYMNASIALE_MATURITAETSSCHULEN
+                - SCHULEN_FUER_ALLGEMEINBILDUNG
+                - VOLLZEITBERUFSSCHULEN
+                - LEHREN_ANLEHREN
+                - BERUFSMATURITAET_NACH_LEHRE
+                - HOEHERE_BERUFSBILDUNG
+                - FACHHOCHSCHULEN
+                - UNIVERSITAETEN_ETH
+            type: string
+        LebenslaufAusbildungsArt:
+            description: ''
+            enum:
+                - BERUFSVORBEREITENDES_SCHULJAHR
+                - VORLEHRE
+                - GESTALTERISCHE_VORKURSE
+                - EIDGENOESSISCHES_BERUFSATTEST
+                - EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS
+                - BERUFSMATURITAET_NACH_LEHRE
+                - FACHMATURITAET
+                - GYMNASIALE_MATURITAETSSCHULEN
+                - EIDGENOESSISCHES_DIPLOM
+                - EIDGENOESSISCHER_FACHAUSWEIS
+                - DIPLOM_HOEHERE_FACHSCHULE
+                - BACHELOR_HOCHSCHULE_UNI
+                - BACHELOR_FACHHOCHSCHULE
+                - MASTER
+                - ANDERER_BILDUNGSABSCHLUSS
+            type: string
+        PersonInAusbildung:
+            type: object
+            allOf:
+                -
+                    required:
+                        - adresse.id
+                    type: object
+                -
+                    $ref: '#/components/schemas/PersonInAusbildungUpdate'
+        Gesuchsperiode:
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                    example: '2022-12-12'
+            example:
+                -
+                    id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
+                    gueltigAb: '2022-02-01'
+                    gueltigBis: '2023-01-31'
+                    einreichfrist: '2022-06-30'
+                    aufschaltdatum: '2022-06-01'
+                -
+                    id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
+                    gueltigAb: '2022-02-01'
+                    gueltigBis: '2023-01-31'
+                    einreichfrist: '2022-06-30'
+                    aufschaltdatum: '2022-06-01'
+        ElternTyp:
+            description: ''
+            enum:
+                - VATER
+                - MUTTER
+            type: string
+        ElternUpdate:
+            title: Root Type for Eltern
+            description: ''
+            required:
+                - adresse
+                - ausweisbFluechtling
+                - ergaenzungsleistungAusbezahlt
+                - geburtsdatum
+                - identischerZivilrechtlicherWohnsitz
+                - nachname
+                - sozialhilfebeitraegeAusbezahlt
+                - telefonnummer
+                - vorname
+                - elternTyp
+            type: object
+            properties:
+                vorname:
+                    type: string
+                adresse:
+                    $ref: '#/components/schemas/Adresse'
+                    properties:
+                        coAdresse:
+                            type: string
+                        strasse:
+                            type: string
+                        hausnummer:
+                            type: string
+                        plz:
+                            type: string
+                        ort:
+                            type: string
+                        land:
+                            type: string
+                        id:
+                            type: string
+                identischerZivilrechtlicherWohnsitz:
+                    type: boolean
+                identischerZivilrechtlicherWohnsitzOrt:
+                    description: Required wenn identischerZivilrechtlicherWohnsitz = false
+                    type: string
+                identischerZivilrechtlicherWohnsitzPLZ:
+                    description: Required wenn identischerZivilrechtlicherWohnsitz = false
+                    type: string
+                telefonnummer:
+                    type: string
+                sozialversicherungsnummer:
+                    type: string
+                geburtsdatum:
+                    format: date
+                    description: dd.MM.YYYY
+                    type: string
+                sozialhilfebeitraegeAusbezahlt:
+                    type: boolean
+                ausweisbFluechtling:
+                    type: boolean
+                ergaenzungsleistungAusbezahlt:
+                    type: boolean
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                elternTyp:
+                    $ref: '#/components/schemas/ElternTyp'
+                nachname:
+                    type: string
+        Eltern:
+            title: Root Type for Eltern
+            description: ''
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        copyOfId:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/ElternUpdate'
+        Geschwister:
+            title: Root Type for Geschwister
+            description: ''
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        copyOfId:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/GeschwisterUpdate'
+        Kind:
+            title: Root Type for Geschwister
+            description: ''
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        copyOfId:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/KindUpdate'
+        LebenslaufItem:
+            title: Root Type for Lebenslauf
+            description: ''
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        copyOfId:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/LebenslaufItemUpdate'
+        Partner:
+            type: object
+            allOf:
+                -
+                    type: object
+                -
+                    $ref: '#/components/schemas/PartnerUpdate'
+        Kontoinhaber:
+            description: ''
+            enum:
+                - GESUCHSTELLER
+                - VATER
+                - MUTTER
+                - SOZIALDIENST_INSTITUTION
+                - ANDERE
+            type: string
+        GesuchFormular:
+            required: []
+            type: object
+            properties:
+                ausbildung:
+                    $ref: '#/components/schemas/Ausbildung'
+                    description: ''
+                personInAusbildung:
+                    $ref: '#/components/schemas/PersonInAusbildung'
+                    description: ''
+                familiensituation:
+                    $ref: '#/components/schemas/Familiensituation'
+                partner:
+                    $ref: '#/components/schemas/Partner'
+                    description: ''
+                auszahlung:
+                    $ref: '#/components/schemas/Auszahlung'
+                    description: ''
+                elterns:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Eltern'
+                geschwisters:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Geschwister'
+                lebenslaufItems:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LebenslaufItem'
+                kinds:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Kind'
+                einnahmenKosten:
+                    $ref: '#/components/schemas/EinnahmenKosten'
+        PersonInAusbildungUpdate:
+            required:
+                - adresse
+                - sozialversicherungsnummer
+                - nachname
+                - vorname
+                - anrede
+                - identischerZivilrechtlicherWohnsitz
+                - email
+                - telefonnummer
+                - geburtsdatum
+                - nationalitaet
+                - wohnsitz
+                - sozialhilfebeitraege
+                - korrespondenzSprache
+            type: object
+            properties:
+                adresse:
+                    $ref: '#/components/schemas/Adresse'
+                sozialversicherungsnummer:
+                    type: string
+                vorname:
+                    type: string
+                anrede:
+                    $ref: '#/components/schemas/Anrede'
+                identischerZivilrechtlicherWohnsitz:
+                    type: boolean
+                email:
+                    type: string
+                telefonnummer:
+                    type: string
+                geburtsdatum:
+                    $ref: '#/components/schemas/LocalDate'
+                nationalitaet:
+                    $ref: '#/components/schemas/Land'
+                heimatort:
+                    description: Required nur wenn Land = CH
+                    type: string
+                niederlassungsstatus:
+                    $ref: '#/components/schemas/Niederlassungsstatus'
+                    description: Required wenn Nationalitaet != CH
+                einreisedatum:
+                    description: Visible nur wenn niederlassungsstatus B
+                    $ref: '#/components/schemas/LocalDate'
+                zivilstand:
+                    $ref: '#/components/schemas/Zivilstand'
+                wohnsitz:
+                    $ref: '#/components/schemas/Wohnsitz'
+                wohnsitzAnteilMutter:
+                    description: Required wenn Wohnsitz.MUTTER_VATER.
+                    type: number
+                wohnsitzAnteilVater:
+                    description: Required wenn Wohnsitz.MUTTER_VATER.
+                    type: number
+                vermoegenVorjahr:
+                    description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
+                    type: number
+                sozialhilfebeitraege:
+                    type: boolean
+                vormundschaft:
+                    description: Required nur wenn Land = CH
+                    type: boolean
+                nachname:
+                    type: string
+                identischerZivilrechtlicherWohnsitzOrt:
+                    description: Required wenn identischerZivilrechtlicherWohnsitz = false
+                    type: string
+                identischerZivilrechtlicherWohnsitzPLZ:
+                    description: Required wenn identischerZivilrechtlicherWohnsitz = false
+                    type: string
+                korrespondenzSprache:
+                    $ref: '#/components/schemas/Sprache'
+                    description: ''
+        Benutzer:
+            description: ''
+            type: object
+            allOf:
+                -
+                    required:
+                        - id
+                    type: object
+                    properties:
+                        id:
+                            $ref: '#/components/schemas/UUID'
+                            description: ''
+                        sachbearbeiterZuordnungStammdaten:
+                            $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                            description: ''
+                -
+                    $ref: '#/components/schemas/BenutzerUpdate'
+        GesuchFormularUpdate:
+            required: []
+            type: object
+            properties:
+                ausbildung:
+                    $ref: '#/components/schemas/AusbildungUpdate'
+                    description: ''
+                personInAusbildung:
+                    $ref: '#/components/schemas/PersonInAusbildungUpdate'
+                    description: ''
+                familiensituation:
+                    $ref: '#/components/schemas/FamiliensituationUpdate'
+                partner:
+                    $ref: '#/components/schemas/PartnerUpdate'
+                    description: ''
+                auszahlung:
+                    $ref: '#/components/schemas/AuszahlungUpdate'
+                    description: ''
+                elterns:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ElternUpdate'
+                geschwisters:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GeschwisterUpdate'
+                lebenslaufItems:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/LebenslaufItemUpdate'
+                kinds:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/KindUpdate'
+                einnahmenKosten:
+                    $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        FileUpload:
+            format: binary
+            type: string
+        Wohnsitz:
+            enum:
+                - FAMILIE
+                - MUTTER_VATER
+                - EIGENER_HAUSHALT
+            type: string
+        ValidationReport:
+            description: ''
+            required:
+                - validationErrors
+            type: object
+            properties:
+                validationErrors:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ValidationError'
+        ValidationError:
+            description: ''
+            required:
+                - message
+                - messageTemplate
+            type: object
+            properties:
+                propertyPath:
+                    description: ''
+                    type: string
+                messageTemplate:
+                    description: ''
+                    type: string
+                message:
+                    description: ''
+                    type: string
+        TenantInfo:
+            title: Root Type for TenantInfo
+            description: Client Application Info about a `Tenant`
+            required:
+                - clientAuth
+                - identifier
+            type: object
+            properties:
+                identifier:
+                    type: string
+                clientAuth:
+                    $ref: '#/components/schemas/TenantAuthConfig'
+                    properties:
+                        authServerUrl:
+                            type: string
+                        clientId:
+                            type: string
+            example:
+                identifier: some text
+                clientAuth:
+                    authServerUrl: some text
+                    clientId: some text
+        BenutzerUpdate:
+            description: ''
+            required:
+                - nachname
+                - sozialversicherungsnummer
+                - vorname
+            type: object
+            properties:
+                sozialversicherungsnummer:
+                    type: string
+                vorname:
+                    type: string
+                nachname:
+                    type: string
+                benutzereinstellungen:
+                    $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+        TenantAuthConfig:
+            title: Root Type for TenantAuthConfig
+            description: ''
+            required:
+                - authServerUrl
+                - realm
+            type: object
+            properties:
+                authServerUrl:
+                    type: string
+                realm:
+                    description: ''
+                    type: string
+            example:
+                authServerUrl: some text
+                realm: some text
+        EinnahmenKostenUpdate:
+            required:
+                - nettoerwerbseinkommen
+                - fahrkosten
+                - verdienstRealisiert
+            type: object
+            properties:
+                nettoerwerbseinkommen:
+                    type: number
+                alimente:
+                    description: Required nur wenn mind. ein Elternteil Alimente zahlt
+                    type: number
+                zulagen:
+                    description: Required nur wenn mind. ein Kind gibt
+                    type: number
+                renten:
+                    description: Required nur wenn mind. ein Elternteil gestorben ist
+                    type: number
+                eoLeistungen:
+                    type: number
+                ergaenzungsleistungen:
+                    type: number
+                beitraege:
+                    type: number
+                ausbildungskostenSekundarstufeZwei:
+                    description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
+                    type: number
+                ausbildungskostenTertiaerstufe:
+                    description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
+                    type: number
+                fahrkosten:
+                    type: number
+                wohnkosten:
+                    type: number
+                wgWohnend:
+                    description: Required nur wenn Person eigener Haushalt hat
+                    type: boolean
+                verdienstRealisiert:
+                    type: boolean
+                willDarlehen:
+                    description: Required nur wenn volljährig
+                    type: boolean
+                auswaertigeMittagessenProWoche:
+                    description: Required nur wenn die Person keinen eigenen Haushalt führt
+                    type: integer
+        EinnahmenKosten:
+            type: object
+            allOf:
+                -
+                    type: object
+                -
+                    $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        AusbildungUpdate:
+            required:
+                - fachrichtung
+                - ausbildungBegin
+                - ausbildungEnd
+                - pensum
+            type: object
+            properties:
+                ausbildungsgangId:
+                    $ref: '#/components/schemas/UUID'
+                    description: |
+                        Required wenn andere ausbildungNichtGefunden = false
+                fachrichtung:
+                    type: string
+                ausbildungNichtGefunden:
+                    type: boolean
+                ausbildungBegin:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                ausbildungEnd:
+                    description: Datum im Format mm.YYYY
+                    type: string
+                pensum:
+                    $ref: '#/components/schemas/AusbildungsPensum'
+                alternativeAusbildungsland:
+                    description: Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+                alternativeAusbildungsstaette:
+                    description: Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+                alternativeAusbildungsgang:
+                    description:
+                        Required wenn andere ausbildungNichtGefunden = true
+                    type: string
+        Ausbildungsstaette:
+            anyOf:
+                -
+                    required: []
+                    type: object
+                    properties:
+                        ausbildungsgaenge:
+                            description: ''
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/Ausbildungsgang'
+                -
+                    $ref: '#/components/schemas/AusbildungsstaetteUpdate'
+            type: object
+        AusbildungsgangUpdate:
+            description: ''
+            required:
+                - bezeichnungDe
+                - bezeichnungFr
+                - ausbildungsrichtung
+                - ausbildungsstaetteId
+                - ausbildungsort
+            type: object
+            properties:
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+        AusbildungsgangCreate:
+            description: ''
+            required:
+                - bezeichnungDe
+                - bezeichnungFr
+                - ausbildungsrichtung
+                - ausbildungsstaette
+                - ausbildungsort
+            type: object
+            properties:
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+        Ausbildungsort:
+            description: ''
+            type: string
+        AusbildungsstaetteUpdate:
+            required:
+                - nameFr
+                - nameDe
+            type: object
+            properties:
+                nameDe:
+                    description: ''
+                    type: string
+                nameFr:
+                    description: ''
+                    type: string
+                id:
+                    $ref: '#/components/schemas/UUID'
+        AusbildungsstaetteCreate:
+            required:
+                - nameFr
+                - nameDe
+            type: object
+            properties:
+                nameDe:
+                    description: ''
+                    type: string
+                nameFr:
+                    description: ''
+                    type: string
+        Ausbildungsgang:
+            required:
+                - ausbildungsort
+                - ausbildungsrichtung
+                - id
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                bezeichnungDe:
+                    description: ''
+                    type: string
+                bezeichnungFr:
+                    description: ''
+                    type: string
+                ausbildungsrichtung:
+                    $ref: '#/components/schemas/Bildungsart'
+                    description: ''
+                ausbildungsort:
+                    $ref: '#/components/schemas/Ausbildungsort'
+                    description: ''
+                ausbildungsstaetteId:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+        GesuchTranche:
+            description: ''
+            required:
+                - id
+                - gueltigAb
+                - gueltigBis
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: ''
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                    description: ''
+                gesuchFormular:
+                    $ref: '#/components/schemas/GesuchFormular'
+                    description: ''
+        GesuchTrancheUpdate:
+            description: ''
+            required:
+                - gesuchFormular
+                - id
+            type: object
+            properties:
+                gesuchFormular:
+                    $ref: '#/components/schemas/GesuchFormularUpdate'
+                    description: ''
+                id:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+        SachbearbeiterZuordnungStammdaten:
+            description: ''
+            type: object
+            properties:
+                buchstabenDe:
+                    description: ''
+                    type: string
+                buchstabenFr:
+                    description: ''
+                    type: string
+        SachbearbeiterZuordnungStammdatenList:
+            description: ''
+            type: object
+            properties:
+                sachbearbeiter:
+                    $ref: '#/components/schemas/UUID'
+                    description: ''
+                zuordnung:
+                    $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+                    description: ''
+        Benutzereinstellungen:
           description: ''
-          type: string
-    Fall:
-      required:
-        - id
-        - fallNummer
-        - mandant
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        fallNummer:
-          format: int64
-          type: integer
-        mandant:
-          type: string
-    GesuchsperiodeCreate:
-      type: object
-      properties:
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-        einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
-          $ref: '#/components/schemas/LocalDate'
-    DokumentCreate:
-      required:
-        - fileUpload
-      type: object
-      properties:
-        fileUpload:
-          $ref: '#/components/schemas/FileUpload'
-    UUID:
-      format: uuid
-      type: string
-    LebenslaufItemUpdate:
-      title: Root Type for Lebenslauf
-      description: ''
-      required:
-        - bis
-        - von
-        - wohnsitz
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-        bildungsart:
-          $ref: '#/components/schemas/LebenslaufAusbildungsArt'
-          description: Required wenn taetigkeitsart = null
-        von:
-          description: Datum im Format mm.YYYY
-          type: string
-        bis:
-          description: Datum im Format mm.YYYY
-          type: string
-        wohnsitz:
-          $ref: '#/components/schemas/WohnsitzKanton'
-          description: ''
-        ausbildungAbgeschlossen:
-          description: ''
-          type: boolean
-        berufsbezeichnung:
-          description: >-
-            Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder
-            'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
-          type: string
-        fachrichtung:
-          description: >-
-            Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE"
-            oder "MASTER"
-          type: string
-        titelDesAbschlusses:
-          description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
-          type: string
-        taetigskeitsart:
-          $ref: '#/components/schemas/Taetigskeitsart'
-          description: Required wenn bildungsart = null
-        taetigkeitsBeschreibung:
-          description: Required wenn taetigkeitsart != null
-          type: string
-    FamiliensituationUpdate:
-      required:
-        - elternVerheiratetZusammen
-      type: object
-      properties:
-        elternVerheiratetZusammen:
-          type: boolean
-        elternteilUnbekanntVerstorben:
-          type: boolean
-        gerichtlicheAlimentenregelung:
-          type: boolean
-        mutterUnbekanntVerstorben:
-          $ref: '#/components/schemas/ElternAbwesenheitsGrund'
-        mutterUnbekanntGrund:
-          $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        mutterWiederverheiratet:
-          type: boolean
-        vaterUnbekanntVerstorben:
-          $ref: '#/components/schemas/ElternAbwesenheitsGrund'
-        vaterUnbekanntGrund:
-          $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        vaterWiederverheiratet:
-          type: boolean
-        sorgerecht:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-        obhut:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-        obhutMutter:
-          description: Required nur wenn obhut = GEMEINSAM
-          type: number
-        obhutVater:
-          description: Required nur wenn obhut = GEMEINSAM
-          type: number
-        werZahltAlimente:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-          description: Required nur wenn gerichtlicheAlimentenregelung = true
-    Ausbildungssituation:
-      description: ''
-      enum:
-        - VORSCHULPFLICHTIG
-        - SCHULPFLICHTIG
-        - IN_AUSBILDUNG
-        - KEINE
-      type: string
-    GeschwisterUpdate:
-      title: Root Type for Geschwister
-      description: ''
-      required:
-        - wohnsitz
-        - vorname
-        - nachname
-        - geburtsdatum
-        - ausbildungssituation
-      type: object
-      properties:
-        vorname:
-          type: string
-        geburtsdatum:
-          format: date
-          description: dd.MM.YYYY
-          type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        ausbildungssituation:
-          $ref: '#/components/schemas/Ausbildungssituation'
-        id:
-          $ref: '#/components/schemas/UUID'
-        wohnsitzAnteilMutter:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        wohnsitzAnteilVater:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        nachname:
-          type: string
-    PartnerUpdate:
-      required:
-        - adresse
-        - nachname
-        - vorname
-        - geburtsdatum
-        - sozialversicherungsnummer
-      type: object
-      properties:
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-        vorname:
-          type: string
-        geburtsdatum:
-          $ref: '#/components/schemas/LocalDate'
-          description: dd.MM.YYYY
-        sozialversicherungsnummer:
-          description: ''
-          type: string
-        nachname:
-          type: string
-        ausbildungMitEinkommenOderErwerbstaetig:
-          type: boolean
-        jahreseinkommen:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: number
-        fahrkosten:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: number
-        verpflegungskosten:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: number
-    KindUpdate:
-      title: Root Type for Geschwister
-      description: ''
-      required:
-        - wohnsitz
-        - vorname
-        - nachname
-        - geburtsdatum
-        - ausbildungssituation
-      type: object
-      properties:
-        vorname:
-          type: string
-        geburtsdatum:
-          format: date
-          description: dd.MM.YYYY
-          type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        ausbildungssituation:
-          $ref: '#/components/schemas/Ausbildungssituation'
-        id:
-          $ref: '#/components/schemas/UUID'
-        wohnsitzAnteilMutter:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        wohnsitzAnteilVater:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        nachname:
-          type: string
-    Auszahlung:
-      title: Root Type for Auszahlung
-      description: ''
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/AuszahlungUpdate'
-    AuszahlungUpdate:
-      title: Root Type for Auszahlung
-      description: ''
-      required:
-        - adresse
-        - iban
-        - nachname
-        - vorname
-        - kontoinhaber
-      type: object
-      properties:
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-          properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
-        iban:
-          type: string
-        nachname:
-          type: string
-        kontoinhaber:
-          $ref: '#/components/schemas/Kontoinhaber'
-    Gesuch:
-      description: ''
-      required:
-        - fall
-        - gesuchsperiode
-        - gesuchStatus
-        - gesuchNummer
-        - id
-        - aenderungsdatum
-        - gesuchTrancheToWorkWith
-        - gesuchTrancheToWorkWith
-      type: object
-      properties:
-        fall:
-          $ref: '#/components/schemas/Fall'
-          description: ''
-        gesuchsperiode:
-          $ref: '#/components/schemas/Gesuchsperiode'
-          description: ''
-        gesuchStatus:
-          $ref: '#/components/schemas/Gesuchstatus'
-          description: ''
-        gesuchNummer:
-          format: int32
-          description: ''
-          type: integer
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-        aenderungsdatum:
-          $ref: '#/components/schemas/LocalDate'
-          description: Datum wann das Gesuch zu letzt geändert wurde
-        bearbeiter:
-          description: Zuständiger Sachbearbeiter des Gesuchs
-          type: string
-        gesuchTrancheToWorkWith:
-          $ref: '#/components/schemas/GesuchTranche'
-          description: ''
-    GesuchCreate:
-      required:
-        - fallId
-        - gesuchsperiodeId
-      type: object
-      properties:
-        fallId:
-          $ref: '#/components/schemas/UUID'
-        gesuchsperiodeId:
-          $ref: '#/components/schemas/UUID'
-    GesuchUpdate:
-      description: ''
-      required:
-        - gesuchTrancheToWorkWith
-      type: object
-      properties:
-        gesuchTrancheToWorkWith:
-          $ref: '#/components/schemas/GesuchTrancheUpdate'
-          description: ''
-    Land:
-      enum:
-        - CH
-        - DE
-        - FR
-        - IT
-      type: string
-    Sprache:
-      description: ''
-      enum:
-        - DEUTSCH
-        - FRANZOESISCH
-      type: string
-    WohnsitzKanton:
-      description: ''
-      enum:
-        - AG
-        - AI
-        - AR
-        - BL
-        - BS
-        - BE
-        - FR
-        - GE
-        - GL
-        - GR
-        - JU
-        - LU
-        - NE
-        - NW
-        - OW
-        - SG
-        - SH
-        - SZ
-        - SO
-        - TI
-        - TG
-        - UR
-        - VD
-        - VS
-        - ZG
-        - ZH
-        - AUSLAND
-      type: string
-    Ausbildung:
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/AusbildungUpdate'
-    Familiensituation:
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/FamiliensituationUpdate'
-    Taetigskeitsart:
-      enum:
-        - ERWERBSTAETIGKEIT
-        - ANDERE_TAETIGKEIT
-      type: string
-    Bildungsart:
-      description: ''
-      enum:
-        - GYMNASIALE_MATURITAETSSCHULEN
-        - SCHULEN_FUER_ALLGEMEINBILDUNG
-        - VOLLZEITBERUFSSCHULEN
-        - LEHREN_ANLEHREN
-        - BERUFSMATURITAET_NACH_LEHRE
-        - HOEHERE_BERUFSBILDUNG
-        - FACHHOCHSCHULEN
-        - UNIVERSITAETEN_ETH
-      type: string
-    LebenslaufAusbildungsArt:
-      description: ''
-      enum:
-        - BERUFSVORBEREITENDES_SCHULJAHR
-        - VORLEHRE
-        - GESTALTERISCHE_VORKURSE
-        - EIDGENOESSISCHES_BERUFSATTEST
-        - EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS
-        - BERUFSMATURITAET_NACH_LEHRE
-        - FACHMATURITAET
-        - GYMNASIALE_MATURITAETSSCHULEN
-        - EIDGENOESSISCHES_DIPLOM
-        - EIDGENOESSISCHER_FACHAUSWEIS
-        - DIPLOM_HOEHERE_FACHSCHULE
-        - BACHELOR_HOCHSCHULE_UNI
-        - BACHELOR_FACHHOCHSCHULE
-        - MASTER
-        - ANDERER_BILDUNGSABSCHLUSS
-      type: string
-    PersonInAusbildung:
-      type: object
-      allOf:
-        - required:
-            - adresse.id
           type: object
-        - $ref: '#/components/schemas/PersonInAusbildungUpdate'
-    Gesuchsperiode:
-      required:
-        - id
-        - gueltigAb
-        - gueltigBis
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-        einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
-          $ref: '#/components/schemas/LocalDate'
-          example: '2022-12-12'
-      example:
-        - id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
-          gueltigAb: '2022-02-01'
-          gueltigBis: '2023-01-31'
-          einreichfrist: '2022-06-30'
-          aufschaltdatum: '2022-06-01'
-        - id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
-          gueltigAb: '2022-02-01'
-          gueltigBis: '2023-01-31'
-          einreichfrist: '2022-06-30'
-          aufschaltdatum: '2022-06-01'
-    ElternTyp:
-      description: ''
-      enum:
-        - VATER
-        - MUTTER
-      type: string
-    ElternUpdate:
-      title: Root Type for Eltern
-      description: ''
-      required:
-        - adresse
-        - ausweisbFluechtling
-        - ergaenzungsleistungAusbezahlt
-        - geburtsdatum
-        - identischerZivilrechtlicherWohnsitz
-        - nachname
-        - sozialhilfebeitraegeAusbezahlt
-        - telefonnummer
-        - vorname
-        - elternTyp
-      type: object
-      properties:
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
           properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
             id:
-              type: string
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        identischerZivilrechtlicherWohnsitzOrt:
-          description: Required wenn identischerZivilrechtlicherWohnsitz = false
-          type: string
-        identischerZivilrechtlicherWohnsitzPLZ:
-          description: Required wenn identischerZivilrechtlicherWohnsitz = false
-          type: string
-        telefonnummer:
-          type: string
-        sozialversicherungsnummer:
-          type: string
-        geburtsdatum:
-          format: date
-          description: dd.MM.YYYY
-          type: string
-        sozialhilfebeitraegeAusbezahlt:
-          type: boolean
-        ausweisbFluechtling:
-          type: boolean
-        ergaenzungsleistungAusbezahlt:
-          type: boolean
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-        elternTyp:
-          $ref: '#/components/schemas/ElternTyp'
-        nachname:
-          type: string
-    Eltern:
-      title: Root Type for Eltern
-      description: ''
-      type: object
-      allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
               $ref: '#/components/schemas/UUID'
+            digitaleKommunikation:
               description: ''
-        - $ref: '#/components/schemas/ElternUpdate'
-    Geschwister:
-      title: Root Type for Geschwister
-      description: ''
-      type: object
-      allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
-        - $ref: '#/components/schemas/GeschwisterUpdate'
-    Kind:
-      title: Root Type for Geschwister
-      description: ''
-      type: object
-      allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
-        - $ref: '#/components/schemas/KindUpdate'
-    LebenslaufItem:
-      title: Root Type for Lebenslauf
-      description: ''
-      type: object
-      allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
-        - $ref: '#/components/schemas/LebenslaufItemUpdate'
-    Partner:
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/PartnerUpdate'
-    Kontoinhaber:
-      description: ''
-      enum:
-        - GESUCHSTELLER
-        - VATER
-        - MUTTER
-        - SOZIALDIENST_INSTITUTION
-        - ANDERE
-      type: string
-    GesuchFormular:
-      required: []
-      type: object
-      properties:
-        ausbildung:
-          $ref: '#/components/schemas/Ausbildung'
-          description: ''
-        personInAusbildung:
-          $ref: '#/components/schemas/PersonInAusbildung'
-          description: ''
-        familiensituation:
-          $ref: '#/components/schemas/Familiensituation'
-        partner:
-          $ref: '#/components/schemas/Partner'
-          description: ''
-        auszahlung:
-          $ref: '#/components/schemas/Auszahlung'
-          description: ''
-        elterns:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/Eltern'
-        geschwisters:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/Geschwister'
-        lebenslaufItems:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItem'
-        kinds:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/Kind'
-        einnahmenKosten:
-          $ref: '#/components/schemas/EinnahmenKosten'
-    PersonInAusbildungUpdate:
-      required:
-        - adresse
-        - sozialversicherungsnummer
-        - nachname
-        - vorname
-        - anrede
-        - identischerZivilrechtlicherWohnsitz
-        - email
-        - telefonnummer
-        - geburtsdatum
-        - nationalitaet
-        - wohnsitz
-        - sozialhilfebeitraege
-        - korrespondenzSprache
-      type: object
-      properties:
-        adresse:
-          $ref: '#/components/schemas/Adresse'
-        sozialversicherungsnummer:
-          type: string
-        vorname:
-          type: string
-        anrede:
-          $ref: '#/components/schemas/Anrede'
-        identischerZivilrechtlicherWohnsitz:
-          type: boolean
-        email:
-          type: string
-        telefonnummer:
-          type: string
-        geburtsdatum:
-          $ref: '#/components/schemas/LocalDate'
-        nationalitaet:
-          $ref: '#/components/schemas/Land'
-        heimatort:
-          description: Required nur wenn Land = CH
-          type: string
-        niederlassungsstatus:
-          $ref: '#/components/schemas/Niederlassungsstatus'
-          description: Required wenn Nationalitaet != CH
-        einreisedatum:
-          description: Visible nur wenn niederlassungsstatus B
-          $ref: '#/components/schemas/LocalDate'
-        zivilstand:
-          $ref: '#/components/schemas/Zivilstand'
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
-        wohnsitzAnteilMutter:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        wohnsitzAnteilVater:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        vermoegenVorjahr:
-          description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-          type: number
-        sozialhilfebeitraege:
-          type: boolean
-        vormundschaft:
-          description: Required nur wenn Land = CH
-          type: boolean
-        nachname:
-          type: string
-        identischerZivilrechtlicherWohnsitzOrt:
-          description: Required wenn identischerZivilrechtlicherWohnsitz = false
-          type: string
-        identischerZivilrechtlicherWohnsitzPLZ:
-          description: Required wenn identischerZivilrechtlicherWohnsitz = false
-          type: string
-        korrespondenzSprache:
-          $ref: '#/components/schemas/Sprache'
-          description: ''
-    Benutzer:
-      description: ''
-      type: object
-      allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/UUID'
-              description: ''
-            sachbearbeiterZuordnungStammdaten:
-              $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
-              description: ''
-        - $ref: '#/components/schemas/BenutzerUpdate'
-    GesuchFormularUpdate:
-      required: []
-      type: object
-      properties:
-        ausbildung:
-          $ref: '#/components/schemas/AusbildungUpdate'
-          description: ''
-        personInAusbildung:
-          $ref: '#/components/schemas/PersonInAusbildungUpdate'
-          description: ''
-        familiensituation:
-          $ref: '#/components/schemas/FamiliensituationUpdate'
-        partner:
-          $ref: '#/components/schemas/PartnerUpdate'
-          description: ''
-        auszahlung:
-          $ref: '#/components/schemas/AuszahlungUpdate'
-          description: ''
-        elterns:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/ElternUpdate'
-        geschwisters:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/GeschwisterUpdate'
-        lebenslaufItems:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/LebenslaufItemUpdate'
-        kinds:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/KindUpdate'
-        einnahmenKosten:
-          $ref: '#/components/schemas/EinnahmenKostenUpdate'
-    FileUpload:
-      format: binary
-      type: string
-    Wohnsitz:
-      enum:
-        - FAMILIE
-        - MUTTER_VATER
-        - EIGENER_HAUSHALT
-      type: string
-    ValidationReport:
-      description: ''
-      required:
-        - validationErrors
-      type: object
-      properties:
-        validationErrors:
-          description: ''
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-    ValidationError:
-      description: ''
-      required:
-        - message
-        - messageTemplate
-      type: object
-      properties:
-        propertyPath:
-          description: ''
-          type: string
-        messageTemplate:
-          description: ''
-          type: string
-        message:
-          description: ''
-          type: string
-    TenantInfo:
-      title: Root Type for TenantInfo
-      description: Client Application Info about a `Tenant`
-      required:
-        - clientAuth
-        - identifier
-      type: object
-      properties:
-        identifier:
-          type: string
-        clientAuth:
-          $ref: '#/components/schemas/TenantAuthConfig'
-          properties:
-            authServerUrl:
-              type: string
-            clientId:
-              type: string
-      example:
-        identifier: some text
-        clientAuth:
-          authServerUrl: some text
-          clientId: some text
-    BenutzerUpdate:
-      description: ''
-      required:
-        - nachname
-        - sozialversicherungsnummer
-        - vorname
-      type: object
-      properties:
-        sozialversicherungsnummer:
-          type: string
-        vorname:
-          type: string
-        nachname:
-          type: string
-        benutzereinstellungen:
-          $ref: '#/components/schemas/BenutzereinstellungenUpdate'
-    TenantAuthConfig:
-      title: Root Type for TenantAuthConfig
-      description: ''
-      required:
-        - authServerUrl
-        - realm
-      type: object
-      properties:
-        authServerUrl:
-          type: string
-        realm:
-          description: ''
-          type: string
-      example:
-        authServerUrl: some text
-        realm: some text
-    EinnahmenKostenUpdate:
-      required:
-        - nettoerwerbseinkommen
-        - fahrkosten
-        - verdienstRealisiert
-      type: object
-      properties:
-        nettoerwerbseinkommen:
-          type: number
-        alimente:
-          description: Required nur wenn mind. ein Elternteil Alimente zahlt
-          type: number
-        zulagen:
-          description: Required nur wenn mind. ein Kind gibt
-          type: number
-        renten:
-          description: Required nur wenn mind. ein Elternteil gestorben ist
-          type: number
-        eoLeistungen:
-          type: number
-        ergaenzungsleistungen:
-          type: number
-        beitraege:
-          type: number
-        ausbildungskostenSekundarstufeZwei:
-          description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
-          type: number
-        ausbildungskostenTertiaerstufe:
-          description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
-          type: number
-        fahrkosten:
-          type: number
-        wohnkosten:
-          type: number
-        wgWohnend:
-          description: Required nur wenn Person eigener Haushalt hat
-          type: boolean
-        verdienstRealisiert:
-          type: boolean
-        willDarlehen:
-          description: Required nur wenn volljährig
-          type: boolean
-        auswaertigeMittagessenProWoche:
-          description: Required nur wenn die Person keinen eigenen Haushalt führt
-          type: integer
-    EinnahmenKosten:
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/EinnahmenKostenUpdate'
-    AusbildungUpdate:
-      required:
-        - fachrichtung
-        - ausbildungBegin
-        - ausbildungEnd
-        - pensum
-      type: object
-      properties:
-        ausbildungsgangId:
-          $ref: '#/components/schemas/UUID'
-          description: |
-            Required wenn andere ausbildungNichtGefunden = false
-        fachrichtung:
-          type: string
-        ausbildungNichtGefunden:
-          type: boolean
-        ausbildungBegin:
-          description: Datum im Format mm.YYYY
-          type: string
-        ausbildungEnd:
-          description: Datum im Format mm.YYYY
-          type: string
-        pensum:
-          $ref: '#/components/schemas/AusbildungsPensum'
-        alternativeAusbildungsland:
-          description: Required wenn andere ausbildungNichtGefunden = true
-          type: string
-        alternativeAusbildungsstaette:
-          description: Required wenn andere ausbildungNichtGefunden = true
-          type: string
-        alternativeAusbildungsgang:
-          description: Required wenn andere ausbildungNichtGefunden = true
-          type: string
-    Ausbildungsstaette:
-      anyOf:
-        - required: []
-          type: object
-          properties:
-            ausbildungsgaenge:
-              description: ''
-              type: array
-              items:
-                $ref: '#/components/schemas/Ausbildungsgang'
-        - $ref: '#/components/schemas/AusbildungsstaetteUpdate'
-      type: object
-    AusbildungsgangUpdate:
-      description: ''
-      required:
-        - bezeichnungDe
-        - bezeichnungFr
-        - ausbildungsrichtung
-        - ausbildungsstaetteId
-        - ausbildungsort
-      type: object
-      properties:
-        bezeichnungDe:
-          description: ''
-          type: string
-        bezeichnungFr:
-          description: ''
-          type: string
-        ausbildungsrichtung:
-          $ref: '#/components/schemas/Bildungsart'
-        ausbildungsstaetteId:
-          $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
-    AusbildungsgangCreate:
-      description: ''
-      required:
-        - bezeichnungDe
-        - bezeichnungFr
-        - ausbildungsrichtung
-        - ausbildungsstaette
-        - ausbildungsort
-      type: object
-      properties:
-        bezeichnungDe:
-          description: ''
-          type: string
-        bezeichnungFr:
-          description: ''
-          type: string
-        ausbildungsrichtung:
-          $ref: '#/components/schemas/Bildungsart'
-        ausbildungsstaetteId:
-          $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
-    Ausbildungsort:
-      description: ''
-      type: string
-    AusbildungsstaetteUpdate:
-      required:
-        - nameFr
-        - nameDe
-      type: object
-      properties:
-        nameDe:
-          description: ''
-          type: string
-        nameFr:
-          description: ''
-          type: string
-        id:
-          $ref: '#/components/schemas/UUID'
-    AusbildungsstaetteCreate:
-      required:
-        - nameFr
-        - nameDe
-      type: object
-      properties:
-        nameDe:
-          description: ''
-          type: string
-        nameFr:
-          description: ''
-          type: string
-    Ausbildungsgang:
-      required:
-        - ausbildungsort
-        - ausbildungsrichtung
-        - id
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        bezeichnungDe:
-          description: ''
-          type: string
-        bezeichnungFr:
-          description: ''
-          type: string
-        ausbildungsrichtung:
-          $ref: '#/components/schemas/Bildungsart'
-          description: ''
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
-          description: ''
-        ausbildungsstaetteId:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-    GesuchTranche:
-      description: ''
-      required:
-        - id
-        - gueltigAb
-        - gueltigBis
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-          description: ''
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-          description: ''
-        gesuchFormular:
-          $ref: '#/components/schemas/GesuchFormular'
-          description: ''
-    GesuchTrancheUpdate:
-      description: ''
-      required:
-        - gesuchFormular
-        - id
-      type: object
-      properties:
-        gesuchFormular:
-          $ref: '#/components/schemas/GesuchFormularUpdate'
-          description: ''
-        id:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-    SachbearbeiterZuordnungStammdaten:
-      description: ''
-      type: object
-      properties:
-        buchstabenDe:
-          description: ''
-          type: string
-        buchstabenFr:
-          description: ''
-          type: string
-    SachbearbeiterZuordnungStammdatenList:
-      description: ''
-      type: object
-      properties:
-        sachbearbeiter:
-          $ref: '#/components/schemas/UUID'
-          description: ''
-        zuordnung:
-          $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
-          description: ''
-    Benutzereinstellungen:
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        digitaleKommunikation:
-          description: ''
-          type: boolean
-    BenutzereinstellungenUpdate:
-      description: ''
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        digitaleKommunikation:
-          description: ''
-          type: boolean
-  responses:
-    Unauthorized:
-      content:
-        text/plain: {}
-      description: Die Zugriffsdaten sind nicht gültig
-    Forbidden:
-      content:
-        text/plain: {}
-      description: Der Zugriff wurde verweigert
-    NotFound:
-      content:
-        text/plain: {}
-      description: Die angeforderte Ressource existiert nicht
-    ServerError:
-      content:
-        text/plain: {}
-      description: Interner Server Fehler
-    BadRequest:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationReport'
-      description: Die Kunde Request Daten sind ungültig
-  securitySchemes:
-    auth-dev-bern:
-      openIdConnectUrl: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern'
-      type: openIdConnect
-      description: Bern (DEV)
-    auth-uat-bern:
-      openIdConnectUrl: 'https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern'
-      type: openIdConnect
-      description: Bern (UAT)
+              type: boolean
+        BenutzereinstellungenUpdate:
+            description: ''
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/UUID'
+                digitaleKommunikation:
+                    description: ''
+                    type: boolean
+    responses:
+        Unauthorized:
+            content:
+                text/plain: {}
+            description: Die Zugriffsdaten sind nicht gültig
+        Forbidden:
+            content:
+                text/plain: {}
+            description: Der Zugriff wurde verweigert
+        NotFound:
+            content:
+                text/plain: {}
+            description: Die angeforderte Ressource existiert nicht
+        ServerError:
+            content:
+                text/plain: {}
+            description: Interner Server Fehler
+        BadRequest:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ValidationReport'
+            description: Die Kunde Request Daten sind ungültig
+    securitySchemes:
+        auth-dev-bern:
+            openIdConnectUrl: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern'
+            type: openIdConnect
+            description: Bern (DEV)
+        auth-uat-bern:
+            openIdConnectUrl: 'https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern'
+            type: openIdConnect
+            description: Bern (UAT)
 security:
-  - auth-dev-bern: []
-  - auth-uat-bern: []
+    - auth-dev-bern: [ ]
+    - auth-uat-bern: [ ]
 tags:
-  - name: Ausbildungsstaette
-  - name: Auth
-  - name: Configuration
-  - name: Fall
-  - name: Gesuch
-  - name: Gesuchsperiode
-  - name: Stammdaten
-  - name: Benutzer
-    description: ''
-  - name: Tenant
-    description: ''
-  - name: Ausbildungsgang
-    description: ''
+    -
+        name: Ausbildungsstaette
+    -
+        name: Auth
+    -
+        name: Configuration
+    -
+        name: Fall
+    -
+        name: Gesuch
+    -
+        name: Gesuchsperiode
+    -
+        name: Stammdaten
+    -
+        name: Benutzer
+        description: ''
+    -
+        name: Tenant
+        description: ''
+    -
+        name: Ausbildungsgang
+        description: ''
