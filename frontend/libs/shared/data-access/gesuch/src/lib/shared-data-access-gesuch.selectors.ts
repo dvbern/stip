@@ -18,15 +18,29 @@ export const selectRouteId = selectRouteParam('id');
 
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,
+  sharedDataAccessGesuchsFeature.selectLastUpdate,
+  sharedDataAccessGesuchsFeature.selectLoading,
+  sharedDataAccessGesuchsFeature.selectGesuch,
+  sharedDataAccessGesuchsFeature.selectGesuchFormular,
+  (config, lastUpdate, loading, gesuch, gesuchFormular) => {
+    return {
+      lastUpdate,
+      loading,
+      gesuch,
+      gesuchFormular,
+      readonly: gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
+      trancheId: gesuch?.gesuchTrancheToWorkWith.id,
+      gesuchId: gesuch?.id,
+      allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
+    };
+  },
+);
+
+export const selectSharedDataAccessGesuchValidationView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
-  (config, state) => {
+  (state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
-      ...state,
-      readonly: state.gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
-      trancheId: state.gesuch?.gesuchTrancheToWorkWith.id,
-      gesuchId: state.gesuch?.id,
-      allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
       cachedGesuchFormular: currentForm,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,

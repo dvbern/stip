@@ -203,10 +203,14 @@ export const {
   name, // feature name
   reducer,
   selectGesuchsState,
+  selectLastUpdate,
   selectGesuch,
   selectGesuchs,
+  selectGesuchFormular,
   selectLoading,
   selectError,
+  selectCache,
+  selectValidations,
 } = sharedDataAccessGesuchsFeature;
 
 const getGesuchFormular = (

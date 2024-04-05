@@ -5,6 +5,7 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import {
   isFormularProp,
+  selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
 
@@ -27,7 +28,13 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchsView.projector(config, state);
+    const result = selectSharedDataAccessGesuchsView.projector(
+      config,
+      state.lastUpdate,
+      state.loading,
+      state.gesuch,
+      state.gesuchFormular,
+    );
     expect(result.loading).toBeFalsy();
   });
 
@@ -46,11 +53,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
   });
 
   it('should still have the cache if gesuchFormular is undefined', () => {
-    const config = {
-      deploymentConfig: undefined,
-      loading: false,
-      error: undefined,
-    };
     const firstUpdate: Gesuch = {
       gesuchTrancheToWorkWith: {
         gesuchFormular: { personInAusbildung: { vorname: 'Max' } },
@@ -62,10 +64,8 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
     const secondState = reducer(firstState, secondAction);
-    const result = selectSharedDataAccessGesuchsView.projector(
-      config,
-      secondState,
-    );
+    const result =
+      selectSharedDataAccessGesuchValidationView.projector(secondState);
     expect(result.cachedGesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
@@ -84,11 +84,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
   );
 
   it('should select correct invalidFormularProps', () => {
-    const config = {
-      deploymentConfig: undefined,
-      loading: false,
-      error: undefined,
-    };
     const state: State = {
       gesuch: null,
       gesuchs: [],
@@ -111,7 +106,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchsView.projector(config, state);
+    const result = selectSharedDataAccessGesuchValidationView.projector(state);
     expect(result.invalidFormularProps.validations).toEqual({
       errors: ['partner', 'kinds'],
     });
