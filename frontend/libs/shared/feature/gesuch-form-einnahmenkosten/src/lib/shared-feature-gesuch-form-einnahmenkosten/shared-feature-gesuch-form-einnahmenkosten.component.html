@@ -186,6 +186,25 @@
       </div>
 
       <div class="row g-4 mt-1">
+        <!-- BETREUUNGKOSTEN_KINDER -->
+        @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.betreuungskostenKinder.label' | translate }}</mat-label>
+            <input
+              formControlName="betreuungskostenKinder"
+              data-testid="form-einnahmen-kosten-betreuungskostenKinder"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+
+      <div class="row g-4 mt-1">
         <!-- FAHRKOSTEN -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
           <mat-label>{{ 'shared.form.einnahmenkosten.fahrkosten.label' | translate }}</mat-label>

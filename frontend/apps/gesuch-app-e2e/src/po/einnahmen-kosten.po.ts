@@ -26,6 +26,7 @@ export class EinnahmenKostenPO {
     wgWohnend: Locator;
     verdienstRealisiert: Locator;
     willDarlehen: Locator;
+    betreuungskostenKinder: Locator;
 
     incompleteWarning: () => Locator;
 
@@ -70,6 +71,9 @@ export class EinnahmenKostenPO {
         'form-einnahmen-kosten-verdienstRealisiert',
       ),
       willDarlehen: page.getByTestId('form-einnahmen-kosten-willDarlehen'),
+      betreuungskostenKinder: page.getByTestId(
+        'form-einnahmen-kosten-betreuungskostenKinder',
+      ),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),
@@ -89,6 +93,10 @@ export class EinnahmenKostenPO {
 
     await this.elems.ausbildungskostenTertiaerstufe.fill(
       `${einnahmenKosten.ausbildungskostenTertiaerstufe ?? 0}`,
+    );
+
+    await this.elems.betreuungskostenKinder.fill(
+      `${einnahmenKosten.betreuungskostenKinder ?? 0}`,
     );
 
     await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
