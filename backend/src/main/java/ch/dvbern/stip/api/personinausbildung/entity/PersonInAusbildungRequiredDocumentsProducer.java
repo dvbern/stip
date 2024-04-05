@@ -49,10 +49,6 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
             requiredDocs.add(DokumentTyp.PERSON_MIETVERTRAG);
         }
 
-        if (pia.isQuellenbesteuert()) {
-            requiredDocs.add(DokumentTyp.PERSON_VERMOEGENSNACHWEIS);
-        }
-
         if (pia.isSozialhilfebeitraege()) {
             requiredDocs.add(DokumentTyp.PERSON_SOZIALHILFEBUDGET);
         }
