@@ -8,10 +8,14 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { distinctUntilChanged, skip } from 'rxjs';
 
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -40,6 +44,7 @@ type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
 })
 export class SharedPatternDocumentUploadComponent implements OnInit {
   private dialog = inject(MatDialog);
+  private globalStore = inject(Store);
   private store = inject(UploadStore);
   optionsSig = input.required<DocumentOptions>();
 
@@ -55,6 +60,19 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       documents.find((document) => document.state === 'done')
     );
   });
+
+  constructor() {
+    // Load the gesuch step validity after the state of uploaded documents changes
+    toObservable(this.store.hasUploadedEntriesSig)
+      .pipe(skip(1), distinctUntilChanged(), takeUntilDestroyed())
+      .subscribe(() => {
+        this.globalStore.dispatch(
+          SharedDataAccessGesuchEvents.gesuchValidateSteps({
+            id: this.optionsSig().gesuchId,
+          }),
+        );
+      });
+  }
 
   ngOnInit() {
     // Only load the documents with the initial required options, not on every change with for example an effect

@@ -48,6 +48,10 @@ export class UploadStore {
     return this.state.documents().length > 0;
   });
 
+  hasUploadedEntriesSig = computed(() => {
+    return this.state.documents().some((d) => !d.isTemporary);
+  });
+
   /**
    * True if there are any documents in the state that are still uploading
    */
