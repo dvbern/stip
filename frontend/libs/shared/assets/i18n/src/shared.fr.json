@@ -141,7 +141,7 @@
   "shared.form.person.file.SOZIALHILFE": "Budget de l'aide sociale",
   "shared.form.person.file.ZIVILSTAND": "Preuve de séparation ou de pension alimentaire",
   "shared.form.person.file.HEIMATORT": "Passeport suisse ou carte d'identité",
-  "shared.form.person.file.VERMOEGENSNACHWEIS": "Copie de l'attestation de fortune de l’année précédente (extraits des comptes bancaires et/ou postaux présentant le solde au 31 décembre) de l'année précédente",
+  "shared.form.person.file.VERMOEGENSNACHWEIS_VORJAHR": "Copie de l'attestation de fortune de l’année précédente (extraits des comptes bancaires et/ou postaux présentant le solde au 31 décembre) de l'année précédente",
   "shared.form.person.origin.label": "Origin",
   "shared.form.person.marital-status.label": "Marital status",
   "shared.form.person.marital-status.ledig.info": "If you have been in a relationship for 5 years or longer, please select \"Concubinage\".",
