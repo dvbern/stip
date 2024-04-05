@@ -1,6 +1,6 @@
 <form [formGroup]="form" data-testid="form-gesuchsjahr-form" (ngSubmit)="handleSave()" novalidate class="mt-4">
   <h2 class="pt-5 mb-4 m-lg-2">
-    {{ 'shared.form.gesuchsjahr.metaDaten.title' | translate }}
+    {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | translate }}
   </h2>
 
   <div class="row g-4 m-lg-2">
@@ -26,7 +26,7 @@
       <!-- Jahr -->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-3">
         <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | translate }}</mat-label>
-        <input formControlName="jahr" data-testid="form-gesuchsjahr-jahr" matInput type="text" />
+        <input formControlName="technischesJahr" data-testid="form-gesuchsjahr-jahr" matInput type="text" />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>

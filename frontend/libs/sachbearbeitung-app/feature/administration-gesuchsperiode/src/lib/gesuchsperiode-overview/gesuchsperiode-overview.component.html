@@ -1,4 +1,4 @@
-@if (store.loading()) {
+@if (store.gesuchsperioden.type() === 'pending' || store.gesuchsjahre.type() === 'pending') {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (gesuchsperiodenDatasourceSig(); as gesuchsperiodeSource) {
@@ -48,10 +48,10 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>
-            <button type="button" class="btn btn-outline-dark d-flex lh-1 align-items-center">
+            <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
               <i class="material-symbols-rounded fs-5 me-2">add</i>
               {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate }}
-            </button>
+            </a>
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
             <div class="d-flex">
@@ -128,10 +128,13 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>
-            <button type="button" class="btn btn-outline-dark d-flex lh-1 align-items-center">
+            <a
+              [routerLink]="['.', 'jahr', 'create']"
+              class="btn btn-outline-dark d-inline-flex lh-1 align-items-center"
+            >
               <i class="material-symbols-rounded fs-5 me-2">add</i>
-              {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.erstellen' | translate }}
-            </button>
+              {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate }}
+            </a>
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             <div class="d-flex">
@@ -153,7 +156,7 @@
           tabindex="-1"
           class="highlightable"
           *matRowDef="let gesuchsjahr; columns: displayedColumnsGesuchsJahr"
-          [routerLink]="['.', gesuchsjahr.id]"
+          [routerLink]="['.', 'jahr', gesuchsjahr.id]"
         ></tr>
       </table>
     </div>

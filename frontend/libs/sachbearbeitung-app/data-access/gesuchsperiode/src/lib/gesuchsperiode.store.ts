@@ -6,63 +6,90 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { BehaviorSubject, lastValueFrom, map, take } from 'rxjs';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import {
+  BehaviorSubject,
+  filter,
+  map,
+  merge,
+  pipe,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 
 import {
   Gesuchsjahr,
   GesuchsjahrService,
   Gesuchsperiode,
-  GesuchsperiodeDaten,
   GesuchsperiodeService,
-  GesuchsperiodeUpdate,
   GesuchsperiodeWithDaten,
 } from '@dv/shared/model/gesuch';
+import {
+  RemoteData,
+  handleApiResponse,
+  initial,
+  pending,
+} from '@dv/shared/util/remote-data';
 import {
   formatBackendLocalDate,
   fromBackendLocalDate,
 } from '@dv/shared/util/validator-date';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type GesuchsperiodeState = {
-  gesuchsjahre: Gesuchsjahr[];
-  gesuchsperioden: Gesuchsperiode[];
-  currentGesuchsperiode?: GesuchsperiodeWithDaten;
-  currentGesuchsJahr?: Gesuchsjahr;
-  hasLoadedOnce: boolean;
-  loading: boolean;
-  error?: string;
+  gesuchsjahre: RemoteData<Gesuchsjahr[]>;
+  gesuchsperioden: RemoteData<Gesuchsperiode[]>;
+  currentGesuchsperiode: RemoteData<GesuchsperiodeWithDaten>;
+  currentGesuchsJahr: RemoteData<Gesuchsjahr>;
 };
-
 @Injectable({ providedIn: 'root' })
 export class MockGesuchsperiodenService {
   private gesuchsperiode$ = new BehaviorSubject<
     GesuchsperiodeWithDaten | undefined
   >(____mockdata);
-  private originalService = inject(GesuchsperiodeService);
 
-  getGesuchsperioden$() {
-    return this.originalService.getGesuchsperioden$();
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getGesuchsperiode$(_param: { gesuchsperiodeId: string }) {
-    return this.gesuchsperiode$.pipe(take(1));
+    return this.gesuchsperiode$.pipe(take(1), filter(isDefined));
   }
 
-  saveGesuchsperiode$(gesuchsperiodenDaten: GesuchsperiodeUpdate) {
+  updateGesuchsperiode$(data: {
+    gesuchsperiodeId: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    gesuchsperiodeUpdate: any;
+  }) {
     return this.gesuchsperiode$.pipe(
       take(1),
-      map((p) => ({ ...p, ...gesuchsperiodenDaten })),
+      filter(isDefined),
+      map(
+        (p) =>
+          ({ ...p, ...data.gesuchsperiodeUpdate }) as GesuchsperiodeWithDaten,
+      ),
+    );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  createGesuchsperiode$(data: { gesuchsperiodeCreate: any }) {
+    return this.gesuchsperiode$.pipe(
+      take(1),
+      map(
+        (p) =>
+          ({
+            ...p,
+            ...data.gesuchsperiodeCreate,
+            id: 'newId',
+          }) as GesuchsperiodeWithDaten,
+      ),
     );
   }
 }
 
 const initialState: GesuchsperiodeState = {
-  gesuchsjahre: [],
-  gesuchsperioden: [],
-  currentGesuchsJahr: undefined,
-  currentGesuchsperiode: undefined,
-  hasLoadedOnce: false,
-  loading: false,
-  error: undefined,
+  gesuchsjahre: initial(),
+  gesuchsperioden: initial(),
+  currentGesuchsJahr: initial(),
+  currentGesuchsperiode: initial(),
 };
 export const GesuchsperiodeStore = signalStore(
   { providedIn: 'root' },
@@ -70,68 +97,122 @@ export const GesuchsperiodeStore = signalStore(
   withMethods(
     (
       store,
-      gesuchsperiodeService = inject(MockGesuchsperiodenService),
-      gesuchjahrService = inject(GesuchsjahrService),
+      gesuchsperiodeService = inject(GesuchsperiodeService),
+      gesuchsjahrService = inject(GesuchsjahrService),
+      mockGesuchsperiodeService = inject(MockGesuchsperiodenService),
     ) => {
-      async function loadOverview() {
-        patchState(store, {
-          loading: true,
-          error: undefined,
-        });
-        const gesuchsperioden = await lastValueFrom(
-          gesuchsperiodeService.getGesuchsperioden$(),
-        );
-
-        const gesuchsjahre = await lastValueFrom(
-          gesuchjahrService.getGesuchsjahre$(),
-        );
-        patchState(store, {
-          gesuchsperioden,
-          gesuchsjahre,
-          hasLoadedOnce: true,
-          loading: false,
-          error: undefined,
-        });
-      }
-      async function loadGesuchsperiode(id: string) {
-        patchState(store, {
-          loading: true,
-          error: undefined,
-        });
-        const gesuchsperiode = await lastValueFrom(
-          gesuchsperiodeService.getGesuchsperiode$({ gesuchsperiodeId: id }),
-        );
-        patchState(store, {
-          currentGesuchsperiode: gesuchsperiode,
-
-          hasLoadedOnce: false,
-          loading: false,
-          error: undefined,
-        });
-      }
-      async function saveGesuchsperiode(
-        id: string,
-        gesuchsperiodenDaten: GesuchsperiodeDaten,
-      ) {
-        patchState(store, {
-          loading: true,
-          error: undefined,
-        });
-        await lastValueFrom(
-          gesuchsperiodeService.saveGesuchsperiode$(gesuchsperiodenDaten),
-        );
-        await loadGesuchsperiode(id);
-      }
+      const loadOverview$ = rxMethod<void>(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              gesuchsperioden: pending(),
+              gesuchsjahre: pending(),
+            });
+          }),
+          switchMap(() =>
+            merge(
+              gesuchsperiodeService
+                .getGesuchsperioden$()
+                .pipe(
+                  handleApiResponse((gesuchsperioden) =>
+                    patchState(store, { gesuchsperioden }),
+                  ),
+                ),
+              gesuchsjahrService
+                .getGesuchsjahre$()
+                .pipe(
+                  handleApiResponse((gesuchsjahre) =>
+                    patchState(store, { gesuchsjahre }),
+                  ),
+                ),
+            ),
+          ),
+        ),
+      );
+      const loadGesuchsperiode$ = rxMethod<string>(
+        pipe(
+          switchMap((id) =>
+            mockGesuchsperiodeService.getGesuchsperiode$({
+              gesuchsperiodeId: id,
+            }),
+          ),
+          handleApiResponse((currentGesuchsperiode) =>
+            patchState(store, { currentGesuchsperiode }),
+          ),
+        ),
+      );
+      const saveGesuchsperiode$ = rxMethod<{
+        gesuchsperiodeId: string;
+        gesuchsperiodenDaten: Omit<
+          GesuchsperiodeWithDaten,
+          'id' | 'gueltigAb' | 'gueltigBis' | 'status'
+        >;
+      }>(
+        pipe(
+          switchMap(({ gesuchsperiodeId, gesuchsperiodenDaten }) =>
+            gesuchsperiodeId
+              ? mockGesuchsperiodeService.updateGesuchsperiode$({
+                  gesuchsperiodeId,
+                  gesuchsperiodeUpdate: gesuchsperiodenDaten,
+                })
+              : mockGesuchsperiodeService.createGesuchsperiode$({
+                  gesuchsperiodeCreate: gesuchsperiodenDaten,
+                }),
+          ),
+          handleApiResponse((currentGesuchsperiode) => {
+            patchState(store, {
+              currentGesuchsperiode,
+            });
+          }),
+        ),
+      );
+      const loadGesuchsjahr$ = rxMethod<string>(
+        pipe(
+          switchMap((gesuchsjahrId) =>
+            gesuchsjahrService.getGesuchsjahr$({ gesuchsjahrId }),
+          ),
+          handleApiResponse((currentGesuchsJahr) => {
+            patchState(store, {
+              currentGesuchsJahr,
+            });
+          }),
+        ),
+      );
+      const saveGesuchsjahr$ = rxMethod<{
+        gesuchsjahrId?: string;
+        gesuchsjahrDaten: Omit<Gesuchsjahr, 'id' | 'gueltigkeitStatus'>;
+      }>(
+        pipe(
+          switchMap(({ gesuchsjahrId, gesuchsjahrDaten }) =>
+            gesuchsjahrId
+              ? gesuchsjahrService.updateGesuchsjahr$({
+                  gesuchsjahrId,
+                  gesuchsjahrUpdate: gesuchsjahrDaten,
+                })
+              : gesuchsjahrService.createGesuchsjahr$({
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  gesuchsjahrCreate: gesuchsjahrDaten as any,
+                }),
+          ),
+          handleApiResponse((currentGesuchsJahr) => {
+            patchState(store, {
+              currentGesuchsJahr,
+            });
+          }),
+        ),
+      );
       return {
-        loadOverview,
-        loadGesuchsperiode,
-        saveGesuchsperiode,
+        loadOverview$,
+        loadGesuchsperiode$,
+        saveGesuchsperiode$,
+        loadGesuchsjahr$,
+        saveGesuchsjahr$,
       };
     },
   ),
   withComputed((store) => ({
     gesuchperiodenListView: computed(() => {
-      return store.gesuchsperioden().map((g) => ({
+      return store.gesuchsperioden.data?.()?.map((g) => ({
         ...g,
         gesuchsperiode:
           formatBackendLocalDate(g.gueltigAb, 'de') +
@@ -141,7 +222,7 @@ export const GesuchsperiodeStore = signalStore(
       }));
     }),
     gesuchsjahreListView: computed(() => {
-      return store.gesuchsjahre().map((g) => ({
+      return store.gesuchsjahre.data?.()?.map((g) => ({
         ...g,
         ausbildungsjahr: `${g.technischesJahr}/${(g.technischesJahr + 1)
           .toString()
@@ -165,7 +246,6 @@ const ____mockdata: GesuchsperiodeWithDaten = {
   wohnkosten_fam_5pluspers: 5,
   freibetrag_vermoegen: 3,
   freibetrag_erwerbseinkommen: 2,
-  einkommensfreibetrag: 2,
   bezeichnungDe: '1a',
   bezeichnungFr: '2b',
   einreichefristNormal: new Date().toISOString(),
@@ -176,9 +256,9 @@ const ____mockdata: GesuchsperiodeWithDaten = {
   wohnkosten_persoenlich_3pers: 0,
   wohnkosten_persoenlich_4pers: 0,
   wohnkosten_persoenlich_5pluspers: 0,
-  f_Einkommensfreibetrag: 0,
-  f_Vermoegensfreibetrag: 0,
-  f_VermogenSatzAngerechnet: 0,
+  einkommensfreibetrag: 0,
+  vermoegensfreibetrag: 0,
+  vermogenSatzAngerechnet: 0,
   fiskaljahr: 'awd',
   gesuchsjahr: 'afn',
   gesuchsperiodeStart: new Date().toISOString(),

@@ -17,7 +17,6 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-gesuchsperiode',
   standalone: true,
   imports: [
     CommonModule,
@@ -72,6 +71,6 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.store.loadOverview();
+    this.store.loadOverview$();
   }
 }

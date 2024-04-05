@@ -41,7 +41,6 @@ import {
 import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-gesuchsperiode-detail',
   standalone: true,
   imports: [
     CommonModule,
@@ -87,9 +86,8 @@ export class GesuchsperiodeDetailComponent {
     freibetrag_erwerbseinkommen: [<string | null>null, [Validators.required]],
     einkommensfreibetrag: [<string | null>null, [Validators.required]],
     elternbeteiligungssatz: [<string | null>null, [Validators.required]],
-    f_Einkommensfreibetrag: [<string | null>null, [Validators.required]],
-    f_Vermoegensfreibetrag: [<string | null>null, [Validators.required]],
-    f_VermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
+    vermoegensfreibetrag: [<string | null>null, [Validators.required]],
+    vermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
     integrationszulage: [<string | null>null, [Validators.required]],
     limite_EkFreibetrag_Integrationszulag: [
       <string | null>null,
@@ -127,12 +125,12 @@ export class GesuchsperiodeDetailComponent {
   constructor() {
     effect(
       () => {
-        this.store.loadGesuchsperiode(this.id());
+        this.store.loadGesuchsperiode$(this.id());
       },
       { allowSignalWrites: true },
     );
     effect(() => {
-      const gesuchsperiode = this.store.currentGesuchsperiode?.();
+      const gesuchsperiode = this.store.currentGesuchsperiode?.().data;
       if (!gesuchsperiode) {
         return;
       }
@@ -146,12 +144,9 @@ export class GesuchsperiodeDetailComponent {
         elternbeteiligungssatz:
           gesuchsperiode.elternbeteiligungssatz.toString(),
         einkommensfreibetrag: gesuchsperiode.einkommensfreibetrag.toString(),
-        f_Einkommensfreibetrag:
-          gesuchsperiode.f_Einkommensfreibetrag.toString(),
-        f_Vermoegensfreibetrag:
-          gesuchsperiode.f_Vermoegensfreibetrag.toString(),
-        f_VermogenSatzAngerechnet:
-          gesuchsperiode.f_VermogenSatzAngerechnet.toString(),
+        vermoegensfreibetrag: gesuchsperiode.vermoegensfreibetrag?.toString(),
+        vermogenSatzAngerechnet:
+          gesuchsperiode.vermogenSatzAngerechnet?.toString(),
         integrationszulage: gesuchsperiode.integrationszulage.toString(),
         limite_EkFreibetrag_Integrationszulag:
           gesuchsperiode.limite_EkFreibetrag_Integrationszulag.toString(),
@@ -196,63 +191,69 @@ export class GesuchsperiodeDetailComponent {
       return;
     }
     const value = convertTempFormToRealValues(this.form, 'all');
-    this.store.saveGesuchsperiode(this.id(), {
-      ...value,
-      ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),
-      ausbKosten_Tertiaer: fromFormatedNumber(value.ausbKosten_Tertiaer),
-      freibetrag_vermoegen: fromFormatedNumber(value.freibetrag_vermoegen),
-      freibetrag_erwerbseinkommen: fromFormatedNumber(
-        value.freibetrag_erwerbseinkommen,
-      ),
-      elternbeteiligungssatz: fromFormatedNumber(value.elternbeteiligungssatz),
-      einkommensfreibetrag: fromFormatedNumber(value.einkommensfreibetrag),
-      f_Einkommensfreibetrag: fromFormatedNumber(value.f_Einkommensfreibetrag),
-      f_Vermoegensfreibetrag: fromFormatedNumber(value.f_Vermoegensfreibetrag),
-      f_VermogenSatzAngerechnet: fromFormatedNumber(
-        value.f_VermogenSatzAngerechnet,
-      ),
-      integrationszulage: fromFormatedNumber(value.integrationszulage),
-      limite_EkFreibetrag_Integrationszulag: fromFormatedNumber(
-        value.limite_EkFreibetrag_Integrationszulag,
-      ),
-      stipLimite_Minimalstipendium: fromFormatedNumber(
-        value.stipLimite_Minimalstipendium,
-      ),
-      person_1: fromFormatedNumber(value.person_1),
-      personen_2: fromFormatedNumber(value.personen_2),
-      personen_3: fromFormatedNumber(value.personen_3),
-      personen_4: fromFormatedNumber(value.personen_4),
-      personen_5: fromFormatedNumber(value.personen_5),
-      personen_6: fromFormatedNumber(value.personen_6),
-      personen_7: fromFormatedNumber(value.personen_7),
-      proWeiterePerson: fromFormatedNumber(value.proWeiterePerson),
-      kinder_00_18: fromFormatedNumber(value.kinder_00_18),
-      jugendliche_erwachsene_19_25: fromFormatedNumber(
-        value.jugendliche_erwachsene_19_25,
-      ),
-      erwachsene_26_99: fromFormatedNumber(value.jugendliche_erwachsene_19_25),
-      wohnkosten_fam_1pers: fromFormatedNumber(value.wohnkosten_fam_1pers),
-      wohnkosten_fam_2pers: fromFormatedNumber(value.wohnkosten_fam_2pers),
-      wohnkosten_fam_3pers: fromFormatedNumber(value.wohnkosten_fam_3pers),
-      wohnkosten_fam_4pers: fromFormatedNumber(value.wohnkosten_fam_4pers),
-      wohnkosten_fam_5pluspers: fromFormatedNumber(
-        value.wohnkosten_fam_5pluspers,
-      ),
-      wohnkosten_persoenlich_1pers: fromFormatedNumber(
-        value.wohnkosten_persoenlich_1pers,
-      ),
-      wohnkosten_persoenlich_2pers: fromFormatedNumber(
-        value.wohnkosten_persoenlich_2pers,
-      ),
-      wohnkosten_persoenlich_3pers: fromFormatedNumber(
-        value.wohnkosten_persoenlich_3pers,
-      ),
-      wohnkosten_persoenlich_4pers: fromFormatedNumber(
-        value.wohnkosten_persoenlich_4pers,
-      ),
-      wohnkosten_persoenlich_5pluspers: fromFormatedNumber(
-        value.wohnkosten_persoenlich_5pluspers,
-      ),
+    this.store.saveGesuchsperiode$({
+      gesuchsperiodeId: this.id(),
+      gesuchsperiodenDaten: {
+        ...value,
+        ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),
+        ausbKosten_Tertiaer: fromFormatedNumber(value.ausbKosten_Tertiaer),
+        freibetrag_vermoegen: fromFormatedNumber(value.freibetrag_vermoegen),
+        freibetrag_erwerbseinkommen: fromFormatedNumber(
+          value.freibetrag_erwerbseinkommen,
+        ),
+        elternbeteiligungssatz: fromFormatedNumber(
+          value.elternbeteiligungssatz,
+        ),
+        einkommensfreibetrag: fromFormatedNumber(value.einkommensfreibetrag),
+        vermoegensfreibetrag: fromFormatedNumber(value.vermoegensfreibetrag),
+        vermogenSatzAngerechnet: fromFormatedNumber(
+          value.vermogenSatzAngerechnet,
+        ),
+        integrationszulage: fromFormatedNumber(value.integrationszulage),
+        limite_EkFreibetrag_Integrationszulag: fromFormatedNumber(
+          value.limite_EkFreibetrag_Integrationszulag,
+        ),
+        stipLimite_Minimalstipendium: fromFormatedNumber(
+          value.stipLimite_Minimalstipendium,
+        ),
+        person_1: fromFormatedNumber(value.person_1),
+        personen_2: fromFormatedNumber(value.personen_2),
+        personen_3: fromFormatedNumber(value.personen_3),
+        personen_4: fromFormatedNumber(value.personen_4),
+        personen_5: fromFormatedNumber(value.personen_5),
+        personen_6: fromFormatedNumber(value.personen_6),
+        personen_7: fromFormatedNumber(value.personen_7),
+        proWeiterePerson: fromFormatedNumber(value.proWeiterePerson),
+        kinder_00_18: fromFormatedNumber(value.kinder_00_18),
+        jugendliche_erwachsene_19_25: fromFormatedNumber(
+          value.jugendliche_erwachsene_19_25,
+        ),
+        erwachsene_26_99: fromFormatedNumber(
+          value.jugendliche_erwachsene_19_25,
+        ),
+        wohnkosten_fam_1pers: fromFormatedNumber(value.wohnkosten_fam_1pers),
+        wohnkosten_fam_2pers: fromFormatedNumber(value.wohnkosten_fam_2pers),
+        wohnkosten_fam_3pers: fromFormatedNumber(value.wohnkosten_fam_3pers),
+        wohnkosten_fam_4pers: fromFormatedNumber(value.wohnkosten_fam_4pers),
+        wohnkosten_fam_5pluspers: fromFormatedNumber(
+          value.wohnkosten_fam_5pluspers,
+        ),
+        wohnkosten_persoenlich_1pers: fromFormatedNumber(
+          value.wohnkosten_persoenlich_1pers,
+        ),
+        wohnkosten_persoenlich_2pers: fromFormatedNumber(
+          value.wohnkosten_persoenlich_2pers,
+        ),
+        wohnkosten_persoenlich_3pers: fromFormatedNumber(
+          value.wohnkosten_persoenlich_3pers,
+        ),
+        wohnkosten_persoenlich_4pers: fromFormatedNumber(
+          value.wohnkosten_persoenlich_4pers,
+        ),
+        wohnkosten_persoenlich_5pluspers: fromFormatedNumber(
+          value.wohnkosten_persoenlich_5pluspers,
+        ),
+      },
     });
   }
 }
