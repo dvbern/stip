@@ -146,6 +146,22 @@
   </div>
 
   <div class="row g-4 my-2">
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.shared.wohnkosten.label' | translate }}</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="wohnkosten"
+        data-testid="form-wohnkosten"
+        [maskito]="maskitoNumber"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 my-2">
     <mat-radio-group
       formControlName="ausweisbFluechtling"
       data-testid="form-eltern-ausweisFluechtling"

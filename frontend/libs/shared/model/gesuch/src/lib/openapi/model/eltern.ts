@@ -29,6 +29,7 @@ export interface Eltern {
      */
     identischerZivilrechtlicherWohnsitzPLZ?: string;
     telefonnummer: string;
+    wohnkosten: number;
     sozialversicherungsnummer?: string;
     /**
      * dd.MM.YYYY

@@ -45,6 +45,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
@@ -107,6 +111,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
 
+  maskitoNumber = maskitoNumber;
+
   readonly ElternTyp = ElternTyp;
 
   languageSig = this.store.selectSignal(selectLanguage);
@@ -126,6 +132,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       <string | undefined>undefined,
       [Validators.required],
     ],
+    wohnkosten: [<string | undefined>undefined, [Validators.required]],
     telefonnummer: [
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
@@ -227,6 +234,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     if (changes['elternteil'].currentValue) {
       this.form.patchValue({
         ...this.elternteil,
+        wohnkosten: this.elternteil.wohnkosten?.toString(),
         geburtsdatum: parseBackendLocalDateAndPrint(
           this.elternteil.geburtsdatum,
           this.languageSig(),
@@ -251,6 +259,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       'sozialhilfebeitraegeAusbezahlt',
       'ausweisbFluechtling',
       'ergaenzungsleistungAusbezahlt',
+      'wohnkosten',
     ]);
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
@@ -269,6 +278,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         id: this.elternteil.id,
         elternTyp: this.elternteil.elternTyp,
         geburtsdatum,
+        wohnkosten: fromFormatedNumber(formValues.wohnkosten),
       });
       this.form.markAsPristine();
     }

@@ -117,6 +117,7 @@
   "shared.form.shared.address.city.label": "Ville",
   "shared.form.shared.address.country.label": "Pays",
   "shared.form.shared.phone.label": "Téléphone",
+  "shared.form.shared.wohnkosten.label": "Frais de logement",
   "shared.form.shared.birthday.label": "Date de naissance",
   "shared.form.shared.identical-civil-residence.label": "Identical with civil residence",
   "shared.form.shared.alternative-civil-residence.title": "Domicile civil:",
