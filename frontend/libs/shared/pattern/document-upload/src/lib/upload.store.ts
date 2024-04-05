@@ -181,7 +181,7 @@ export class UploadStore {
                       id: tempDokumentId,
                       filename: action.fileUpload.name,
                       filesize: action.fileUpload.size.toString(),
-                      filepfad: '',
+                      filepath: '',
                       objectId: '',
                       timestampErstellt: new Date().toISOString(),
                     },

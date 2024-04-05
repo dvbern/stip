@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String filename;
-  private @Valid String filepfad;
+  private @Valid String filepath;
   private @Valid String filesize;
   private @Valid String objectId;
   private @Valid String timestampErstellt;
@@ -67,21 +67,21 @@ public class DokumentDto  implements Serializable {
 
   /**
    **/
-  public DokumentDto filepfad(String filepfad) {
-    this.filepfad = filepfad;
+  public DokumentDto filepath(String filepath) {
+    this.filepath = filepath;
     return this;
   }
 
   
-  @JsonProperty("filepfad")
+  @JsonProperty("filepath")
   @NotNull
-  public String getFilepfad() {
-    return filepfad;
+  public String getFilepath() {
+    return filepath;
   }
 
-  @JsonProperty("filepfad")
-  public void setFilepfad(String filepfad) {
-    this.filepfad = filepfad;
+  @JsonProperty("filepath")
+  public void setFilepath(String filepath) {
+    this.filepath = filepath;
   }
 
   /**
@@ -153,7 +153,7 @@ public class DokumentDto  implements Serializable {
     DokumentDto dokument = (DokumentDto) o;
     return Objects.equals(this.id, dokument.id) &&
         Objects.equals(this.filename, dokument.filename) &&
-        Objects.equals(this.filepfad, dokument.filepfad) &&
+        Objects.equals(this.filepath, dokument.filepath) &&
         Objects.equals(this.filesize, dokument.filesize) &&
         Objects.equals(this.objectId, dokument.objectId) &&
         Objects.equals(this.timestampErstellt, dokument.timestampErstellt);
@@ -161,7 +161,7 @@ public class DokumentDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, filename, filepfad, filesize, objectId, timestampErstellt);
+    return Objects.hash(id, filename, filepath, filesize, objectId, timestampErstellt);
   }
 
   @Override
@@ -171,7 +171,7 @@ public class DokumentDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
-    sb.append("    filepfad: ").append(toIndentedString(filepfad)).append("\n");
+    sb.append("    filepath: ").append(toIndentedString(filepath)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
     sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
