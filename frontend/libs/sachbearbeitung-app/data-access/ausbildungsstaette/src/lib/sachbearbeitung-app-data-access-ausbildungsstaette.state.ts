@@ -9,7 +9,6 @@ import {
   patchState,
   signalStore,
   withComputed,
-  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
@@ -95,8 +94,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
       loadAusbildungsstaetten: rxMethod(
         pipe(
           tap(() => {
-            console.log('loadAusbildungsstaetten');
-
             patchState(store, {
               response: pending(),
             });
@@ -521,12 +518,4 @@ export const AdminAusbildungsstaetteStore = signalStore(
     ausbildungsstaetteCount: computed(() => tableData().data.length ?? 0),
     loading: computed(() => response.type() === 'pending'),
   })),
-  withHooks({
-    onInit(store) {
-      console.log('init');
-    },
-    onDestroy(store) {
-      console.log('destroy');
-    },
-  }),
 );
