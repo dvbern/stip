@@ -86,7 +86,7 @@ export class SharedUtilDocumentMergerService {
       new File(
         [blob],
         `${context}_${imageFiles
-          .map((f) => f.name.replace(/\..+$/, ''))
+          .map((f) => f.name.replace(/\.[^.]+$/, ''))
           .join('-')}.pdf`,
         {
           type: 'application/pdf',
