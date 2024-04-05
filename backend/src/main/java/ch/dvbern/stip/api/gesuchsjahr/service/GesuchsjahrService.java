@@ -10,6 +10,7 @@ import ch.dvbern.stip.generated.dto.GesuchsjahrCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsjahrDto;
 import ch.dvbern.stip.generated.dto.GesuchsjahrUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @RequestScoped
@@ -31,12 +32,14 @@ public class GesuchsjahrService {
 				.toList();
 	}
 
+    @Transactional
 	public GesuchsjahrDto createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
 		Gesuchsjahr gesuchsjahr = gesuchsjahrMapper.toEntity(gesuchsjahrCreateDto);
 		gesuchsjahrRepository.persist(gesuchsjahr);
 		return gesuchsjahrMapper.toDto(gesuchsjahr);
 	}
 
+    @Transactional
 	public GesuchsjahrDto updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
 		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
 		if (gesuchsjahr.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
@@ -47,6 +50,7 @@ public class GesuchsjahrService {
 		return gesuchsjahrMapper.toDto(gesuchsjahr);
 	}
 
+    @Transactional
 	public GesuchsjahrDto publishGesuchsjahr(UUID gesuchsjahrId) {
 		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
 		gesuchsjahr.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
@@ -54,6 +58,7 @@ public class GesuchsjahrService {
     	return gesuchsjahrMapper.toDto(gesuchsjahr);
 	}
 
+    @Transactional
 	public void deleteGesuchsjahr(UUID gesuchsjahrId) {
 		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
 		gesuchsjahrRepository.delete(gesuchsjahr);
