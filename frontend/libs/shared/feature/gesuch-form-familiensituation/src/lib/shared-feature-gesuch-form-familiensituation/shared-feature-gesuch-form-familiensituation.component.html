@@ -1,4 +1,4 @@
-@if (view().loading) {
+@if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-family-loading"></dv-shared-ui-loading>
 } @else {
   <form [formGroup]="form" data-testid="form-family-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
@@ -49,24 +49,34 @@
             <mat-radio-group
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
-              class="d-flex flex-column"
+              class="col-12"
             >
               <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
-              <mat-radio-button data-testid="yes" [value]="true">{{
-                'shared.form.radio.yes' | translate
-              }}</mat-radio-button>
+              <div class="d-flex gap-2 flex-wrap justify-content-between">
+                <div class="d-flex flex-column">
+                  <mat-radio-button data-testid="yes" [value]="true">{{
+                    'shared.form.radio.yes' | translate
+                  }}</mat-radio-button>
 
-              <mat-radio-button data-testid="no" [value]="false">{{
-                'shared.form.radio.no' | translate
-              }}</mat-radio-button>
+                  <mat-radio-button data-testid="no" [value]="false">{{
+                    'shared.form.radio.no' | translate
+                  }}</mat-radio-button>
+                </div>
 
+                @if (trennungsvereinbarungDocumentSig(); as options) {
+                  <dv-shared-pattern-document-upload
+                    class="flex-shrink-1 mt-2"
+                    [optionsSig]="options"
+                  ></dv-shared-pattern-document-upload>
+                }
+              </div>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
             </mat-radio-group>
           </div>
           @if (form.controls.werZahltAlimente.enabled) {
-            <div class="row g-4 mt-3 col-xl-8">
+            <div class="row g-4 mt-3">
               <mat-form-field dvSharedUiFormField>
                 <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | translate }}</mat-label>
                 <mat-select formControlName="werZahltAlimente" data-testid="form-family-werZahltAlimente">
@@ -168,7 +178,7 @@
             </div>
           }
           @if (form.controls.mutterUnbekanntGrund.enabled) {
-            <div class="row g-4 mt-3">
+            <div class="row g-4 mt-3 flex-nowrap">
               <mat-radio-group
                 formControlName="mutterUnbekanntGrund"
                 data-testid="form-family-mutterUnbekanntGrund"
@@ -176,24 +186,32 @@
                 class="d-flex flex-column"
               >
                 <label>{{ 'shared.form.familiensituation.mutter-unbekannt-reason.label' | translate }}</label>
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort' | translate
-                  }}</mat-radio-button
-                >
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
-                      | translate
-                  }}</mat-radio-button
-                >
-
+                <div class="d-flex gap-2 flex-wrap justify-content-between">
+                  <div class="d-flex flex-column">
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                  </div>
+                  @if (mutterUnbekanntDocumentSig(); as options) {
+                    <dv-shared-pattern-document-upload
+                      class="flex-shrink-1 mt-2"
+                      [optionsSig]="options"
+                    ></dv-shared-pattern-document-upload>
+                  }
+                </div>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
@@ -251,26 +269,35 @@
                 formControlName="vaterUnbekanntGrund"
                 data-testid="form-family-vaterUnbekanntGrund"
                 dvSharedUiFormField
-                class="d-flex flex-column"
+                class="col-12"
               >
                 <label>{{ 'shared.form.familiensituation.vater-unbekannt-reason.label' | translate }}</label>
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort' | translate
-                  }}</mat-radio-button
-                >
-
-                <mat-radio-button
-                  [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                  >{{
-                    'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung'
-                      | translate
-                  }}</mat-radio-button
-                >
+                <div class="d-flex gap-2 flex-wrap justify-content-between">
+                  <div class="d-flex flex-column">
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                    <mat-radio-button
+                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                      >{{
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung'
+                          | translate
+                      }}</mat-radio-button
+                    >
+                  </div>
+                  @if (vaterUnbekanntDocumentSig(); as options) {
+                    <dv-shared-pattern-document-upload
+                      class="flex-shrink-1 mt-2"
+                      [optionsSig]="options"
+                    ></dv-shared-pattern-document-upload>
+                  }
+                </div>
 
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | translate }}
@@ -370,7 +397,7 @@
     </div>
     <!-- buttons -->
     <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
-      @if (!view().readonly) {
+      @if (!viewSig().readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>

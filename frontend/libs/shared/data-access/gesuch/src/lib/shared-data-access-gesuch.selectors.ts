@@ -1,6 +1,7 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
 
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
   Gesuchstatus,
   SharedModelGesuchFormular,
@@ -16,13 +17,16 @@ const { selectRouteParam } = getRouterSelectors();
 export const selectRouteId = selectRouteParam('id');
 
 export const selectSharedDataAccessGesuchsView = createSelector(
+  selectSharedDataAccessConfigsView,
   sharedDataAccessGesuchsFeature.selectGesuchsState,
-  (state) => {
+  (config, state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
       ...state,
       readonly: state.gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
       trancheId: state.gesuch?.gesuchTrancheToWorkWith.id,
+      gesuchId: state.gesuch?.id,
+      allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
       cachedGesuchFormular: currentForm,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,

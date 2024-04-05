@@ -21,20 +21,12 @@ public class FamiliensituationRequiredDocumentsProducer implements RequiredDocum
         }
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
-        if (Boolean.TRUE.equals(famsit.getGerichtlicheAlimentenregelung())) {
-            requiredDocs.add(DokumentTyp.FAMILIENSITUATION_ALIMENTENREGELUNG);
-        }
-
         if (famsit.getMutterUnbekanntGrund() == ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT) {
             requiredDocs.add(DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER);
         }
 
         if (famsit.getVaterUnbekanntGrund() == ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT) {
             requiredDocs.add(DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER);
-        }
-
-        if (famsit.getVaterUnbekanntGrund() == ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG) {
-            requiredDocs.add(DokumentTyp.FAMILIENSITUATION_VATERSCHAFTSANERKENNUNG);
         }
 
         return ImmutablePair.of("familiensituation", requiredDocs);
