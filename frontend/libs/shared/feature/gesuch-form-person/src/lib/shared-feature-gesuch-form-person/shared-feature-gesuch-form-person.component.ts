@@ -198,6 +198,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
+  vermoegensnachweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
+    return DokumentTyp.PERSON_VERMOEGENSNACHWEIS;
+  });
 
   form = this.formBuilder.group({
     sozialversicherungsnummer: ['', []],

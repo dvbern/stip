@@ -31,17 +31,4 @@ class PartnerRequiredDocumentsProducerTest {
             DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
         );
     }
-
-    @Test
-    void requiresIfJahreseinkommen() {
-        formular.setPartner(
-            new Partner()
-                .setJahreseinkommen(BigDecimal.ONE)
-        );
-
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
-            DokumentTyp.PARTNER_ERGAENZUNGSLEISTUNGEN
-        );
-    }
 }

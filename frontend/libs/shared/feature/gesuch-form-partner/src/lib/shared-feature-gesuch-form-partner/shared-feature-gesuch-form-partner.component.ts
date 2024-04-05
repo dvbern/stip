@@ -29,11 +29,16 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import {
+  DokumentTyp,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   PartnerUpdate,
 } from '@dv/shared/model/gesuch';
 import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -83,6 +88,7 @@ const MEDIUM_AGE_ADULT = 30;
     GesuchAppUiStepFormButtonsComponent,
     MatCheckboxModule,
     SharedUiLoadingComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-partner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,8 +106,8 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   readonly Land = Land;
 
   languageSig = this.store.selectSignal(selectLanguage);
-  view = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
-  laenderSig = computed(() => this.view().laender);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
+  laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
@@ -140,11 +146,35 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     this.form.controls.ausbildungMitEinkommenOderErwerbstaetig.valueChanges,
   );
 
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
+  jahreseinkommenSig = toSignal(
+    this.form.controls.jahreseinkommen.valueChanges,
+  );
+
+  fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
+
+  jahreseinkommenDocumentSig = this.createUploadOptionsSig(() => {
+    const jahreseinkommen = fromFormatedNumber(
+      this.jahreseinkommenSig() ?? '0',
+    );
+
+    return jahreseinkommen > 0
+      ? DokumentTyp.PARNTER_AUSBILUNG_LOHNABRECHNUNG
+      : null;
+  });
+
+  fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
+
+    return fahrkosten > 0 ? DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT : null;
+  });
+
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
-        const { gesuchFormular } = this.view();
+        const { gesuchFormular } = this.viewSig();
         const svValidators = [
           Validators.required,
           sharedUtilValidatorAhv('partner', gesuchFormular),
@@ -176,7 +206,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     );
     effect(
       () => {
-        const { gesuch, gesuchFormular } = this.view();
+        const { gesuch, gesuchFormular } = this.viewSig();
         if (
           gesuch &&
           gesuchFormular &&
@@ -198,7 +228,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       () => {
         const noAusbildungMitEinkommenOderErwerbstaetigkeit =
           !this.ausbildungMitEinkommenOderErwerbstaetigSig();
-        if (this.view().readonly) {
+        if (this.viewSig().readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
           );
@@ -248,7 +278,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormPartner.nextTriggered({
@@ -290,7 +320,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   }
 
   private buildUpdatedGesuchFromForm() {
-    const { gesuch, gesuchFormular } = this.view();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = this.form.getRawValue();
     const partner: PartnerUpdate = {
       ...gesuchFormular?.partner,

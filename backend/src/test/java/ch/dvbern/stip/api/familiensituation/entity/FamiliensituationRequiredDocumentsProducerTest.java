@@ -19,19 +19,6 @@ class FamiliensituationRequiredDocumentsProducerTest {
     }
 
     @Test
-    void requiresIfAlimentenregelung() {
-        formular.setFamiliensituation(
-            new Familiensituation()
-                .setGerichtlicheAlimentenregelung(true)
-        );
-
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
-            DokumentTyp.FAMILIENSITUATION_ALIMENTENREGELUNG
-        );
-    }
-
-    @Test
     void requiresIfElternteilUnbekannterAufenthaltsort() {
         formular.setFamiliensituation(
             new Familiensituation()
@@ -51,19 +38,6 @@ class FamiliensituationRequiredDocumentsProducerTest {
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
             DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
-        );
-    }
-
-    @Test
-    void requiresIfVaterschaftsanerkennung() {
-        formular.setFamiliensituation(
-            new Familiensituation()
-                .setVaterUnbekanntGrund(ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG)
-        );
-
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
-            DokumentTyp.FAMILIENSITUATION_VATERSCHAFTSANERKENNUNG
         );
     }
 }

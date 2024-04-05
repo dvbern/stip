@@ -22,7 +22,12 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchsView.projector(state);
+    const config = {
+      deploymentConfig: undefined,
+      loading: false,
+      error: undefined,
+    };
+    const result = selectSharedDataAccessGesuchsView.projector(config, state);
     expect(result.loading).toBeFalsy();
   });
 
@@ -41,6 +46,11 @@ describe('selectSharedDataAccessGesuchsView', () => {
   });
 
   it('should still have the cache if gesuchFormular is undefined', () => {
+    const config = {
+      deploymentConfig: undefined,
+      loading: false,
+      error: undefined,
+    };
     const firstUpdate: Gesuch = {
       gesuchTrancheToWorkWith: {
         gesuchFormular: { personInAusbildung: { vorname: 'Max' } },
@@ -52,7 +62,10 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
     const secondState = reducer(firstState, secondAction);
-    const result = selectSharedDataAccessGesuchsView.projector(secondState);
+    const result = selectSharedDataAccessGesuchsView.projector(
+      config,
+      secondState,
+    );
     expect(result.cachedGesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
@@ -71,6 +84,11 @@ describe('selectSharedDataAccessGesuchsView', () => {
   );
 
   it('should select correct invalidFormularProps', () => {
+    const config = {
+      deploymentConfig: undefined,
+      loading: false,
+      error: undefined,
+    };
     const state: State = {
       gesuch: null,
       gesuchs: [],
@@ -91,7 +109,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchsView.projector(state);
+    const result = selectSharedDataAccessGesuchsView.projector(config, state);
     expect(result.invalidFormularProps.validations).toEqual([
       'partner',
       'kinds',
