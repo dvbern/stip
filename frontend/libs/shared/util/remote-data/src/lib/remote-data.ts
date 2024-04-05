@@ -1,11 +1,13 @@
+import { tapResponse } from '@ngrx/operators';
+
 type Initial = {
   type: 'initial';
   data?: never;
   error?: never;
 };
 
-export const initial = () => ({
-  type: 'initial' as const,
+export const initial = (): Initial => ({
+  type: 'initial',
   data: undefined,
   error: undefined,
 });
@@ -19,11 +21,11 @@ export const isInitial = (
 type Failure = {
   type: 'failure';
   data?: never;
-  error: Error;
+  error: unknown;
 };
 
-export const failure = (error: Error) => ({
-  type: 'failure' as const,
+export const failure = (error: unknown): Failure => ({
+  type: 'failure',
   data: undefined,
   error,
 });
@@ -40,8 +42,8 @@ type Pending = {
   error?: never;
 };
 
-export const pending = () => ({
-  type: 'pending' as const,
+export const pending = (): Pending => ({
+  type: 'pending',
   data: undefined,
   error: undefined,
 });
@@ -58,8 +60,8 @@ type Success<T = unknown> = {
   error?: never;
 };
 
-export const success = <T>(data: T) => ({
-  type: 'success' as const,
+export const success = <T>(data: T): Success<T> => ({
+  type: 'success',
   data,
   error: undefined,
 });
@@ -71,3 +73,14 @@ export const isSuccess = <T>(
 };
 
 export type RemoteData<T> = Initial | Failure | Pending | Success<T>;
+
+export function handleApiResponse<T>(handler: (value: RemoteData<T>) => void) {
+  return tapResponse<T>({
+    next: (data) => {
+      handler(success(data));
+    },
+    error: (error) => {
+      handler(failure(error));
+    },
+  });
+}
