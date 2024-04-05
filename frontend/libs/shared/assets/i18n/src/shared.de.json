@@ -142,7 +142,7 @@
   "shared.form.person.file.SOZIALHILFE": "Sozialhilfebudget",
   "shared.form.person.file.ZIVILSTAND": "Trennungs- oder Unterhaltsbeleg",
   "shared.form.person.file.HEIMATORT": "Schweizer Pass oder Identitätskarte",
-  "shared.form.person.file.VERMOEGENSNACHWEIS": "Vermögensnachweis (Bank-/Postbelege mit Schlusssaldo per 31.12.) des Vorjahres",
+  "shared.form.person.file.VERMOEGENSNACHWEIS_VORJAHR": "Vermögensnachweis (Bank-/Postbelege mit Schlusssaldo per 31.12.) des Vorjahres",
   "shared.form.person.origin.label": "Heimatort",
   "shared.form.person.marital-status.label": "Zivilstand",
   "shared.form.person.marital-status.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
