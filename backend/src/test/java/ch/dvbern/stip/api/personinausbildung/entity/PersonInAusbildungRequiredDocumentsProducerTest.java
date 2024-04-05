@@ -81,10 +81,9 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         );
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
-        RequiredDocsUtil.assertCount(requiredDocs, 2);
+        RequiredDocsUtil.assertCount(requiredDocs, 1);
         RequiredDocsUtil.assertTypes(
             requiredDocs,
-            DokumentTyp.PERSON_VERMOEGENSNACHWEIS,
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B
         );
     }
