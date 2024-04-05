@@ -435,7 +435,7 @@
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
             </mat-form-field>
-            @if (vermoegensnachweisDocumentOptionsSig(); as options) {
+            @if (vermoegensnachweisVorjahrDocumentOptionsSig(); as options) {
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
