@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.is;
 class GesuchsperiodeResourceTest {
 
     private final GesuchsperiodeApiSpec api = GesuchsperiodeApiSpec.gesuchsperiode(RequestSpecUtil.quarkusSpec());
-    private GesuchsperiodeDtoSpec gesuchsperiode;
+    private GesuchsperiodeWithDatenDtoSpec gesuchsperiode;
 
     @Test
     @TestAsAdmin
@@ -68,7 +68,7 @@ class GesuchsperiodeResourceTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
-            .as(GesuchsperiodeDtoSpec.class);
+            .as(GesuchsperiodeWithDatenDtoSpec.class);
     }
 
     @Test
@@ -141,7 +141,7 @@ class GesuchsperiodeResourceTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
-            .as(GesuchsperiodeDtoSpec.class);
+            .as(GesuchsperiodeWithDatenDtoSpec.class);
 
         assertThat(updated.getBezeichnungDe(), is(updateBezeichnungDe));
         gesuchsperiode = updated;
