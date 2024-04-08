@@ -1,10 +1,11 @@
-@if (hasEntriesSig()) {
+@if (storeSig().hasEntriesSig()) {
   <ul class="d-flex flex-column mb-2 list-unstyled">
     @for (document of storeSig().documentsView(); track document.file.id) {
       <li class="mb-2">
         <dv-shared-pattern-document-upload-entry
           [loadingSig]="storeSig().isLoading()"
-          [documentSig]="document"
+          [uploadViewSig]="uploadViewSig()"
+          [documentViewSig]="document"
           (cancelUpload)="cancelUpload.emit($event)"
           (removeUpload)="removeUpload.emit($event)"
         ></dv-shared-pattern-document-upload-entry>

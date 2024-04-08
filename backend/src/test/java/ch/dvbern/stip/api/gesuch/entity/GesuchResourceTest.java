@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -108,6 +109,15 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
+    void uploadAllDocumentTypes() {
+        for (final var dokType : DokumentTypDtoSpec.values()) {
+            uploadDocumentWithType(dokType);
+        }
     }
 
     @Test
@@ -448,6 +458,11 @@ class GesuchResourceTest {
             .as(ValidationReportDto.class);
 
         assertThat(report.getValidationErrors(), is(empty()));
+    }
+
+    private void uploadDocumentWithType(final DokumentTypDtoSpec dokTyp) {
+        final var file = TestUtil.getTestPng();
+        TestUtil.uploadFile(gesuchApiSpec, gesuchId, dokTyp, file);
     }
 
     private Optional<GesuchDtoSpec> findGesuchWithId(GesuchDtoSpec[] gesuche, UUID gesuchId) {

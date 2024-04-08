@@ -1,10 +1,12 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
 
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
   Gesuchstatus,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -15,20 +17,43 @@ const { selectRouteParam } = getRouterSelectors();
 export const selectRouteId = selectRouteParam('id');
 
 export const selectSharedDataAccessGesuchsView = createSelector(
+  selectSharedDataAccessConfigsView,
+  sharedDataAccessGesuchsFeature.selectLastUpdate,
+  sharedDataAccessGesuchsFeature.selectLoading,
+  sharedDataAccessGesuchsFeature.selectGesuch,
+  sharedDataAccessGesuchsFeature.selectGesuchFormular,
+  (config, lastUpdate, loading, gesuch, gesuchFormular) => {
+    return {
+      lastUpdate,
+      loading,
+      gesuch,
+      gesuchFormular,
+      readonly: gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
+      trancheId: gesuch?.gesuchTrancheToWorkWith.id,
+      gesuchId: gesuch?.id,
+      allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
+    };
+  },
+);
+
+export const selectSharedDataAccessGesuchValidationView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   (state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
-      ...state,
-      readonly: state.gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
-      trancheId: state.gesuch?.gesuchTrancheToWorkWith.id,
       cachedGesuchFormular: currentForm,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
-        validations: (state.validations ?? [])
-          .map((v) => v.propertyPath)
-          .filter(isDefined)
-          .filter(isFormularProp(currentForm)),
+        validations: {
+          errors: transformValidationMessage(
+            state.validations?.errors,
+            currentForm,
+          ),
+          warnings: transformValidationMessage(
+            state.validations?.warnings,
+            currentForm,
+          ),
+        },
       },
     };
   },
@@ -43,3 +68,13 @@ export const isFormularProp =
     if (!gesuchFormular) return false;
     return Object.keys(gesuchFormular).includes(prop);
   };
+
+const transformValidationMessage = (
+  messages?: ValidationMessage[],
+  currentForm?: SharedModelGesuchFormular | null,
+) => {
+  return messages
+    ?.map((m) => m.propertyPath)
+    .filter(isDefined)
+    .filter(isFormularProp(currentForm ?? null));
+};

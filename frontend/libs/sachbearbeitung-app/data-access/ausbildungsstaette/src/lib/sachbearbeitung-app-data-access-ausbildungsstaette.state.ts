@@ -522,10 +522,10 @@ export const AdminAusbildungsstaetteStore = signalStore(
     loading: computed(() => response.type() === 'pending'),
   })),
   withHooks({
-    onInit(store) {
+    onInit() {
       console.log('init');
     },
-    onDestroy(store) {
+    onDestroy() {
       console.log('destroy');
     },
   }),

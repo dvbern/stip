@@ -418,58 +418,63 @@
         </div>
       }
 
-      <div class="row g-4 mt-1">
-        @if (!hiddenFieldsSetSig().has(form.controls.vermoegenVorjahr)) {
-          <!-- VERMOEGEN VORJAHR -->
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-            <mat-label>{{ 'shared.form.person.vermoegenVorjahr.label' | translate }}</mat-label>
-            <input
-              type="text"
-              matInput
-              [maskito]="maskitoNumber"
-              formControlName="vermoegenVorjahr"
-              data-testid="form-person-vermoegenVorjahr"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-        }
-      </div>
-      <div class="row g-4 mt-1">
-        <!-- Sozialhilfebeitraege -->
-        <div class="col-12 col-md-6 col-xl-4">
-          <label>{{ 'shared.form.person.social-security.label' | translate }}</label>
-          <mat-radio-group
-            class="d-flex flex-column"
-            formControlName="sozialhilfebeitraege"
-            data-testid="form-person-sozialhilfeBeitraege"
-            dvSharedUiFormField
-          >
-            <div class="d-flex gap-2">
-              <div class="d-flex flex-column">
-                <mat-radio-button data-testid="yes" [value]="true">{{
-                  'shared.form.radio.yes' | translate
-                }}</mat-radio-button>
-                <mat-radio-button data-testid="no" [value]="false">{{
-                  'shared.form.radio.no' | translate
-                }}</mat-radio-button>
-              </div>
-
+      @if (!hiddenFieldsSetSig().has(form.controls.vermoegenVorjahr)) {
+        <div class="row g-4 mt-1">
+          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+            <!-- VERMOEGEN VORJAHR -->
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.person.vermoegenVorjahr.label' | translate }}</mat-label>
+              <input
+                type="text"
+                matInput
+                [maskito]="maskitoNumber"
+                formControlName="vermoegenVorjahr"
+                data-testid="form-person-vermoegenVorjahr"
+              />
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
-
-              @if (sozialhilfebeitraegeDocumentOptionsSig(); as options) {
-                <dv-shared-pattern-document-upload
-                  class="ms-3 mt-2"
-                  [optionsSig]="options"
-                ></dv-shared-pattern-document-upload>
-              }
-            </div>
-          </mat-radio-group>
+            </mat-form-field>
+            @if (vermoegensnachweisVorjahrDocumentOptionsSig(); as options) {
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+            }
+          </div>
         </div>
+      }
+
+      <div class="row g-4 mt-1">
+        <!-- Sozialhilfebeitraege -->
+
+        <mat-radio-group
+          class="col-12"
+          formControlName="sozialhilfebeitraege"
+          data-testid="form-person-sozialhilfeBeitraege"
+          dvSharedUiFormField
+        >
+          <label>{{ 'shared.form.person.social-security.label' | translate }}</label>
+          <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
+            <div class="d-flex flex-column">
+              <mat-radio-button data-testid="yes" [value]="true">{{
+                'shared.form.radio.yes' | translate
+              }}</mat-radio-button>
+              <mat-radio-button data-testid="no" [value]="false">{{
+                'shared.form.radio.no' | translate
+              }}</mat-radio-button>
+            </div>
+
+            @if (sozialhilfebeitraegeDocumentOptionsSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1 ms-auto align-self-center"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-radio-group>
       </div>
+
       <div class="row g-4 mt-1">
         <div class="col-12 col-md-6 col-xl-4">
           <!-- KorrespondenzSprache -->

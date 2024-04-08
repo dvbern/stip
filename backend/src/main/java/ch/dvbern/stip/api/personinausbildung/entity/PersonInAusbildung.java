@@ -142,4 +142,12 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Sprache korrespondenzSprache;
+
+    public boolean isQuellenbesteuert() {
+        return nationalitaet != Land.CH &&
+            (
+                niederlassungsstatus == Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B ||
+                niederlassungsstatus == Niederlassungsstatus.FLUECHTLING
+            );
+    }
 }

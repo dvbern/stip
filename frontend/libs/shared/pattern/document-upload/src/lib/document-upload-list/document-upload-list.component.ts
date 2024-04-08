@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedPatternDocumentUploadEntryComponent } from './document-upload-entry.component';
+import { UploadView } from '../upload.model';
 import { UploadStore } from '../upload.store';
 
 @Component({
@@ -23,8 +24,8 @@ import { UploadStore } from '../upload.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternDocumentUploadListComponent {
+  uploadViewSig = input.required<UploadView>();
   storeSig = input.required<UploadStore>();
-  hasEntriesSig = input.required<boolean>();
 
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();
   @Output() removeUpload = new EventEmitter<{ dokumentId: string }>();
