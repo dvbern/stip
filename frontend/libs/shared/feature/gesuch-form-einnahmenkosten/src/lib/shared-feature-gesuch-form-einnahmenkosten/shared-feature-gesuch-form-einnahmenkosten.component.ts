@@ -338,9 +338,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'wgWohnend',
       'verdienstRealisiert',
       'auswaertigeMittagessenProWoche',
-      ...(hatKinder
-        ? ['zulagen' as const, 'betreuungskostenKinder' as const]
-        : []),
+      ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
     ]);
     return {
       gesuchId: gesuch?.id,
