@@ -26,6 +26,6 @@ public class MutterRequiredDocumentsProducer implements RequiredDocumentProducer
         final var mutter = eltern.stream()
             .filter(x -> x.getElternTyp() == ElternTyp.MUTTER)
             .findFirst().orElse(null);
-        return ImmutablePair.of("eltern", producer.getForElternteil(mutter));
+        return ImmutablePair.of("elterns", producer.getForElternteil(mutter));
     }
 }

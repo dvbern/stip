@@ -175,6 +175,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     ],
   });
 
+  svnIsRequiredSig = signal(false);
+
   ergaenzungsleistungAusbezahltSig = toSignal(
     this.form.controls.ergaenzungsleistungAusbezahlt.valueChanges,
   );
@@ -186,6 +188,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   ausweisbFluechtlingSig = toSignal(
     this.form.controls.ausweisbFluechtling.valueChanges,
   );
+
+  wohnkostenChangedSig = toSignal(this.form.controls.wohnkosten.valueChanges);
 
   lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
     const elternTyp = this.elternteil.elternTyp;
@@ -239,7 +243,20 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     return sozialhilfe ? DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER : null;
   });
 
-  svnIsRequiredSig = signal(false);
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const wohnkosten = fromFormatedNumber(this.wohnkostenChangedSig()) ?? 0;
+
+    if (elternTyp === ElternTyp.MUTTER) {
+      return wohnkosten > 0
+        ? DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+        : null;
+    }
+
+    return wohnkosten > 0
+      ? DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+      : null;
+  });
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
