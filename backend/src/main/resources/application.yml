@@ -110,7 +110,7 @@ quarkus:
     url: "http://dummy.keycloak"
   kstip:
     allowed:
-      mimetypes: "text/plain"
+      mimetypes: "text/plain,image/png"
 '%prod':
   quarkus:
     s3:

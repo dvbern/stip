@@ -27,3 +27,8 @@ export interface DocumentState {
   documents: DocumentUpload[];
   errorKey?: string;
 }
+
+export interface UploadView {
+  gesuchId: string;
+  type: DokumentTyp;
+}

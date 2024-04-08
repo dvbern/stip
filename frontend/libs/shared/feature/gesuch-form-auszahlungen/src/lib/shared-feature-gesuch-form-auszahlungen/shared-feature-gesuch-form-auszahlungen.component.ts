@@ -31,6 +31,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
 import {
+  DokumentTyp,
   ElternUpdate,
   Kontoinhaber,
   MASK_IBAN,
@@ -38,6 +39,10 @@ import {
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNGEN } from '@dv/shared/model/gesuch-form';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -73,6 +78,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     NgbAlert,
     GesuchAppUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-auszahlungen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,11 +110,36 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   });
 
   laenderSig = computed(() => {
-    return this.view().laender;
+    return this.viewSig().laender;
   });
+
   languageSig = this.store.selectSignal(selectLanguage);
 
-  view = this.store.selectSignal(selectSharedFeatureGesuchFormAuszahlungenView);
+  viewSig = this.store.selectSignal(
+    selectSharedFeatureGesuchFormAuszahlungenView,
+  );
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
+  kontoinhaberChangesSig = toSignal(
+    this.form.controls.kontoinhaber.valueChanges,
+  );
+
+  abtretungserklaerungDocumentSig = this.createUploadOptionsSig(() => {
+    const kontoinhaberChanged = this.kontoinhaberChangesSig();
+    const { gesuchFormular } = this.viewSig();
+    const kontoinhaber =
+      kontoinhaberChanged ?? gesuchFormular?.auszahlung?.kontoinhaber;
+
+    if (
+      kontoinhaber === Kontoinhaber.SOZIALDIENST_INSTITUTION ||
+      kontoinhaber === Kontoinhaber.ANDERE
+    ) {
+      return DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG;
+    }
+
+    return null;
+  });
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -121,7 +152,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
     effect(
       () => {
-        const { gesuchFormular } = this.view();
+        const { gesuchFormular } = this.viewSig();
         if (isDefined(gesuchFormular)) {
           const initalValue = gesuchFormular.auszahlung;
           this.form.patchValue(
@@ -148,7 +179,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         if (kontoinhaberin === undefined) {
           return;
         }
-        const { gesuchFormular } = this.view();
+        const { gesuchFormular } = this.viewSig();
         this.form.reset({
           kontoinhaber: kontoinhaberin,
         });
@@ -159,7 +190,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
 
     effect(
       () => {
-        const { readonly } = this.view();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
@@ -194,7 +225,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   }
 
   handleContinue() {
-    const { gesuch } = this.view();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id && gesuch?.gesuchTrancheToWorkWith.id) {
       this.store.dispatch(
         SharedEventGesuchFormAuszahlung.nextTriggered({
@@ -276,7 +307,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   }
 
   private buildUpdatedGesuchFromForm() {
-    const { gesuch, gesuchFormular } = this.view();
+    const { gesuch, gesuchFormular } = this.viewSig();
     const auszahlung = gesuchFormular?.auszahlung;
     const formularData = convertTempFormToRealValues(this.form, [
       'iban',

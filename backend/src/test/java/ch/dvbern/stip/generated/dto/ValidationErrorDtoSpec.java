@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * ValidationErrorDtoSpec
  */
 @JsonPropertyOrder({
   ValidationErrorDtoSpec.JSON_PROPERTY_PROPERTY_PATH,

@@ -114,6 +114,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   });
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormEducationView);
+
   ausbildungsLandSig = toSignal(
     this.form.controls.ausbildungsland.valueChanges,
   );

@@ -370,7 +370,7 @@ paths:
                 '200':
                     content:
                         application/json:
-                            schema:
+                            schema: 
                                 $ref: '#/components/schemas/Ausbildungsstaette'
                     description: Ausbildungsstaette updated
                 '400':
@@ -1002,7 +1002,36 @@ components:
                 - PERSON_SOZIALHILFEBUDGET
                 - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
                 - PERSON_AUSWEIS
-                - PERSON_VERMOEGENSNACHWEIS
+                - FAMILIENSITUATION_GEBURTSSCHEIN
+                - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
+                - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
+                - FAMILIENSITUATION_TRENNUNGSKONVENTION
+                - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
+                - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+                - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+                - ELTERN_SOZIALHILFEBUDGET_VATER
+                - ELTERN_STEUERUNTERLAGEN_VATER
+                - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
+                - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+                - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+                - ELTERN_SOZIALHILFEBUDGET_MUTTER
+                - ELTERN_STEUERUNTERLAGEN_MUTTER
+                - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+                - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+                - PARNTER_AUSBILUNG_LOHNABRECHNUNG
+                - PARTNER_BELEG_OV_ABONNEMENT
+                - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
+                - EK_BELEG_ALIMENTE
+                - EK_BELEG_KINDERZULAGEN
+                - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+                - EK_BELEG_BEZAHLTE_RENTEN
+                - EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+                - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+                - EK_BELEG_OV_ABONNEMENT
+                - EK_MIETVERTRAG
+                - EK_BELEG_BETREUUNGSKOSTEN_KINDER
+                - EK_LOHNABRECHNUNG
+                - EK_VERDIENST
                 - AUSBILDUNG_DOK
                 - ELTERN_DOK
                 - PARTNER_DOK
@@ -1102,7 +1131,7 @@ components:
             required:
                 - id
                 - filename
-                - filepfad
+                - filepath
                 - filesize
                 - objectId
             type: object
@@ -1111,7 +1140,7 @@ components:
                     $ref: '#/components/schemas/UUID'
                 filename:
                     type: string
-                filepfad:
+                filepath:
                     type: string
                 filesize:
                     type: string
@@ -1909,7 +1938,12 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/ValidationError'
-        ValidationError:
+                validationWarnings:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ValidationWarning'
+        ValidationMessage:
             description: ''
             required:
                 - message
@@ -1925,6 +1959,12 @@ components:
                 message:
                     description: ''
                     type: string
+        ValidationWarning:
+            allOf:
+                - $ref: '#/components/schemas/ValidationMessage'
+        ValidationError:
+            allOf:
+                - $ref: '#/components/schemas/ValidationMessage'
         TenantInfo:
             title: Root Type for TenantInfo
             description: Client Application Info about a `Tenant`

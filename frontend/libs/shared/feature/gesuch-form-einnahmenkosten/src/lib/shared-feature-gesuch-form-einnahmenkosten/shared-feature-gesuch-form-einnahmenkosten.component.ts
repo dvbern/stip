@@ -9,6 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -25,12 +26,17 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
+import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
   EINNAHMEN_KOSTEN,
   FAMILIENSITUATION,
   PERSON,
 } from '@dv/shared/model/gesuch-form';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -70,6 +76,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiFormMessageErrorDirective,
     GesuchAppUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -115,6 +122,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   maskitoNumber = maskitoNumber;
   maskitoPositiveNumber = maskitoPositiveNumber;
   hiddenFieldsSetSig = signal(new Set());
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   formStateSig = computed(() => {
     const { gesuchFormular, ausbildungsstaettes } = this.viewSig();
@@ -174,6 +183,106 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     } as const;
   });
 
+  nettoerwerbseinkommenSig = toSignal(
+    this.form.controls.nettoerwerbseinkommen.valueChanges,
+  );
+
+  nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
+    const nettoerwerbseinkommen = fromFormatedNumber(
+      this.nettoerwerbseinkommenSig() ?? '0',
+    );
+
+    return nettoerwerbseinkommen > 0 ? DokumentTyp.EK_LOHNABRECHNUNG : null;
+  });
+
+  alimenteSig = toSignal(this.form.controls.alimente.valueChanges);
+
+  alimenteDocumentSig = this.createUploadOptionsSig(() => {
+    const alimente = fromFormatedNumber(this.alimenteSig() ?? '0');
+
+    return alimente > 0 ? DokumentTyp.EK_BELEG_ALIMENTE : null;
+  });
+
+  zulagenSig = toSignal(this.form.controls.zulagen.valueChanges);
+
+  zulagenDocumentSig = this.createUploadOptionsSig(() => {
+    const zulagen = fromFormatedNumber(this.zulagenSig() ?? '0');
+
+    return zulagen > 0 ? DokumentTyp.EK_BELEG_KINDERZULAGEN : null;
+  });
+
+  rentenSig = toSignal(this.form.controls.renten.valueChanges);
+
+  rentenDocumentSig = this.createUploadOptionsSig(() => {
+    const renten = fromFormatedNumber(this.rentenSig() ?? '0');
+
+    return renten > 0 ? DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN : null;
+  });
+
+  eoLeistungenSig = toSignal(this.form.controls.eoLeistungen.valueChanges);
+
+  eoLeistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const eoLeistungen = fromFormatedNumber(this.eoLeistungenSig() ?? '0');
+
+    return eoLeistungen > 0
+      ? DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+      : null;
+  });
+
+  ergaenzungsleistungenSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const ergaenzungsleistungen = fromFormatedNumber(
+      this.ergaenzungsleistungenSig() ?? '0',
+    );
+
+    return ergaenzungsleistungen > 0
+      ? DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+      : null;
+  });
+
+  beitraegeSig = toSignal(this.form.controls.beitraege.valueChanges);
+
+  beitraegeDocumentSig = this.createUploadOptionsSig(() => {
+    const beitraege = fromFormatedNumber(this.beitraegeSig() ?? '0');
+
+    return beitraege > 0
+      ? DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+      : null;
+  });
+
+  fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
+
+  fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
+
+    return fahrkosten > 0 ? DokumentTyp.EK_BELEG_OV_ABONNEMENT : null;
+  });
+
+  wohnkostenSig = toSignal(this.form.controls.wohnkosten.valueChanges);
+
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const wohnkosten = fromFormatedNumber(this.wohnkostenSig() ?? '0');
+
+    return wohnkosten > 0 ? DokumentTyp.EK_MIETVERTRAG : null;
+  });
+
+  verdienstRealisiertSig = toSignal(
+    this.form.controls.verdienstRealisiert.valueChanges,
+  );
+
+  verdienstRealisiertDocumentSig = this.createUploadOptionsSig(() => {
+    const verdienstRealisiert = this.verdienstRealisiertSig();
+
+    return verdienstRealisiert ? DokumentTyp.EK_VERDIENST : null;
+  });
+
+  kostenEigeneKinderDocumentSig = this.createUploadOptionsSig(() => {
+    return DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER;
+  });
+
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
@@ -186,6 +295,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           // willTertiaerstufe,
           istErwachsen,
         } = this.formStateSig();
+
         const {
           wohnsitzNotEigenerHaushalt,
           existiertGerichtlicheAlimentenregelung,

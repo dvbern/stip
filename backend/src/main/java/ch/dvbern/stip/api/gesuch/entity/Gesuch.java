@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -69,6 +70,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Size(min = 1)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private @Valid List<GesuchDokument> gesuchDokuments;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

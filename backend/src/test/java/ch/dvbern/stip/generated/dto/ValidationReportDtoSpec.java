@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.ValidationErrorDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationWarningDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,13 +32,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * 
  */
 @JsonPropertyOrder({
-  ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS
+  ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS,
+  ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_WARNINGS
 })
 @JsonTypeName("ValidationReport")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class ValidationReportDtoSpec {
   public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
   private List<ValidationErrorDtoSpec> validationErrors;
+
+  public static final String JSON_PROPERTY_VALIDATION_WARNINGS = "validationWarnings";
+  private List<ValidationWarningDtoSpec> validationWarnings;
 
   public ValidationReportDtoSpec() {
   }
@@ -75,6 +80,40 @@ public class ValidationReportDtoSpec {
     this.validationErrors = validationErrors;
   }
 
+
+  public ValidationReportDtoSpec validationWarnings(List<ValidationWarningDtoSpec> validationWarnings) {
+    
+    this.validationWarnings = validationWarnings;
+    return this;
+  }
+
+  public ValidationReportDtoSpec addValidationWarningsItem(ValidationWarningDtoSpec validationWarningsItem) {
+    if (this.validationWarnings == null) {
+      this.validationWarnings = new ArrayList<>();
+    }
+    this.validationWarnings.add(validationWarningsItem);
+    return this;
+  }
+
+   /**
+   * 
+   * @return validationWarnings
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<ValidationWarningDtoSpec> getValidationWarnings() {
+    return validationWarnings;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValidationWarnings(List<ValidationWarningDtoSpec> validationWarnings) {
+    this.validationWarnings = validationWarnings;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -84,12 +123,13 @@ public class ValidationReportDtoSpec {
       return false;
     }
     ValidationReportDtoSpec validationReport = (ValidationReportDtoSpec) o;
-    return Objects.equals(this.validationErrors, validationReport.validationErrors);
+    return Objects.equals(this.validationErrors, validationReport.validationErrors) &&
+        Objects.equals(this.validationWarnings, validationReport.validationWarnings);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validationErrors);
+    return Objects.hash(validationErrors, validationWarnings);
   }
 
   @Override
@@ -97,6 +137,7 @@ public class ValidationReportDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class ValidationReportDtoSpec {\n");
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
+    sb.append("    validationWarnings: ").append(toIndentedString(validationWarnings)).append("\n");
     sb.append("}");
     return sb.toString();
   }

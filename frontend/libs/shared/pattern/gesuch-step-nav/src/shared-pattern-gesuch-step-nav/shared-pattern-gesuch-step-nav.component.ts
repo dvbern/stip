@@ -11,7 +11,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
@@ -33,12 +33,12 @@ export class SharedPatternGesuchStepNavComponent {
   @Output() navClicked = new EventEmitter();
   private store = inject(Store);
 
-  stepsSig = input<
-    (SharedModelGesuchFormStep & {
-      valid?: boolean;
-      disabled: boolean;
-    })[]
-  >();
+  statusIconMap: Record<StepState, string> = {
+    VALID: 'check_circle',
+    INVALID: 'error',
+    WARNING: 'error',
+  };
+  stepsSig = input<GesuchFormStepView[]>();
   stepsViewSig = computed(
     () =>
       this.stepsSig()?.map((step) => ({

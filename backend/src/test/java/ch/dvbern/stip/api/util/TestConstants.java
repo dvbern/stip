@@ -20,6 +20,7 @@ public final class TestConstants {
 
     public static final String TEST_FILE_LOCATION = "./src/test/resources/testUpload.txt";
     public static final String TEST_XML_FILE_LOCATION = "./src/test/resources/testUpload.xml";
+    public static final String TEST_PNG_FILE_LOCATION = "./src/test/resources/testUpload.png";
 
     public static final String AHV_NUMMER_VALID = "756.9217.0769.85";
     public static final String AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG = "756.1111.1113.11";

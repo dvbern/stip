@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DokumentDtoSpec.JSON_PROPERTY_ID,
   DokumentDtoSpec.JSON_PROPERTY_FILENAME,
-  DokumentDtoSpec.JSON_PROPERTY_FILEPFAD,
+  DokumentDtoSpec.JSON_PROPERTY_FILEPATH,
   DokumentDtoSpec.JSON_PROPERTY_FILESIZE,
   DokumentDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   DokumentDtoSpec.JSON_PROPERTY_OBJECT_ID
@@ -44,8 +44,8 @@ public class DokumentDtoSpec {
   public static final String JSON_PROPERTY_FILENAME = "filename";
   private String filename;
 
-  public static final String JSON_PROPERTY_FILEPFAD = "filepfad";
-  private String filepfad;
+  public static final String JSON_PROPERTY_FILEPATH = "filepath";
+  private String filepath;
 
   public static final String JSON_PROPERTY_FILESIZE = "filesize";
   private String filesize;
@@ -111,29 +111,29 @@ public class DokumentDtoSpec {
   }
 
 
-  public DokumentDtoSpec filepfad(String filepfad) {
+  public DokumentDtoSpec filepath(String filepath) {
     
-    this.filepfad = filepfad;
+    this.filepath = filepath;
     return this;
   }
 
    /**
-   * Get filepfad
-   * @return filepfad
+   * Get filepath
+   * @return filepath
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILEPFAD)
+  @JsonProperty(JSON_PROPERTY_FILEPATH)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getFilepfad() {
-    return filepfad;
+  public String getFilepath() {
+    return filepath;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILEPFAD)
+  @JsonProperty(JSON_PROPERTY_FILEPATH)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilepfad(String filepfad) {
-    this.filepfad = filepfad;
+  public void setFilepath(String filepath) {
+    this.filepath = filepath;
   }
 
 
@@ -225,7 +225,7 @@ public class DokumentDtoSpec {
     DokumentDtoSpec dokument = (DokumentDtoSpec) o;
     return Objects.equals(this.id, dokument.id) &&
         Objects.equals(this.filename, dokument.filename) &&
-        Objects.equals(this.filepfad, dokument.filepfad) &&
+        Objects.equals(this.filepath, dokument.filepath) &&
         Objects.equals(this.filesize, dokument.filesize) &&
         Objects.equals(this.timestampErstellt, dokument.timestampErstellt) &&
         Objects.equals(this.objectId, dokument.objectId);
@@ -233,7 +233,7 @@ public class DokumentDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, filename, filepfad, filesize, timestampErstellt, objectId);
+    return Objects.hash(id, filename, filepath, filesize, timestampErstellt, objectId);
   }
 
   @Override
@@ -242,7 +242,7 @@ public class DokumentDtoSpec {
     sb.append("class DokumentDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
-    sb.append("    filepfad: ").append(toIndentedString(filepfad)).append("\n");
+    sb.append("    filepath: ").append(toIndentedString(filepath)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
