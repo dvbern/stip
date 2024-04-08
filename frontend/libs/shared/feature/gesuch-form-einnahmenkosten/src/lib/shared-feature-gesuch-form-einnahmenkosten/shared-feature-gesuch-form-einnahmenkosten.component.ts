@@ -279,8 +279,18 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     return verdienstRealisiert ? DokumentTyp.EK_VERDIENST : null;
   });
 
-  kostenEigeneKinderDocumentSig = this.createUploadOptionsSig(() => {
-    return DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER;
+  betreuungskostenKinderSig = toSignal(
+    this.form.controls.betreuungskostenKinder.valueChanges,
+  );
+
+  betreuungskostenKinderDocumentSig = this.createUploadOptionsSig(() => {
+    const betreuungskostenKinder = fromFormatedNumber(
+      this.betreuungskostenKinderSig() ?? '0',
+    );
+
+    return betreuungskostenKinder > 0
+      ? DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER
+      : null;
   });
 
   constructor() {
