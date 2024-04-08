@@ -37,6 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ElternDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT,
   ElternDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z,
   ElternDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
+  ElternDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   ElternDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
   ElternDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   ElternDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE_AUSBEZAHLT,
@@ -67,6 +68,9 @@ public class ElternDtoSpec {
 
   public static final String JSON_PROPERTY_TELEFONNUMMER = "telefonnummer";
   private String telefonnummer;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
+  private Integer wohnkosten;
 
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
   private String sozialversicherungsnummer;
@@ -251,6 +255,32 @@ public class ElternDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTelefonnummer(String telefonnummer) {
     this.telefonnummer = telefonnummer;
+  }
+
+
+  public ElternDtoSpec wohnkosten(Integer wohnkosten) {
+    
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+   /**
+   * Get wohnkosten
+   * @return wohnkosten
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
   }
 
 
@@ -502,6 +532,7 @@ public class ElternDtoSpec {
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, eltern.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, eltern.identischerZivilrechtlicherWohnsitzPLZ) &&
         Objects.equals(this.telefonnummer, eltern.telefonnummer) &&
+        Objects.equals(this.wohnkosten, eltern.wohnkosten) &&
         Objects.equals(this.sozialversicherungsnummer, eltern.sozialversicherungsnummer) &&
         Objects.equals(this.geburtsdatum, eltern.geburtsdatum) &&
         Objects.equals(this.sozialhilfebeitraegeAusbezahlt, eltern.sozialhilfebeitraegeAusbezahlt) &&
@@ -515,7 +546,7 @@ public class ElternDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, sozialversicherungsnummer, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, id, elternTyp, nachname, copyOfId);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, wohnkosten, sozialversicherungsnummer, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, id, elternTyp, nachname, copyOfId);
   }
 
   @Override
@@ -528,6 +559,7 @@ public class ElternDtoSpec {
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    sozialhilfebeitraegeAusbezahlt: ").append(toIndentedString(sozialhilfebeitraegeAusbezahlt)).append("\n");

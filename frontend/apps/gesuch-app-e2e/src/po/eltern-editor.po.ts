@@ -22,6 +22,7 @@ export class ElternEditorPO {
     identischerZivilrechtlicherWohnsitzOrt: Locator;
     geburtsdatum: Locator;
     telefonnummer: Locator;
+    wohnkosten: Locator;
     ausweisbFluechtlingRadio: Locator;
     ergaenzungsleistungAusbezahltRadio: Locator;
     sozialhilfebeitraegeAusbezahltRadio: Locator;
@@ -52,6 +53,7 @@ export class ElternEditorPO {
       ),
       geburtsdatum: page.getByTestId('form-eltern-geburtsdatum'),
       telefonnummer: page.getByTestId('form-eltern-telefonnummer'),
+      wohnkosten: page.getByTestId('form-eltern-wohnkosten'),
       ausweisbFluechtlingRadio: page.getByTestId(
         'form-eltern-ausweisFluechtling',
       ),
@@ -70,7 +72,7 @@ export class ElternEditorPO {
 
   async fillElternTeilH(item: Eltern) {
     await this.elems.sozialversicherungsnummer.fill(
-      item.sozialversicherungsnummer,
+      item.sozialversicherungsnummer ?? '',
     );
     await this.elems.nachname.fill(item.nachname);
     await this.elems.vorname.fill(item.vorname);
@@ -79,6 +81,7 @@ export class ElternEditorPO {
 
     await this.elems.geburtsdatum.fill(item.geburtsdatum);
     await this.elems.telefonnummer.fill(item.telefonnummer);
+    await this.elems.wohnkosten.fill(item.wohnkosten.toString());
 
     await selectMatRadio(
       this.elems.ausweisbFluechtlingRadio,

@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.geschwister.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -20,7 +21,14 @@ public class GeschwisterRequiredDocumentsProducer implements RequiredDocumentPro
         }
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
-        // TODO KSTIP-856: implement this as well
+
+        if (formular.getGeschwisters()
+            .stream()
+            .anyMatch(x -> x.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG)
+        ) {
+            requiredDocs.add(DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
+        }
+
         return ImmutablePair.of("geschwister", requiredDocs);
     }
 }

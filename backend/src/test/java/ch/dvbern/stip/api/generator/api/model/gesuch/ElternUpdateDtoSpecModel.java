@@ -25,6 +25,7 @@ public class ElternUpdateDtoSpecModel {
             model.setSozialhilfebeitraegeAusbezahlt(faker.bool().bool());
             model.setAusweisbFluechtling(faker.bool().bool());
             model.setErgaenzungsleistungAusbezahlt(faker.bool().bool());
+            model.setWohnkosten(100);
         }, amount);
     }
 

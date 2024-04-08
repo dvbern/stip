@@ -58,6 +58,10 @@ public class Eltern extends AbstractPerson {
 
     @NotNull
     @Column(nullable = false)
+    private Integer wohnkosten;
+
+    @NotNull
+    @Column(nullable = false)
     private Boolean sozialhilfebeitraegeAusbezahlt;
 
     @NotNull

@@ -121,6 +121,7 @@
   "shared.form.shared.address.city.label": "Ort",
   "shared.form.shared.address.country.label": "Land",
   "shared.form.shared.phone.label": "Telefonnummer",
+  "shared.form.shared.wohnkosten.label": "Wohnkosten",
   "shared.form.shared.birthday.label": "Geburtsdatum",
   "shared.form.shared.identical-civil-residence.label": "Identischer zivilrechtlicher Wohnsitz",
   "shared.form.shared.alternative-civil-residence.title": "Zivilrechtlicher Wohnsitz:",
