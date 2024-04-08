@@ -33,11 +33,6 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
-// TODO: Refactor once services and landing page exist
-// -----
-
-// -----
-
 @Component({
   selector: 'dv-gesuch-app-feature-cockpit',
   standalone: true,

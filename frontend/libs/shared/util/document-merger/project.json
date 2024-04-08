@@ -1,0 +1,17 @@
+{
+  "name": "shared-util-document-merger",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/util/document-merger/src",
+  "prefix": "dv",
+  "tags": ["type:util", "scope:shared"],
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/shared/util/document-merger/jest.config.ts"
+      }
+    }
+  }
+}
