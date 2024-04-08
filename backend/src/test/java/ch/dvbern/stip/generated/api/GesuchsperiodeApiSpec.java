@@ -103,7 +103,7 @@ public class GesuchsperiodeApiSpec {
      * 
      *
      * @see #body  (required)
-     * return List&lt;GesuchsperiodeDtoSpec&gt;
+     * return List&lt;GesuchsperiodeWithDatenDtoSpec&gt;
      */
     public static class CreateGesuchsperiodeOper implements Oper {
 
@@ -134,10 +134,10 @@ public class GesuchsperiodeApiSpec {
         /**
          * POST /gesuchsperiode
          * @param handler handler
-         * @return List&lt;GesuchsperiodeDtoSpec&gt;
+         * @return List&lt;GesuchsperiodeWithDatenDtoSpec&gt;
          */
-        public List<GesuchsperiodeDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchsperiodeDtoSpec>> type = new TypeRef<List<GesuchsperiodeDtoSpec>>(){};
+        public List<GesuchsperiodeWithDatenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchsperiodeWithDatenDtoSpec>> type = new TypeRef<List<GesuchsperiodeWithDatenDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
@@ -371,7 +371,7 @@ public class GesuchsperiodeApiSpec {
      *
      * @see #gesuchsperiodeIdPath  (required)
      * @see #body  (optional)
-     * return GesuchsperiodeDtoSpec
+     * return GesuchsperiodeWithDatenDtoSpec
      */
     public static class UpdateGesuchsperiodeOper implements Oper {
 
@@ -402,10 +402,10 @@ public class GesuchsperiodeApiSpec {
         /**
          * PATCH /gesuchsperiode/{gesuchsperiodeId}
          * @param handler handler
-         * @return GesuchsperiodeDtoSpec
+         * @return GesuchsperiodeWithDatenDtoSpec
          */
-        public GesuchsperiodeDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchsperiodeDtoSpec> type = new TypeRef<GesuchsperiodeDtoSpec>(){};
+        public GesuchsperiodeWithDatenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchsperiodeWithDatenDtoSpec> type = new TypeRef<GesuchsperiodeWithDatenDtoSpec>(){};
             return execute(handler).as(type);
         }
 

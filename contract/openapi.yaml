@@ -344,7 +344,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/Gesuchsperiode'
+                                    $ref: '#/components/schemas/GesuchsperiodeWithDaten'
                     description: Gesuchsperiode created
                 '401':
                     $ref: '#/components/responses/Unauthorized'
@@ -416,7 +416,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Gesuchsperiode'
+                                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
                     description: Returned updated Gesuchsjahr
                 401:
                     $ref: '#/components/responses/Unauthorized'

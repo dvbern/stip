@@ -23,21 +23,21 @@ public class GesuchsperiodenService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @Transactional
-    public GesuchsperiodeDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
+    public GesuchsperiodeWithDatenDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
         final var newEntity = gesuchsperiodeMapper.toEntity(createDto);
         gesuchsperiodeRepository.persistAndFlush(newEntity);
-        return gesuchsperiodeMapper.toDto(newEntity);
+        return gesuchsperiodeMapper.toDatenDto(newEntity);
     }
 
     @Transactional
-    public GesuchsperiodeDto updateGesuchsperiode(
+    public GesuchsperiodeWithDatenDto updateGesuchsperiode(
         final UUID gesuchsperiodeId,
         final GesuchsperiodeUpdateDto updateDto
     ) {
         final var gesuchsperiode = gesuchsperiodeRepository.requireById(gesuchsperiodeId);
         preventUpdateIfReadonly(gesuchsperiode);
         gesuchsperiodeMapper.partialUpdate(updateDto, gesuchsperiode);
-        return gesuchsperiodeMapper.toDto(gesuchsperiode);
+        return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
     }
 
     public Collection<GesuchsperiodeDto> getAllGesuchsperioden() {
