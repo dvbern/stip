@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -86,7 +87,6 @@ public class GesuchService {
 
     private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
-
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
@@ -116,7 +116,8 @@ public class GesuchService {
 
         var tranche = new GesuchTranche()
             .setGueltigkeit(new DateRange(periode.getGueltigAb(), periode.getGueltigBis()))
-            .setGesuch(gesuch);
+            .setGesuch(gesuch)
+            .setGesuchFormular(new GesuchFormular());
 
         gesuch.getGesuchTranchen().add(tranche);
     }
@@ -180,6 +181,8 @@ public class GesuchService {
 
     public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        validationGroups.add(DocumentsRequiredValidationGroup.class);
+
         final var violations = new HashSet<>(
             validator.validate(
                 gesuchFormular,
@@ -188,7 +191,7 @@ public class GesuchService {
         );
         violations.addAll(validator.validate(gesuchFormular));
 
-        return ValidationsExceptionMapper.constraintViolationstoDto(violations);
+        return ValidationsExceptionMapper.toDto(violations);
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {

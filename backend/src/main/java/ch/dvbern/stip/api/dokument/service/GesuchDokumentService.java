@@ -44,7 +44,7 @@ public class GesuchDokumentService {
         dokument.setFilename(fileUpload.fileName());
         dokument.setObjectId(objectId);
         dokument.setFilesize(String.valueOf(fileUpload.size()));
-        dokument.setFilepfad(GESUCH_DOKUMENT_PATH);
+        dokument.setFilepath(GESUCH_DOKUMENT_PATH);
         dokumentRepository.persist(dokument);
 
         return dokumentMapper.toDto(dokument);
@@ -98,5 +98,6 @@ public class GesuchDokumentService {
     public void deleteDokument(UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         dokumentRepository.delete(dokument);
+        gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(dokument.getGesuchDokument().getId());
     }
 }

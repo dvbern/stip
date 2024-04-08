@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -39,6 +40,11 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @TestAsGesuchsteller
     void gesuchEinreichtenWithUniqueSvNummerAccepted() {
         UUID gesuchId = createFullGesuch();
+
+        final var file = TestUtil.getTestPng();
+        for (final var dokType : DokumentTypDtoSpec.values()) {
+            TestUtil.uploadFile(gesuchApiSpec, gesuchId, dokType, file);
+        }
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)

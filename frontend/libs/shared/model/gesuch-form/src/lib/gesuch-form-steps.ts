@@ -4,7 +4,11 @@ import {
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 
-import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
+import {
+  SharedModelGesuchFormStep,
+  StepState,
+  StepValidation,
+} from './shared-model-gesuch-form';
 
 export const PERSON: SharedModelGesuchFormStep = {
   route: 'person',
@@ -140,7 +144,7 @@ export const isStepDisabled = (
 export const isStepValid = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
-  invalidProps: SharedModelGesuchFormularProps[],
+  invalidProps?: StepValidation,
 ) => {
   const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
     [PERSON.route]: 'personInAusbildung',
@@ -155,5 +159,22 @@ export const isStepValid = (
     [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
   };
   const field = stepFieldMap[step.route];
-  return formular?.[field] ? !invalidProps.includes(field) : undefined;
+  return formular?.[field] ? toStepState(field, invalidProps) : undefined;
+};
+
+const toStepState = (
+  field: SharedModelGesuchFormularProps,
+  invalidProps?: StepValidation,
+): StepState | undefined => {
+  if (invalidProps?.errors?.includes(field)) {
+    return 'INVALID';
+  }
+  if (invalidProps?.warnings?.includes(field)) {
+    return 'WARNING';
+  }
+  // If the error list is still empty then no status is identifiable
+  if (invalidProps?.errors === undefined) {
+    return undefined;
+  }
+  return 'VALID';
 };

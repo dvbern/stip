@@ -1,10 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 
 import { AppType, SharedModelCompiletimeConfig } from '@dv/shared/model/config';
-import {
-  GesuchFormularUpdate,
-  SharedModelGesuchFormularProps,
-} from '@dv/shared/model/gesuch';
+import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
@@ -14,11 +11,13 @@ import {
   ELTERN,
   FAMILIENSITUATION,
   GESCHWISTER,
+  GesuchFormStepView,
   KINDER,
   LEBENSLAUF,
   PARTNER,
   PERSON,
   SharedModelGesuchFormStep,
+  StepValidation,
   isStepDisabled,
   isStepValid,
 } from '@dv/shared/model/gesuch-form';
@@ -62,15 +61,15 @@ export class SharedUtilGesuchFormStepManagerService {
    */
   getAllSteps(
     gesuchFormular: GesuchFormularUpdate | null,
-    invalidProps: SharedModelGesuchFormularProps[] = [],
-  ) {
+    invalidProps?: StepValidation,
+  ): GesuchFormStepView[] {
     const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
       'sachbearbeitung-app': BaseSteps,
       'gesuch-app': [...BaseSteps, ABSCHLUSS],
     };
     return steps[this.compiletimeConfig.appType].map((step) => ({
       ...step,
-      valid: isStepValid(step, gesuchFormular, invalidProps),
+      status: isStepValid(step, gesuchFormular, invalidProps),
       disabled: isStepDisabled(step, gesuchFormular),
     }));
   }
