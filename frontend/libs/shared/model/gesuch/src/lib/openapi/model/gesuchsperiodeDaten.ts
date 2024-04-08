@@ -19,14 +19,18 @@ export interface GesuchsperiodeDaten {
      * 
      */
     bezeichnungFr: string;
+    gueltigAb?: string;
+    gueltigBis?: string;
+    einreichfrist?: string;
+    aufschaltdatum?: string;
     /**
      * 
      */
-    fiskaljahr: string;
+    fiskaljahr: number;
     /**
      * 
      */
-    gesuchsjahr: string;
+    gesuchsjahr: number;
     /**
      * dd.MM.YYYY
      */
@@ -78,11 +82,11 @@ export interface GesuchsperiodeDaten {
     /**
      * 
      */
-    vermoegensfreibetrag?: number;
+    vermoegensfreibetrag: number;
     /**
      * 
      */
-    vermogenSatzAngerechnet?: number;
+    vermogenSatzAngerechnet: number;
     /**
      * 
      */

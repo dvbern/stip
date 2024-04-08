@@ -23,13 +23,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid GueltigkeitStatusDto status;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
-  private @Valid GueltigkeitStatusDto status;
-  private @Valid String fiskaljahr;
-  private @Valid String gesuchsjahr;
+  private @Valid Integer fiskaljahr;
+  private @Valid Integer gesuchsjahr;
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
@@ -42,6 +42,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid Integer freibetragErwerbseinkommen;
   private @Valid Integer einkommensfreibetrag;
   private @Valid Integer elternbeteiligungssatz;
+  private @Valid Integer vermoegensfreibetrag;
+  private @Valid Integer vermogenSatzAngerechnet;
   private @Valid Integer integrationszulage;
   private @Valid Integer limiteEkFreibetragIntegrationszulag;
   private @Valid Integer stipLimiteMinimalstipendium;
@@ -68,8 +70,6 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid Integer wohnkostenPersoenlich5pluspers;
   private @Valid LocalDate einreichfrist;
   private @Valid LocalDate aufschaltdatum;
-  private @Valid Integer vermoegensfreibetrag;
-  private @Valid Integer vermogenSatzAngerechnet;
 
   /**
    **/
@@ -92,6 +92,26 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
 
   /**
    **/
+  public GesuchsperiodeWithDatenDto status(GueltigkeitStatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  @NotNull
+  public GueltigkeitStatusDto getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(GueltigkeitStatusDto status) {
+    this.status = status;
+  }
+
+  /**
+   * 
+   **/
   public GesuchsperiodeWithDatenDto bezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
     return this;
@@ -110,6 +130,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   }
 
   /**
+   * 
    **/
   public GesuchsperiodeWithDatenDto bezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
@@ -167,28 +188,9 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   }
 
   /**
-   **/
-  public GesuchsperiodeWithDatenDto status(GueltigkeitStatusDto status) {
-    this.status = status;
-    return this;
-  }
-
-  
-  @JsonProperty("status")
-  @NotNull
-  public GueltigkeitStatusDto getStatus() {
-    return status;
-  }
-
-  @JsonProperty("status")
-  public void setStatus(GueltigkeitStatusDto status) {
-    this.status = status;
-  }
-
-  /**
    * 
    **/
-  public GesuchsperiodeWithDatenDto fiskaljahr(String fiskaljahr) {
+  public GesuchsperiodeWithDatenDto fiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
     return this;
   }
@@ -196,19 +198,19 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   
   @JsonProperty("fiskaljahr")
   @NotNull
-  public String getFiskaljahr() {
+  public Integer getFiskaljahr() {
     return fiskaljahr;
   }
 
   @JsonProperty("fiskaljahr")
-  public void setFiskaljahr(String fiskaljahr) {
+  public void setFiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
   }
 
   /**
    * 
    **/
-  public GesuchsperiodeWithDatenDto gesuchsjahr(String gesuchsjahr) {
+  public GesuchsperiodeWithDatenDto gesuchsjahr(Integer gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
     return this;
   }
@@ -216,12 +218,12 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   
   @JsonProperty("gesuchsjahr")
   @NotNull
-  public String getGesuchsjahr() {
+  public Integer getGesuchsjahr() {
     return gesuchsjahr;
   }
 
   @JsonProperty("gesuchsjahr")
-  public void setGesuchsjahr(String gesuchsjahr) {
+  public void setGesuchsjahr(Integer gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 
@@ -463,6 +465,46 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   @JsonProperty("elternbeteiligungssatz")
   public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
+  }
+
+  /**
+   * 
+   **/
+  public GesuchsperiodeWithDatenDto vermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
+    return this;
+  }
+
+  
+  @JsonProperty("vermoegensfreibetrag")
+  @NotNull
+  public Integer getVermoegensfreibetrag() {
+    return vermoegensfreibetrag;
+  }
+
+  @JsonProperty("vermoegensfreibetrag")
+  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
+  }
+
+  /**
+   * 
+   **/
+  public GesuchsperiodeWithDatenDto vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
+    return this;
+  }
+
+  
+  @JsonProperty("vermogenSatzAngerechnet")
+  @NotNull
+  public Integer getVermogenSatzAngerechnet() {
+    return vermogenSatzAngerechnet;
+  }
+
+  @JsonProperty("vermogenSatzAngerechnet")
+  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
   }
 
   /**
@@ -981,44 +1023,6 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     this.aufschaltdatum = aufschaltdatum;
   }
 
-  /**
-   * 
-   **/
-  public GesuchsperiodeWithDatenDto vermoegensfreibetrag(Integer vermoegensfreibetrag) {
-    this.vermoegensfreibetrag = vermoegensfreibetrag;
-    return this;
-  }
-
-  
-  @JsonProperty("vermoegensfreibetrag")
-  public Integer getVermoegensfreibetrag() {
-    return vermoegensfreibetrag;
-  }
-
-  @JsonProperty("vermoegensfreibetrag")
-  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
-    this.vermoegensfreibetrag = vermoegensfreibetrag;
-  }
-
-  /**
-   * 
-   **/
-  public GesuchsperiodeWithDatenDto vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
-    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
-    return this;
-  }
-
-  
-  @JsonProperty("vermogenSatzAngerechnet")
-  public Integer getVermogenSatzAngerechnet() {
-    return vermogenSatzAngerechnet;
-  }
-
-  @JsonProperty("vermogenSatzAngerechnet")
-  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
-    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -1030,11 +1034,11 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     }
     GesuchsperiodeWithDatenDto gesuchsperiodeWithDaten = (GesuchsperiodeWithDatenDto) o;
     return Objects.equals(this.id, gesuchsperiodeWithDaten.id) &&
+        Objects.equals(this.status, gesuchsperiodeWithDaten.status) &&
         Objects.equals(this.bezeichnungDe, gesuchsperiodeWithDaten.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsperiodeWithDaten.bezeichnungFr) &&
         Objects.equals(this.gueltigAb, gesuchsperiodeWithDaten.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchsperiodeWithDaten.gueltigBis) &&
-        Objects.equals(this.status, gesuchsperiodeWithDaten.status) &&
         Objects.equals(this.fiskaljahr, gesuchsperiodeWithDaten.fiskaljahr) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiodeWithDaten.gesuchsjahr) &&
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeWithDaten.gesuchsperiodeStart) &&
@@ -1049,6 +1053,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
         Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeWithDaten.freibetragErwerbseinkommen) &&
         Objects.equals(this.einkommensfreibetrag, gesuchsperiodeWithDaten.einkommensfreibetrag) &&
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeWithDaten.elternbeteiligungssatz) &&
+        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeWithDaten.vermoegensfreibetrag) &&
+        Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeWithDaten.vermogenSatzAngerechnet) &&
         Objects.equals(this.integrationszulage, gesuchsperiodeWithDaten.integrationszulage) &&
         Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeWithDaten.limiteEkFreibetragIntegrationszulag) &&
         Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeWithDaten.stipLimiteMinimalstipendium) &&
@@ -1074,14 +1080,12 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
         Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich4pers) &&
         Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeWithDaten.wohnkostenPersoenlich5pluspers) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeWithDaten.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeWithDaten.aufschaltdatum) &&
-        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeWithDaten.vermoegensfreibetrag) &&
-        Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeWithDaten.vermogenSatzAngerechnet);
+        Objects.equals(this.aufschaltdatum, gesuchsperiodeWithDaten.aufschaltdatum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, status, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist, aufschaltdatum, vermoegensfreibetrag, vermogenSatzAngerechnet);
+    return Objects.hash(id, status, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist, aufschaltdatum);
   }
 
   @Override
@@ -1090,11 +1094,11 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     sb.append("class GesuchsperiodeWithDatenDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
@@ -1109,6 +1113,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
+    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
+    sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
     sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
@@ -1135,8 +1141,6 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     sb.append("    wohnkostenPersoenlich5pluspers: ").append(toIndentedString(wohnkostenPersoenlich5pluspers)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
-    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
-    sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

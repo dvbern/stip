@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,8 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchsjahrCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   GesuchsjahrCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
-  GesuchsjahrCreateDtoSpec.JSON_PROPERTY_TECHNISCHES_JAHR,
-  GesuchsjahrCreateDtoSpec.JSON_PROPERTY_GUELTIGKEIT_STATUS
+  GesuchsjahrCreateDtoSpec.JSON_PROPERTY_TECHNISCHES_JAHR
 })
 @JsonTypeName("GesuchsjahrCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -44,9 +42,6 @@ public class GesuchsjahrCreateDtoSpec {
 
   public static final String JSON_PROPERTY_TECHNISCHES_JAHR = "technischesJahr";
   private Integer technischesJahr;
-
-  public static final String JSON_PROPERTY_GUELTIGKEIT_STATUS = "gueltigkeitStatus";
-  private GueltigkeitStatusDtoSpec gueltigkeitStatus;
 
   public GesuchsjahrCreateDtoSpec() {
   }
@@ -128,32 +123,6 @@ public class GesuchsjahrCreateDtoSpec {
     this.technischesJahr = technischesJahr;
   }
 
-
-  public GesuchsjahrCreateDtoSpec gueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
-    
-    this.gueltigkeitStatus = gueltigkeitStatus;
-    return this;
-  }
-
-   /**
-   * Get gueltigkeitStatus
-   * @return gueltigkeitStatus
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
-    return gueltigkeitStatus;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
-    this.gueltigkeitStatus = gueltigkeitStatus;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -165,13 +134,12 @@ public class GesuchsjahrCreateDtoSpec {
     GesuchsjahrCreateDtoSpec gesuchsjahrCreate = (GesuchsjahrCreateDtoSpec) o;
     return Objects.equals(this.bezeichnungDe, gesuchsjahrCreate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsjahrCreate.bezeichnungFr) &&
-        Objects.equals(this.technischesJahr, gesuchsjahrCreate.technischesJahr) &&
-        Objects.equals(this.gueltigkeitStatus, gesuchsjahrCreate.gueltigkeitStatus);
+        Objects.equals(this.technischesJahr, gesuchsjahrCreate.technischesJahr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, technischesJahr, gueltigkeitStatus);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, technischesJahr);
   }
 
   @Override
@@ -181,7 +149,6 @@ public class GesuchsjahrCreateDtoSpec {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    technischesJahr: ").append(toIndentedString(technischesJahr)).append("\n");
-    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid String fiskaljahr;
-  private @Valid String gesuchsjahr;
+  private @Valid Integer fiskaljahr;
+  private @Valid Integer gesuchsjahr;
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
@@ -36,6 +36,8 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid Integer freibetragErwerbseinkommen;
   private @Valid Integer einkommensfreibetrag;
   private @Valid Integer elternbeteiligungssatz;
+  private @Valid Integer vermoegensfreibetrag;
+  private @Valid Integer vermogenSatzAngerechnet;
   private @Valid Integer integrationszulage;
   private @Valid Integer limiteEkFreibetragIntegrationszulag;
   private @Valid Integer stipLimiteMinimalstipendium;
@@ -64,8 +66,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid LocalDate gueltigBis;
   private @Valid LocalDate einreichfrist;
   private @Valid LocalDate aufschaltdatum;
-  private @Valid Integer vermoegensfreibetrag;
-  private @Valid Integer vermogenSatzAngerechnet;
 
   /**
    * 
@@ -110,7 +110,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   /**
    * 
    **/
-  public GesuchsperiodeUpdateDto fiskaljahr(String fiskaljahr) {
+  public GesuchsperiodeUpdateDto fiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
     return this;
   }
@@ -118,19 +118,19 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   
   @JsonProperty("fiskaljahr")
   @NotNull
-  public String getFiskaljahr() {
+  public Integer getFiskaljahr() {
     return fiskaljahr;
   }
 
   @JsonProperty("fiskaljahr")
-  public void setFiskaljahr(String fiskaljahr) {
+  public void setFiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
   }
 
   /**
    * 
    **/
-  public GesuchsperiodeUpdateDto gesuchsjahr(String gesuchsjahr) {
+  public GesuchsperiodeUpdateDto gesuchsjahr(Integer gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
     return this;
   }
@@ -138,12 +138,12 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   
   @JsonProperty("gesuchsjahr")
   @NotNull
-  public String getGesuchsjahr() {
+  public Integer getGesuchsjahr() {
     return gesuchsjahr;
   }
 
   @JsonProperty("gesuchsjahr")
-  public void setGesuchsjahr(String gesuchsjahr) {
+  public void setGesuchsjahr(Integer gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 
@@ -385,6 +385,46 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   @JsonProperty("elternbeteiligungssatz")
   public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
+  }
+
+  /**
+   * 
+   **/
+  public GesuchsperiodeUpdateDto vermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
+    return this;
+  }
+
+  
+  @JsonProperty("vermoegensfreibetrag")
+  @NotNull
+  public Integer getVermoegensfreibetrag() {
+    return vermoegensfreibetrag;
+  }
+
+  @JsonProperty("vermoegensfreibetrag")
+  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
+  }
+
+  /**
+   * 
+   **/
+  public GesuchsperiodeUpdateDto vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
+    return this;
+  }
+
+  
+  @JsonProperty("vermogenSatzAngerechnet")
+  @NotNull
+  public Integer getVermogenSatzAngerechnet() {
+    return vermogenSatzAngerechnet;
+  }
+
+  @JsonProperty("vermogenSatzAngerechnet")
+  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
   }
 
   /**
@@ -939,44 +979,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     this.aufschaltdatum = aufschaltdatum;
   }
 
-  /**
-   * 
-   **/
-  public GesuchsperiodeUpdateDto vermoegensfreibetrag(Integer vermoegensfreibetrag) {
-    this.vermoegensfreibetrag = vermoegensfreibetrag;
-    return this;
-  }
-
-  
-  @JsonProperty("vermoegensfreibetrag")
-  public Integer getVermoegensfreibetrag() {
-    return vermoegensfreibetrag;
-  }
-
-  @JsonProperty("vermoegensfreibetrag")
-  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
-    this.vermoegensfreibetrag = vermoegensfreibetrag;
-  }
-
-  /**
-   * 
-   **/
-  public GesuchsperiodeUpdateDto vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
-    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
-    return this;
-  }
-
-  
-  @JsonProperty("vermogenSatzAngerechnet")
-  public Integer getVermogenSatzAngerechnet() {
-    return vermogenSatzAngerechnet;
-  }
-
-  @JsonProperty("vermogenSatzAngerechnet")
-  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
-    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -1003,6 +1005,8 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
         Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeUpdate.freibetragErwerbseinkommen) &&
         Objects.equals(this.einkommensfreibetrag, gesuchsperiodeUpdate.einkommensfreibetrag) &&
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeUpdate.elternbeteiligungssatz) &&
+        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeUpdate.vermoegensfreibetrag) &&
+        Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeUpdate.vermogenSatzAngerechnet) &&
         Objects.equals(this.integrationszulage, gesuchsperiodeUpdate.integrationszulage) &&
         Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeUpdate.limiteEkFreibetragIntegrationszulag) &&
         Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeUpdate.stipLimiteMinimalstipendium) &&
@@ -1030,14 +1034,12 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
         Objects.equals(this.gueltigAb, gesuchsperiodeUpdate.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchsperiodeUpdate.gueltigBis) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeUpdate.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeUpdate.aufschaltdatum) &&
-        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeUpdate.vermoegensfreibetrag) &&
-        Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeUpdate.vermogenSatzAngerechnet);
+        Objects.equals(this.aufschaltdatum, gesuchsperiodeUpdate.aufschaltdatum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, vermoegensfreibetrag, vermogenSatzAngerechnet);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum);
   }
 
   @Override
@@ -1061,6 +1063,8 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
+    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
+    sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
     sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
@@ -1089,8 +1093,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
-    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
-    sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

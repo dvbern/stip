@@ -1300,8 +1300,6 @@ components:
                     type: string
                 technischesJahr:
                     type: integer
-                gueltigkeitStatus:
-                    $ref: '#/components/schemas/GueltigkeitStatus'
         GesuchsjahrUpdate:
             type: object
             properties:
@@ -1311,8 +1309,6 @@ components:
                     type: string
                 technischesJahr:
                     type: integer
-                gueltigkeitStatus:
-                    $ref: '#/components/schemas/GueltigkeitStatus'
         DokumentCreate:
             required:
                 - fileUpload
@@ -2275,18 +2271,6 @@ components:
             properties:
                 id:
                     $ref: '#/components/schemas/UUID'
-                bezeichnungDe:
-                    type: string
-                bezeichnungFr:
-                    type: string
-                gueltigAb:
-                    $ref: '#/components/schemas/LocalDate'
-                gueltigBis:
-                    $ref: '#/components/schemas/LocalDate'
-                einreichfrist:
-                    $ref: '#/components/schemas/LocalDate'
-                aufschaltdatum:
-                    $ref: '#/components/schemas/LocalDate'
                 status:
                     $ref: '#/components/schemas/GueltigkeitStatus'
             allOf:
@@ -2319,35 +2303,16 @@ components:
                     $ref: '#/components/schemas/GueltigkeitStatus'
         GesuchsperiodeCreate:
             required:
-                - id
                 - gueltigAb
                 - gueltigBis
                 - bezeichnungDe
                 - bezeichnungFr
                 - status
             type: object
-            properties:
-                gueltigAb:
-                    $ref: '#/components/schemas/LocalDate'
-                gueltigBis:
-                    $ref: '#/components/schemas/LocalDate'
-                einreichfrist:
-                    $ref: '#/components/schemas/LocalDate'
-                aufschaltdatum:
-                    $ref: '#/components/schemas/LocalDate'
             allOf:
                 - $ref: '#/components/schemas/GesuchsperiodeDaten'
         GesuchsperiodeUpdate:
             type: object
-            properties:
-                gueltigAb:
-                    $ref: '#/components/schemas/LocalDate'
-                gueltigBis:
-                    $ref: '#/components/schemas/LocalDate'
-                einreichfrist:
-                    $ref: '#/components/schemas/LocalDate'
-                aufschaltdatum:
-                    $ref: '#/components/schemas/LocalDate'
             allOf:
                 - $ref: '#/components/schemas/GesuchsperiodeDaten'
         GesuchsperiodeDaten:
@@ -2402,12 +2367,20 @@ components:
                 bezeichnungFr:
                     description: ''
                     type: string
+                gueltigAb:
+                    $ref: '#/components/schemas/LocalDate'
+                gueltigBis:
+                    $ref: '#/components/schemas/LocalDate'
+                einreichfrist:
+                    $ref: '#/components/schemas/LocalDate'
+                aufschaltdatum:
+                    $ref: '#/components/schemas/LocalDate'                    
                 fiskaljahr:
                     description: ''
-                    type: string
+                    type: integer
                 gesuchsjahr:
                     description: ''
-                    type: string
+                    type: integer
                 gesuchsperiodeStart:
                     format: date
                     description: dd.MM.YYYY

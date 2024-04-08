@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GueltigkeitStatusDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -23,7 +22,6 @@ public class GesuchsjahrUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid Integer technischesJahr;
-  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
 
   /**
    **/
@@ -79,24 +77,6 @@ public class GesuchsjahrUpdateDto  implements Serializable {
     this.technischesJahr = technischesJahr;
   }
 
-  /**
-   **/
-  public GesuchsjahrUpdateDto gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
-    this.gueltigkeitStatus = gueltigkeitStatus;
-    return this;
-  }
-
-  
-  @JsonProperty("gueltigkeitStatus")
-  public GueltigkeitStatusDto getGueltigkeitStatus() {
-    return gueltigkeitStatus;
-  }
-
-  @JsonProperty("gueltigkeitStatus")
-  public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
-    this.gueltigkeitStatus = gueltigkeitStatus;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -109,13 +89,12 @@ public class GesuchsjahrUpdateDto  implements Serializable {
     GesuchsjahrUpdateDto gesuchsjahrUpdate = (GesuchsjahrUpdateDto) o;
     return Objects.equals(this.bezeichnungDe, gesuchsjahrUpdate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsjahrUpdate.bezeichnungFr) &&
-        Objects.equals(this.technischesJahr, gesuchsjahrUpdate.technischesJahr) &&
-        Objects.equals(this.gueltigkeitStatus, gesuchsjahrUpdate.gueltigkeitStatus);
+        Objects.equals(this.technischesJahr, gesuchsjahrUpdate.technischesJahr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, technischesJahr, gueltigkeitStatus);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, technischesJahr);
   }
 
   @Override
@@ -126,7 +105,6 @@ public class GesuchsjahrUpdateDto  implements Serializable {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    technischesJahr: ").append(toIndentedString(technischesJahr)).append("\n");
-    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }

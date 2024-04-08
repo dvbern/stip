@@ -11,10 +11,6 @@
  */
 
 export interface GesuchsperiodeUpdate { 
-    gueltigAb?: string;
-    gueltigBis?: string;
-    einreichfrist?: string;
-    aufschaltdatum?: string;
     /**
      * 
      */
@@ -23,14 +19,18 @@ export interface GesuchsperiodeUpdate {
      * 
      */
     bezeichnungFr: string;
+    gueltigAb?: string;
+    gueltigBis?: string;
+    einreichfrist?: string;
+    aufschaltdatum?: string;
     /**
      * 
      */
-    fiskaljahr: string;
+    fiskaljahr: number;
     /**
      * 
      */
-    gesuchsjahr: string;
+    gesuchsjahr: number;
     /**
      * dd.MM.YYYY
      */
@@ -82,11 +82,11 @@ export interface GesuchsperiodeUpdate {
     /**
      * 
      */
-    vermoegensfreibetrag?: number;
+    vermoegensfreibetrag: number;
     /**
      * 
      */
-    vermogenSatzAngerechnet?: number;
+    vermogenSatzAngerechnet: number;
     /**
      * 
      */

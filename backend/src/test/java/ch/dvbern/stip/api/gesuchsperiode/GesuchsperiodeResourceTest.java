@@ -49,8 +49,8 @@ class GesuchsperiodeResourceTest {
         newPeriode.setEinreichfrist(LocalDate.of(2023, 12, 1));
         newPeriode.setGueltigAb(LocalDate.of(2023, 1, 1));
         newPeriode.setGueltigBis(LocalDate.of(2023, 12, 1));
-        newPeriode.setFiskaljahr("2024");
-        newPeriode.setGesuchsjahr("2024");
+        newPeriode.setFiskaljahr(2024);
+        newPeriode.setGesuchsjahr(2024);
 
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 

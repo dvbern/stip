@@ -28,12 +28,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchsperiodeUpdateDtoSpec
  */
 @JsonPropertyOrder({
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_EINREICHFRIST,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_AUFSCHALTDATUM,
-  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
-  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_FISKALJAHR,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
@@ -78,6 +78,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("GesuchsperiodeUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchsperiodeUpdateDtoSpec {
+  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  private String bezeichnungDe;
+
+  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  private String bezeichnungFr;
+
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
   private LocalDate gueltigAb;
 
@@ -90,17 +96,11 @@ public class GesuchsperiodeUpdateDtoSpec {
   public static final String JSON_PROPERTY_AUFSCHALTDATUM = "aufschaltdatum";
   private LocalDate aufschaltdatum;
 
-  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
-  private String bezeichnungDe;
-
-  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
-  private String bezeichnungFr;
-
   public static final String JSON_PROPERTY_FISKALJAHR = "fiskaljahr";
-  private String fiskaljahr;
+  private Integer fiskaljahr;
 
   public static final String JSON_PROPERTY_GESUCHSJAHR = "gesuchsjahr";
-  private String gesuchsjahr;
+  private Integer gesuchsjahr;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
   private LocalDate gesuchsperiodeStart;
@@ -219,6 +219,58 @@ public class GesuchsperiodeUpdateDtoSpec {
   public GesuchsperiodeUpdateDtoSpec() {
   }
 
+  public GesuchsperiodeUpdateDtoSpec bezeichnungDe(String bezeichnungDe) {
+    
+    this.bezeichnungDe = bezeichnungDe;
+    return this;
+  }
+
+   /**
+   * 
+   * @return bezeichnungDe
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
+  }
+
+
+  public GesuchsperiodeUpdateDtoSpec bezeichnungFr(String bezeichnungFr) {
+    
+    this.bezeichnungFr = bezeichnungFr;
+    return this;
+  }
+
+   /**
+   * 
+   * @return bezeichnungFr
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
+  }
+
+
   public GesuchsperiodeUpdateDtoSpec gueltigAb(LocalDate gueltigAb) {
     
     this.gueltigAb = gueltigAb;
@@ -323,59 +375,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
 
-  public GesuchsperiodeUpdateDtoSpec bezeichnungDe(String bezeichnungDe) {
-    
-    this.bezeichnungDe = bezeichnungDe;
-    return this;
-  }
-
-   /**
-   * 
-   * @return bezeichnungDe
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getBezeichnungDe() {
-    return bezeichnungDe;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
-    this.bezeichnungDe = bezeichnungDe;
-  }
-
-
-  public GesuchsperiodeUpdateDtoSpec bezeichnungFr(String bezeichnungFr) {
-    
-    this.bezeichnungFr = bezeichnungFr;
-    return this;
-  }
-
-   /**
-   * 
-   * @return bezeichnungFr
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getBezeichnungFr() {
-    return bezeichnungFr;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
-    this.bezeichnungFr = bezeichnungFr;
-  }
-
-
-  public GesuchsperiodeUpdateDtoSpec fiskaljahr(String fiskaljahr) {
+  public GesuchsperiodeUpdateDtoSpec fiskaljahr(Integer fiskaljahr) {
     
     this.fiskaljahr = fiskaljahr;
     return this;
@@ -389,19 +389,19 @@ public class GesuchsperiodeUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_FISKALJAHR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getFiskaljahr() {
+  public Integer getFiskaljahr() {
     return fiskaljahr;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FISKALJAHR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFiskaljahr(String fiskaljahr) {
+  public void setFiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
   }
 
 
-  public GesuchsperiodeUpdateDtoSpec gesuchsjahr(String gesuchsjahr) {
+  public GesuchsperiodeUpdateDtoSpec gesuchsjahr(Integer gesuchsjahr) {
     
     this.gesuchsjahr = gesuchsjahr;
     return this;
@@ -415,14 +415,14 @@ public class GesuchsperiodeUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGesuchsjahr() {
+  public Integer getGesuchsjahr() {
     return gesuchsjahr;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsjahr(String gesuchsjahr) {
+  public void setGesuchsjahr(Integer gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 
@@ -749,9 +749,9 @@ public class GesuchsperiodeUpdateDtoSpec {
    * 
    * @return vermoegensfreibetrag
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermoegensfreibetrag() {
     return vermoegensfreibetrag;
@@ -759,7 +759,7 @@ public class GesuchsperiodeUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
     this.vermoegensfreibetrag = vermoegensfreibetrag;
   }
@@ -775,9 +775,9 @@ public class GesuchsperiodeUpdateDtoSpec {
    * 
    * @return vermogenSatzAngerechnet
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermogenSatzAngerechnet() {
     return vermogenSatzAngerechnet;
@@ -785,7 +785,7 @@ public class GesuchsperiodeUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
     this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
   }
@@ -1423,12 +1423,12 @@ public class GesuchsperiodeUpdateDtoSpec {
       return false;
     }
     GesuchsperiodeUpdateDtoSpec gesuchsperiodeUpdate = (GesuchsperiodeUpdateDtoSpec) o;
-    return Objects.equals(this.gueltigAb, gesuchsperiodeUpdate.gueltigAb) &&
+    return Objects.equals(this.bezeichnungDe, gesuchsperiodeUpdate.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, gesuchsperiodeUpdate.bezeichnungFr) &&
+        Objects.equals(this.gueltigAb, gesuchsperiodeUpdate.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchsperiodeUpdate.gueltigBis) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeUpdate.einreichfrist) &&
         Objects.equals(this.aufschaltdatum, gesuchsperiodeUpdate.aufschaltdatum) &&
-        Objects.equals(this.bezeichnungDe, gesuchsperiodeUpdate.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, gesuchsperiodeUpdate.bezeichnungFr) &&
         Objects.equals(this.fiskaljahr, gesuchsperiodeUpdate.fiskaljahr) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiodeUpdate.gesuchsjahr) &&
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeUpdate.gesuchsperiodeStart) &&
@@ -1473,19 +1473,19 @@ public class GesuchsperiodeUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeUpdateDtoSpec {\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
-    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
-    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");

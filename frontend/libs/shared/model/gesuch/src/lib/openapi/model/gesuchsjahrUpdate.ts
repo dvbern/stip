@@ -9,14 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GueltigkeitStatus } from './gueltigkeitStatus';
 
 export interface GesuchsjahrUpdate { 
     bezeichnungDe?: string;
     bezeichnungFr?: string;
     technischesJahr?: number;
-    gueltigkeitStatus?: GueltigkeitStatus;
 }
-
-
 

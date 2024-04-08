@@ -13,21 +13,27 @@ import { GueltigkeitStatus } from './gueltigkeitStatus';
 
 export interface GesuchsperiodeWithDaten { 
     id: string;
+    status: GueltigkeitStatus;
+    /**
+     * 
+     */
     bezeichnungDe: string;
+    /**
+     * 
+     */
     bezeichnungFr: string;
     gueltigAb: string;
     gueltigBis: string;
     einreichfrist?: string;
     aufschaltdatum?: string;
-    status: GueltigkeitStatus;
     /**
      * 
      */
-    fiskaljahr: string;
+    fiskaljahr: number;
     /**
      * 
      */
-    gesuchsjahr: string;
+    gesuchsjahr: number;
     /**
      * dd.MM.YYYY
      */
@@ -79,11 +85,11 @@ export interface GesuchsperiodeWithDaten {
     /**
      * 
      */
-    vermoegensfreibetrag?: number;
+    vermoegensfreibetrag: number;
     /**
      * 
      */
-    vermogenSatzAngerechnet?: number;
+    vermogenSatzAngerechnet: number;
     /**
      * 
      */
