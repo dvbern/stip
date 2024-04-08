@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,6 +22,10 @@ public interface GesuchsperiodeMapper {
     @Mapping(target = "gueltigAb", source = "gueltigkeit.gueltigAb")
     @Mapping(target = "gueltigBis", source = "gueltigkeit.gueltigBis")
     GesuchsperiodeDto toDto(Gesuchsperiode gesuchsperiode);
+
+    @Mapping(target = "gueltigAb", source = "gueltigkeit.gueltigAb")
+    @Mapping(target = "gueltigBis", source = "gueltigkeit.gueltigBis")
+    GesuchsperiodeWithDatenDto toDatenDto(Gesuchsperiode gesuchsperiode);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Gesuchsperiode partialUpdate(

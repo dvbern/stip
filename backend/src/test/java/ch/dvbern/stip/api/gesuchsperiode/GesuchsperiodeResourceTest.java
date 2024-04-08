@@ -12,6 +12,7 @@ import ch.dvbern.stip.generated.api.GesuchsperiodeApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -109,7 +110,7 @@ class GesuchsperiodeResourceTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
-            .as(GesuchsperiodeDtoSpec.class);
+            .as(GesuchsperiodeWithDatenDtoSpec.class);
 
         assertThat(got.getBezeichnungDe(), is(gesuchsperiode.getBezeichnungDe()));
     }

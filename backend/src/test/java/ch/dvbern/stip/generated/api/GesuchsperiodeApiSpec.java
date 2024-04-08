@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -231,11 +232,11 @@ public class GesuchsperiodeApiSpec {
         }
     }
     /**
-     * Returniert der Gesuchsperiode mit der gegebene Id.
+     * Returniert die GesuchsperiodeWithDaten mit der gegebene Id.
      * 
      *
      * @see #gesuchsperiodeIdPath  (required)
-     * return GesuchsperiodeDtoSpec
+     * return GesuchsperiodeWithDatenDtoSpec
      */
     public static class GetGesuchsperiodeOper implements Oper {
 
@@ -265,10 +266,10 @@ public class GesuchsperiodeApiSpec {
         /**
          * GET /gesuchsperiode/{gesuchsperiodeId}
          * @param handler handler
-         * @return GesuchsperiodeDtoSpec
+         * @return GesuchsperiodeWithDatenDtoSpec
          */
-        public GesuchsperiodeDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchsperiodeDtoSpec> type = new TypeRef<GesuchsperiodeDtoSpec>(){};
+        public GesuchsperiodeWithDatenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchsperiodeWithDatenDtoSpec> type = new TypeRef<GesuchsperiodeWithDatenDtoSpec>(){};
             return execute(handler).as(type);
         }
 

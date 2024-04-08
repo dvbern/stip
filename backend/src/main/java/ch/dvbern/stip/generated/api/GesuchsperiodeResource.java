@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;

@@ -391,7 +391,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Gesuchsperiode'
+                                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
                     description: OK
                 '401':
                     $ref: '#/components/responses/Unauthorized'
@@ -402,7 +402,7 @@ paths:
                 '500':
                     $ref: '#/components/responses/ServerError'
             operationId: getGesuchsperiode
-            summary: Returniert der Gesuchsperiode mit der gegebene Id.
+            summary: Returniert die GesuchsperiodeWithDaten mit der gegebene Id.
         patch:
             requestBody:
                 content:

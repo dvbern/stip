@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +47,9 @@ public class GesuchsperiodenService {
             .toList();
     }
 
-    public Optional<GesuchsperiodeDto> getGesuchsperiode(final UUID id) {
+    public Optional<GesuchsperiodeWithDatenDto> getGesuchsperiode(final UUID id) {
         final var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(id);
-        return gesuchsperiode.map(gesuchsperiodeMapper::toDto);
+        return gesuchsperiode.map(gesuchsperiodeMapper::toDatenDto);
     }
 
     public Collection<GesuchsperiodeDto> getAllActive() {
