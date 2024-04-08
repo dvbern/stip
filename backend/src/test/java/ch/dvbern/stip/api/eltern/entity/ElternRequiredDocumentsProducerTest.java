@@ -64,6 +64,18 @@ class ElternRequiredDocumentsProducerTest {
         );
     }
 
+    @Test
+    void requiresIfWohnkosten() {
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getForElternteil(createWohnkosten(ElternTyp.VATER)),
+            DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+        );
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getForElternteil(createWohnkosten(ElternTyp.MUTTER)),
+            DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+        );
+    }
+
     private Eltern createBern(final ElternTyp elternTyp) {
         return createWithTyp(elternTyp).setAdresse(new Adresse().setPlz("3000"));
     }
@@ -78,6 +90,10 @@ class ElternRequiredDocumentsProducerTest {
 
     private Eltern createAusweisbFluechtling(final ElternTyp elternTyp) {
         return createWithTyp(elternTyp).setAusweisbFluechtling(true);
+    }
+
+    private Eltern createWohnkosten(final ElternTyp elternTyp) {
+        return createWithTyp(elternTyp).setWohnkosten(1);
     }
 
     private Eltern createWithTyp(final ElternTyp typ) {
