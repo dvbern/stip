@@ -43,6 +43,7 @@ public interface GesuchsjahrResource {
 
     @PATCH
     @Path("/publish/{gesuchsjahrId}")
+    @Produces({ "application/json" })
     Response publishGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
 
     @PATCH

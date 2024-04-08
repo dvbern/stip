@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 import { Gesuchsjahr } from '../model/gesuchsjahr';
 import { GesuchsjahrCreate } from '../model/gesuchsjahrCreate';
 import { GesuchsjahrUpdate } from '../model/gesuchsjahrUpdate';
+import { Gesuchsperiode } from '../model/gesuchsperiode';
+import { GesuchsperiodeUpdate } from '../model/gesuchsperiodeUpdate';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -45,6 +47,11 @@ export interface GesuchsjahrServicePublishGesuchsjahrRequestParams {
 export interface GesuchsjahrServiceUpdateGesuchsjahrRequestParams {
     gesuchsjahrId: string;
     gesuchsjahrUpdate?: GesuchsjahrUpdate;
+}
+
+export interface GesuchsjahrServiceUpdateGesuchsperiodeRequestParams {
+    gesuchsperiodeId: string;
+    gesuchsperiodeUpdate?: GesuchsperiodeUpdate;
 }
 
 
@@ -413,10 +420,10 @@ export class GesuchsjahrService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Gesuchsjahr>;
+     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Gesuchsjahr>>;
+     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Gesuchsjahr>>;
+     public publishGesuchsjahr$(requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         const gesuchsjahrId = requestParameters.gesuchsjahrId;
         if (gesuchsjahrId === null || gesuchsjahrId === undefined) {
             throw new Error('Required parameter gesuchsjahrId was null or undefined when calling publishGesuchsjahr$.');
@@ -441,6 +448,7 @@ export class GesuchsjahrService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -466,7 +474,7 @@ export class GesuchsjahrService {
         }
 
         const localVarPath = `/gesuchsjahr/publish/${this.configuration.encodeParam({name: "gesuchsjahrId", value: gesuchsjahrId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Gesuchsjahr>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -553,6 +561,90 @@ export class GesuchsjahrService {
             {
                 context: localVarHttpContext,
                 body: gesuchsjahrUpdate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Updates a Gesuchperiode with the given id
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public updateGesuchsperiode$(requestParameters: GesuchsjahrServiceUpdateGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuchsperiode>;
+     public updateGesuchsperiode$(requestParameters: GesuchsjahrServiceUpdateGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuchsperiode>>;
+     public updateGesuchsperiode$(requestParameters: GesuchsjahrServiceUpdateGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuchsperiode>>;
+     public updateGesuchsperiode$(requestParameters: GesuchsjahrServiceUpdateGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling updateGesuchsperiode$.');
+        }
+        const gesuchsperiodeUpdate = requestParameters.gesuchsperiodeUpdate;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Gesuchsperiode>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: gesuchsperiodeUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

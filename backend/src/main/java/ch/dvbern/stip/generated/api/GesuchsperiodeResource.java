@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -39,4 +40,10 @@ public interface GesuchsperiodeResource {
     @GET
     @Produces({ "application/json", "text/plain" })
     Response getGesuchsperioden();
+
+    @PATCH
+    @Path("/{gesuchsperiodeId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response updateGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId,@Valid GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto);
 }

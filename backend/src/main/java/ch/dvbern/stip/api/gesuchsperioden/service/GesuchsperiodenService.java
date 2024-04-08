@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +22,21 @@ public class GesuchsperiodenService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @Transactional
-    public GesuchsperiodeDto createGesuchsperiode(GesuchsperiodeCreateDto createDto) {
-        var newEntity = gesuchsperiodeMapper.toEntity(createDto);
+    public GesuchsperiodeDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
+        final var newEntity = gesuchsperiodeMapper.toEntity(createDto);
         gesuchsperiodeRepository.persistAndFlush(newEntity);
         return gesuchsperiodeMapper.toDto(newEntity);
+    }
+
+    @Transactional
+    public GesuchsperiodeDto updateGesuchsperiode(
+        final UUID gesuchsperiodeId,
+        final GesuchsperiodeUpdateDto updateDto
+    ) {
+        final var gesuchsperiode = gesuchsperiodeRepository.requireById(gesuchsperiodeId);
+        preventUpdateIfReadonly(gesuchsperiode);
+        gesuchsperiodeMapper.partialUpdate(updateDto, gesuchsperiode);
+        return gesuchsperiodeMapper.toDto(gesuchsperiode);
     }
 
     public Collection<GesuchsperiodeDto> getAllGesuchsperioden() {
@@ -33,10 +46,8 @@ public class GesuchsperiodenService {
             .toList();
     }
 
-    public Optional<GesuchsperiodeDto> getGesuchsperiode(UUID id) {
-
-        var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(id);
-
+    public Optional<GesuchsperiodeDto> getGesuchsperiode(final UUID id) {
+        final var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(id);
         return gesuchsperiode.map(gesuchsperiodeMapper::toDto);
     }
 
@@ -45,5 +56,11 @@ public class GesuchsperiodenService {
             .findAllActiveForDate(LocalDate.now())
             .map(gesuchsperiodeMapper::toDto)
             .toList();
+    }
+
+    private void preventUpdateIfReadonly(final Gesuchsperiode gesuchsperiode) {
+        if (gesuchsperiode.getGesuchsperiodeStart().isAfter(LocalDate.now())) {
+            throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");
+        }
     }
 }

@@ -22,7 +22,6 @@ import org.hibernate.envers.Audited;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Gesuchsjahr extends AbstractMandantEntity {
-
     @Column(name = "bezeichnung_de")
     private String bezeichnungDe;
 
@@ -34,5 +33,5 @@ public class Gesuchsjahr extends AbstractMandantEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gueltigkeit_status")
-    private GueltigkeitStatus gueltigkeitStatus;
+    private GueltigkeitStatus gueltigkeitStatus = GueltigkeitStatus.ENTWURF;
 }

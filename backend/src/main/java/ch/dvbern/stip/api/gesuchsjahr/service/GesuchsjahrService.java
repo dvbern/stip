@@ -19,7 +19,7 @@ public class GesuchsjahrService {
     private final GesuchsjahrMapper gesuchsjahrMapper;
     private final GesuchsjahrRepository gesuchsjahrRepository;
 
-    public GesuchsjahrDto getGesuchsjahr(UUID gesuchsjahrId) {
+    public GesuchsjahrDto getGesuchsjahr(final UUID gesuchsjahrId) {
         var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
         return gesuchsjahrMapper.toDto(gesuchsperiode);
     }
@@ -32,25 +32,22 @@ public class GesuchsjahrService {
     }
 
     @Transactional
-    public GesuchsjahrDto createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
-        Gesuchsjahr gesuchsjahr = gesuchsjahrMapper.toEntity(gesuchsjahrCreateDto);
-        gesuchsjahrRepository.persist(gesuchsjahr);
+    public GesuchsjahrDto createGesuchsjahr(final GesuchsjahrCreateDto gesuchsjahrCreateDto) {
+        final var gesuchsjahr = gesuchsjahrMapper.toEntity(gesuchsjahrCreateDto);
+        gesuchsjahrRepository.persistAndFlush(gesuchsjahr);
         return gesuchsjahrMapper.toDto(gesuchsjahr);
     }
 
     @Transactional
-    public GesuchsjahrDto updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
-        Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
-        if (gesuchsjahr.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
-            throw new UnsupportedOperationException("Cannot update a Gesuchsjahr with GueltigkeitStatus PUBLIZIERT");
-        }
+    public GesuchsjahrDto updateGesuchsjahr(final UUID gesuchsjahrId, final GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
+        var gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        preventUpdateIfReadonly(gesuchsjahr);
         gesuchsjahr = gesuchsjahrMapper.partialUpdate(gesuchsjahrUpdateDto, gesuchsjahr);
-        gesuchsjahrRepository.persist(gesuchsjahr);
         return gesuchsjahrMapper.toDto(gesuchsjahr);
     }
 
     @Transactional
-    public GesuchsjahrDto publishGesuchsjahr(UUID gesuchsjahrId) {
+    public GesuchsjahrDto publishGesuchsjahr(final UUID gesuchsjahrId) {
         Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
         gesuchsjahr.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
         gesuchsjahrRepository.persist(gesuchsjahr);
@@ -58,8 +55,14 @@ public class GesuchsjahrService {
     }
 
     @Transactional
-    public void deleteGesuchsjahr(UUID gesuchsjahrId) {
+    public void deleteGesuchsjahr(final UUID gesuchsjahrId) {
         Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
         gesuchsjahrRepository.delete(gesuchsjahr);
+    }
+
+    private void preventUpdateIfReadonly(final Gesuchsjahr gesuchsjahr) {
+        if (gesuchsjahr.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF) {
+            throw new IllegalStateException("Cannot update a Gesuchsjahr with GueltigkeitStatus != ENTWURF");
+        }
     }
 }

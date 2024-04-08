@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -24,21 +25,21 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @RolesAllowed(ROLE_ADMIN)
     @Override
     public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
-        var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
+        final var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
         return CreatedResponseBuilder.of(gesuchsperiode.getId(), GesuchsperiodeResource.class).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getAktiveGesuchsperioden() {
-        var activeGesuchsperioden = gesuchsperiodenService.getAllActive();
+        final var activeGesuchsperioden = gesuchsperiodenService.getAllActive();
         return Response.ok(activeGesuchsperioden).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesuchsperiode(UUID gesuchsperiodeId) {
-        var gesuchsperiod = gesuchsperiodenService
+        final var gesuchsperiod = gesuchsperiodenService
             .getGesuchsperiode(gesuchsperiodeId)
             .orElseThrow(NotFoundException::new);
 
@@ -49,5 +50,12 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     public Response getGesuchsperioden() {
         return Response.ok(gesuchsperiodenService.getAllGesuchsperioden()).build();
+    }
+
+    @Override
+    public Response updateGesuchsperiode(UUID gesuchsperiodeId, GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto) {
+        final var gesuchsperiode = gesuchsperiodenService
+            .updateGesuchsperiode(gesuchsperiodeId, gesuchsperiodeUpdateDto);
+        return Response.ok(gesuchsperiode).build();
     }
 }

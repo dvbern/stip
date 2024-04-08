@@ -306,6 +306,10 @@ paths:
             responses:
                 200:
                     description: Gesuchsjahr published
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuchsjahr'
             operationId: publishGesuchsjahr
             summary: Publishes a Gesuchsjahr with the given id
     /gesuchsperiode:
@@ -367,16 +371,15 @@ paths:
             operationId: getAktiveGesuchsperioden
             summary: Get all active Gesuchsperioden
     '/gesuchsperiode/{gesuchsperiodeId}':
+        parameters:
+            - name: gesuchsperiodeId
+              schema:
+                  $ref: '#/components/schemas/UUID'
+              in: path
+              required: true
         get:
             tags:
                 - Gesuchsperiode
-            parameters:
-                -
-                    name: gesuchsperiodeId
-                    schema:
-                        $ref: '#/components/schemas/UUID'
-                    in: path
-                    required: true
             responses:
                 '200':
                     content:
@@ -394,6 +397,31 @@ paths:
                     $ref: '#/components/responses/ServerError'
             operationId: getGesuchsperiode
             summary: Returniert der Gesuchsperiode mit der gegebene Id.
+        patch:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GesuchsperiodeUpdate'
+            tags:
+                - Gesuchsjahr
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Gesuchsperiode'
+                    description: Returned updated Gesuchsjahr
+                401:
+                    $ref: '#/components/responses/Unauthorized'
+                403:
+                    $ref: '#/components/responses/Forbidden'
+                404:
+                    $ref: '#/components/responses/NotFound'
+                500:
+                    $ref: '#/components/responses/ServerError'
+            operationId: updateGesuchsperiode
+            summary: Updates a Gesuchperiode with the given id
     /stammdaten/land:
         get:
             tags:
@@ -2501,7 +2529,6 @@ components:
                 wohnkosten_persoenlich_5pluspers:
                     description: ''
                     type: integer
-
         AusbildungsstaetteUpdate:
             required:
                 - nameFr
