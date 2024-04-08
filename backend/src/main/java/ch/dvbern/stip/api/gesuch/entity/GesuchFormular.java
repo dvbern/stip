@@ -24,11 +24,13 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
+import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.FamiliensituationPageValidation;
@@ -102,6 +104,12 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
+@DocumentsRequiredConstraint(groups = {
+    DocumentsRequiredValidationGroup.class
+}, payload = Severity.Warning.class)
+@DocumentsRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class
+})
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity
@@ -179,4 +187,7 @@ public class GesuchFormular extends AbstractMandantEntity {
     @OrderBy("geburtsdatum")
     @HasPageValidation(KindPageValidation.class)
     private Set<Kind> kinds = new LinkedHashSet<>();
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
+    private @Valid GesuchTranche tranche;
 }

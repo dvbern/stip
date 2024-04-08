@@ -215,18 +215,13 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   }
 
   deleteAusbildungsstaette(staette: AusbildungsstaetteTableData) {
-    const dialogRef = this.dialog.open<unknown, ConfirmDialogData, boolean>(
-      SharedUiConfirmDialogComponent,
-      {
-        data: {
-          title: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle',
-          message: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage',
-          confirmText: 'shared.ui.yes',
-          cancelText: 'shared.ui.no',
-          translationObject: staette,
-        },
-      },
-    );
+    const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle',
+      message: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage',
+      confirmText: 'shared.ui.yes',
+      cancelText: 'shared.ui.no',
+      translationObject: staette,
+    });
 
     dialogRef
       .afterClosed()

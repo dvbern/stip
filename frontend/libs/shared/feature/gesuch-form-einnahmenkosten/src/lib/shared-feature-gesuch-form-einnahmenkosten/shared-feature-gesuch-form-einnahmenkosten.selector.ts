@@ -10,6 +10,8 @@ export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
   (gesuchsView, ausbildungsstaettesView) => ({
     loading: gesuchsView.loading,
     gesuch: gesuchsView.gesuch,
+    gesuchId: gesuchsView.gesuch?.id,
+    allowTypes: gesuchsView.allowTypes,
     ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
     gesuchFormular: gesuchsView.gesuchFormular,
     einnahmenKosten: gesuchsView.gesuchFormular?.einnahmenKosten,

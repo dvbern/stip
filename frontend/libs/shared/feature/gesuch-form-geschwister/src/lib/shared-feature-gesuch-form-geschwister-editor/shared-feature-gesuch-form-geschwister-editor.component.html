@@ -80,14 +80,25 @@
       formControlName="ausbildungssituation"
       data-testid="form-geschwister-ausbildungssituation"
       dvSharedUiFormField
-      class="col-12 col-md-6 col-xl-4 d-flex flex-column"
+      class="col-12 col-xl-8"
     >
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | translate }}</label>
-      @for (a of ausbildungssituationValues; track trackByIndex($index)) {
-        <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-          'shared.form.geschwister.ausbildungssituation.select.' + a | translate
-        }}</mat-radio-button>
-      }
+      <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
+        <div class="d-flex flex-column">
+          @for (a of ausbildungssituationValues; track trackByIndex($index)) {
+            <mat-radio-button [attr.data-testid]="a" [value]="a">{{
+              'shared.form.geschwister.ausbildungssituation.select.' + a | translate
+            }}</mat-radio-button>
+          }
+        </div>
+
+        @if (ausbildungssituationDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1 mt-2"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>

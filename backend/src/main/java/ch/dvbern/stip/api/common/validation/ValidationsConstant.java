@@ -118,6 +118,8 @@ public final class ValidationsConstant {
 
     public static final String VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.person.vermoegenVorjahr.required.message}";
+    public static final String VALIDATION_DOCUMENTS_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.gesuchFormular.documents.required.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");
