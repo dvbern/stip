@@ -57,10 +57,10 @@ public class Eltern extends AbstractPerson {
     private String telefonnummer;
 
     @NotNull
-	@Column(nullable = false)
-	private Integer wohnkosten;
+    @Column(nullable = false)
+    private Integer wohnkosten;
 
-	@NotNull
+    @NotNull
     @Column(nullable = false)
     private Boolean sozialhilfebeitraegeAusbezahlt;
 
