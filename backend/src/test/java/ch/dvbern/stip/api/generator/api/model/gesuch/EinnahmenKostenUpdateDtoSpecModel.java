@@ -20,6 +20,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setVerdienstRealisiert(false);
             model.setWillDarlehen(false);
             model.setAuswaertigeMittagessenProWoche(faker.number().randomDigit());
+            model.setBetreuungskostenKinder(TestUtil.getRandomBigDecimal());
         });
 
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecEinnahmenKosten =

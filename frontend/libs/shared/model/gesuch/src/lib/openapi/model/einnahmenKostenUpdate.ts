@@ -50,5 +50,9 @@ export interface EinnahmenKostenUpdate {
      * Required nur wenn die Person keinen eigenen Haushalt führt
      */
     auswaertigeMittagessenProWoche?: number;
+    /**
+     * Betreuungskosten eigener Kinder
+     */
+    betreuungskostenKinder?: number;
 }
 

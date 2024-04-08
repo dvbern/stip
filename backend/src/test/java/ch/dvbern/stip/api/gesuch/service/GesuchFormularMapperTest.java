@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
@@ -19,6 +20,7 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
@@ -181,6 +183,30 @@ class GesuchFormularMapperTest {
 
         // Assert
         assertThat(update.getEinnahmenKosten().getAuswaertigeMittagessenProWoche(), is(nullValue()));
+    }
+
+    @Test
+    void resetEinnahmenKostenClearsBetreuungskostenKinderTest() {
+        // Arrange
+        final var target = new GesuchFormular()
+            .setKinds(new HashSet<>() {{
+                add(new Kind());
+            }});
+
+        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setBetreuungskostenKinder(BigDecimal.ONE);
+
+        final var update = new GesuchFormularUpdateDto();
+        update.setEinnahmenKosten(updateEinnahmenKosten);
+        update.setKinds(new ArrayList<>());
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.partialUpdate(update, target);
+
+        // Assert
+        assertThat(target.getEinnahmenKosten().getBetreuungskostenKinder(), is(nullValue()));
     }
 
     @Test
