@@ -30,7 +30,9 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
             requiredDocs.add(DokumentTyp.EK_LOHNABRECHNUNG);
         }
 
-        // TODO KSTIP-622: Betreuungskosten eigener Kinder
+        if (greaterThanZero(ek.getBetreuungskostenKinder())) {
+            requiredDocs.add(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
+        }
 
         if (greaterThanZero(ek.getWohnkosten())) {
             requiredDocs.add(DokumentTyp.EK_MIETVERTRAG);
@@ -49,7 +51,6 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         }
 
         if (greaterThanZero(ek.getBeitraege())) {
-            // TODO KSTIP-170: Check with Severin
             requiredDocs.add(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION);
         }
 
