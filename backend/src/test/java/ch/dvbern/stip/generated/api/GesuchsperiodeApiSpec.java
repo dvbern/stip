@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -61,7 +62,8 @@ public class GesuchsperiodeApiSpec {
                 createGesuchsperiode(),
                 getAktiveGesuchsperioden(),
                 getGesuchsperiode(),
-                getGesuchsperioden()
+                getGesuchsperioden(),
+                updateGesuchsperiode()
         );
     }
 
@@ -81,6 +83,10 @@ public class GesuchsperiodeApiSpec {
         return new GetGesuchsperiodenOper(createReqSpec());
     }
 
+    public UpdateGesuchsperiodeOper updateGesuchsperiode() {
+        return new UpdateGesuchsperiodeOper(createReqSpec());
+    }
+
     /**
      * Customize request specification
      * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
@@ -96,6 +102,7 @@ public class GesuchsperiodeApiSpec {
      * 
      *
      * @see #body  (required)
+     * return List&lt;GesuchsperiodeDtoSpec&gt;
      */
     public static class CreateGesuchsperiodeOper implements Oper {
 
@@ -108,7 +115,7 @@ public class GesuchsperiodeApiSpec {
         public CreateGesuchsperiodeOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -121,6 +128,16 @@ public class GesuchsperiodeApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuchsperiode
+         * @param handler handler
+         * @return List&lt;GesuchsperiodeDtoSpec&gt;
+         */
+        public List<GesuchsperiodeDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchsperiodeDtoSpec>> type = new TypeRef<List<GesuchsperiodeDtoSpec>>(){};
+            return execute(handler).as(type);
         }
 
          /**
@@ -343,6 +360,90 @@ public class GesuchsperiodeApiSpec {
          * @return operation
          */
         public GetGesuchsperiodenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Updates a Gesuchperiode with the given id
+     * 
+     *
+     * @see #gesuchsperiodeIdPath  (required)
+     * @see #body  (optional)
+     * return GesuchsperiodeDtoSpec
+     */
+    public static class UpdateGesuchsperiodeOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchsperiode/{gesuchsperiodeId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateGesuchsperiodeOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchsperiode/{gesuchsperiodeId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchsperiode/{gesuchsperiodeId}
+         * @param handler handler
+         * @return GesuchsperiodeDtoSpec
+         */
+        public GesuchsperiodeDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchsperiodeDtoSpec> type = new TypeRef<GesuchsperiodeDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param gesuchsperiodeUpdateDtoSpec (GesuchsperiodeUpdateDtoSpec)  (optional)
+         * @return operation
+         */
+        public UpdateGesuchsperiodeOper body(GesuchsperiodeUpdateDtoSpec gesuchsperiodeUpdateDtoSpec) {
+            reqSpec.setBody(gesuchsperiodeUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCHSPERIODE_ID_PATH = "gesuchsperiodeId";
+
+        /**
+         * @param gesuchsperiodeId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateGesuchsperiodeOper gesuchsperiodeIdPath(Object gesuchsperiodeId) {
+            reqSpec.addPathParam(GESUCHSPERIODE_ID_PATH, gesuchsperiodeId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateGesuchsperiodeOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -338,7 +338,13 @@ paths:
             tags:
                 - Gesuchsperiode
             responses:
-                '201':
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Gesuchsperiode'
                     description: Gesuchsperiode created
                 '401':
                     $ref: '#/components/responses/Unauthorized'
@@ -404,7 +410,7 @@ paths:
                         schema:
                             $ref: '#/components/schemas/GesuchsperiodeUpdate'
             tags:
-                - Gesuchsjahr
+                - Gesuchsperiode
             responses:
                 200:
                     content:

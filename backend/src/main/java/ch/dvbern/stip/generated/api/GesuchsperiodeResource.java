@@ -24,7 +24,7 @@ public interface GesuchsperiodeResource {
 
     @POST
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response createGesuchsperiode(@Valid @NotNull GesuchsperiodeCreateDto gesuchsperiodeCreateDto);
 
     @GET

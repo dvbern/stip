@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuchsperioden.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
@@ -26,7 +25,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
         final var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
-        return CreatedResponseBuilder.of(gesuchsperiode.getId(), GesuchsperiodeResource.class).build();
+        return Response.ok(gesuchsperiode).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
@@ -52,6 +51,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
         return Response.ok(gesuchsperiodenService.getAllGesuchsperioden()).build();
     }
 
+    @RolesAllowed(ROLE_ADMIN)
     @Override
     public Response updateGesuchsperiode(UUID gesuchsperiodeId, GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto) {
         final var gesuchsperiode = gesuchsperiodenService

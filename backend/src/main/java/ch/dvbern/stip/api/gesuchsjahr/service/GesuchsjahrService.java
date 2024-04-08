@@ -20,7 +20,7 @@ public class GesuchsjahrService {
     private final GesuchsjahrRepository gesuchsjahrRepository;
 
     public GesuchsjahrDto getGesuchsjahr(final UUID gesuchsjahrId) {
-        var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        final var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
         return gesuchsjahrMapper.toDto(gesuchsperiode);
     }
 
@@ -48,7 +48,7 @@ public class GesuchsjahrService {
 
     @Transactional
     public GesuchsjahrDto publishGesuchsjahr(final UUID gesuchsjahrId) {
-        Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        final var gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
         gesuchsjahr.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
         gesuchsjahrRepository.persist(gesuchsjahr);
         return gesuchsjahrMapper.toDto(gesuchsjahr);
