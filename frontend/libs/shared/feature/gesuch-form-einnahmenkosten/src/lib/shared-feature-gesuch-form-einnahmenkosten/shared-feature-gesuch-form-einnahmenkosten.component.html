@@ -251,19 +251,28 @@
       <div class="row g-4 mt-1">
         <!-- BETREUUNGKOSTEN_KINDER -->
         @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-9 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.betreuungskostenKinder.label' | translate }}</mat-label>
-            <input
-              formControlName="betreuungskostenKinder"
-              data-testid="form-einnahmen-kosten-betreuungskostenKinder"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.einnahmenkosten.betreuungskostenKinder.label' | translate }}</mat-label>
+              <input
+                formControlName="betreuungskostenKinder"
+                data-testid="form-einnahmen-kosten-betreuungskostenKinder"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (betreuungskostenKinderDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
         }
       </div>
 
