@@ -146,6 +146,7 @@ const vater: Eltern = {
   ergaenzungsleistungAusbezahlt: false,
   sozialhilfebeitraegeAusbezahlt: false,
   id: '',
+  wohnkosten: 100,
   elternTyp: 'VATER',
 };
 
@@ -161,6 +162,7 @@ const mutter: Eltern = {
   ergaenzungsleistungAusbezahlt: false,
   sozialhilfebeitraegeAusbezahlt: false,
   id: '',
+  wohnkosten: 100,
   elternTyp: 'VATER',
 };
 

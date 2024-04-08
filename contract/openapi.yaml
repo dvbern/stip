@@ -1787,6 +1787,7 @@ components:
                 - nachname
                 - sozialhilfebeitraegeAusbezahlt
                 - telefonnummer
+                - wohnkosten
                 - vorname
                 - elternTyp
             type: object
@@ -1820,6 +1821,8 @@ components:
                     type: string
                 telefonnummer:
                     type: string
+                wohnkosten:
+                    type: integer
                 sozialversicherungsnummer:
                     type: string
                 geburtsdatum:
