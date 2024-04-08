@@ -2,18 +2,12 @@ package ch.dvbern.stip.api.gesuchsjahr.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
-import ch.dvbern.stip.api.common.util.DateRange;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,16 +23,16 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 public class Gesuchsjahr extends AbstractMandantEntity {
 
-	@Column(name = "bezeichnung_de")
-	private String bezeichnungDe;
+    @Column(name = "bezeichnung_de")
+    private String bezeichnungDe;
 
-	@Column(name = "bezeichnung_fr")
-	private String bezeichnungFr;
+    @Column(name = "bezeichnung_fr")
+    private String bezeichnungFr;
 
-	@Column(name = "technisches_jahr")
-	private Integer technischesJahr;
+    @Column(name = "technisches_jahr")
+    private Integer technischesJahr;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "gueltigkeit_status")
-	private GueltigkeitStatus gueltigkeitStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gueltigkeit_status")
+    private GueltigkeitStatus gueltigkeitStatus;
 }

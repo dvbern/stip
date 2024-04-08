@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuchsperioden.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
@@ -20,9 +19,7 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
-
     private final GesuchsperiodenService gesuchsperiodenService;
-    private final BenutzerService benutzerService;
 
     @RolesAllowed(ROLE_ADMIN)
     @Override

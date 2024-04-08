@@ -16,51 +16,50 @@ import lombok.AllArgsConstructor;
 @RequestScoped
 @AllArgsConstructor
 public class GesuchsjahrService {
+    private final GesuchsjahrMapper gesuchsjahrMapper;
+    private final GesuchsjahrRepository gesuchsjahrRepository;
 
-	private final GesuchsjahrMapper gesuchsjahrMapper;
-	private final GesuchsjahrRepository gesuchsjahrRepository;
+    public GesuchsjahrDto getGesuchsjahr(UUID gesuchsjahrId) {
+        var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        return gesuchsjahrMapper.toDto(gesuchsperiode);
+    }
 
-	public GesuchsjahrDto getGesuchsjahr(UUID gesuchsjahrId) {
-		var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
-		return gesuchsjahrMapper.toDto(gesuchsperiode);
-	}
-
-	public Collection<GesuchsjahrDto> getGesuchsjahre() {
-		return gesuchsjahrRepository.findAll()
-				.stream()
-				.map(gesuchsjahrMapper::toDto)
-				.toList();
-	}
-
-    @Transactional
-	public GesuchsjahrDto createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
-		Gesuchsjahr gesuchsjahr = gesuchsjahrMapper.toEntity(gesuchsjahrCreateDto);
-		gesuchsjahrRepository.persist(gesuchsjahr);
-		return gesuchsjahrMapper.toDto(gesuchsjahr);
-	}
+    public Collection<GesuchsjahrDto> getGesuchsjahre() {
+        return gesuchsjahrRepository.findAll()
+            .stream()
+            .map(gesuchsjahrMapper::toDto)
+            .toList();
+    }
 
     @Transactional
-	public GesuchsjahrDto updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
-		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
-		if (gesuchsjahr.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
-			throw new UnsupportedOperationException("Cannot update a Gesuchsjahr with GueltigkeitStatus PUBLIZIERT");
-		}
-		gesuchsjahr = gesuchsjahrMapper.partialUpdate(gesuchsjahrUpdateDto, gesuchsjahr);
-		gesuchsjahrRepository.persist(gesuchsjahr);
-		return gesuchsjahrMapper.toDto(gesuchsjahr);
-	}
+    public GesuchsjahrDto createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
+        Gesuchsjahr gesuchsjahr = gesuchsjahrMapper.toEntity(gesuchsjahrCreateDto);
+        gesuchsjahrRepository.persist(gesuchsjahr);
+        return gesuchsjahrMapper.toDto(gesuchsjahr);
+    }
 
     @Transactional
-	public GesuchsjahrDto publishGesuchsjahr(UUID gesuchsjahrId) {
-		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
-		gesuchsjahr.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
-    	gesuchsjahrRepository.persist(gesuchsjahr);
-    	return gesuchsjahrMapper.toDto(gesuchsjahr);
-	}
+    public GesuchsjahrDto updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
+        Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        if (gesuchsjahr.getGueltigkeitStatus() == GueltigkeitStatus.PUBLIZIERT) {
+            throw new UnsupportedOperationException("Cannot update a Gesuchsjahr with GueltigkeitStatus PUBLIZIERT");
+        }
+        gesuchsjahr = gesuchsjahrMapper.partialUpdate(gesuchsjahrUpdateDto, gesuchsjahr);
+        gesuchsjahrRepository.persist(gesuchsjahr);
+        return gesuchsjahrMapper.toDto(gesuchsjahr);
+    }
 
     @Transactional
-	public void deleteGesuchsjahr(UUID gesuchsjahrId) {
-		Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
-		gesuchsjahrRepository.delete(gesuchsjahr);
-	}
+    public GesuchsjahrDto publishGesuchsjahr(UUID gesuchsjahrId) {
+        Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        gesuchsjahr.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
+        gesuchsjahrRepository.persist(gesuchsjahr);
+        return gesuchsjahrMapper.toDto(gesuchsjahr);
+    }
+
+    @Transactional
+    public void deleteGesuchsjahr(UUID gesuchsjahrId) {
+        Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        gesuchsjahrRepository.delete(gesuchsjahr);
+    }
 }

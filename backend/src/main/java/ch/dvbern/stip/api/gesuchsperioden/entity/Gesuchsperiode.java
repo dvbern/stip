@@ -42,7 +42,6 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class Gesuchsperiode extends AbstractMandantEntity {
-
     @Column(nullable = false, name = "bezeichnung_de")
     private String bezeichnungDe;
 
