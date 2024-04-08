@@ -9,7 +9,7 @@ import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-g
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { SharedModelError } from '@dv/shared/model/error';
+import { SharedModelError, ValidationWarning } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
@@ -19,7 +19,10 @@ import {
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 export interface State {
-  validations: ValidationError[] | null;
+  validations: {
+    errors: ValidationError[];
+    warnings?: ValidationWarning[];
+  } | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   gesuchs: SharedModelGesuch[];
@@ -168,7 +171,12 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state, { error }): State => ({
         ...state,
         validations:
-          error.type === 'validationError' ? error.validationErrors : null,
+          error.type === 'validationError'
+            ? {
+                errors: error.validationErrors,
+                warnings: error.validationWarnings,
+              }
+            : null,
         loading: false,
         error: error.type === 'validationError' ? undefined : error,
       }),
@@ -195,10 +203,14 @@ export const {
   name, // feature name
   reducer,
   selectGesuchsState,
+  selectLastUpdate,
   selectGesuch,
   selectGesuchs,
+  selectGesuchFormular,
   selectLoading,
   selectError,
+  selectCache,
+  selectValidations,
 } = sharedDataAccessGesuchsFeature;
 
 const getGesuchFormular = (

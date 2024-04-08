@@ -5,7 +5,6 @@ import {
   OPTION_BUCHSTABEN_ZUTEILUNG,
   OPTION_GESUCHSPERIODEN,
 } from '@dv/sachbearbeitung-app/model/administration';
-import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
 export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
   {

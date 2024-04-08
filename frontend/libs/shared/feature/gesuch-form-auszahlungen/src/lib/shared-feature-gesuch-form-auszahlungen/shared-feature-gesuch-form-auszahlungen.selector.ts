@@ -18,6 +18,8 @@ export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
     return {
       loading: gesuchsView.loading || stammdatenView.loading,
       gesuch: gesuchsView.gesuch,
+      allowTypes: gesuchsView.allowTypes,
+      gesuchId: gesuchsView.gesuch?.id,
       gesuchFormular: gesuchsView.gesuchFormular,
       laender: stammdatenView.laender,
       kontoinhaberValues: calculateKontoinhaberValuesGesuch(

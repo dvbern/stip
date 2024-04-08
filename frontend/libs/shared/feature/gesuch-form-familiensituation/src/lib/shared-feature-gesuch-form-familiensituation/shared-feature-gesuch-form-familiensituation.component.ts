@@ -36,12 +36,17 @@ import { Subject } from 'rxjs';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import {
+  DokumentTyp,
   ElternAbwesenheitsGrund,
   ElternUnbekanntheitsGrund,
   Elternschaftsteilung,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import { FAMILIENSITUATION } from '@dv/shared/model/gesuch-form';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -90,6 +95,7 @@ const animationTime = 500;
     GesuchAppUiStepFormButtonsComponent,
     SharedUiStepperNavigationComponent,
     SharedUiLoadingComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],
@@ -174,7 +180,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   });
 
   duringAnimation: 'show' | 'hide' = 'show';
-  view = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   updateValidity$ = new Subject<unknown>();
 
   stateSig: WritableSignal<FamSitStepMeta> = signal({
@@ -184,6 +190,57 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
   private currentFamiliensituationFormStep =
     FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN;
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
+  gerichtlicheAlimentenregelungSig = toSignal(
+    this.form.controls.gerichtlicheAlimentenregelung.valueChanges,
+  );
+
+  mutterUnbekanntGrundSig = toSignal(
+    this.form.controls.mutterUnbekanntGrund.valueChanges,
+  );
+
+  vaterUnbekanntGrundSig = toSignal(
+    this.form.controls.vaterUnbekanntGrund.valueChanges,
+  );
+
+  trennungsvereinbarungDocumentSig = this.createUploadOptionsSig(() => {
+    const gerichtlicheAlimentenregelung =
+      this.gerichtlicheAlimentenregelungSig();
+
+    return gerichtlicheAlimentenregelung
+      ? DokumentTyp.FAMILIENSITUATION_TRENNUNGSKONVENTION
+      : null;
+  });
+
+  vaterUnbekanntDocumentSig = this.createUploadOptionsSig(() => {
+    const vaterUnbekanntGrund = this.vaterUnbekanntGrundSig();
+
+    if (
+      vaterUnbekanntGrund ===
+      ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT
+    ) {
+      return DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER;
+    }
+
+    if (
+      vaterUnbekanntGrund === ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG
+    ) {
+      return DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN;
+    }
+
+    return null;
+  });
+
+  mutterUnbekanntDocumentSig = this.createUploadOptionsSig(() => {
+    const mutterUnbekanntGrund = this.mutterUnbekanntGrundSig();
+
+    return mutterUnbekanntGrund ===
+      ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT
+      ? DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
+      : null;
+  });
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormFamiliensituation.init());
@@ -213,9 +270,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     const elternVerheiratetZusammenSig = toSignal(
       elternVerheiratetZusammen.valueChanges,
     );
-    const gerichtlicheAlimentenregelungSig = toSignal(
-      gerichtlicheAlimentenregelung.valueChanges,
-    );
+
     const werZahltAlimenteSig = toSignal(werZahltAlimente.valueChanges);
     const elternteilUnbekanntVerstorbenSig = toSignal(
       elternteilUnbekanntVerstorben.valueChanges,
@@ -230,7 +285,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
-        const { gesuchFormular } = this.view();
+        const { gesuchFormular } = this.viewSig();
         if (gesuchFormular !== undefined) {
           const initialFormFamSit = gesuchFormular?.familiensituation ?? {};
           this.form.patchValue({
@@ -265,7 +320,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     effect(
       () => {
         const gerichtlicheAlimentenregelung =
-          gerichtlicheAlimentenregelungSig();
+          this.gerichtlicheAlimentenregelungSig();
 
         this.setDisabledStateAndHide(
           werZahltAlimente,
@@ -390,7 +445,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
-        const { readonly } = this.view();
+        const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
             control.disable(),
@@ -456,7 +511,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     this.updateValidity$.next({});
-    const { gesuch } = this.view();
+    const { gesuch } = this.viewSig();
     if (this.form.valid && gesuch?.id) {
       const gesuchFormular = this.buildSharedModelAdresseFromForm();
       this.store.dispatch(
@@ -472,7 +527,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   }
 
   handleContinue() {
-    const { gesuch } = this.view();
+    const { gesuch } = this.viewSig();
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormFamiliensituation.nextTriggered({
@@ -485,7 +540,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   }
 
   private buildSharedModelAdresseFromForm(): GesuchFormularUpdate {
-    const { gesuchFormular } = this.view();
+    const { gesuchFormular } = this.viewSig();
     return {
       ...(gesuchFormular ?? {}),
       familiensituation: {

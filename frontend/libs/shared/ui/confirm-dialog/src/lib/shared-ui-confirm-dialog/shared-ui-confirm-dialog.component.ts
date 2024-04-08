@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface ConfirmDialogData {
@@ -22,6 +26,14 @@ export interface ConfirmDialogData {
 export class SharedUiConfirmDialogComponent {
   dialogRef = inject(MatDialogRef);
   dialogData = inject<ConfirmDialogData>(MAT_DIALOG_DATA, { optional: true });
+
+  static open(dialog: MatDialog, data: ConfirmDialogData) {
+    return dialog.open<
+      SharedUiConfirmDialogComponent,
+      ConfirmDialogData,
+      boolean
+    >(SharedUiConfirmDialogComponent, { data });
+  }
 
   confirm() {
     return this.dialogRef.close(true);

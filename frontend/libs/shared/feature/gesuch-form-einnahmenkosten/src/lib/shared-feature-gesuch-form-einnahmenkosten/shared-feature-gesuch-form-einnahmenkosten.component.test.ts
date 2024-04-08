@@ -275,6 +275,48 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe('should display betreuungskostenKinder field correctly based on current state', () => {
+    it('should not display betreuungskostenKinder field if no kinds', async () => {
+      const { queryByTestId, detectChanges } = await setup({
+        personInAusbildung: createEmptyPersonInAusbildung(),
+        ausbildung: createEmptyAusbildung(),
+        familiensituation: {
+          elternVerheiratetZusammen: true,
+        },
+        kinds: undefined,
+      });
+
+      detectChanges();
+
+      expect(
+        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
+      ).toBeNull();
+      expect(
+        queryByTestId('form-einnahmen-kosten-betreuungskostenKinder'),
+      ).toBeNull();
+    });
+
+    it('should display betreuungskostenKinder field if there are kinds', async () => {
+      const { queryByTestId, detectChanges } = await setup({
+        personInAusbildung: createEmptyPersonInAusbildung(),
+        ausbildung: createEmptyAusbildung(),
+        familiensituation: {
+          elternVerheiratetZusammen: true,
+        },
+        kinds: [{} as never],
+      });
+
+      detectChanges();
+
+      expect(
+        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
+      ).toBeNull();
+      expect(
+        queryByTestId('form-einnahmen-kosten-betreuungskostenKinder'),
+      ).toBeInTheDocument();
+    });
+  });
 });
 
 function createEmptyAusbildung(): Ausbildung {

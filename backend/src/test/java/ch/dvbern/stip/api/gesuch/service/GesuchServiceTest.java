@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,8 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.type.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -756,6 +759,13 @@ class GesuchServiceTest {
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
 
+        tranche.getGesuchFormular().setTranche(tranche);
+        tranche.getGesuch().setGesuchDokuments(
+            Arrays.stream(DokumentTyp.values())
+                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
+                .toList()
+        );
+
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
 
@@ -781,6 +791,13 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+
+        tranche.getGesuchFormular().setTranche(tranche);
+        tranche.getGesuch().setGesuchDokuments(
+            Arrays.stream(DokumentTyp.values())
+                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
+                .toList()
+        );
 
         gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
 

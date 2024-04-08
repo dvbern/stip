@@ -9,6 +9,8 @@ describe('selectSharedDataAccessDokumentesView', () => {
       error: undefined,
     };
     const gesuch = {
+      gesuchId: undefined,
+      allowTypes: undefined,
       gesuch: null,
       gesuchs: [],
       gesuchFormular: null,
@@ -21,10 +23,10 @@ describe('selectSharedDataAccessDokumentesView', () => {
         gesuchFormular: null,
       },
       lastUpdate: null,
-      validations: [],
+      validations: { errors: [] },
       invalidFormularProps: {
         lastUpdate: null,
-        validations: [],
+        validations: { errors: undefined, warnings: undefined },
       },
     };
     const result = selectSharedDataAccessDokumentesView.projector(
