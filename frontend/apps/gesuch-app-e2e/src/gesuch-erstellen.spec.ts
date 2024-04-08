@@ -122,6 +122,7 @@ const einnahmenKosten: EinnahmenKosten = {
   zulagen: 250,
   wgWohnend: false,
   auswaertigeMittagessenProWoche: 5,
+  betreuungskostenKinder: 100,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

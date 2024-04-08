@@ -363,6 +363,7 @@
   "shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info": "effektive Kosten, max. CHF 2000.-/Jahr",
   "shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label": "Ausbildungskosten: Tertiärstufe",
   "shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.info": "effektive Kosten, max. CHF 3000.-/Jahr",
+  "shared.form.einnahmenkosten.betreuungskostenKinder.label": "Betreuungskosten Kinder",
   "shared.form.einnahmenkosten.fahrkosten.label": "Fahrkosten",
   "shared.form.einnahmenkosten.wohnkosten.label": "Wohnkosten",
   "shared.form.einnahmenkosten.wgWohnend.label": "In WG (Wohngemeinschaft) wohnend",

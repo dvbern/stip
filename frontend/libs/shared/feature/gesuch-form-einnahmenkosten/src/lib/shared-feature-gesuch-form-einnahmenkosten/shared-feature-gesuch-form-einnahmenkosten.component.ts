@@ -86,6 +86,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
+
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
     alimente: [<string | null>null, [Validators.required]],
@@ -104,6 +105,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
     fahrkosten: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
+    betreuungskostenKinder: [<string | null>null, [Validators.required]],
     verdienstRealisiert: [<boolean | null>null, [Validators.required]],
     willDarlehen: [<boolean | undefined>undefined, [Validators.required]],
     auswaertigeMittagessenProWoche: [
@@ -112,13 +114,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
   });
+
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
   maskitoNumber = maskitoNumber;
   maskitoPositiveNumber = maskitoPositiveNumber;
-
   hiddenFieldsSetSig = signal(new Set());
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
@@ -339,6 +341,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.controls.wgWohnend,
           wohnsitzNotEigenerHaushalt,
         );
+        this.setDisabledStateAndHide(
+          this.form.controls.betreuungskostenKinder,
+          !hatKinder,
+        );
       },
       { allowSignalWrites: true },
     );
@@ -365,6 +371,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
               einnahmenKosten.ausbildungskostenTertiaerstufe?.toString(),
             fahrkosten: einnahmenKosten.fahrkosten.toString(),
             wohnkosten: einnahmenKosten.wohnkosten?.toString(),
+            betreuungskostenKinder:
+              einnahmenKosten.betreuungskostenKinder?.toString(),
           });
         } else {
           this.form.reset();
@@ -399,6 +407,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     this.formUtils.focusFirstInvalid(this.elementRef);
     const { gesuchId, trancheId, gesuchFormular } =
       this.buildUpdatedGesuchFromForm();
+
     if (this.form.valid && gesuchId && trancheId) {
       this.store.dispatch(
         SharedEventGesuchFormEinnahmenkosten.saveTriggered({
@@ -439,7 +448,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'wgWohnend',
       'verdienstRealisiert',
       'auswaertigeMittagessenProWoche',
-      ...(hatKinder ? ['zulagen' as const] : []),
+      ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
     ]);
     return {
       gesuchId: gesuch?.id,
@@ -467,6 +476,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ),
           fahrkosten: fromFormatedNumber(formValues.fahrkosten),
           wohnkosten: fromFormatedNumber(formValues.wohnkosten),
+          betreuungskostenKinder: fromFormatedNumber(
+            formValues.betreuungskostenKinder,
+          ),
         },
       },
     };
