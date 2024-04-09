@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
@@ -11,6 +11,7 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   standalone: true,
   imports: [
     RouterLink,
+    RouterLinkActive,
     SharedPatternAppHeaderComponent,
     SharedUiSearchComponent,
     TranslateModule,
