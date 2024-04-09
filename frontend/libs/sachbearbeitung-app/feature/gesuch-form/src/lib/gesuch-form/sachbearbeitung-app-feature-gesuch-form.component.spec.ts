@@ -14,7 +14,12 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            gesuchs: { gesuchFormular: {} },
+            gesuchs: {
+              cache: {
+                gesuchId: null,
+                gesuchFormular: null,
+              },
+            },
             globalNotifications: { globalNotificationsById: {} },
           },
         }),

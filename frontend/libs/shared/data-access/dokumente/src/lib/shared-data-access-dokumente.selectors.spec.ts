@@ -20,6 +20,7 @@ describe('selectSharedDataAccessDokumentesView', () => {
       trancheId: '',
       cachedGesuchFormular: null,
       cache: {
+        gesuchId: null,
         gesuchFormular: null,
       },
       lastUpdate: null,
