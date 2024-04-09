@@ -1,7 +1,5 @@
-import { inject } from '@angular/core';
 import { Route } from '@angular/router';
 
-import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
 import { OPTION_AUSBILDUNGSSTAETTE } from '@dv/sachbearbeitung-app/model/administration';
 import { checkUnsavedChanges } from '@dv/shared/pattern/unsaved-guard';
 
@@ -13,12 +11,6 @@ export const sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes: Ro
       path: '',
       pathMatch: 'prefix',
       data: { option: OPTION_AUSBILDUNGSSTAETTE },
-      resolve: {
-        init: () => {
-          inject(AdminAusbildungsstaetteStore).loadAusbildungsstaetten({});
-        },
-      },
-      providers: [AdminAusbildungsstaetteStore],
       children: [
         {
           path: '',

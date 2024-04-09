@@ -142,3 +142,15 @@
     width: 100%;
   }
 }
+
+.table-select {
+  font-size: 14px;
+
+  .mat-mdc-option {
+    min-height: 40px;
+  }
+}
+
+.cdk-overlay-pane:has(.table-select) {
+  width: auto !important;
+}
