@@ -41,6 +41,7 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   (state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
+      cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,

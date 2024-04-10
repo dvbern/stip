@@ -17,6 +17,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       validations: { errors: [] },
       gesuchFormular: null,
       cache: {
+        gesuchId: null,
         gesuchFormular: null,
       },
       lastUpdate: null,
@@ -100,6 +101,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
         kinds: [],
       },
       cache: {
+        gesuchId: null,
         gesuchFormular: null,
       },
       lastUpdate: null,

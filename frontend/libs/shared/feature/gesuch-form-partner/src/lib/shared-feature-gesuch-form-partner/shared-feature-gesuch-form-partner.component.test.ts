@@ -28,6 +28,7 @@ async function setup() {
           } as GesuchFormular,
           gesuchs: {
             cache: {
+              gesuchId: null,
               gesuchFormular: null,
             },
           },
