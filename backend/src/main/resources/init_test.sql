@@ -24,6 +24,10 @@ VALUES ('4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b', '2023-06-20 14:22:43.418364', '2
 
 -- Gesuchsperiode
 
+DELETE
+FROM gesuchsperiode
+WHERE id = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
+
 INSERT INTO gesuchsperiode (
   id,
   timestamp_erstellt,
@@ -31,10 +35,6 @@ INSERT INTO gesuchsperiode (
   user_erstellt,
   user_mutiert,
   version,
-  gueltig_ab,
-  gueltig_bis,
-  einreichfrist,
-  aufschaltdatum,
   mandant,
   bezeichnung_de,
   bezeichnung_fr,
@@ -77,7 +77,8 @@ INSERT INTO gesuchsperiode (
   wohnkosten_persoenlich_2pers,
   wohnkosten_persoenlich_3pers,
   wohnkosten_persoenlich_4pers,
-  wohnkosten_persoenlich_5pluspers
+  wohnkosten_persoenlich_5pluspers,
+  gueltigkeit_status
 )
 VALUES (
   '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -86,21 +87,17 @@ VALUES (
   'Admin',
   'Admin',
   0,
-  '2023-08-01',
-  '2024-07-31',
-  '2023-12-31',
-  '2023-06-01',
   'bern',
   'Test DE',
   'Test FR',
   '2024',
   '2024',
+  '2023-08-01',
+  '2024-07-31',
+  '2024-01-01',
+  '2024-12-31',
   current_date,
   current_date,
-  current_date,
-  current_date,
-  current_date,
-  current_date,
   1,
   1,
   1,
@@ -132,7 +129,8 @@ VALUES (
   1,
   1,
   1,
-  1
+  1,
+  'ENTWURF'
  );
 
 INSERT INTO ausbildungsstaette (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version,

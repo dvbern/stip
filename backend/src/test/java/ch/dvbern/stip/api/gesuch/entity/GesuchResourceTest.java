@@ -49,7 +49,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchResourceTest {
-
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;

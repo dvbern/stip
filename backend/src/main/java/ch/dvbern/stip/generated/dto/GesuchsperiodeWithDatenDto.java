@@ -23,11 +23,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid GueltigkeitStatusDto status;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
   private @Valid Integer fiskaljahr;
   private @Valid Integer gesuchsjahr;
   private @Valid LocalDate gesuchsperiodeStart;
@@ -68,8 +65,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid Integer wohnkostenPersoenlich3pers;
   private @Valid Integer wohnkostenPersoenlich4pers;
   private @Valid Integer wohnkostenPersoenlich5pluspers;
+  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
   private @Valid LocalDate einreichfrist;
-  private @Valid LocalDate aufschaltdatum;
 
   /**
    **/
@@ -88,25 +85,6 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeWithDatenDto status(GueltigkeitStatusDto status) {
-    this.status = status;
-    return this;
-  }
-
-  
-  @JsonProperty("status")
-  @NotNull
-  public GueltigkeitStatusDto getStatus() {
-    return status;
-  }
-
-  @JsonProperty("status")
-  public void setStatus(GueltigkeitStatusDto status) {
-    this.status = status;
   }
 
   /**
@@ -147,44 +125,6 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   @JsonProperty("bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeWithDatenDto gueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
-    return this;
-  }
-
-  
-  @JsonProperty("gueltigAb")
-  @NotNull
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
-  }
-
-  @JsonProperty("gueltigAb")
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeWithDatenDto gueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-    return this;
-  }
-
-  
-  @JsonProperty("gueltigBis")
-  @NotNull
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
-  }
-
-  @JsonProperty("gueltigBis")
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
   }
 
   /**
@@ -989,6 +929,24 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
 
   /**
    **/
+  public GesuchsperiodeWithDatenDto gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
+    return this;
+  }
+
+  
+  @JsonProperty("gueltigkeitStatus")
+  public GueltigkeitStatusDto getGueltigkeitStatus() {
+    return gueltigkeitStatus;
+  }
+
+  @JsonProperty("gueltigkeitStatus")
+  public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
+  }
+
+  /**
+   **/
   public GesuchsperiodeWithDatenDto einreichfrist(LocalDate einreichfrist) {
     this.einreichfrist = einreichfrist;
     return this;
@@ -1005,24 +963,6 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     this.einreichfrist = einreichfrist;
   }
 
-  /**
-   **/
-  public GesuchsperiodeWithDatenDto aufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
-    return this;
-  }
-
-  
-  @JsonProperty("aufschaltdatum")
-  public LocalDate getAufschaltdatum() {
-    return aufschaltdatum;
-  }
-
-  @JsonProperty("aufschaltdatum")
-  public void setAufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -1034,11 +974,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     }
     GesuchsperiodeWithDatenDto gesuchsperiodeWithDaten = (GesuchsperiodeWithDatenDto) o;
     return Objects.equals(this.id, gesuchsperiodeWithDaten.id) &&
-        Objects.equals(this.status, gesuchsperiodeWithDaten.status) &&
         Objects.equals(this.bezeichnungDe, gesuchsperiodeWithDaten.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsperiodeWithDaten.bezeichnungFr) &&
-        Objects.equals(this.gueltigAb, gesuchsperiodeWithDaten.gueltigAb) &&
-        Objects.equals(this.gueltigBis, gesuchsperiodeWithDaten.gueltigBis) &&
         Objects.equals(this.fiskaljahr, gesuchsperiodeWithDaten.fiskaljahr) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiodeWithDaten.gesuchsjahr) &&
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeWithDaten.gesuchsperiodeStart) &&
@@ -1079,13 +1016,13 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
         Objects.equals(this.wohnkostenPersoenlich3pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich3pers) &&
         Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeWithDaten.wohnkostenPersoenlich4pers) &&
         Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeWithDaten.wohnkostenPersoenlich5pluspers) &&
-        Objects.equals(this.einreichfrist, gesuchsperiodeWithDaten.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeWithDaten.aufschaltdatum);
+        Objects.equals(this.gueltigkeitStatus, gesuchsperiodeWithDaten.gueltigkeitStatus) &&
+        Objects.equals(this.einreichfrist, gesuchsperiodeWithDaten.einreichfrist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist, aufschaltdatum);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, gueltigkeitStatus, einreichfrist);
   }
 
   @Override
@@ -1094,11 +1031,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     sb.append("class GesuchsperiodeWithDatenDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
@@ -1139,8 +1073,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     sb.append("    wohnkostenPersoenlich3pers: ").append(toIndentedString(wohnkostenPersoenlich3pers)).append("\n");
     sb.append("    wohnkostenPersoenlich4pers: ").append(toIndentedString(wohnkostenPersoenlich4pers)).append("\n");
     sb.append("    wohnkostenPersoenlich5pluspers: ").append(toIndentedString(wohnkostenPersoenlich5pluspers)).append("\n");
+    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
-    sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
     sb.append("}");
     return sb.toString();
   }

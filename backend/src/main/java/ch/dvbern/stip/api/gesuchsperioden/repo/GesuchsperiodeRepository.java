@@ -24,9 +24,9 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         var query = queryFactory
             .select(gesuchsperiode)
             .from(gesuchsperiode)
-            .where(gesuchsperiode.aufschaltdatum.before(date)
-                .and(gesuchsperiode.gueltigkeit.gueltigBis.after(date)
-                    .or(gesuchsperiode.gueltigkeit.gueltigBis.eq(date))));
+            .where(gesuchsperiode.aufschaltterminStart.before(date)
+                .and(gesuchsperiode.aufschaltterminStopp.after(date)
+                    .or(gesuchsperiode.aufschaltterminStopp.eq(date))));
         return query.stream();
     }
 

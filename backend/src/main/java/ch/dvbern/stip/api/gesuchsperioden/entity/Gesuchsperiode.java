@@ -20,15 +20,13 @@ package ch.dvbern.stip.api.gesuchsperioden.entity;
 import java.time.LocalDate;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.util.DateRange;
-import jakarta.persistence.AttributeOverride;
+import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -36,7 +34,7 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(indexes = {
-    @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
+    @Index(name = "IX_gesuchsperiode_aufschalttermin_start", columnList = "aufschalttermin_start"),
     @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
 })
 @Getter
@@ -168,15 +166,7 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "wohnkosten_persoenlich_5pluspers")
     private Integer wohnkostenPersoenlich5pluspers;
 
-    @NotNull
-    @Embedded
-    @Valid
-    @AttributeOverride(name = "gueltigBis", column = @Column(name = "gueltig_bis"))
-    private DateRange gueltigkeit = new DateRange();
-
-    @Column(nullable = true)
-    private LocalDate einreichfrist;
-
-    @Column(nullable = true)
-    private LocalDate aufschaltdatum;
+    @Column(nullable = false, name = "gueltigkeit_status")
+    @Enumerated(EnumType.STRING)
+    private GueltigkeitStatus gueltigkeitStatus = GueltigkeitStatus.ENTWURF;
 }
