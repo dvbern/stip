@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
@@ -18,12 +21,17 @@ import lombok.RequiredArgsConstructor;
 public class BenutzerResourceImpl implements BenutzerResource {
 
     private final BenutzerService benutzerService;
+    private final ZuordnungService zuordnungService;
+    private final SachbearbeiterZuordnungStammdatenWorker worker;
+    private final TenantService tenantService;
 
     @Override
     public Response createOrUpdateSachbearbeiterStammdaten(
         UUID benutzerId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
         benutzerService.createOrUpdateSachbearbeiterStammdaten(benutzerId, sachbearbeiterZuordnungStammdatenDto);
+        worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
+        //        zuordnungService.fireUpdateZuordnung();
         return Response.accepted().build();
     }
 
@@ -32,6 +40,8 @@ public class BenutzerResourceImpl implements BenutzerResource {
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto
     ) {
         benutzerService.createOrUpdateSachbearbeiterStammdaten(sachbearbeiterZuordnungStammdatenListDto);
+        worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
+        //        zuordnungService.fireUpdateZuordnung();
         return Response.accepted().build();
     }
 
