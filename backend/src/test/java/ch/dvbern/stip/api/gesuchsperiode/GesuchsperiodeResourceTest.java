@@ -15,9 +15,6 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import org.junit.jupiter.api.MethodOrderer;
@@ -52,15 +49,14 @@ class GesuchsperiodeResourceTest {
             assertThat(String.format("Failed to create periode: %s", e), false, is(true));
             return;
         }
-
-        newPeriode.setAufschaltdatum(LocalDate.now().with(firstDayOfYear()));
+        
+        newPeriode.setAufschaltterminStart(LocalDate.now().with(firstDayOfYear()));
+        newPeriode.setAufschaltterminStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setEinreichfrist(LocalDate.now().with(lastDayOfYear()));
-        newPeriode.setGueltigAb(LocalDate.now().with(firstDayOfYear()));
-        newPeriode.setGueltigBis(LocalDate.now().with(lastDayOfYear()));
+        newPeriode.setGesuchsperiodeStart(LocalDate.now().with(firstDayOfYear()));
+        newPeriode.setGesuchsperiodeStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setFiskaljahr(LocalDate.now().getYear());
         newPeriode.setGesuchsjahr(LocalDate.now().getYear());
-
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
         gesuchsperiode = api.createGesuchsperiode().body(newPeriode)
             .execute(ResponseBody::prettyPeek)

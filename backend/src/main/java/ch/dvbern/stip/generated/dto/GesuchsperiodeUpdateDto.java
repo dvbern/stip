@@ -62,10 +62,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid Integer wohnkostenPersoenlich3pers;
   private @Valid Integer wohnkostenPersoenlich4pers;
   private @Valid Integer wohnkostenPersoenlich5pluspers;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
   private @Valid LocalDate einreichfrist;
-  private @Valid LocalDate aufschaltdatum;
 
   /**
    * 
@@ -909,42 +906,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchsperiodeUpdateDto gueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
-    return this;
-  }
-
-  
-  @JsonProperty("gueltigAb")
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
-  }
-
-  @JsonProperty("gueltigAb")
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeUpdateDto gueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-    return this;
-  }
-
-  
-  @JsonProperty("gueltigBis")
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
-  }
-
-  @JsonProperty("gueltigBis")
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-  }
-
-  /**
-   **/
   public GesuchsperiodeUpdateDto einreichfrist(LocalDate einreichfrist) {
     this.einreichfrist = einreichfrist;
     return this;
@@ -959,24 +920,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   @JsonProperty("einreichfrist")
   public void setEinreichfrist(LocalDate einreichfrist) {
     this.einreichfrist = einreichfrist;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeUpdateDto aufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
-    return this;
-  }
-
-  
-  @JsonProperty("aufschaltdatum")
-  public LocalDate getAufschaltdatum() {
-    return aufschaltdatum;
-  }
-
-  @JsonProperty("aufschaltdatum")
-  public void setAufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
   }
 
 
@@ -1031,15 +974,12 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
         Objects.equals(this.wohnkostenPersoenlich3pers, gesuchsperiodeUpdate.wohnkostenPersoenlich3pers) &&
         Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeUpdate.wohnkostenPersoenlich4pers) &&
         Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeUpdate.wohnkostenPersoenlich5pluspers) &&
-        Objects.equals(this.gueltigAb, gesuchsperiodeUpdate.gueltigAb) &&
-        Objects.equals(this.gueltigBis, gesuchsperiodeUpdate.gueltigBis) &&
-        Objects.equals(this.einreichfrist, gesuchsperiodeUpdate.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeUpdate.aufschaltdatum);
+        Objects.equals(this.einreichfrist, gesuchsperiodeUpdate.einreichfrist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist);
   }
 
   @Override
@@ -1089,10 +1029,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     sb.append("    wohnkostenPersoenlich3pers: ").append(toIndentedString(wohnkostenPersoenlich3pers)).append("\n");
     sb.append("    wohnkostenPersoenlich4pers: ").append(toIndentedString(wohnkostenPersoenlich4pers)).append("\n");
     sb.append("    wohnkostenPersoenlich5pluspers: ").append(toIndentedString(wohnkostenPersoenlich5pluspers)).append("\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
-    sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
     sb.append("}");
     return sb.toString();
   }

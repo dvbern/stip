@@ -1330,7 +1330,6 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - technischesJahr
-        - gueltigkeitStatus
       properties:
         bezeichnungDe:
           type: string
@@ -2301,15 +2300,15 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        status:
+        gueltigkeitStatus:
           $ref: '#/components/schemas/GueltigkeitStatus'
       allOf:
         - $ref: '#/components/schemas/GesuchsperiodeDaten'
     Gesuchsperiode:
       required:
         - id
-        - gueltigAb
-        - gueltigBis
+        - gesuchsperiodeStart
+        - gesuchsperiodeStopp
         - bezeichnungDe
         - bezeichnungFr
         - status
@@ -2321,20 +2320,20 @@ components:
           type: string
         bezeichnungFr:
           type: string
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-        einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
-          $ref: '#/components/schemas/LocalDate'
-        status:
+        gueltigkeitStatus:
           $ref: '#/components/schemas/GueltigkeitStatus'
+        gesuchsperiodeStart:
+          $ref: '#/components/schemas/LocalDate'
+        gesuchsperiodeStopp:
+          $ref: '#/components/schemas/LocalDate'
+        einreichefristNormal:
+          $ref: '#/components/schemas/LocalDate'
+        einreichefristReduziert:
+          $ref: '#/components/schemas/LocalDate'
     GesuchsperiodeCreate:
       required:
-        - gueltigAb
-        - gueltigBis
+        - gesuchsperiodeStart
+        - gesuchsperiodeStopp
         - bezeichnungDe
         - bezeichnungFr
         - status
@@ -2397,13 +2396,7 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
         einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
           $ref: '#/components/schemas/LocalDate'
         fiskaljahr:
           description: ''

@@ -33,11 +33,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDtoSpec.JSON_PROPERTY_ID,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_GUELTIG_AB,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHFRIST,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_AUFSCHALTDATUM,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_STATUS
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_GUELTIGKEIT_STATUS,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_STOPP,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT
 })
 @JsonTypeName("Gesuchsperiode")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -51,20 +51,20 @@ public class GesuchsperiodeDtoSpec {
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
   private String bezeichnungFr;
 
-  public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
-  private LocalDate gueltigAb;
+  public static final String JSON_PROPERTY_GUELTIGKEIT_STATUS = "gueltigkeitStatus";
+  private GueltigkeitStatusDtoSpec gueltigkeitStatus;
 
-  public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
-  private LocalDate gueltigBis;
+  public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
+  private LocalDate gesuchsperiodeStart;
 
-  public static final String JSON_PROPERTY_EINREICHFRIST = "einreichfrist";
-  private LocalDate einreichfrist;
+  public static final String JSON_PROPERTY_GESUCHSPERIODE_STOPP = "gesuchsperiodeStopp";
+  private LocalDate gesuchsperiodeStopp;
 
-  public static final String JSON_PROPERTY_AUFSCHALTDATUM = "aufschaltdatum";
-  private LocalDate aufschaltdatum;
+  public static final String JSON_PROPERTY_EINREICHEFRIST_NORMAL = "einreichefristNormal";
+  private LocalDate einreichefristNormal;
 
-  public static final String JSON_PROPERTY_STATUS = "status";
-  private GueltigkeitStatusDtoSpec status;
+  public static final String JSON_PROPERTY_EINREICHEFRIST_REDUZIERT = "einreichefristReduziert";
+  private LocalDate einreichefristReduziert;
 
   public GesuchsperiodeDtoSpec() {
   }
@@ -147,133 +147,133 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  public GesuchsperiodeDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public GesuchsperiodeDtoSpec gueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
     
-    this.gueltigAb = gueltigAb;
+    this.gueltigkeitStatus = gueltigkeitStatus;
     return this;
   }
 
    /**
-   * Get gueltigAb
-   * @return gueltigAb
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
-  }
-
-
-  public GesuchsperiodeDtoSpec gueltigBis(LocalDate gueltigBis) {
-    
-    this.gueltigBis = gueltigBis;
-    return this;
-  }
-
-   /**
-   * Get gueltigBis
-   * @return gueltigBis
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-  }
-
-
-  public GesuchsperiodeDtoSpec einreichfrist(LocalDate einreichfrist) {
-    
-    this.einreichfrist = einreichfrist;
-    return this;
-  }
-
-   /**
-   * Get einreichfrist
-   * @return einreichfrist
+   * Get gueltigkeitStatus
+   * @return gueltigkeitStatus
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINREICHFRIST)
+  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public LocalDate getEinreichfrist() {
-    return einreichfrist;
+  public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
+    return gueltigkeitStatus;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINREICHFRIST)
+  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinreichfrist(LocalDate einreichfrist) {
-    this.einreichfrist = einreichfrist;
+  public void setGueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
   }
 
 
-  public GesuchsperiodeDtoSpec aufschaltdatum(LocalDate aufschaltdatum) {
+  public GesuchsperiodeDtoSpec gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
     
-    this.aufschaltdatum = aufschaltdatum;
+    this.gesuchsperiodeStart = gesuchsperiodeStart;
     return this;
   }
 
    /**
-   * Get aufschaltdatum
-   * @return aufschaltdatum
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getAufschaltdatum() {
-    return aufschaltdatum;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
-  }
-
-
-  public GesuchsperiodeDtoSpec status(GueltigkeitStatusDtoSpec status) {
-    
-    this.status = status;
-    return this;
-  }
-
-   /**
-   * Get status
-   * @return status
+   * Get gesuchsperiodeStart
+   * @return gesuchsperiodeStart
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public GueltigkeitStatusDtoSpec getStatus() {
-    return status;
+  public LocalDate getGesuchsperiodeStart() {
+    return gesuchsperiodeStart;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(GueltigkeitStatusDtoSpec status) {
-    this.status = status;
+  public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+    this.gesuchsperiodeStart = gesuchsperiodeStart;
+  }
+
+
+  public GesuchsperiodeDtoSpec gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+    
+    this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+    return this;
+  }
+
+   /**
+   * Get gesuchsperiodeStopp
+   * @return gesuchsperiodeStopp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGesuchsperiodeStopp() {
+    return gesuchsperiodeStopp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+    this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+  }
+
+
+  public GesuchsperiodeDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
+    
+    this.einreichefristNormal = einreichefristNormal;
+    return this;
+  }
+
+   /**
+   * Get einreichefristNormal
+   * @return einreichefristNormal
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEinreichefristNormal() {
+    return einreichefristNormal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
+    this.einreichefristNormal = einreichefristNormal;
+  }
+
+
+  public GesuchsperiodeDtoSpec einreichefristReduziert(LocalDate einreichefristReduziert) {
+    
+    this.einreichefristReduziert = einreichefristReduziert;
+    return this;
+  }
+
+   /**
+   * Get einreichefristReduziert
+   * @return einreichefristReduziert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEinreichefristReduziert() {
+    return einreichefristReduziert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
+    this.einreichefristReduziert = einreichefristReduziert;
   }
 
   @Override
@@ -288,16 +288,16 @@ public class GesuchsperiodeDtoSpec {
     return Objects.equals(this.id, gesuchsperiode.id) &&
         Objects.equals(this.bezeichnungDe, gesuchsperiode.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsperiode.bezeichnungFr) &&
-        Objects.equals(this.gueltigAb, gesuchsperiode.gueltigAb) &&
-        Objects.equals(this.gueltigBis, gesuchsperiode.gueltigBis) &&
-        Objects.equals(this.einreichfrist, gesuchsperiode.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiode.aufschaltdatum) &&
-        Objects.equals(this.status, gesuchsperiode.status);
+        Objects.equals(this.gueltigkeitStatus, gesuchsperiode.gueltigkeitStatus) &&
+        Objects.equals(this.gesuchsperiodeStart, gesuchsperiode.gesuchsperiodeStart) &&
+        Objects.equals(this.gesuchsperiodeStopp, gesuchsperiode.gesuchsperiodeStopp) &&
+        Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
+        Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum, status);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, einreichefristNormal, einreichefristReduziert);
   }
 
   @Override
@@ -307,11 +307,11 @@ public class GesuchsperiodeDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
-    sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
-    sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
+    sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
+    sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
+    sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
+    sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("}");
     return sb.toString();
   }
