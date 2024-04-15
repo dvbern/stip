@@ -26,6 +26,10 @@ public class Kind extends AbstractFamilieEntity {
     @Column(nullable = false)
     private Ausbildungssituation ausbildungssituation;
 
+
+    @Column(nullable = true)
+    private Integer erhalteneAlimentebeitraege;
+
     @Column(nullable = true)
     private UUID copyOfId;
 }
