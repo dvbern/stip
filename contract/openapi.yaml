@@ -1342,6 +1342,8 @@ components:
           type: number
         nachname:
           type: string
+        erhalteneAlimentebeitraege:
+          type: number
     Auszahlung:
       title: Root Type for Auszahlung
       description: ''
