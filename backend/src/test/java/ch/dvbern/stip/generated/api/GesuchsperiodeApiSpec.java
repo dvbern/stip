@@ -103,7 +103,7 @@ public class GesuchsperiodeApiSpec {
      * 
      *
      * @see #body  (required)
-     * return List&lt;GesuchsperiodeWithDatenDtoSpec&gt;
+     * return GesuchsperiodeWithDatenDtoSpec
      */
     public static class CreateGesuchsperiodeOper implements Oper {
 
@@ -134,10 +134,10 @@ public class GesuchsperiodeApiSpec {
         /**
          * POST /gesuchsperiode
          * @param handler handler
-         * @return List&lt;GesuchsperiodeWithDatenDtoSpec&gt;
+         * @return GesuchsperiodeWithDatenDtoSpec
          */
-        public List<GesuchsperiodeWithDatenDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchsperiodeWithDatenDtoSpec>> type = new TypeRef<List<GesuchsperiodeWithDatenDtoSpec>>(){};
+        public GesuchsperiodeWithDatenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchsperiodeWithDatenDtoSpec> type = new TypeRef<GesuchsperiodeWithDatenDtoSpec>(){};
             return execute(handler).as(type);
         }
 

@@ -109,9 +109,9 @@ export class GesuchsperiodeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchsperiodeWithDaten>>;
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchsperiodeWithDaten>>>;
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchsperiodeWithDaten>>>;
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchsperiodeWithDaten>;
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchsperiodeWithDaten>>;
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchsperiodeWithDaten>>;
      public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchsperiodeCreate = requestParameters.gesuchsperiodeCreate;
         if (gesuchsperiodeCreate === null || gesuchsperiodeCreate === undefined) {
@@ -173,7 +173,7 @@ export class GesuchsperiodeService {
         }
 
         const localVarPath = `/gesuchsperiode`;
-        return this.httpClient.request<Array<GesuchsperiodeWithDaten>>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchsperiodeWithDaten>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: gesuchsperiodeCreate,

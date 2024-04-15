@@ -19,8 +19,6 @@ export interface GesuchsperiodeCreate {
      * 
      */
     bezeichnungFr: string;
-    gueltigAb: string;
-    gueltigBis: string;
     einreichfrist?: string;
     aufschaltdatum?: string;
     /**
