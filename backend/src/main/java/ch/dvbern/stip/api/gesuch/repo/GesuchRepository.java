@@ -4,12 +4,14 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
+import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,13 +25,18 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     private final EntityManager entityManager;
 
     public Stream<Gesuch> findAllForBenutzer(UUID benutzerId) {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuch = QGesuch.gesuch;
+        // TODO KSTIP-948 fix this
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var gesuch = QGesuch.gesuch;
+        final var zuordnung = QZuordnung.zuordnung;
+        final var fall = QFall.fall;
 
-        var query = queryFactory
+        final var query = queryFactory
             .select(gesuch)
             .from(gesuch)
-            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId).or(gesuch.fall.sachbearbeiter.id.eq(benutzerId)));
+            .join(fall).on(gesuch.fall.id.eq(fall.id))
+            .join(zuordnung).on(fall.id.eq(zuordnung.id))
+            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId).or(zuordnung.sachbearbeiter.id.eq(benutzerId)));
         return query.stream();
     }
 

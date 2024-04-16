@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +36,7 @@ public class Zuordnung extends AbstractMandantEntity {
     private Fall fall;
 
     @NotNull
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "sachbearbeiter_id", foreignKey = @ForeignKey(name = "FK_zuordnung_sachbearbeiter_id"), nullable = false)
     private Benutzer sachbearbeiter;
 

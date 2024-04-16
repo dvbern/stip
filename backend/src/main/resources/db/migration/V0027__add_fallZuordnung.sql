@@ -40,3 +40,6 @@ ALTER TABLE zuordnung_aud
   ADD CONSTRAINT FK_zuordnung_aud_revinfo
     FOREIGN KEY (rev)
       REFERENCES revinfo(rev);
+
+ALTER TABLE fall
+  DROP COLUMN sachbearbeiter_id;

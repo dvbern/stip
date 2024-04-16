@@ -23,6 +23,8 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.entity.QFall;
+import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -35,13 +37,22 @@ public class FallRepository implements BaseRepository<Fall> {
     private final EntityManager entityManager;
 
     public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var fall = QFall.fall;
+        // TODO KSTIP-948 run test
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var fall = QFall.fall;
+        final var zuordnung = QZuordnung.zuordnung;
 
-        var query = queryFactory
+        final var query = queryFactory
             .select(fall)
             .from(fall)
-            .where(fall.gesuchsteller.id.eq(benutzerId).or(fall.sachbearbeiter.id.eq(benutzerId)));
+            .where(fall.gesuchsteller.id.eq(benutzerId)
+                .or(
+                    JPAExpressions.select(zuordnung.sachbearbeiter.id)
+                        .from(zuordnung)
+                        .where(zuordnung.sachbearbeiter.id.eq(benutzerId))
+                        .contains(benutzerId)
+                )
+            );
         return query.stream();
     }
 }

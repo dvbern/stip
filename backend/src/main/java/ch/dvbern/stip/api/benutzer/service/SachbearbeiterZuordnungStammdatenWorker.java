@@ -43,7 +43,7 @@ public class SachbearbeiterZuordnungStammdatenWorker {
 
     public void updateZuordnung(final String tenantId) {
         if (!running.compareAndSet(false, true)) {
-            return; // TODO Error/ Exception?
+            throw new IllegalStateException("A previous assignment run is still in progress");
         }
 
         executor.executeBlocking(() -> {
@@ -53,7 +53,7 @@ public class SachbearbeiterZuordnungStammdatenWorker {
                     zuordnungService.updateZuordnungOnFall();
                 });
             } catch (Exception e) {
-                LOG.error(e.toString());
+                LOG.error(e.toString(), e);
             } finally {
                 running.set(false);
             }
