@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.entity.BuchstabenRangeUtility;
+import ch.dvbern.stip.api.benutzer.entity.BuchstabenRangeUtil;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -84,7 +84,7 @@ public class ZuordnungService {
                     x.getBuchstabenDe() :
                     x.getBuchstabenFr();
 
-                return BuchstabenRangeUtility.contains(range, pia.getNachname());
+                return BuchstabenRangeUtil.contains(range, pia.getNachname());
             })
             .map(SachbearbeiterZuordnungStammdaten::getBenutzer)
             .findFirst();
