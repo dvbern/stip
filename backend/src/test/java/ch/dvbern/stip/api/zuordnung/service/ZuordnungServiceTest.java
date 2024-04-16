@@ -28,12 +28,14 @@ import org.mockito.stubbing.Answer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 class ZuordnungServiceTest {
     private final UUID sachbearbeiterZuordnungStammdatenId = UUID.randomUUID();
     private final UUID sachbearbeiterId = UUID.randomUUID();
     private final UUID fallId = UUID.randomUUID();
-    private final List<Zuordnung> zuordnungen = new ArrayList<>();
+    private Fall fall;
+    private List<Zuordnung> zuordnungen = new ArrayList<>();
 
     private ZuordnungService zuordnungService;
 
@@ -41,7 +43,7 @@ class ZuordnungServiceTest {
     void setup() {
         final var query = Mockito.mock(PanacheQuery.class);
         Mockito.when(query.page(Mockito.any())).thenReturn(query);
-        final var sb = (Benutzer) new Benutzer()
+        Benutzer sb = (Benutzer) new Benutzer()
             .setBenutzerTyp(BenutzerTyp.SACHBEARBEITER)
             .setVorname("John")
             .setNachname("Doe")
@@ -58,8 +60,14 @@ class ZuordnungServiceTest {
         Mockito.when(szsRepo.findAll()).thenReturn(query);
 
         final var zuordnungRepo = Mockito.mock(ZuordnungRepository.class);
-        Mockito.when(zuordnungRepo.findAllWithType(ZuordnungType.AUTOMATIC)).thenReturn(Stream.of());
-        Mockito.doNothing().when(zuordnungRepo).deleteByFallIds(Mockito.any());
+        Mockito.when(zuordnungRepo.findAllWithType(ZuordnungType.AUTOMATIC)).thenReturn(
+            zuordnungen.stream().filter(x -> x.getZuordnungType() == ZuordnungType.AUTOMATIC)
+        );
+        Mockito.doAnswer((Answer<Void>) invocation -> {
+            final var toDrop = (Set<UUID>) invocation.getArgument(0);
+            zuordnungen = zuordnungen.stream().filter(x -> toDrop.contains(x.getFall().getId())).toList();
+            return null;
+        }).when(zuordnungRepo).deleteByFallIds(Mockito.any());
         Mockito.doAnswer((Answer<Void>) invocation -> {
                 zuordnungen.addAll(invocation.getArgument(0));
                 return null;
@@ -70,7 +78,7 @@ class ZuordnungServiceTest {
             .setKorrespondenzSprache(Sprache.DEUTSCH)
             .setNachname("Alfred");
 
-        final var fall = (Fall) new Fall().setId(fallId);
+        fall = (Fall) new Fall().setId(fallId);
         final var gesuch = new Gesuch().setGesuchTranchen(
             List.of(
                 new GesuchTranche().setGesuchFormular(
@@ -89,9 +97,31 @@ class ZuordnungServiceTest {
     }
 
     @Test
-    void testUpdateZuordnungOnFall() {
+    void testCreateZuordnungOnFall() {
         zuordnungService.updateZuordnungOnFall();
         assertThat(zuordnungen.size(), is(1));
         assertThat(zuordnungen.get(0).getFall().getId(), is(fallId));
+    }
+
+    @Test
+    void testUpdateZuordnungOnFall() {
+        final var oldSbId = UUID.randomUUID();
+
+        zuordnungen.add((Zuordnung) new Zuordnung()
+            .setZuordnungType(ZuordnungType.AUTOMATIC)
+            .setFall(fall)
+            .setSachbearbeiter(
+                (Benutzer) new Benutzer()
+                    .setBenutzerTyp(BenutzerTyp.SACHBEARBEITER)
+                    .setId(oldSbId)
+            )
+            .setId(UUID.randomUUID())
+        );
+
+        zuordnungService.updateZuordnungOnFall();
+        assertThat(oldSbId, is(not(sachbearbeiterId)));
+        assertThat(zuordnungen.size(), is(1));
+        assertThat(zuordnungen.get(0).getSachbearbeiter().getId(), is(sachbearbeiterId));
+
     }
 }
