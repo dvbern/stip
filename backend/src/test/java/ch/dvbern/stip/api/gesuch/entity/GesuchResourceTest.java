@@ -431,7 +431,7 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.get().getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
-        assertThat(gesuchOpt.get().getBearbeiter(), is("John Doe"));
+        assertThat(gesuchOpt.get().getBearbeiter(), is(""));
     }
 
     @Test

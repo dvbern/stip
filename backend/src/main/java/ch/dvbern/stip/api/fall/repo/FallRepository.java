@@ -37,7 +37,6 @@ public class FallRepository implements BaseRepository<Fall> {
     private final EntityManager entityManager;
 
     public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
-        // TODO KSTIP-948 run test
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var fall = QFall.fall;
         final var zuordnung = QZuordnung.zuordnung;

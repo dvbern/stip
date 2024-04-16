@@ -4,7 +4,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
@@ -25,18 +24,21 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     private final EntityManager entityManager;
 
     public Stream<Gesuch> findAllForBenutzer(UUID benutzerId) {
-        // TODO KSTIP-948 fix this
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
-        final var fall = QFall.fall;
 
         final var query = queryFactory
             .select(gesuch)
             .from(gesuch)
-            .join(fall).on(gesuch.fall.id.eq(fall.id))
-            .join(zuordnung).on(fall.id.eq(zuordnung.id))
-            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId).or(zuordnung.sachbearbeiter.id.eq(benutzerId)));
+            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId)
+                .or(
+                    JPAExpressions.select(zuordnung.sachbearbeiter.id)
+                        .from(zuordnung)
+                        .where(zuordnung.sachbearbeiter.id.eq(benutzerId))
+                        .contains(benutzerId)
+                )
+            );
         return query.stream();
     }
 
