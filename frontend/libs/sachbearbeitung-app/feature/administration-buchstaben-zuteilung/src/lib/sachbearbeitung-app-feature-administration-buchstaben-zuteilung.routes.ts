@@ -15,7 +15,7 @@ export const sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes: R
       data: { option: OPTION_BUCHSTABEN_ZUTEILUNG },
       resolve: {
         init: () => {
-          inject(SachbearbeiterStore).loadSachbearbeiterZuweisung();
+          inject(SachbearbeiterStore).loadSachbearbeiterZuweisungen$();
         },
       },
       providers: [SachbearbeiterStore],
