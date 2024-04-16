@@ -34,6 +34,7 @@
     </sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
+    <javafaker.version>1.0.2</javafaker.version>
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
   </properties>
@@ -59,6 +60,10 @@
         <version>${quarkus-amazon-services.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-vertx</artifactId>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -254,9 +259,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.instancio</groupId>
-      <artifactId>instancio-junit</artifactId>
-      <version>3.3.0</version>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>${javafaker.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

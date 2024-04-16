@@ -4,10 +4,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsstaetteCreateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsstaetteUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -17,15 +20,12 @@ import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpecModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
@@ -47,7 +47,7 @@ class AusbildungsstaetteResourceTest {
     @Order(1)
     void createAusbildungsstaetteAsGesuchstellerForbidden() {
         api.createAusbildungsstaette()
-                .body(Instancio.of(ausbildungsstaetteCreateDtoSpecModel).create())
+                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec)
                 .execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
@@ -59,7 +59,7 @@ class AusbildungsstaetteResourceTest {
     @Order(2)
     void createAusbildungsstaetteAsSachbearbeiter() {
         var response = api.createAusbildungsstaette()
-                .body(Instancio.of(ausbildungsstaetteCreateDtoSpecModel).create())
+                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec)
                 .execute(ResponseBody::prettyPeek)
                 .then();
 
@@ -98,7 +98,7 @@ class AusbildungsstaetteResourceTest {
     @TestAsSachbearbeiter
     @Order(5)
     void updateAusbildungsstaetteNotFound() {
-        var ausbildungsstaette = Instancio.of(ausbildungsstaetteUpdateDtoSpecModel).create();
+        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
 
         api.updateAusbildungsstaette().ausbildungsstaetteIdPath(UUID.randomUUID())
 			.body(ausbildungsstaette)
@@ -112,7 +112,7 @@ class AusbildungsstaetteResourceTest {
     @TestAsGesuchsteller
     @Order(6)
     void updateAusbildungsstaetteAsGesuchstellerForbidden() {
-        var ausbildungsstaette = Instancio.of(ausbildungsstaetteUpdateDtoSpecModel).create();
+        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
 
         api.updateAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
                 .body(ausbildungsstaette)
@@ -126,7 +126,7 @@ class AusbildungsstaetteResourceTest {
     @TestAsSachbearbeiter
     @Order(7)
     void updateAusbildungsstaette() {
-        var ausbildungsstaette = Instancio.of(ausbildungsstaetteUpdateDtoSpecModel).create();
+        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
 
         var uniAarau = "Uni Aarau";
         ausbildungsstaette.setNameDe(uniAarau);

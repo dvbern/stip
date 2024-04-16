@@ -198,6 +198,11 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
+  vermoegensnachweisVorjahrDocumentOptionsSig = this.createUploadOptionsSig(
+    () => {
+      return DokumentTyp.PERSON_VERMOEGENSNACHWEIS_VORJAHR;
+    },
+  );
 
   form = this.formBuilder.group({
     sozialversicherungsnummer: ['', []],
@@ -568,7 +573,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           ...values,
           adresse: {
             id: gesuchFormular?.personInAusbildung?.adresse?.id,
-            ...values.adresse,
+            ...SharedUiFormAddressComponent.getRealValues(
+              this.form.controls.adresse,
+            ),
           },
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
             values.geburtsdatum,

@@ -28,6 +28,7 @@ public class ElternUpdateDto  implements Serializable {
   private @Valid AdresseDto adresse;
   private @Valid Boolean identischerZivilrechtlicherWohnsitz;
   private @Valid String telefonnummer;
+  private @Valid Integer wohnkosten;
   private @Valid LocalDate geburtsdatum;
   private @Valid Boolean sozialhilfebeitraegeAusbezahlt;
   private @Valid Boolean ausweisbFluechtling;
@@ -113,6 +114,25 @@ public class ElternUpdateDto  implements Serializable {
   @JsonProperty("telefonnummer")
   public void setTelefonnummer(String telefonnummer) {
     this.telefonnummer = telefonnummer;
+  }
+
+  /**
+   **/
+  public ElternUpdateDto wohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+  
+  @JsonProperty("wohnkosten")
+  @NotNull
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+  @JsonProperty("wohnkosten")
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
   }
 
   /**
@@ -318,6 +338,7 @@ public class ElternUpdateDto  implements Serializable {
         Objects.equals(this.adresse, elternUpdate.adresse) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitz, elternUpdate.identischerZivilrechtlicherWohnsitz) &&
         Objects.equals(this.telefonnummer, elternUpdate.telefonnummer) &&
+        Objects.equals(this.wohnkosten, elternUpdate.wohnkosten) &&
         Objects.equals(this.geburtsdatum, elternUpdate.geburtsdatum) &&
         Objects.equals(this.sozialhilfebeitraegeAusbezahlt, elternUpdate.sozialhilfebeitraegeAusbezahlt) &&
         Objects.equals(this.ausweisbFluechtling, elternUpdate.ausweisbFluechtling) &&
@@ -332,7 +353,7 @@ public class ElternUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, elternTyp, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, wohnkosten, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, elternTyp, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id);
   }
 
   @Override
@@ -344,6 +365,7 @@ public class ElternUpdateDto  implements Serializable {
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitz: ").append(toIndentedString(identischerZivilrechtlicherWohnsitz)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    sozialhilfebeitraegeAusbezahlt: ").append(toIndentedString(sozialhilfebeitraegeAusbezahlt)).append("\n");
     sb.append("    ausweisbFluechtling: ").append(toIndentedString(ausweisbFluechtling)).append("\n");

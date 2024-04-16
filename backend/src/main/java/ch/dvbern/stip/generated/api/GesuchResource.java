@@ -73,7 +73,7 @@ public interface GesuchResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getGesuche();
+    Response getGesuche(@QueryParam("show-all")   Boolean showAll);
 
     @GET
     @Path("/benutzer/{benutzerId}")

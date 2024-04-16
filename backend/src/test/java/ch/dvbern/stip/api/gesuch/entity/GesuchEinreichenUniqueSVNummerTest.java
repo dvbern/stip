@@ -3,10 +3,12 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -14,14 +16,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
-import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
-import static ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -40,6 +40,11 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @TestAsGesuchsteller
     void gesuchEinreichtenWithUniqueSvNummerAccepted() {
         UUID gesuchId = createFullGesuch();
+
+        final var file = TestUtil.getTestPng();
+        for (final var dokType : DokumentTypDtoSpec.values()) {
+            TestUtil.uploadFile(gesuchApiSpec, gesuchId, dokType, file);
+        }
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
@@ -83,19 +88,15 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .body()
             .as(GesuchDtoSpec.class)
             .getGesuchTrancheToWorkWith().getId();
-        var gesuchUpdatDTO = Instancio.of(gesuchUpdateDtoSpecFullModel).create();
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung()
             .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
-        gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
 
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdatDTO).execute(ResponseBody::prettyPeek)
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());

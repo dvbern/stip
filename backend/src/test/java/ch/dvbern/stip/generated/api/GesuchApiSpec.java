@@ -836,6 +836,7 @@ public class GesuchApiSpec {
      * Returns all Gesuche
      * 
      *
+     * @see #showAllQuery Show all Gesuche (optional)
      * return List&lt;GesuchDtoSpec&gt;
      */
     public static class GetGesucheOper implements Oper {
@@ -871,6 +872,17 @@ public class GesuchApiSpec {
         public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
             TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String SHOW_ALL_QUERY = "show-all";
+
+        /**
+         * @param showAll (Boolean) Show all Gesuche (optional)
+         * @return operation
+         */
+        public GetGesucheOper showAllQuery(Object... showAll) {
+            reqSpec.addQueryParam(SHOW_ALL_QUERY, showAll);
+            return this;
         }
 
         /**

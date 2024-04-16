@@ -5,7 +5,7 @@ import { SharedModelError } from '@dv/shared/model/error';
 
 import { GesuchAppDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
 
-interface State {
+export interface State {
   checkResult:
     | { success: boolean; error: SharedModelError | undefined }
     | undefined;

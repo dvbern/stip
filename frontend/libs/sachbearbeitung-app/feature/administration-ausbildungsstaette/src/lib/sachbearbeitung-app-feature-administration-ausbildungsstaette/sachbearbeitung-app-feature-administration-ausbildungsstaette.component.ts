@@ -21,7 +21,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -38,6 +42,7 @@ import {
 import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUtilFormService } from '@dv/shared/util/form';
+import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-ausbildungsstaette',
@@ -69,6 +74,10 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
       ),
     ]),
+  ],
+  providers: [
+    AdminAusbildungsstaetteStore,
+    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -140,6 +149,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
         this.endEdit();
       }
     });
+    this.store.loadAusbildungsstaetten({});
   }
 
   ngAfterViewInit() {
@@ -205,18 +215,13 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   }
 
   deleteAusbildungsstaette(staette: AusbildungsstaetteTableData) {
-    const dialogRef = this.dialog.open<unknown, ConfirmDialogData, boolean>(
-      SharedUiConfirmDialogComponent,
-      {
-        data: {
-          title: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle',
-          message: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage',
-          confirmText: 'shared.ui.yes',
-          cancelText: 'shared.ui.no',
-          translationObject: staette,
-        },
-      },
-    );
+    const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle',
+      message: 'sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage',
+      confirmText: 'shared.ui.yes',
+      cancelText: 'shared.ui.no',
+      translationObject: staette,
+    });
 
     dialogRef
       .afterClosed()

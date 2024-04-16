@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.common.util.FileUtil;
+import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -25,7 +26,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
@@ -57,12 +57,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
-
-        if (fileUpload.fileName() == null || fileUpload.fileName().isEmpty()) {
-            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
-        }
-
-        if (fileUpload.contentType() == null || fileUpload.contentType().isEmpty()) {
+        if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
@@ -99,40 +94,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
-    public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
-        GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
-        return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
-    }
-
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
-    @Override
-    public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
-        gesuchDokumentService.deleteDokument(dokumentId);
-        return Response.noContent().build();
-    }
-
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
-    @Override
-    public Response deleteGesuch(UUID gesuchId) {
-        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
-        gesuchService.deleteGesuch(gesuchId);
-        return Response.noContent().build();
-    }
-
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
-    @Override
-    public Response gesuchEinreichen(UUID gesuchId) {
-        gesuchService.gesuchEinreichen(gesuchId);
-        return Response.accepted().build();
-    }
-
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
-    @Override
-    public Response gesuchEinreichenValidieren(UUID gesuchId) {
-        return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
-    }
-
-    @Override
     @Blocking
     public RestMulti<Buffer> getDokument(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         DokumentDto dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
@@ -158,6 +119,41 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
+    public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+        gesuchDokumentService.deleteDokument(dokumentId);
+        return Response.noContent().build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
+        GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
+        return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response deleteGesuch(UUID gesuchId) {
+        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
+        gesuchService.deleteGesuch(gesuchId);
+        return Response.noContent().build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response gesuchEinreichen(UUID gesuchId) {
+        gesuchService.gesuchEinreichen(gesuchId);
+        return Response.accepted().build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response gesuchEinreichenValidieren(UUID gesuchId) {
+        return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {
         List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
@@ -172,7 +168,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
-    public Response getGesuche() {
+    public Response getGesuche(Boolean showAll) {
         return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
     }
 

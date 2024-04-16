@@ -3,11 +3,14 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -70,6 +73,9 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private @Valid List<GesuchDokument> gesuchDokuments;
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))
@@ -80,5 +86,18 @@ public class Gesuch extends AbstractMandantEntity {
         return gesuchTranchen.stream()
             .filter(t -> t.getGueltigkeit().contains(date))
             .findFirst();
+    }
+
+    public Optional<GesuchTranche> getNewestGesuchTranche() {
+        if (gesuchTranchen.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(
+            Collections.max(
+                gesuchTranchen,
+                Comparator.comparing(x -> x.getGueltigkeit().getGueltigBis())
+            )
+        );
     }
 }

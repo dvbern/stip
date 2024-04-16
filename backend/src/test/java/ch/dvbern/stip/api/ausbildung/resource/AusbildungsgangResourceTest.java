@@ -4,13 +4,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangCreateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.AusbildungsgangApiSpec;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -18,15 +18,12 @@ import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.instancio.Instancio;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpecModel;
-import static ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpecModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -37,7 +34,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AusbildungsgangResourceTest {
-
 	private final AusbildungsgangApiSpec ausbildungsgangApi =
 			AusbildungsgangApiSpec.ausbildungsgang(RequestSpecUtil.quarkusSpec());
 	private final AusbildungsstaetteApiSpec ausbildungsstaetteApiSpec =
@@ -51,7 +47,7 @@ class AusbildungsgangResourceTest {
 	@Order(1)
 	void createAusbildungsgangAsGesuchstellerForbidden() {
 		ausbildungsgangApi.createAusbildungsgang()
-				.body(Instancio.of(ausbildungsgangCreateDtoSpecModel).create())
+				.body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec)
 				.execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -63,7 +59,7 @@ class AusbildungsgangResourceTest {
 	@Order(2)
 	void createAusbildungsgangAsSachbearbeiter() {
 		var response = ausbildungsgangApi.createAusbildungsgang()
-				.body(Instancio.of(ausbildungsgangCreateDtoSpecModel).create())
+				.body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec)
 				.execute(ResponseBody::prettyPeek)
 				.then();
 
@@ -89,7 +85,7 @@ class AusbildungsgangResourceTest {
 	@Order(4)
 	void createNewAusbildungsgangWithExistingAusbildungsstaette() {
 		var ausbildungsstaettes = getAusbildungsstaettenFromApi();
-		var ausbildungsgang = Instancio.of(ausbildungsgangCreateDtoSpecModel).create();
+		var ausbildungsgang = AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec;
 
 		ausbildungsgang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());
 
@@ -107,7 +103,7 @@ class AusbildungsgangResourceTest {
 	@TestAsSachbearbeiter
 	@Order(5)
 	void updateAusbildungsgangNotFound() {
-		var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
+		var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
 		ausbildunggang.setAusbildungsstaetteId(ausbildungsstaetteId);
 
 		ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
@@ -122,7 +118,7 @@ class AusbildungsgangResourceTest {
 	@TestAsGesuchsteller
 	@Order(6)
 	void updateAusbildungsgangAsGesuchstellerForbidden() {
-		var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
+		var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
 
 		ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
 				.body(ausbildunggang)
@@ -138,7 +134,7 @@ class AusbildungsgangResourceTest {
 	void updateAusbildungsgang() {
 		var ausbildungsstaettes = getAusbildungsstaettenFromApi();
 
-		var ausbildunggang = Instancio.of(ausbildungsgangUpdateDtoSpecModel).create();
+		var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
 		final var aarau = "AARAU";
 		ausbildunggang.setAusbildungsort(aarau);
 		ausbildunggang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());

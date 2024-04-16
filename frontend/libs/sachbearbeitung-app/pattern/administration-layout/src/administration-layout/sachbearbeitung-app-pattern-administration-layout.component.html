@@ -42,6 +42,7 @@
           [class.btn-light]="!stepRoute.active"
           [class.shadow-none]="!stepRoute.active"
           [routerLink]="['/', 'administration', option.route]"
+          routerLinkActive="active"
           [attr.data-testid]="'option-nav-' + option.route"
         >
           <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>

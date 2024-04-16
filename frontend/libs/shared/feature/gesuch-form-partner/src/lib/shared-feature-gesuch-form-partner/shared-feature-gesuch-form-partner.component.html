@@ -1,6 +1,6 @@
 <div>
   <!-- loading -->
-  @if (view().loading) {
+  @if (viewSig().loading) {
     <dv-shared-ui-loading data-testid="form-partner-loading"></dv-shared-ui-loading>
   } @else {
     <form
@@ -106,19 +106,28 @@
       </div>
       @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
         <div class="row g-4 my-2">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-            <mat-label>{{ 'shared.form.partner.jahreseinkommen.label' | translate }}</mat-label>
-            <input
-              formControlName="jahreseinkommen"
-              matInput
-              type="text"
-              data-testid="form-partner-jahreseinkommen"
-              [maskito]="maskitoNumber"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.partner.jahreseinkommen.label' | translate }}</mat-label>
+              <input
+                formControlName="jahreseinkommen"
+                matInput
+                type="text"
+                data-testid="form-partner-jahreseinkommen"
+                [maskito]="maskitoNumber"
+              />
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (jahreseinkommenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
         </div>
       }
       @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
@@ -140,24 +149,33 @@
       }
       @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
         <div class="row g-4 my-2">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-            <mat-label>{{ 'shared.form.partner.fahrkosten.label' | translate }}</mat-label>
-            <input
-              formControlName="fahrkosten"
-              matInput
-              type="text"
-              data-testid="form-partner-fahrkosten"
-              [maskito]="maskitoNumber"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.partner.fahrkosten.label' | translate }}</mat-label>
+              <input
+                formControlName="fahrkosten"
+                matInput
+                type="text"
+                data-testid="form-partner-fahrkosten"
+                [maskito]="maskitoNumber"
+              />
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (fahrkostenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
         </div>
       }
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
-        @if (!view().readonly) {
+        @if (!viewSig().readonly) {
           <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
             {{ 'shared.form.save-and-continue' | translate }}
           </button>

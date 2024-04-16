@@ -120,8 +120,9 @@ const einnahmenKosten: EinnahmenKosten = {
   ausbildungskostenSekundarstufeZwei: 1000,
   ausbildungskostenTertiaerstufe: 1300,
   zulagen: 250,
-  personenImHaushalt: 3,
+  wgWohnend: false,
   auswaertigeMittagessenProWoche: 5,
+  betreuungskostenKinder: 100,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -145,6 +146,7 @@ const vater: Eltern = {
   ergaenzungsleistungAusbezahlt: false,
   sozialhilfebeitraegeAusbezahlt: false,
   id: '',
+  wohnkosten: 100,
   elternTyp: 'VATER',
 };
 
@@ -160,6 +162,7 @@ const mutter: Eltern = {
   ergaenzungsleistungAusbezahlt: false,
   sozialhilfebeitraegeAusbezahlt: false,
   id: '',
+  wohnkosten: 100,
   elternTyp: 'VATER',
 };
 

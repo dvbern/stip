@@ -39,7 +39,7 @@ public class Dokument extends AbstractMandantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(nullable = false)
-    private String filepfad;
+    private String filepath;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

@@ -5,6 +5,7 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import {
   isFormularProp,
+  selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
 
@@ -13,16 +14,28 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
-      validations: [],
+      validations: { errors: [] },
       gesuchFormular: null,
       cache: {
+        gesuchId: null,
         gesuchFormular: null,
       },
       lastUpdate: null,
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchsView.projector(state);
+    const config = {
+      deploymentConfig: undefined,
+      loading: false,
+      error: undefined,
+    };
+    const result = selectSharedDataAccessGesuchsView.projector(
+      config,
+      state.lastUpdate,
+      state.loading,
+      state.gesuch,
+      state.gesuchFormular,
+    );
     expect(result.loading).toBeFalsy();
   });
 
@@ -52,7 +65,8 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
     const secondState = reducer(firstState, secondAction);
-    const result = selectSharedDataAccessGesuchsView.projector(secondState);
+    const result =
+      selectSharedDataAccessGesuchValidationView.projector(secondState);
     expect(result.cachedGesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
@@ -74,27 +88,29 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
-      validations: [
-        { message: '', messageTemplate: '', propertyPath: 'partner' },
-        { message: '', messageTemplate: '', propertyPath: 'kinds' },
-        { message: '', messageTemplate: '', propertyPath: 'invalid' },
-      ],
+      validations: {
+        errors: [
+          { message: '', messageTemplate: '', propertyPath: 'partner' },
+          { message: '', messageTemplate: '', propertyPath: 'kinds' },
+          { message: '', messageTemplate: '', propertyPath: 'invalid' },
+        ],
+      },
       gesuchFormular: {
         personInAusbildung: {} as any,
         partner: {} as any,
         kinds: [],
       },
       cache: {
+        gesuchId: null,
         gesuchFormular: null,
       },
       lastUpdate: null,
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchsView.projector(state);
-    expect(result.invalidFormularProps.validations).toEqual([
-      'partner',
-      'kinds',
-    ]);
+    const result = selectSharedDataAccessGesuchValidationView.projector(state);
+    expect(result.invalidFormularProps.validations).toEqual({
+      errors: ['partner', 'kinds'],
+    });
   });
 });

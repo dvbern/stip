@@ -3,7 +3,7 @@ package ch.dvbern.stip.api.common.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -19,7 +19,7 @@ public final class FileUtil {
         return UUID.randomUUID() + "." + FilenameUtils.getExtension(filename);
     }
 
-    public static boolean checkFileExtensionAllowed(Path filePath, List<String> extensions) {
+    public static boolean checkFileExtensionAllowed(final Path filePath, final Set<String> extensions) {
         Tika tika = new Tika();
         try {
             String mimeType = tika.detect(filePath);

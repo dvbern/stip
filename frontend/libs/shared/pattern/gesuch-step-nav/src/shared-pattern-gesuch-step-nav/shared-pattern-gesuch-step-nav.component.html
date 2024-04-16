@@ -5,18 +5,20 @@
     [class.shadow-none]="!step.isActive"
     [class.active]="step.isActive"
     [class.disabled]="step.disabled"
-    [routerLink]="['/', 'gesuch', step.route, viewSig().gesuch?.id]"
+    [routerLink]="['/', 'gesuch', step.route, viewSig().cachedGesuchId]"
     [attr.data-testid]="'step-nav-' + step.route"
+    (click)="navClicked.emit({})"
   >
     <div class="position-relative d-flex align-middle me-3">
       <i class="material-symbols-rounded">{{ step.iconSymbolName }}</i>
-      @if (step.valid !== undefined) {
+      @if (step.status) {
         <i
           class="validator-indicator material-symbols-rounded position-absolute"
-          [class.text-warning]="!step.valid"
-          [class.text-success]="step.valid"
+          [class.text-warning]="step.status === 'WARNING'"
+          [class.text-success]="step.status === 'VALID'"
+          [class.text-danger]="step.status === 'INVALID'"
         >
-          {{ step.valid ? 'check_circle' : 'error' }}
+          {{ statusIconMap[step.status] }}
         </i>
       }
     </div>

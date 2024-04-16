@@ -3,7 +3,15 @@
     <dv-shared-ui-loading class="loading-spinner"></dv-shared-ui-loading>
   }
   <form [formGroup]="form">
-    <table class="dv-expandable-table" mat-table matSort [dataSource]="store.tableData()" multiTemplateDataRows>
+    <table
+      class="dv-expandable-table"
+      mat-table
+      matSort
+      matSortActive="nameDe"
+      matSortDirection="asc"
+      [dataSource]="store.tableData()"
+      multiTemplateDataRows
+    >
       <caption class="cdk-visually-hidden">
         {{
           'sachbearbeitung-app.admin.ausbildungsstaette.description' | translate
@@ -212,7 +220,11 @@
                     <td mat-cell *matCellDef="let ausbildungsgang">
                       @if (editedAusbildungsgang === ausbildungsgang) {
                         <mat-form-field>
-                          <mat-select formControlName="ausbildungsrichtung" (click)="$event.stopPropagation()">
+                          <mat-select
+                            formControlName="ausbildungsrichtung"
+                            panelClass="table-select"
+                            (click)="$event.stopPropagation()"
+                          >
                             @for (b of bildungsartValues; track $index) {
                               <mat-option [value]="b" [attr.data-testid]="b">
                                 {{ 'shared.form.lebenslauf.item.subtype.bildungsart.' + b | translate }}
