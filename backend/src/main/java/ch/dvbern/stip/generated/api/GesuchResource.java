@@ -73,7 +73,7 @@ public interface GesuchResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getGesuche(@QueryParam("show-all")   Boolean showAll);
+    Response getGesuche();
 
     @GET
     @Path("/benutzer/{benutzerId}")
@@ -84,6 +84,11 @@ public interface GesuchResource {
     @Path("/fall/{fallId}")
     @Produces({ "application/json", "text/plain" })
     Response getGesucheForFall(@PathParam("fallId") UUID fallId);
+
+    @GET
+    @Path("/benutzer/me")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesucheForMe();
 
     @PATCH
     @Path("/{gesuchId}")

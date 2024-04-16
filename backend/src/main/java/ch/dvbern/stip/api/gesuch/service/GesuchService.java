@@ -122,9 +122,17 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
+    public List<GesuchDto> findAllForCurrentBenutzer() {
+        return findAllForBenutzer(benutzerService.getOrCreateCurrentBenutzer().getId());
+    }
+
     @Transactional
     public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
         return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
+    }
+
+    public List<GesuchDto> findAll() {
+        return gesuchRepository.findAll().stream().map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional

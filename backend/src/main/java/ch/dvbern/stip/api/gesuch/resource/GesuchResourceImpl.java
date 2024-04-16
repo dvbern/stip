@@ -168,7 +168,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
-    public Response getGesuche(Boolean showAll) {
+    public Response getGesuche() {
         return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
     }
 
@@ -182,6 +182,12 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGesucheForFall(UUID fallId) {
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response getGesucheForMe() {
+        return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })

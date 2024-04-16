@@ -77,8 +77,12 @@ export const loadAllGesuchs = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return combineLoadAllActions$(actions$).pipe(
       filter(isDefined),
-      switchMap(({ filter }) =>
-        gesuchService.getGesuche$({ showAll: filter?.showAll }).pipe(
+      switchMap(({ filter }) => {
+        const getCall = filter?.showAll
+          ? gesuchService.getGesuche$()
+          : gesuchService.getGesucheForMe$();
+
+        return getCall.pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -89,8 +93,8 @@ export const loadAllGesuchs = createEffect(
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
-        ),
-      ),
+        );
+      }),
     );
   },
   { functional: true },
