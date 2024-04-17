@@ -199,6 +199,7 @@ public class GesuchService {
         return ValidationsExceptionMapper.toDto(violations);
     }
 
+    @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
         return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
     }
