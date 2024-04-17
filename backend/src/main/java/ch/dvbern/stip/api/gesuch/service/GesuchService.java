@@ -32,6 +32,8 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -42,6 +44,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -70,6 +73,8 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchFormularRepository gesuchFormularRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentMapper gesuchDokumentMapper;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -192,6 +197,10 @@ public class GesuchService {
         violations.addAll(validator.validate(gesuchFormular));
 
         return ValidationsExceptionMapper.toDto(violations);
+    }
+
+    public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
+        return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {

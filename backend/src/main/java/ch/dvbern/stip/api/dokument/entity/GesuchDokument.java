@@ -48,7 +48,6 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class GesuchDokument extends AbstractMandantEntity {
-
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_id"))

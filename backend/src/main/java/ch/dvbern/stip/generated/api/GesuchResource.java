@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import java.util.UUID;
@@ -70,6 +71,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response getGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/dokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesuchDokumente(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Produces({ "application/json", "text/plain" })
