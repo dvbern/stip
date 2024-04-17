@@ -48,6 +48,11 @@ public interface GesuchsperiodeResource {
     Response getGesuchsperioden();
 
     @PATCH
+    @Path("/publish/{gesuchsperiodeId}")
+    @Produces({ "application/json" })
+    Response publishGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
+
+    @PATCH
     @Path("/{gesuchsperiodeId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })

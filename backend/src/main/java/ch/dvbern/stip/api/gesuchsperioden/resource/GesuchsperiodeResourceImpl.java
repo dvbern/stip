@@ -57,6 +57,12 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
         return Response.ok(gesuchsperiodenService.getAllGesuchsperioden()).build();
     }
 
+    @Override
+    public Response publishGesuchsperiode(UUID gesuchperiodeId) {
+        final var gesuchsperiode = gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
+        return Response.ok(gesuchsperiode).build();
+    }
+
     @RolesAllowed(ROLE_ADMIN)
     @Override
     public Response updateGesuchsperiode(UUID gesuchsperiodeId, GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto) {

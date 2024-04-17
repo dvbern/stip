@@ -65,6 +65,7 @@ public class GesuchsperiodeApiSpec {
                 getAktiveGesuchsperioden(),
                 getGesuchsperiode(),
                 getGesuchsperioden(),
+                publishGesuchsperiode(),
                 updateGesuchsperiode()
         );
     }
@@ -87,6 +88,10 @@ public class GesuchsperiodeApiSpec {
 
     public GetGesuchsperiodenOper getGesuchsperioden() {
         return new GetGesuchsperiodenOper(createReqSpec());
+    }
+
+    public PublishGesuchsperiodeOper publishGesuchsperiode() {
+        return new PublishGesuchsperiodeOper(createReqSpec());
     }
 
     public UpdateGesuchsperiodeOper updateGesuchsperiode() {
@@ -428,6 +433,79 @@ public class GesuchsperiodeApiSpec {
          * @return operation
          */
         public GetGesuchsperiodenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Publishes a Gesuchsperiode with the given id
+     * 
+     *
+     * @see #gesuchsperiodeIdPath  (required)
+     * return GesuchsperiodeWithDatenDtoSpec
+     */
+    public static class PublishGesuchsperiodeOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchsperiode/publish/{gesuchsperiodeId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public PublishGesuchsperiodeOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchsperiode/publish/{gesuchsperiodeId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchsperiode/publish/{gesuchsperiodeId}
+         * @param handler handler
+         * @return GesuchsperiodeWithDatenDtoSpec
+         */
+        public GesuchsperiodeWithDatenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchsperiodeWithDatenDtoSpec> type = new TypeRef<GesuchsperiodeWithDatenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCHSPERIODE_ID_PATH = "gesuchsperiodeId";
+
+        /**
+         * @param gesuchsperiodeId (UUID)  (required)
+         * @return operation
+         */
+        public PublishGesuchsperiodeOper gesuchsperiodeIdPath(Object gesuchsperiodeId) {
+            reqSpec.addPathParam(GESUCHSPERIODE_ID_PATH, gesuchsperiodeId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public PublishGesuchsperiodeOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public PublishGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

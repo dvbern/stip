@@ -13,6 +13,7 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDtoSpec;
+import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -126,9 +127,6 @@ class GesuchsperiodeResourceTest {
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
 
-        // This makes the Gesuchsperiode readonly
-        updateDto.setGesuchsperiodeStart(LocalDate.now().plusMonths(1));
-
         final var updated = api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
             .body(updateDto)
@@ -146,6 +144,23 @@ class GesuchsperiodeResourceTest {
     @Test
     @TestAsAdmin
     @Order(6)
+    void publishTest() {
+        final var updated = api.publishGesuchsperiode()
+            .gesuchsperiodeIdPath(gesuchsperiode.getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(GesuchsperiodeWithDatenDtoSpec.class);
+
+        assertThat(updated.getGueltigkeitStatus(), is(GueltigkeitStatusDtoSpec.PUBLIZIERT));
+        gesuchsperiode = updated;
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(7)
     void readonlyUpdateFailsTest() {
         final GesuchsperiodeUpdateDtoSpec updateDto;
         try {
@@ -169,7 +184,7 @@ class GesuchsperiodeResourceTest {
 
     @Test
     @TestAsAdmin
-    @Order(7)
+    @Order(8)
     void readonlyDeleteFailsTest() {
         api.deleteGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())

@@ -435,6 +435,25 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuchsperiode
       summary: Deletes a Gesuchsperiode with the given id
+  /gesuchsperiode/publish/{gesuchsperiodeId}:
+    parameters:
+      - name: gesuchsperiodeId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuchsperiode
+      responses:
+        200:
+          description: Gesuchsperiode published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+      operationId: publishGesuchsperiode
+      summary: Publishes a Gesuchsperiode with the given id
   /stammdaten/land:
     get:
       tags:

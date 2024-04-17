@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
@@ -66,8 +67,16 @@ public class GesuchsperiodenService {
         gesuchsperiodeRepository.delete(gesuchsperiode);
     }
 
+    @Transactional
+    public GesuchsperiodeWithDatenDto publishGesuchsperiode(final UUID gesuchsperiodeId) {
+        final var gesuchsperiode = gesuchsperiodeRepository.requireById(gesuchsperiodeId);
+        preventUpdateIfReadonly(gesuchsperiode);
+        gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
+        return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
+    }
+
     private void preventUpdateIfReadonly(final Gesuchsperiode gesuchsperiode) {
-        if (gesuchsperiode.getGesuchsperiodeStart().isAfter(LocalDate.now())) {
+        if (gesuchsperiode.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF) {
             throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");
         }
     }
