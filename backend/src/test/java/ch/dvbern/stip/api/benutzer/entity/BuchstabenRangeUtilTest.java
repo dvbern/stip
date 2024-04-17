@@ -28,7 +28,16 @@ class BuchstabenRangeUtilTest {
         "'A',Abbuehl,true",
         "'A,F-X',Federer,true",
         "'C,F-X',Federer,true",
-        "'A,F-X',Berchtold,false"
+        "'A,F-X',Berchtold,false",
+        "'SCA-SCG,SCI-Z',Schweizer,false",
+        "A-Z,Äbi,true",
+        "B-Z,Äbi,false",
+        "'A,B',Äbi,true",
+        "'B,C',Äbi,false",
+        "AAA-Z,Äbi,true",
+        "A-Z,Śchweizer,true",
+        "'SCA-SCG,SCI-Z',Śchweizer,false",
+        "O,Ølund,false"
     })
     void containsTest(final String range, final String test, final boolean expected) {
         assertThat(BuchstabenRangeUtil.contains(range, test), is(expected));
