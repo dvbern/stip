@@ -33,6 +33,7 @@ export interface KindUpdate {
      */
     wohnsitzAnteilVater?: number;
     nachname: string;
+    erhalteneAlimentebeitraege?: number;
 }
 
 
