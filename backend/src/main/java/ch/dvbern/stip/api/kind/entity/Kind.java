@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.kind.entity;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
@@ -26,9 +27,8 @@ public class Kind extends AbstractFamilieEntity {
     @Column(nullable = false)
     private Ausbildungssituation ausbildungssituation;
 
-
     @Column(nullable = true)
-    private Integer erhalteneAlimentebeitraege;
+    private BigDecimal erhalteneAlimentebeitraege;
 
     @Column(nullable = true)
     private UUID copyOfId;
