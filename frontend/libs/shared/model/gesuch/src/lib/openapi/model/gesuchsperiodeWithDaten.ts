@@ -13,7 +13,7 @@ import { GueltigkeitStatus } from './gueltigkeitStatus';
 
 export interface GesuchsperiodeWithDaten { 
     id: string;
-    status: GueltigkeitStatus;
+    gueltigkeitStatus?: GueltigkeitStatus;
     /**
      * 
      */
@@ -22,10 +22,7 @@ export interface GesuchsperiodeWithDaten {
      * 
      */
     bezeichnungFr: string;
-    gueltigAb: string;
-    gueltigBis: string;
     einreichfrist?: string;
-    aufschaltdatum?: string;
     /**
      * 
      */

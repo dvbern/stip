@@ -61,6 +61,7 @@ public class GesuchsperiodeApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createGesuchsperiode(),
+                deleteGesuchsperiode(),
                 getAktiveGesuchsperioden(),
                 getGesuchsperiode(),
                 getGesuchsperioden(),
@@ -70,6 +71,10 @@ public class GesuchsperiodeApiSpec {
 
     public CreateGesuchsperiodeOper createGesuchsperiode() {
         return new CreateGesuchsperiodeOper(createReqSpec());
+    }
+
+    public DeleteGesuchsperiodeOper deleteGesuchsperiode() {
+        return new DeleteGesuchsperiodeOper(createReqSpec());
     }
 
     public GetAktiveGesuchsperiodenOper getAktiveGesuchsperioden() {
@@ -166,6 +171,68 @@ public class GesuchsperiodeApiSpec {
          * @return operation
          */
         public CreateGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Deletes a Gesuchsperiode with the given id
+     * 
+     *
+     * @see #gesuchsperiodeIdPath  (required)
+     */
+    public static class DeleteGesuchsperiodeOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/gesuchsperiode/{gesuchsperiodeId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteGesuchsperiodeOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /gesuchsperiode/{gesuchsperiodeId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCHSPERIODE_ID_PATH = "gesuchsperiodeId";
+
+        /**
+         * @param gesuchsperiodeId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteGesuchsperiodeOper gesuchsperiodeIdPath(Object gesuchsperiodeId) {
+            reqSpec.addPathParam(GESUCHSPERIODE_ID_PATH, gesuchsperiodeId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteGesuchsperiodeOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteGesuchsperiodeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

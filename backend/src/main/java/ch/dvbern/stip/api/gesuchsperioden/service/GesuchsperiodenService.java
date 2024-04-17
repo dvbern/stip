@@ -59,6 +59,13 @@ public class GesuchsperiodenService {
             .toList();
     }
 
+    @Transactional
+    public void deleteGesuchsperiode(final UUID gesuchsperiodeId) {
+        final var gesuchsperiode = gesuchsperiodeRepository.requireById(gesuchsperiodeId);
+        preventUpdateIfReadonly(gesuchsperiode);
+        gesuchsperiodeRepository.delete(gesuchsperiode);
+    }
+
     private void preventUpdateIfReadonly(final Gesuchsperiode gesuchsperiode) {
         if (gesuchsperiode.getGesuchsperiodeStart().isAfter(LocalDate.now())) {
             throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");

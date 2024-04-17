@@ -28,6 +28,11 @@ public interface GesuchsperiodeResource {
     @Produces({ "application/json", "text/plain" })
     Response createGesuchsperiode(@Valid @NotNull GesuchsperiodeCreateDto gesuchsperiodeCreateDto);
 
+    @DELETE
+    @Path("/{gesuchsperiodeId}")
+    @Produces({ "text/plain" })
+    Response deleteGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
+
     @GET
     @Path("/aktive")
     @Produces({ "application/json", "text/plain" })

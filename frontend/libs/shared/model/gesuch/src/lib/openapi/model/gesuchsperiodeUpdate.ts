@@ -19,10 +19,7 @@ export interface GesuchsperiodeUpdate {
      * 
      */
     bezeichnungFr: string;
-    gueltigAb?: string;
-    gueltigBis?: string;
     einreichfrist?: string;
-    aufschaltdatum?: string;
     /**
      * 
      */

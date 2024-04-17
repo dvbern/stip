@@ -157,19 +157,19 @@ class GesuchsjahrResourceTest {
     @Test
     @Order(8)
     @TestAsAdmin
-    void deleteTest() {
+    void readonlyDeleteFailsTest() {
         apiSpec.deleteGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
 
         apiSpec.getGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.NOT_FOUND.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
     }
 }

@@ -28,6 +28,12 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
         return Response.ok(gesuchsperiode).build();
     }
 
+    @Override
+    public Response deleteGesuchsperiode(UUID gesuchsperiodeId) {
+        gesuchsperiodenService.deleteGesuchsperiode(gesuchsperiodeId);
+        return Response.noContent().build();
+    }
+
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getAktiveGesuchsperioden() {

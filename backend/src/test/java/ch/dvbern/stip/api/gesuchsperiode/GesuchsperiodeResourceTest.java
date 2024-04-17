@@ -49,7 +49,7 @@ class GesuchsperiodeResourceTest {
             assertThat(String.format("Failed to create periode: %s", e), false, is(true));
             return;
         }
-        
+
         newPeriode.setAufschaltterminStart(LocalDate.now().with(firstDayOfYear()));
         newPeriode.setAufschaltterminStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setEinreichfrist(LocalDate.now().with(lastDayOfYear()));
@@ -146,7 +146,7 @@ class GesuchsperiodeResourceTest {
     @Test
     @TestAsAdmin
     @Order(6)
-    void updateReadonlyTest() {
+    void readonlyUpdateFailsTest() {
         final GesuchsperiodeUpdateDtoSpec updateDto;
         try {
             updateDto = GesuchsperiodeTestSpecGenerator.gesuchsperiodeUpdateDtoSpec();
@@ -165,5 +165,24 @@ class GesuchsperiodeResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(7)
+    void readonlyDeleteFailsTest() {
+        api.deleteGesuchsperiode()
+            .gesuchsperiodeIdPath(gesuchsperiode.getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+
+        api.getGesuchsperiode()
+            .gesuchsperiodeIdPath(gesuchsperiode.getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 }

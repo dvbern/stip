@@ -56,7 +56,8 @@ public class GesuchsjahrService {
 
     @Transactional
     public void deleteGesuchsjahr(final UUID gesuchsjahrId) {
-        Gesuchsjahr gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        final var gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        preventUpdateIfReadonly(gesuchsjahr);
         gesuchsjahrRepository.delete(gesuchsjahr);
     }
 

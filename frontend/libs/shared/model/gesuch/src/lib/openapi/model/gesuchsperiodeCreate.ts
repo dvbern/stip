@@ -20,7 +20,6 @@ export interface GesuchsperiodeCreate {
      */
     bezeichnungFr: string;
     einreichfrist?: string;
-    aufschaltdatum?: string;
     /**
      * 
      */
