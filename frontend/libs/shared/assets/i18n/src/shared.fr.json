@@ -71,6 +71,7 @@
   "shared.form.error.email": "L'adresse e-mail est invalide",
   "shared.form.error.telefonnummer": "Le numéro de téléphone est invalide",
   "shared.weiterangaben": "Plus de détails",
+  "shared.table.noData": "Aucune donnée disponible",
   "shared.table.paginator.itemsPerPage": "Nombre d'éléments par page",
   "shared.table.paginator.nextPage": "Page suivante",
   "shared.table.paginator.lastPage": "Dernière page",
@@ -96,6 +97,10 @@
   "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Veuillez remplir les informations sur les parents.",
   "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Veuillez remplir le champ \"Pensions\" dans les recettes et les coûts.",
   "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "La section \"{{section}}\" n'est pas complète.",
+
+  "shared.gesuch.status.ENTWURF": "Brouillon",
+  "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
+  "shared.gesuch.status.ARCHIVIERT": "Archivé",
 
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",

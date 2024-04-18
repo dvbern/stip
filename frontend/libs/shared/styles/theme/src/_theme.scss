@@ -27,5 +27,8 @@ $dv-size-unit: 0.25rem;
     --dv-gray-bg: #{$body-bg};
 
     --dv-secondary-color: #{$gray};
+    --dv-light-bg-subtle: #fff;
+    --dv-light-border-subtle: #{$lightgray};
+    --dv-border-radius: 8px;
   }
 }

@@ -32,8 +32,8 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUtilFormService } from '@dv/shared/util/form';
-import { isPending } from '@dv/shared/util/remote-data';
 import { createFilterableColumns } from '@dv/shared/util-fn/table-helper';
 
 const CHAR = '[a-z]{1,3} ?';
@@ -55,6 +55,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiRdIsPendingPipe,
   ],
   providers: [
     provideMaterialDefaultOptions({
@@ -96,7 +97,6 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     ],
   };
 
-  isLoading = computed(() => isPending(this.store.sachbearbeiter()));
   formSig = computed(() => {
     const zuweisungen = this.store.zuweisungenViewSig();
     const createFormGroup = (z?: BuchstabenZuordnung) =>

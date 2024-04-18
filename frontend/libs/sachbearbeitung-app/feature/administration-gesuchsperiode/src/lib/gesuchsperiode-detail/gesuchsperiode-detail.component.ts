@@ -24,6 +24,7 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -31,14 +32,22 @@ import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchs
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
+  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import {
+  SharedUiRdIsPendingPipe,
+  SharedUiRdIsPendingWithoutCachePipe,
+} from '@dv/shared/ui/remote-data-pipe';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
+import { maskitoYear } from '@dv/shared/util/maskito-util';
+
+import { PublishComponent } from '../publish/publish.component';
 
 @Component({
   standalone: true,
@@ -53,7 +62,12 @@ import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiFormSaveComponent,
+    SharedUiFormReadonlyDirective,
+    SharedUiLoadingComponent,
+    SharedUiRdIsPendingPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
+    PublishComponent,
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
@@ -67,7 +81,11 @@ export class GesuchsperiodeDetailComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
-  id = input.required<string>();
+  store = inject(GesuchsperiodeStore);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  maskitoYear = maskitoYear;
+  idSig = input.required<string | undefined>({ alias: 'id' });
 
   form = this.formBuilder.group({
     bezeichnungDe: [<string | null>null, [Validators.required]],
@@ -120,66 +138,61 @@ export class GesuchsperiodeDetailComponent {
     ],
   });
 
-  store = inject(GesuchsperiodeStore);
+  private numberConverter = this.formUtils.createNumberConverter(this.form, [
+    'fiskaljahr',
+    'gesuchsjahr',
+    'ausbKosten_SekII',
+    'ausbKosten_Tertiaer',
+    'freibetrag_vermoegen',
+    'freibetrag_erwerbseinkommen',
+    'elternbeteiligungssatz',
+    'einkommensfreibetrag',
+    'vermoegensfreibetrag',
+    'vermogenSatzAngerechnet',
+    'integrationszulage',
+    'limite_EkFreibetrag_Integrationszulag',
+    'stipLimite_Minimalstipendium',
+    'person_1',
+    'personen_2',
+    'personen_3',
+    'personen_4',
+    'personen_5',
+    'personen_6',
+    'personen_7',
+    'proWeiterePerson',
+    'kinder_00_18',
+    'jugendliche_erwachsene_19_25',
+    'erwachsene_26_99',
+    'wohnkosten_fam_1pers',
+    'wohnkosten_fam_2pers',
+    'wohnkosten_fam_3pers',
+    'wohnkosten_fam_4pers',
+    'wohnkosten_fam_5pluspers',
+    'wohnkosten_persoenlich_1pers',
+    'wohnkosten_persoenlich_2pers',
+    'wohnkosten_persoenlich_3pers',
+    'wohnkosten_persoenlich_4pers',
+    'wohnkosten_persoenlich_5pluspers',
+  ]);
 
   constructor() {
     effect(
       () => {
-        this.store.loadGesuchsperiode$(this.id());
+        const id = this.idSig();
+        if (id) {
+          this.store.loadGesuchsperiode$(id);
+        }
       },
       { allowSignalWrites: true },
     );
     effect(() => {
-      const gesuchsperiode = this.store.currentGesuchsperiode?.().data;
+      const gesuchsperiode = this.store.currentGesuchsperiodeViewSig();
       if (!gesuchsperiode) {
         return;
       }
       this.form.patchValue({
         ...gesuchsperiode,
-        ausbKosten_SekII: gesuchsperiode.ausbKosten_SekII.toString(),
-        ausbKosten_Tertiaer: gesuchsperiode.ausbKosten_Tertiaer.toString(),
-        freibetrag_vermoegen: gesuchsperiode.freibetrag_vermoegen.toString(),
-        freibetrag_erwerbseinkommen:
-          gesuchsperiode.freibetrag_erwerbseinkommen.toString(),
-        elternbeteiligungssatz:
-          gesuchsperiode.elternbeteiligungssatz.toString(),
-        einkommensfreibetrag: gesuchsperiode.einkommensfreibetrag.toString(),
-        vermoegensfreibetrag: gesuchsperiode.vermoegensfreibetrag?.toString(),
-        vermogenSatzAngerechnet:
-          gesuchsperiode.vermogenSatzAngerechnet?.toString(),
-        integrationszulage: gesuchsperiode.integrationszulage.toString(),
-        limite_EkFreibetrag_Integrationszulag:
-          gesuchsperiode.limite_EkFreibetrag_Integrationszulag.toString(),
-        stipLimite_Minimalstipendium:
-          gesuchsperiode.stipLimite_Minimalstipendium.toString(),
-        person_1: gesuchsperiode.person_1.toString(),
-        personen_2: gesuchsperiode.personen_2.toString(),
-        personen_3: gesuchsperiode.personen_3.toString(),
-        personen_4: gesuchsperiode.personen_4.toString(),
-        personen_5: gesuchsperiode.personen_5.toString(),
-        personen_6: gesuchsperiode.personen_6.toString(),
-        personen_7: gesuchsperiode.personen_7.toString(),
-        proWeiterePerson: gesuchsperiode.proWeiterePerson.toString(),
-        kinder_00_18: gesuchsperiode.kinder_00_18.toString(),
-        jugendliche_erwachsene_19_25:
-          gesuchsperiode.jugendliche_erwachsene_19_25.toString(),
-        erwachsene_26_99: gesuchsperiode.erwachsene_26_99.toString(),
-        wohnkosten_fam_1pers: gesuchsperiode.wohnkosten_fam_1pers.toString(),
-        wohnkosten_fam_2pers: gesuchsperiode.wohnkosten_fam_2pers.toString(),
-        wohnkosten_fam_3pers: gesuchsperiode.wohnkosten_fam_3pers.toString(),
-        wohnkosten_fam_4pers: gesuchsperiode.wohnkosten_fam_4pers.toString(),
-        wohnkosten_fam_5pluspers:
-          gesuchsperiode.wohnkosten_fam_5pluspers.toString(),
-        wohnkosten_persoenlich_1pers:
-          gesuchsperiode.wohnkosten_persoenlich_1pers.toString(),
-        wohnkosten_persoenlich_2pers:
-          gesuchsperiode.wohnkosten_persoenlich_2pers.toString(),
-        wohnkosten_persoenlich_3pers:
-          gesuchsperiode.wohnkosten_persoenlich_3pers.toString(),
-        wohnkosten_persoenlich_4pers:
-          gesuchsperiode.wohnkosten_persoenlich_4pers.toString(),
-        wohnkosten_persoenlich_5pluspers:
-          gesuchsperiode.wohnkosten_persoenlich_5pluspers.toString(),
+        ...this.numberConverter.toString(gesuchsperiode),
       });
     });
   }
@@ -187,72 +200,20 @@ export class GesuchsperiodeDetailComponent {
   handleSave() {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
-    const value = convertTempFormToRealValues(this.form, 'all');
+    const value = convertTempFormToRealValues(this.form);
     this.store.saveGesuchsperiode$({
-      gesuchsperiodeId: this.id(),
+      gesuchsperiodeId: this.idSig(),
       gesuchsperiodenDaten: {
         ...value,
-        ausbKosten_SekII: fromFormatedNumber(value.ausbKosten_SekII),
-        ausbKosten_Tertiaer: fromFormatedNumber(value.ausbKosten_Tertiaer),
-        freibetrag_vermoegen: fromFormatedNumber(value.freibetrag_vermoegen),
-        freibetrag_erwerbseinkommen: fromFormatedNumber(
-          value.freibetrag_erwerbseinkommen,
-        ),
-        elternbeteiligungssatz: fromFormatedNumber(
-          value.elternbeteiligungssatz,
-        ),
-        einkommensfreibetrag: fromFormatedNumber(value.einkommensfreibetrag),
-        vermoegensfreibetrag: fromFormatedNumber(value.vermoegensfreibetrag),
-        vermogenSatzAngerechnet: fromFormatedNumber(
-          value.vermogenSatzAngerechnet,
-        ),
-        integrationszulage: fromFormatedNumber(value.integrationszulage),
-        limite_EkFreibetrag_Integrationszulag: fromFormatedNumber(
-          value.limite_EkFreibetrag_Integrationszulag,
-        ),
-        stipLimite_Minimalstipendium: fromFormatedNumber(
-          value.stipLimite_Minimalstipendium,
-        ),
-        person_1: fromFormatedNumber(value.person_1),
-        personen_2: fromFormatedNumber(value.personen_2),
-        personen_3: fromFormatedNumber(value.personen_3),
-        personen_4: fromFormatedNumber(value.personen_4),
-        personen_5: fromFormatedNumber(value.personen_5),
-        personen_6: fromFormatedNumber(value.personen_6),
-        personen_7: fromFormatedNumber(value.personen_7),
-        proWeiterePerson: fromFormatedNumber(value.proWeiterePerson),
-        kinder_00_18: fromFormatedNumber(value.kinder_00_18),
-        jugendliche_erwachsene_19_25: fromFormatedNumber(
-          value.jugendliche_erwachsene_19_25,
-        ),
-        erwachsene_26_99: fromFormatedNumber(
-          value.jugendliche_erwachsene_19_25,
-        ),
-        wohnkosten_fam_1pers: fromFormatedNumber(value.wohnkosten_fam_1pers),
-        wohnkosten_fam_2pers: fromFormatedNumber(value.wohnkosten_fam_2pers),
-        wohnkosten_fam_3pers: fromFormatedNumber(value.wohnkosten_fam_3pers),
-        wohnkosten_fam_4pers: fromFormatedNumber(value.wohnkosten_fam_4pers),
-        wohnkosten_fam_5pluspers: fromFormatedNumber(
-          value.wohnkosten_fam_5pluspers,
-        ),
-        wohnkosten_persoenlich_1pers: fromFormatedNumber(
-          value.wohnkosten_persoenlich_1pers,
-        ),
-        wohnkosten_persoenlich_2pers: fromFormatedNumber(
-          value.wohnkosten_persoenlich_2pers,
-        ),
-        wohnkosten_persoenlich_3pers: fromFormatedNumber(
-          value.wohnkosten_persoenlich_3pers,
-        ),
-        wohnkosten_persoenlich_4pers: fromFormatedNumber(
-          value.wohnkosten_persoenlich_4pers,
-        ),
-        wohnkosten_persoenlich_5pluspers: fromFormatedNumber(
-          value.wohnkosten_persoenlich_5pluspers,
-        ),
+        ...this.numberConverter.toNumber(),
+      },
+      onAfterSave: (gesuchsjahr) => {
+        this.router.navigate(['..', gesuchsjahr.id], {
+          relativeTo: this.route,
+        });
       },
     });
   }

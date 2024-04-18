@@ -85,11 +85,17 @@
             </mat-form-field>
           </td>
         </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="combined-header-row"></tr>
         <tr mat-header-row *matHeaderRowDef="displayedColumnFilters" class="combined-header-row"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
       </table>
     </div>
-    <dv-shared-ui-form-save [loading]="store.sachbearbeiter.type() === 'pending'"></dv-shared-ui-form-save>
+    <dv-shared-ui-form-save [loading]="store.sachbearbeiter() | rdIsPending"></dv-shared-ui-form-save>
   </form>
 }

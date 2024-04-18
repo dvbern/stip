@@ -1,9 +1,17 @@
-@if (store.gesuchsperioden.type() === 'pending' || store.gesuchsjahre.type() === 'pending') {
+@if ((store.gesuchsperioden() | rdIsPendingWithoutCache) || (store.gesuchsjahre() | rdIsPendingWithoutCache)) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (gesuchsperiodenDatasourceSig(); as gesuchsperiodeSource) {
     <div class="mt-4 shadow rounded-4 overflow-hidden">
-      <table mat-table [dataSource]="gesuchsperiodeSource">
+      <table
+        mat-table
+        [dataSource]="gesuchsperiodeSource"
+        #gesuchsperiodenSort="matSort"
+        matSort
+        matSortDirection="desc"
+        matSortStart="desc"
+        matSortActive="gesuchsperiode"
+      >
         <caption class="cdk-visually-hidden">
           {{
             'sachbearbeitung-app.admin.gesuchsperiode.table.description' | translate
@@ -11,7 +19,7 @@
         </caption>
 
         <ng-container matColumnDef="bezeichnung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef>
             {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.bezeichnung' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource" class="fw-bold">
@@ -28,12 +36,12 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="gueltigkeitStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.status' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
-            {{ gesuchsperiode.status }}
+            {{ 'shared.gesuch.status.' + gesuchsperiode.gueltigkeitStatus | translate }}
           </td>
         </ng-container>
 
@@ -55,15 +63,18 @@
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
             <div class="d-flex">
-              <button
-                type="button"
-                class="btn btn-link me-2"
-                [attr.aria-label]="
-                  'sachbearbeitung-app.admin.gesuchsperiode.table.loeschen' | translate: gesuchsperiode
-                "
-              >
-                <i class="material-symbols-rounded fs-5">delete</i>
-              </button>
+              @if (gesuchsperiode.isEditable) {
+                <button
+                  type="button"
+                  class="btn btn-link me-2"
+                  [attr.aria-label]="
+                    'sachbearbeitung-app.admin.gesuchsperiode.table.loeschen' | translate: gesuchsperiode
+                  "
+                  (click)="store.deleteGesuchsperiode$(gesuchsperiode.id); $event.stopPropagation()"
+                >
+                  <i class="material-symbols-rounded fs-5">delete</i>
+                </button>
+              }
             </div>
           </td></ng-container
         >
@@ -83,7 +94,15 @@
   @if (gesuchsJahrDatasourceSig(); as gesuchsjahrSource) {
     <h3 class="mt-5">{{ 'sachbearbeitung-app.admin.gesuchsjahr.title' | translate }}</h3>
     <div class="mt-2 shadow rounded-4 overflow-hidden">
-      <table mat-table [dataSource]="gesuchsjahrSource">
+      <table
+        mat-table
+        [dataSource]="gesuchsjahrSource"
+        #gesuchsjahrSort="matSort"
+        matSort
+        matSortDirection="desc"
+        matSortStart="desc"
+        matSortActive="ausbildungsjahr"
+      >
         <caption class="cdk-visually-hidden">
           {{
             'sachbearbeitung-app.admin.gesuchsjahr.table.description' | translate
@@ -99,7 +118,7 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="gesuchsjahr">
+        <ng-container matColumnDef="ausbildungsjahr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr' | translate }}
           </th>
@@ -108,7 +127,7 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="gueltigkeitStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.status' | translate }}
           </th>
@@ -138,24 +157,31 @@
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             <div class="d-flex">
-              <button
-                type="button"
-                class="btn btn-link me-2"
-                [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | translate: gesuchsjahr"
-              >
-                <i class="material-symbols-rounded fs-5">delete</i>
-              </button>
+              @if (gesuchsjahr.isEditable) {
+                @if (store.gesuchsjahre() | rdIsPending) {
+                  <dv-shared-ui-loading class="ps-3" type="icon"></dv-shared-ui-loading>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn btn-link me-2"
+                    [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | translate: gesuchsjahr"
+                    (click)="store.deleteGesuchsjahr$(gesuchsjahr.id); $event.stopPropagation()"
+                  >
+                    <i class="material-symbols-rounded fs-5">delete</i>
+                  </button>
+                }
+              }
             </div>
-          </td></ng-container
-        >
+          </td>
+        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsGesuchsJahr" class="fw-bold"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsGesuchsjahr" class="fw-bold"></tr>
         <tr
           mat-row
           dvSharedUiFocusableListItem
           tabindex="-1"
           class="highlightable"
-          *matRowDef="let gesuchsjahr; columns: displayedColumnsGesuchsJahr"
+          *matRowDef="let gesuchsjahr; columns: displayedColumnsGesuchsjahr"
           [routerLink]="['.', 'jahr', gesuchsjahr.id]"
         ></tr>
       </table>

@@ -1,20 +1,22 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { patchState, withDevtools } from '@angular-architects/ngrx-toolkit';
-import { signalStore, withState } from '@ngrx/signals';
+import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { BuchstabenZuordnungUpdate } from '@dv/sachbearbeitung-app/model/administration';
 import { Benutzer, BenutzerService } from '@dv/shared/model/gesuch';
 import {
-  RemoteData,
+  CachedRemoteData,
+  cachedPending,
+  catchRemoteDataError,
+  fromCachedDataSig,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type SachbearbeiterState = {
-  sachbearbeiter: RemoteData<Benutzer[]>;
+  sachbearbeiter: CachedRemoteData<Benutzer[]>;
 };
 
 const initialState: SachbearbeiterState = {
@@ -27,45 +29,10 @@ export class SachbearbeiterStore extends signalStore(
   withState(initialState),
 ) {
   private benutzerService = inject(BenutzerService);
-  private loadZuweisungen = pipe(
-    tap(() =>
-      patchState(this, 'loadZuweisungen', {
-        sachbearbeiter: pending(),
-      }),
-    ),
-    switchMap(() =>
-      this.benutzerService.getSachbearbeitende$().pipe(
-        handleApiResponse((sachbearbeiter) =>
-          patchState(this, 'loadZuweisungen', {
-            sachbearbeiter,
-          }),
-        ),
-      ),
-    ),
-  );
-
-  loadSachbearbeiterZuweisungen$ = rxMethod<void>(this.loadZuweisungen);
-
-  saveSachbearbeiterZuweisung$ = rxMethod<BuchstabenZuordnungUpdate[]>(
-    pipe(
-      tap(() =>
-        patchState(this, 'saveSachbearbeiterZuweisung', {
-          sachbearbeiter: pending(),
-        }),
-      ),
-      switchMap((zuordnungen) =>
-        this.benutzerService
-          .createOrUpdateSachbearbeiterStammdatenList$({
-            sachbearbeiterZuordnungStammdatenList: zuordnungen,
-          })
-          .pipe(switchMap(this.loadZuweisungen)),
-      ),
-    ),
-  );
 
   zuweisungenViewSig = computed(
     () =>
-      this.sachbearbeiter().data?.map((u) => ({
+      fromCachedDataSig(this.sachbearbeiter)?.map((u) => ({
         benutzerId: u.id,
         fullName: `${u.vorname} ${u.nachname}`,
         enabledDe:
@@ -75,5 +42,46 @@ export class SachbearbeiterStore extends signalStore(
           (u.sachbearbeiterZuordnungStammdaten?.buchstabenFr?.length ?? 0) > 0,
         buchstabenFr: u.sachbearbeiterZuordnungStammdaten?.buchstabenFr,
       })) ?? [],
+  );
+
+  private loadZuweisungen = pipe(
+    switchMap(() =>
+      this.benutzerService.getSachbearbeitende$().pipe(
+        handleApiResponse((sachbearbeiter) =>
+          patchState(this, {
+            sachbearbeiter,
+          }),
+        ),
+      ),
+    ),
+  );
+
+  loadSachbearbeiterZuweisungen$ = rxMethod<void>(
+    pipe(
+      tap(() =>
+        patchState(this, (state) => ({
+          sachbearbeiter: cachedPending(state.sachbearbeiter),
+        })),
+      ),
+      this.loadZuweisungen,
+    ),
+  );
+
+  saveSachbearbeiterZuweisung$ = rxMethod<BuchstabenZuordnungUpdate[]>(
+    pipe(
+      tap(() =>
+        patchState(this, (state) => ({
+          sachbearbeiter: cachedPending(state.sachbearbeiter),
+        })),
+      ),
+      switchMap((zuordnungen) =>
+        this.benutzerService
+          .createOrUpdateSachbearbeiterStammdatenList$({
+            sachbearbeiterZuordnungStammdatenList: zuordnungen,
+          })
+          .pipe(catchRemoteDataError()),
+      ),
+      this.loadZuweisungen,
+    ),
   );
 }

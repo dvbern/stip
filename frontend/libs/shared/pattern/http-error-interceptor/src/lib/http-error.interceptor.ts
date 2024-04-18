@@ -6,10 +6,9 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { EMPTY, catchError, of, throwError } from 'rxjs';
 
-import { SharedDataAccessGlobalNotificationEvents } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { IGNORE_NOT_FOUND_ERRORS } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
@@ -58,7 +57,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
       req: HttpRequest<unknown>,
       next: HttpHandlerFn,
     ) {
-      const store = inject(Store);
+      const store = inject(GlobalNotificationStore);
       return next(req).pipe(
         catchError((error) => {
           // ignore errors if the HTTP context is set to ignore errors
@@ -76,18 +75,14 @@ export function withDvGlobalHttpErrorInterceptorFn({
           }
 
           if (!req.context.get(NO_GLOBAL_ERRORS)) {
-            store.dispatch(
-              SharedDataAccessGlobalNotificationEvents.httpRequestFailed({
-                errors: [errorToDispatch],
-              }),
-            );
+            store.handleHttpRequestFailed([errorToDispatch]);
           }
 
           if (type === 'globalOnly') {
             return EMPTY; // global errors only. Effects will never fail, no local catchErrors are reached
           } else {
             // TODO fix this: throwError stops stuff and the local error handling is not reached
-            return throwError(storableError); // global errors plus local catchErrors in Effects.
+            return throwError(() => storableError); // global errors plus local catchErrors in Effects.
           }
         }),
       );

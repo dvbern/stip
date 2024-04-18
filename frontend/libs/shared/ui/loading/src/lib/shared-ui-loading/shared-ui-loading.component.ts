@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiLoadingComponent {
-  @Input() compact = false;
+  @Input() type: 'spinner' | 'compact' | 'icon' = 'spinner';
   @Input() loadingTextKey = 'shared.ui.loading.text';
 
   @HostBinding('class') class = 'd-flex';

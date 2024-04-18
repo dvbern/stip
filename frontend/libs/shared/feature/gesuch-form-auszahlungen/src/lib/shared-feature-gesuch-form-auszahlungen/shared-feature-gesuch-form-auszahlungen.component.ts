@@ -50,7 +50,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -76,7 +76,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     MaskitoModule,
     SharedUiFormAddressComponent,
     NgbAlert,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
   ],

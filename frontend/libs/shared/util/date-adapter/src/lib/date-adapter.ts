@@ -9,16 +9,15 @@ import { startWith } from 'rxjs';
 export class DvDateAdapter extends DateFnsAdapter {
   translate = inject(TranslateService);
 
-  constructor(@Optional() @Inject(MAT_DATE_LOCALE) matDateLocale?: string) {
-    // Not relevant once the base adapter is implemented with `inject` instead of `@Inject`
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    console.log('DvDateAdapter', matDateLocale as any);
-    super(matDateLocale as any);
+  constructor(@Optional() @Inject(MAT_DATE_LOCALE) matDateLocale: object) {
+    /** Not relevant once the base adapter is implemented with `inject` instead of `@Inject`
+     *  @see https://github.com/angular/components/blob/main/src/material-date-fns-adapter/adapter/date-fns-adapter.ts#L55
+     */
+    super(matDateLocale);
 
     this.translate.onLangChange
       .pipe(startWith({ lang: this.translate.currentLang }))
       .subscribe(({ lang }) => {
-        console.log('LOCALE?', { locale: getLocaleFromLanguage(lang), lang });
         this.setLocale(getLocaleFromLanguage(lang));
       });
   }

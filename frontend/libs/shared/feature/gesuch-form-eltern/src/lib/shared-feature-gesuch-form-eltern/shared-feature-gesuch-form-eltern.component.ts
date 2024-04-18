@@ -18,7 +18,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { ElternteilCardComponent } from './elternteil-card/elternteil-card.component';
@@ -32,7 +32,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
     TranslateModule,
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern.component.html',

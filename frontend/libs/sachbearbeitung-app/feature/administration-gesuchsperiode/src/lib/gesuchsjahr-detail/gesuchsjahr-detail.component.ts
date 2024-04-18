@@ -24,20 +24,29 @@ import {
   MatHint,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MaskitoModule } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
-import { GueltigkeitStatus } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
+  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import {
+  SharedUiRdIsPendingPipe,
+  SharedUiRdIsPendingWithoutCachePipe,
+} from '@dv/shared/ui/remote-data-pipe';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { maskitoYear } from '@dv/shared/util/maskito-util';
+
+import { PublishComponent } from '../publish/publish.component';
 
 @Component({
   standalone: true,
@@ -52,44 +61,57 @@ import {
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiFormReadonlyDirective,
+    SharedUiFormSaveComponent,
+    SharedUiLoadingComponent,
+    SharedUiRdIsPendingPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
     MatDatepickerApply,
+    PublishComponent,
   ],
   templateUrl: './gesuchsjahr-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [],
 })
 export class GesuchsjahrDetailComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
 
+  readonly = false;
+  masktitoYear = maskitoYear;
   store = inject(GesuchsperiodeStore);
-  id = input<string | undefined>();
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  idSig = input.required<string | undefined>({ alias: 'id' });
   form = this.formBuilder.group({
     bezeichnungDe: [<string | null>null, [Validators.required]],
     bezeichnungFr: [<string | null>null, [Validators.required]],
     technischesJahr: [<string | null>null, [Validators.required]],
-    gueltigkeitStatus: [<GueltigkeitStatus>'ENTWURF'],
   });
 
   constructor() {
     effect(() => {
-      const gesuchsjahr = this.store.currentGesuchsJahr().data;
+      const gesuchsjahr = this.store.currentGesuchsjahrViewSig();
+      if (!gesuchsjahr) return;
+
       this.form.patchValue({
         ...gesuchsjahr,
         technischesJahr: gesuchsjahr?.technischesJahr.toString(),
       });
     });
-    effect(() => {
-      const id = this.id();
-
-      if (id) {
-        this.store.loadGesuchsjahr$(id);
-      }
-    });
+    effect(
+      () => {
+        const id = this.idSig();
+        if (id) {
+          this.store.loadGesuchsjahr$(id);
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   handleSave() {
@@ -98,10 +120,15 @@ export class GesuchsjahrDetailComponent {
     if (!this.form.valid) {
       return;
     }
-    const value = convertTempFormToRealValues(this.form, 'all');
+    const value = convertTempFormToRealValues(this.form);
     this.store.saveGesuchsjahr$({
-      gesuchsjahrId: this.id(),
+      gesuchsjahrId: this.idSig(),
       gesuchsjahrDaten: { ...value, technischesJahr: +value.technischesJahr },
+      onAfterSave: (gesuchsjahr) => {
+        this.router.navigate(['..', gesuchsjahr.id], {
+          relativeTo: this.route,
+        });
+      },
     });
   }
 }

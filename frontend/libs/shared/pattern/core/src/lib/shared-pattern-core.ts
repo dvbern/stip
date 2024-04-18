@@ -6,6 +6,7 @@ import {
 import {
   ApplicationConfig,
   ENVIRONMENT_INITIALIZER,
+  ElementRef,
   importProvidersFrom,
   inject,
   isDevMode,
@@ -41,7 +42,6 @@ import {
   sharedDataAccessConfigEffects,
   sharedDataAccessConfigsFeature,
 } from '@dv/shared/data-access/config';
-import { sharedDataAccessGlobalNotificationsFeature } from '@dv/shared/data-access/global-notification';
 import {
   SharedDataAccessLanguageEvents,
   sharedDataAccessLanguageEffects,
@@ -70,6 +70,10 @@ export class ExplicitMissingTranslationHandler
   handle(params: MissingTranslationHandlerParams) {
     return `${params.key}`;
   }
+}
+
+export abstract class RootComponent {
+  abstract elementRef: ElementRef;
 }
 
 export const metaReducers = [];
@@ -125,7 +129,6 @@ export function provideSharedPatternCore(
         },
       },
     ),
-    provideState(sharedDataAccessGlobalNotificationsFeature),
     provideState(sharedDataAccessBenutzersFeature),
     provideState(sharedDataAccessConfigsFeature),
     provideState(sharedDataAccessLanguageFeature),

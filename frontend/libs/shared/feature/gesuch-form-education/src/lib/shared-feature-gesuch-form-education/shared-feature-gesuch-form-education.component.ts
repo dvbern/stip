@@ -46,7 +46,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -78,7 +78,7 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MatCheckboxModule,
     MatAutocompleteModule,
     MaskitoModule,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-education.component.html',

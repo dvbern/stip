@@ -58,7 +58,7 @@ import {
   percentStringToNumber,
 } from '@dv/shared/ui/percentage-splitter';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-navigation';
 import {
   SharedUtilFormService,
@@ -92,7 +92,7 @@ const animationTime = 500;
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiPercentageSplitterComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiStepperNavigationComponent,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,

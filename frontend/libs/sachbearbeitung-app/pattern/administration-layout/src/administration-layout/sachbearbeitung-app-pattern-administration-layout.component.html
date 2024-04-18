@@ -30,7 +30,7 @@
 
 <ng-template #navigation>
   <div class="sidenav p-4">
-    <ng-container *ngFor="let option of options; trackBy: trackByIndex">
+    @for (option of options; track $index) {
       <ng-container
         *ngIf="{
           active: route.isActive(option.route, false)
@@ -51,7 +51,7 @@
           </span>
         </a>
       </ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
@@ -69,15 +69,27 @@
       </div>
 
       <!-- title (desktop) -->
-      <div class="d-none d-lg-flex justify-content-start" *ngIf="option">
-        <dv-shared-ui-icon-chip class="step-icon me-3">
-          <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
-        </dv-shared-ui-icon-chip>
+      @if (option) {
+        <div class="d-none d-lg-flex justify-content-start align-items-center">
+          @if (option.type === 'PARENT') {
+            <dv-shared-ui-icon-chip class="step-icon me-3">
+              <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
+            </dv-shared-ui-icon-chip>
+          } @else {
+            <a
+              [routerLink]="option.parentRoute"
+              class="btn btn-link text-decoration-none fw-normal px-2 d-flex align-items-center shadow-none"
+              data-testid="gesuch-step-nav-overview"
+            >
+              <i class="material-symbols-rounded text-black me-2">arrow_back</i>
+            </a>
+          }
 
-        <h2 class="fw-bold" data-testid="step-title">
-          {{ option.titleTranslationKey | translate }}
-        </h2>
-      </div>
+          <h2 class="fw-bold m-0" data-testid="step-title">
+            {{ option.titleTranslationKey | translate }}
+          </h2>
+        </div>
+      }
 
       <div>
         <ng-content></ng-content>

@@ -1,30 +1,35 @@
 export type AdminOption = {
+  type: 'PARENT';
   route: string;
   translationKey: string;
   titleTranslationKey: string;
   iconSymbolName: string;
 };
 
-export const OPTION_AUSBILDUNGSSTAETTE = {
+export const OPTION_AUSBILDUNGSSTAETTE: AdminOption = {
+  type: 'PARENT',
   route: 'ausbildungsstaette',
   translationKey: 'sachbearbeitung-app.admin.option.ausbildungsstaette',
   titleTranslationKey:
-    'sachbearbeitung-app.admin.option.ausbildungsstaetteTitle',
+    'sachbearbeitung-app.admin.ausbildungsstaette.route.overview',
   iconSymbolName: 'school',
-} satisfies AdminOption;
+};
 
-export const OPTION_BUCHSTABEN_ZUTEILUNG = {
+export const OPTION_BUCHSTABEN_ZUTEILUNG: AdminOption = {
+  type: 'PARENT',
   route: 'buchstaben-zuteilung',
   translationKey: 'sachbearbeitung-app.admin.option.buchstabenZuteilung',
   titleTranslationKey:
-    'sachbearbeitung-app.admin.option.buchstabenZuteilungTitle',
+    'sachbearbeitung-app.admin.buchstabenZuteilung.route.overview',
   iconSymbolName: 'sort_by_alpha',
 };
 
-export const OPTION_GESUCHSPERIODEN = {
+export const OPTION_GESUCHSPERIODEN: AdminOption = {
+  type: 'PARENT',
   route: 'gesuchsperioden',
   translationKey: 'sachbearbeitung-app.admin.option.gesuchsperioden',
-  titleTranslationKey: 'sachbearbeitung-app.admin.option.gesuchsperiodenTitle',
+  titleTranslationKey:
+    'sachbearbeitung-app.admin.gesuchsperiode.route.overview',
   iconSymbolName: 'format_indent_increase',
 };
 
@@ -33,3 +38,28 @@ export const AdminOptions = [
   OPTION_BUCHSTABEN_ZUTEILUNG,
   OPTION_GESUCHSPERIODEN,
 ];
+
+export type ChildAdminOption = {
+  type: 'CHILD';
+  route: string;
+  titleTranslationKey: string;
+  parentRoute: string;
+};
+
+export const CHILD_OPTION_GESUCHSJAHRE = (
+  titleTranslationKey: string,
+): ChildAdminOption => ({
+  type: 'CHILD',
+  route: 'jahr',
+  titleTranslationKey,
+  parentRoute: OPTION_GESUCHSPERIODEN.route,
+});
+
+export const CHILD_OPTION_GESUCHSPERIODE = (
+  titleTranslationKey: string,
+): ChildAdminOption => ({
+  type: 'CHILD',
+  route: 'gesuchsperiode',
+  titleTranslationKey,
+  parentRoute: OPTION_GESUCHSPERIODEN.route,
+});

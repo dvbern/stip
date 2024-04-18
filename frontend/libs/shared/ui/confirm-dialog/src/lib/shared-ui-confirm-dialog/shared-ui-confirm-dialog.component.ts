@@ -8,10 +8,10 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface ConfirmDialogData {
-  title: string;
-  message: string;
-  confirmText: string;
-  cancelText: string;
+  title?: string;
+  message?: string;
+  confirmText?: string;
+  cancelText?: string;
   translationObject?: unknown;
 }
 

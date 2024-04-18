@@ -36,15 +36,16 @@ type OnlyString<T> = T extends string ? T : never;
  * @throws Error if given properties have no `Validators.required` set
  * @param form The form used to obtain the values
  * @param required a list of properties that should be handled as non-nullable
+ *                 if none given, all properties are treated as non-nullable
  */
 export function convertTempFormToRealValues<
   T extends {
     [K: string]: AbstractControl<unknown>;
   },
   K extends keyof T,
->(form: FormGroup<T>, required: OnlyString<K>[] | 'all') {
+>(form: FormGroup<T>, required?: OnlyString<K>[]) {
   const values = form.getRawValue();
-  if (required === 'all') {
+  if (!required) {
     return values as NonNullableRecord<typeof values>;
   }
 
