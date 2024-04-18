@@ -25,9 +25,10 @@ public class GesuchsperiodeDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
+  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
-  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
+  private @Valid LocalDate aufschaltterminStart;
   private @Valid LocalDate einreichefristNormal;
   private @Valid LocalDate einreichefristReduziert;
 
@@ -90,6 +91,25 @@ public class GesuchsperiodeDto  implements Serializable {
 
   /**
    **/
+  public GesuchsperiodeDto gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
+    return this;
+  }
+
+  
+  @JsonProperty("gueltigkeitStatus")
+  @NotNull
+  public GueltigkeitStatusDto getGueltigkeitStatus() {
+    return gueltigkeitStatus;
+  }
+
+  @JsonProperty("gueltigkeitStatus")
+  public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
+  }
+
+  /**
+   **/
   public GesuchsperiodeDto gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
     this.gesuchsperiodeStart = gesuchsperiodeStart;
     return this;
@@ -127,21 +147,23 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   /**
+   * dd.MM.YYYY
    **/
-  public GesuchsperiodeDto gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
-    this.gueltigkeitStatus = gueltigkeitStatus;
+  public GesuchsperiodeDto aufschaltterminStart(LocalDate aufschaltterminStart) {
+    this.aufschaltterminStart = aufschaltterminStart;
     return this;
   }
 
   
-  @JsonProperty("gueltigkeitStatus")
-  public GueltigkeitStatusDto getGueltigkeitStatus() {
-    return gueltigkeitStatus;
+  @JsonProperty("aufschaltterminStart")
+  @NotNull
+  public LocalDate getAufschaltterminStart() {
+    return aufschaltterminStart;
   }
 
-  @JsonProperty("gueltigkeitStatus")
-  public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
-    this.gueltigkeitStatus = gueltigkeitStatus;
+  @JsonProperty("aufschaltterminStart")
+  public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
+    this.aufschaltterminStart = aufschaltterminStart;
   }
 
   /**
@@ -193,16 +215,17 @@ public class GesuchsperiodeDto  implements Serializable {
     return Objects.equals(this.id, gesuchsperiode.id) &&
         Objects.equals(this.bezeichnungDe, gesuchsperiode.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsperiode.bezeichnungFr) &&
+        Objects.equals(this.gueltigkeitStatus, gesuchsperiode.gueltigkeitStatus) &&
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiode.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiode.gesuchsperiodeStopp) &&
-        Objects.equals(this.gueltigkeitStatus, gesuchsperiode.gueltigkeitStatus) &&
+        Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
         Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gesuchsperiodeStart, gesuchsperiodeStopp, gueltigkeitStatus, einreichefristNormal, einreichefristReduziert);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert);
   }
 
   @Override
@@ -213,9 +236,10 @@ public class GesuchsperiodeDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
-    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
+    sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
     sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("}");

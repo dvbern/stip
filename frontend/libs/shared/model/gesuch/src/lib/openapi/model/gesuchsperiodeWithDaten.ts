@@ -13,7 +13,7 @@ import { GueltigkeitStatus } from './gueltigkeitStatus';
 
 export interface GesuchsperiodeWithDaten { 
     id: string;
-    gueltigkeitStatus?: GueltigkeitStatus;
+    gueltigkeitStatus: GueltigkeitStatus;
     /**
      * 
      */

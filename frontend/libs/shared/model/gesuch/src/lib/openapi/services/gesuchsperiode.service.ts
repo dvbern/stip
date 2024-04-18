@@ -40,7 +40,7 @@ export interface GesuchsperiodeServiceGetGesuchsperiodeRequestParams {
 }
 
 export interface GesuchsperiodeServicePublishGesuchsperiodeRequestParams {
-    gesuchperiodeId: string;
+    gesuchsperiodeId: string;
 }
 
 export interface GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams {
@@ -480,13 +480,13 @@ export class GesuchsperiodeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Gesuchsperiode>;
-     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Gesuchsperiode>>;
-     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Gesuchsperiode>>;
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<GesuchsperiodeWithDaten>;
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<GesuchsperiodeWithDaten>>;
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<GesuchsperiodeWithDaten>>;
      public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        const gesuchperiodeId = requestParameters.gesuchperiodeId;
-        if (gesuchperiodeId === null || gesuchperiodeId === undefined) {
-            throw new Error('Required parameter gesuchperiodeId was null or undefined when calling publishGesuchsperiode$.');
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling publishGesuchsperiode$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -533,8 +533,8 @@ export class GesuchsperiodeService {
             }
         }
 
-        const localVarPath = `/gesuchsperiode/publish/${this.configuration.encodeParam({name: "gesuchperiodeId", value: gesuchperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Gesuchsperiode>('patch', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/gesuchsperiode/publish/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<GesuchsperiodeWithDaten>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

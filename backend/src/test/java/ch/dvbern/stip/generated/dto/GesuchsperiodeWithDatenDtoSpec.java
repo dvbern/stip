@@ -253,9 +253,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
    * Get gueltigkeitStatus
    * @return gueltigkeitStatus
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
     return gueltigkeitStatus;
@@ -263,7 +263,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
     this.gueltigkeitStatus = gueltigkeitStatus;
   }
