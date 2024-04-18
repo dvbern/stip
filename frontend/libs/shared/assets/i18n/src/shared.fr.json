@@ -262,6 +262,11 @@
   "shared.form.kinder.edit": "Modifier l'enfant",
   "shared.form.kinder.view": "Afficher l'enfant",
   "shared.form.kinder.delete": "Retirer l'enfant",
+  "shared.form.kinder.alimentenregelung.label": "Règlement alimentaire",
+  "shared.form.kinder.alimentenregelungExistiert.label": "Il existe un règlement alimentaire",
+  "shared.form.kinder.erhalteneAlimentebeitraege.label": "Pensions alimentaires reçues",
+  "shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION": "Copie de la convention de séparation/de divorce ou d’entretien",
+  "shared.form.kinder.file.ALIMENTENVERORDNUNG": "Copie de l’ordonnance alimentaire",
 
   "shared.lebenslauf.title": "Curriculum vitae",
   "shared.form.lebenslauf.add.ausbildung": "Ajouter une formation",

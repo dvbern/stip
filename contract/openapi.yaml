@@ -1188,6 +1188,7 @@ components:
         - ELTERN_STEUERUNTERLAGEN_MUTTER
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+        - KINDER_ALIMENTENVERORDUNG
         - PARNTER_AUSBILUNG_LOHNABRECHNUNG
         - PARTNER_BELEG_OV_ABONNEMENT
         - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
@@ -1573,6 +1574,8 @@ components:
           type: number
         nachname:
           type: string
+        erhalteneAlimentebeitraege:
+          type: number
     Auszahlung:
       title: Root Type for Auszahlung
       description: ''

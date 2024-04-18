@@ -10,6 +10,9 @@
 # frontend generated
 /frontend/libs/backend-models/src/lib/generated/.openapi-generator/FILES
 
+## jpa buddy
+.jpb
+
 ##### Common ignore settings ####
 
 ## Local developer / local build settings
