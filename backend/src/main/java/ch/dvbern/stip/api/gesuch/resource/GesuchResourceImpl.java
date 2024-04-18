@@ -193,6 +193,13 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
+    public Response getRequiredGesuchDokumentTyp(UUID gesuchId) {
+        final var requiredTypes = gesuchService.getRequiredDokumentTypes(gesuchId);
+        return Response.ok(requiredTypes).build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
         return Response.accepted().build();

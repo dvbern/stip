@@ -91,6 +91,11 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     Response getGesucheForFall(@PathParam("fallId") UUID fallId);
 
+    @GET
+    @Path("/{gesuchId}/requiredDokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response getRequiredGesuchDokumentTyp(@PathParam("gesuchId") UUID gesuchId);
+
     @PATCH
     @Path("/{gesuchId}")
     @Consumes({ "application/json" })
