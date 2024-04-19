@@ -2,6 +2,7 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (gesuchsperiodenDatasourceSig(); as gesuchsperiodeSource) {
+    <h3 class="mt-5">{{ 'sachbearbeitung-app.admin.gesuchsperiode.title' | translate }}</h3>
     <div class="mt-4 shadow rounded-4 overflow-hidden">
       <table
         mat-table
@@ -88,6 +89,11 @@
           *matRowDef="let gesuchsperiode; columns: displayedColumnsGesuchsperiode"
           [routerLink]="['.', gesuchsperiode.id]"
         ></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumnsGesuchsperiode.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
       </table>
     </div>
   }
@@ -184,6 +190,11 @@
           *matRowDef="let gesuchsjahr; columns: displayedColumnsGesuchsjahr"
           [routerLink]="['.', 'jahr', gesuchsjahr.id]"
         ></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumnsGesuchsjahr.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
       </table>
     </div>
   }

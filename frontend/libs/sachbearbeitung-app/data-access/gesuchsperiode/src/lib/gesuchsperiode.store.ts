@@ -206,13 +206,16 @@ export class GesuchsperiodeStore extends signalStore(
         }));
       }),
       switchMap((gesuchsperiodeId) =>
-        this.gesuchsperiodeService.publishGesuchsperiode$({ gesuchsperiodeId }),
+        this.gesuchsperiodeService
+          .publishGesuchsperiode$({ gesuchsperiodeId })
+          .pipe(
+            handleApiResponse((currentGesuchsperiode) => {
+              patchState(this, {
+                currentGesuchsperiode,
+              });
+            }),
+          ),
       ),
-      handleApiResponse((currentGesuchsperiode) => {
-        patchState(this, {
-          currentGesuchsperiode,
-        });
-      }),
     ),
   );
 
@@ -306,13 +309,14 @@ export class GesuchsperiodeStore extends signalStore(
         }));
       }),
       switchMap((gesuchsjahrId) =>
-        this.gesuchsjahrService.publishGesuchsjahr$({ gesuchsjahrId }),
+        this.gesuchsjahrService.publishGesuchsjahr$({ gesuchsjahrId }).pipe(
+          handleApiResponse((currentGesuchsjahr) => {
+            patchState(this, {
+              currentGesuchsjahr,
+            });
+          }),
+        ),
       ),
-      handleApiResponse((currentGesuchsjahr) => {
-        patchState(this, {
-          currentGesuchsjahr,
-        });
-      }),
     ),
   );
 }

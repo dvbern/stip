@@ -3,10 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Signal,
   effect,
   inject,
   input,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -45,6 +47,7 @@ import {
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoYear } from '@dv/shared/util/maskito-util';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 import { PublishComponent } from '../publish/publish.component';
 
@@ -87,6 +90,7 @@ export class GesuchsjahrDetailComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
   idSig = input.required<string | undefined>({ alias: 'id' });
+  unsavedChangesSig: Signal<boolean>;
   form = this.formBuilder.group({
     bezeichnungDe: [<string | null>null, [Validators.required]],
     bezeichnungFr: [<string | null>null, [Validators.required]],
@@ -94,6 +98,10 @@ export class GesuchsjahrDetailComponent {
   });
 
   constructor() {
+    this.unsavedChangesSig = toSignal(observeUnsavedChanges(this.form), {
+      initialValue: false,
+    });
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(() => {
       const gesuchsjahr = this.store.currentGesuchsjahrViewSig();
       if (!gesuchsjahr) return;
@@ -114,21 +122,37 @@ export class GesuchsjahrDetailComponent {
     );
   }
 
-  handleSave() {
+  handleSave(config?: { shouldPublishAfterSave: boolean }) {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     if (!this.form.valid) {
       return;
     }
     const value = convertTempFormToRealValues(this.form);
+    const isNew = !this.idSig();
     this.store.saveGesuchsjahr$({
       gesuchsjahrId: this.idSig(),
       gesuchsjahrDaten: { ...value, technischesJahr: +value.technischesJahr },
       onAfterSave: (gesuchsjahr) => {
-        this.router.navigate(['..', gesuchsjahr.id], {
-          relativeTo: this.route,
-        });
+        this.form.markAsPristine();
+        if (isNew) {
+          this.router.navigate(['..', gesuchsjahr.id], {
+            relativeTo: this.route,
+          });
+        }
+        if (config?.shouldPublishAfterSave) {
+          this.store.publishGesuchsjahr$(gesuchsjahr.id);
+        }
       },
     });
+  }
+
+  publish(id: string) {
+    if (!this.unsavedChangesSig()) {
+      this.store.publishGesuchsjahr$(id);
+      return;
+    }
+
+    this.handleSave({ shouldPublishAfterSave: true });
   }
 }

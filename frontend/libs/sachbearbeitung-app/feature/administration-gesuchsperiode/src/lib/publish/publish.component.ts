@@ -24,6 +24,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 })
 export class PublishComponent {
   typeSig = input.required<'gesuchsperiode' | 'gesuchsjahr'>();
+  unsavedChangesSig = input.required<boolean>();
   @Output() publish: Observable<unknown>;
   askForPublish$ = new EventEmitter();
 
@@ -34,7 +35,12 @@ export class PublishComponent {
       switchMap(() =>
         SharedUiConfirmDialogComponent.open(this.dialog, {
           title: `sachbearbeitung-app.admin.${this.typeSig()}.publizieren.title`,
-          message: `sachbearbeitung-app.admin.${this.typeSig()}.publizieren.confirm.text`,
+          message:
+            `sachbearbeitung-app.admin.${this.typeSig()}.publizieren.confirm.text` +
+            (this.unsavedChangesSig() ? '.unsaved' : ''),
+          confirmText: this.unsavedChangesSig()
+            ? `sachbearbeitung-app.admin.save-and-publish`
+            : undefined,
         }).afterClosed(),
       ),
       filter(Boolean),

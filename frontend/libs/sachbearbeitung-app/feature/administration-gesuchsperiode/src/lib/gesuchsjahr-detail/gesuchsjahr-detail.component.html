@@ -5,7 +5,8 @@
         <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
           class="col-12 col-md-3 col-xl-3"
           typeSig="gesuchsperiode"
-          (publish)="store.publishGesuchsjahr$(id)"
+          [unsavedChangesSig]="unsavedChangesSig()"
+          (publish)="publish(id)"
         ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
       </div>
     }
@@ -60,10 +61,12 @@
         </mat-form-field>
       </div>
 
-      <dv-shared-ui-form-save
-        class="mt-4"
-        [loading]="store.currentGesuchsjahr() | rdIsPending"
-      ></dv-shared-ui-form-save>
+      @if (store.currentGesuchsjahrViewSig()?.isEditable ?? true) {
+        <dv-shared-ui-form-save
+          class="mt-4"
+          [loading]="store.currentGesuchsjahr() | rdIsPending"
+        ></dv-shared-ui-form-save>
+      }
     }
   </form>
 </div>

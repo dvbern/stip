@@ -7,6 +7,7 @@ import {
   CHILD_OPTION_GESUCHSPERIODE,
   OPTION_GESUCHSPERIODEN,
 } from '@dv/sachbearbeitung-app/model/administration';
+import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 
 import { GesuchsjahrDetailComponent } from './gesuchsjahr-detail/gesuchsjahr-detail.component';
 import { GesuchsperiodeDetailComponent } from './gesuchsperiode-detail/gesuchsperiode-detail.component';
@@ -30,7 +31,7 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
         component: GesuchsperiodeOverviewComponent,
         title: 'sachbearbeitung-app.admin.gesuchsperiode.route.overview',
       },
-      {
+      routeWithUnsavedChangesGuard({
         data: {
           option: CHILD_OPTION_GESUCHSPERIODE(
             'sachbearbeitung-app.admin.gesuchsperiode.route.create',
@@ -40,8 +41,8 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
         resolve: resetResolver,
         component: GesuchsperiodeDetailComponent,
         title: 'sachbearbeitung-app.admin.gesuchsperiode.route.create',
-      },
-      {
+      }),
+      routeWithUnsavedChangesGuard({
         data: {
           option: CHILD_OPTION_GESUCHSPERIODE(
             'sachbearbeitung-app.admin.gesuchsperiode.route.detail',
@@ -51,8 +52,8 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
         resolve: resetResolver,
         component: GesuchsperiodeDetailComponent,
         title: 'sachbearbeitung-app.admin.gesuchsperiode.route.detail',
-      },
-      {
+      }),
+      routeWithUnsavedChangesGuard({
         data: {
           option: CHILD_OPTION_GESUCHSJAHRE(
             'sachbearbeitung-app.admin.gesuchsjahr.route.create',
@@ -62,8 +63,8 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
         resolve: resetResolver,
         component: GesuchsjahrDetailComponent,
         title: 'sachbearbeitung-app.admin.gesuchsjahr.route.create',
-      },
-      {
+      }),
+      routeWithUnsavedChangesGuard({
         data: {
           option: CHILD_OPTION_GESUCHSJAHRE(
             'sachbearbeitung-app.admin.gesuchsjahr.route.detail',
@@ -73,7 +74,7 @@ export const sachbearbeitungAppFeatureGesuchsperiodeRoutes: Route[] = [
         resolve: resetResolver,
         component: GesuchsjahrDetailComponent,
         title: 'sachbearbeitung-app.admin.gesuchsjahr.route.detail',
-      },
+      }),
     ],
   },
 ];

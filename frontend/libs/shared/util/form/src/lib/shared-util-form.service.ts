@@ -92,7 +92,24 @@ export class SharedUtilFormService {
   focusFirstInvalid(elementRef: ElementRef<HTMLElement>) {
     this.focusInput$.next(elementRef);
   }
-
+  /**
+   * Create a converter for a form that has formatted number strings
+   *
+   * It returns 2 functions, one to convert API values to string and one to convert string values to API values
+   *
+   * @example
+   * const converter = this.formUtils.createNumberConverter(
+   *   this.form,
+   *   [
+   *     'einkommen',
+   *     'wohnkosten',
+   *   ]
+   * );
+   *
+   * this.form.patchValue(converter.toString(apiValues));
+   *
+   * store.saveValues$(converter.toNumber());
+   */
   createNumberConverter<
     T extends { [k: string]: AbstractControl<string | null> },
     K extends OnlyString<keyof T>,

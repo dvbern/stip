@@ -5,7 +5,8 @@
         <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
           class="col-12 col-md-3 col-xl-3"
           typeSig="gesuchsperiode"
-          (publish)="store.publishGesuchsperiode$(id)"
+          [unsavedChangesSig]="unsavedChangesSig()"
+          (publish)="publish(id)"
         ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
       </div>
     }
@@ -197,6 +198,7 @@
             formControlName="ausbKosten_SekII"
             data-testid="form-gesuchsperiode-AusbKosten_SekII"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -211,6 +213,7 @@
             formControlName="ausbKosten_Tertiaer"
             data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -235,6 +238,7 @@
             formControlName="freibetrag_vermoegen"
             data-testid="form-gesuchsperiode-freibetrag_vermoegen"
             matInput
+            [maskito]="maskitoNumber"
             type="type"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -251,6 +255,7 @@
             formControlName="freibetrag_erwerbseinkommen"
             data-testid="form-gesuchsperiode-freibetrag_erwerbseinkommen"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.freibetrag_erwerbseinkommen.info </mat-hint>
@@ -268,6 +273,7 @@
             formControlName="einkommensfreibetrag"
             data-testid="form-gesuchsperiode-einkommensfreibetrag"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.einkommensfreibetrag.info </mat-hint>
@@ -285,6 +291,7 @@
             formControlName="elternbeteiligungssatz"
             data-testid="form-gesuchsperiode-elternbeteiligungssatz"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -301,6 +308,7 @@
             formControlName="vermoegensfreibetrag"
             data-testid="form-gesuchsperiode-vermoegensfreibetrag"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -317,6 +325,7 @@
             formControlName="vermogenSatzAngerechnet"
             data-testid="form-gesuchsperiode-vermogenSatzAngerechnet"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -333,6 +342,7 @@
             formControlName="integrationszulage"
             data-testid="form-gesuchsperiode-integrationszulage"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -349,6 +359,7 @@
             formControlName="limite_EkFreibetrag_Integrationszulag"
             data-testid="form-gesuchsperiode-limite_EkFreibetrag_Integrationszulag"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -367,6 +378,7 @@
             formControlName="stipLimite_Minimalstipendium"
             data-testid="form-gesuchsperiode-stipLimite_Minimalstipendium"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -384,7 +396,13 @@
         <!-- 1 Person -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.person_1.label' | translate }}</mat-label>
-          <input formControlName="person_1" data-testid="form-gesuchsperiode-person_1" matInput type="text" />
+          <input
+            formControlName="person_1"
+            data-testid="form-gesuchsperiode-person_1"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -393,7 +411,13 @@
         <!-- 2 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_2.label' | translate }}</mat-label>
-          <input formControlName="personen_2" data-testid="form-gesuchsperiode-personen_2" matInput type="text" />
+          <input
+            formControlName="personen_2"
+            data-testid="form-gesuchsperiode-personen_2"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -404,7 +428,13 @@
         <!-- 3 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_3.label' | translate }}</mat-label>
-          <input formControlName="personen_3" data-testid="form-gesuchsperiode-personen_3" matInput type="text" />
+          <input
+            formControlName="personen_3"
+            data-testid="form-gesuchsperiode-personen_3"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -413,7 +443,13 @@
         <!-- 4 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_4.label' | translate }}</mat-label>
-          <input formControlName="personen_4" data-testid="form-gesuchsperiode-personen_4" matInput type="text" />
+          <input
+            formControlName="personen_4"
+            data-testid="form-gesuchsperiode-personen_4"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -424,7 +460,13 @@
         <!-- 5 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_5.label' | translate }}</mat-label>
-          <input formControlName="personen_5" data-testid="form-gesuchsperiode-personen_5" matInput type="text" />
+          <input
+            formControlName="personen_5"
+            data-testid="form-gesuchsperiode-personen_5"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -433,7 +475,13 @@
         <!-- 6 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_6.label' | translate }}</mat-label>
-          <input formControlName="personen_6" data-testid="form-gesuchsperiode-personen_6" matInput type="text" />
+          <input
+            formControlName="personen_6"
+            data-testid="form-gesuchsperiode-personen_6"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -444,7 +492,13 @@
         <!-- 7 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_7.label' | translate }}</mat-label>
-          <input formControlName="personen_7" data-testid="form-gesuchsperiode-personen_7" matInput type="text" />
+          <input
+            formControlName="personen_7"
+            data-testid="form-gesuchsperiode-personen_7"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -457,6 +511,7 @@
             formControlName="proWeiterePerson"
             data-testid="form-gesuchsperiode-proWeiterePerson"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
@@ -474,7 +529,13 @@
         <!-- Kinder 00-18 -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.kinder_00_18.label' | translate }}</mat-label>
-          <input formControlName="kinder_00_18" data-testid="form-gesuchsperiode-kinder_00_18" matInput type="text" />
+          <input
+            formControlName="kinder_00_18"
+            data-testid="form-gesuchsperiode-kinder_00_18"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.kinder_00_18.info </mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -490,6 +551,7 @@
             formControlName="jugendliche_erwachsene_19_25"
             data-testid="form-gesuchsperiode-jugendliche_erwachsene_19_25"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.jugendliche_erwachsene_19_25.info </mat-hint>
@@ -507,9 +569,10 @@
             formControlName="erwachsene_26_99"
             data-testid="form-gesuchsperiode-erwachsene_26_99"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.erwachsene-26-99.info </mat-hint>
+          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.erwachsene_26_99.info </mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -529,6 +592,7 @@
             formControlName="wohnkosten_fam_1pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_1pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_1pers.info </mat-hint>
@@ -544,6 +608,7 @@
             formControlName="wohnkosten_fam_2pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_2pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_2pers.info </mat-hint>
@@ -561,6 +626,7 @@
             formControlName="wohnkosten_fam_3pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_3pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_3pers.info </mat-hint>
@@ -576,6 +642,7 @@
             formControlName="wohnkosten_fam_4pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_4pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_4pers.info </mat-hint>
@@ -595,6 +662,7 @@
             formControlName="wohnkosten_fam_5pluspers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_5pluspers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_5pluspers.info </mat-hint>
@@ -619,6 +687,7 @@
             formControlName="wohnkosten_persoenlich_1pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_1pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_1pers.info </mat-hint>
@@ -636,6 +705,7 @@
             formControlName="wohnkosten_persoenlich_2pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_2pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_2pers.info </mat-hint>
@@ -655,6 +725,7 @@
             formControlName="wohnkosten_persoenlich_3pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_3pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_3pers.info </mat-hint>
@@ -672,6 +743,7 @@
             formControlName="wohnkosten_persoenlich_4pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_4pers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_4pers.info </mat-hint>
@@ -691,6 +763,7 @@
             formControlName="wohnkosten_persoenlich_5pluspers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_5pluspers"
             matInput
+            [maskito]="maskitoNumber"
             type="text"
           />
           <mat-hint translate>
@@ -702,10 +775,12 @@
         </mat-form-field>
       </div>
 
-      <dv-shared-ui-form-save
-        class="mt-4"
-        [loading]="store.currentGesuchsperiode() | rdIsPending"
-      ></dv-shared-ui-form-save>
+      @if (store.currentGesuchsperiodeViewSig()?.isEditable ?? true) {
+        <dv-shared-ui-form-save
+          class="mt-4"
+          [loading]="store.currentGesuchsperiode() | rdIsPending"
+        ></dv-shared-ui-form-save>
+      }
     }
   </form>
 </div>
