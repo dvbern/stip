@@ -1,0 +1,67 @@
+@if (documentViewSig(); as document) {
+  <dv-shared-ui-icon-chip
+    class="me-2 mt-1 fs-5 reverse"
+    [class.spin]="document.state === 'uploading'"
+    [ngClass]="'bg-' + document.theme.type"
+  >
+    <i class="material-symbols-rounded fs-6" [ngClass]="'text-' + document.theme.type">
+      {{ document.theme.icon }}
+    </i>
+  </dv-shared-ui-icon-chip>
+  <div class="d-flex flex-column flex-grow-1 w-min-content">
+    <div class="d-flex flex-row">
+      <span class="text-truncate filename fs-7" [title]="document.file.filename">{{ document.file.filename }}</span>
+      <div class="flex-grow-1"></div>
+      @if (document.state === 'uploading') {
+        <button
+          type="button"
+          class="dv-button-icon flex-shrink-0 cancel-icon ms-2"
+          [attr.aria-label]="'shared.cancel' | translate"
+          (click)="cancelUpload.emit({ dokumentId: document.file.id })"
+        >
+          <span class="material-symbols-rounded align-middle">clear</span>
+        </button>
+      } @else {
+        <a
+          class="text-truncate filename fs-7"
+          [href]="downloadLinkSig()"
+          target="_blank"
+          [title]="document.file.filename"
+        >
+          <span class="material-symbols-rounded align-middle text-muted">download</span>
+        </a>
+        <button
+          type="button"
+          class="dv-button-icon flex-shrink-0 delete-icon ms-2"
+          [attr.aria-label]="'shared.form.delete' | translate"
+          [disabled]="loadingSig()"
+          (click)="checkForRemove$.emit()"
+        >
+          <span class="material-symbols-rounded align-middle text-muted">delete</span>
+        </button>
+      }
+    </div>
+    <mat-progress-bar [color]="document.theme.color" [value]="document.progress"></mat-progress-bar>
+
+    @if (document.state === 'done') {
+      <span
+        class="fs-8 fst-italic text-success"
+        translate
+        [translateParams]="{
+          date: document.file.timestampErstellt | date: 'dd.MM.YYYY',
+          size: document.file.filesize | filesize
+        }"
+        >shared.file.uploadDone</span
+      >
+    }
+    @if (document.state === 'uploading') {
+      <span class="fs-8 fst-italic text-info" translate>shared.file.uploading</span>
+    }
+    @if (document.error; as error) {
+      <span
+        class="fs-8 fst-italic text-danger text-wrap"
+        [innerHTML]="error.translationKey | translate: error.values"
+      ></span>
+    }
+  </div>
+}

@@ -1,0 +1,11 @@
+:host {
+  --dv-size-unit: 0.15rem;
+
+  .w-min-content {
+    width: min-content;
+  }
+
+  .filename {
+    max-width: 350px;
+  }
+}

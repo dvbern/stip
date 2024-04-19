@@ -34,6 +34,7 @@ export interface Kind {
      */
     wohnsitzAnteilVater?: number;
     nachname: string;
+    erhalteneAlimentebeitraege?: number;
 }
 
 

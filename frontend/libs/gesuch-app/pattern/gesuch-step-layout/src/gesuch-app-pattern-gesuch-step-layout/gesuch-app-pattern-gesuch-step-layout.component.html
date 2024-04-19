@@ -3,11 +3,11 @@
     <!-- left step nav (Desktop) -->
     <div class="d-none d-lg-block border-end bg-white">
       <p class="m-4">
-        <span class="small">in Bearbeitung durch</span><br />
+        <span class="small" translate>shared.menu.workedBy</span><br />
         <span class="fw-medium">Eva Mendes</span>
       </p>
 
-      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [steps]="stepsSig()" />
+      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
     </div>
 
     @if (step) {
@@ -56,19 +56,19 @@
 
   <div class="mobile-nav-content">
     <dv-shared-pattern-gesuch-step-nav
-      [steps]="stepsSig()"
-      (navClicked)="navClicked.emit()"
+      [stepsSig]="stepsSig()"
+      (navClicked)="navClicked.emit($event)"
     ></dv-shared-pattern-gesuch-step-nav>
   </div>
 
   <div class="header-desktop-left d-flex gap-3 align-items-center">
     <a
       routerLink="/"
-      class="btn btn-warning fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-danger fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-step-nav-dashboard"
     >
       <i class="material-symbols-rounded text-white me-2">dashboard</i>
-      <span>Dashboard</span>
+      <span translate>shared.menu.dashboard</span>
     </a>
   </div>
 

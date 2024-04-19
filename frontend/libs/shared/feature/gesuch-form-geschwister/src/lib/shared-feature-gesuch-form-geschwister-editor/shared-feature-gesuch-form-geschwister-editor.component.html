@@ -80,14 +80,25 @@
       formControlName="ausbildungssituation"
       data-testid="form-geschwister-ausbildungssituation"
       dvSharedUiFormField
-      class="col-12 col-md-6 col-xl-4 d-flex flex-column"
+      class="col-12 col-xl-8"
     >
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | translate }}</label>
-      @for (a of ausbildungssituationValues; track trackByIndex($index)) {
-        <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-          'shared.form.geschwister.ausbildungssituation.select.' + a | translate
-        }}</mat-radio-button>
-      }
+      <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
+        <div class="d-flex flex-column">
+          @for (a of ausbildungssituationValues; track trackByIndex($index)) {
+            <mat-radio-button [attr.data-testid]="a" [value]="a">{{
+              'shared.form.geschwister.ausbildungssituation.select.' + a | translate
+            }}</mat-radio-button>
+          }
+        </div>
+
+        @if (ausbildungssituationDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1 mt-2"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -96,11 +107,11 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel-back">
+    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.back' | translate }}
     </button>
     @if (!viewSig().readonly) {
-      <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+      <button type="submit" class="btn btn-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | translate }}
       </button>
     }

@@ -9,26 +9,42 @@ import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-g
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { SharedModelError } from '@dv/shared/model/error';
+import { SharedModelError, ValidationWarning } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
+  ValidationError,
 } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 export interface State {
+  validations: {
+    errors: ValidationError[];
+    warnings?: ValidationWarning[];
+  } | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   gesuchs: SharedModelGesuch[];
+  cache: {
+    gesuchId: string | null;
+    gesuchFormular: SharedModelGesuchFormular | null;
+  };
+  lastUpdate: string | null;
   loading: boolean;
   error: SharedModelError | undefined;
 }
 
 const initialState: State = {
+  validations: null,
   gesuch: null,
   gesuchFormular: null,
   gesuchs: [],
+  cache: {
+    gesuchId: null,
+    gesuchFormular: null,
+  },
+  lastUpdate: null,
   loading: false,
   error: undefined,
 };
@@ -43,6 +59,12 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         gesuchs: [],
+        // Allow cached gesuchFormular to be used if gesuchFormular is null
+        // (e.g. while navigating between steps and the navbar shouldn't be updated)
+        cache: {
+          ...state.cache,
+          gesuchFormular: null,
+        },
       }),
     ),
 
@@ -111,13 +133,20 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.gesuchLoadedSuccess,
-      (state, { gesuch }): State => ({
-        ...state,
-        gesuch,
-        gesuchFormular: getGesuchFormular(gesuch),
-        loading: false,
-        error: undefined,
-      }),
+      (state, { gesuch }): State => {
+        const gesuchFormular = getGesuchFormular(gesuch);
+        return {
+          ...state,
+          gesuch,
+          gesuchFormular: gesuchFormular,
+          cache: {
+            gesuchId: gesuch.id ?? state.cache.gesuchId,
+            gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
+          },
+          loading: false,
+          error: undefined,
+        };
+      },
     ),
 
     on(
@@ -125,6 +154,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       (state): State => ({
         ...state,
+        lastUpdate: new Date().toISOString(),
         loading: false,
         error: undefined,
       }),
@@ -134,7 +164,24 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess,
       (state): State => ({
         ...state,
+        lastUpdate: new Date().toISOString(),
         error: undefined,
+      }),
+    ),
+
+    on(
+      SharedDataAccessGesuchEvents.gesuchValidationSuccess,
+      (state, { error }): State => ({
+        ...state,
+        validations:
+          error.type === 'validationError'
+            ? {
+                errors: error.validationErrors,
+                warnings: error.validationWarnings,
+              }
+            : null,
+        loading: false,
+        error: error.type === 'validationError' ? undefined : error,
       }),
     ),
 
@@ -159,10 +206,14 @@ export const {
   name, // feature name
   reducer,
   selectGesuchsState,
+  selectLastUpdate,
   selectGesuch,
   selectGesuchs,
+  selectGesuchFormular,
   selectLoading,
   selectError,
+  selectCache,
+  selectValidations,
 } = sharedDataAccessGesuchsFeature;
 
 const getGesuchFormular = (

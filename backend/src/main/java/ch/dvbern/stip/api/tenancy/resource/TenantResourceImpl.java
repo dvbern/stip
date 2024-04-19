@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TenantResourceImpl implements TenantResource {
 
-
     private final TenantService tenantService;
 
     @Override

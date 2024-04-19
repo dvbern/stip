@@ -1,8 +1,0 @@
-# Add files here to ignore them from prettier formatting
-/frontend/.angular
-/frontend/.nx/cache
-/frontend/dist
-/frontend/coverage
-/frontend/deploy
-/frontend/libs/tooling/nx-plugin/src/generators/lib/files/
-/frontend/libs/shared/model/gesuch/src/lib/openapi/

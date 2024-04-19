@@ -26,8 +26,8 @@ describe('SharedUtilFormService', () => {
   let componentFixture: ComponentFixture<TestComponent>;
   let injector: Injector;
   const wndw = {
-    addEventListener: () => {},
-    removeEventListener: () => {},
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
   };
 
   beforeEach(async () => {

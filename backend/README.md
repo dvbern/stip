@@ -23,6 +23,7 @@ triggered by enabling the `generate-stubs-from-contract` Maven profile. One migh
 ```
 
 ### How to debug
+
 * Per default Quarkus open in development mode a debug port (5005) that you can attach in a remote JVM debug configuration
 * When you're building the project with ./mvnw clean install the Quarkus tests are executed in a shared environment
 * You can debug a maven build like this:
@@ -37,14 +38,14 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the process for submitting pu
 ## Code of Conduct
 
 One healthy social atmospehere is very important to us, wherefore we rate our Code of Conduct high.
- For details check the file [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+For details check the file [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
 ## Authors
 
 * **DV Bern AG** - *Initial work* - [dvbern](https://github.com/dvbern)
 
 See also the list of [contributors](https://github.com/dvbern/(RepoName)/contributors)
- who participated in this project.
+who participated in this project.
 
 ## License
 

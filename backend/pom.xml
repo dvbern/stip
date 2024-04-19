@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
@@ -17,7 +17,7 @@
     <maven.compiler.release>17</maven.compiler.release>
     <package>ch.dvbern.stip</package>
     <package.generated>${package}.generated</package.generated>
-    <package.generated.test>${package.generated}.test</package.generated.test>
+    <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
@@ -27,9 +27,14 @@
     <querydsl.version>5.0.0</querydsl.version>
     <skipITs>true</skipITs>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-    <sonar.exclusions>file:**/generated/**</sonar.exclusions>
+    <sonar.exclusions>
+      file:**/generated/**,
+      file:**/.mvn/**,
+      file:**/.quarkus/**
+    </sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
+    <javafaker.version>1.0.2</javafaker.version>
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
   </properties>
@@ -250,9 +255,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.instancio</groupId>
-      <artifactId>instancio-junit</artifactId>
-      <version>3.3.0</version>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>${javafaker.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -264,6 +269,11 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.13.0</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.dvbern.oss.commons-i18n-l10n</groupId>
+      <artifactId>dvb-commons-i18n-l10n-api</artifactId>
+      <version>0.0.2</version>
     </dependency>
   </dependencies>
   <build>
@@ -520,7 +530,8 @@
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt</schemaMappings>
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
+                  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -537,7 +548,8 @@
                     <returnResponse>true</returnResponse>
                     <additionalModelTypeAnnotations>@lombok.NoArgsConstructor
                       @lombok.AllArgsConstructor
-                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)</additionalModelTypeAnnotations>
+                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+                    </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                   </configOptions>
                   <typeMappings>

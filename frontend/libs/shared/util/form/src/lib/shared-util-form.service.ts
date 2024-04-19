@@ -10,7 +10,7 @@ import {
   ComponentWithForm,
   hasUnsavedChanges,
 } from '@dv/shared/util/unsaved-changes';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Injectable({
   providedIn: 'root',
@@ -56,7 +56,7 @@ export class SharedUtilFormService {
     const wndw = this.wndw;
     // Prevent accessing window directly because there are cases where it is not available, for example in SSR
     // even if currently no such feature is currently planned
-    if (sharedUtilFnTypeGuardsIsDefined(wndw)) {
+    if (isDefined(wndw)) {
       const handler = (e: BeforeUnloadEvent) => {
         const unsaved = hasUnsavedChanges(component);
         const message = unsaved
@@ -72,7 +72,7 @@ export class SharedUtilFormService {
       wndw.addEventListener('beforeunload', handler);
       concat(
         // Create a never ending observable to keep the handler alive until the component is destroyed
-        from(new Promise(() => {})).pipe(takeUntilDestroyed()),
+        from(new Promise(() => undefined)).pipe(takeUntilDestroyed()),
         // continue with a instantly ending observable to remove the handler once the previous observable is completed
         of({}),
       ).subscribe(() => {

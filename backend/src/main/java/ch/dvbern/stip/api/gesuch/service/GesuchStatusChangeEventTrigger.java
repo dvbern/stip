@@ -6,11 +6,11 @@ import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
 public final class GesuchStatusChangeEventTrigger extends TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent> {
 
-	private GesuchStatusChangeEventTrigger(GesuchStatusChangeEvent underlyingTrigger) {
-		super(underlyingTrigger, Gesuch.class);
-	}
+    private GesuchStatusChangeEventTrigger(GesuchStatusChangeEvent underlyingTrigger) {
+        super(underlyingTrigger, Gesuch.class);
+    }
 
-	public static GesuchStatusChangeEventTrigger createTrigger(GesuchStatusChangeEvent event) {
-		return new GesuchStatusChangeEventTrigger(event);
-	}
+    public static GesuchStatusChangeEventTrigger createTrigger(GesuchStatusChangeEvent event) {
+        return new GesuchStatusChangeEventTrigger(event);
+    }
 }

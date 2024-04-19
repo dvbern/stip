@@ -29,14 +29,9 @@ import { Language } from '@dv/shared/model/language';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
-
-// TODO: Refactor once services and landing page exist
-// -----
-
-// -----
 
 @Component({
   selector: 'dv-gesuch-app-feature-cockpit',
@@ -66,7 +61,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   // -----
   private http = inject(HttpClient);
   fall$ = this.store.select(selectCurrentBenutzer).pipe(
-    filter(sharedUtilFnTypeGuardsIsDefined),
+    filter(isDefined),
     switchMap((benutzer) => {
       const fallUrl = `/api/v1/fall/benutzer/${benutzer.id}`;
       return this.http.get<Fall[]>(fallUrl).pipe(

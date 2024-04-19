@@ -32,9 +32,10 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid BigDecimal ausbildungskostenSekundarstufeZwei;
   private @Valid BigDecimal ausbildungskostenTertiaerstufe;
   private @Valid BigDecimal wohnkosten;
-  private @Valid BigDecimal personenImHaushalt;
+  private @Valid Boolean wgWohnend;
   private @Valid Boolean willDarlehen;
   private @Valid Integer auswaertigeMittagessenProWoche;
+  private @Valid BigDecimal betreuungskostenKinder;
 
   /**
    **/
@@ -261,21 +262,22 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
   /**
+   * Required nur wenn Person eigener Haushalt hat
    **/
-  public EinnahmenKostenUpdateDto personenImHaushalt(BigDecimal personenImHaushalt) {
-    this.personenImHaushalt = personenImHaushalt;
+  public EinnahmenKostenUpdateDto wgWohnend(Boolean wgWohnend) {
+    this.wgWohnend = wgWohnend;
     return this;
   }
 
   
-  @JsonProperty("personenImHaushalt")
-  public BigDecimal getPersonenImHaushalt() {
-    return personenImHaushalt;
+  @JsonProperty("wgWohnend")
+  public Boolean getWgWohnend() {
+    return wgWohnend;
   }
 
-  @JsonProperty("personenImHaushalt")
-  public void setPersonenImHaushalt(BigDecimal personenImHaushalt) {
-    this.personenImHaushalt = personenImHaushalt;
+  @JsonProperty("wgWohnend")
+  public void setWgWohnend(Boolean wgWohnend) {
+    this.wgWohnend = wgWohnend;
   }
 
   /**
@@ -316,6 +318,25 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
   }
 
+  /**
+   * Betreuungskosten eigener Kinder
+   **/
+  public EinnahmenKostenUpdateDto betreuungskostenKinder(BigDecimal betreuungskostenKinder) {
+    this.betreuungskostenKinder = betreuungskostenKinder;
+    return this;
+  }
+
+  
+  @JsonProperty("betreuungskostenKinder")
+  public BigDecimal getBetreuungskostenKinder() {
+    return betreuungskostenKinder;
+  }
+
+  @JsonProperty("betreuungskostenKinder")
+  public void setBetreuungskostenKinder(BigDecimal betreuungskostenKinder) {
+    this.betreuungskostenKinder = betreuungskostenKinder;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -338,14 +359,15 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
         Objects.equals(this.ausbildungskostenSekundarstufeZwei, einnahmenKostenUpdate.ausbildungskostenSekundarstufeZwei) &&
         Objects.equals(this.ausbildungskostenTertiaerstufe, einnahmenKostenUpdate.ausbildungskostenTertiaerstufe) &&
         Objects.equals(this.wohnkosten, einnahmenKostenUpdate.wohnkosten) &&
-        Objects.equals(this.personenImHaushalt, einnahmenKostenUpdate.personenImHaushalt) &&
+        Objects.equals(this.wgWohnend, einnahmenKostenUpdate.wgWohnend) &&
         Objects.equals(this.willDarlehen, einnahmenKostenUpdate.willDarlehen) &&
-        Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche);
+        Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche) &&
+        Objects.equals(this.betreuungskostenKinder, einnahmenKostenUpdate.betreuungskostenKinder);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, personenImHaushalt, willDarlehen, auswaertigeMittagessenProWoche);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
   }
 
   @Override
@@ -365,9 +387,10 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     sb.append("    ausbildungskostenSekundarstufeZwei: ").append(toIndentedString(ausbildungskostenSekundarstufeZwei)).append("\n");
     sb.append("    ausbildungskostenTertiaerstufe: ").append(toIndentedString(ausbildungskostenTertiaerstufe)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
-    sb.append("    personenImHaushalt: ").append(toIndentedString(personenImHaushalt)).append("\n");
+    sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
+    sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("}");
     return sb.toString();
   }

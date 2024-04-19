@@ -9,7 +9,7 @@ import {
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { addYears, setMonth, subMonths } from 'date-fns';
+import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
@@ -29,6 +29,7 @@ import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-vis
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
 
 const AUSBILDUNGS_MONTH = 8; // August
+const MIN_EDUCATION_AGE = 16; // August
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
@@ -52,29 +53,37 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
 
-  minDateSig: Signal<Date | null> = computed(() => {
-    const geburtsdatum =
-      this.viewSig().gesuchFormular?.personInAusbildung?.geburtsdatum;
-    if (geburtsdatum) {
-      const sixteenthBirthdate = setMonth(
-        addYears(Date.parse(geburtsdatum), 16),
-        AUSBILDUNGS_MONTH - 1,
-      );
-      return new Date(
-        sixteenthBirthdate.getFullYear(),
-        sixteenthBirthdate.getMonth(),
-        1,
-      );
-    }
-    return null;
-  });
+  minDatesSig: Signal<{ optional: Date; required: Date } | null> = computed(
+    () => {
+      const geburtsdatum =
+        this.viewSig().gesuchFormular?.personInAusbildung?.geburtsdatum;
+      if (geburtsdatum) {
+        const geburtsdatumDate = Date.parse(geburtsdatum);
+        const dates = [
+          // either the birthdate or the start of the current school year of the birth year
+          // if the birthdate is after the start of the school year
+          max([
+            geburtsdatumDate,
+            setMonth(geburtsdatumDate, AUSBILDUNGS_MONTH - 1),
+          ]),
+          // the start of the current school year of the birth year + 16 years
+          setMonth(
+            addYears(Date.parse(geburtsdatum), MIN_EDUCATION_AGE),
+            AUSBILDUNGS_MONTH - 1,
+          ),
+        ];
+        const [optional, required] = dates.map(startOfMonth);
+        return { optional, required };
+      }
+      return null;
+    },
+  );
 
   maxDateSig: Signal<Date | null> = computed(() => {
     const ausbildungStart =
       this.viewSig().gesuchFormular?.ausbildung?.ausbildungBegin;
     if (ausbildungStart) {
       const start = dateFromMonthYearString(ausbildungStart);
-      // console.log('ausbildung start parsed: ', start);
       return start ? subMonths(start, 1) : null;
     }
     return null;

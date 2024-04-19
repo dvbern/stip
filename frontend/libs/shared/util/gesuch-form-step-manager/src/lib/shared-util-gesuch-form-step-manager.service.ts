@@ -6,18 +6,22 @@ import {
   ABSCHLUSS,
   AUSBILDUNG,
   AUSZAHLUNGEN,
+  DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
   GESCHWISTER,
+  GesuchFormStepView,
   KINDER,
   LEBENSLAUF,
   PARTNER,
   PERSON,
   SharedModelGesuchFormStep,
+  StepValidation,
   isStepDisabled,
+  isStepValid,
 } from '@dv/shared/model/gesuch-form';
-import { sharedUtilFnTypeGuardsIsDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
   route: '/',
@@ -37,6 +41,7 @@ const BaseSteps = [
   KINDER,
   AUSZAHLUNGEN,
   EINNAHMEN_KOSTEN,
+  DOKUMENTE,
 ];
 
 const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
@@ -49,19 +54,36 @@ const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
 })
 export class SharedUtilGesuchFormStepManagerService {
   private compiletimeConfig = inject(SharedModelCompiletimeConfig);
-  getAllSteps(gesuchFormular: GesuchFormularUpdate | null) {
+  /**
+   * Returns all steps for the current app type
+   *
+   * Adds valid and disabled properties to the steps depending on the formular state
+   */
+  getAllSteps(
+    gesuchFormular: GesuchFormularUpdate | null,
+    invalidProps?: StepValidation,
+  ): GesuchFormStepView[] {
     const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
       'sachbearbeitung-app': BaseSteps,
       'gesuch-app': [...BaseSteps, ABSCHLUSS],
     };
     return steps[this.compiletimeConfig.appType].map((step) => ({
       ...step,
+      status: isStepValid(step, gesuchFormular, invalidProps),
       disabled: isStepDisabled(step, gesuchFormular),
     }));
   }
+
+  /**
+   * Returns the total number of steps
+   */
   getTotalSteps(gesuchFormular: GesuchFormularUpdate | null): number {
     return this.getAllSteps(gesuchFormular).length;
   }
+
+  /**
+   * Returns the next step depending on the origin step
+   */
   getNext(origin?: SharedModelGesuchFormStep): SharedModelGesuchFormStep {
     const steps = [...StepFlow[this.compiletimeConfig.appType]].sort(
       (s1, s2) => s1.currentStepNumber - s2.currentStepNumber,
@@ -69,10 +91,7 @@ export class SharedUtilGesuchFormStepManagerService {
     const currentIndex = steps.findIndex(
       (step) => step.currentStepNumber === origin?.currentStepNumber,
     );
-    if (
-      currentIndex === -1 ||
-      !sharedUtilFnTypeGuardsIsDefined(steps[currentIndex + 1])
-    ) {
+    if (currentIndex === -1 || !isDefined(steps[currentIndex + 1])) {
       throw new Error('Step not defined');
     }
     return steps[currentIndex + 1];

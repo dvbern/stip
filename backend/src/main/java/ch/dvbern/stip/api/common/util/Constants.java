@@ -19,12 +19,10 @@ package ch.dvbern.stip.api.common.util;
 
 public final class Constants {
 
-	private Constants() {
-		throw new IllegalStateException("Constants class");
-	}
+    public static final int DB_DEFAULT_MAX_LENGTH = 255;
+    public static final int DB_DEFAULT_SMALL_VALUE_LENGTH = 20;
 
-
-	public static final int DB_DEFAULT_MAX_LENGTH = 255;
-
-	public static final int DB_DEFAULT_SMALL_VALUE_LENGTH = 20;
+    private Constants() {
+        throw new IllegalStateException("Constants class");
+    }
 }

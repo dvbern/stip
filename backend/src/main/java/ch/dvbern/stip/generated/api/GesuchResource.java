@@ -56,11 +56,6 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
 
-    @PATCH
-    @Path("/{gesuchId}/nachfrist")
-    @Produces({ "application/json", "text/plain" })
-    Response gesuchNachfristBeantragen(@PathParam("gesuchId") UUID gesuchId);
-
     @GET
     @Path("/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}")
     @Produces({ "application/octet-stream" })
@@ -95,4 +90,9 @@ public interface GesuchResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
+
+    @GET
+    @Path("/validatePages/{gesuchId}")
+    @Produces({ "application/json" })
+    Response validateGesuchPages(@PathParam("gesuchId") UUID gesuchId);
 }

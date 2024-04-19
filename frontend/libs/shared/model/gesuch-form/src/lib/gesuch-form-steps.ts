@@ -1,6 +1,14 @@
-import { SharedModelGesuchFormular, Zivilstand } from '@dv/shared/model/gesuch';
+import {
+  SharedModelGesuchFormular,
+  SharedModelGesuchFormularProps,
+  Zivilstand,
+} from '@dv/shared/model/gesuch';
 
-import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
+import {
+  SharedModelGesuchFormStep,
+  StepState,
+  StepValidation,
+} from './shared-model-gesuch-form';
 
 export const PERSON: SharedModelGesuchFormStep = {
   route: 'person',
@@ -72,11 +80,33 @@ export const EINNAHMEN_KOSTEN = {
   iconSymbolName: 'call_missed_outgoing',
 };
 
+export const DOKUMENTE = {
+  route: 'dokumente',
+  translationKey: 'shared.dokumente.title',
+  currentStepNumber: 11,
+  iconSymbolName: 'description',
+};
+
 export const ABSCHLUSS = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
-  currentStepNumber: 11,
+  currentStepNumber: 12,
   iconSymbolName: 'check_circle',
+};
+
+export const gesuchFormSteps = {
+  PERSON,
+  AUSBILDUNG,
+  LEBENSLAUF,
+  FAMILIENSITUATION,
+  ELTERN,
+  GESCHWISTER,
+  PARTNER,
+  KINDER,
+  AUSZAHLUNGEN,
+  EINNAHMEN_KOSTEN,
+  DOKUMENTE,
+  ABSCHLUSS,
 };
 
 export const isStepDisabled = (
@@ -109,4 +139,42 @@ export const isStepDisabled = (
     );
   }
   return false;
+};
+
+export const isStepValid = (
+  step: SharedModelGesuchFormStep,
+  formular: SharedModelGesuchFormular | null,
+  invalidProps?: StepValidation,
+) => {
+  const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
+    [PERSON.route]: 'personInAusbildung',
+    [AUSBILDUNG.route]: 'ausbildung',
+    [LEBENSLAUF.route]: 'lebenslaufItems',
+    [FAMILIENSITUATION.route]: 'familiensituation',
+    [ELTERN.route]: 'elterns',
+    [GESCHWISTER.route]: 'geschwisters',
+    [PARTNER.route]: 'partner',
+    [KINDER.route]: 'kinds',
+    [AUSZAHLUNGEN.route]: 'auszahlung',
+    [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  };
+  const field = stepFieldMap[step.route];
+  return formular?.[field] ? toStepState(field, invalidProps) : undefined;
+};
+
+const toStepState = (
+  field: SharedModelGesuchFormularProps,
+  invalidProps?: StepValidation,
+): StepState | undefined => {
+  if (invalidProps?.errors?.includes(field)) {
+    return 'INVALID';
+  }
+  if (invalidProps?.warnings?.includes(field)) {
+    return 'WARNING';
+  }
+  // If the error list is still empty then no status is identifiable
+  if (invalidProps?.errors === undefined) {
+    return undefined;
+  }
+  return 'VALID';
 };

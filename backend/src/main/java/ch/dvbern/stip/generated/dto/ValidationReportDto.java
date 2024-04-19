@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.ValidationErrorDto;
+import ch.dvbern.stip.generated.dto.ValidationWarningDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class ValidationReportDto  implements Serializable {
   private @Valid List<ValidationErrorDto> validationErrors = new ArrayList<>();
+  private @Valid List<ValidationWarningDto> validationWarnings;
 
   /**
    * 
@@ -63,6 +65,41 @@ public class ValidationReportDto  implements Serializable {
 
     return this;
   }
+  /**
+   * 
+   **/
+  public ValidationReportDto validationWarnings(List<ValidationWarningDto> validationWarnings) {
+    this.validationWarnings = validationWarnings;
+    return this;
+  }
+
+  
+  @JsonProperty("validationWarnings")
+  public List<ValidationWarningDto> getValidationWarnings() {
+    return validationWarnings;
+  }
+
+  @JsonProperty("validationWarnings")
+  public void setValidationWarnings(List<ValidationWarningDto> validationWarnings) {
+    this.validationWarnings = validationWarnings;
+  }
+
+  public ValidationReportDto addValidationWarningsItem(ValidationWarningDto validationWarningsItem) {
+    if (this.validationWarnings == null) {
+      this.validationWarnings = new ArrayList<>();
+    }
+
+    this.validationWarnings.add(validationWarningsItem);
+    return this;
+  }
+
+  public ValidationReportDto removeValidationWarningsItem(ValidationWarningDto validationWarningsItem) {
+    if (validationWarningsItem != null && this.validationWarnings != null) {
+      this.validationWarnings.remove(validationWarningsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -73,12 +110,13 @@ public class ValidationReportDto  implements Serializable {
       return false;
     }
     ValidationReportDto validationReport = (ValidationReportDto) o;
-    return Objects.equals(this.validationErrors, validationReport.validationErrors);
+    return Objects.equals(this.validationErrors, validationReport.validationErrors) &&
+        Objects.equals(this.validationWarnings, validationReport.validationWarnings);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validationErrors);
+    return Objects.hash(validationErrors, validationWarnings);
   }
 
   @Override
@@ -87,6 +125,7 @@ public class ValidationReportDto  implements Serializable {
     sb.append("class ValidationReportDto {\n");
     
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
+    sb.append("    validationWarnings: ").append(toIndentedString(validationWarnings)).append("\n");
     sb.append("}");
     return sb.toString();
   }

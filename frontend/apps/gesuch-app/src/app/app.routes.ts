@@ -31,6 +31,14 @@ export const appRoutes: Route[] = [
         (m) => m.gesuchAppFeatureGesuchFormRoutes,
       ),
   },
+  {
+    path: 'download',
+    canActivate: [hasBenutzer],
+    loadChildren: () =>
+      import('@dv/shared/feature/download').then(
+        (m) => m.sharedFeatureDownloadRoutes,
+      ),
+  },
 ];
 
 export const routes: Route[] = [
