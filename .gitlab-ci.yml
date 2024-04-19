@@ -78,39 +78,6 @@ include:
       e2e-test-image-version: v1.41.1-jammy
       install-e2e-test-package: 'false'
 
-trying-to-reset-nx:
-  image: "$DVB_DOCKER_REGISTRY/devops/docker/buildenvs/node/18"
-  tags:
-  - zone:tz
-  - os:linux
-  - type:docker
-  cache:
-  - key:
-      files:
-      - frontend/package.json
-      - frontend/package-lock.json
-    paths:
-    - frontend/node_modules/
-    - frontend/.nx/cache
-    policy: pull-push
-  - key:
-      files:
-      - frontend/package-lock.json
-    paths:
-    - frontend/.npm
-    policy: pull-push
-  variables:
-    NX_REJECT_UNKNOWN_LOCAL_CACHE: 0
-  stage: ".pre"
-  script:
-  - cd $CI_PROJECT_DIR/frontend
-  - rm -rf node_modules
-  - rm -rf .nx/
-  - rm -rf .angular
-  - npm ci
-  rules:
-  - if: "$PIPELINE_TYPE =~ /(default|mr)/"
-
 .install-argocd:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
   image:
