@@ -52,12 +52,8 @@ describe('sharedDataAccessGesuch Effects', () => {
       const gesuch2 = { id: '2' } as SharedModelGesuch;
 
       const gesuchServiceMock = mockGesuchService({
-        getGesuche$: (filter: { showAll: boolean }) => {
-          if (filter.showAll) {
-            return cold('a', { a: [gesuch1, gesuch2] });
-          }
-          return cold('a', { a: [gesuch1] });
-        },
+        getGesucheForMe$: () => cold('a', { a: [gesuch1] }),
+        getGesuche$: () => cold('a', { a: [gesuch1, gesuch2] }),
       });
 
       const debounced = `${LOAD_ALL_DEBOUNCE_TIME}ms`;
