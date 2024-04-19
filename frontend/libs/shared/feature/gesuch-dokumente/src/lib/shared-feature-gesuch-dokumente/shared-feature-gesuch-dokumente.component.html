@@ -20,7 +20,7 @@
               *matHeaderCellDef
             ></th>
             <td class="status-cell" mat-cell *matCellDef="let dokument">
-              @if (dokument.status) {
+              @if (dokument.id) {
                 <span class="badge-round bg-success">
                   <i class="material-symbols-rounded fs-6">check</i>
                 </span>
@@ -38,7 +38,7 @@
               {{ 'shared.dokumente.table.requiredDocuments' | translate }}
             </th>
             <td mat-cell *matCellDef="let dokument">
-              {{ dokument.documentName }}
+              {{ dokument.titleKey | translate }}
             </td>
           </ng-container>
 
@@ -48,19 +48,9 @@
               {{ 'shared.dokumente.table.formStep' | translate }}
             </th>
             <td mat-cell *matCellDef="let dokument">
-              <a [routerLink]="['/gesuch', dokument.formStep.route, viewSig().gesuchId]">
+              <a [routerLink]="['/gesuch', dokument.formStep.route, gesuchViewSig().gesuchId]">
                 {{ dokument.formStep.translationKey | translate }}
               </a>
-            </td>
-          </ng-container>
-
-          <!-- filename -->
-          <ng-container matColumnDef="filename">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ 'shared.dokumente.table.filename' | translate }}
-            </th>
-            <td mat-cell *matCellDef="let dokument">
-              {{ dokument.filename }}
             </td>
           </ng-container>
 
@@ -74,33 +64,7 @@
             ></th>
             <td mat-cell class="action-cell" *matCellDef="let dokument">
               <div class="action-cell-content">
-                @if (dokument.status) {
-                  <button
-                    type="button"
-                    [title]="'shared.dokumente.table.download' | translate"
-                    class="btn btn-sm btn-link"
-                    (click)="downloadDocument(dokument.id)"
-                  >
-                    <i class="material-symbols-rounded">download</i>
-                  </button>
-                  <button
-                    type="button"
-                    [title]="'shared.dokumente.table.delete' | translate"
-                    class="btn btn-sm btn-link"
-                    (click)="handleDocumentDelete(dokument.id)"
-                  >
-                    <i class="material-symbols-rounded fs-4">delete</i>
-                  </button>
-                } @else {
-                  <button
-                    type="button"
-                    [title]="'shared.dokumente.table.upload' | translate"
-                    class="btn btn-outline-primary btn-sm"
-                    (click)="uploadDocument(dokument.objectId)"
-                  >
-                    <i class="material-symbols-rounded">upload</i>
-                  </button>
-                }
+                <!-- <dv-shared-pattern-document-upload-table></dv-shared-pattern-document-upload-table> -->
               </div>
             </td>
           </ng-container>

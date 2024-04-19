@@ -2,49 +2,64 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   computed,
   inject,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
+import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
   SharedModelGesuchFormStep,
   gesuchFormSteps,
 } from '@dv/shared/model/gesuch-form';
+import {
+  DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
+  SharedPatternDocumentUploadTableComponent,
+} from '@dv/shared/pattern/document-upload';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 
-type RequiredDocument = {
-  documentName: string;
+interface TableDocument {
+  id?: string;
   formStep: SharedModelGesuchFormStep;
-  objectId: string;
-};
+  dokumentTyp?: DokumentTyp;
+  titleKey?: string;
+  dokumente?: Dokument[];
+}
 
-type DocumentTableSource = {
-  id: string;
-  status: boolean;
-  objectId: string;
-  formStep: SharedModelGesuchFormStep;
-  filename: string;
-  documentName: string;
-};
+function getFormStep(
+  dokumentTyp: DokumentTyp | undefined,
+): SharedModelGesuchFormStep {
+  const unknownStep: SharedModelGesuchFormStep = {
+    route: 'unknown',
+    translationKey: 'unknown',
+    currentStepNumber: 0,
+    iconSymbolName: 'unknown',
+  };
 
-const requiredDocuments: RequiredDocument[] = Object.values(gesuchFormSteps)
-  .filter(
-    (formStep) => formStep.currentStepNumber !== DOKUMENTE.currentStepNumber,
-  )
-  .map((formStep) => ({
-    documentName: `Dokument-${formStep.route}`,
-    formStep,
-    objectId: `${formStep.route}.${formStep.currentStepNumber}`,
-  }));
+  if (!dokumentTyp) {
+    return unknownStep;
+  }
+
+  const key = Object.keys(gesuchFormSteps).find((key) => {
+    if (key === 'EINNAHMEN_KOSTEN') {
+      return dokumentTyp.includes('EK');
+    }
+
+    return dokumentTyp.includes(key);
+  }) as keyof typeof gesuchFormSteps;
+
+  return key ? gesuchFormSteps[key] : unknownStep;
+}
 
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',
@@ -56,65 +71,81 @@ const requiredDocuments: RequiredDocument[] = Object.values(gesuchFormSteps)
     TranslateModule,
     MatTableModule,
     GesuchAppUiStepFormButtonsComponent,
+    SharedPatternDocumentUploadTableComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureGesuchDokumenteComponent implements OnInit {
+export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
 
   displayedColumns = [
     'status',
     'documentName',
     'formStep',
-    'filename',
+    // 'filename',
     'actions',
   ];
 
   viewSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
+  gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   dokumenteDataSourceSig = computed(() => {
-    const dokumente = this.viewSig().dokumentes;
+    const documents = this.viewSig().dokumentes;
+    const requiredDocumentTypes = this.viewSig().requiredDocumentTypes;
 
-    const documentTableSource: DocumentTableSource[] = requiredDocuments.map(
-      (requiredDocument) => {
-        const document = dokumente.find(
-          (dokument) => dokument.objectId === requiredDocument.objectId,
-        );
+    if (!documents.length) {
+      return new MatTableDataSource<TableDocument>([]);
+    }
+
+    if (!requiredDocumentTypes) {
+      return new MatTableDataSource<TableDocument>([]);
+    }
+
+    const uploadedDocuments: TableDocument[] = documents.map((document) => {
+      const formStep = getFormStep(document.dokumentTyp);
+
+      return {
+        ...document,
+        formStep,
+        titleKey: document.dokumentTyp
+          ? DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[document.dokumentTyp]
+          : undefined,
+      };
+    });
+
+    const missingDocuments: TableDocument[] = requiredDocumentTypes.map(
+      (documentTyp) => {
+        const formStep = getFormStep(documentTyp);
 
         return {
-          status: !!document,
-          id: document?.id ?? '',
-          objectId: requiredDocument.objectId,
-          formStep: requiredDocument.formStep,
-          filename: document?.filename ?? '',
-          documentName: requiredDocument.documentName,
+          documentTyp,
+          formStep,
+          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[documentTyp],
         };
       },
     );
 
-    return new MatTableDataSource<DocumentTableSource>(documentTableSource);
+    return new MatTableDataSource<TableDocument>([
+      ...uploadedDocuments,
+      ...missingDocuments,
+    ]);
   });
 
-  ngOnInit() {
+  constructor() {
+    getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
+      .pipe(takeUntilDestroyed())
+      .subscribe((gesuchId) => {
+        this.store.dispatch(
+          SharedEventGesuchDokumente.loadDocuments({ gesuchId }),
+        );
+      });
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  uploadDocument(objectId: string) {
-    alert(`Upload document for ${objectId}`);
-  }
-
-  downloadDocument(id: string) {
-    alert(`Download document ${id}`);
-  }
-
-  handleDocumentDelete(id: string) {
-    alert(`Delete document ${id}`);
-  }
-
   handleContinue() {
-    const { gesuchId } = this.viewSig();
+    const { gesuchId } = this.gesuchViewSig();
     if (gesuchId) {
       this.store.dispatch(
         SharedEventGesuchDokumente.nextTriggered({
