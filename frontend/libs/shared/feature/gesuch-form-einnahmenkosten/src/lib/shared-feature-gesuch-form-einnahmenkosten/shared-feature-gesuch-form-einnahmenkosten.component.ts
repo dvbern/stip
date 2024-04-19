@@ -170,10 +170,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       .find(
         (a) =>
           a.ausbildungsgaenge?.some(
-            (g) => g.id === ausbildung.ausbildungsgangId,
+            (g) => g.id === ausbildung.ausbildungsgang.id,
           ),
       )
-      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgangId);
+      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang.id);
     const willSekundarstufeZwei = ausbildungsgang?.bezeichnungDe === 'Bachelor';
     const willTertiaerstufe =
       ausbildungsgang?.bezeichnungDe?.includes('Master');

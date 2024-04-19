@@ -1,6 +1,7 @@
 export * from './adresse';
 export * from './anrede';
 export * from './ausbildung';
+export * from './ausbildungBase';
 export * from './ausbildungUpdate';
 export * from './ausbildungsPensum';
 export * from './ausbildungsgang';

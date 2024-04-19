@@ -268,12 +268,12 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
             (ausbildungsstaette) =>
               ausbildungsstaette.ausbildungsgaenge?.find(
                 (ausbildungsgang) =>
-                  ausbildungsgang.id === ausbildung.ausbildungsgangId,
+                  ausbildungsgang.id === ausbildung.ausbildungsgang.id,
               ),
           );
           const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
             (ausbildungsgang) =>
-              ausbildungsgang.id === ausbildung?.ausbildungsgangId,
+              ausbildungsgang.id === ausbildung?.ausbildungsgang.id,
           );
           const currentAusbildungsOrt =
             ausbildungsstaette?.ausbildungsgaenge?.[0].ausbildungsort;

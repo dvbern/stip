@@ -1487,11 +1487,6 @@ components:
         - ZH
         - AUSLAND
       type: string
-    Ausbildung:
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/AusbildungUpdate'
     Familiensituation:
       type: object
       allOf:
@@ -2030,7 +2025,7 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
-    AusbildungUpdate:
+    AusbildungBase:
       required:
         - fachrichtung
         - ausbildungBegin
@@ -2038,10 +2033,6 @@ components:
         - pensum
       type: object
       properties:
-        ausbildungsgangId:
-          $ref: '#/components/schemas/UUID'
-          description: |
-            Required wenn andere ausbildungNichtGefunden = false
         fachrichtung:
           type: string
         ausbildungNichtGefunden:
@@ -2063,6 +2054,25 @@ components:
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
+    Ausbildung:
+      required:
+        - ausbildungsgang
+      type: object
+      properties:
+        ausbildungsgang:
+          $ref: '#/components/schemas/Ausbildungsgang'
+          description: ''
+      allOf:
+        - $ref: '#/components/schemas/AusbildungBase'
+    AusbildungUpdate:
+      type: object
+      properties:
+        ausbildungsgangId:
+          $ref: '#/components/schemas/UUID'
+          description: |
+            Required wenn andere ausbildungNichtGefunden = false
+      allOf:
+        - $ref: '#/components/schemas/AusbildungBase'
     Ausbildungsstaette:
       anyOf:
         - required: []

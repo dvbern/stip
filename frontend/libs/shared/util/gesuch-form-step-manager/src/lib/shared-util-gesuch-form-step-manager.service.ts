@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 
 import { AppType, SharedModelCompiletimeConfig } from '@dv/shared/model/config';
-import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
@@ -60,7 +60,7 @@ export class SharedUtilGesuchFormStepManagerService {
    * Adds valid and disabled properties to the steps depending on the formular state
    */
   getAllSteps(
-    gesuchFormular: GesuchFormularUpdate | null,
+    gesuchFormular: SharedModelGesuchFormular | null,
     invalidProps?: StepValidation,
   ): GesuchFormStepView[] {
     const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
@@ -77,7 +77,7 @@ export class SharedUtilGesuchFormStepManagerService {
   /**
    * Returns the total number of steps
    */
-  getTotalSteps(gesuchFormular: GesuchFormularUpdate | null): number {
+  getTotalSteps(gesuchFormular: SharedModelGesuchFormular | null): number {
     return this.getAllSteps(gesuchFormular).length;
   }
 
