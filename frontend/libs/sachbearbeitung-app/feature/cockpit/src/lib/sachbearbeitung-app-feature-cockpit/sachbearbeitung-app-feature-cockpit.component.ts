@@ -34,6 +34,7 @@ import {
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
 import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
@@ -50,6 +51,7 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     ReactiveFormsModule,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
+    SharedUiLoadingComponent,
     RouterModule,
     A11yModule,
     SharedUiIconChipComponent,
