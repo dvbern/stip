@@ -24,7 +24,7 @@ import {
   DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
   SharedPatternDocumentUploadComponent,
   TableDocument,
-  createUploadOptionsFactorySync,
+  createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -79,13 +79,15 @@ export class SharedFeatureGesuchDokumenteComponent {
   dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
-  private createUploadOptions = createUploadOptionsFactorySync(
-    this.gesuchViewSig,
-  );
-
   dokumenteDataSourceSig = computed(() => {
     const documents = this.dokumenteSig().dokumentes;
     const requiredDocumentTypes = this.dokumenteSig().requiredDocumentTypes;
+    const gesuchId = this.gesuchViewSig().gesuchId;
+    const allowTypes = this.gesuchViewSig().allowTypes;
+
+    if (!gesuchId || !allowTypes) {
+      return new MatTableDataSource<TableDocument>([]);
+    }
 
     const uploadedDocuments: TableDocument[] = documents.map((document) => {
       const documentType = document.dokumentTyp;
@@ -94,9 +96,12 @@ export class SharedFeatureGesuchDokumenteComponent {
         throw new Error('Document type is missing');
       }
 
-      const documentOptions = this.createUploadOptions(() => documentType, {
-        initialDocuments: document.dokumente,
-      });
+      const documentOptions = createDocumentOptions(
+        gesuchId,
+        allowTypes,
+        documentType,
+        document.dokumente,
+      );
 
       const formStep = getFormStep(documentType);
 
@@ -113,9 +118,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       (dokumentTyp) => {
         const formStep = getFormStep(dokumentTyp);
 
-        const documentOptions = this.createUploadOptions(() => dokumentTyp, {
-          initialDocuments: [],
-        });
+        const documentOptions = createDocumentOptions(
+          gesuchId,
+          allowTypes,
+          dokumentTyp,
+          [],
+        );
 
         return {
           dokumentTyp,

@@ -150,30 +150,19 @@ export function createUploadOptionsFactory<
   };
 }
 
-export function createUploadOptionsFactorySync<
-  T extends Signal<{
-    gesuchId: string | undefined;
-    allowTypes: string | undefined;
-  }>,
->(view: T) {
-  const allowTypes = view().allowTypes;
-  const gesuchId = view().gesuchId;
-
-  return (
-    lazyDokumentTyp: () => DokumentTyp,
-    options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
-  ) => {
-    const dokumentTyp = lazyDokumentTyp();
-
-    return dokumentTyp && gesuchId && allowTypes
-      ? {
-          allowTypes,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-          dokumentTyp,
-          singleUpload: options?.singleUpload ?? false,
-          gesuchId,
-          initialDocuments: options?.initialDocuments,
-        }
-      : null;
+export function createDocumentOptions(
+  gesuchId: string,
+  allowTypes: string,
+  dokumentTyp: DokumentTyp,
+  initialDocuments?: Dokument[],
+  singleUpload = false,
+): DocumentOptions {
+  return {
+    allowTypes,
+    titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+    dokumentTyp,
+    singleUpload,
+    gesuchId,
+    initialDocuments,
   };
 }
