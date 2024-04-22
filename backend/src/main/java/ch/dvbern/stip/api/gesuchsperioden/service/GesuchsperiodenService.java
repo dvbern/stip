@@ -75,6 +75,11 @@ public class GesuchsperiodenService {
         return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
     }
 
+    public GesuchsperiodeWithDatenDto getLatestWhereStatus(final GueltigkeitStatus status) {
+        final var found = gesuchsperiodeRepository.getLatestWithStatus(status);
+        return found.map(gesuchsperiodeMapper::toDatenDto).orElse(null);
+    }
+
     private void preventUpdateIfReadonly(final Gesuchsperiode gesuchsperiode) {
         if (gesuchsperiode.getGueltigkeitStatus() != GueltigkeitStatus.ENTWURF) {
             throw new IllegalStateException("Cannot update Gesuchsperiode if it is started");

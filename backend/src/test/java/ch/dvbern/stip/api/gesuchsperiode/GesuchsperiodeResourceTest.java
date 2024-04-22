@@ -29,6 +29,7 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -113,8 +114,23 @@ class GesuchsperiodeResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsGesuchsteller
     @Order(5)
+    void getLatestWithNoneTest() {
+        final var got = api.getLatestPublished()
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .and()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(GesuchsperiodeWithDatenDtoSpec.class);
+
+        assertThat(got, is(nullValue()));
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(6)
     void updateTest() {
         final GesuchsperiodeUpdateDtoSpec updateDto;
         try {
@@ -143,7 +159,7 @@ class GesuchsperiodeResourceTest {
 
     @Test
     @TestAsAdmin
-    @Order(6)
+    @Order(7)
     void publishTest() {
         final var updated = api.publishGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
@@ -159,8 +175,23 @@ class GesuchsperiodeResourceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
+    @Order(8)
+    void getLatestTest() {
+        final var got = api.getLatestPublished()
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .and()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .as(GesuchsperiodeWithDatenDtoSpec.class);
+
+        assertThat(got.getId(), is(gesuchsperiode.getId()));
+    }
+
+    @Test
     @TestAsAdmin
-    @Order(7)
+    @Order(9)
     void readonlyUpdateFailsTest() {
         final GesuchsperiodeUpdateDtoSpec updateDto;
         try {
@@ -184,7 +215,7 @@ class GesuchsperiodeResourceTest {
 
     @Test
     @TestAsAdmin
-    @Order(8)
+    @Order(10)
     void readonlyDeleteFailsTest() {
         api.deleteGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())

@@ -47,6 +47,11 @@ public interface GesuchsperiodeResource {
     @Produces({ "application/json", "text/plain" })
     Response getGesuchsperioden();
 
+    @GET
+    @Path("/latest")
+    @Produces({ "application/json", "text/plain" })
+    Response getLatestPublished();
+
     @PATCH
     @Path("/publish/{gesuchsperiodeId}")
     @Produces({ "application/json" })
