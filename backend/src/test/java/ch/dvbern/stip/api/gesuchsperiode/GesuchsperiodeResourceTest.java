@@ -29,7 +29,6 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -122,10 +121,9 @@ class GesuchsperiodeResourceTest {
             .then()
             .and()
             .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(GesuchsperiodeWithDatenDtoSpec.class);
+            .extract();
 
-        assertThat(got, is(nullValue()));
+        assertThat(got.body().asString(), is(""));
     }
 
     @Test
