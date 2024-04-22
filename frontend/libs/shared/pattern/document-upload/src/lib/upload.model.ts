@@ -6,6 +6,7 @@ export interface DocumentOptions {
   gesuchId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
+  initialDocuments?: Dokument[];
 }
 
 export interface DocumentUpload {

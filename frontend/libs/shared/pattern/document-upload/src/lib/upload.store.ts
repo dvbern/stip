@@ -14,7 +14,7 @@ import {
   takeUntil,
 } from 'rxjs/operators';
 
-import { GesuchService } from '@dv/shared/model/gesuch';
+import { Dokument, GesuchService } from '@dv/shared/model/gesuch';
 import {
   noGlobalErrorsIf,
   shouldIgnoreErrorsIf,
@@ -229,6 +229,12 @@ export class UploadStore {
           }
         },
       });
+  }
+
+  setInitialDocuments(documents: Dokument[]) {
+    patchState(this.state, {
+      documents: documents.map((file) => ({ file, progress: 100 })),
+    });
   }
 
   /**

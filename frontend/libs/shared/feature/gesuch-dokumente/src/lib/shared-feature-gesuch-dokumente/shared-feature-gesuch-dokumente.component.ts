@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
-import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
+import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
   SharedModelGesuchFormStep,
@@ -22,19 +22,13 @@ import {
 } from '@dv/shared/model/gesuch-form';
 import {
   DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
-  SharedPatternDocumentUploadTableComponent,
+  SharedPatternDocumentUploadComponent,
+  TableDocument,
+  createUploadOptionsFactorySync,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
-
-interface TableDocument {
-  id?: string;
-  formStep: SharedModelGesuchFormStep;
-  dokumentTyp?: DokumentTyp;
-  titleKey?: string;
-  dokumente?: Dokument[];
-}
 
 function getFormStep(
   dokumentTyp: DokumentTyp | undefined,
@@ -71,7 +65,7 @@ function getFormStep(
     TranslateModule,
     MatTableModule,
     GesuchAppUiStepFormButtonsComponent,
-    SharedPatternDocumentUploadTableComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -80,49 +74,54 @@ function getFormStep(
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
 
-  displayedColumns = [
-    'status',
-    'documentName',
-    'formStep',
-    // 'filename',
-    'actions',
-  ];
+  displayedColumns = ['status', 'documentName', 'formStep', 'actions'];
 
-  viewSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
+  dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
+  private createUploadOptions = createUploadOptionsFactorySync(
+    this.gesuchViewSig,
+  );
+
   dokumenteDataSourceSig = computed(() => {
-    const documents = this.viewSig().dokumentes;
-    const requiredDocumentTypes = this.viewSig().requiredDocumentTypes;
-
-    if (!documents.length) {
-      return new MatTableDataSource<TableDocument>([]);
-    }
-
-    if (!requiredDocumentTypes) {
-      return new MatTableDataSource<TableDocument>([]);
-    }
+    const documents = this.dokumenteSig().dokumentes;
+    const requiredDocumentTypes = this.dokumenteSig().requiredDocumentTypes;
 
     const uploadedDocuments: TableDocument[] = documents.map((document) => {
-      const formStep = getFormStep(document.dokumentTyp);
+      const documentType = document.dokumentTyp;
+
+      if (!documentType) {
+        throw new Error('Document type is missing');
+      }
+
+      const documentOptions = this.createUploadOptions(() => documentType, {
+        initialDocuments: document.dokumente,
+      });
+
+      const formStep = getFormStep(documentType);
 
       return {
         ...document,
+        dokumentTyp: documentType,
         formStep,
-        titleKey: document.dokumentTyp
-          ? DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[document.dokumentTyp]
-          : undefined,
+        titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[documentType],
+        documentOptions,
       };
     });
 
     const missingDocuments: TableDocument[] = requiredDocumentTypes.map(
-      (documentTyp) => {
-        const formStep = getFormStep(documentTyp);
+      (dokumentTyp) => {
+        const formStep = getFormStep(dokumentTyp);
+
+        const documentOptions = this.createUploadOptions(() => dokumentTyp, {
+          initialDocuments: [],
+        });
 
         return {
-          documentTyp,
+          dokumentTyp,
           formStep,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[documentTyp],
+          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+          documentOptions,
         };
       },
     );
@@ -132,6 +131,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       ...missingDocuments,
     ]);
   });
+
+  trackByFn(index: number, item: TableDocument) {
+    return item.id ?? item.dokumentTyp;
+  }
 
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)

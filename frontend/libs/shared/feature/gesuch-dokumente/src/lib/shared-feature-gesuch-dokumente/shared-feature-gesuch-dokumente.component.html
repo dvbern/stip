@@ -1,10 +1,10 @@
-@if (viewSig().loading) {
+@if (gesuchViewSig().loading) {
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
 } @else {
   <div class="col-12">
     <div class="container card pb-4 pt-5 mt-5 shadow">
       <div class="row overflow-auto">
-        <table class="document-table" mat-table [dataSource]="dokumenteDataSourceSig()">
+        <table class="document-table" mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn">
           <caption class="cdk-visually-hidden">
             {{
               'shared.dokumente.table.description' | translate
@@ -64,7 +64,9 @@
             ></th>
             <td mat-cell class="action-cell" *matCellDef="let dokument">
               <div class="action-cell-content">
-                <!-- <dv-shared-pattern-document-upload-table></dv-shared-pattern-document-upload-table> -->
+                <dv-shared-pattern-document-upload
+                  [optionsSig]="dokument.documentOptions"
+                ></dv-shared-pattern-document-upload>
               </div>
             </td>
           </ng-container>

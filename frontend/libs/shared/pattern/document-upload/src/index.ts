@@ -4,5 +4,4 @@ export * from './lib/document-upload/document-upload.component';
 export * from './lib/helpers/upload-options';
 export * from './lib/upload.model';
 export * from './lib/upload.store';
-
-export * from './lib/document-upload-table/document-upload-table.component';
+export * from './lib/table-document.model';

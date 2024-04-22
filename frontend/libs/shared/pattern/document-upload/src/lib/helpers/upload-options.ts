@@ -1,6 +1,6 @@
 import { Signal, computed } from '@angular/core';
 
-import { DokumentTyp } from '@dv/shared/model/gesuch';
+import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
 
 import { DocumentOptions } from '../upload.model';
 
@@ -126,11 +126,11 @@ export function createUploadOptionsFactory<
    * ```
    *
    * @param lazyDokumentTyp - a function that should return the {@link DokumentTyp} or `null | undefined` if the upload is not required
-   * @param options - additional options for the upload
+   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization, but display the provided documents instead.
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
-    options?: { singleUpload?: boolean },
+    options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
     return computed<DocumentOptions | null>(() => {
       const gesuchId = view().gesuchId;
@@ -143,8 +143,37 @@ export function createUploadOptionsFactory<
             dokumentTyp,
             singleUpload: options?.singleUpload ?? false,
             gesuchId,
+            initialDocuments: options?.initialDocuments,
           }
         : null;
     });
+  };
+}
+
+export function createUploadOptionsFactorySync<
+  T extends Signal<{
+    gesuchId: string | undefined;
+    allowTypes: string | undefined;
+  }>,
+>(view: T) {
+  const allowTypes = view().allowTypes;
+  const gesuchId = view().gesuchId;
+
+  return (
+    lazyDokumentTyp: () => DokumentTyp,
+    options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
+  ) => {
+    const dokumentTyp = lazyDokumentTyp();
+
+    return dokumentTyp && gesuchId && allowTypes
+      ? {
+          allowTypes,
+          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+          dokumentTyp,
+          singleUpload: options?.singleUpload ?? false,
+          gesuchId,
+          initialDocuments: options?.initialDocuments,
+        }
+      : null;
   };
 }
