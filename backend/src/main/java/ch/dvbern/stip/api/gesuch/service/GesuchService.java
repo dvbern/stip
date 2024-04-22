@@ -127,8 +127,19 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
-        return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findAllForBenutzer(final UUID benutzerId) {
+        final var benutzer = benutzerService.getBenutzer(benutzerId);
+        if (benutzer.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        final var gesuche = switch (benutzer.get().getBenutzerTyp()) {
+            case GESUCHSTELLER -> gesuchRepository.findAllForGs(benutzerId);
+            case SACHBEARBEITER -> gesuchRepository.findAllForSb(benutzerId);
+            default -> throw new NotFoundException();
+        };
+
+        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
     }
 
     public List<GesuchDto> findAll() {

@@ -23,23 +23,27 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     private final EntityManager entityManager;
 
-    public Stream<Gesuch> findAllForBenutzer(UUID benutzerId) {
+    public Stream<Gesuch> findAllForGs(final UUID gesuchstellerId) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var gesuch = QGesuch.gesuch;
+
+         final var query = queryFactory
+            .selectFrom(gesuch)
+            .where(gesuch.fall.gesuchsteller.id.eq(gesuchstellerId));
+        return query.stream();
+    }
+
+    public Stream<Gesuch> findAllForSb(final UUID sachbearbeiterId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
 
-        final var query = queryFactory
-            .select(gesuch)
-            .from(gesuch)
-            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId)
-                .or(
-                    JPAExpressions.select(zuordnung.sachbearbeiter.id)
-                        .from(zuordnung)
-                        .where(zuordnung.sachbearbeiter.id.eq(benutzerId))
-                        .contains(benutzerId)
-                )
-            );
-        return query.stream();
+        final var zuordnungQuery = queryFactory
+            .selectFrom(gesuch)
+            .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
+            .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
+
+        return zuordnungQuery.stream();
     }
 
     public Stream<Gesuch> findAllForFall(UUID fallId) {

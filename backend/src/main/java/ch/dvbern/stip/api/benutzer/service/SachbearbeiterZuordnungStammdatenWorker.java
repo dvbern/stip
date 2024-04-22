@@ -51,6 +51,7 @@ public class SachbearbeiterZuordnungStammdatenWorker {
                 QuarkusTransaction.requiringNew().run(() -> {
                     DataTenantResolver.setTenantId(tenantId);
                     zuordnungService.updateZuordnungOnFall();
+                    LOG.info("Done");
                 });
             } catch (Exception e) {
                 LOG.error(e.toString(), e);
