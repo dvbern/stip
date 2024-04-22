@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
+import ch.dvbern.stip.generated.dto.NullableGesuchsperiodeWithDatenDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -62,7 +63,8 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     public Response getLatestPublished() {
         final var gesuchsperiode = gesuchsperiodenService.getLatestWhereStatus(GueltigkeitStatus.PUBLIZIERT);
-        return Response.ok(gesuchsperiode).build();
+        final var wrapped = new NullableGesuchsperiodeWithDatenDto(gesuchsperiode);
+        return Response.ok(wrapped).build();
     }
 
     @Override

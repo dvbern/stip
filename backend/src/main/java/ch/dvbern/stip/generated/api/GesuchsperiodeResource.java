@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
+import ch.dvbern.stip.generated.dto.NullableGesuchsperiodeWithDatenDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;

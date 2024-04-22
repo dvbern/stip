@@ -14,6 +14,7 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDtoSpec;
 import ch.dvbern.stip.generated.dto.GueltigkeitStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.NullableGesuchsperiodeWithDatenDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -29,6 +30,7 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -121,9 +123,10 @@ class GesuchsperiodeResourceTest {
             .then()
             .and()
             .statusCode(Status.OK.getStatusCode())
-            .extract();
+            .extract()
+            .as(NullableGesuchsperiodeWithDatenDtoSpec.class);
 
-        assertThat(got.body().asString(), is(""));
+        assertThat(got.getValue(), is(nullValue()));
     }
 
     @Test
@@ -182,9 +185,9 @@ class GesuchsperiodeResourceTest {
             .and()
             .statusCode(Status.OK.getStatusCode())
             .extract()
-            .as(GesuchsperiodeWithDatenDtoSpec.class);
+            .as(NullableGesuchsperiodeWithDatenDtoSpec.class);
 
-        assertThat(got.getId(), is(gesuchsperiode.getId()));
+        assertThat(got.getValue().getId(), is(gesuchsperiode.getId()));
     }
 
     @Test

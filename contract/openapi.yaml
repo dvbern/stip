@@ -353,7 +353,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+                $ref: '#/components/schemas/NullableGesuchsperiodeWithDaten'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -2357,6 +2357,10 @@ components:
           $ref: '#/components/schemas/GueltigkeitStatus'
       allOf:
         - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    NullableGesuchsperiodeWithDaten:
+      properties:
+        value:
+          $ref: '#/components/schemas/GesuchsperiodeWithDaten'
     Gesuchsperiode:
       required:
         - id

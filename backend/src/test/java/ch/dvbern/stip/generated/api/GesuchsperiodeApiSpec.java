@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDtoSpec;
+import ch.dvbern.stip.generated.dto.NullableGesuchsperiodeWithDatenDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -446,7 +447,7 @@ public class GesuchsperiodeApiSpec {
      * Returniert die neuste GesuchsperiodeWithDaten wo Status &#x3D; PUBLIZIERT
      * 
      *
-     * return GesuchsperiodeWithDatenDtoSpec
+     * return NullableGesuchsperiodeWithDatenDtoSpec
      */
     public static class GetLatestPublishedOper implements Oper {
 
@@ -476,10 +477,10 @@ public class GesuchsperiodeApiSpec {
         /**
          * GET /gesuchsperiode/latest
          * @param handler handler
-         * @return GesuchsperiodeWithDatenDtoSpec
+         * @return NullableGesuchsperiodeWithDatenDtoSpec
          */
-        public GesuchsperiodeWithDatenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchsperiodeWithDatenDtoSpec> type = new TypeRef<GesuchsperiodeWithDatenDtoSpec>(){};
+        public NullableGesuchsperiodeWithDatenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<NullableGesuchsperiodeWithDatenDtoSpec> type = new TypeRef<NullableGesuchsperiodeWithDatenDtoSpec>(){};
             return execute(handler).as(type);
         }
 
