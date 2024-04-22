@@ -7,7 +7,6 @@ import ch.dvbern.stip.generated.dto.GesuchsjahrDto;
 import ch.dvbern.stip.generated.dto.GesuchsjahrUpdateDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
