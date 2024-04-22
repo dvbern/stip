@@ -13,7 +13,7 @@ class BuchstabenRangeUtilTest {
         "AA-ZZ,Schweizer,true",
         "AAA-ZZZ,Schweizer,true",
         "A-Z,schweizer,true",
-        "A-Z,Müller,true",
+        "A-Z,Mueller,true",
         "A-A,Schweizer,false",
         "A-Z,Yi,true",
         "AA-ZZ,Yi,true",
@@ -22,7 +22,22 @@ class BuchstabenRangeUtilTest {
         "AA-BB,Yi,false",
         "AAA-BBB,Yi,false",
         "A-AA,Aaron,true",
-        "A-AB,Abbuehl,true"
+        "A-AB,Abbuehl,true",
+        "'A,F',Federer,true",
+        "'A',Federer,false",
+        "'A',Abbuehl,true",
+        "'A,F-X',Federer,true",
+        "'C,F-X',Federer,true",
+        "'A,F-X',Berchtold,false",
+        "'SCA-SCG,SCI-Z',Schweizer,false",
+        "A-Z,Äbi,true",
+        "B-Z,Äbi,false",
+        "'A,B',Äbi,true",
+        "'B,C',Äbi,false",
+        "AAA-Z,Äbi,true",
+        "A-Z,Śchweizer,true",
+        "'SCA-SCG,SCI-Z',Śchweizer,false",
+        "O,Ølund,false"
     })
     void containsTest(final String range, final String test, final boolean expected) {
         assertThat(BuchstabenRangeUtil.contains(range, test), is(expected));

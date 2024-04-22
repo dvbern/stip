@@ -263,6 +263,11 @@
   "shared.form.kinder.edit": "Kind bearbeiten",
   "shared.form.kinder.view": "Kind anzeigen",
   "shared.form.kinder.delete": "Kind entfernen",
+  "shared.form.kinder.alimentenregelung.label": "Alimentenregelung",
+  "shared.form.kinder.alimentenregelungExistiert.label": "Es existiert eine Alimentenregelung",
+  "shared.form.kinder.erhalteneAlimentebeitraege.label": "Erhaltene Alimentenbeiträge",
+  "shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION": "Kopie Unterhaltsvertrag, Trennungs-/Scheidungskonvention",
+  "shared.form.kinder.file.ALIMENTENVERORDNUNG": "Kopie Alimentenverordnung",
 
   "shared.lebenslauf.title": "Lebenslauf",
   "shared.form.lebenslauf.add.ausbildung": "Ausbildung hinzufügen",

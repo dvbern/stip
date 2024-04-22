@@ -31,7 +31,6 @@ public class BenutzerResourceImpl implements BenutzerResource {
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
         benutzerService.createOrUpdateSachbearbeiterStammdaten(benutzerId, sachbearbeiterZuordnungStammdatenDto);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
-        //        zuordnungService.fireUpdateZuordnung();
         return Response.accepted().build();
     }
 
@@ -41,7 +40,6 @@ public class BenutzerResourceImpl implements BenutzerResource {
     ) {
         benutzerService.createOrUpdateSachbearbeiterStammdaten(sachbearbeiterZuordnungStammdatenListDto);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
-        //        zuordnungService.fireUpdateZuordnung();
         return Response.accepted().build();
     }
 

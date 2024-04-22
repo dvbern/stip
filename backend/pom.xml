@@ -61,10 +61,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-vertx</artifactId>
-      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -115,6 +111,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-envers</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
