@@ -29,6 +29,10 @@ public class FamiliensituationRequiredDocumentsProducer implements RequiredDocum
             requiredDocs.add(DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER);
         }
 
+        if (Boolean.TRUE.equals(famsit.getGerichtlicheAlimentenregelung())) {
+            requiredDocs.add(DokumentTyp.FAMILIENSITUATION_TRENNUNGSKONVENTION);
+        }
+
         return ImmutablePair.of("familiensituation", requiredDocs);
     }
 }
