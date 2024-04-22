@@ -3,7 +3,6 @@ package ch.dvbern.stip.api.ausbildung.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
-import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.generated.api.AusbildungsgangResource;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
