@@ -6,7 +6,6 @@ import {
 import {
   ApplicationConfig,
   ENVIRONMENT_INITIALIZER,
-  ElementRef,
   importProvidersFrom,
   inject,
   isDevMode,
@@ -70,10 +69,6 @@ export class ExplicitMissingTranslationHandler
   handle(params: MissingTranslationHandlerParams) {
     return `${params.key}`;
   }
-}
-
-export abstract class RootComponent {
-  abstract elementRef: ElementRef;
 }
 
 export const metaReducers = [];
