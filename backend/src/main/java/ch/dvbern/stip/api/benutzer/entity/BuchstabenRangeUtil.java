@@ -28,15 +28,12 @@ public class BuchstabenRangeUtil {
             this.pairs = pairs;
         }
 
-        // Example 1: A-F,X
-        //  Pair1: A-F
-        //  Pair2: X-X
-        // Example 2: A,F-X
-        //  Pair1: A-A
-        //  Pair2: F-X
-        // Example 3: A-F,I-X
-        //  Pair1: A-F
-        //  Pair2: I-X
+        /**
+         * Parses a given {@link String} into one or multiple {@link Pair} of letter ranges
+         * <p>
+         * Example: A-F,X -> [[ A-X ], [ X - X ]]<p>
+         * Example: AB-C,X -> [[ AB-C ], [ X - X ]]
+         * */
         public static BuchstabenRange parse(String buchstabenRange) {
             final var pairs = new ArrayList<Pair>();
 
