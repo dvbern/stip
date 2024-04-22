@@ -37,7 +37,10 @@ export interface EinnahmenKosten {
     ausbildungskostenTertiaerstufe?: number;
     fahrkosten: number;
     wohnkosten?: number;
-    personenImHaushalt?: number;
+    /**
+     * Required nur wenn Person eigener Haushalt hat
+     */
+    wgWohnend?: boolean;
     verdienstRealisiert: boolean;
     /**
      * Required nur wenn volljährig
@@ -47,5 +50,9 @@ export interface EinnahmenKosten {
      * Required nur wenn die Person keinen eigenen Haushalt führt
      */
     auswaertigeMittagessenProWoche?: number;
+    /**
+     * Betreuungskosten eigener Kinder
+     */
+    betreuungskostenKinder?: number;
 }
 

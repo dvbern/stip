@@ -1,10 +1,24 @@
 /* eslint-disable */
 export default {
-  displayName: 'tooling-nx-plugin',
+  displayName: 'sachbearbeitung-app-pattern-overview-layout',
   preset: '../../../jest.preset.js',
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  coverageDirectory:
+    '../../../coverage/libs/sachbearbeitung-app/pattern/overview-layout',
   transform: {
-    '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
+    '^.+\\.(ts|mjs|js|html)$': [
+      'jest-preset-angular',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      },
+    ],
   },
-  moduleFileExtensions: ['ts', 'js', 'html'],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  snapshotSerializers: [
+    'jest-preset-angular/build/serializers/no-ng-attributes',
+    'jest-preset-angular/build/serializers/ng-snapshot',
+    'jest-preset-angular/build/serializers/html-comment',
+  ],
   modulePathIgnorePatterns: ['<rootDir>/src/generators/lib/files'],
 };

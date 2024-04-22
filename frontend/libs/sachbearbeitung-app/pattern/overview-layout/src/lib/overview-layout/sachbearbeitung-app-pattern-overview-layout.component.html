@@ -17,7 +17,7 @@
   </div>
   <div class="header-desktop-left d-flex gap-3 align-items-center ms-4">
     <a
-      routerLink="/sachbearbeitung-app-feature-gesuch-form"
+      routerLink="/administration"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-step-nav-overview"
     >
@@ -31,4 +31,9 @@
 <!-- MAIN CONTENT -->
 <main class="page-body">
   <ng-content></ng-content>
+
+  <!-- notifications/errors -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <dv-global-notifications></dv-global-notifications>
+  </div>
 </main>

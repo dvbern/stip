@@ -92,6 +92,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
           id: lebenslaufItem.id,
           label: this.getLebenslaufItemLabel(lebenslaufItem),
           editable: true,
+          ausbildungAbgeschlossen: lebenslaufItem.ausbildungAbgeschlossen,
         }) as TimelineRawItem,
     );
 
@@ -100,11 +101,11 @@ export class TwoColumnTimelineComponent implements OnChanges {
       (staette) =>
         staette.ausbildungsgaenge?.some(
           (ausbildungsgang) =>
-            plannedAusbildung?.ausbildungsgangId === ausbildungsgang.id,
+            plannedAusbildung?.ausbildungsgang.id === ausbildungsgang.id,
         ),
     );
     const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-      (each) => each.id === plannedAusbildung?.ausbildungsgangId,
+      (each) => each.id === plannedAusbildung?.ausbildungsgang.id,
     );
 
     timelineRawItems.push({
@@ -125,6 +126,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
         },
       },
       editable: false,
+      ausbildungAbgeschlossen: false,
     } as TimelineRawItem);
 
     this.timeline.fillWith(expectedSartDate, timelineRawItems);
@@ -138,7 +140,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
       lebenslaufItem.taetigskeitsart !== undefined &&
       lebenslaufItem.taetigskeitsart !== null
     ) {
-      return { title: lebenslaufItem.taetigkeitsBeschreibung || '' };
+      return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
     }
     if (
       lebenslaufItem.bildungsart === 'EIDGENOESSISCHES_BERUFSATTEST' ||
@@ -168,7 +170,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     return {
       title:
         lebenslaufItem.bildungsart === 'ANDERER_BILDUNGSABSCHLUSS'
-          ? lebenslaufItem.titelDesAbschlusses || ''
+          ? lebenslaufItem.titelDesAbschlusses ?? ''
           : `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
     };
   }

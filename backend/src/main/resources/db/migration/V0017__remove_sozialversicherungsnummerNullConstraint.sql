@@ -1,1 +1,2 @@
-ALTER TABLE eltern ALTER sozialversicherungsnummer DROP NOT NULL;
+ALTER TABLE eltern
+  ALTER sozialversicherungsnummer DROP NOT NULL;

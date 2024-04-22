@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.tenancy.service;
 
-
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.vertx.ext.web.RoutingContext;

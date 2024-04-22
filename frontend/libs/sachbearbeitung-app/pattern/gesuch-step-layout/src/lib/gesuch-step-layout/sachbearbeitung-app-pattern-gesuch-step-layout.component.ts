@@ -15,6 +15,7 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
+import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
@@ -32,6 +33,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     SharedUiProgressBarComponent,
     SharedUiSearchComponent,
     TranslateModule,
+    GlobalNotificationsComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-gesuch-step-layout.component.html',
@@ -40,7 +42,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
+export class SachbearbeitungAppPatternAdministrationLayoutComponent {
   @Input()
   step?: SharedModelGesuchFormStep;
   navClicked = new EventEmitter();

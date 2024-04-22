@@ -17,16 +17,16 @@
 
 package ch.dvbern.stip.api.fall.resource;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -35,28 +35,27 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequiredArgsConstructor
 public class FallResourceImpl implements FallResource {
 
-	private final FallService fallService;
-	private final UriInfo uriInfo;
+    private final FallService fallService;
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-	@Override
-	public Response createFall(UUID benutzerId) {
-		var fall = fallService.createFall(benutzerId);
-		return Response.created(uriInfo.getAbsolutePathBuilder().path(fall.getId().toString()).build()).build();
-	}
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response createFall(UUID benutzerId) {
+        var fall = fallService.createFall(benutzerId);
+        return CreatedResponseBuilder.of(fall.getId(), FallResource.class).build();
+    }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-	@Override
-	public Response getFall(UUID fallId) {
-		var fall = fallService
-				.getFall(fallId)
-				.orElseThrow(NotFoundException::new);
-		return Response.ok(fall).build();
-	}
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response getFall(UUID fallId) {
+        var fall = fallService
+            .getFall(fallId)
+            .orElseThrow(NotFoundException::new);
+        return Response.ok(fall).build();
+    }
 
-    @RolesAllowed({ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER})
-	@Override
-	public Response getFallForBenutzer(UUID benutzerId) {
-		return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();
-	}
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response getFallForBenutzer(UUID benutzerId) {
+        return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();
+    }
 }

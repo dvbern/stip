@@ -1,28 +1,34 @@
 package ch.dvbern.stip.api.kind.entity;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.util.UUID;
-
-
 @Audited
 @Entity
-@Table(indexes = {
-        @Index(name = "IX_kind_mandant", columnList = "mandant")
-})
+@Table(indexes = @Index(name = "IX_kind_mandant", columnList = "mandant"))
 @Getter
 @Setter
-public class Kind  extends AbstractFamilieEntity {
+public class Kind extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Ausbildungssituation ausbildungssituation;
+
+    @Column(nullable = true)
+    private BigDecimal erhalteneAlimentebeitraege;
 
     @Column(nullable = true)
     private UUID copyOfId;

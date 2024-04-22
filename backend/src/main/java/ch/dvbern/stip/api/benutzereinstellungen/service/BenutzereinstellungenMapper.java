@@ -16,5 +16,7 @@ public interface BenutzereinstellungenMapper {
     BenutzereinstellungenDto toDto(Benutzereinstellungen benutzereinstellungen);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Benutzereinstellungen partialUpdate(BenutzerUpdateDto benutzereinstellungenDto, @MappingTarget Benutzereinstellungen benutzereinstellungen);
+    Benutzereinstellungen partialUpdate(
+        BenutzerUpdateDto benutzereinstellungenDto,
+        @MappingTarget Benutzereinstellungen benutzereinstellungen);
 }

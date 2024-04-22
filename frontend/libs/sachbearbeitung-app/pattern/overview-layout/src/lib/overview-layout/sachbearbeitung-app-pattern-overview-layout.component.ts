@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 
 @Component({
@@ -10,9 +11,11 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   standalone: true,
   imports: [
     RouterLink,
+    RouterLinkActive,
     SharedPatternAppHeaderComponent,
     SharedUiSearchComponent,
     TranslateModule,
+    GlobalNotificationsComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',
   styleUrls: ['./sachbearbeitung-app-pattern-overview-layout.component.scss'],

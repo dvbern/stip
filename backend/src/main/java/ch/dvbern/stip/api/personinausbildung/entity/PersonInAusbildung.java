@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Anrede;
@@ -25,7 +28,18 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import jakarta.persistence.*;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -43,10 +57,12 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
 @LandCHRequiredConstraint
 @NiederlassungsstatusRequiredConstraint
+@EinreisedatumRequiredIfNiederlassungsstatusConstraint
+@VermoegenVorjahrRequiredConstraint
 @Entity
 @Table(indexes = {
-        @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+    @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
+    @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
 })
 @Getter
 @Setter
@@ -103,6 +119,9 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(nullable = true)
     private Niederlassungsstatus niederlassungsstatus;
 
+    @Column(nullable = true)
+    private LocalDate einreisedatum;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private Zivilstand zivilstand;
@@ -113,14 +132,22 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @Column(nullable = false)
-    private boolean quellenbesteuert = true;
-
-    @NotNull
-    @Column(nullable = false)
     private boolean vormundschaft = false;
+
+    @Nullable
+    @Column(nullable = true)
+    private BigDecimal vermoegenVorjahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Sprache korrespondenzSprache;
+
+    public boolean isQuellenbesteuert() {
+        return nationalitaet != Land.CH &&
+            (
+                niederlassungsstatus == Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B ||
+                niederlassungsstatus == Niederlassungsstatus.FLUECHTLING
+            );
+    }
 }

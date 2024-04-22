@@ -13,5 +13,7 @@ public interface PersonInAusbildungMapper {
 
     PersonInAusbildungDto toDto(PersonInAusbildung personInAusbildung);
 
-    PersonInAusbildung partialUpdate(PersonInAusbildungUpdateDto personInAusbildungUpdateDto, @MappingTarget PersonInAusbildung personInAusbildung);
+    PersonInAusbildung partialUpdate(
+        PersonInAusbildungUpdateDto personInAusbildungUpdateDto,
+        @MappingTarget PersonInAusbildung personInAusbildung);
 }

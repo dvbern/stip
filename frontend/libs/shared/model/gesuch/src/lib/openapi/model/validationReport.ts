@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { ValidationError } from './validationError';
+import { ValidationWarning } from './validationWarning';
 
 /**
  * 
@@ -19,5 +20,9 @@ export interface ValidationReport {
      * 
      */
     validationErrors: Array<ValidationError>;
+    /**
+     * 
+     */
+    validationWarnings?: Array<ValidationWarning>;
 }
 

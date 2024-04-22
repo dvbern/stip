@@ -6,7 +6,7 @@ import {
 
 import { calculateExpectElternteil } from './shared-util-fn-gesuch-util';
 
-describe('gesuch util', () => {
+describe('calculateExpectElternteil', () => {
   it.each([
     // verstorben geschlecht  elternstatus     expectParent
 

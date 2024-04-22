@@ -4,8 +4,22 @@ import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
   {
+    path: 'administration',
+    canActivate: [hasBenutzer],
+    title: 'sachbearbeitung-app.admin.title',
+    loadComponent: () =>
+      import('@dv/sachbearbeitung-app/feature/administration').then(
+        (m) => m.SachbearbeitungAppFeatureAdministrationComponent,
+      ),
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/administration').then(
+        (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
+      ),
+  },
+  {
     path: 'sachbearbeitung-app-feature-cockpit',
     canActivate: [hasBenutzer],
+    title: 'sachbearbeitung-app.cockpit.title',
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/cockpit').then(
         (m) => m.sachbearbeitungAppFeatureCockpitRoutes,
@@ -14,6 +28,7 @@ export const appRoutes: Route[] = [
   {
     path: 'gesuch',
     canActivate: [hasBenutzer],
+    title: 'sachbearbeitung-app.gesuch-form.title',
     loadComponent: () =>
       import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
         (m) => m.SachbearbeitungAppFeatureGesuchFormComponent,

@@ -11,6 +11,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -29,12 +30,17 @@ import { Observable } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
+  DokumentTyp,
   ElternTyp,
   ElternUpdate,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -45,6 +51,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
@@ -80,6 +90,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormMessageErrorDirective,
     SharedUiFormAddressComponent,
     GesuchAppUiStepFormButtonsComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],
@@ -105,7 +116,11 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
 
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
+
+  maskitoNumber = maskitoNumber;
 
   readonly ElternTyp = ElternTyp;
 
@@ -126,6 +141,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       <string | undefined>undefined,
       [Validators.required],
     ],
+    wohnkosten: [<string | undefined>undefined, [Validators.required]],
     telefonnummer: [
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
@@ -160,6 +176,87 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   });
 
   svnIsRequiredSig = signal(false);
+
+  ergaenzungsleistungAusbezahltSig = toSignal(
+    this.form.controls.ergaenzungsleistungAusbezahlt.valueChanges,
+  );
+
+  sozialhilfeSig = toSignal(
+    this.form.controls.sozialhilfebeitraegeAusbezahlt.valueChanges,
+  );
+
+  ausweisbFluechtlingSig = toSignal(
+    this.form.controls.ausweisbFluechtling.valueChanges,
+  );
+
+  wohnkostenChangedSig = toSignal(this.form.controls.wohnkosten.valueChanges);
+
+  lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const fluechtling = this.ausweisbFluechtlingSig();
+
+    if (fluechtling) {
+      return DokumentTyp[`ELTERN_LOHNABRECHNUNG_VERMOEGEN_${elternTyp}`];
+    }
+
+    return null;
+  });
+
+  plzChangedSig = toSignal(
+    this.form.controls.adresse.controls.plz.valueChanges,
+  );
+
+  steuerunterlagenDocumentSig = this.createUploadOptionsSig(() => {
+    const plz = this.plzChangedSig();
+    const elternTyp = this.elternteil.elternTyp;
+
+    if (!isFromBern(plz)) {
+      return DokumentTyp[`ELTERN_STEUERUNTERLAGEN_${elternTyp}`];
+    }
+
+    return null;
+  });
+
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const ergaenzungsleistung = this.ergaenzungsleistungAusbezahltSig();
+
+    if (elternTyp === ElternTyp.MUTTER) {
+      return ergaenzungsleistung
+        ? DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+        : null;
+    }
+
+    return ergaenzungsleistung
+      ? DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+      : null;
+  });
+
+  sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const sozialhilfe = this.sozialhilfeSig();
+
+    if (elternTyp === ElternTyp.MUTTER) {
+      return sozialhilfe ? DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER : null;
+    }
+
+    return sozialhilfe ? DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER : null;
+  });
+
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const wohnkosten = fromFormatedNumber(this.wohnkostenChangedSig()) ?? 0;
+
+    if (elternTyp === ElternTyp.MUTTER) {
+      return wohnkosten > 0
+        ? DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+        : null;
+    }
+
+    return wohnkosten > 0
+      ? DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+      : null;
+  });
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
@@ -227,6 +324,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     if (changes['elternteil'].currentValue) {
       this.form.patchValue({
         ...this.elternteil,
+        wohnkosten: this.elternteil.wohnkosten?.toString(),
         geburtsdatum: parseBackendLocalDateAndPrint(
           this.elternteil.geburtsdatum,
           this.languageSig(),
@@ -251,6 +349,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       'sozialhilfebeitraegeAusbezahlt',
       'ausweisbFluechtling',
       'ergaenzungsleistungAusbezahlt',
+      'wohnkosten',
     ]);
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
@@ -261,12 +360,15 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       this.saveTriggered.emit({
         ...formValues,
         adresse: {
-          ...formValues.adresse,
+          ...SharedUiFormAddressComponent.getRealValues(
+            this.form.controls.adresse,
+          ),
           id: this.elternteil.adresse?.id,
         },
         id: this.elternteil.id,
         elternTyp: this.elternteil.elternTyp,
         geburtsdatum,
+        wohnkosten: fromFormatedNumber(formValues.wohnkosten),
       });
       this.form.markAsPristine();
     }
@@ -294,4 +396,12 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       this.languageSig(),
     );
   }
+}
+
+function isFromBern(plz?: string) {
+  if (!plz) {
+    return true;
+  }
+
+  return !!plz && plz.startsWith('3');
 }

@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { Benutzer } from '../model/benutzer';
 import { BenutzerUpdate } from '../model/benutzerUpdate';
 import { SachbearbeiterZuordnungStammdaten } from '../model/sachbearbeiterZuordnungStammdaten';
+import { SachbearbeiterZuordnungStammdatenList } from '../model/sachbearbeiterZuordnungStammdatenList';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -30,6 +31,10 @@ import { Configuration }                                     from '../configurat
 export interface BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenRequestParams {
     benutzerId: string;
     sachbearbeiterZuordnungStammdaten: SachbearbeiterZuordnungStammdaten;
+}
+
+export interface BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenListRequestParams {
+    sachbearbeiterZuordnungStammdatenList?: Array<SachbearbeiterZuordnungStammdatenList>;
 }
 
 export interface BenutzerServiceGetSachbearbeiterStammdatenRequestParams {
@@ -180,6 +185,85 @@ export class BenutzerService {
             {
                 context: localVarHttpContext,
                 body: sachbearbeiterZuordnungStammdaten,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createOrUpdateSachbearbeiterStammdatenList$(requestParameters: BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenListRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
+     public createOrUpdateSachbearbeiterStammdatenList$(requestParameters: BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenListRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public createOrUpdateSachbearbeiterStammdatenList$(requestParameters: BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenListRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public createOrUpdateSachbearbeiterStammdatenList$(requestParameters: BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenListRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sachbearbeiterZuordnungStammdatenList = requestParameters.sachbearbeiterZuordnungStammdatenList;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/benutzer/stammdaten/sachbearbeiter`;
+        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: sachbearbeiterZuordnungStammdatenList,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

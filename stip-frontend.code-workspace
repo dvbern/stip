@@ -6,17 +6,16 @@
   ],
   "extensions": {
     "recommendations": [
-      "smulyono.reveal",
       "nrwl.angular-console",
       "esbenp.prettier-vscode",
       "Orta.vscode-jest",
-      "dbaeumer.vscode-eslint"
+      "dbaeumer.vscode-eslint",
+      "SonarSource.sonarlint-vscode"
     ]
   },
   "settings": {
     "files.exclude": {
-      "backend/**": true,
-      "contract/**": true
+      "backend/**": true
     },
     "eslint.validate": ["json"],
     "eslint.workingDirectories": ["./frontend"],
@@ -40,6 +39,9 @@
       "titleBar.inactiveBackground": "#075fa499",
       "titleBar.inactiveForeground": "#e7e7e799"
     },
+    "peacock.color": "#075fa4",
+    "prettier.configPath": "frontend/.prettierrc",
+    "prettier.ignorePath": "frontend/.prettierignore",
     "sqltools.connections": [
       {
         "previewLimit": 50,
@@ -69,7 +71,7 @@
         {
           "type": "chrome",
           "request": "launch",
-          "name": "Stip Chrome",
+          "name": "GS Chrome",
           "url": "http://localhost:4200",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
@@ -77,13 +79,43 @@
         {
           "type": "msedge",
           "request": "launch",
-          "name": "Stip Edge",
+          "name": "GS Edge",
           "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "chrome",
+          "request": "launch",
+          "name": "SB Chrome",
+          "url": "http://localhost:4201",
+          "webRoot": "${workspaceFolder}/frontend",
+          "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+          "type": "msedge",
+          "request": "launch",
+          "name": "SB Edge",
+          "url": "http://localhost:4201",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
         }
       ]
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "files.eol": "\n",
+    "exportall.config.relExclusion": [],
+    "testing.openTesting": "neverOpen",
+    "jest.outputConfig": "neutral",
+    "jest.runMode": {
+      "type": "on-save",
+      "runAllTestsOnStartup": false,
+      "showInlineError": true,
+      "testFileOnly": true
+    },
+    "sonarlint.connectedMode.project": {
+      "connectionId": "sonarqube-next-dvbern-ch",
+      "projectKey": "stip_frontend"
+    }
   }
 }

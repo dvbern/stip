@@ -1,3 +1,12 @@
 :host {
   display: block;
+
+  .validator-indicator {
+    font-size: 1em;
+    right: -8px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 0.1em solid var(--dv-light);
+    background-color: var(--dv-light);
+  }
 }

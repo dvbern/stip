@@ -2,13 +2,16 @@ import { z } from 'zod';
 
 import {
   ValidationError as DvValidationError,
+  ValidationWarning as DvValidationWarning,
   ValidationReport,
 } from '@dv/shared/model/gesuch';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type Extends<T, _U extends T> = T;
+type Extends<T, U extends T> = T extends U ? T : never;
 
-export const ValidationError = z.object({
+export const GENERIC_REQUIRED_ERROR =
+  '{jakarta.validation.constraints.NotNull.message}';
+
+const ValidationMessage = z.object({
   messageTemplate: z.string(),
   message: z.string(),
   propertyPath: z
@@ -17,15 +20,25 @@ export const ValidationError = z.object({
     .transform((value) => value ?? undefined),
 });
 
+export const ValidationError = ValidationMessage;
+
 export type ValidationError = Extends<
   z.infer<typeof ValidationError>,
   DvValidationError
+>;
+
+export const ValidationWarning = ValidationMessage;
+
+export type ValidationWarning = Extends<
+  z.infer<typeof ValidationWarning>,
+  DvValidationWarning
 >;
 
 const ErrorTypes = {
   validationError: z.object({
     error: z.object({
       validationErrors: z.array(ValidationError),
+      validationWarnings: z.optional(z.array(ValidationWarning)),
     }),
   }),
   unknownHttpError: z.object({
@@ -44,12 +57,14 @@ export type SharedModelErrorTypes = keyof typeof ErrorTypes;
 
 export const SharedModelError = z.intersection(
   z.union([
-    ErrorTypes.validationError.transform(({ error: { validationErrors } }) =>
-      createError('validationError', {
-        message: validationErrors[0]?.message,
-        messageKey: 'shared.genericError.validation',
-        validationErrors,
-      }),
+    ErrorTypes.validationError.transform(
+      ({ error: { validationErrors, validationWarnings } }) =>
+        createError('validationError', {
+          message: validationErrors[0]?.message,
+          messageKey: 'shared.genericError.validation',
+          validationErrors,
+          validationWarnings,
+        }),
     ),
     ErrorTypes.unknownHttpError.transform(({ error }) => {
       return createError('unknownHttpError', {
