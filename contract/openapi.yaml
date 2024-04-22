@@ -1376,11 +1376,38 @@ components:
             type: string
         Ausbildung:
             type: object
-            allOf:
+            required:
+        - fachrichtung
+        - ausbildungBegin
+        - ausbildungEnd
+        - pensum
+      properties:
+        ausbildungsgang:
+          $ref: '#/components/schemas/Ausbildungsgang'
+        fachrichtung:
                 -
-                    type: object
-                -
-                    $ref: '#/components/schemas/AusbildungUpdate'
+          type: string
+        ausbildungNichtGefunden:
+          type: boolean
+        ausbildungBegin:
+          description: Datum im Format mm.YYYY
+          type: string
+        ausbildungEnd:
+          description: Datum im Format mm.YYYY
+          type: string
+        pensum:
+
+                    $ref: '#/components/schemas/AusbildungsPensum'
+        alternativeAusbildungsland:
+          description: Required wenn andere ausbildungNichtGefunden = true
+          type: string
+        alternativeAusbildungsstaette:
+          description: Required wenn andere ausbildungNichtGefunden = true
+          type: string
+        alternativeAusbildungsgang:
+          description:
+            Required wenn andere ausbildungNichtGefunden = true
+          type: string
         Familiensituation:
             type: object
             allOf:
@@ -1388,23 +1415,35 @@ components:
                     type: object
                 -
                     $ref: '#/components/schemas/FamiliensituationUpdate'
-        Taetigskeitsart:
-            enum:
-                - ERWERBSTAETIGKEIT
-                - ANDERE_TAETIGKEIT
-            type: string
-        Bildungsart:
-            description: ''
-            enum:
-                - GYMNASIALE_MATURITAETSSCHULEN
-                - SCHULEN_FUER_ALLGEMEINBILDUNG
-                - VOLLZEITBERUFSSCHULEN
-                - LEHREN_ANLEHREN
-                - BERUFSMATURITAET_NACH_LEHRE
-                - HOEHERE_BERUFSBILDUNG
-                - FACHHOCHSCHULEN
-                - UNIVERSITAETEN_ETH
-            type: string
+    Taetigskeitsart:
+      enum:
+        - ERWERBSTAETIGKEIT
+        - ANDERE_TAETIGKEIT
+      type: string
+    Bildungsart:
+      description: ''
+      enum:
+        - GYMNASIALE_MATURITAETSSCHULEN
+        - SCHULEN_FUER_ALLGEMEINBILDUNG
+        - VOLLZEITBERUFSSCHULEN
+        - LEHREN_ANLEHREN
+        - BERUFSMATURITAET_NACH_LEHRE
+        - HOEHERE_BERUFSBILDUNG
+        - FACHHOCHSCHULEN
+        - UNIVERSITAETEN_ETH
+      type: string
+    BildungsartWithStufe:
+        type: object
+        properties:
+            bildungsart:
+                $ref: '#/components/schemas/Bildungsart'
+            bildungsstufe:
+                $ref: '#/components/schemas/Bildungsstufe'
+    Bildungsstufe:
+        type: string
+        enum:
+            - SEKUNDAR
+            - TERTIAER
         LebenslaufAusbildungsArt:
             description: ''
             enum:
@@ -1949,7 +1988,7 @@ components:
                     description: Required wenn andere ausbildungNichtGefunden = true
                     type: string
                 alternativeAusbildungsgang:
-                    description: 
+                    description:
                         Required wenn andere ausbildungNichtGefunden = true
                     type: string
         Ausbildungsstaette:
@@ -2134,23 +2173,21 @@ components:
                 id:
                     $ref: '#/components/schemas/UUID'
                     description: ''
-        Ausbildungsgang:
-            required:
-                - ausbildungsort
-                - ausbildungsrichtung
-                - id
-            type: object
-            properties:
-                id:
-                    $ref: '#/components/schemas/UUID'
-                bezeichnungDe:
-                    description: ''
-                    type: string
-                bezeichnungFr:
-                    description: ''
+    Ausbildungsgang:
+      type: object
+      required:
+        - ausbildungsort
+        - ausbildungsrichtung
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
                     type: string
                 ausbildungsrichtung:
-                    $ref: '#/components/schemas/Bildungsart'
+                    $ref: '#/components/schemas/BildungsartWithStufe'
                     description: ''
                 ausbildungsort:
                     $ref: '#/components/schemas/Ausbildungsort'

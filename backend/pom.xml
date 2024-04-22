@@ -514,7 +514,6 @@
                     Land=ch.dvbern.stip.api.stammdaten.type.Land,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
                     Ausbildungsland=ch.dvbern.stip.api.ausbildung.type.Ausbildungsland,
-                    Bildungsart=ch.dvbern.stip.api.common.type.Bildungsart,
                     Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
                     Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
