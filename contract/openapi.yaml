@@ -1509,6 +1509,18 @@ components:
         - FACHHOCHSCHULEN
         - UNIVERSITAETEN_ETH
       type: string
+    BildungsartWithStufe:
+      type: object
+      properties:
+        bildungsart:
+          $ref: '#/components/schemas/Bildungsart'
+        bildungsstufe:
+          $ref: '#/components/schemas/Bildungsstufe'
+    Bildungsstufe:
+      type: string
+      enum:
+        - SEKUNDAR
+        - TERTIAER
     LebenslaufAusbildungsArt:
       description: ''
       enum:
@@ -2174,7 +2186,7 @@ components:
           description: ''
           type: string
         ausbildungsrichtung:
-          $ref: '#/components/schemas/Bildungsart'
+          $ref: '#/components/schemas/BildungsartWithStufe'
           description: ''
         ausbildungsort:
           $ref: '#/components/schemas/Ausbildungsort'
