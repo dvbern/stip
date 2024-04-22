@@ -39,7 +39,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   KindUpdateDtoSpec.JSON_PROPERTY_ID,
   KindUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   KindUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
-  KindUpdateDtoSpec.JSON_PROPERTY_NACHNAME
+  KindUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
+  KindUpdateDtoSpec.JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE
 })
 @JsonTypeName("KindUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -67,6 +68,9 @@ public class KindUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
+
+  public static final String JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE = "erhalteneAlimentebeitraege";
+  private BigDecimal erhalteneAlimentebeitraege;
 
   public KindUpdateDtoSpec() {
   }
@@ -278,6 +282,32 @@ public class KindUpdateDtoSpec {
     this.nachname = nachname;
   }
 
+
+  public KindUpdateDtoSpec erhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+    
+    this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
+    return this;
+  }
+
+   /**
+   * Get erhalteneAlimentebeitraege
+   * @return erhalteneAlimentebeitraege
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public BigDecimal getErhalteneAlimentebeitraege() {
+    return erhalteneAlimentebeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+    this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -294,12 +324,13 @@ public class KindUpdateDtoSpec {
         Objects.equals(this.id, kindUpdate.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, kindUpdate.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, kindUpdate.wohnsitzAnteilVater) &&
-        Objects.equals(this.nachname, kindUpdate.nachname);
+        Objects.equals(this.nachname, kindUpdate.nachname) &&
+        Objects.equals(this.erhalteneAlimentebeitraege, kindUpdate.erhalteneAlimentebeitraege);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname);
+    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, erhalteneAlimentebeitraege);
   }
 
   @Override
@@ -314,6 +345,7 @@ public class KindUpdateDtoSpec {
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    erhalteneAlimentebeitraege: ").append(toIndentedString(erhalteneAlimentebeitraege)).append("\n");
     sb.append("}");
     return sb.toString();
   }

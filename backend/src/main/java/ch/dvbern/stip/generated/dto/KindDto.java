@@ -32,6 +32,7 @@ public class KindDto  implements Serializable {
   private @Valid String nachname;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
+  private @Valid BigDecimal erhalteneAlimentebeitraege;
   private @Valid UUID copyOfId;
 
   /**
@@ -189,6 +190,24 @@ public class KindDto  implements Serializable {
 
   /**
    **/
+  public KindDto erhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+    this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
+    return this;
+  }
+
+  
+  @JsonProperty("erhalteneAlimentebeitraege")
+  public BigDecimal getErhalteneAlimentebeitraege() {
+    return erhalteneAlimentebeitraege;
+  }
+
+  @JsonProperty("erhalteneAlimentebeitraege")
+  public void setErhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+    this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
+  }
+
+  /**
+   **/
   public KindDto copyOfId(UUID copyOfId) {
     this.copyOfId = copyOfId;
     return this;
@@ -223,12 +242,13 @@ public class KindDto  implements Serializable {
         Objects.equals(this.nachname, kind.nachname) &&
         Objects.equals(this.wohnsitzAnteilMutter, kind.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, kind.wohnsitzAnteilVater) &&
+        Objects.equals(this.erhalteneAlimentebeitraege, kind.erhalteneAlimentebeitraege) &&
         Objects.equals(this.copyOfId, kind.copyOfId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, nachname, wohnsitzAnteilMutter, wohnsitzAnteilVater, copyOfId);
+    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, nachname, wohnsitzAnteilMutter, wohnsitzAnteilVater, erhalteneAlimentebeitraege, copyOfId);
   }
 
   @Override
@@ -244,6 +264,7 @@ public class KindDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    erhalteneAlimentebeitraege: ").append(toIndentedString(erhalteneAlimentebeitraege)).append("\n");
     sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();

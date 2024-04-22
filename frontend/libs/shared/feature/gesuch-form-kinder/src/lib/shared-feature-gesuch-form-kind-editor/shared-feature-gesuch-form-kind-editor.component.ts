@@ -17,10 +17,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MaskitoModule } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -31,9 +33,14 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
+  DokumentTyp,
   KindUpdate,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
+import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -46,7 +53,14 @@ import {
   wohnsitzAnteileNumber,
   wohnsitzAnteileString,
 } from '@dv/shared/ui/wohnsitz-splitter';
-import { SharedUtilFormService } from '@dv/shared/util/form';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
   maxDateValidatorForLocale,
@@ -72,10 +86,13 @@ const MEDIUM_AGE = 20;
     SharedUiFormMessageErrorDirective,
     NgbInputDatepicker,
     MatFormFieldModule,
+    MatCheckboxModule,
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
+    MaskitoModule,
     SharedUiWohnsitzSplitterComponent,
+    SharedPatternDocumentUploadComponent,
     GesuchAppUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
@@ -97,6 +114,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   updateValidity$ = new Subject();
+  maskitoNumber = maskitoNumber;
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -123,7 +141,11 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       '' as Ausbildungssituation,
       [Validators.required],
     ),
+    alimentenregelungExistiert: [<boolean | undefined>false],
+    erhalteneAlimentebeitraege: [<string | null>null, [Validators.required]],
   });
+
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   private wohnsitzChangedSig = toSignal(
     this.form.controls.wohnsitz.valueChanges,
@@ -131,6 +153,20 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
   showWohnsitzSplitterSig = computed(() => {
     return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+  });
+
+  alimentenregelungExistiertSig = toSignal(
+    this.form.controls.alimentenregelungExistiert.valueChanges,
+  );
+
+  alimentenBeitraegeSig = toSignal(
+    this.form.controls.erhalteneAlimentebeitraege.valueChanges,
+  );
+
+  alimenteDocumentSig = this.createUploadOptionsSig(() => {
+    const alimente = fromFormatedNumber(this.alimentenBeitraegeSig() ?? '0');
+
+    return alimente > 0 ? DokumentTyp.KINDER_ALIMENTENVERORDUNG : null;
   });
 
   constructor() {
@@ -161,6 +197,16 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
+    effect(
+      () => {
+        this.formUtils.setDisabledState(
+          this.form.controls.erhalteneAlimentebeitraege,
+          !this.alimentenregelungExistiertSig(),
+          true,
+        );
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   ngOnChanges() {
@@ -171,6 +217,9 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         this.languageSig(),
       ),
       ...wohnsitzAnteileString(this.kind),
+      erhalteneAlimentebeitraege:
+        this.kind.erhalteneAlimentebeitraege?.toString(),
+      alimentenregelungExistiert: this.kind.erhalteneAlimentebeitraege !== null,
     });
   }
 
@@ -178,17 +227,26 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     this.updateValidity$.next({});
+
+    const formValues = convertTempFormToRealValues(this.form, [
+      'erhalteneAlimentebeitraege',
+    ]);
+    delete formValues.alimentenregelungExistiert;
+
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
-      this.form.getRawValue().geburtsdatum,
+      formValues.geburtsdatum,
       this.languageSig(),
       subYears(new Date(), MEDIUM_AGE),
     );
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
-        ...this.form.getRawValue(),
+        ...formValues,
         id: this.kind?.id,
         geburtsdatum,
-        ...wohnsitzAnteileNumber(this.form.getRawValue()),
+        ...wohnsitzAnteileNumber(formValues),
+        erhalteneAlimentebeitraege: fromFormatedNumber(
+          formValues.erhalteneAlimentebeitraege,
+        ),
       });
       this.form.markAsPristine();
     }

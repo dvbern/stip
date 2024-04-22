@@ -96,6 +96,43 @@
     </div>
   </div>
 
+  <div class="row g-4 my-2">
+    <div class="d-flex col-12 col-md-6 col-xl-4 flex-column">
+      <label>{{ 'shared.form.kinder.alimentenregelung.label' | translate }}</label>
+      <mat-checkbox
+        formControlName="alimentenregelungExistiert"
+        data-testid="form-education-alimentenregelungExistiert"
+      >
+        {{ 'shared.form.kinder.alimentenregelungExistiert.label' | translate }}
+      </mat-checkbox>
+    </div>
+  </div>
+  <div class="row g-4 my-2">
+    @if (alimentenregelungExistiertSig()) {
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.kinder.erhalteneAlimentebeitraege.label' | translate }}</mat-label>
+          <input
+            matInput
+            [maskito]="maskitoNumber"
+            formControlName="erhalteneAlimentebeitraege"
+            data-testid="form-kind-erhalteneAlimentebeitraege"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        @if (alimenteDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
+    }
+  </div>
+
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
     <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
