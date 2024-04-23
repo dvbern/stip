@@ -22,7 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -77,7 +77,7 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MatSelectModule,
     MatCheckboxModule,
     MatAutocompleteModule,
-    MaskitoModule,
+    MaskitoDirective,
     GesuchAppUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],

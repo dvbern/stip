@@ -28,7 +28,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -84,7 +84,7 @@ const animationTime = 500;
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    MaskitoModule,
+    MaskitoDirective,
     MatFormFieldModule,
     MatRadioModule,
     MatSelectModule,
