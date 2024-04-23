@@ -77,8 +77,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_PREIS_PRO_MAHLZEIT,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_MAX_SAEULE3A,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHE_LEHRE,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHE_SCHULE
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE
 })
 @JsonTypeName("GesuchsperiodeWithDaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -224,11 +224,11 @@ public class GesuchsperiodeWithDatenDtoSpec {
   public static final String JSON_PROPERTY_MAX_SAEULE3A = "maxSaeule3a";
   private Integer maxSaeule3a;
 
-  public static final String JSON_PROPERTY_ANZAHL_WOCHE_LEHRE = "anzahlWocheLehre";
-  private Integer anzahlWocheLehre;
+  public static final String JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE = "anzahlWochenLehre";
+  private Integer anzahlWochenLehre;
 
-  public static final String JSON_PROPERTY_ANZAHL_WOCHE_SCHULE = "anzahlWocheSchule";
-  private Integer anzahlWocheSchule;
+  public static final String JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE = "anzahlWochenSchule";
+  private Integer anzahlWochenSchule;
 
   public GesuchsperiodeWithDatenDtoSpec() {
   }
@@ -1455,55 +1455,55 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec anzahlWocheLehre(Integer anzahlWocheLehre) {
+  public GesuchsperiodeWithDatenDtoSpec anzahlWochenLehre(Integer anzahlWochenLehre) {
     
-    this.anzahlWocheLehre = anzahlWocheLehre;
+    this.anzahlWochenLehre = anzahlWochenLehre;
     return this;
   }
 
    /**
    * 
-   * @return anzahlWocheLehre
+   * @return anzahlWochenLehre
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHE_LEHRE)
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getAnzahlWocheLehre() {
-    return anzahlWocheLehre;
+  public Integer getAnzahlWochenLehre() {
+    return anzahlWochenLehre;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHE_LEHRE)
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnzahlWocheLehre(Integer anzahlWocheLehre) {
-    this.anzahlWocheLehre = anzahlWocheLehre;
+  public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
+    this.anzahlWochenLehre = anzahlWochenLehre;
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec anzahlWocheSchule(Integer anzahlWocheSchule) {
+  public GesuchsperiodeWithDatenDtoSpec anzahlWochenSchule(Integer anzahlWochenSchule) {
     
-    this.anzahlWocheSchule = anzahlWocheSchule;
+    this.anzahlWochenSchule = anzahlWochenSchule;
     return this;
   }
 
    /**
    * 
-   * @return anzahlWocheSchule
+   * @return anzahlWochenSchule
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHE_SCHULE)
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getAnzahlWocheSchule() {
-    return anzahlWocheSchule;
+  public Integer getAnzahlWochenSchule() {
+    return anzahlWochenSchule;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHE_SCHULE)
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnzahlWocheSchule(Integer anzahlWocheSchule) {
-    this.anzahlWocheSchule = anzahlWocheSchule;
+  public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
+    this.anzahlWochenSchule = anzahlWochenSchule;
   }
 
   @Override
@@ -1562,13 +1562,13 @@ public class GesuchsperiodeWithDatenDtoSpec {
         Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeWithDaten.wohnkostenPersoenlich5pluspers) &&
         Objects.equals(this.preisProMahlzeit, gesuchsperiodeWithDaten.preisProMahlzeit) &&
         Objects.equals(this.maxSaeule3a, gesuchsperiodeWithDaten.maxSaeule3a) &&
-        Objects.equals(this.anzahlWocheLehre, gesuchsperiodeWithDaten.anzahlWocheLehre) &&
-        Objects.equals(this.anzahlWocheSchule, gesuchsperiodeWithDaten.anzahlWocheSchule);
+        Objects.equals(this.anzahlWochenLehre, gesuchsperiodeWithDaten.anzahlWochenLehre) &&
+        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeWithDaten.anzahlWochenSchule);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWocheLehre, anzahlWocheSchule);
+    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
   }
 
   @Override
@@ -1622,8 +1622,8 @@ public class GesuchsperiodeWithDatenDtoSpec {
     sb.append("    wohnkostenPersoenlich5pluspers: ").append(toIndentedString(wohnkostenPersoenlich5pluspers)).append("\n");
     sb.append("    preisProMahlzeit: ").append(toIndentedString(preisProMahlzeit)).append("\n");
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
-    sb.append("    anzahlWocheLehre: ").append(toIndentedString(anzahlWocheLehre)).append("\n");
-    sb.append("    anzahlWocheSchule: ").append(toIndentedString(anzahlWocheSchule)).append("\n");
+    sb.append("    anzahlWochenLehre: ").append(toIndentedString(anzahlWochenLehre)).append("\n");
+    sb.append("    anzahlWochenSchule: ").append(toIndentedString(anzahlWochenSchule)).append("\n");
     sb.append("}");
     return sb.toString();
   }

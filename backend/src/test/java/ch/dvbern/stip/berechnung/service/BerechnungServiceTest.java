@@ -20,7 +20,11 @@ class BerechnungServiceTest {
     @Test
     void getV1Test() {
         final var gesuch = new Gesuch().setGesuchsperiode(new Gesuchsperiode()
+            .setMaxSaeule3a(7000)
             .setEinkommensfreibetrag(6000)
+            .setAnzahlWochenLehre(42)
+            .setAnzahlWochenSchule(37)
+            .setPreisProMahlzeit(7)
         );
 
         final var request = berechnungService.getBerechnungRequest(1, gesuch);

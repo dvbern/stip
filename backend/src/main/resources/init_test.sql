@@ -22,12 +22,6 @@ INSERT INTO fall (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user
 VALUES ('4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b', '2023-06-20 14:22:43.418364', '2023-06-20 14:22:43.418364', 'TODO',
         'TODO', 0, 1, 'bern', '9477487f-3ac4-4d02-b57c-e0cefb292ae5');
 
--- Gesuchsperiode
-
-DELETE
-FROM gesuchsperiode
-WHERE id = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
-
 INSERT INTO gesuchsjahr(id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, bezeichnung_de,
                         bezeichnung_fr, technisches_jahr, gueltigkeit_status, mandant)
 VALUES ('9596bb3e-10ea-4493-8aed-a6ef510f806b', now(), now(), 'Migration', 'Migration', 0, 'Gesuchsjahr 24',
@@ -82,7 +76,11 @@ INSERT INTO gesuchsperiode (id,
                             wohnkosten_persoenlich_3pers,
                             wohnkosten_persoenlich_4pers,
                             wohnkosten_persoenlich_5pluspers,
-                            gueltigkeit_status)
+                            gueltigkeit_status,
+                            preis_pro_mahlzeit,
+                            max_saeule_3a,
+                            anzahl_wochen_lehre,
+                            anzahl_wochen_schule)
 VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         '2023-05-31 08:35:52',
         '2023-05-30 08:35:43',
@@ -132,7 +130,11 @@ VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         1,
         1,
         1,
-        'ENTWURF');
+        'ENTWURF',
+        1,
+        1,
+        1,
+        1);
 
 INSERT INTO ausbildungsstaette (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version,
                                 name_de, name_fr)

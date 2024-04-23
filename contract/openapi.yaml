@@ -2587,10 +2587,10 @@ components:
         maxSaeule3a:
           description: ''
           type: integer
-        anzahlWocheLehre:
+        anzahlWochenLehre:
           description: ''
           type: integer
-        anzahlWocheSchule:
+        anzahlWochenSchule:
           description: ''
           type: integer
     AusbildungsstaetteUpdate:

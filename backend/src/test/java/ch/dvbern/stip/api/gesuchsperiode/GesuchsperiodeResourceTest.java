@@ -38,6 +38,7 @@ import static org.hamcrest.Matchers.nullValue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class GesuchsperiodeResourceTest {
+    private static final UUID GESUCHSJAHR_ID = UUID.fromString("9596bb3e-10ea-4493-8aed-a6ef510f806b");
 
     private final GesuchsperiodeApiSpec api = GesuchsperiodeApiSpec.gesuchsperiode(RequestSpecUtil.quarkusSpec());
     private GesuchsperiodeWithDatenDtoSpec gesuchsperiode;
@@ -60,7 +61,7 @@ class GesuchsperiodeResourceTest {
         newPeriode.setGesuchsperiodeStart(LocalDate.now().with(firstDayOfYear()));
         newPeriode.setGesuchsperiodeStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setFiskaljahr(LocalDate.now().getYear());
-        newPeriode.setGesuchsjahr(UUID.fromString("9596bb3e-10ea-4493-8aed-a6ef510f806b"));
+        newPeriode.setGesuchsjahr(GESUCHSJAHR_ID);
 
         gesuchsperiode = api.createGesuchsperiode().body(newPeriode)
             .execute(ResponseBody::prettyPeek)
@@ -144,6 +145,7 @@ class GesuchsperiodeResourceTest {
 
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
+        updateDto.setGesuchsjahr(GESUCHSJAHR_ID);
 
         final var updated = api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
@@ -205,6 +207,7 @@ class GesuchsperiodeResourceTest {
 
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
+        updateDto.setGesuchsjahr(GESUCHSJAHR_ID);
 
         api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())

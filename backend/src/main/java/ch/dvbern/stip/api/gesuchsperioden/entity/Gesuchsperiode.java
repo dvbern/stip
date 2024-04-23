@@ -31,7 +31,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -59,7 +59,7 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     private String fiskaljahr;
 
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuchsperiode_gesuchsjahr_id"), nullable = false)
     private @Valid Gesuchsjahr gesuchsjahr;
 
@@ -181,7 +181,7 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private GueltigkeitStatus gueltigkeitStatus = GueltigkeitStatus.ENTWURF;
 
-    @Column(nullable = false, name = "preise_pro_mahlzeit")
+    @Column(nullable = false, name = "preis_pro_mahlzeit")
     private Integer preisProMahlzeit;
 
     @Column(nullable = false, name = "max_saeule_3a")
