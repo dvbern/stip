@@ -180,4 +180,16 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "gueltigkeit_status")
     @Enumerated(EnumType.STRING)
     private GueltigkeitStatus gueltigkeitStatus = GueltigkeitStatus.ENTWURF;
+
+    @Column(nullable = false, name = "preise_pro_mahlzeit")
+    private Integer preisProMahlzeit;
+
+    @Column(nullable = false, name = "max_saeule_3a")
+    private Integer maxSaeule3a;
+
+    @Column(nullable = false, name = "anzahl_wochen_lehre")
+    private Integer anzahlWochenLehre;
+
+    @Column(nullable = false, name = "anzahl_wochen_schule")
+    private Integer anzahlWochenSchule;
 }

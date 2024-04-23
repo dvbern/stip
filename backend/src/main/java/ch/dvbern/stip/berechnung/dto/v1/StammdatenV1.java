@@ -18,11 +18,11 @@ public class StammdatenV1 {
     public static StammdatenV1 fromGesuchsperiode(final Gesuchsperiode gesuchsperiode) {
         // TODO KSTIP-542: Remove hardcoded values and actually map them from somewhere
         return new StammdatenV1Builder()
-            .maxSaeule3a(7000)
+            .maxSaeule3a(gesuchsperiode.getMaxSaeule3a())
             .einkommensfreibetrag(gesuchsperiode.getEinkommensfreibetrag())
-            .anzahlWochenLehre(42)
-            .anzahlWochenSchule(37)
-            .preisProMahlzeit(7)
+            .anzahlWochenLehre(gesuchsperiode.getAnzahlWochenLehre())
+            .anzahlWochenSchule(gesuchsperiode.getAnzahlWochenSchule())
+            .preisProMahlzeit(gesuchsperiode.getPreisProMahlzeit())
             .build();
     }
 }

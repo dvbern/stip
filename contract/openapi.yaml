@@ -2581,6 +2581,18 @@ components:
         wohnkosten_persoenlich_5pluspers:
           description: ''
           type: integer
+        preisProMahlzeit:
+          description: ''
+          type: integer
+        maxSaeule3a:
+          description: ''
+          type: integer
+        anzahlWocheLehre:
+          description: ''
+          type: integer
+        anzahlWocheSchule:
+          description: ''
+          type: integer
     AusbildungsstaetteUpdate:
       required:
         - nameFr
