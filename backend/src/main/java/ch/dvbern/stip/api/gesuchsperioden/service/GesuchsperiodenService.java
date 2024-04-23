@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
@@ -22,10 +23,12 @@ public class GesuchsperiodenService {
 
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
+    private final GesuchsjahrRepository gesuchsjahrRepository;
 
     @Transactional
     public GesuchsperiodeWithDatenDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
         final var newEntity = gesuchsperiodeMapper.toEntity(createDto);
+        newEntity.setGesuchsjahr(gesuchsjahrRepository.requireById(newEntity.getGesuchsjahr().getId()));
         gesuchsperiodeRepository.persistAndFlush(newEntity);
         return gesuchsperiodeMapper.toDatenDto(newEntity);
     }
@@ -38,6 +41,7 @@ public class GesuchsperiodenService {
         final var gesuchsperiode = gesuchsperiodeRepository.requireById(gesuchsperiodeId);
         preventUpdateIfReadonly(gesuchsperiode);
         gesuchsperiodeMapper.partialUpdate(updateDto, gesuchsperiode);
+        gesuchsperiode.setGesuchsjahr(gesuchsjahrRepository.requireById(gesuchsperiode.getGesuchsjahr().getId()));
         return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
     }
 

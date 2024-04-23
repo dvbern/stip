@@ -2392,9 +2392,9 @@ components:
           $ref: '#/components/schemas/LocalDate'
         einreichefristReduziert:
           $ref: '#/components/schemas/LocalDate'
+        gesuchsjahr:
+          $ref: '#/components/schemas/UUID'
     GesuchsperiodeCreate:
-      required:
-        - gueltigkeitStatus
       type: object
       allOf:
         - $ref: '#/components/schemas/GesuchsperiodeDaten'
@@ -2460,8 +2460,7 @@ components:
           description: ''
           type: integer
         gesuchsjahr:
-          description: ''
-          type: integer
+          $ref: '#/components/schemas/UUID'
         gesuchsperiodeStart:
           format: date
           description: dd.MM.YYYY

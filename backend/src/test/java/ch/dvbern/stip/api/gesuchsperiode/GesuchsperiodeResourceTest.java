@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuchsperiode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -59,7 +60,7 @@ class GesuchsperiodeResourceTest {
         newPeriode.setGesuchsperiodeStart(LocalDate.now().with(firstDayOfYear()));
         newPeriode.setGesuchsperiodeStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setFiskaljahr(LocalDate.now().getYear());
-        newPeriode.setGesuchsjahr(LocalDate.now().getYear());
+        newPeriode.setGesuchsjahr(UUID.fromString("9596bb3e-10ea-4493-8aed-a6ef510f806b"));
 
         gesuchsperiode = api.createGesuchsperiode().body(newPeriode)
             .execute(ResponseBody::prettyPeek)

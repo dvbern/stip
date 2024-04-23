@@ -27,7 +27,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid Integer fiskaljahr;
-  private @Valid Integer gesuchsjahr;
+  private @Valid UUID gesuchsjahr;
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
@@ -167,9 +167,8 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   }
 
   /**
-   * 
    **/
-  public GesuchsperiodeWithDatenDto gesuchsjahr(Integer gesuchsjahr) {
+  public GesuchsperiodeWithDatenDto gesuchsjahr(UUID gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
     return this;
   }
@@ -177,12 +176,12 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   
   @JsonProperty("gesuchsjahr")
   @NotNull
-  public Integer getGesuchsjahr() {
+  public UUID getGesuchsjahr() {
     return gesuchsjahr;
   }
 
   @JsonProperty("gesuchsjahr")
-  public void setGesuchsjahr(Integer gesuchsjahr) {
+  public void setGesuchsjahr(UUID gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 

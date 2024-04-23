@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid Integer fiskaljahr;
-  private @Valid Integer gesuchsjahr;
+  private @Valid UUID gesuchsjahr;
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
@@ -125,9 +126,8 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
-  public GesuchsperiodeUpdateDto gesuchsjahr(Integer gesuchsjahr) {
+  public GesuchsperiodeUpdateDto gesuchsjahr(UUID gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
     return this;
   }
@@ -135,12 +135,12 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   
   @JsonProperty("gesuchsjahr")
   @NotNull
-  public Integer getGesuchsjahr() {
+  public UUID getGesuchsjahr() {
     return gesuchsjahr;
   }
 
   @JsonProperty("gesuchsjahr")
-  public void setGesuchsjahr(Integer gesuchsjahr) {
+  public void setGesuchsjahr(UUID gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 

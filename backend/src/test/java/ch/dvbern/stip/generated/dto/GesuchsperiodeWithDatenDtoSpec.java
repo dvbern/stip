@@ -98,7 +98,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
   private Integer fiskaljahr;
 
   public static final String JSON_PROPERTY_GESUCHSJAHR = "gesuchsjahr";
-  private Integer gesuchsjahr;
+  private UUID gesuchsjahr;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
   private LocalDate gesuchsperiodeStart;
@@ -373,28 +373,28 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeWithDatenDtoSpec gesuchsjahr(Integer gesuchsjahr) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsjahr(UUID gesuchsjahr) {
     
     this.gesuchsjahr = gesuchsjahr;
     return this;
   }
 
    /**
-   * 
+   * Get gesuchsjahr
    * @return gesuchsjahr
   **/
   @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getGesuchsjahr() {
+  public UUID getGesuchsjahr() {
     return gesuchsjahr;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsjahr(Integer gesuchsjahr) {
+  public void setGesuchsjahr(UUID gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 
