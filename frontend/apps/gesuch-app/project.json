@@ -7,7 +7,7 @@
   "tags": ["type:app", "scope:gesuch-app"],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "allowedCommonJsDependencies": [
@@ -19,7 +19,7 @@
         ],
         "outputPath": "dist/apps/gesuch-app",
         "index": "apps/gesuch-app/src/index.html",
-        "main": "apps/gesuch-app/src/main.ts",
+        "browser": "apps/gesuch-app/src/main.ts",
         "polyfills": ["zone.js", "apps/gesuch-app/src/polyfills.ts"],
         "tsConfig": "apps/gesuch-app/tsconfig.app.json",
         "assets": [
@@ -62,9 +62,7 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
