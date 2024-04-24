@@ -1,4 +1,4 @@
-stages: [build, validate, test, analyze, package]
+stages: [.reset, build, validate, test, analyze, package]
 
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@v0.8.0'
@@ -37,3 +37,39 @@ include:
       build-latest: 'false'
       build-args: |
         APP=gesuch-app
+
+
+reset-nx:
+  image: "$DVB_DOCKER_REGISTRY/devops/docker/buildenvs/node/18"
+  tags:
+  - zone:tz
+  - os:linux
+  - type:docker
+  needs:
+  - nx-install
+  cache:
+  - key:
+      files:
+      - frontend/package.json
+      - frontend/package-lock.json
+    paths:
+    - frontend/node_modules/
+    - frontend/.nx/cache
+    policy: pull-push
+  - key:
+      files:
+      - frontend/package-lock.json
+    paths:
+    - frontend/.npm
+    policy: pull-push
+  variables:
+    NX_REJECT_UNKNOWN_LOCAL_CACHE: 0
+  stage: ".reset"
+  script:
+  - cd $CI_PROJECT_DIR/frontend
+  - npm i
+  - npm i @nx/nx-linux-x64-gnu
+  - npx nx reset
+  - npm ci
+  rules:
+  - if: "$PIPELINE_TYPE =~ /(default|mr)/"
