@@ -14,10 +14,10 @@ quarkus:
     # TODO: use FAIL as soon as @Blocking is detected on subclasses
     # see: https://github.com/quarkusio/quarkus/issues/38275
     detection-mode: WARN
-  flyway:
-    locations: "db/migration"
-    baseline-on-migrate: true
+  liquibase:
     migrate-at-start: true
+    change-log: "db/migration/db.changelog-master.xml"
+    validate-on-migrate: true
   oidc:
     bern:
       auth-server-url: "${keycloak.url}/realms/bern"
@@ -48,7 +48,6 @@ quarkus:
       queries-slower-than-ms: 20
       jdbc-warnings: true
     multitenant: "DISCRIMINATOR"
-    physical-naming-strategy: "ch.dvbern.stip.api.common.entity.StipPhysicalNamingStrategy"
   default-locale: "de"
   security:
     jaxrs:
@@ -71,8 +70,6 @@ quarkus:
       endpoint-override: "${STIP_S3_ENDPOINT}"
     swagger-ui:
       oauth2-redirect-url: "http://localhost:8080/q/swagger-ui/oauth2-redirect.html"
-    flyway:
-      locations: "db/migration,db/dev/migration"
     oidc:
       bern:
         tls:

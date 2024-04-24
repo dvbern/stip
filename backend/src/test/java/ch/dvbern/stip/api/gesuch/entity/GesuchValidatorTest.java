@@ -348,7 +348,7 @@ class GesuchValidatorTest {
 
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
-        lebenslaufItem.setTaetigskeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
+        lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
         Gesuch gesuch = prepareDummyGesuch();
@@ -386,7 +386,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationLebenslauf() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
-        lebenslaufItem.setTaetigskeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
+        lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         lebenslaufItem.setVon(LocalDate.of(2020, 10, 1));
         lebenslaufItem.setBis(LocalDate.of(2020, 12, 1));
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
