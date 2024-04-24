@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -81,7 +81,7 @@ const MEDIUM_AGE = 20;
     MatRadioModule,
     SharedUiFormMessageErrorDirective,
     NgbInputDatepicker,
-    MaskitoModule,
+    MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
     GesuchAppUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,

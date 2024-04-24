@@ -19,7 +19,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -70,7 +70,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
-    MaskitoModule,
+    MaskitoDirective,
     NgbAlert,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
@@ -163,11 +163,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       : (getDateDifference(geburtsdatum, new Date())?.years ?? 0) > 18;
     // TODO: Use stammdaten info once available
     const ausbildungsgang = ausbildungsstaettes
-      .find(
-        (a) =>
-          a.ausbildungsgaenge?.some(
-            (g) => g.id === ausbildung.ausbildungsgangId,
-          ),
+      .find((a) =>
+        a.ausbildungsgaenge?.some((g) => g.id === ausbildung.ausbildungsgangId),
       )
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgangId);
     const willSekundarstufeZwei = ausbildungsgang?.bezeichnungDe === 'Bachelor';
