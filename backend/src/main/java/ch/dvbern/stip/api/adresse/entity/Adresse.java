@@ -47,7 +47,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 public class Adresse extends AbstractMandantEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name= "land", nullable = false)
+    @Column(name = "land", nullable = false)
     private Land land = Land.CH;
 
     @Nullable
