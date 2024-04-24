@@ -112,7 +112,7 @@ public class PersonInAusbildungDtoSpec {
   private BigDecimal wohnsitzAnteilVater;
 
   public static final String JSON_PROPERTY_VERMOEGEN_VORJAHR = "vermoegenVorjahr";
-  private BigDecimal vermoegenVorjahr;
+  private Integer vermoegenVorjahr;
 
   public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
   private Boolean sozialhilfebeitraege;
@@ -551,7 +551,7 @@ public class PersonInAusbildungDtoSpec {
   }
 
 
-  public PersonInAusbildungDtoSpec vermoegenVorjahr(BigDecimal vermoegenVorjahr) {
+  public PersonInAusbildungDtoSpec vermoegenVorjahr(Integer vermoegenVorjahr) {
     
     this.vermoegenVorjahr = vermoegenVorjahr;
     return this;
@@ -565,14 +565,14 @@ public class PersonInAusbildungDtoSpec {
   @JsonProperty(JSON_PROPERTY_VERMOEGEN_VORJAHR)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getVermoegenVorjahr() {
+  public Integer getVermoegenVorjahr() {
     return vermoegenVorjahr;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VERMOEGEN_VORJAHR)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVermoegenVorjahr(BigDecimal vermoegenVorjahr) {
+  public void setVermoegenVorjahr(Integer vermoegenVorjahr) {
     this.vermoegenVorjahr = vermoegenVorjahr;
   }
 

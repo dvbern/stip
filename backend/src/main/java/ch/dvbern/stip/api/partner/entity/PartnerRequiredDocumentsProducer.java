@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.partner.entity;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class PartnerRequiredDocumentsProducer implements RequiredDocumentProduce
         final var requiredDocs = new ArrayList<DokumentTyp>();
 
         // if fahrkosten > 0
-        if (partner.getFahrkosten() != null && partner.getFahrkosten().compareTo(BigDecimal.ZERO) > 0) {
+        if (partner.getFahrkosten() != null && partner.getFahrkosten() > 0) {
             requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
         }
 

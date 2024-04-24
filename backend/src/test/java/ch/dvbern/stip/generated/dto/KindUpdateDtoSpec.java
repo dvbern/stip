@@ -70,7 +70,7 @@ public class KindUpdateDtoSpec {
   private String nachname;
 
   public static final String JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE = "erhalteneAlimentebeitraege";
-  private BigDecimal erhalteneAlimentebeitraege;
+  private Integer erhalteneAlimentebeitraege;
 
   public KindUpdateDtoSpec() {
   }
@@ -283,7 +283,7 @@ public class KindUpdateDtoSpec {
   }
 
 
-  public KindUpdateDtoSpec erhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+  public KindUpdateDtoSpec erhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
     return this;
@@ -297,14 +297,14 @@ public class KindUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getErhalteneAlimentebeitraege() {
+  public Integer getErhalteneAlimentebeitraege() {
     return erhalteneAlimentebeitraege;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setErhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+  public void setErhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
   }
 
