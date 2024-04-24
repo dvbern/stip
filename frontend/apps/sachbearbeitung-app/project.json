@@ -7,7 +7,7 @@
   "tags": ["type:app", "scope:sachbearbeitung-app"],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "allowedCommonJsDependencies": [
@@ -19,7 +19,7 @@
         ],
         "outputPath": "dist/apps/sachbearbeitung-app",
         "index": "apps/sachbearbeitung-app/src/index.html",
-        "main": "apps/sachbearbeitung-app/src/main.ts",
+        "browser": "apps/sachbearbeitung-app/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/sachbearbeitung-app/tsconfig.app.json",
         "assets": [
@@ -62,9 +62,7 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true

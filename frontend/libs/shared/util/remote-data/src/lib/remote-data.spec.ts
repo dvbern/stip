@@ -78,7 +78,8 @@ describe('RemoteData', () => {
     const Store = signalStore(
       withState({ value: success(42) }),
       withMethods((state) => ({
-        setValue: (value) => patchState(state, { value: success(value) }),
+        setValue: (value: number) =>
+          patchState(state, { value: success(value) }),
       })),
     );
     const store = new Store();

@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -45,7 +45,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MaskitoModule,
+    MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
