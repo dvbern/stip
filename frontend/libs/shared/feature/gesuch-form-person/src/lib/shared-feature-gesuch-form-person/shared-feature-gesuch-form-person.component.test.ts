@@ -45,20 +45,27 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
     const { queryByTestId, detectChanges } = await setup();
 
     detectChanges();
+
     expect(queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
   });
 
   it('should not display vermoegenVorjahr if PLZ != Bern has been filled', async () => {
-    const { queryByTestId, getByTestId } = await setup();
+    const { queryByTestId, getByTestId, detectChanges } = await setup();
 
     await userEvent.type(getByTestId('form-address-plz'), '2000');
+
+    detectChanges();
+
     expect(queryByTestId('form-person-vermoegenVorjahr')).toBeInTheDocument();
   });
 
   it('should display vermoegenVorjahr if PLZ = Bern has been filled', async () => {
-    const { queryByTestId, getByTestId } = await setup();
+    const { queryByTestId, getByTestId, detectChanges } = await setup();
 
     await userEvent.type(getByTestId('form-address-plz'), '3000');
+
+    detectChanges();
+
     expect(queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
   });
 });
