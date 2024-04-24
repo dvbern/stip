@@ -24,7 +24,7 @@ export interface GesuchsperiodeUpdate {
      * 
      */
     fiskaljahr: number;
-    gesuchsjahr: string;
+    gesuchsjahrId: string;
     /**
      * dd.MM.YYYY
      */

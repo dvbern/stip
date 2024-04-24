@@ -39,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSJAHR
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSJAHR_ID
 })
 @JsonTypeName("Gesuchsperiode")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -71,8 +71,8 @@ public class GesuchsperiodeDtoSpec {
   public static final String JSON_PROPERTY_EINREICHEFRIST_REDUZIERT = "einreichefristReduziert";
   private LocalDate einreichefristReduziert;
 
-  public static final String JSON_PROPERTY_GESUCHSJAHR = "gesuchsjahr";
-  private UUID gesuchsjahr;
+  public static final String JSON_PROPERTY_GESUCHSJAHR_ID = "gesuchsjahrId";
+  private UUID gesuchsjahrId;
 
   public GesuchsperiodeDtoSpec() {
   }
@@ -311,29 +311,29 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  public GesuchsperiodeDtoSpec gesuchsjahr(UUID gesuchsjahr) {
+  public GesuchsperiodeDtoSpec gesuchsjahrId(UUID gesuchsjahrId) {
     
-    this.gesuchsjahr = gesuchsjahr;
+    this.gesuchsjahrId = gesuchsjahrId;
     return this;
   }
 
    /**
-   * Get gesuchsjahr
-   * @return gesuchsjahr
+   * Get gesuchsjahrId
+   * @return gesuchsjahrId
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getGesuchsjahr() {
-    return gesuchsjahr;
+  public UUID getGesuchsjahrId() {
+    return gesuchsjahrId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchsjahr(UUID gesuchsjahr) {
-    this.gesuchsjahr = gesuchsjahr;
+  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchsjahrId(UUID gesuchsjahrId) {
+    this.gesuchsjahrId = gesuchsjahrId;
   }
 
   @Override
@@ -354,12 +354,12 @@ public class GesuchsperiodeDtoSpec {
         Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
         Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert) &&
-        Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr);
+        Objects.equals(this.gesuchsjahrId, gesuchsperiode.gesuchsjahrId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, gesuchsjahr);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, gesuchsjahrId);
   }
 
   @Override
@@ -375,7 +375,7 @@ public class GesuchsperiodeDtoSpec {
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
     sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
-    sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
+    sb.append("    gesuchsjahrId: ").append(toIndentedString(gesuchsjahrId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

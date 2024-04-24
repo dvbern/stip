@@ -24,6 +24,7 @@ export interface Gesuchsperiode {
     aufschaltterminStart: string;
     einreichefristNormal?: string;
     einreichefristReduziert?: string;
+    gesuchsjahrId: string;
 }
 
 

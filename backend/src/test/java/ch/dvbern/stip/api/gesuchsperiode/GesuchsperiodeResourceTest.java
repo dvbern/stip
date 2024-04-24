@@ -61,7 +61,7 @@ class GesuchsperiodeResourceTest {
         newPeriode.setGesuchsperiodeStart(LocalDate.now().with(firstDayOfYear()));
         newPeriode.setGesuchsperiodeStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setFiskaljahr(LocalDate.now().getYear());
-        newPeriode.setGesuchsjahr(GESUCHSJAHR_ID);
+        newPeriode.setGesuchsjahrId(GESUCHSJAHR_ID);
 
         gesuchsperiode = api.createGesuchsperiode().body(newPeriode)
             .execute(ResponseBody::prettyPeek)
@@ -120,7 +120,7 @@ class GesuchsperiodeResourceTest {
     @TestAsGesuchsteller
     @Order(5)
     void getLatestWithNoneTest() {
-        final var got = api.getLatestPublished()
+        final var got = api.getLatest()
             .execute(ResponseBody::prettyPeek)
             .then()
             .and()
@@ -145,7 +145,7 @@ class GesuchsperiodeResourceTest {
 
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
-        updateDto.setGesuchsjahr(GESUCHSJAHR_ID);
+        updateDto.setGesuchsjahrId(GESUCHSJAHR_ID);
 
         final var updated = api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
@@ -182,7 +182,7 @@ class GesuchsperiodeResourceTest {
     @TestAsGesuchsteller
     @Order(8)
     void getLatestTest() {
-        final var got = api.getLatestPublished()
+        final var got = api.getLatest()
             .execute(ResponseBody::prettyPeek)
             .then()
             .and()
@@ -207,7 +207,7 @@ class GesuchsperiodeResourceTest {
 
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
-        updateDto.setGesuchsjahr(GESUCHSJAHR_ID);
+        updateDto.setGesuchsjahrId(GESUCHSJAHR_ID);
 
         api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())

@@ -66,7 +66,7 @@ public class GesuchsperiodeApiSpec {
                 getAktiveGesuchsperioden(),
                 getGesuchsperiode(),
                 getGesuchsperioden(),
-                getLatestPublished(),
+                getLatest(),
                 publishGesuchsperiode(),
                 updateGesuchsperiode()
         );
@@ -92,8 +92,8 @@ public class GesuchsperiodeApiSpec {
         return new GetGesuchsperiodenOper(createReqSpec());
     }
 
-    public GetLatestPublishedOper getLatestPublished() {
-        return new GetLatestPublishedOper(createReqSpec());
+    public GetLatestOper getLatest() {
+        return new GetLatestOper(createReqSpec());
     }
 
     public PublishGesuchsperiodeOper publishGesuchsperiode() {
@@ -444,12 +444,12 @@ public class GesuchsperiodeApiSpec {
         }
     }
     /**
-     * Returniert die neuste GesuchsperiodeWithDaten wo Status &#x3D; PUBLIZIERT
+     * Returniert die neuste GesuchsperiodeWithDaten
      * 
      *
      * return NullableGesuchsperiodeWithDatenDtoSpec
      */
-    public static class GetLatestPublishedOper implements Oper {
+    public static class GetLatestOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/gesuchsperiode/latest";
@@ -457,7 +457,7 @@ public class GesuchsperiodeApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetLatestPublishedOper(RequestSpecBuilder reqSpec) {
+        public GetLatestOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -489,7 +489,7 @@ public class GesuchsperiodeApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetLatestPublishedOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetLatestOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -499,7 +499,7 @@ public class GesuchsperiodeApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetLatestPublishedOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetLatestOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

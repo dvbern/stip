@@ -25,10 +25,11 @@ import {
   MatFormFieldModule,
   MatHint,
 } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MaskitoModule } from '@maskito/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { MaskitoDirective } from '@maskito/angular';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import {
@@ -42,6 +43,7 @@ import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
+import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import {
   SharedUtilFormService,
@@ -56,11 +58,12 @@ import { PublishComponent } from '../publish/publish.component';
   standalone: true,
   imports: [
     CommonModule,
-    MaskitoModule,
+    MaskitoDirective,
     MatError,
     MatFormFieldModule,
     MatHint,
-    MatInput,
+    MatInputModule,
+    MatSelectModule,
     TranslateModule,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
@@ -71,6 +74,7 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     PublishComponent,
+    TranslatedPropertyPipe,
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
@@ -87,6 +91,7 @@ export class GesuchsperiodeDetailComponent {
   store = inject(GesuchsperiodeStore);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  translate = inject(TranslateService);
   maskitoYear = maskitoYear;
   maskitoNumber = maskitoNumber;
   idSig = input.required<string | undefined>({ alias: 'id' });
@@ -96,7 +101,7 @@ export class GesuchsperiodeDetailComponent {
     bezeichnungDe: [<string | null>null, [Validators.required]],
     bezeichnungFr: [<string | null>null, [Validators.required]],
     fiskaljahr: [<string | null>null, [Validators.required]],
-    gesuchsjahr: [<string | null>null, [Validators.required]],
+    gesuchsjahrId: [<string | null>null, [Validators.required]],
     gesuchsperiodeStart: [<string | null>null, [Validators.required]],
     gesuchsperiodeStopp: [<string | null>null, [Validators.required]],
     aufschaltterminStart: [<string | null>null, [Validators.required]],
@@ -145,7 +150,6 @@ export class GesuchsperiodeDetailComponent {
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
     'fiskaljahr',
-    'gesuchsjahr',
     'ausbKosten_SekII',
     'ausbKosten_Tertiaer',
     'freibetrag_vermoegen',
@@ -188,14 +192,19 @@ export class GesuchsperiodeDetailComponent {
     effect(
       () => {
         const id = this.idSig();
+        this.store.loadAllGesuchsjahre$();
         if (id) {
           this.store.loadGesuchsperiode$(id);
+        } else {
+          this.store.loadLatestGesuchsperiode$();
         }
       },
       { allowSignalWrites: true },
     );
     effect(() => {
-      const gesuchsperiode = this.store.currentGesuchsperiodeViewSig();
+      const gesuchsperiode =
+        this.store.currentGesuchsperiodeViewSig() ??
+        this.store.lastPublishedGesuchsperiodeViewSig();
       if (!gesuchsperiode) {
         return;
       }

@@ -47,8 +47,8 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
   displayedColumnsGesuchsperiode: string[] = [
     'bezeichnung',
     'gesuchsperiode',
-    'gueltigkeitStatus',
     'gesuchsjahr',
+    'gueltigkeitStatus',
     'actions',
   ];
 
