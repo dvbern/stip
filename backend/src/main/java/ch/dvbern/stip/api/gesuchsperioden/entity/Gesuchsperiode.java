@@ -21,7 +21,6 @@ import java.time.LocalDate;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
-import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -35,23 +34,24 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
-    @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
-})
+@Table(
+    name = "gesuchsperiode",
+    indexes = {
+        @Index(name = "IX_gesuchsperiode_aufschaltdatum_gueltig_bis", columnList = "aufschaltdatum,gueltig_bis"),
+        @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Gesuchsperiode extends AbstractMandantEntity {
-
     @NotNull
     @Embedded
     @Valid
-    @AttributeOverride(name = "gueltigBis", column = @Column(name = "gueltig_bis"))
     private DateRange gueltigkeit = new DateRange();
 
-    @Column(nullable = true)
+    @Column(name = "einreichfrist")
     private LocalDate einreichfrist;
 
-    @Column(nullable = true)
+    @Column(name = "aufschaltdatum")
     private LocalDate aufschaltdatum;
 }

@@ -1,5 +1,5 @@
 package ch.dvbern.stip.api.lebenslauf.type;
 
-public enum Taetigskeitsart {
+public enum Taetigkeitsart {
     ERWERBSTAETIGKEIT, ANDERE_TAETIGKEIT
 }

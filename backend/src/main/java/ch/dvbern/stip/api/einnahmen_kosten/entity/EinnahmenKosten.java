@@ -13,47 +13,77 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+
 @Audited
 @Entity
-@Table(indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant"))
+@Table(
+    name = "einnahmen_kosten",
+    indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "nettoerwerbseinkommen", nullable = false)
     private BigDecimal nettoerwerbseinkommen;
+
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "fahrkosten", nullable = false)
     private BigDecimal fahrkosten;
+
     @Nullable
-    @Column(nullable = true)
+    @Column(name = "wohnkosten")
     private BigDecimal wohnkosten;
+
     @Nullable
-    @Column(nullable = true)
+    @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
+
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "verdienst_realisiert", nullable = false)
     private Boolean verdienstRealisiert;
-    @Column
+
+    @Nullable
+    @Column(name = "alimente")
     private BigDecimal alimente;
-    @Column
+
+    @Nullable
+    @Column(name = "zulagen")
     private BigDecimal zulagen;
-    @Column
+
+    @Nullable
+    @Column(name = "renten")
     private BigDecimal renten;
-    @Column
+
+    @Nullable
+    @Column(name = "eo_leistungen")
     private BigDecimal eoLeistungen;
-    @Column
+
+    @Nullable
+    @Column(name = "ergaenzungsleistungen")
     private BigDecimal ergaenzungsleistungen;
-    @Column
+
+    @Nullable
+    @Column(name = "beitraege")
     private BigDecimal beitraege;
-    @Column
+
+    @Nullable
+    @Column(name = "ausbildungskosten_sekundarstufe_zwei")
     private BigDecimal ausbildungskostenSekundarstufeZwei;
-    @Column
+
+    @Nullable
+    @Column(name = "ausbildungskosten_tertiaerstufe")
     private BigDecimal ausbildungskostenTertiaerstufe;
-    @Column
+
+    @Nullable
+    @Column(name = "will_darlehen")
     private Boolean willDarlehen;
-    @Column
+
+    @Nullable
+    @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
-    @Column
+
+    @Nullable
+    @Column(name = "betreuungskosten_kinder")
     private BigDecimal betreuungskostenKinder;
 }

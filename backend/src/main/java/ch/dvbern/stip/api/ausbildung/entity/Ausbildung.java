@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,49 +28,54 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @AusbildungNichtGefundenRequiredNullFieldsConstraint
 @AusbildungEndDateMustBeAfterStartConstraint
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
-    @Index(name = "IX_ausbildung_mandant", columnList = "mandant")
-})
+@Table(
+    name = "ausbildung",
+    indexes = {
+        @Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
+        @Index(name = "IX_ausbildung_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Ausbildung extends AbstractMandantEntity {
-
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
+    @JoinColumn(name = "ausbildungsgang_id", foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
     private Ausbildungsgang ausbildungsgang;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
+    @Column(name = "alternative_ausbildungsgang")
     private String alternativeAusbildungsgang;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
+    @Column(name = "alternative_ausbildungsstaette")
     private String alternativeAusbildungsstaette;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column
+    @Column(name = "alternative_ausbildungsland")
     private String alternativeAusbildungsland;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "fachrichtung", nullable = false)
     private String fachrichtung;
 
-    @Column(nullable = false)
+    @Column(name = "ausbildung_nicht_gefunden", nullable = false)
     private boolean ausbildungNichtGefunden = false;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "ausbildung_begin", nullable = false)
     private LocalDate ausbildungBegin;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "ausbildung_end", nullable = false)
     @Future
     private LocalDate ausbildungEnd;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "pensum", nullable = false)
     private AusbildungsPensum pensum;
 }

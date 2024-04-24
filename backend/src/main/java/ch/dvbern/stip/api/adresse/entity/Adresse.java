@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.adresse.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.stammdaten.type.Land;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,39 +37,44 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Entity
-@Table(indexes = @Index(name = "IX_adresse_mandant", columnList = "mandant"))
+@Table(
+    name = "adresse",
+    indexes = @Index(name = "IX_adresse_mandant", columnList = "mandant")
+)
 @Audited
 @Getter
 @Setter
 public class Adresse extends AbstractMandantEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name= "land", nullable = false)
     private Land land = Land.CH;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "co_adresse")
     private String coAdresse;
 
     @NotNull
     @NotBlank
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "strasse", nullable = false)
     private String strasse;
 
+    @Nullable
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "hausnummer")
     private String hausnummer;
 
     @NotNull
     @NotBlank
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "plz", nullable = false)
     private String plz;
 
     @NotNull
     @NotBlank
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "ort", nullable = false)
     private String ort;
 }

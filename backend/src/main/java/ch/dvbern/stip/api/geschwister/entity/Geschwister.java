@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,15 +18,19 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = @Index(name = "IX_geschwister_mandant", columnList = "mandant"))
+@Table(
+    name = "geschwister",
+    indexes = @Index(name = "IX_geschwister_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 public class Geschwister extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "ausbildungssituation", nullable = false)
     private Ausbildungssituation ausbildungssituation;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "copy_of_id")
     private UUID copyOfId;
 }

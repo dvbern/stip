@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.fall.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,24 +35,30 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-    @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-    @Index(name = "IX_fall_mandant", columnList = "mandant")
-})
+@Table(
+    name = "fall",
+    indexes = {
+        @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
+        @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+        @Index(name = "IX_fall_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Fall extends AbstractMandantEntity {
-
-    @Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
-        insertable = false)
+    @Column(name = "fall_nummer", columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')", insertable = false)
     private Long fallNummer;
 
-    @OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "gesuchsteller_id",
+        foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"),
+        nullable = false
+    )
     private Benutzer gesuchsteller;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
+    @Nullable
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sachbearbeiter_id", foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"))
     private Benutzer sachbearbeiter;
 }

@@ -22,7 +22,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
-import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -348,7 +348,7 @@ class GesuchValidatorTest {
 
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
-        lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
+        lebenslaufItem.setTaetigskeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
         Gesuch gesuch = prepareDummyGesuch();
@@ -386,7 +386,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationLebenslauf() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
-        lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
+        lebenslaufItem.setTaetigskeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         lebenslaufItem.setVon(LocalDate.of(2020, 10, 1));
         lebenslaufItem.setBis(LocalDate.of(2020, 12, 1));
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
