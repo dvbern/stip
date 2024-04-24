@@ -1,0 +1,3 @@
+ALTER TABLE eltern_aud
+	ALTER COLUMN wohnkosten DROP NOT NULL,
+	ALTER COLUMN wohnkosten DROP DEFAULT;
