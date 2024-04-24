@@ -42,7 +42,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -74,7 +74,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     NgbAlert,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
   ],

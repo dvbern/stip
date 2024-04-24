@@ -52,9 +52,9 @@
                             </h3>
                           </div>
                           <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
-                            <span>{{ periode.gueltigAb | date: 'dd.MM.yyyy' }}</span>
+                            <span>{{ periode.gesuchsperiodeStart | date: 'dd.MM.yyyy' }}</span>
                             <span> - </span>
-                            <span>{{ periode.gueltigBis | date: 'dd.MM.yyyy' }}</span>
+                            <span>{{ periode.gesuchsperiodeStopp | date: 'dd.MM.yyyy' }}</span>
                           </h6>
                         </div>
                       </div>
@@ -127,20 +127,22 @@
                   }
                 </div>
               </div>
+
+              <ng-template #einreichefrist>
+                <span class="mt-4 fw-normal small">{{
+                  'gesuch-app.cockpit.periode.einreichfrist.titel' | translate
+                }}</span>
+                @if (periode.einreichefristReduziert) {
+                  <span class="fw-medium">
+                    {{ 'gesuch-app.cockpit.periode.einreichfrist.spaetestens' | translate }}
+                    {{ periode.einreichefristReduziert | date: 'dd.MM.yyyy' }}
+                  </span>
+                }
+              </ng-template>
             }
           </div>
         }
       </div>
-
-      <ng-template #einreichefrist let-periode="periode">
-        <span class="mt-4 fw-normal small">{{ 'gesuch-app.cockpit.periode.einreichfrist.titel' | translate }}</span>
-        @if (periode.einreichfrist) {
-          <span class="fw-medium">
-            {{ 'gesuch-app.cockpit.periode.einreichfrist.spaetestens' | translate }}
-            {{ periode.einreichfrist | date: 'dd.MM.yyyy' }}
-          </span>
-        }
-      </ng-template>
 
       <!-- side column -->
       <div class="col-lg-4 mb-lg-5">

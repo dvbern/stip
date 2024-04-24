@@ -1,1 +1,1 @@
-export * from './lib/sachbearbeiter';
+export * from './lib/sachbearbeiter.store';

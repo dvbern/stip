@@ -20,6 +20,9 @@ import { Observable }                                        from 'rxjs';
 
 import { Gesuchsperiode } from '../model/gesuchsperiode';
 import { GesuchsperiodeCreate } from '../model/gesuchsperiodeCreate';
+import { GesuchsperiodeUpdate } from '../model/gesuchsperiodeUpdate';
+import { GesuchsperiodeWithDaten } from '../model/gesuchsperiodeWithDaten';
+import { NullableGesuchsperiodeWithDaten } from '../model/nullableGesuchsperiodeWithDaten';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -29,8 +32,21 @@ export interface GesuchsperiodeServiceCreateGesuchsperiodeRequestParams {
     gesuchsperiodeCreate: GesuchsperiodeCreate;
 }
 
+export interface GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams {
+    gesuchsperiodeId: string;
+}
+
 export interface GesuchsperiodeServiceGetGesuchsperiodeRequestParams {
     gesuchsperiodeId: string;
+}
+
+export interface GesuchsperiodeServicePublishGesuchsperiodeRequestParams {
+    gesuchsperiodeId: string;
+}
+
+export interface GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams {
+    gesuchsperiodeId: string;
+    gesuchsperiodeUpdate?: GesuchsperiodeUpdate;
 }
 
 
@@ -102,10 +118,10 @@ export class GesuchsperiodeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchsperiodeWithDaten>;
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchsperiodeWithDaten>>;
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchsperiodeWithDaten>>;
+     public createGesuchsperiode$(requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchsperiodeCreate = requestParameters.gesuchsperiodeCreate;
         if (gesuchsperiodeCreate === null || gesuchsperiodeCreate === undefined) {
             throw new Error('Required parameter gesuchsperiodeCreate was null or undefined when calling createGesuchsperiode$.');
@@ -130,6 +146,7 @@ export class GesuchsperiodeService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json',
                 'text/plain'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
@@ -165,10 +182,82 @@ export class GesuchsperiodeService {
         }
 
         const localVarPath = `/gesuchsperiode`;
-        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchsperiodeWithDaten>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: gesuchsperiodeCreate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Deletes a Gesuchsperiode with the given id
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public deleteGesuchsperiode$(requestParameters: GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteGesuchsperiode$(requestParameters: GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteGesuchsperiode$(requestParameters: GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteGesuchsperiode$(requestParameters: GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling deleteGesuchsperiode$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -247,14 +336,14 @@ export class GesuchsperiodeService {
     }
 
     /**
-     * Returniert der Gesuchsperiode mit der gegebene Id.
+     * Returniert die GesuchsperiodeWithDaten mit der gegebene Id.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuchsperiode>;
-     public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuchsperiode>>;
-     public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuchsperiode>>;
+     public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchsperiodeWithDaten>;
+     public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchsperiodeWithDaten>>;
+     public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchsperiodeWithDaten>>;
      public getGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
         if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
@@ -307,7 +396,7 @@ export class GesuchsperiodeService {
         }
 
         const localVarPath = `/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Gesuchsperiode>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchsperiodeWithDaten>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -377,6 +466,230 @@ export class GesuchsperiodeService {
         return this.httpClient.request<Array<Gesuchsperiode>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returniert die neuste GesuchsperiodeWithDaten wo Status &#x3D; PUBLIZIERT
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getLatestPublished$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableGesuchsperiodeWithDaten>;
+     public getLatestPublished$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableGesuchsperiodeWithDaten>>;
+     public getLatestPublished$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableGesuchsperiodeWithDaten>>;
+     public getLatestPublished$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchsperiode/latest`;
+        return this.httpClient.request<NullableGesuchsperiodeWithDaten>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Publishes a Gesuchsperiode with the given id
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<GesuchsperiodeWithDaten>;
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<GesuchsperiodeWithDaten>>;
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<GesuchsperiodeWithDaten>>;
+     public publishGesuchsperiode$(requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling publishGesuchsperiode$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchsperiode/publish/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<GesuchsperiodeWithDaten>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Updates a Gesuchperiode with the given id
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public updateGesuchsperiode$(requestParameters: GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchsperiodeWithDaten>;
+     public updateGesuchsperiode$(requestParameters: GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchsperiodeWithDaten>>;
+     public updateGesuchsperiode$(requestParameters: GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchsperiodeWithDaten>>;
+     public updateGesuchsperiode$(requestParameters: GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling updateGesuchsperiode$.');
+        }
+        const gesuchsperiodeUpdate = requestParameters.gesuchsperiodeUpdate;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<GesuchsperiodeWithDaten>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: gesuchsperiodeUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

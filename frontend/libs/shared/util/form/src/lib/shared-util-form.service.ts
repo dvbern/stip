@@ -1,16 +1,24 @@
 import { DOCUMENT } from '@angular/common';
 import { ApplicationRef, ElementRef, Injectable, inject } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, concat, from, of } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 
+import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 import {
   ComponentWithForm,
   hasUnsavedChanges,
 } from '@dv/shared/util/unsaved-changes';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
+
+type OnlyString<T> = T extends string ? T : never;
 
 @Injectable({
   providedIn: 'root',
@@ -83,6 +91,45 @@ export class SharedUtilFormService {
 
   focusFirstInvalid(elementRef: ElementRef<HTMLElement>) {
     this.focusInput$.next(elementRef);
+  }
+  /**
+   * Create a converter for a form that has formatted number strings
+   *
+   * It returns 2 functions, one to convert API values to string and one to convert string values to API values
+   *
+   * @example
+   * const converter = this.formUtils.createNumberConverter(
+   *   this.form,
+   *   [
+   *     'einkommen',
+   *     'wohnkosten',
+   *   ]
+   * );
+   *
+   * this.form.patchValue(converter.toString(apiValues));
+   *
+   * store.saveValues$(converter.toNumber());
+   */
+  createNumberConverter<
+    T extends { [k: string]: AbstractControl<string | null> },
+    K extends OnlyString<keyof T>,
+  >(group: FormGroup<T>, numberFields: K[]) {
+    return {
+      toNumber: () =>
+        numberFields.reduce(
+          (acc, key) => {
+            return { ...acc, [key]: fromFormatedNumber(group.get(key)?.value) };
+          },
+          {} as Record<K, number>,
+        ),
+      toString: (values: { [key in K]?: number }) =>
+        numberFields.reduce(
+          (acc, key) => {
+            return { ...acc, [key]: values[key]?.toString() };
+          },
+          {} as Record<K, string>,
+        ),
+    };
   }
 
   /**

@@ -1,11 +1,14 @@
 import { format, intervalToDuration, isValid, parse, parseISO } from 'date-fns';
 
 import { Language } from '@dv/shared/model/language';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { DateFormatVariant, getFormatDef, parseDateForVariant } from '../index';
 
+type NullableString = string | null | undefined;
+
 export function parseBackendLocalDateAndPrint(
-  value: string | null | undefined,
+  value: NullableString,
   locale: Language,
 ) {
   return formatBackendLocalDate(value, locale);
@@ -19,8 +22,15 @@ export function printDate(
   return format(date, getFormatDef(locale, dateFormatVariant).niceInput);
 }
 
+export function fromBackendLocalDate(value: NullableString) {
+  if (!isDefined(value)) {
+    return undefined;
+  }
+  return parseISO(value);
+}
+
 export function formatBackendLocalDate(
-  value: string | null | undefined,
+  value: NullableString,
   locale: Language,
 ) {
   if (value === null || value === undefined) {
@@ -34,7 +44,7 @@ export function formatBackendLocalDate(
 }
 
 export function parseStringAndPrintForBackendLocalDate(
-  value: string | null | undefined,
+  value: NullableString,
   locale: Language,
   referenceDate: Date,
 ) {
@@ -46,7 +56,7 @@ export function parseStringAndPrintForBackendLocalDate(
 }
 
 export function parseInputDateStringVariants(
-  value: string | null | undefined,
+  value: NullableString,
   srcFormats: string[],
 ) {
   if (value === null || value === undefined) {
@@ -59,7 +69,7 @@ export function parseInputDateStringVariants(
 }
 
 export function parseInputDateString(
-  value: string | null | undefined,
+  value: NullableString,
   srcFormats: string[],
   referenceDate: Date,
 ) {
@@ -78,7 +88,7 @@ export function parseInputDateString(
 }
 
 export function asBackendLocalDate(
-  value: string | null | undefined,
+  value: NullableString,
   srcFormats: string[],
   referenceDate: Date,
 ) {

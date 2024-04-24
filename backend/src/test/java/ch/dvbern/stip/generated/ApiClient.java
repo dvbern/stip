@@ -54,6 +54,9 @@ public class ApiClient {
     public GesuchApiSpec gesuch() {
         return GesuchApiSpec.gesuch(config.reqSpecSupplier);
     }
+    public GesuchsjahrApiSpec gesuchsjahr() {
+        return GesuchsjahrApiSpec.gesuchsjahr(config.reqSpecSupplier);
+    }
     public GesuchsperiodeApiSpec gesuchsperiode() {
         return GesuchsperiodeApiSpec.gesuchsperiode(config.reqSpecSupplier);
     }

@@ -28,6 +28,27 @@ $gesuch-app-theme: mat.define-light-theme(
 @include mat.all-component-themes($gesuch-app-theme);
 @include cdk.a11y-visually-hidden();
 
+// Snackbar overlay settings for container size
+// modify the parent container of the snackbar to center it
+.cdk-overlay-pane:not(.mat-mdc-snack-bar-handset):has(
+    > .mat-mdc-snack-bar-container
+  ) {
+  position: relative !important;
+  margin: 120px auto 0 auto !important;
+  flex-basis: var(--content-max-width);
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-self: flex-start;
+
+  .mat-mdc-snack-bar-container {
+    position: absolute;
+    top: 0;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+}
+
 .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid)
   .mdc-floating-label {
   color: $black;
@@ -64,17 +85,46 @@ $gesuch-app-theme: mat.define-light-theme(
     padding: 0;
   }
 }
+// Used for readonly mat-form-fields, see dvSharedUiFormReadonly
+form.readonly .mat-mdc-form-field {
+  --mdc-outlined-text-field-disabled-outline-color: transparent;
+  --mdc-outlined-text-field-disabled-input-text-color: black;
+  --mdc-outlined-text-field-disabled-label-text-color: black;
+  --mdc-outlined-text-field-container-shape: 0;
+
+  .mat-mdc-input-element {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  .mdc-text-field--outlined {
+    background-color: transparent;
+  }
+  .mat-mdc-form-field-hint,
+  .mat-mdc-form-field-icon-suffix {
+    display: none;
+  }
+  .mdc-text-field--outlined .mdc-floating-label {
+    left: 0;
+  }
+}
 .mat-mdc-table .mat-mdc-header-row {
   --mat-table-header-container-height: 20px;
 }
 .mat-mdc-table {
   .mat-mdc-header-cell {
-    border-bottom: 0;
     padding-top: 20px;
-  }
-  .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
     padding-bottom: 20px;
-    padding-top: 0;
+  }
+  .combined-header-row {
+    .mat-mdc-header-cell {
+      border-bottom: 0;
+      padding-top: 20px;
+      padding-bottom: 0px;
+    }
+    .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
+      padding-bottom: 20px;
+      padding-top: 0;
+    }
   }
 }
 .mat-mdc-paginator-page-size-label {
@@ -122,6 +172,22 @@ table tr.mat-mdc-row {
 }
 
 .mat-mdc-progress-bar.mat-warn {
-  --mdc-linear-progress-active-indicator-color: #{$warn};
-  --mdc-linear-progress-track-color: #{lighten($warn, 25%)};
+  --mdc-linear-progress-active-indicator-color: #{$danger};
+  --mdc-linear-progress-track-color: #{lighten($danger, 25%)};
+}
+
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: #{$success};
+  --mat-mdc-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+
+  &.accent {
+    --mdc-snackbar-container-color: #{$info};
+  }
+  &.warn {
+    --mdc-snackbar-container-color: #{$warn};
+  }
+  &.error {
+    --mdc-snackbar-container-color: #{$danger};
+  }
 }

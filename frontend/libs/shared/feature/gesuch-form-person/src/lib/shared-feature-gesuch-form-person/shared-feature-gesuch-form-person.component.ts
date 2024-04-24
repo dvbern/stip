@@ -57,7 +57,7 @@ import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -115,7 +115,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiWohnsitzSplitterComponent,
     SharedUiFormAddressComponent,
     SharedPatternDocumentUploadComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
@@ -492,9 +492,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable();
         }
       },
       { allowSignalWrites: true },
