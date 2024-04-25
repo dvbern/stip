@@ -7,8 +7,11 @@
     padding-bottom: 32px;
   }
 
+  .mat-mdc-header-row {
+    border-bottom: solid 1px var(--mat-table-row-item-outline-color);
+  }
+
   .mat-mdc-row {
-    height: 60px;
     &.warning {
       background-color: var(--dv-yellow-bg-subtle);
     }
@@ -16,6 +19,17 @@
 
   .status-cell {
     width: 50px;
+  }
+
+  dv-shared-pattern-document-upload {
+    button.btn {
+      height: 44px;
+    }
+
+    dv-shared-ui-icon-chip {
+      width: 0.8em;
+      height: 0.8em;
+    }
   }
 }
 

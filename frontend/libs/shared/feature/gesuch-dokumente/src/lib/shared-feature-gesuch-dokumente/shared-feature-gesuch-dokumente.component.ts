@@ -90,26 +90,26 @@ export class SharedFeatureGesuchDokumenteComponent {
     }
 
     const uploadedDocuments: TableDocument[] = documents.map((document) => {
-      const documentType = document.dokumentTyp;
+      const dokumentTyp = document.dokumentTyp;
 
-      if (!documentType) {
+      if (!dokumentTyp) {
         throw new Error('Document type is missing');
       }
 
       const documentOptions = createDocumentOptions(
         gesuchId,
         allowTypes,
-        documentType,
+        dokumentTyp,
         document.dokumente,
       );
 
-      const formStep = getFormStep(documentType);
+      const formStep = getFormStep(dokumentTyp);
 
       return {
         ...document,
-        dokumentTyp: documentType,
+        dokumentTyp,
         formStep,
-        titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[documentType],
+        titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
         documentOptions,
       };
     });
@@ -134,10 +134,15 @@ export class SharedFeatureGesuchDokumenteComponent {
       },
     );
 
-    return new MatTableDataSource<TableDocument>([
-      ...uploadedDocuments,
-      ...missingDocuments,
-    ]);
+    return new MatTableDataSource<TableDocument>(
+      [...uploadedDocuments, ...missingDocuments].sort((a, b) => {
+        if (a.formStep.currentStepNumber === b.formStep.currentStepNumber) {
+          return a.dokumentTyp.localeCompare(b.dokumentTyp);
+        }
+
+        return a.formStep.currentStepNumber - b.formStep.currentStepNumber;
+      }),
+    );
   });
 
   trackByFn(index: number, item: TableDocument) {

@@ -2,7 +2,7 @@
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
 } @else {
   <div class="col-12">
-    <div class="container card pb-4 pt-5 mt-5 shadow">
+    <div class="container card pb-3 pt-3 mt-5 shadow">
       <div class="row overflow-auto">
         <table class="document-table" mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn">
           <caption class="cdk-visually-hidden">
@@ -73,11 +73,7 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-          <tr
-            [ngClass]="{ warning: dokument.status === false }"
-            mat-row
-            *matRowDef="let dokument; columns: displayedColumns"
-          ></tr>
+          <tr [ngClass]="{ warning: !dokument.id }" mat-row *matRowDef="let dokument; columns: displayedColumns"></tr>
         </table>
       </div>
     </div>
