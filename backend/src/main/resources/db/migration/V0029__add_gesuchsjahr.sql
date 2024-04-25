@@ -31,3 +31,8 @@ CREATE TABLE gesuchsjahr_aud
 	mandant				VARCHAR(255),
 	CONSTRAINT gesuchsjahr_aud_pk PRIMARY KEY (id, rev)
 );
+
+INSERT INTO gesuchsjahr(id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, bezeichnung_de,
+                        bezeichnung_fr, technisches_jahr, gueltigkeit_status)
+VALUES ('9596bb3e-10ea-4493-8aed-a6ef510f806b', now(), now(), 'Migration', 'Migration', 0, 'Gesuchsjahr 24',
+        'Année de la demande 23', 2024, 'PUBLIZIERT');
