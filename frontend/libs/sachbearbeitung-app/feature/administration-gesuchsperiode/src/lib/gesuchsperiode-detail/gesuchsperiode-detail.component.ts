@@ -32,6 +32,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
+import { GesuchsperiodeWithDaten } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -114,7 +115,6 @@ export class GesuchsperiodeDetailComponent {
     freibetrag_erwerbseinkommen: [<string | null>null, [Validators.required]],
     einkommensfreibetrag: [<string | null>null, [Validators.required]],
     elternbeteiligungssatz: [<string | null>null, [Validators.required]],
-    vermoegensfreibetrag: [<string | null>null, [Validators.required]],
     vermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
     integrationszulage: [<string | null>null, [Validators.required]],
     limite_EkFreibetrag_Integrationszulag: [
@@ -156,7 +156,6 @@ export class GesuchsperiodeDetailComponent {
     'freibetrag_erwerbseinkommen',
     'elternbeteiligungssatz',
     'einkommensfreibetrag',
-    'vermoegensfreibetrag',
     'vermogenSatzAngerechnet',
     'integrationszulage',
     'limite_EkFreibetrag_Integrationszulag',
@@ -202,10 +201,30 @@ export class GesuchsperiodeDetailComponent {
       { allowSignalWrites: true },
     );
     effect(() => {
-      const gesuchsperiode =
-        this.store.currentGesuchsperiodeViewSig() ??
-        this.store.lastPublishedGesuchsperiodeViewSig();
+      const gesuchsperiode = this.store.currentGesuchsperiodeViewSig();
       if (!gesuchsperiode) {
+        const latestGesuchsperiode = this.store.latestGesuchsperiodeViewSig();
+        if (latestGesuchsperiode) {
+          const removeMetadaten = unsetGivenProperties<GesuchsperiodeWithDaten>(
+            [
+              'bezeichnungDe',
+              'bezeichnungFr',
+              'fiskaljahr',
+              'gesuchsjahrId',
+              'gesuchsperiodeStart',
+              'gesuchsperiodeStopp',
+              'aufschaltterminStart',
+              'aufschaltterminStopp',
+              'einreichefristNormal',
+              'einreichefristReduziert',
+            ],
+          );
+          this.form.patchValue({
+            ...latestGesuchsperiode,
+            ...this.numberConverter.toString(latestGesuchsperiode),
+            ...removeMetadaten,
+          });
+        }
         return;
       }
       this.form.patchValue({
@@ -252,3 +271,9 @@ export class GesuchsperiodeDetailComponent {
     this.handleSave({ shouldPublishAfterSave: true });
   }
 }
+
+const unsetGivenProperties = <T>(keys: (keyof T)[]) => {
+  return keys.reduce((acc, key) => {
+    return { ...acc, [key]: null };
+  }, {});
+};

@@ -2422,7 +2422,6 @@ components:
         - freibetrag_erwerbseinkommen
         - elternbeteiligungssatz
         - einkommensfreibetrag
-        - vermoegensfreibetrag
         - vermogenSatzAngerechnet
         - integrationszulage
         - limite_EkFreibetrag_Integrationszulag
@@ -2503,9 +2502,6 @@ components:
           description: ''
           type: integer
         elternbeteiligungssatz:
-          description: ''
-          type: integer
-        vermoegensfreibetrag:
           description: ''
           type: integer
         vermogenSatzAngerechnet:

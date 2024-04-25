@@ -46,7 +46,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_VERMOEGENSFREIBETRAG,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG,
@@ -126,9 +125,6 @@ public class GesuchsperiodeCreateDtoSpec {
 
   public static final String JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ = "elternbeteiligungssatz";
   private Integer elternbeteiligungssatz;
-
-  public static final String JSON_PROPERTY_VERMOEGENSFREIBETRAG = "vermoegensfreibetrag";
-  private Integer vermoegensfreibetrag;
 
   public static final String JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET = "vermogenSatzAngerechnet";
   private Integer vermogenSatzAngerechnet;
@@ -647,32 +643,6 @@ public class GesuchsperiodeCreateDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
-  }
-
-
-  public GesuchsperiodeCreateDtoSpec vermoegensfreibetrag(Integer vermoegensfreibetrag) {
-    
-    this.vermoegensfreibetrag = vermoegensfreibetrag;
-    return this;
-  }
-
-   /**
-   * 
-   * @return vermoegensfreibetrag
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getVermoegensfreibetrag() {
-    return vermoegensfreibetrag;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
-    this.vermoegensfreibetrag = vermoegensfreibetrag;
   }
 
 
@@ -1351,7 +1321,6 @@ public class GesuchsperiodeCreateDtoSpec {
         Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeCreate.freibetragErwerbseinkommen) &&
         Objects.equals(this.einkommensfreibetrag, gesuchsperiodeCreate.einkommensfreibetrag) &&
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeCreate.elternbeteiligungssatz) &&
-        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeCreate.vermoegensfreibetrag) &&
         Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeCreate.vermogenSatzAngerechnet) &&
         Objects.equals(this.integrationszulage, gesuchsperiodeCreate.integrationszulage) &&
         Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeCreate.limiteEkFreibetragIntegrationszulag) &&
@@ -1381,7 +1350,7 @@ public class GesuchsperiodeCreateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers);
   }
 
   @Override
@@ -1405,7 +1374,6 @@ public class GesuchsperiodeCreateDtoSpec {
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
-    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
     sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
     sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");

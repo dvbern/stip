@@ -193,43 +193,6 @@
         </mat-form-field>
       </div>
 
-      <!-- Ausbildungskosten (pers. Budget) -->
-      <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
-      </h2>
-
-      <div class="row g-4">
-        <!-- Sekundarstufe II -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
-          <input
-            formControlName="ausbKosten_SekII"
-            data-testid="form-gesuchsperiode-AusbKosten_SekII"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Teritärstufe -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
-          <input
-            formControlName="ausbKosten_Tertiaer"
-            data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
       <!-- Stammdaten -->
       <h1 class="h2 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title' | translate }}
@@ -309,21 +272,6 @@
       </div>
 
       <div class="row g-4 mt-1">
-        <!-- Vermoegensfreibetrag -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.vermoegensfreibetrag.label' | translate }}</mat-label>
-          <input
-            formControlName="vermoegensfreibetrag"
-            data-testid="form-gesuchsperiode-vermoegensfreibetrag"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-
         <!-- VermogenSatzAngerechnet -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
@@ -340,9 +288,7 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
-      </div>
 
-      <div class="row g-4 mt-1">
         <!-- Integrationszulage -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.integrationszulage.label' | translate }}</mat-label>
@@ -357,7 +303,9 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
+      </div>
 
+      <div class="row g-4 mt-1">
         <!-- Limite_EkFreibetrag_Integrationszulag -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label
@@ -374,9 +322,7 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
-      </div>
 
-      <div class="row g-4 mt-1">
         <!-- StipLimite_Minimalstipendium -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
@@ -385,6 +331,43 @@
           <input
             formControlName="stipLimite_Minimalstipendium"
             data-testid="form-gesuchsperiode-stipLimite_Minimalstipendium"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Ausbildungskosten (pers. Budget) -->
+      <h2 class="h3 pt-5 mb-4">
+        {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
+      </h2>
+
+      <div class="row g-4">
+        <!-- Sekundarstufe II -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
+          <input
+            formControlName="ausbKosten_SekII"
+            data-testid="form-gesuchsperiode-AusbKosten_SekII"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Teritärstufe -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
+          <input
+            formControlName="ausbKosten_Tertiaer"
+            data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
             matInput
             [maskito]="maskitoNumber"
             type="text"

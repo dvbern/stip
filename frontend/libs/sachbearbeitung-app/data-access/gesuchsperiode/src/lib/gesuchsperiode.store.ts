@@ -83,7 +83,7 @@ export class GesuchsperiodeStore extends signalStore(
     return prepareView(this.currentGesuchsjahr.data());
   });
 
-  lastPublishedGesuchsperiodeViewSig = computed(() => {
+  latestGesuchsperiodeViewSig = computed(() => {
     return prepareView(this.latestGesuchsperiode.data()?.value);
   });
 

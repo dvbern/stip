@@ -76,10 +76,6 @@ export interface GesuchsperiodeDaten {
     /**
      * 
      */
-    vermoegensfreibetrag: number;
-    /**
-     * 
-     */
     vermogenSatzAngerechnet: number;
     /**
      * 
