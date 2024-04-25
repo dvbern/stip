@@ -12,7 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import {
@@ -26,7 +26,7 @@ import { percentStringToNumber } from '../utils/form';
   selector: 'dv-shared-ui-percentage-splitter',
   standalone: true,
   imports: [
-    MaskitoModule,
+    MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,

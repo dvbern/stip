@@ -54,11 +54,13 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   });
 
   it('should display jahreseinkommen, verpflegunskosten and fahrkosten if "ausbildungMitEinkommenOderErwerbstaetig" is selected', async () => {
-    await setup();
+    const { detectChanges } = await setup();
 
     await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
+
+    detectChanges();
 
     expect(screen.queryByTestId('form-partner-fahrkosten')).toBeInTheDocument();
     expect(
@@ -70,20 +72,24 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
   });
 
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is not selected', async () => {
-    const { getByTestId } = await setup();
+    const { getByTestId, detectChanges } = await setup();
     const user = await fillBasicForm();
 
-    expect(getByTestId('form-partner-form').classList.contains('ng-valid'));
-
     await user.click(getByTestId('button-save-continue'));
+
+    detectChanges();
+
+    expect(getByTestId('form-partner-form').classList.contains('ng-valid'));
   });
 
   it('should allow to save the form when all required fields are filled in if "ausbildungMitEinkommenOderErwerbstaetig" is selected', async () => {
-    const { getByTestId, container } = await setup();
+    const { getByTestId, container, detectChanges } = await setup();
     const user = await fillBasicForm();
     await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
+
+    detectChanges();
 
     expect(screen.queryByTestId('form-partner-fahrkosten')).toBeInTheDocument();
 
@@ -91,17 +97,25 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
     await user.type(getByTestId('form-partner-jahreseinkommen'), '4000');
     await user.type(getByTestId('form-partner-verpflegungskosten'), '5000');
 
+    detectChanges();
+
     // discuss order with team
     expect(getByTestId('form-partner-form').classList.contains('ng-valid'));
+
     await user.click(getByTestId('button-save-continue'));
+
+    detectChanges();
+
     expect(container.querySelector('mat-error')).not.toBeInTheDocument();
   });
 
   it('should reset jahreseinkommen, verpflegunskosten and fahrkosten if "ausbildungMitEinkommenOderErwerbstaetig" is selected, unselected, and selected again', async () => {
-    const { getByTestId } = await setup();
+    const { getByTestId, detectChanges } = await setup();
     const checkbox = await checkMatCheckbox(
       'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
     );
+
+    detectChanges();
 
     await userEvent.type(getByTestId('form-partner-fahrkosten'), '3000');
     await userEvent.type(getByTestId('form-partner-jahreseinkommen'), '4000');
@@ -112,11 +126,15 @@ describe(SharedFeatureGesuchFormPartnerComponent.name, () => {
 
     await userEvent.click(checkbox);
 
+    detectChanges();
+
     expect(screen.queryByTestId('form-partner-fahrkosten')).toBeNull();
     expect(screen.queryByTestId('form-partner-jahreseinkommen')).toBeNull();
     expect(screen.queryByTestId('form-partner-verpflegungskosten')).toBeNull();
 
     await userEvent.click(checkbox);
+
+    detectChanges();
 
     expect(getByTestId('form-partner-fahrkosten')).toHaveValue('');
     expect(getByTestId('form-partner-jahreseinkommen')).toHaveValue('');
