@@ -96,7 +96,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.einreichefristNormal.label": "Date limite de dépôt Normal",
   "sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.label": "Date limite de dépôt Réduit",
   "sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title": "Frais de formation (budget personnel)",
-  "sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label": "Enseignement secondaire supérieur",
+  "sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label": "Frais de formation Secondaire II",
   "sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label": "Frais de formation tertiaire",
   "sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title": "Données de base",
   "sachbearbeitung-app.admin.gesuchsperiode.freibetrag_vermoegen.label": "Montant exonéré Fortune",

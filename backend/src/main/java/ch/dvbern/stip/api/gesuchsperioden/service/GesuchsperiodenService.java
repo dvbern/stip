@@ -79,8 +79,8 @@ public class GesuchsperiodenService {
         return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
     }
 
-    public GesuchsperiodeWithDatenDto getLatestWhereStatus(final GueltigkeitStatus status) {
-        final var found = gesuchsperiodeRepository.getLatestWithStatus(status);
+    public GesuchsperiodeWithDatenDto getLatest() {
+        final var found = gesuchsperiodeRepository.getLatest();
         return found.map(gesuchsperiodeMapper::toDatenDto).orElse(null);
     }
 

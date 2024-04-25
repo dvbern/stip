@@ -363,8 +363,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getLatestPublished
-      summary: Returniert die neuste GesuchsperiodeWithDaten wo Status = PUBLIZIERT
+      operationId: getLatest
+      summary: Returniert die neuste GesuchsperiodeWithDaten
   /gesuchsperiode/aktive:
     get:
       tags:
@@ -2370,6 +2370,7 @@ components:
         - gesuchsperiodeStopp
         - aufschaltterminStart
         - gueltigkeitStatus
+        - gesuchsjahrId
       type: object
       properties:
         id:
@@ -2392,7 +2393,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         einreichefristReduziert:
           $ref: '#/components/schemas/LocalDate'
-        gesuchsjahr:
+        gesuchsjahrId:
           $ref: '#/components/schemas/UUID'
     GesuchsperiodeCreate:
       type: object
@@ -2408,7 +2409,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - fiskaljahr
-        - gesuchsjahr
+        - gesuchsjahrId
         - gesuchsperiodeStart
         - gesuchsperiodeStopp
         - aufschaltterminStart
@@ -2459,8 +2460,9 @@ components:
         fiskaljahr:
           description: ''
           type: integer
-        gesuchsjahr:
+        gesuchsjahrId:
           $ref: '#/components/schemas/UUID'
+          description: ''
         gesuchsperiodeStart:
           format: date
           description: dd.MM.YYYY

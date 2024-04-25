@@ -138,7 +138,7 @@
             {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.status' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
-            {{ gesuchsjahr.gueltigkeitStatus }}
+            {{ 'shared.gesuch.status.' + gesuchsjahr.gueltigkeitStatus | translate }}
           </td>
         </ng-container>
 
