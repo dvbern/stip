@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -24,7 +23,7 @@ class EinnahmenKostenValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         gesuchFormular.setPersonInAusbildung(personInAusbildung);
         Kind kind = new Kind();
-        Set kindSet = new HashSet<Kind>();
+        final var kindSet = new HashSet<Kind>();
         kindSet.add(kind);
         gesuchFormular.setKinds(kindSet);
         return gesuchFormular;

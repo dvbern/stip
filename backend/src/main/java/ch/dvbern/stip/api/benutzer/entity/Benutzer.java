@@ -73,4 +73,8 @@ public class Benutzer extends AbstractMandantEntity {
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "benutzereinstellungen_id", foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"), nullable = false)
     private @Valid Benutzereinstellungen benutzereinstellungen;
+
+    public String getFullName() {
+        return getVorname() + " " + getNachname();
+    }
 }

@@ -17,8 +17,12 @@
 
 package ch.dvbern.stip.api.fall.entity;
 
+import java.util.Set;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +32,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -42,7 +46,7 @@ import org.hibernate.envers.Audited;
     name = "fall",
     indexes = {
         @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-        @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+        @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_zuordnung_id"),
         @Index(name = "IX_fall_mandant", columnList = "mandant")
     }
 )
@@ -63,7 +67,13 @@ public class Fall extends AbstractMandantEntity {
     private Benutzer gesuchsteller;
 
     @Nullable
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sachbearbeiter_id", foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"))
-    private Benutzer sachbearbeiter;
+    @JoinColumn(
+        name = "sachbearbeiter_zuordnung_id",
+        foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
+    )
+    @OneToOne(mappedBy = "fall")
+    private Zuordnung sachbearbeiterZuordnung;
+
+    @OneToMany(mappedBy = "fall")
+    private Set<Gesuch> gesuch;
 }
