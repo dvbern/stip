@@ -99,9 +99,6 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "elternbeteiligungssatz")
     private Integer elternbeteiligungssatz;
 
-    @Column(nullable = false, name = "vermoegensfreibetrag")
-    private Integer vermoegensfreibetrag;
-
     @Column(nullable = false, name = "vermogen_satz_angerechnet")
     private Integer vermogenSatzAngerechnet;
 
