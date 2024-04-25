@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -476,10 +477,19 @@ class GesuchValidatorTest {
     private void assertAll(String[] messages, Gesuch gesuch, boolean expected) {
         Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
         if (expected) {
-            assertThat(violations.size() >= messages.length, is(true));
+            assertThat(
+                String.format(
+                    "Expected at least %s messages, got %s:\nExpected messages: %s",
+                    messages.length,
+                    violations.size(),
+                    Arrays.toString(messages)
+                ),
+                violations.size() >= messages.length,
+                is(true)
+            );
         }
         for (String message : messages) {
-            assertThat(violations.stream()
+            assertThat(message, violations.stream()
                 .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
                     .equals(message)), is(expected));
         }

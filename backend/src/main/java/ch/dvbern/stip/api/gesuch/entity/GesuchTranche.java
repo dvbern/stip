@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -30,7 +29,6 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class GesuchTranche extends AbstractEntity {
-    @NotNull
     @Embedded
     private @Valid DateRange gueltigkeit = new DateRange();
 
@@ -42,7 +40,6 @@ public class GesuchTranche extends AbstractEntity {
     )
     private @Valid GesuchFormular gesuchFormular;
 
-    @NotNull
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_tranche_gesuch_id"), nullable = false)
     private Gesuch gesuch;

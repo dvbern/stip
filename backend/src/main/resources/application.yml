@@ -16,7 +16,7 @@ quarkus:
     detection-mode: WARN
   liquibase:
     migrate-at-start: true
-    change-log: "db/migration/db.changelog-master.xml"
+    change-log: "db/migration/db.changelog-main.xml"
     validate-on-migrate: true
   oidc:
     bern:
@@ -64,6 +64,8 @@ quarkus:
 
 '%dev':
   quarkus:
+    hibernate-orm:
+      sql-load-script: "db/dev/seed_gesuchsperiode.sql"
     mailer:
       mock: false
     s3:
@@ -85,7 +87,7 @@ quarkus:
 '%test':
   quarkus:
     hibernate-orm:
-      sql-load-script: "init_test.sql"
+      sql-load-script: "db/test/init_test.sql"
       database:
         generation: "drop-and-create"
     oidc:

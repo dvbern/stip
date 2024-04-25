@@ -188,7 +188,7 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     @HasPageValidation(KindPageValidation.class)
-    private Set<Kind> kinds = new LinkedHashSet<>();
+    private @Valid Set<Kind> kinds = new LinkedHashSet<>();
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
     private @Valid GesuchTranche tranche;
