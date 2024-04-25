@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   stip-database:
     image: docker-registry.dvbern.ch/dockerhub/library/postgres:15.3
