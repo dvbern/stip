@@ -67,7 +67,7 @@ quarkus:
     hibernate-orm:
       sql-load-script: "db/dev/seed_gesuchsperiode.sql"
       database:
-        generation: "create"
+        generation: "validate"
     mailer:
       mock: false
     s3:
