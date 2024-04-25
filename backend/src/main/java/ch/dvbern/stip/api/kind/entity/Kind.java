@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.kind.entity;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
@@ -33,7 +32,7 @@ public class Kind extends AbstractFamilieEntity {
 
     @Nullable
     @Column(name = "erhaltene_alimentebeitraege")
-    private BigDecimal erhalteneAlimentebeitraege;
+    private Integer erhalteneAlimentebeitraege;
 
     @Nullable
     @Column(name = "copy_of_id")

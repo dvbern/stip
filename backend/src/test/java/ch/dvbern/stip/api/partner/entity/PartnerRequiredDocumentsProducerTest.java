@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.partner.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
@@ -23,7 +21,7 @@ class PartnerRequiredDocumentsProducerTest {
     void requiresIfFahrkosten() {
         formular.setPartner(
             new Partner()
-                .setFahrkosten(BigDecimal.ONE)
+                .setFahrkosten(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(

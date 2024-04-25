@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -413,7 +412,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(BigDecimal.valueOf(1000));
+            .setAlimente(1000);
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -445,7 +444,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(BigDecimal.valueOf(1000));
+            .setAlimente(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, true, gesuchUpdateDto);
 
@@ -459,7 +458,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(BigDecimal.valueOf(1000));
+            .setAlimente(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, true, gesuchUpdateDto);
 
@@ -470,7 +469,7 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromTrueToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        BigDecimal alimente = BigDecimal.valueOf(1000);
+        final var alimente = 1000;
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, true, gesuchUpdateDto);
@@ -485,7 +484,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(BigDecimal.valueOf(1000));
+            .setAlimente(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, false, gesuchUpdateDto);
 
@@ -499,7 +498,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(BigDecimal.valueOf(1000));
+            .setAlimente(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, false, gesuchUpdateDto);
 
@@ -510,7 +509,7 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromFalseToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        BigDecimal alimente = BigDecimal.valueOf(1000);
+        final var alimente = 1000;
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()

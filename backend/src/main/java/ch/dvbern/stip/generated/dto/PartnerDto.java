@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -28,9 +27,9 @@ public class PartnerDto  implements Serializable {
   private @Valid String sozialversicherungsnummer;
   private @Valid String nachname;
   private @Valid Boolean ausbildungMitEinkommenOderErwerbstaetig;
-  private @Valid BigDecimal jahreseinkommen;
-  private @Valid BigDecimal fahrkosten;
-  private @Valid BigDecimal verpflegungskosten;
+  private @Valid Integer jahreseinkommen;
+  private @Valid Integer fahrkosten;
+  private @Valid Integer verpflegungskosten;
 
   /**
    **/
@@ -149,57 +148,57 @@ public class PartnerDto  implements Serializable {
   /**
    * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
    **/
-  public PartnerDto jahreseinkommen(BigDecimal jahreseinkommen) {
+  public PartnerDto jahreseinkommen(Integer jahreseinkommen) {
     this.jahreseinkommen = jahreseinkommen;
     return this;
   }
 
   
   @JsonProperty("jahreseinkommen")
-  public BigDecimal getJahreseinkommen() {
+  public Integer getJahreseinkommen() {
     return jahreseinkommen;
   }
 
   @JsonProperty("jahreseinkommen")
-  public void setJahreseinkommen(BigDecimal jahreseinkommen) {
+  public void setJahreseinkommen(Integer jahreseinkommen) {
     this.jahreseinkommen = jahreseinkommen;
   }
 
   /**
    * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
    **/
-  public PartnerDto fahrkosten(BigDecimal fahrkosten) {
+  public PartnerDto fahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
     return this;
   }
 
   
   @JsonProperty("fahrkosten")
-  public BigDecimal getFahrkosten() {
+  public Integer getFahrkosten() {
     return fahrkosten;
   }
 
   @JsonProperty("fahrkosten")
-  public void setFahrkosten(BigDecimal fahrkosten) {
+  public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
 
   /**
    * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
    **/
-  public PartnerDto verpflegungskosten(BigDecimal verpflegungskosten) {
+  public PartnerDto verpflegungskosten(Integer verpflegungskosten) {
     this.verpflegungskosten = verpflegungskosten;
     return this;
   }
 
   
   @JsonProperty("verpflegungskosten")
-  public BigDecimal getVerpflegungskosten() {
+  public Integer getVerpflegungskosten() {
     return verpflegungskosten;
   }
 
   @JsonProperty("verpflegungskosten")
-  public void setVerpflegungskosten(BigDecimal verpflegungskosten) {
+  public void setVerpflegungskosten(Integer verpflegungskosten) {
     this.verpflegungskosten = verpflegungskosten;
   }
 

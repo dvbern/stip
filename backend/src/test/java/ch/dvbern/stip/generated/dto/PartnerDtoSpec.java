@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -62,13 +61,13 @@ public class PartnerDtoSpec {
   private Boolean ausbildungMitEinkommenOderErwerbstaetig;
 
   public static final String JSON_PROPERTY_JAHRESEINKOMMEN = "jahreseinkommen";
-  private BigDecimal jahreseinkommen;
+  private Integer jahreseinkommen;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
-  private BigDecimal fahrkosten;
+  private Integer fahrkosten;
 
   public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
-  private BigDecimal verpflegungskosten;
+  private Integer verpflegungskosten;
 
   public PartnerDtoSpec() {
   }
@@ -229,7 +228,7 @@ public class PartnerDtoSpec {
   }
 
 
-  public PartnerDtoSpec jahreseinkommen(BigDecimal jahreseinkommen) {
+  public PartnerDtoSpec jahreseinkommen(Integer jahreseinkommen) {
     
     this.jahreseinkommen = jahreseinkommen;
     return this;
@@ -243,19 +242,19 @@ public class PartnerDtoSpec {
   @JsonProperty(JSON_PROPERTY_JAHRESEINKOMMEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getJahreseinkommen() {
+  public Integer getJahreseinkommen() {
     return jahreseinkommen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_JAHRESEINKOMMEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setJahreseinkommen(BigDecimal jahreseinkommen) {
+  public void setJahreseinkommen(Integer jahreseinkommen) {
     this.jahreseinkommen = jahreseinkommen;
   }
 
 
-  public PartnerDtoSpec fahrkosten(BigDecimal fahrkosten) {
+  public PartnerDtoSpec fahrkosten(Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
     return this;
@@ -269,19 +268,19 @@ public class PartnerDtoSpec {
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getFahrkosten() {
+  public Integer getFahrkosten() {
     return fahrkosten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFahrkosten(BigDecimal fahrkosten) {
+  public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
 
 
-  public PartnerDtoSpec verpflegungskosten(BigDecimal verpflegungskosten) {
+  public PartnerDtoSpec verpflegungskosten(Integer verpflegungskosten) {
     
     this.verpflegungskosten = verpflegungskosten;
     return this;
@@ -295,14 +294,14 @@ public class PartnerDtoSpec {
   @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getVerpflegungskosten() {
+  public Integer getVerpflegungskosten() {
     return verpflegungskosten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerpflegungskosten(BigDecimal verpflegungskosten) {
+  public void setVerpflegungskosten(Integer verpflegungskosten) {
     this.verpflegungskosten = verpflegungskosten;
   }
 

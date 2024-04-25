@@ -1557,13 +1557,13 @@ components:
           type: boolean
         jahreseinkommen:
           description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: number
+          type: integer
         fahrkosten:
           description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: number
+          type: integer
         verpflegungskosten:
           description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: number
+          type: integer
     KindUpdate:
       title: Root Type for Geschwister
       description: ''
@@ -1596,7 +1596,7 @@ components:
         nachname:
           type: string
         erhalteneAlimentebeitraege:
-          type: number
+          type: integer
     Auszahlung:
       title: Root Type for Auszahlung
       description: ''
@@ -2027,7 +2027,7 @@ components:
           type: number
         vermoegenVorjahr:
           description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-          type: number
+          type: integer
         sozialhilfebeitraege:
           type: boolean
         vormundschaft:
@@ -2208,32 +2208,32 @@ components:
       type: object
       properties:
         nettoerwerbseinkommen:
-          type: number
+          type: integer
         alimente:
           description: Required nur wenn mind. ein Elternteil Alimente zahlt
-          type: number
+          type: integer
         zulagen:
           description: Required nur wenn mind. ein Kind gibt
-          type: number
+          type: integer
         renten:
           description: Required nur wenn mind. ein Elternteil gestorben ist
-          type: number
+          type: integer
         eoLeistungen:
-          type: number
+          type: integer
         ergaenzungsleistungen:
-          type: number
+          type: integer
         beitraege:
-          type: number
+          type: integer
         ausbildungskostenSekundarstufeZwei:
           description: Required nur wenn die ausgewählte Ausbildung auf der Sekundarstuffe II ist
-          type: number
+          type: integer
         ausbildungskostenTertiaerstufe:
           description: Required nur wenn die ausgewählte Ausbildung auf der Tertiärstufe ist
-          type: number
+          type: integer
         fahrkosten:
-          type: number
+          type: integer
         wohnkosten:
-          type: number
+          type: integer
         wgWohnend:
           description: Required nur wenn Person eigener Haushalt hat
           type: boolean
@@ -2247,7 +2247,7 @@ components:
           type: integer
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
-          type: number
+          type: integer
     EinnahmenKosten:
       type: object
       allOf:

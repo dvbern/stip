@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -25,15 +23,15 @@ import org.hibernate.envers.Audited;
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
-    private BigDecimal nettoerwerbseinkommen;
+    private Integer nettoerwerbseinkommen;
 
     @NotNull
     @Column(name = "fahrkosten", nullable = false)
-    private BigDecimal fahrkosten;
+    private Integer fahrkosten;
 
     @Nullable
     @Column(name = "wohnkosten")
-    private BigDecimal wohnkosten;
+    private Integer wohnkosten;
 
     @Nullable
     @Column(name = "wg_wohnend")
@@ -45,35 +43,35 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "alimente")
-    private BigDecimal alimente;
+    private Integer alimente;
 
     @Nullable
     @Column(name = "zulagen")
-    private BigDecimal zulagen;
+    private Integer zulagen;
 
     @Nullable
     @Column(name = "renten")
-    private BigDecimal renten;
+    private Integer renten;
 
     @Nullable
     @Column(name = "eo_leistungen")
-    private BigDecimal eoLeistungen;
+    private Integer eoLeistungen;
 
     @Nullable
     @Column(name = "ergaenzungsleistungen")
-    private BigDecimal ergaenzungsleistungen;
+    private Integer ergaenzungsleistungen;
 
     @Nullable
     @Column(name = "beitraege")
-    private BigDecimal beitraege;
+    private Integer beitraege;
 
     @Nullable
     @Column(name = "ausbildungskosten_sekundarstufe_zwei")
-    private BigDecimal ausbildungskostenSekundarstufeZwei;
+    private Integer ausbildungskostenSekundarstufeZwei;
 
     @Nullable
     @Column(name = "ausbildungskosten_tertiaerstufe")
-    private BigDecimal ausbildungskostenTertiaerstufe;
+    private Integer ausbildungskostenTertiaerstufe;
 
     @Nullable
     @Column(name = "will_darlehen")
@@ -85,5 +83,5 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "betreuungskosten_kinder")
-    private BigDecimal betreuungskostenKinder;
+    private Integer betreuungskostenKinder;
 }

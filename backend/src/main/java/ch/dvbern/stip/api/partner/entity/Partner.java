@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.partner.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
@@ -50,13 +48,13 @@ public class Partner extends AbstractPerson {
 
     @Nullable
     @Column(name = "jahreseinkommen")
-    private BigDecimal jahreseinkommen;
+    private Integer jahreseinkommen;
 
     @Nullable
     @Column(name = "verpflegungskosten")
-    private BigDecimal verpflegungskosten;
+    private Integer verpflegungskosten;
 
     @Nullable
     @Column(name = "fahrkosten")
-    private BigDecimal fahrkosten;
+    private Integer fahrkosten;
 }
