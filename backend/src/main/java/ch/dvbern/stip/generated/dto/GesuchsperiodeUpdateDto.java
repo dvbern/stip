@@ -24,7 +24,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid Integer fiskaljahr;
-  private @Valid UUID gesuchsjahr;
+  private @Valid UUID gesuchsjahrId;
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
@@ -131,21 +131,21 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchsperiodeUpdateDto gesuchsjahr(UUID gesuchsjahr) {
-    this.gesuchsjahr = gesuchsjahr;
+  public GesuchsperiodeUpdateDto gesuchsjahrId(UUID gesuchsjahrId) {
+    this.gesuchsjahrId = gesuchsjahrId;
     return this;
   }
 
   
-  @JsonProperty("gesuchsjahr")
+  @JsonProperty("gesuchsjahrId")
   @NotNull
-  public UUID getGesuchsjahr() {
-    return gesuchsjahr;
+  public UUID getGesuchsjahrId() {
+    return gesuchsjahrId;
   }
 
-  @JsonProperty("gesuchsjahr")
-  public void setGesuchsjahr(UUID gesuchsjahr) {
-    this.gesuchsjahr = gesuchsjahr;
+  @JsonProperty("gesuchsjahrId")
+  public void setGesuchsjahrId(UUID gesuchsjahrId) {
+    this.gesuchsjahrId = gesuchsjahrId;
   }
 
   /**
@@ -1015,7 +1015,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     return Objects.equals(this.bezeichnungDe, gesuchsperiodeUpdate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsperiodeUpdate.bezeichnungFr) &&
         Objects.equals(this.fiskaljahr, gesuchsperiodeUpdate.fiskaljahr) &&
-        Objects.equals(this.gesuchsjahr, gesuchsperiodeUpdate.gesuchsjahr) &&
+        Objects.equals(this.gesuchsjahrId, gesuchsperiodeUpdate.gesuchsjahrId) &&
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeUpdate.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiodeUpdate.gesuchsperiodeStopp) &&
         Objects.equals(this.aufschaltterminStart, gesuchsperiodeUpdate.aufschaltterminStart) &&
@@ -1063,7 +1063,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
   }
 
   @Override
@@ -1074,7 +1074,7 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
-    sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
+    sb.append("    gesuchsjahrId: ").append(toIndentedString(gesuchsjahrId)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");

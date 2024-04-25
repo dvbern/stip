@@ -21,9 +21,9 @@
     @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache) {
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
-      <h3 class="mb-4">
+      <h1 class="h2 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title' | translate }}
-      </h3>
+      </h1>
 
       <div class="row g-4">
         <!-- BezeichnungDe -->
@@ -61,19 +61,27 @@
         </mat-form-field>
 
         <!-- Gesuchsjahr -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
-          <input
-            formControlName="gesuchsjahr"
-            data-testid="form-gesuchsperiode-gesuchsjahr"
-            matInput
-            [maskito]="maskitoYear"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
+        @if (store.gesuchsjahre() | rdIsPending) {
+          <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+        } @else {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+            <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
+            <mat-select
+              formControlName="gesuchsjahrId"
+              data-testid="form-gesuchsperiode-gesuchsjahr"
+              [placeholder]="'shared.form.select.empty' | translate"
+            >
+              @for (jahr of store.gesuchsjahre.data(); track $index) {
+                <mat-option [attr.data-testid]="'gesuchsjahr-' + jahr" [value]="jahr.id">
+                  {{ jahr | translatedProp: 'bezeichnung' : translate.currentLang }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
       </div>
 
       <div class="row g-4 mt-1">
@@ -186,9 +194,9 @@
       </div>
 
       <!-- Ausbildungskosten (pers. Budget) -->
-      <h3 class="pt-5 mb-4">
+      <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
-      </h3>
+      </h2>
 
       <div class="row g-4">
         <!-- Sekundarstufe II -->
@@ -223,9 +231,9 @@
       </div>
 
       <!-- Stammdaten -->
-      <h3 class="pt-5 mb-4">
+      <h1 class="h2 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title' | translate }}
-      </h3>
+      </h1>
 
       <div class="row g-4">
         <!-- Freibetrag Vermögen -->
@@ -388,9 +396,9 @@
       </div>
 
       <!-- Grundbedarf -->
-      <h3 class="pt-5 mb-4">
+      <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.grundbedarf.title' | translate }}
-      </h3>
+      </h2>
 
       <div class="row g-4">
         <!-- 1 Person -->
@@ -521,9 +529,9 @@
       </div>
 
       <!-- Medizinische Grundversorgung -->
-      <h3 class="pt-5 mb-4">
+      <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.medizinische_grundversorgung.title' | translate }}
-      </h3>
+      </h2>
 
       <div class="row g-4">
         <!-- Kinder 00-18 -->
@@ -580,9 +588,9 @@
       </div>
 
       <!-- Wohnkosten (Familienbudget) -->
-      <h3 class="pt-5 mb-4">
+      <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-familienbudget.title' | translate }}
-      </h3>
+      </h2>
 
       <div class="row g-4">
         <!-- 1 Person (2 Zimmer) -->
@@ -673,11 +681,11 @@
       </div>
 
       <!-- Wohnkosten (Persönliches Budget) -->
-      <h3 class="pt-5 mb-4">
+      <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-persoenlich.title' | translate }}
-      </h3>
+      </h2>
 
-      <div class="row g-4 mt-1">
+      <div class="row g-4">
         <!-- 1 Person (2 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{

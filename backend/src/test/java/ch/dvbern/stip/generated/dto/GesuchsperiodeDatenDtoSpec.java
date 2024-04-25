@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_EINREICHFRIST,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_FISKALJAHR,
-  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_GESUCHSJAHR_ID,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_STOPP,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
@@ -92,8 +92,8 @@ public class GesuchsperiodeDatenDtoSpec {
   public static final String JSON_PROPERTY_FISKALJAHR = "fiskaljahr";
   private Integer fiskaljahr;
 
-  public static final String JSON_PROPERTY_GESUCHSJAHR = "gesuchsjahr";
-  private UUID gesuchsjahr;
+  public static final String JSON_PROPERTY_GESUCHSJAHR_ID = "gesuchsjahrId";
+  private UUID gesuchsjahrId;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
   private LocalDate gesuchsperiodeStart;
@@ -328,29 +328,29 @@ public class GesuchsperiodeDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeDatenDtoSpec gesuchsjahr(UUID gesuchsjahr) {
+  public GesuchsperiodeDatenDtoSpec gesuchsjahrId(UUID gesuchsjahrId) {
     
-    this.gesuchsjahr = gesuchsjahr;
+    this.gesuchsjahrId = gesuchsjahrId;
     return this;
   }
 
    /**
-   * Get gesuchsjahr
-   * @return gesuchsjahr
+   * Get gesuchsjahrId
+   * @return gesuchsjahrId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
+  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getGesuchsjahr() {
-    return gesuchsjahr;
+  public UUID getGesuchsjahrId() {
+    return gesuchsjahrId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
+  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsjahr(UUID gesuchsjahr) {
-    this.gesuchsjahr = gesuchsjahr;
+  public void setGesuchsjahrId(UUID gesuchsjahrId) {
+    this.gesuchsjahrId = gesuchsjahrId;
   }
 
 
@@ -1458,7 +1458,7 @@ public class GesuchsperiodeDatenDtoSpec {
         Objects.equals(this.bezeichnungFr, gesuchsperiodeDaten.bezeichnungFr) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeDaten.einreichfrist) &&
         Objects.equals(this.fiskaljahr, gesuchsperiodeDaten.fiskaljahr) &&
-        Objects.equals(this.gesuchsjahr, gesuchsperiodeDaten.gesuchsjahr) &&
+        Objects.equals(this.gesuchsjahrId, gesuchsperiodeDaten.gesuchsjahrId) &&
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeDaten.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiodeDaten.gesuchsperiodeStopp) &&
         Objects.equals(this.aufschaltterminStart, gesuchsperiodeDaten.aufschaltterminStart) &&
@@ -1505,7 +1505,7 @@ public class GesuchsperiodeDatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahr, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
   }
 
   @Override
@@ -1516,7 +1516,7 @@ public class GesuchsperiodeDatenDtoSpec {
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
-    sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
+    sb.append("    gesuchsjahrId: ").append(toIndentedString(gesuchsjahrId)).append("\n");
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");

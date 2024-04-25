@@ -14,6 +14,7 @@ import {
   GesuchsperiodeService,
   GesuchsperiodeWithDaten,
   GueltigkeitStatus,
+  NullableGesuchsperiodeWithDaten,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -30,6 +31,7 @@ import {
 type GesuchsperiodeState = {
   gesuchsjahre: CachedRemoteData<Gesuchsjahr[]>;
   gesuchsperioden: CachedRemoteData<Gesuchsperiode[]>;
+  latestGesuchsperiode: CachedRemoteData<NullableGesuchsperiodeWithDaten>;
   currentGesuchsperiode: CachedRemoteData<GesuchsperiodeWithDaten>;
   currentGesuchsjahr: CachedRemoteData<Gesuchsjahr>;
 };
@@ -37,6 +39,7 @@ type GesuchsperiodeState = {
 const initialState: GesuchsperiodeState = {
   gesuchsjahre: initial(),
   gesuchsperioden: initial(),
+  latestGesuchsperiode: initial(),
   currentGesuchsjahr: initial(),
   currentGesuchsperiode: initial(),
 };
@@ -78,6 +81,10 @@ export class GesuchsperiodeStore extends signalStore(
 
   currentGesuchsjahrViewSig = computed(() => {
     return prepareView(this.currentGesuchsjahr.data());
+  });
+
+  lastPublishedGesuchsperiodeViewSig = computed(() => {
+    return prepareView(this.latestGesuchsperiode.data()?.value);
   });
 
   resetCurrentData() {
@@ -124,12 +131,34 @@ export class GesuchsperiodeStore extends signalStore(
         }));
       }),
       switchMap((id) =>
-        this.gesuchsperiodeService.getGesuchsperiode$({
-          gesuchsperiodeId: id,
-        }),
+        this.gesuchsperiodeService
+          .getGesuchsperiode$({
+            gesuchsperiodeId: id,
+          })
+          .pipe(
+            handleApiResponse((currentGesuchsperiode) =>
+              patchState(this, { currentGesuchsperiode }),
+            ),
+          ),
       ),
-      handleApiResponse((currentGesuchsperiode) =>
-        patchState(this, { currentGesuchsperiode }),
+    ),
+  );
+
+  loadLatestGesuchsperiode$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          latestGesuchsperiode: cachedPending(state.latestGesuchsperiode),
+        }));
+      }),
+      switchMap(() =>
+        this.gesuchsperiodeService
+          .getLatest$()
+          .pipe(
+            handleApiResponse((latestGesuchsperiode) =>
+              patchState(this, { latestGesuchsperiode }),
+            ),
+          ),
       ),
     ),
   );
@@ -227,13 +256,33 @@ export class GesuchsperiodeStore extends signalStore(
         }));
       }),
       switchMap((gesuchsjahrId) =>
-        this.gesuchsjahrService.getGesuchsjahr$({ gesuchsjahrId }),
+        this.gesuchsjahrService.getGesuchsjahr$({ gesuchsjahrId }).pipe(
+          handleApiResponse((currentGesuchsJahr) => {
+            patchState(this, {
+              currentGesuchsjahr: currentGesuchsJahr,
+            });
+          }),
+        ),
       ),
-      handleApiResponse((currentGesuchsJahr) => {
-        patchState(this, {
-          currentGesuchsjahr: currentGesuchsJahr,
-        });
+    ),
+  );
+
+  loadAllGesuchsjahre$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          gesuchsjahre: cachedPending(state.gesuchsjahre),
+        }));
       }),
+      switchMap(() =>
+        this.gesuchsjahrService
+          .getGesuchsjahre$()
+          .pipe(
+            handleApiResponse((gesuchsjahre) =>
+              patchState(this, { gesuchsjahre }),
+            ),
+          ),
+      ),
     ),
   );
 
@@ -326,7 +375,7 @@ const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
 ) => value.gueltigkeitStatus === 'ENTWURF';
 
 const prepareView = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
-  value: T | undefined,
+  value: T | null | undefined,
 ) => {
   if (!value) return undefined;
   const editable = isEditable(value);

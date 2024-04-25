@@ -90,9 +90,11 @@ form.readonly .mat-mdc-form-field {
   --mdc-outlined-text-field-disabled-outline-color: transparent;
   --mdc-outlined-text-field-disabled-input-text-color: black;
   --mdc-outlined-text-field-disabled-label-text-color: black;
+  --mat-select-disabled-trigger-text-color: black;
   --mdc-outlined-text-field-container-shape: 0;
 
-  .mat-mdc-input-element {
+  .mat-mdc-input-element,
+  .mat-mdc-select {
     font-size: 1.25rem;
     font-weight: bold;
   }
@@ -100,7 +102,8 @@ form.readonly .mat-mdc-form-field {
     background-color: transparent;
   }
   .mat-mdc-form-field-hint,
-  .mat-mdc-form-field-icon-suffix {
+  .mat-mdc-form-field-icon-suffix,
+  .mat-mdc-select-arrow-wrapper {
     display: none;
   }
   .mdc-text-field--outlined .mdc-floating-label {

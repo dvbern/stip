@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,12 +30,11 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         return query.stream();
     }
 
-    public Optional<Gesuchsperiode> getLatestWithStatus(final GueltigkeitStatus status) {
+    public Optional<Gesuchsperiode> getLatest() {
         final var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchsperiode)
-            .where(gesuchsperiode.gueltigkeitStatus.eq(status))
-            .orderBy(gesuchsperiode.gesuchsperiodeStart.desc())
+            .orderBy(gesuchsperiode.timestampErstellt.desc())
             .stream()
             .findFirst();
     }

@@ -61,8 +61,8 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
-    public Response getLatestPublished() {
-        final var gesuchsperiode = gesuchsperiodenService.getLatestWhereStatus(GueltigkeitStatus.PUBLIZIERT);
+    public Response getLatest() {
+        final var gesuchsperiode = gesuchsperiodenService.getLatest();
         final var wrapped = new NullableGesuchsperiodeWithDatenDto(gesuchsperiode);
         return Response.ok(wrapped).build();
     }

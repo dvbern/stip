@@ -21,6 +21,7 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
 
 export const maskitoYear = maskitoNumberOptionsGenerator({
   min: 0,
+  max: 9999,
   precision: 0,
   thousandSeparator: '',
 });
