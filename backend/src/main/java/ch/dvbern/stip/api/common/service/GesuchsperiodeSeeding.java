@@ -29,10 +29,15 @@ public class GesuchsperiodeSeeding {
             QuarkusTransaction.requiringNew().run(() -> {
                 DataTenantResolver.setTenantId("bern");
 
-                gesuchsperiodeRepository.deleteAll();
-                gesuchsjahrRepository.deleteAll();
+                Gesuchsjahr newJahr = null;
+                if (gesuchsperiodeRepository.count() == 0) {
+                    newJahr = getJahrForSeeding();
+                }
 
-                final var newJahr = getJahrForSeeding();
+                if (newJahr == null) {
+                    return;
+                }
+
                 final var newPerioden = List.of(
                     getPeriodeForSeeding(
                         newJahr,
@@ -82,7 +87,7 @@ public class GesuchsperiodeSeeding {
             .setFreibetragErwerbseinkommen(6000)
             .setEinkommensfreibetrag(6000)
             .setElternbeteiligungssatz(50)
-            .setFreibetragVermoegen(3000)
+            .setVermoegensfreibetrag(30000)
             .setVermogenSatzAngerechnet(15)
             .setIntegrationszulage(2400)
             .setLimiteEkFreibetragIntegrationszulag(13200)
