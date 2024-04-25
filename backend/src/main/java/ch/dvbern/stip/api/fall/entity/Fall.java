@@ -46,7 +46,6 @@ import org.hibernate.envers.Audited;
     name = "fall",
     indexes = {
         @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-        @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_zuordnung_id"),
         @Index(name = "IX_fall_mandant", columnList = "mandant")
     }
 )
