@@ -38,7 +38,7 @@ import {
   PersonInAusbildungUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import { AUSZAHLUNGEN } from '@dv/shared/model/gesuch-form';
+import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -90,7 +90,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
 
   MASK_IBAN = MASK_IBAN;
-  step = AUSZAHLUNGEN;
+  step = AUSZAHLUNG;
 
   form = this.fb.group({
     adresseId: [<string | undefined>undefined, []],
@@ -217,7 +217,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           gesuchId,
           trancheId,
           gesuchFormular,
-          origin: AUSZAHLUNGEN,
+          origin: AUSZAHLUNG,
         }),
       );
       this.form.markAsPristine();
@@ -231,7 +231,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         SharedEventGesuchFormAuszahlung.nextTriggered({
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
-          origin: AUSZAHLUNGEN,
+          origin: AUSZAHLUNG,
         }),
       );
     }

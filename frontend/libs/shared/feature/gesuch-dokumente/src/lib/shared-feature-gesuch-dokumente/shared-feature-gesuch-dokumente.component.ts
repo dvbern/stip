@@ -44,7 +44,18 @@ function getFormStep(
     return unknownStep;
   }
 
-  const key = Object.keys(gesuchFormSteps).find((key) => {
+  if (
+    dokumentTyp === DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER ||
+    dokumentTyp === DokumentTyp.EK_BELEG_KINDERZULAGEN
+  ) {
+    return gesuchFormSteps.EINNAHMEN_KOSTEN;
+  }
+
+  if (dokumentTyp === DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE) {
+    return gesuchFormSteps.GESCHWISTER;
+  }
+
+  const step = Object.keys(gesuchFormSteps).find((key) => {
     if (key === 'EINNAHMEN_KOSTEN') {
       return dokumentTyp.includes('EK');
     }
@@ -52,7 +63,7 @@ function getFormStep(
     return dokumentTyp.includes(key);
   }) as keyof typeof gesuchFormSteps;
 
-  return key ? gesuchFormSteps[key] : unknownStep;
+  return step ? gesuchFormSteps[step] : unknownStep;
 }
 
 @Component({

@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 
 import {
   AUSBILDUNG,
-  AUSZAHLUNGEN,
+  AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
@@ -48,9 +48,9 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
       ),
   },
   {
-    path: AUSZAHLUNGEN.route,
+    path: AUSZAHLUNG.route,
     resolve: {
-      step: () => AUSZAHLUNGEN,
+      step: () => AUSZAHLUNG,
     },
     title: 'shared.auszahlung.title',
     loadChildren: () =>
