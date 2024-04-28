@@ -27,15 +27,16 @@ export interface AusbildungUpdate {
     /**
      * Required wenn andere ausbildungNichtGefunden = true
      */
-    alternativeAusbildungsland?: string;
-    /**
-     * Required wenn andere ausbildungNichtGefunden = true
-     */
     alternativeAusbildungsstaette?: string;
     /**
      * Required wenn andere ausbildungNichtGefunden = true
      */
     alternativeAusbildungsgang?: string;
+    /**
+     * Not required if isAusbildungAusland = true
+     */
+    ausbildungsort?: string;
+    isAusbildungAusland?: boolean;
 }
 
 

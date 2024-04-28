@@ -25,10 +25,6 @@ export interface AusbildungsgangCreate {
     bezeichnungFr: string;
     ausbildungsrichtung: Bildungsart;
     ausbildungsstaetteId?: string;
-    /**
-     * 
-     */
-    ausbildungsort: string;
 }
 
 

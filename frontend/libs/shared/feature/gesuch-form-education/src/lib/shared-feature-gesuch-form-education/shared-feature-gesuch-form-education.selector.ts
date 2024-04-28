@@ -26,8 +26,6 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
         : undefined,
       ausbildung: gesuchsView.gesuchFormular?.ausbildung,
       ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
-      ausbildungsstaetteByLand:
-        ausbildungsstaettesView.ausbildungsstaetteByLand,
       minEndDatum: addMonths(minEndDatum, 1),
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
       readonly: gesuchsView.readonly,

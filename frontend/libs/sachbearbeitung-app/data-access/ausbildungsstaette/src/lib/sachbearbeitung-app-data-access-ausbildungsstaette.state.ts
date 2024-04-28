@@ -356,7 +356,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 .createAusbildungsgang$({
                   ausbildungsgangCreate: {
                     ausbildungsstaetteId: staette.id,
-                    ausbildungsort: gang.ausbildungsort,
                     bezeichnungDe: gang.bezeichnungDe ?? '',
                     bezeichnungFr: gang.bezeichnungFr ?? '',
                     ausbildungsrichtung: gang.ausbildungsrichtung,
@@ -410,7 +409,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 ausbildungsgangUpdate: {
                   ausbildungsstaetteId: staette.id,
                   ausbildungsrichtung: gang.ausbildungsrichtung,
-                  ausbildungsort: gang.ausbildungsort,
                   bezeichnungDe: gang.bezeichnungDe ?? '',
                   bezeichnungFr: gang.bezeichnungFr ?? '',
                 },
