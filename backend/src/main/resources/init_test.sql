@@ -28,6 +28,10 @@ DELETE
 FROM gesuchsperiode
 WHERE id = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
 
+DELETE
+FROM gesuchsjahr
+WHERE id = '9596bb3e-10ea-4493-8aed-a6ef510f806b';
+
 INSERT INTO gesuchsjahr(id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, bezeichnung_de,
                         bezeichnung_fr, technisches_jahr, gueltigkeit_status, mandant)
 VALUES ('9596bb3e-10ea-4493-8aed-a6ef510f806b', now(), now(), 'Migration', 'Migration', 0, 'Gesuchsjahr 24',
@@ -99,7 +103,6 @@ VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         '2024-12-31',
         current_date,
         current_date,
-        1,
         1,
         1,
         1,
