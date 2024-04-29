@@ -153,7 +153,6 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
         staette: 'form-education-ausbildungsstaette',
         gang: 'form-education-ausbildungsgang',
         alternativ: {
-          // land: 'form-education-alternativeAusbildungsland',
           staette: 'form-education-alternativeAusbildungsstaette',
           gang: 'form-education-alternativeAusbildungsgang',
         },
@@ -190,7 +189,6 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       detectChanges();
 
       for (const field of [
-        // fields.alternativ.land,
         fields.alternativ.staette,
         fields.alternativ.gang,
         fields.fachrichtung,
@@ -207,6 +205,20 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
 
         expect(fieldEl).toHaveClass('ng-invalid');
       }
+    });
+
+    it('should disable ausbildungsort if isAusbildungAusland is checked', async () => {
+      const { getByTestId, detectChanges } = await setup();
+
+      detectChanges();
+
+      expect(getByTestId('form-education-ausbildungsort')).not.toBeDisabled();
+
+      await checkMatCheckbox('form-education-isAusbildungAusland');
+
+      detectChanges();
+
+      expect(getByTestId('form-education-ausbildungsort')).toBeDisabled();
     });
   });
 });

@@ -97,7 +97,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
     fachrichtung: [<string | null>null, [Validators.required]],
     ausbildungNichtGefunden: [false, []],
-    // alternativeAusbildungsland: [<string | undefined>undefined],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
     ausbildungBegin: ['', []],
@@ -163,7 +162,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         const value = this.ausbildungNichtGefundenChangedSig();
         const {
-          // alternativeAusbildungsland,
           alternativeAusbildungsgang,
           alternativeAusbildungsstaette,
           ausbildungsgang,
@@ -171,7 +169,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         } = this.form.controls;
         this.formUtils.setRequired(ausbildungsgang, !value);
         this.formUtils.setRequired(ausbildungsstaette, !value);
-        // this.formUtils.setRequired(alternativeAusbildungsland, !!value);
         this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
         this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
       },

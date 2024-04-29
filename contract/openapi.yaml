@@ -2054,9 +2054,6 @@ components:
           type: string
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
-        # alternativeAusbildungsland:
-        #   description: Required wenn andere ausbildungNichtGefunden = true
-        #   type: string
         alternativeAusbildungsstaette:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string

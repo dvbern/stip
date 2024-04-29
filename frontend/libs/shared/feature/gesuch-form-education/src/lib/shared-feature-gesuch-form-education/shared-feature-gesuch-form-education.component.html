@@ -9,29 +9,6 @@
     </h3>
 
     <div class="row">
-      <!-- isAusbildungAusland -->
-      <mat-checkbox formControlName="isAusbildungAusland" data-testid="form-education-isAusbildungAusland">{{
-        'shared.form.education.isAusbildungAusland.label' | translate
-      }}</mat-checkbox>
-
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
-        <mat-label>
-          {{ 'shared.form.education.ausbildungsort.label' | translate }}
-        </mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="ausbildungsort"
-          data-testid="form-education-ausbildungsort"
-          [readonly]="viewSig().readonly"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="row">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
@@ -71,20 +48,6 @@
           </mat-autocomplete>
         </mat-form-field>
       } @else {
-        <!-- Alternatives AUSBILDUNGSLAND -->
-        <!-- <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
-          <mat-label>
-            {{ 'shared.form.education.ausbildungsland.label' | translate }}
-          </mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="alternativeAusbildungsland"
-            data-testid="form-education-alternativeAusbildungsland"
-            [readonly]="viewSig().readonly"
-          />
-        </mat-form-field> -->
-
         <!-- Alternative STAETTE -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
           <mat-label>
@@ -161,6 +124,32 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+    </div>
+
+    <div class="row align-items-center">
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-label>
+          {{ 'shared.form.education.ausbildungsort.label' | translate }}
+        </mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="ausbildungsort"
+          data-testid="form-education-ausbildungsort"
+          [readonly]="viewSig().readonly"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- isAusbildungAusland -->
+      <mat-checkbox
+        class="col-12 col-md-6 col-xl-4"
+        formControlName="isAusbildungAusland"
+        data-testid="form-education-isAusbildungAusland"
+        >{{ 'shared.form.education.isAusbildungAusland.label' | translate }}</mat-checkbox
+      >
     </div>
 
     <!-- MANUELL -->
