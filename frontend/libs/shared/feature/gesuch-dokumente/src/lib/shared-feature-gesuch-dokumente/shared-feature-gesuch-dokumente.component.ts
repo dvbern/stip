@@ -45,6 +45,12 @@ function getFormStep(
   }
 
   if (
+    dokumentTyp === DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+  ) {
+    return gesuchFormSteps.DOKUMENTE;
+  }
+
+  if (
     dokumentTyp === DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER ||
     dokumentTyp === DokumentTyp.EK_BELEG_KINDERZULAGEN
   ) {
