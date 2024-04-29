@@ -2370,7 +2370,7 @@ components:
         - gesuchsperiodeStopp
         - aufschaltterminStart
         - gueltigkeitStatus
-        - gesuchsjahrId
+        - gesuchsjahr
       type: object
       properties:
         id:
@@ -2393,8 +2393,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         einreichefristReduziert:
           $ref: '#/components/schemas/LocalDate'
-        gesuchsjahrId:
-          $ref: '#/components/schemas/UUID'
+        gesuchsjahr:
+          $ref: '#/components/schemas/Gesuchsjahr'
     GesuchsperiodeCreate:
       type: object
       allOf:

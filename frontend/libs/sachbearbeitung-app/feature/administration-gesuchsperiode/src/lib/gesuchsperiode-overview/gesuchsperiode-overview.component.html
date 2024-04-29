@@ -51,7 +51,7 @@
             {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsjahr' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
-            {{ gesuchsperiode.gesuchsjahr }}
+            {{ gesuchsperiode.gesuchsjahr | translatedProp: 'bezeichnung' : translate.currentLang }}
           </td>
         </ng-container>
 

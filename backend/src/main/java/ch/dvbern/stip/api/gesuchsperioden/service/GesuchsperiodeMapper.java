@@ -19,7 +19,6 @@ public interface GesuchsperiodeMapper {
     @Mapping(source = "gesuchsjahrId", target = "gesuchsjahr.id")
     Gesuchsperiode toEntity(GesuchsperiodeCreateDto gesuchsperiodeDto);
 
-    @Mapping(source = "gesuchsjahr.id", target = "gesuchsjahrId")
     GesuchsperiodeDto toDto(Gesuchsperiode gesuchsperiode);
 
     @Mapping(source = "gesuchsjahr.id", target = "gesuchsjahrId")

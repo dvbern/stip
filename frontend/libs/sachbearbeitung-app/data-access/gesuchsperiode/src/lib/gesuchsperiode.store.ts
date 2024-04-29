@@ -23,10 +23,7 @@ import {
   handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
-import {
-  formatBackendLocalDate,
-  fromBackendLocalDate,
-} from '@dv/shared/util/validator-date';
+import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 
 type GesuchsperiodeState = {
   gesuchsjahre: CachedRemoteData<Gesuchsjahr[]>;
@@ -60,7 +57,6 @@ export class GesuchsperiodeStore extends signalStore(
         formatBackendLocalDate(g.gesuchsperiodeStart, 'de') +
         ' - ' +
         formatBackendLocalDate(g.gesuchsperiodeStopp, 'de'),
-      gesuchsjahr: fromBackendLocalDate(g.einreichefristNormal)?.getFullYear(),
       isEditable: isEditable(g),
     }));
   });
