@@ -22,6 +22,16 @@ INSERT INTO fall (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user
 VALUES ('4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b', '2023-06-20 14:22:43.418364', '2023-06-20 14:22:43.418364', 'TODO',
         'TODO', 0, 1, 'bern', '9477487f-3ac4-4d02-b57c-e0cefb292ae5');
 
+-- Gesuchsperiode
+
+DELETE
+FROM gesuchsperiode
+WHERE id = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
+
+DELETE
+FROM gesuchsjahr
+WHERE id = '9596bb3e-10ea-4493-8aed-a6ef510f806b';
+
 INSERT INTO gesuchsjahr(id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, bezeichnung_de,
                         bezeichnung_fr, technisches_jahr, gueltigkeit_status, mandant)
 VALUES ('9596bb3e-10ea-4493-8aed-a6ef510f806b', now(), now(), 'Migration', 'Migration', 0, 'Gesuchsjahr 24',
@@ -50,7 +60,6 @@ INSERT INTO gesuchsperiode (id,
                             freibetrag_erwerbseinkommen,
                             einkommensfreibetrag,
                             elternbeteiligungssatz,
-                            vermoegensfreibetrag,
                             vermogen_satz_angerechnet,
                             integrationszulage,
                             limite_ek_freibetrag_integrationszulag,
@@ -98,7 +107,6 @@ VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         '2024-12-31',
         current_date,
         current_date,
-        1,
         1,
         1,
         1,

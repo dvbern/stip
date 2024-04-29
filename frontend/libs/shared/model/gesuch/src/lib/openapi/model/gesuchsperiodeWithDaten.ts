@@ -79,10 +79,6 @@ export interface GesuchsperiodeWithDaten {
     /**
      * 
      */
-    vermoegensfreibetrag: number;
-    /**
-     * 
-     */
     vermogenSatzAngerechnet: number;
     /**
      * 
@@ -180,6 +176,22 @@ export interface GesuchsperiodeWithDaten {
      * 
      */
     wohnkosten_persoenlich_5pluspers: number;
+    /**
+     * 
+     */
+    preisProMahlzeit?: number;
+    /**
+     * 
+     */
+    maxSaeule3a?: number;
+    /**
+     * 
+     */
+    anzahlWochenLehre?: number;
+    /**
+     * 
+     */
+    anzahlWochenSchule?: number;
 }
 
 
