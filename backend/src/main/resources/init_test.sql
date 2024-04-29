@@ -1,7 +1,7 @@
 INSERT INTO benutzereinstellungen (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version,
                                    digitale_kommunikation, mandant)
-VALUES ('92486d34-083a-4eb2-b676-f160a99512ba', NOW(), NOW(), 'Admin', 'ADmin', 0, true, 'bern'),
-       ('be468db0-017e-4516-b2bb-6077bae8d78a', NOW(), NOW(), 'Admin', 'ADmin', 0, true, 'bern');
+VALUES ('92486d34-083a-4eb2-b676-f160a99512ba', now(), now(), 'Admin', 'ADmin', 0, TRUE, 'bern'),
+       ('be468db0-017e-4516-b2bb-6077bae8d78a', now(), now(), 'Admin', 'ADmin', 0, TRUE, 'bern');
 
 
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,
@@ -16,7 +16,10 @@ INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, 
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae3', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
         'Admin', 0, 'Schärer', 'Philipp', '756.2222.2222.24', 'AKTIV', 'bern', 'GESUCHSTELLER',
         'be468db0-017e-4516-b2bb-6077bae8d78a');
-
+INSERT INTO sachbearbeiter_zuordnung_stammdaten (id, mandant, version, timestamp_erstellt, timestamp_mutiert,
+                                                 user_erstellt, user_mutiert, buchstaben_de, buchstaben_fr, benutzer_id)
+VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae4', 'bern', 0, now(), now(), 'Admin', 'Admin', 'A-Z', 'A-Z',
+        '9477487f-3ac4-4d02-b57c-e0cefb292ae3');
 INSERT INTO fall (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, fall_nummer, mandant,
                   gesuchsteller_id)
 VALUES ('4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b', '2023-06-20 14:22:43.418364', '2023-06-20 14:22:43.418364', 'TODO',

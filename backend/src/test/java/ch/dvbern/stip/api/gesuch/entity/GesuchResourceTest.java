@@ -14,6 +14,7 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
@@ -51,6 +52,7 @@ import static org.hamcrest.Matchers.notNullValue;
 class GesuchResourceTest {
 
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
@@ -161,6 +163,27 @@ class GesuchResourceTest {
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
         validatePage();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(8)
+    void testUpdatePersonCreatedZuordnung() throws InterruptedException {
+        Thread.sleep(5000);
+        final var response = gesuchApiSpec.getGesucheForBenutzer()
+            .benutzerIdPath(UUID.fromString(TestConstants.GESUCHSTELLER_TEST_ID))
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        final var myGesuche = response
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
+
+        assertThat(myGesuche.length, is(greaterThan(0)));
+        assertThat(Arrays.stream(myGesuche).allMatch(x -> x.getBearbeiter().equals("Philipp Schärer")), is(true));
     }
 
     @Test
@@ -431,7 +454,6 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.get().getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
-        assertThat(gesuchOpt.get().getBearbeiter(), is(""));
     }
 
     @Test

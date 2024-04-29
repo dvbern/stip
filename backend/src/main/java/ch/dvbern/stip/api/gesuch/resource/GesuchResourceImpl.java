@@ -12,6 +12,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -47,6 +48,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchDokumentService gesuchDokumentService;
     private final ConfigService configService;
     private final S3AsyncClient s3;
+    private final TenantService tenantService;
 
     private static Buffer toBuffer(ByteBuffer bytebuffer) {
         byte[] result = new byte[bytebuffer.remaining()];
@@ -187,13 +189,13 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesucheForMe() {
-        return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
+    return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-        gesuchService.updateGesuch(gesuchId, gesuchUpdateDto);
+        gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
         return Response.accepted().build();
     }
 

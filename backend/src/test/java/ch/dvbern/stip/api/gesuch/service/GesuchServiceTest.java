@@ -82,6 +82,8 @@ class GesuchServiceTest {
     @InjectMock
     GesuchRepository gesuchRepository;
 
+    static final String TENANT_ID = "bern";
+
     @Test
     @TestAsGesuchsteller
     void testVerheiratetToLedigShouldResetPartner() {
@@ -258,7 +260,7 @@ class GesuchServiceTest {
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         tranche.getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(true);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(
             tranche.getGesuchFormular().getElterns().size(),
@@ -291,7 +293,7 @@ class GesuchServiceTest {
             .setElternteilUnbekanntVerstorben(false);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         assertThat(hasMutter(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
         assertThat(hasVater(tranche.getGesuchFormular().getElterns()), Matchers.is(true));
     }
@@ -433,7 +435,7 @@ class GesuchServiceTest {
             .setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
     }
@@ -534,7 +536,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
@@ -567,7 +569,7 @@ class GesuchServiceTest {
             .setWohnsitzAnteilVater(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
@@ -592,7 +594,7 @@ class GesuchServiceTest {
             .setWohnsitz(Wohnsitz.MUTTER_VATER);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
@@ -625,7 +627,7 @@ class GesuchServiceTest {
             .setWohnsitzAnteilVater(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(),
@@ -654,7 +656,7 @@ class GesuchServiceTest {
             .setWohnsitzAnteilVater(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
         assertThat(
             tranche.getGesuchFormular().getEinnahmenKosten(),
@@ -674,7 +676,7 @@ class GesuchServiceTest {
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
@@ -697,7 +699,7 @@ class GesuchServiceTest {
             .getPersonInAusbildung()
             .setGeburtsdatum(LocalDate.of(2000, 10, 11));
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(0)
@@ -717,7 +719,7 @@ class GesuchServiceTest {
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
@@ -856,7 +858,7 @@ class GesuchServiceTest {
         }
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
     }
 
@@ -899,7 +901,7 @@ class GesuchServiceTest {
             .setVaterUnbekanntVerstorben(grundVater);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
     }
 
@@ -920,7 +922,7 @@ class GesuchServiceTest {
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setWerZahltAlimente(to);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
     }
 
@@ -933,7 +935,7 @@ class GesuchServiceTest {
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setZivilstand(to);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto);
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
     }
 
