@@ -2447,6 +2447,10 @@ components:
         - wohnkosten_persoenlich_3pers
         - wohnkosten_persoenlich_4pers
         - wohnkosten_persoenlich_5pluspers
+        - preisProMahlzeit
+        - maxSaeule3a
+        - anzahlWochenLehre
+        - anzahlWochenSchule
       properties:
         bezeichnungDe:
           description: ''
