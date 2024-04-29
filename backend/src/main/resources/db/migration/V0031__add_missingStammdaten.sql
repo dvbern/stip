@@ -9,3 +9,9 @@ ALTER TABLE gesuchsperiode
   ALTER COLUMN max_saeule_3a DROP DEFAULT,
   ALTER COLUMN anzahl_wochen_lehre DROP DEFAULT,
   ALTER COLUMN anzahl_wochen_schule DROP DEFAULT;
+
+ALTER TABLE gesuchsperiode_aud
+  ADD COLUMN preis_pro_mahlzeit INTEGER,
+  ADD COLUMN max_saeule_3a INTEGER,
+  ADD COLUMN anzahl_wochen_lehre INTEGER,
+  ADD COLUMN anzahl_wochen_schule INTEGER;
