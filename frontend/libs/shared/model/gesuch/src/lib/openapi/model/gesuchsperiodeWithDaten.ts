@@ -179,19 +179,19 @@ export interface GesuchsperiodeWithDaten {
     /**
      * 
      */
-    preisProMahlzeit?: number;
+    preisProMahlzeit: number;
     /**
      * 
      */
-    maxSaeule3a?: number;
+    maxSaeule3a: number;
     /**
      * 
      */
-    anzahlWochenLehre?: number;
+    anzahlWochenLehre: number;
     /**
      * 
      */
-    anzahlWochenSchule?: number;
+    anzahlWochenSchule: number;
 }
 
 

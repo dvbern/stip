@@ -146,6 +146,10 @@ export class GesuchsperiodeDetailComponent {
       <string | null>null,
       [Validators.required],
     ],
+    preisProMahlzeit: [<string | null>null, [Validators.required]],
+    maxSaeule3a: [<string | null>null, [Validators.required]],
+    anzahlWochenLehre: [<string | null>null, [Validators.required]],
+    anzahlWochenSchule: [<string | null>null, [Validators.required]],
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
@@ -181,6 +185,10 @@ export class GesuchsperiodeDetailComponent {
     'wohnkosten_persoenlich_3pers',
     'wohnkosten_persoenlich_4pers',
     'wohnkosten_persoenlich_5pluspers',
+    'preisProMahlzeit',
+    'maxSaeule3a',
+    'anzahlWochenLehre',
+    'anzahlWochenSchule',
   ]);
 
   constructor() {

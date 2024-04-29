@@ -341,6 +341,70 @@
         </mat-form-field>
       </div>
 
+      <div class="row g-4 mt-1">
+        <!-- Preis pro Mahlzeit -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.preisProMahlzeit.label' | translate }}</mat-label>
+          <input
+            formControlName="preisProMahlzeit"
+            data-testid="form-gesuchsperiode-preisProMahlzeit"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Max Säule 3a -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.maxSaeule3a.label' | translate }}</mat-label>
+          <input
+            formControlName="maxSaeule3a"
+            data-testid="form-gesuchsperiode-maxSaeule3a"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <!-- Anzahl Wochen Lehre -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenLehre.label' | translate }}</mat-label>
+          <input
+            formControlName="anzahlWochenLehre"
+            data-testid="form-gesuchsperiode-anzahlWochenLehre"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Anzahl Wochen Schule -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenSchule.label' | translate }}</mat-label>
+          <input
+            formControlName="anzahlWochenSchule"
+            data-testid="form-gesuchsperiode-anzahlWochenSchule"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
       <!-- Ausbildungskosten (pers. Budget) -->
       <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
