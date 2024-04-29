@@ -98,7 +98,7 @@
             [matDatepicker]="gesuchsperiodeStartDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #gesuchsperiodeStartDatepicker startView="year"></mat-datepicker>
+          <mat-datepicker #gesuchsperiodeStartDatepicker></mat-datepicker>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -185,7 +185,7 @@
             [matDatepicker]="einreicherfristReduziertDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #einreicherfristReduziertDatepicker startView="year"></mat-datepicker>
+          <mat-datepicker #einreicherfristReduziertDatepicker></mat-datepicker>
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.info </mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
