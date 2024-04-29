@@ -1,6 +1,6 @@
 import { Injectable, computed } from '@angular/core';
-import { patchState, withDevtools } from '@angular-architects/ngrx-toolkit';
-import { signalStore, withState } from '@ngrx/signals';
+import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { patchState, signalStore, withState } from '@ngrx/signals';
 
 import { SharedModelError } from '@dv/shared/model/error';
 import {
@@ -39,18 +39,18 @@ export class GlobalNotificationStore extends signalStore(
    * Add a new notification to the list of notifications.
    */
   createNotification(notification: CreateNotification) {
-    return patchState(this, 'createNotification', {
-      nextNotificationId: this.nextNotificationId() + 1,
+    return patchState(this, (state) => ({
+      nextNotificationId: state.nextNotificationId + 1,
       notifications: [
         ...this.notifications().filter(
           ({ type }) => type === 'ERROR' || type !== notification.type,
         ),
         {
-          id: this.nextNotificationId(),
+          id: state.nextNotificationId,
           ...notification,
         },
       ],
-    });
+    }));
   }
 
   /**
@@ -67,17 +67,27 @@ export class GlobalNotificationStore extends signalStore(
    * Helper function to handle a failed http request.
    */
   handleHttpRequestFailed(errors: SharedModelError[]) {
-    const nextNotificationId = this.nextNotificationId();
-    return patchState(this, 'handleHttpRequestFailed', {
-      nextNotificationId: nextNotificationId + 1 + errors.length,
+    return patchState(this, (state) => ({
+      nextNotificationId: state.nextNotificationId + 1 + errors.length,
       notifications: [
         ...this.notifications(),
         ...errors.map((error, i) => ({
-          id: nextNotificationId + i,
+          id: state.nextNotificationId + i,
           type: 'ERROR' as const,
           content: error,
         })),
       ],
+    }));
+  }
+
+  /**
+   * Helper function to create a new error notification specific to 403 Forbidden errors.
+   */
+  handleForbiddenError(baseError?: SharedModelError) {
+    return this.createNotification({
+      type: 'ERROR',
+      messageKey: 'shared.genericError.forbidden',
+      content: baseError,
     });
   }
 
@@ -89,7 +99,7 @@ export class GlobalNotificationStore extends signalStore(
       (notification) => notification.id !== notificationId,
     );
 
-    return patchState(this, 'removeNotification', {
+    return patchState(this, {
       notifications: notifications,
     });
   }
@@ -102,7 +112,7 @@ export class GlobalNotificationStore extends signalStore(
       CRITICAL_NOTIFICATIONS.includes(notification.type),
     );
 
-    return patchState(this, 'clearUnimportantNotificaitons', {
+    return patchState(this, {
       notifications: notifications,
     });
   }

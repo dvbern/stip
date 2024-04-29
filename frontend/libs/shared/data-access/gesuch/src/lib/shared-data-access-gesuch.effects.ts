@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import {
   catchError,
@@ -13,6 +14,7 @@ import {
 } from 'rxjs';
 
 import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
@@ -28,7 +30,11 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import { GesuchFormularUpdate, GesuchService } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
+import {
+  handleNotFound,
+  noGlobalErrorsIf,
+  shouldIgnoreNotFoundErrorsIf,
+} from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -95,6 +101,8 @@ export const loadGesuch = createEffect(
     actions$ = inject(Actions),
     store = inject(Store),
     gesuchService = inject(GesuchService),
+    router = inject(Router),
+    globalNotifications = inject(GlobalNotificationStore),
   ) => {
     return actions$.pipe(
       ofType(
@@ -118,16 +126,30 @@ export const loadGesuch = createEffect(
             'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
           );
         }
-        return gesuchService.getGesuch$({ gesuchId: id }).pipe(
-          map((gesuch) =>
-            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        );
+        return gesuchService
+          .getGesuch$({ gesuchId: id }, undefined, undefined, {
+            context: noGlobalErrorsIf(
+              true,
+              handleNotFound((error) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR',
+                  messageKey: 'gesuch-app.gesuch.not-found-redirection',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              }),
+            ),
+          })
+          .pipe(
+            map((gesuch) =>
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
       }),
     );
   },

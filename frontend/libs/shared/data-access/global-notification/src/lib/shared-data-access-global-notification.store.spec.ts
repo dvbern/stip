@@ -61,19 +61,28 @@ describe('GlobalNotificationStore', () => {
       SharedModelGlobalNotification
     >{
       autohide: false,
-      type: 'ERROR',
       list: [
         {
-          id: 1,
-
           content: {
-            error,
-            messageKey: 'shared.genericError.http',
-            type: 'unknownHttpError',
+            error: {
+              error: {
+                validationErrors: [
+                  {
+                    message: 'message',
+                    messsageTemplate: 'template',
+                    propertyPath: 'field',
+                  },
+                ],
+              },
+            },
+            messageKey: 'shared.genericError.general',
+            type: 'unknownError',
           },
+          id: 1,
           type: 'ERROR',
         },
       ],
+      type: 'ERROR',
     });
   });
 });
