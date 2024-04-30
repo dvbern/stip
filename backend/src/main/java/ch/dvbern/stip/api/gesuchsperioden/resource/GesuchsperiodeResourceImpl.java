@@ -67,6 +67,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     }
 
     @Override
+    @RolesAllowed(ROLE_ADMIN)
     public Response publishGesuchsperiode(UUID gesuchperiodeId) {
         final var gesuchsperiode = gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
         return Response.ok(gesuchsperiode).build();
