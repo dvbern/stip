@@ -156,12 +156,14 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
 
   handleContinue() {
     const { gesuch } = this.viewSig();
-    this.store.dispatch(
-      SharedEventGesuchFormLebenslauf.nextTriggered({
-        id: gesuch!.id!,
-        origin: LEBENSLAUF,
-      }),
-    );
+    if (gesuch?.id) {
+      this.store.dispatch(
+        SharedEventGesuchFormLebenslauf.nextTriggered({
+          id: gesuch.id,
+          origin: LEBENSLAUF,
+        }),
+      );
+    }
   }
 
   handleEditorClose() {
