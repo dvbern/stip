@@ -16,7 +16,7 @@ quarkus:
     detection-mode: WARN
   liquibase:
     migrate-at-start: true
-    change-log: "db/migration/db.changelog-main.xml"
+    change-log: "db/migration/changelog.xml"
     validate-on-migrate: true
   oidc:
     bern:

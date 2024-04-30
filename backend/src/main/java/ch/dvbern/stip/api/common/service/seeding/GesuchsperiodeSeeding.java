@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.common.service;
+package ch.dvbern.stip.api.common.service.seeding;
 
 import java.time.LocalDate;
 import java.util.List;
