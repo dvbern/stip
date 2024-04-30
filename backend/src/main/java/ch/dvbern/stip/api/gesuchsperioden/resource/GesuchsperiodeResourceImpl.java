@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuchsperioden.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
