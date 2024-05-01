@@ -1952,6 +1952,7 @@ components:
       description: ''
       required:
         - validationErrors
+        - validationWarnings
       type: object
       properties:
         validationErrors:
