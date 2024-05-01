@@ -10,7 +10,9 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.AusbildungsgangApiSpec;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -135,8 +137,8 @@ class AusbildungsgangResourceTest {
 		var ausbildungsstaettes = getAusbildungsstaettenFromApi();
 
 		var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
-		final var aarau = "AARAU";
-		ausbildunggang.setAusbildungsort(aarau);
+		final var updateBezeichnung = ausbildunggang.getBezeichnungDe() + "UPDATED";
+		ausbildunggang.setBezeichnungDe(updateBezeichnung);
 		ausbildunggang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());
 
 		ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
@@ -147,9 +149,7 @@ class AusbildungsgangResourceTest {
 				.statusCode(Status.OK.getStatusCode());
 
 		var updatedAussibldungsgang = getAusbildungsgangeFromAPI(ausbildungsgangId);
-		var updatedAusbildungsstaette = getAusbildungsstaetteFromApi(ausbildungsstaettes[0].getId());
-
-		assertThat(updatedAussibldungsgang.getAusbildungsort(), is(aarau));
+		assertThat(updatedAussibldungsgang.getBezeichnungDe(), is(updateBezeichnung));
 		assertThat(getAusbildungsstaettenFromApi().length, is(ausbildungsstaettes.length));
 	}
 
