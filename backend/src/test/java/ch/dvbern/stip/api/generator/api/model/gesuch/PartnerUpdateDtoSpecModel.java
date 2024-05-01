@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
-
-import java.time.LocalDate;
 
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 
@@ -17,9 +17,9 @@ public class PartnerUpdateDtoSpecModel {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec);
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
             model.setAusbildungMitEinkommenOderErwerbstaetig(true);
-            model.setFahrkosten(TestUtil.getRandomBigDecimal());
-            model.setJahreseinkommen(TestUtil.getRandomBigDecimal());
-            model.setVerpflegungskosten(TestUtil.getRandomBigDecimal());
+            model.setFahrkosten(TestUtil.getRandomInt());
+            model.setJahreseinkommen(TestUtil.getRandomInt());
+            model.setVerpflegungskosten(TestUtil.getRandomInt());
         });
 
     public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPartner =

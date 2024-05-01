@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -21,13 +19,13 @@ import org.hibernate.envers.Audited;
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(nullable = false)
-    private BigDecimal nettoerwerbseinkommen;
+    private Integer nettoerwerbseinkommen;
     @NotNull
     @Column(nullable = false)
-    private BigDecimal fahrkosten;
+    private Integer fahrkosten;
     @Nullable
     @Column(nullable = true)
-    private BigDecimal wohnkosten;
+    private Integer wohnkosten;
     @Nullable
     @Column(nullable = true)
     private Boolean wgWohnend;
@@ -35,25 +33,25 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(nullable = false)
     private Boolean verdienstRealisiert;
     @Column
-    private BigDecimal alimente;
+    private Integer alimente;
     @Column
-    private BigDecimal zulagen;
+    private Integer zulagen;
     @Column
-    private BigDecimal renten;
+    private Integer renten;
     @Column
-    private BigDecimal eoLeistungen;
+    private Integer eoLeistungen;
     @Column
-    private BigDecimal ergaenzungsleistungen;
+    private Integer ergaenzungsleistungen;
     @Column
-    private BigDecimal beitraege;
+    private Integer beitraege;
     @Column
-    private BigDecimal ausbildungskostenSekundarstufeZwei;
+    private Integer ausbildungskostenSekundarstufeZwei;
     @Column
-    private BigDecimal ausbildungskostenTertiaerstufe;
+    private Integer ausbildungskostenTertiaerstufe;
     @Column
     private Boolean willDarlehen;
     @Column
     private Integer auswaertigeMittagessenProWoche;
     @Column
-    private BigDecimal betreuungskostenKinder;
+    private Integer betreuungskostenKinder;
 }

@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.kind.entity;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -24,7 +23,7 @@ class KindRequiredDocumentsProducerTest {
     void requiresIfAlimentebeitraege() {
         formular.setKinds(Set.of(
             new Kind()
-                .setErhalteneAlimentebeitraege(BigDecimal.ONE)
+                .setErhalteneAlimentebeitraege(1)
         ));
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
