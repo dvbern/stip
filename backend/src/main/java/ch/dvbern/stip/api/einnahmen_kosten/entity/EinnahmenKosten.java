@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -13,47 +11,77 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+
 @Audited
 @Entity
-@Table(indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant"))
+@Table(
+    name = "einnahmen_kosten",
+    indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
-    @Column(nullable = false)
-    private BigDecimal nettoerwerbseinkommen;
+    @Column(name = "nettoerwerbseinkommen", nullable = false)
+    private Integer nettoerwerbseinkommen;
+
     @NotNull
-    @Column(nullable = false)
-    private BigDecimal fahrkosten;
+    @Column(name = "fahrkosten", nullable = false)
+    private Integer fahrkosten;
+
     @Nullable
-    @Column(nullable = true)
-    private BigDecimal wohnkosten;
+    @Column(name = "wohnkosten")
+    private Integer wohnkosten;
+
     @Nullable
-    @Column(nullable = true)
+    @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
+
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "verdienst_realisiert", nullable = false)
     private Boolean verdienstRealisiert;
-    @Column
-    private BigDecimal alimente;
-    @Column
-    private BigDecimal zulagen;
-    @Column
-    private BigDecimal renten;
-    @Column
-    private BigDecimal eoLeistungen;
-    @Column
-    private BigDecimal ergaenzungsleistungen;
-    @Column
-    private BigDecimal beitraege;
-    @Column
-    private BigDecimal ausbildungskostenSekundarstufeZwei;
-    @Column
-    private BigDecimal ausbildungskostenTertiaerstufe;
-    @Column
+
+    @Nullable
+    @Column(name = "alimente")
+    private Integer alimente;
+
+    @Nullable
+    @Column(name = "zulagen")
+    private Integer zulagen;
+
+    @Nullable
+    @Column(name = "renten")
+    private Integer renten;
+
+    @Nullable
+    @Column(name = "eo_leistungen")
+    private Integer eoLeistungen;
+
+    @Nullable
+    @Column(name = "ergaenzungsleistungen")
+    private Integer ergaenzungsleistungen;
+
+    @Nullable
+    @Column(name = "beitraege")
+    private Integer beitraege;
+
+    @Nullable
+    @Column(name = "ausbildungskosten_sekundarstufe_zwei")
+    private Integer ausbildungskostenSekundarstufeZwei;
+
+    @Nullable
+    @Column(name = "ausbildungskosten_tertiaerstufe")
+    private Integer ausbildungskostenTertiaerstufe;
+
+    @Nullable
+    @Column(name = "will_darlehen")
     private Boolean willDarlehen;
-    @Column
+
+    @Nullable
+    @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
-    @Column
-    private BigDecimal betreuungskostenKinder;
+
+    @Nullable
+    @Column(name = "betreuungskosten_kinder")
+    private Integer betreuungskostenKinder;
 }

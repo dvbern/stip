@@ -1,9 +1,26 @@
-@if (globalNotificationsSig().notificationList; as notifications) {
-  @for (notification of notifications; track trackByIndex($index)) {
-    <dv-notification
-      [isToast]="true"
-      [notification]="notification"
-      (closeTriggered)="hideNotification(notification)"
-    ></dv-notification>
-  }
-}
+<ng-template #notificationTemplate>
+  <div class="p-3" matSnackBarLabel>
+    @if (store.mostImportantNotificationSig(); as globalNotification) {
+      @for (notification of globalNotification?.list; track notification.id) {
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1">
+            @if (notification.messageKey) {
+              {{ notification.messageKey | translate }}
+            } @else if (notification.message) {
+              {{ notification.message }}
+            } @else {
+              {{ 'shared.genericError.general' | translate }}
+            }
+          </div>
+          @if (!globalNotification.autohide) {
+            <button type="button" class="dv-button-icon text-white" (click)="removeNotification(notification.id)">
+              <span class="material-symbols-rounded align-middle fs-4">close</span>
+            </button>
+          }
+        </div>
+      }
+    } @else {
+      &nbsp;
+    }
+  </div>
+</ng-template>

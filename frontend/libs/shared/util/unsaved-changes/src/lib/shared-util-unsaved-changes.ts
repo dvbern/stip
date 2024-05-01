@@ -1,6 +1,6 @@
 import { Signal } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { Observable, distinctUntilChanged, map, merge } from 'rxjs';
+import { EMPTY, Observable, distinctUntilChanged, map, merge } from 'rxjs';
 
 export type ComponentWithForm =
   | {
@@ -33,11 +33,13 @@ export const hasUnsavedChanges = (component: ComponentWithForm) => {
  */
 export const observeUnsavedChanges = (
   form: AbstractControl,
-  resetEvent: Observable<unknown>,
+  resetEvent?: Observable<unknown>,
   ...moreResetEvents: Observable<unknown>[]
 ) => {
   return merge(
     form.valueChanges.pipe(map(() => form.dirty)),
-    merge(resetEvent, ...moreResetEvents).pipe(map(() => false)),
+    resetEvent
+      ? merge(resetEvent, ...moreResetEvents).pipe(map(() => false))
+      : EMPTY,
   ).pipe(distinctUntilChanged());
 };

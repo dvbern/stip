@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
   AdminOption,
   AdminOptions,
+  ChildAdminOption,
 } from '@dv/sachbearbeitung-app/model/administration';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
@@ -38,13 +39,9 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppPatternAdministrationLayoutComponent {
-  @Input() option?: AdminOption;
+  @Input() option?: AdminOption | ChildAdminOption;
   navClicked = new EventEmitter();
 
   route = inject(Router);
   options = AdminOptions;
-
-  trackByIndex(index: number) {
-    return index;
-  }
 }

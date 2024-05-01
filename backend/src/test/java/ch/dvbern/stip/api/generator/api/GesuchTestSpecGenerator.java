@@ -22,7 +22,6 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
-import org.junit.jupiter.api.Test;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
@@ -47,12 +46,6 @@ public class GesuchTestSpecGenerator {
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
             model.getGesuchTrancheToWorkWith().setGesuchFormular(FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituation);
         });
-
-    @Test
-    void test() {
-        var foo = gesuchUpdateDtoSpecAusbildung;
-        System.out.println();
-    }
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecPartner =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {

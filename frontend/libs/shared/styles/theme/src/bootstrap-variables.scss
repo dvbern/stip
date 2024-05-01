@@ -10,12 +10,14 @@ $blue: #298bef;
 $green: #2eb85c;
 $darkgray: #4e4e4e;
 $gray: #677589;
+$lightgray: #7f7f8b;
 
 $primary: $darkgray;
 $secondary: $blue;
 $info: $blue;
-$warn: $red;
+$warn: $yellow;
 $success: $green;
+$danger: $red;
 
 $body-bg: #fafbfd;
 $min-contrast-ratio: 3; // default 4.5 leads to black text on primary red background

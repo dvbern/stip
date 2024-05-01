@@ -1,6 +1,3 @@
-@if (stateSig().loading && stateSig().hasLoadedOnce === false) {
-  <dv-shared-ui-loading></dv-shared-ui-loading>
-}
 @if (formSig(); as form) {
   <form (submit)="handleSave()" [formGroup]="form">
     <div class="rounded-4 overflow-hidden bg-white my-3 shadow">
@@ -14,13 +11,13 @@
       >
         <caption class="cdk-visually-hidden">
           {{
-            'sachbearbeitung-app.administration.buchstaben-zuordnung.table.description' | translate
+            'sachbearbeitung-app.admin.buchstabenZuteilung.table.description' | translate
           }}
         </caption>
 
         <ng-container matColumnDef="fullName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="fs-6 fw-bolder">
-            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiter' | translate }}
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | translate }}
           </th>
           <td mat-cell class="py-1" *matCellDef="let element">{{ element.fullName }}</td>
         </ng-container>
@@ -30,7 +27,7 @@
               #filter
               type="text"
               (keyup)="filterChangedSig.set(filter.value)"
-              [attr.aria-label]="'sachbearbeitung-app.admin.buchstabenZuteilung.sachbearbeiterFilter' | translate"
+              [attr.aria-label]="'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | translate"
             />
           </th>
         </ng-container>
@@ -88,11 +85,17 @@
             </mat-form-field>
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-header-row *matHeaderRowDef="displayedColumnFilters"></tr>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="combined-header-row"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnFilters" class="combined-header-row"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
       </table>
     </div>
-    <dv-shared-ui-form-save [loading]="stateSig().loading"></dv-shared-ui-form-save>
+    <dv-shared-ui-form-save [loading]="store.sachbearbeiter() | rdIsPending"></dv-shared-ui-form-save>
   </form>
 }

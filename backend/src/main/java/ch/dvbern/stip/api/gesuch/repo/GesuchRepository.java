@@ -8,7 +8,10 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
+import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -21,13 +24,21 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     private final EntityManager entityManager;
 
     public Stream<Gesuch> findAllForBenutzer(UUID benutzerId) {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuch = QGesuch.gesuch;
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var gesuch = QGesuch.gesuch;
+        final var zuordnung = QZuordnung.zuordnung;
 
-        var query = queryFactory
+        final var query = queryFactory
             .select(gesuch)
             .from(gesuch)
-            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId).or(gesuch.fall.sachbearbeiter.id.eq(benutzerId)));
+            .where(gesuch.fall.gesuchsteller.id.eq(benutzerId)
+                .or(
+                    JPAExpressions.select(zuordnung.sachbearbeiter.id)
+                        .from(zuordnung)
+                        .where(zuordnung.sachbearbeiter.id.eq(benutzerId))
+                        .contains(benutzerId)
+                )
+            );
         return query.stream();
     }
 
@@ -40,6 +51,35 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .from(gesuch)
             .where(gesuch.fall.id.eq(fallId));
         return query.stream();
+    }
+
+    public Stream<Gesuch> findAllNewestWithPia() {
+        final var gesuch = QGesuch.gesuch;
+        final var tranche = QGesuchTranche.gesuchTranche;
+        final var formular = QGesuchFormular.gesuchFormular;
+        final var pia = QPersonInAusbildung.personInAusbildung;
+        final var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuch)
+            .join(tranche).on(tranche.gesuch.id.eq(gesuch.id))
+            .join(formular).on(formular.tranche.id.eq(tranche.id))
+            .join(pia).on(formular.personInAusbildung.id.eq(pia.id))
+            .join(gesuchsperiode).on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
+            .where(
+                gesuch.id.in(
+                    JPAExpressions
+                        .select(gesuch.id)
+                        .from(gesuch)
+                        .join(tranche).on(tranche.gesuch.id.eq(gesuch.id))
+                        .join(formular).on(formular.tranche.id.eq(tranche.id))
+                        .join(pia).on(formular.personInAusbildung.id.eq(pia.id))
+                        .join(gesuchsperiode).on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
+                        .orderBy(gesuchsperiode.gesuchsperiodeStart.desc(), gesuch.fall.id.asc())
+                        .limit(1)
+                )
+            )
+            .stream();
     }
 
     public Stream<Gesuch> findAllWithFormular() {

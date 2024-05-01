@@ -69,7 +69,11 @@ public final class GesuchGenerator {
     public static Gesuch initGesuch() {
         var gesuch = new Gesuch()
             .setFall(new Fall())
-            .setGesuchsperiode(new Gesuchsperiode().setGueltigkeit(GUELTIGKEIT_PERIODE_23_24));
+            .setGesuchsperiode(
+                new Gesuchsperiode()
+                    .setGesuchsperiodeStart(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
+                    .setGesuchsperiodeStopp(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
+            );
         gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
             .setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
             .setGesuch(gesuch)
@@ -111,7 +115,8 @@ public final class GesuchGenerator {
     }
 
     private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
-        EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec;
+        EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto =
+            EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec;
         einnahmenKostenUpdateDto.setVerdienstRealisiert(false);
         return einnahmenKostenUpdateDto;
     }

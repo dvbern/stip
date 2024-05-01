@@ -49,7 +49,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchResourceTest {
-
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
@@ -431,7 +430,7 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.get().getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
-        assertThat(gesuchOpt.get().getBearbeiter(), is("John Doe"));
+        assertThat(gesuchOpt.get().getBearbeiter(), is(""));
     }
 
     @Test

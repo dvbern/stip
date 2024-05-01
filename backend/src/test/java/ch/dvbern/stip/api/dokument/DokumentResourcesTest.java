@@ -44,9 +44,7 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
-
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-
     private UUID gesuchId;
     private UUID dokumentId;
 
@@ -61,8 +59,7 @@ class DokumentResourcesTest {
         var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
             .then();
 
-        response.assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
+        response.assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
         gesuchId = TestUtil.extractIdFromResponse(response);
     }

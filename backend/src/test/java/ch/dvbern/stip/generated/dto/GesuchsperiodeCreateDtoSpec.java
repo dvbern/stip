@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalDate;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,78 +29,250 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchsperiodeCreateDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GUELTIG_AB,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINREICHFRIST,
-  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUFSCHALTDATUM
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FISKALJAHR,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GESUCHSJAHR_ID,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_STOPP,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_STOPP,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FREIBETRAG_VERMOEGEN,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_VERMOEGENSFREIBETRAG,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSON1,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN2,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN3,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN4,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN5,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN6,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PERSONEN7,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PRO_WEITERE_PERSON,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_KINDER0018,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ERWACHSENE2699,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM1PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM2PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM3PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM4PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_PREIS_PRO_MAHLZEIT,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_MAX_SAEULE3A,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE,
+  GesuchsperiodeCreateDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE
 })
 @JsonTypeName("GesuchsperiodeCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchsperiodeCreateDtoSpec {
-  public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
-  private LocalDate gueltigAb;
+  public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  private String bezeichnungDe;
 
-  public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
-  private LocalDate gueltigBis;
+  public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_EINREICHFRIST = "einreichfrist";
   private LocalDate einreichfrist;
 
-  public static final String JSON_PROPERTY_AUFSCHALTDATUM = "aufschaltdatum";
-  private LocalDate aufschaltdatum;
+  public static final String JSON_PROPERTY_FISKALJAHR = "fiskaljahr";
+  private Integer fiskaljahr;
+
+  public static final String JSON_PROPERTY_GESUCHSJAHR_ID = "gesuchsjahrId";
+  private UUID gesuchsjahrId;
+
+  public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
+  private LocalDate gesuchsperiodeStart;
+
+  public static final String JSON_PROPERTY_GESUCHSPERIODE_STOPP = "gesuchsperiodeStopp";
+  private LocalDate gesuchsperiodeStopp;
+
+  public static final String JSON_PROPERTY_AUFSCHALTTERMIN_START = "aufschaltterminStart";
+  private LocalDate aufschaltterminStart;
+
+  public static final String JSON_PROPERTY_AUFSCHALTTERMIN_STOPP = "aufschaltterminStopp";
+  private LocalDate aufschaltterminStopp;
+
+  public static final String JSON_PROPERTY_EINREICHEFRIST_NORMAL = "einreichefristNormal";
+  private LocalDate einreichefristNormal;
+
+  public static final String JSON_PROPERTY_EINREICHEFRIST_REDUZIERT = "einreichefristReduziert";
+  private LocalDate einreichefristReduziert;
+
+  public static final String JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I = "ausbKosten_SekII";
+  private Integer ausbKostenSekII;
+
+  public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
+  private Integer ausbKostenTertiaer;
+
+  public static final String JSON_PROPERTY_FREIBETRAG_VERMOEGEN = "freibetrag_vermoegen";
+  private Integer freibetragVermoegen;
+
+  public static final String JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN = "freibetrag_erwerbseinkommen";
+  private Integer freibetragErwerbseinkommen;
+
+  public static final String JSON_PROPERTY_EINKOMMENSFREIBETRAG = "einkommensfreibetrag";
+  private Integer einkommensfreibetrag;
+
+  public static final String JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ = "elternbeteiligungssatz";
+  private Integer elternbeteiligungssatz;
+
+  public static final String JSON_PROPERTY_VERMOEGENSFREIBETRAG = "vermoegensfreibetrag";
+  private Integer vermoegensfreibetrag;
+
+  public static final String JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET = "vermogenSatzAngerechnet";
+  private Integer vermogenSatzAngerechnet;
+
+  public static final String JSON_PROPERTY_INTEGRATIONSZULAGE = "integrationszulage";
+  private Integer integrationszulage;
+
+  public static final String JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG = "limite_EkFreibetrag_Integrationszulag";
+  private Integer limiteEkFreibetragIntegrationszulag;
+
+  public static final String JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM = "stipLimite_Minimalstipendium";
+  private Integer stipLimiteMinimalstipendium;
+
+  public static final String JSON_PROPERTY_PERSON1 = "person_1";
+  private Integer person1;
+
+  public static final String JSON_PROPERTY_PERSONEN2 = "personen_2";
+  private Integer personen2;
+
+  public static final String JSON_PROPERTY_PERSONEN3 = "personen_3";
+  private Integer personen3;
+
+  public static final String JSON_PROPERTY_PERSONEN4 = "personen_4";
+  private Integer personen4;
+
+  public static final String JSON_PROPERTY_PERSONEN5 = "personen_5";
+  private Integer personen5;
+
+  public static final String JSON_PROPERTY_PERSONEN6 = "personen_6";
+  private Integer personen6;
+
+  public static final String JSON_PROPERTY_PERSONEN7 = "personen_7";
+  private Integer personen7;
+
+  public static final String JSON_PROPERTY_PRO_WEITERE_PERSON = "proWeiterePerson";
+  private Integer proWeiterePerson;
+
+  public static final String JSON_PROPERTY_KINDER0018 = "kinder_00_18";
+  private Integer kinder0018;
+
+  public static final String JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925 = "jugendliche_erwachsene_19_25";
+  private Integer jugendlicheErwachsene1925;
+
+  public static final String JSON_PROPERTY_ERWACHSENE2699 = "erwachsene_26_99";
+  private Integer erwachsene2699;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_FAM1PERS = "wohnkosten_fam_1pers";
+  private Integer wohnkostenFam1pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_FAM2PERS = "wohnkosten_fam_2pers";
+  private Integer wohnkostenFam2pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_FAM3PERS = "wohnkosten_fam_3pers";
+  private Integer wohnkostenFam3pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_FAM4PERS = "wohnkosten_fam_4pers";
+  private Integer wohnkostenFam4pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS = "wohnkosten_fam_5pluspers";
+  private Integer wohnkostenFam5pluspers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS = "wohnkosten_persoenlich_1pers";
+  private Integer wohnkostenPersoenlich1pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS = "wohnkosten_persoenlich_2pers";
+  private Integer wohnkostenPersoenlich2pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS = "wohnkosten_persoenlich_3pers";
+  private Integer wohnkostenPersoenlich3pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS = "wohnkosten_persoenlich_4pers";
+  private Integer wohnkostenPersoenlich4pers;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS = "wohnkosten_persoenlich_5pluspers";
+  private Integer wohnkostenPersoenlich5pluspers;
+
+  public static final String JSON_PROPERTY_PREIS_PRO_MAHLZEIT = "preisProMahlzeit";
+  private Integer preisProMahlzeit;
+
+  public static final String JSON_PROPERTY_MAX_SAEULE3A = "maxSaeule3a";
+  private Integer maxSaeule3a;
+
+  public static final String JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE = "anzahlWochenLehre";
+  private Integer anzahlWochenLehre;
+
+  public static final String JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE = "anzahlWochenSchule";
+  private Integer anzahlWochenSchule;
 
   public GesuchsperiodeCreateDtoSpec() {
   }
 
-  public GesuchsperiodeCreateDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public GesuchsperiodeCreateDtoSpec bezeichnungDe(String bezeichnungDe) {
     
-    this.gueltigAb = gueltigAb;
+    this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
    /**
-   * Get gueltigAb
-   * @return gueltigAb
+   * 
+   * @return bezeichnungDe
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
   }
 
 
-  public GesuchsperiodeCreateDtoSpec gueltigBis(LocalDate gueltigBis) {
+  public GesuchsperiodeCreateDtoSpec bezeichnungFr(String bezeichnungFr) {
     
-    this.gueltigBis = gueltigBis;
+    this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
    /**
-   * Get gueltigBis
-   * @return gueltigBis
+   * 
+   * @return bezeichnungFr
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
+  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
   }
 
 
@@ -129,29 +302,1147 @@ public class GesuchsperiodeCreateDtoSpec {
   }
 
 
-  public GesuchsperiodeCreateDtoSpec aufschaltdatum(LocalDate aufschaltdatum) {
+  public GesuchsperiodeCreateDtoSpec fiskaljahr(Integer fiskaljahr) {
     
-    this.aufschaltdatum = aufschaltdatum;
+    this.fiskaljahr = fiskaljahr;
     return this;
   }
 
    /**
-   * Get aufschaltdatum
-   * @return aufschaltdatum
+   * 
+   * @return fiskaljahr
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FISKALJAHR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getAufschaltdatum() {
-    return aufschaltdatum;
+  public Integer getFiskaljahr() {
+    return fiskaljahr;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTDATUM)
+  @JsonProperty(JSON_PROPERTY_FISKALJAHR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFiskaljahr(Integer fiskaljahr) {
+    this.fiskaljahr = fiskaljahr;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec gesuchsjahrId(UUID gesuchsjahrId) {
+    
+    this.gesuchsjahrId = gesuchsjahrId;
+    return this;
+  }
+
+   /**
+   * Get gesuchsjahrId
+   * @return gesuchsjahrId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchsjahrId() {
+    return gesuchsjahrId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchsjahrId(UUID gesuchsjahrId) {
+    this.gesuchsjahrId = gesuchsjahrId;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+    
+    this.gesuchsperiodeStart = gesuchsperiodeStart;
+    return this;
+  }
+
+   /**
+   * dd.MM.YYYY
+   * @return gesuchsperiodeStart
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGesuchsperiodeStart() {
+    return gesuchsperiodeStart;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+    this.gesuchsperiodeStart = gesuchsperiodeStart;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+    
+    this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+    return this;
+  }
+
+   /**
+   * dd.MM.YYYY
+   * @return gesuchsperiodeStopp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGesuchsperiodeStopp() {
+    return gesuchsperiodeStopp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+    this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec aufschaltterminStart(LocalDate aufschaltterminStart) {
+    
+    this.aufschaltterminStart = aufschaltterminStart;
+    return this;
+  }
+
+   /**
+   * dd.MM.YYYY
+   * @return aufschaltterminStart
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_START)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getAufschaltterminStart() {
+    return aufschaltterminStart;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_START)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
+    this.aufschaltterminStart = aufschaltterminStart;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec aufschaltterminStopp(LocalDate aufschaltterminStopp) {
+    
+    this.aufschaltterminStopp = aufschaltterminStopp;
+    return this;
+  }
+
+   /**
+   * dd.MM.YYYY
+   * @return aufschaltterminStopp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getAufschaltterminStopp() {
+    return aufschaltterminStopp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAufschaltterminStopp(LocalDate aufschaltterminStopp) {
+    this.aufschaltterminStopp = aufschaltterminStopp;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
+    
+    this.einreichefristNormal = einreichefristNormal;
+    return this;
+  }
+
+   /**
+   * dd.MM.YYYY
+   * @return einreichefristNormal
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getEinreichefristNormal() {
+    return einreichefristNormal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
+    this.einreichefristNormal = einreichefristNormal;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec einreichefristReduziert(LocalDate einreichefristReduziert) {
+    
+    this.einreichefristReduziert = einreichefristReduziert;
+    return this;
+  }
+
+   /**
+   * dd.MM.YYYY
+   * @return einreichefristReduziert
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getEinreichefristReduziert() {
+    return einreichefristReduziert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
+    this.einreichefristReduziert = einreichefristReduziert;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec ausbKostenSekII(Integer ausbKostenSekII) {
+    
+    this.ausbKostenSekII = ausbKostenSekII;
+    return this;
+  }
+
+   /**
+   * 
+   * @return ausbKostenSekII
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAusbKostenSekII() {
+    return ausbKostenSekII;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbKostenSekII(Integer ausbKostenSekII) {
+    this.ausbKostenSekII = ausbKostenSekII;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec ausbKostenTertiaer(Integer ausbKostenTertiaer) {
+    
+    this.ausbKostenTertiaer = ausbKostenTertiaer;
+    return this;
+  }
+
+   /**
+   * 
+   * @return ausbKostenTertiaer
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAusbKostenTertiaer() {
+    return ausbKostenTertiaer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
+    this.ausbKostenTertiaer = ausbKostenTertiaer;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec freibetragVermoegen(Integer freibetragVermoegen) {
+    
+    this.freibetragVermoegen = freibetragVermoegen;
+    return this;
+  }
+
+   /**
+   * 
+   * @return freibetragVermoegen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getFreibetragVermoegen() {
+    return freibetragVermoegen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFreibetragVermoegen(Integer freibetragVermoegen) {
+    this.freibetragVermoegen = freibetragVermoegen;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+    
+    this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
+    return this;
+  }
+
+   /**
+   * 
+   * @return freibetragErwerbseinkommen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getFreibetragErwerbseinkommen() {
+    return freibetragErwerbseinkommen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFreibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+    this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec einkommensfreibetrag(Integer einkommensfreibetrag) {
+    
+    this.einkommensfreibetrag = einkommensfreibetrag;
+    return this;
+  }
+
+   /**
+   * 
+   * @return einkommensfreibetrag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getEinkommensfreibetrag() {
+    return einkommensfreibetrag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
+    this.einkommensfreibetrag = einkommensfreibetrag;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec elternbeteiligungssatz(Integer elternbeteiligungssatz) {
+    
+    this.elternbeteiligungssatz = elternbeteiligungssatz;
+    return this;
+  }
+
+   /**
+   * 
+   * @return elternbeteiligungssatz
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getElternbeteiligungssatz() {
+    return elternbeteiligungssatz;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
+    this.elternbeteiligungssatz = elternbeteiligungssatz;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec vermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
+    return this;
+  }
+
+   /**
+   * 
+   * @return vermoegensfreibetrag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getVermoegensfreibetrag() {
+    return vermoegensfreibetrag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSFREIBETRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVermoegensfreibetrag(Integer vermoegensfreibetrag) {
+    this.vermoegensfreibetrag = vermoegensfreibetrag;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
+    return this;
+  }
+
+   /**
+   * 
+   * @return vermogenSatzAngerechnet
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getVermogenSatzAngerechnet() {
+    return vermogenSatzAngerechnet;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+    this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec integrationszulage(Integer integrationszulage) {
+    
+    this.integrationszulage = integrationszulage;
+    return this;
+  }
+
+   /**
+   * 
+   * @return integrationszulage
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getIntegrationszulage() {
+    return integrationszulage;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setIntegrationszulage(Integer integrationszulage) {
+    this.integrationszulage = integrationszulage;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec limiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
+    
+    this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
+    return this;
+  }
+
+   /**
+   * 
+   * @return limiteEkFreibetragIntegrationszulag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getLimiteEkFreibetragIntegrationszulag() {
+    return limiteEkFreibetragIntegrationszulag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setLimiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
+    this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+    
+    this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
+    return this;
+  }
+
+   /**
+   * 
+   * @return stipLimiteMinimalstipendium
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getStipLimiteMinimalstipendium() {
+    return stipLimiteMinimalstipendium;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+    this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec person1(Integer person1) {
+    
+    this.person1 = person1;
+    return this;
+  }
+
+   /**
+   * 
+   * @return person1
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSON1)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPerson1() {
+    return person1;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSON1)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPerson1(Integer person1) {
+    this.person1 = person1;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec personen2(Integer personen2) {
+    
+    this.personen2 = personen2;
+    return this;
+  }
+
+   /**
+   * 
+   * @return personen2
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN2)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPersonen2() {
+    return personen2;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN2)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonen2(Integer personen2) {
+    this.personen2 = personen2;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec personen3(Integer personen3) {
+    
+    this.personen3 = personen3;
+    return this;
+  }
+
+   /**
+   * 
+   * @return personen3
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN3)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPersonen3() {
+    return personen3;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN3)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonen3(Integer personen3) {
+    this.personen3 = personen3;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec personen4(Integer personen4) {
+    
+    this.personen4 = personen4;
+    return this;
+  }
+
+   /**
+   * 
+   * @return personen4
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN4)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPersonen4() {
+    return personen4;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN4)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonen4(Integer personen4) {
+    this.personen4 = personen4;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec personen5(Integer personen5) {
+    
+    this.personen5 = personen5;
+    return this;
+  }
+
+   /**
+   * 
+   * @return personen5
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN5)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPersonen5() {
+    return personen5;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN5)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonen5(Integer personen5) {
+    this.personen5 = personen5;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec personen6(Integer personen6) {
+    
+    this.personen6 = personen6;
+    return this;
+  }
+
+   /**
+   * 
+   * @return personen6
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN6)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPersonen6() {
+    return personen6;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN6)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonen6(Integer personen6) {
+    this.personen6 = personen6;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec personen7(Integer personen7) {
+    
+    this.personen7 = personen7;
+    return this;
+  }
+
+   /**
+   * 
+   * @return personen7
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN7)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getPersonen7() {
+    return personen7;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN7)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonen7(Integer personen7) {
+    this.personen7 = personen7;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec proWeiterePerson(Integer proWeiterePerson) {
+    
+    this.proWeiterePerson = proWeiterePerson;
+    return this;
+  }
+
+   /**
+   * 
+   * @return proWeiterePerson
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PRO_WEITERE_PERSON)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getProWeiterePerson() {
+    return proWeiterePerson;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PRO_WEITERE_PERSON)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setProWeiterePerson(Integer proWeiterePerson) {
+    this.proWeiterePerson = proWeiterePerson;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec kinder0018(Integer kinder0018) {
+    
+    this.kinder0018 = kinder0018;
+    return this;
+  }
+
+   /**
+   * 
+   * @return kinder0018
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER0018)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getKinder0018() {
+    return kinder0018;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER0018)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinder0018(Integer kinder0018) {
+    this.kinder0018 = kinder0018;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec jugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
+    
+    this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
+    return this;
+  }
+
+   /**
+   * 
+   * @return jugendlicheErwachsene1925
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getJugendlicheErwachsene1925() {
+    return jugendlicheErwachsene1925;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1925)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setJugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
+    this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec erwachsene2699(Integer erwachsene2699) {
+    
+    this.erwachsene2699 = erwachsene2699;
+    return this;
+  }
+
+   /**
+   * 
+   * @return erwachsene2699
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ERWACHSENE2699)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getErwachsene2699() {
+    return erwachsene2699;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERWACHSENE2699)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setErwachsene2699(Integer erwachsene2699) {
+    this.erwachsene2699 = erwachsene2699;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenFam1pers(Integer wohnkostenFam1pers) {
+    
+    this.wohnkostenFam1pers = wohnkostenFam1pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenFam1pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM1PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenFam1pers() {
+    return wohnkostenFam1pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM1PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenFam1pers(Integer wohnkostenFam1pers) {
+    this.wohnkostenFam1pers = wohnkostenFam1pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenFam2pers(Integer wohnkostenFam2pers) {
+    
+    this.wohnkostenFam2pers = wohnkostenFam2pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenFam2pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM2PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenFam2pers() {
+    return wohnkostenFam2pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM2PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenFam2pers(Integer wohnkostenFam2pers) {
+    this.wohnkostenFam2pers = wohnkostenFam2pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenFam3pers(Integer wohnkostenFam3pers) {
+    
+    this.wohnkostenFam3pers = wohnkostenFam3pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenFam3pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM3PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenFam3pers() {
+    return wohnkostenFam3pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM3PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenFam3pers(Integer wohnkostenFam3pers) {
+    this.wohnkostenFam3pers = wohnkostenFam3pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenFam4pers(Integer wohnkostenFam4pers) {
+    
+    this.wohnkostenFam4pers = wohnkostenFam4pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenFam4pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM4PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenFam4pers() {
+    return wohnkostenFam4pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM4PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenFam4pers(Integer wohnkostenFam4pers) {
+    this.wohnkostenFam4pers = wohnkostenFam4pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
+    
+    this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenFam5pluspers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenFam5pluspers() {
+    return wohnkostenFam5pluspers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
+    this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
+    
+    this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenPersoenlich1pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenPersoenlich1pers() {
+    return wohnkostenPersoenlich1pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
+    this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
+    
+    this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenPersoenlich2pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenPersoenlich2pers() {
+    return wohnkostenPersoenlich2pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
+    this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
+    
+    this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenPersoenlich3pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenPersoenlich3pers() {
+    return wohnkostenPersoenlich3pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
+    this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
+    
+    this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenPersoenlich4pers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenPersoenlich4pers() {
+    return wohnkostenPersoenlich4pers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
+    this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec wohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
+    
+    this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
+    return this;
+  }
+
+   /**
+   * 
+   * @return wohnkostenPersoenlich5pluspers
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkostenPersoenlich5pluspers() {
+    return wohnkostenPersoenlich5pluspers;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
+    this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec preisProMahlzeit(Integer preisProMahlzeit) {
+    
+    this.preisProMahlzeit = preisProMahlzeit;
+    return this;
+  }
+
+   /**
+   * 
+   * @return preisProMahlzeit
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
+
+  public Integer getPreisProMahlzeit() {
+    return preisProMahlzeit;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPreisProMahlzeit(Integer preisProMahlzeit) {
+    this.preisProMahlzeit = preisProMahlzeit;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec maxSaeule3a(Integer maxSaeule3a) {
+    
+    this.maxSaeule3a = maxSaeule3a;
+    return this;
+  }
+
+   /**
+   * 
+   * @return maxSaeule3a
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getMaxSaeule3a() {
+    return maxSaeule3a;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMaxSaeule3a(Integer maxSaeule3a) {
+    this.maxSaeule3a = maxSaeule3a;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec anzahlWochenLehre(Integer anzahlWochenLehre) {
+    
+    this.anzahlWochenLehre = anzahlWochenLehre;
+    return this;
+  }
+
+   /**
+   * 
+   * @return anzahlWochenLehre
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAnzahlWochenLehre() {
+    return anzahlWochenLehre;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
+    this.anzahlWochenLehre = anzahlWochenLehre;
+  }
+
+
+  public GesuchsperiodeCreateDtoSpec anzahlWochenSchule(Integer anzahlWochenSchule) {
+    
+    this.anzahlWochenSchule = anzahlWochenSchule;
+    return this;
+  }
+
+   /**
+   * 
+   * @return anzahlWochenSchule
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAnzahlWochenSchule() {
+    return anzahlWochenSchule;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
+    this.anzahlWochenSchule = anzahlWochenSchule;
   }
 
   @Override
@@ -163,25 +1454,111 @@ public class GesuchsperiodeCreateDtoSpec {
       return false;
     }
     GesuchsperiodeCreateDtoSpec gesuchsperiodeCreate = (GesuchsperiodeCreateDtoSpec) o;
-    return Objects.equals(this.gueltigAb, gesuchsperiodeCreate.gueltigAb) &&
-        Objects.equals(this.gueltigBis, gesuchsperiodeCreate.gueltigBis) &&
+    return Objects.equals(this.bezeichnungDe, gesuchsperiodeCreate.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, gesuchsperiodeCreate.bezeichnungFr) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeCreate.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiodeCreate.aufschaltdatum);
+        Objects.equals(this.fiskaljahr, gesuchsperiodeCreate.fiskaljahr) &&
+        Objects.equals(this.gesuchsjahrId, gesuchsperiodeCreate.gesuchsjahrId) &&
+        Objects.equals(this.gesuchsperiodeStart, gesuchsperiodeCreate.gesuchsperiodeStart) &&
+        Objects.equals(this.gesuchsperiodeStopp, gesuchsperiodeCreate.gesuchsperiodeStopp) &&
+        Objects.equals(this.aufschaltterminStart, gesuchsperiodeCreate.aufschaltterminStart) &&
+        Objects.equals(this.aufschaltterminStopp, gesuchsperiodeCreate.aufschaltterminStopp) &&
+        Objects.equals(this.einreichefristNormal, gesuchsperiodeCreate.einreichefristNormal) &&
+        Objects.equals(this.einreichefristReduziert, gesuchsperiodeCreate.einreichefristReduziert) &&
+        Objects.equals(this.ausbKostenSekII, gesuchsperiodeCreate.ausbKostenSekII) &&
+        Objects.equals(this.ausbKostenTertiaer, gesuchsperiodeCreate.ausbKostenTertiaer) &&
+        Objects.equals(this.freibetragVermoegen, gesuchsperiodeCreate.freibetragVermoegen) &&
+        Objects.equals(this.freibetragErwerbseinkommen, gesuchsperiodeCreate.freibetragErwerbseinkommen) &&
+        Objects.equals(this.einkommensfreibetrag, gesuchsperiodeCreate.einkommensfreibetrag) &&
+        Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeCreate.elternbeteiligungssatz) &&
+        Objects.equals(this.vermoegensfreibetrag, gesuchsperiodeCreate.vermoegensfreibetrag) &&
+        Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeCreate.vermogenSatzAngerechnet) &&
+        Objects.equals(this.integrationszulage, gesuchsperiodeCreate.integrationszulage) &&
+        Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeCreate.limiteEkFreibetragIntegrationszulag) &&
+        Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeCreate.stipLimiteMinimalstipendium) &&
+        Objects.equals(this.person1, gesuchsperiodeCreate.person1) &&
+        Objects.equals(this.personen2, gesuchsperiodeCreate.personen2) &&
+        Objects.equals(this.personen3, gesuchsperiodeCreate.personen3) &&
+        Objects.equals(this.personen4, gesuchsperiodeCreate.personen4) &&
+        Objects.equals(this.personen5, gesuchsperiodeCreate.personen5) &&
+        Objects.equals(this.personen6, gesuchsperiodeCreate.personen6) &&
+        Objects.equals(this.personen7, gesuchsperiodeCreate.personen7) &&
+        Objects.equals(this.proWeiterePerson, gesuchsperiodeCreate.proWeiterePerson) &&
+        Objects.equals(this.kinder0018, gesuchsperiodeCreate.kinder0018) &&
+        Objects.equals(this.jugendlicheErwachsene1925, gesuchsperiodeCreate.jugendlicheErwachsene1925) &&
+        Objects.equals(this.erwachsene2699, gesuchsperiodeCreate.erwachsene2699) &&
+        Objects.equals(this.wohnkostenFam1pers, gesuchsperiodeCreate.wohnkostenFam1pers) &&
+        Objects.equals(this.wohnkostenFam2pers, gesuchsperiodeCreate.wohnkostenFam2pers) &&
+        Objects.equals(this.wohnkostenFam3pers, gesuchsperiodeCreate.wohnkostenFam3pers) &&
+        Objects.equals(this.wohnkostenFam4pers, gesuchsperiodeCreate.wohnkostenFam4pers) &&
+        Objects.equals(this.wohnkostenFam5pluspers, gesuchsperiodeCreate.wohnkostenFam5pluspers) &&
+        Objects.equals(this.wohnkostenPersoenlich1pers, gesuchsperiodeCreate.wohnkostenPersoenlich1pers) &&
+        Objects.equals(this.wohnkostenPersoenlich2pers, gesuchsperiodeCreate.wohnkostenPersoenlich2pers) &&
+        Objects.equals(this.wohnkostenPersoenlich3pers, gesuchsperiodeCreate.wohnkostenPersoenlich3pers) &&
+        Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeCreate.wohnkostenPersoenlich4pers) &&
+        Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeCreate.wohnkostenPersoenlich5pluspers) &&
+        Objects.equals(this.preisProMahlzeit, gesuchsperiodeCreate.preisProMahlzeit) &&
+        Objects.equals(this.maxSaeule3a, gesuchsperiodeCreate.maxSaeule3a) &&
+        Objects.equals(this.anzahlWochenLehre, gesuchsperiodeCreate.anzahlWochenLehre) &&
+        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeCreate.anzahlWochenSchule);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gueltigAb, gueltigBis, einreichfrist, aufschaltdatum);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermoegensfreibetrag, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeCreateDtoSpec {\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
-    sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
+    sb.append("    fiskaljahr: ").append(toIndentedString(fiskaljahr)).append("\n");
+    sb.append("    gesuchsjahrId: ").append(toIndentedString(gesuchsjahrId)).append("\n");
+    sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
+    sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
+    sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
+    sb.append("    aufschaltterminStopp: ").append(toIndentedString(aufschaltterminStopp)).append("\n");
+    sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
+    sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
+    sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
+    sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
+    sb.append("    freibetragVermoegen: ").append(toIndentedString(freibetragVermoegen)).append("\n");
+    sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
+    sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
+    sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
+    sb.append("    vermoegensfreibetrag: ").append(toIndentedString(vermoegensfreibetrag)).append("\n");
+    sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
+    sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
+    sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");
+    sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
+    sb.append("    person1: ").append(toIndentedString(person1)).append("\n");
+    sb.append("    personen2: ").append(toIndentedString(personen2)).append("\n");
+    sb.append("    personen3: ").append(toIndentedString(personen3)).append("\n");
+    sb.append("    personen4: ").append(toIndentedString(personen4)).append("\n");
+    sb.append("    personen5: ").append(toIndentedString(personen5)).append("\n");
+    sb.append("    personen6: ").append(toIndentedString(personen6)).append("\n");
+    sb.append("    personen7: ").append(toIndentedString(personen7)).append("\n");
+    sb.append("    proWeiterePerson: ").append(toIndentedString(proWeiterePerson)).append("\n");
+    sb.append("    kinder0018: ").append(toIndentedString(kinder0018)).append("\n");
+    sb.append("    jugendlicheErwachsene1925: ").append(toIndentedString(jugendlicheErwachsene1925)).append("\n");
+    sb.append("    erwachsene2699: ").append(toIndentedString(erwachsene2699)).append("\n");
+    sb.append("    wohnkostenFam1pers: ").append(toIndentedString(wohnkostenFam1pers)).append("\n");
+    sb.append("    wohnkostenFam2pers: ").append(toIndentedString(wohnkostenFam2pers)).append("\n");
+    sb.append("    wohnkostenFam3pers: ").append(toIndentedString(wohnkostenFam3pers)).append("\n");
+    sb.append("    wohnkostenFam4pers: ").append(toIndentedString(wohnkostenFam4pers)).append("\n");
+    sb.append("    wohnkostenFam5pluspers: ").append(toIndentedString(wohnkostenFam5pluspers)).append("\n");
+    sb.append("    wohnkostenPersoenlich1pers: ").append(toIndentedString(wohnkostenPersoenlich1pers)).append("\n");
+    sb.append("    wohnkostenPersoenlich2pers: ").append(toIndentedString(wohnkostenPersoenlich2pers)).append("\n");
+    sb.append("    wohnkostenPersoenlich3pers: ").append(toIndentedString(wohnkostenPersoenlich3pers)).append("\n");
+    sb.append("    wohnkostenPersoenlich4pers: ").append(toIndentedString(wohnkostenPersoenlich4pers)).append("\n");
+    sb.append("    wohnkostenPersoenlich5pluspers: ").append(toIndentedString(wohnkostenPersoenlich5pluspers)).append("\n");
+    sb.append("    preisProMahlzeit: ").append(toIndentedString(preisProMahlzeit)).append("\n");
+    sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
+    sb.append("    anzahlWochenLehre: ").append(toIndentedString(anzahlWochenLehre)).append("\n");
+    sb.append("    anzahlWochenSchule: ").append(toIndentedString(anzahlWochenSchule)).append("\n");
     sb.append("}");
     return sb.toString();
   }

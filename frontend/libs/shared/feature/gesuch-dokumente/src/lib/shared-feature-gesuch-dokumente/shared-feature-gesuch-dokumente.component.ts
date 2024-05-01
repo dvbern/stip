@@ -19,7 +19,7 @@ import {
   gesuchFormSteps,
 } from '@dv/shared/model/gesuch-form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 
 type RequiredDocument = {
   documentName: string;
@@ -55,7 +55,7 @@ const requiredDocuments: RequiredDocument[] = Object.values(gesuchFormSteps)
     SharedUiLoadingComponent,
     TranslateModule,
     MatTableModule,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
