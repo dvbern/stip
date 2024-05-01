@@ -27,6 +27,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @AusbildungNichtGefundenRequiredFieldsConstraint
 @AusbildungNichtGefundenRequiredNullFieldsConstraint
 @AusbildungEndDateMustBeAfterStartConstraint
+@AusbildungsortRequiredIfSwissConstraint
 @Entity
 @Table(
     name = "ausbildung",
@@ -78,4 +79,12 @@ public class Ausbildung extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "pensum", nullable = false)
     private AusbildungsPensum pensum;
+
+    @Nullable
+    @Column(name = "ausbildungsort")
+    private String ausbildungsort;
+
+    @NotNull
+    @Column(name = "is_ausbildung_ausland")
+    private boolean isAusbildungAusland = false;
 }
