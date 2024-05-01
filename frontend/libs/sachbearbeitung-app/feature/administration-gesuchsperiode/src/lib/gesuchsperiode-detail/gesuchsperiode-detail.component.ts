@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   Signal,
+  computed,
   effect,
   inject,
   input,
@@ -51,6 +52,7 @@ import {
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoNumber, maskitoYear } from '@dv/shared/util/maskito-util';
+import { isPending, pending, success } from '@dv/shared/util/remote-data';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 import { PublishComponent } from '../publish/publish.component';
@@ -146,6 +148,38 @@ export class GesuchsperiodeDetailComponent {
       <string | null>null,
       [Validators.required],
     ],
+  });
+
+  gesuchsjahrChangedSig = toSignal(
+    this.form.controls.gesuchsjahrId.valueChanges,
+  );
+  publishBlockedReasonSig = computed(() => {
+    const gesuchsjahrId =
+      this.gesuchsjahrChangedSig() ??
+      this.store.currentGesuchsperiode.data()?.gesuchsjahrId;
+    const gesuchsjahr = this.store.gesuchsjahre
+      .data()
+      ?.find((g) => g.id === gesuchsjahrId);
+
+    if (
+      isPending(this.store.currentGesuchsperiode()) ||
+      isPending(this.store.gesuchsjahre())
+    ) {
+      return pending();
+    }
+
+    if (!gesuchsjahr) {
+      return success(
+        'sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr',
+      );
+    }
+
+    if (gesuchsjahr.gueltigkeitStatus === 'ENTWURF') {
+      return success(
+        'sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf',
+      );
+    }
+    return null;
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
