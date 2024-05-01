@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
@@ -33,7 +31,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfNettoerwerbseinkommen() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setNettoerwerbseinkommen(BigDecimal.ONE)
+                .setNettoerwerbseinkommen(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_LOHNABRECHNUNG);
@@ -43,7 +41,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfWohnkosten() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setWohnkosten(BigDecimal.ONE)
+                .setWohnkosten(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_MIETVERTRAG);
@@ -53,7 +51,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfFahrkosten() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setFahrkosten(BigDecimal.ONE)
+                .setFahrkosten(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(
@@ -66,7 +64,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfEoLeistungen() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setEoLeistungen(BigDecimal.ONE)
+                .setEoLeistungen(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(
@@ -79,7 +77,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfRenten() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setRenten(BigDecimal.ONE)
+                .setRenten(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(
@@ -92,7 +90,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfBeitraege() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setBeitraege(BigDecimal.ONE)
+                .setBeitraege(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(
@@ -105,7 +103,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfZulagen() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setZulagen(BigDecimal.ONE)
+                .setZulagen(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(
@@ -118,7 +116,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfAlimente() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setAlimente(BigDecimal.ONE)
+                .setAlimente(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ALIMENTE);

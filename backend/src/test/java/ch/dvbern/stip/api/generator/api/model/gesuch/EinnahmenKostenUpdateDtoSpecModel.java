@@ -7,20 +7,20 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 public class EinnahmenKostenUpdateDtoSpecModel {
     public static final EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDtoSpec =
         TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model, faker) -> {
-            model.setNettoerwerbseinkommen(TestUtil.getRandomBigDecimal());
-            model.setZulagen(TestUtil.getRandomBigDecimal());
-            model.setRenten(TestUtil.getRandomBigDecimal());
-            model.setEoLeistungen(TestUtil.getRandomBigDecimal());
-            model.setErgaenzungsleistungen(TestUtil.getRandomBigDecimal());
-            model.setBeitraege(TestUtil.getRandomBigDecimal());
-            model.setAusbildungskostenSekundarstufeZwei(TestUtil.getRandomBigDecimal());
-            model.setAusbildungskostenTertiaerstufe(TestUtil.getRandomBigDecimal());
-            model.setFahrkosten(TestUtil.getRandomBigDecimal());
-            model.setWohnkosten(TestUtil.getRandomBigDecimal());
+            model.setNettoerwerbseinkommen(TestUtil.getRandomInt());
+            model.setZulagen(TestUtil.getRandomInt());
+            model.setRenten(TestUtil.getRandomInt());
+            model.setEoLeistungen(TestUtil.getRandomInt());
+            model.setErgaenzungsleistungen(TestUtil.getRandomInt());
+            model.setBeitraege(TestUtil.getRandomInt());
+            model.setAusbildungskostenSekundarstufeZwei(TestUtil.getRandomInt());
+            model.setAusbildungskostenTertiaerstufe(TestUtil.getRandomInt());
+            model.setFahrkosten(TestUtil.getRandomInt());
+            model.setWohnkosten(TestUtil.getRandomInt());
             model.setVerdienstRealisiert(false);
             model.setWillDarlehen(false);
             model.setAuswaertigeMittagessenProWoche(faker.number().randomDigit());
-            model.setBetreuungskostenKinder(TestUtil.getRandomBigDecimal());
+            model.setBetreuungskostenKinder(TestUtil.getRandomInt());
         });
 
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecEinnahmenKosten =
