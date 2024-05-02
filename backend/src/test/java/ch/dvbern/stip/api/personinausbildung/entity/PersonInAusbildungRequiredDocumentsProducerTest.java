@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -148,7 +147,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         formular.setPersonInAusbildung(
             new PersonInAusbildung()
                 .setSozialhilfebeitraege(false)
-                .setVermoegenVorjahr(BigDecimal.ONE)
+                .setVermoegenVorjahr(1)
         );
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),

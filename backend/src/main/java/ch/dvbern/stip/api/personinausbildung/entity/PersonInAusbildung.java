@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -136,7 +135,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @Nullable
     @Column(nullable = true)
-    private BigDecimal vermoegenVorjahr;
+    private Integer vermoegenVorjahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)

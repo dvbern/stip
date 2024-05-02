@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.partner.entity;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,7 +14,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 
         Partner partner = new Partner();
         partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setJahreseinkommen(BigDecimal.ONE);
+        partner.setJahreseinkommen(1);
 
         assertThat(validator.isValid(partner, null), is(false));
     }
@@ -28,7 +26,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 
         Partner partner = new Partner();
         partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setVerpflegungskosten(BigDecimal.ONE);
+        partner.setVerpflegungskosten(1);
 
         assertThat(validator.isValid(partner, null), is(false));
     }
@@ -40,7 +38,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 
         Partner partner = new Partner();
         partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setFahrkosten(BigDecimal.ONE);
+        partner.setFahrkosten(1);
 
         assertThat(validator.isValid(partner, null), is(false));
     }
