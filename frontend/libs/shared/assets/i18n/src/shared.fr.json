@@ -388,12 +388,12 @@
   "shared.form.einnahmenkosten.file.VERDIENST": "Si des subsides de formation ont été perçus l’année précédente : Copie de tous les décomptes de salaire mensuels indiquant les revenus touchés durant l’année de formation précédente, c’est-à-dire si la formation débute en août : justificatifs de salaire d’août à juillet de l’année de formation précédente, et si la formation débute en septembre : justificatifs de salaire de septembre à août de l’année de formation précédente (= en règle générale, 12 justificatifs)",
 
   "shared.abschluss.title": "Validation",
-  "shared.form.abschluss.notReady": "Vous ne pouvez valider la demande que lorsque vous avez rempli tous les champs obligatoires.",
-  "shared.form.abschluss.readyToSend.text": "Voulez-vous vraiment valider la demande?",
-  "shared.form.abschluss.readyToSend.warning": "Les modifications ultérieures ne sont plus possibles.",
-  "shared.form.abschluss.readyToSend.info": "La demande n'est considérée comme complète que lorsque tous les documents requis ont été téléchargés.<br>Vous avez 30 jours pour le faire.",
-  "shared.form.abschluss.submitted": "Merci de nous avoir transmis votre demande<br><br>Si vous n'avez pas encore téléchargé tous les documents nécessaires, veuillez le faire dans les 30 prochains jours<br><br>Imprimez la feuille de signatures et envoyez-la signée au BKD",
-  "shared.form.abschluss.abschliessen": "Fermer",
+  "shared.form.abschluss.notReady": "Toutes les pages n'ont pas été remplies. Vous ne pouvez pas valider la demande tant que tous les champs obligatoires ne sont pas remplis.",
+  "shared.form.abschluss.ready": "Tous les champs obligatoires ont été remplis. Vous pouvez maintenant valider la demande.",
+  "shared.form.abschluss.dialog.title": "Voulez-vous vraiment valider la demande ?",
+  "shared.form.abschluss.dialog.text": "Les modifications ultérieures ne seront pas possibles.",
+  "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
+  "shared.form.abschluss.abschliessen": "Valider",
 
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",

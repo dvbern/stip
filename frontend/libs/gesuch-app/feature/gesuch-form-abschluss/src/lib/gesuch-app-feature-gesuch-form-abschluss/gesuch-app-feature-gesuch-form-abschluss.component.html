@@ -4,30 +4,18 @@
       <div class="col-12 col-xl-8 mt-4 d-flex flex-column align-items-start">
         @switch (viewSig().abschlussPhase) {
           @case ('NOT_READY') {
-            <p [innerHTML]="'shared.form.abschluss.notReady' | translate"></p>
+            <div class="alert alert-warning d-flex" role="alert">
+              <span class="text-warning material-symbols-rounded me-3">warning</span>
+              <span [innerHTML]="'shared.form.abschluss.notReady' | translate"></span>
+            </div>
           }
           @case ('READY_TO_SEND') {
-            <p [innerHTML]="'shared.form.abschluss.readyToSend.text' | translate"></p>
             <div class="alert alert-info d-flex" role="alert">
               <span class="text-info material-symbols-rounded me-3">info</span>
-              <span [innerHTML]="'shared.form.abschluss.readyToSend.warning' | translate"></span>
+              <span [innerHTML]="'shared.form.abschluss.ready' | translate"></span>
             </div>
-            <p [innerHTML]="'shared.form.abschluss.readyToSend.info' | translate"></p>
 
-            @for (message of validationMessagesSig(); track message) {
-              @if (message) {
-                <ngb-alert class="w-100" type="warning" [dismissible]="false">
-                  {{ message.key | translate: message.params }}
-                </ngb-alert>
-              }
-            }
-            @if (viewSig().canAbschliessen === false && validationMessagesSig().length === 0) {
-              <ngb-alert class="w-100" type="danger" [dismissible]="false">
-                {{ defaultErrorKey | translate }}
-              </ngb-alert>
-            }
             <button
-              [disabled]="validationMessagesSig().length > 0 || !viewSig().canAbschliessen"
               type="submit"
               class="btn btn-primary m-auto mt-4"
               (click)="abschliessen(gesuch.id)"
@@ -37,7 +25,10 @@
             </button>
           }
           @case ('SUBMITTED') {
-            <p [innerHTML]="'shared.form.abschluss.submitted' | translate"></p>
+            <div class="alert alert-success d-flex" role="alert">
+              <span class="text-success material-symbols-rounded me-3">check_circle</span>
+              <span [innerHTML]="'shared.form.abschluss.submitted' | translate"></span>
+            </div>
           }
         }
       </div>

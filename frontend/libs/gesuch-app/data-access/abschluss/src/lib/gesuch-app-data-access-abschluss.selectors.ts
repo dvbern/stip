@@ -23,7 +23,7 @@ export const selectGesuchAppDataAccessAbschlusssView = createSelector(
       validations: allValidations,
       canCheck: validations?.errors?.length === 0,
       canAbschliessen: state.checkResult?.success,
-      abschlussPhase: toAbschlussPhase(gesuch, true),
+      abschlussPhase: toAbschlussPhase(gesuch, !!state.checkResult?.success),
     };
   },
 );

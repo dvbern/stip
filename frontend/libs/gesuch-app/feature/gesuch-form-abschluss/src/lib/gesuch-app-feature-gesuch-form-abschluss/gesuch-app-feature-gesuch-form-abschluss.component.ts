@@ -2,26 +2,20 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
-  computed,
   inject,
 } from '@angular/core';
-import {
-  takeUntilDestroyed,
-  toObservable,
-  toSignal,
-} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
 import {
   GesuchAppDataAccessAbschlussApiEvents,
   selectGesuchAppDataAccessAbschlusssView,
 } from '@dv/gesuch-app/data-access/abschluss';
-import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import {
   GENERIC_REQUIRED_ERROR,
@@ -29,44 +23,26 @@ import {
 } from '@dv/shared/model/error';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
-import { onTranslationChanges$ } from '@dv/shared/util-fn/translation-helper';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export const DEFAULT_ERROR_KEY = 'shared.gesuch.validation.generic';
+
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
   standalone: true,
-  imports: [CommonModule, TranslateModule, NgbAlert],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
-  private translate = inject(TranslateService);
-  private translationsSig = toSignal(onTranslationChanges$(this.translate));
   private dialog = inject(MatDialog);
+  destroyRef = inject(DestroyRef);
 
   viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlusssView);
-  validationMessagesSig = computed(() => {
-    const validations = this.viewSig().validations;
-    const translations = this.translationsSig()?.translations;
-
-    if (!validations || !translations) {
-      return [];
-    }
-
-    const parsedValidations = validations.map(
-      getTranslationFromValidation(translations),
-    );
-    return parsedValidations.some((v) => v === null)
-      ? [{ key: DEFAULT_ERROR_KEY }]
-      : parsedValidations;
-  });
-
-  defaultErrorKey = DEFAULT_ERROR_KEY;
 
   constructor() {
-    // validate form only if no formErrors are present
+    // validate form only if no formErrors form validatePages are present
     combineLatest([
       getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig).pipe(
         filter(isDefined),
@@ -88,20 +64,19 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormAbschluss.init());
-    this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
   }
 
   abschliessen(gesuchId: string) {
     const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'shared.form.abschluss.readyToSend.text',
-      message: 'shared.form.abschluss.readyToSend.warning',
+      title: 'shared.form.abschluss.dialog.title',
+      message: 'shared.form.abschluss.dialog.text',
       confirmText: 'shared.form.abschluss.abschliessen',
-      cancelText: 'shared.ui.no',
+      cancelText: 'shared.cancel',
     });
 
     dialogRef
       .afterClosed()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
           this.store.dispatch(
