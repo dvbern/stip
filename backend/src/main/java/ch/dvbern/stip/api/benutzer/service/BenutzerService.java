@@ -92,9 +92,8 @@ public class BenutzerService {
         return newBenutzer;
     }
 
-    public Optional<BenutzerDto> getBenutzer(UUID id) {
-        var optionalFall = benutzerRepository.findByIdOptional(id);
-        return optionalFall.map(benutzerMapper::toDto);
+    public Optional<Benutzer> getBenutzer(final UUID id) {
+        return benutzerRepository.findByIdOptional(id);
     }
 
     @Transactional
