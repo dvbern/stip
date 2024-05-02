@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  <changeSet id="1714646063455-7" author="fuju (generated)">
+    <createIndex indexName="FK_gesuch_formular_auszahlung_id" tableName="gesuch_formular" unique="false">
+      <column name="auszahlung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-9" author="fuju (generated)">
+    <createIndex indexName="FK_gesuch_formular_einnahmen_kosten_id" tableName="gesuch_formular" unique="false">
+      <column name="einnahmen_kosten_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-11" author="fuju (generated)">
+    <createIndex indexName="IX_auszahlung_adresse_id" tableName="auszahlung" unique="false">
+      <column name="adresse_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-13" author="fuju (generated)">
+    <createIndex indexName="IX_benutzer_benutzereinstellungen_id" tableName="benutzer" unique="false">
+      <column name="benutzereinstellungen_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-15" author="fuju (generated)">
+    <createIndex indexName="IX_eltern_adresse_id" tableName="eltern" unique="false">
+      <column name="adresse_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-17" author="fuju (generated)">
+    <createIndex indexName="IX_fall_gesuchsteller_id" tableName="fall" unique="false">
+      <column name="gesuchsteller_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-19" author="fuju (generated)">
+    <createIndex indexName="IX_gesuch_formular_ausbildung_id" tableName="gesuch_formular" unique="false">
+      <column name="ausbildung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-21" author="fuju (generated)">
+    <createIndex indexName="IX_gesuch_formular_familiensituation_id" tableName="gesuch_formular" unique="false">
+      <column name="familiensituation_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-23" author="fuju (generated)">
+    <createIndex indexName="IX_gesuch_formular_partner_id" tableName="gesuch_formular" unique="false">
+      <column name="partner_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-25" author="fuju (generated)">
+    <createIndex indexName="IX_gesuch_formular_person_in_ausbildung_id" tableName="gesuch_formular" unique="false">
+      <column name="person_in_ausbildung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-27" author="fuju (generated)">
+    <createIndex indexName="IX_gesuch_tranche_gesuch_formular_id" tableName="gesuch_tranche" unique="false">
+      <column name="gesuch_formular_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-29" author="fuju (generated)">
+    <createIndex indexName="IX_partner_adresse_id" tableName="partner" unique="false">
+      <column name="adresse_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-31" author="fuju (generated)">
+    <createIndex indexName="IX_person_in_ausbildung_adresse_id" tableName="person_in_ausbildung" unique="false">
+      <column name="adresse_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-33" author="fuju (generated)">
+    <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_benutzer_id"
+                 tableName="sachbearbeiter_zuordnung_stammdaten"
+                 unique="false">
+      <column name="benutzer_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="1714646063455-35" author="fuju (generated)">
+    <createIndex indexName="IX_zuordnung_fall_id" tableName="zuordnung" unique="false">
+      <column name="fall_id"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>
