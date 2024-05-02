@@ -394,21 +394,16 @@
         <artifactId>liquibase-maven-plugin</artifactId>
         <version>${liquibase-maven-plugin.version}</version>
         <configuration>
-          <changeLogDirectory>src/main/resources/db/migration</changeLogDirectory>
           <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
-
+          <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
+          <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
+          <propertyFile>liquibase.properties</propertyFile>
+          
           <!-- Old state -->
-          <url>jdbc:postgresql://localhost:5432/stip</url>
           <driver>org.postgresql.Driver</driver>
 
           <!-- Target state -->
           <referenceUrl>hibernate:ejb3:LiquibasePU</referenceUrl>
-          <username>stip</username>
-          <password>stip</password>
-          <goal>diff</goal>
-          
-          <verbose>true</verbose>
-          <logging>warning</logging>
         </configuration>
         <dependencies>
           <dependency>

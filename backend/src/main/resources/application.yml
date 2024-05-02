@@ -44,6 +44,8 @@ quarkus:
     jdbc:
       url: "${STIP_DB_URL}"
   hibernate-orm:
+    persistence-xml:
+      ignore: true
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true

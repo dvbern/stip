@@ -4,7 +4,7 @@ We use Liquibase to generate and ultimately apply our migrations. The Liquibase 
 ## Generating a new Migration
 We use the Liquibase Maven plugin to automatically generate changelogs based on the DB and the JPA entities, where the JPA entities are our source of truth. To do this, execute
 
-    mvnw liquibase:generateChangeLog
+    mvnw liquibase:generateChangeLog -Dliquibase.outputChangeLogFile=src/main/resources/db/migration/{version}/{name}.xml
     
 This will generate a changelog with only your changes. You should always check the generated changelog for any potential errors. For example, Liquibase will generate `NOT NULL` constraints on properties with the `@NotNull` annotation, which is nice, but it will also generate those constraints on properties that have `@NotNull(groups = ...)` i.e. conditionally not null properties, which will break things.
 
