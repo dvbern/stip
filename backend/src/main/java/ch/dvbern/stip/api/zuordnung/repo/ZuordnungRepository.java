@@ -4,7 +4,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.fall.entity.QFall;
+import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.type.ZuordnungType;
@@ -33,5 +36,29 @@ public class ZuordnungRepository implements BaseRepository<Zuordnung> {
             .delete(zuordnung)
             .where(zuordnung.fall.id.in(fallIds))
             .execute();
+    }
+
+    public void deleteByGesuchId(final UUID gesuchId) {
+        if (gesuchId == null) {
+            return;
+        }
+
+        final var zuordnung = QZuordnung.zuordnung;
+        final var fall = QFall.fall;
+        final var gesuch = QGesuch.gesuch;
+
+        final var found = new JPAQueryFactory(entityManager)
+            .selectFrom(zuordnung)
+            .join(fall).on(zuordnung.fall.id.eq(fall.id))
+            .join(gesuch).on(gesuch.fall.id.eq(fall.id))
+            .where(gesuch.id.eq(gesuchId))
+            .stream()
+            .map(AbstractEntity::getId)
+            .toList();
+
+        new JPAQueryFactory(entityManager)
+                .delete(zuordnung)
+                .where(zuordnung.id.in(found))
+                .execute();
     }
 }

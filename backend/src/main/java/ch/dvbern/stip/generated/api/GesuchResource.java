@@ -85,6 +85,11 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     Response getGesucheForFall(@PathParam("fallId") UUID fallId);
 
+    @GET
+    @Path("/benutzer/me")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesucheForMe();
+
     @PATCH
     @Path("/{gesuchId}")
     @Consumes({ "application/json" })

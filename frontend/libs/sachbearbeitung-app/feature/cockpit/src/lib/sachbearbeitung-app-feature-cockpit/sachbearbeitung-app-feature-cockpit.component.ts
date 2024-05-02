@@ -5,41 +5,39 @@ import {
   Component,
   OnInit,
   QueryList,
-  Signal,
   ViewChild,
   ViewChildren,
   computed,
+  effect,
   inject,
+  input,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatPaginator,
   MatPaginatorIntl,
   MatPaginatorModule,
 } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
-import { countByStatus } from '@dv/sachbearbeitung-app/util-fn/gesuch-helper';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
 import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
-
-type GesuchGroup = {
-  status: Gesuchstatus;
-  iconName: string;
-  count: number;
-};
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
@@ -49,8 +47,11 @@ type GesuchGroup = {
     TranslateModule,
     MatTableModule,
     MatSortModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
+    SharedUiLoadingComponent,
     RouterModule,
     A11yModule,
     SharedUiIconChipComponent,
@@ -66,10 +67,13 @@ type GesuchGroup = {
 })
 export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
+  private router = inject(Router);
+  showAll = input<true | undefined>(undefined, { alias: 'show-all' });
 
   @ViewChildren(SharedUiFocusableListItemDirective)
-  public items?: QueryList<SharedUiFocusableListItemDirective>;
-  public displayedColumns = [
+  items?: QueryList<SharedUiFocusableListItemDirective>;
+  @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
+  displayedColumns = [
     'fall',
     'sv-nummer',
     'nachname',
@@ -81,9 +85,10 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     'letzteAktivitaet',
   ];
 
+  // FormControl is necessary instead of (change) event binding due to an potential issue
+  // with the Angular Material SlideToggle, see https://github.com/angular/components/pull/28745
+  showAllControl = new FormControl<boolean | undefined>(this.showAll());
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
-
-  @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
 
   cockpitViewSig = this.store.selectSignal(
     selectSachbearbeitungAppFeatureCockpitView,
@@ -98,15 +103,43 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     return dataSource;
   });
 
-  public groupsSig: Signal<GesuchGroup[]> = computed(() => {
-    return countByStatus(this.cockpitViewSig().gesuche);
-  });
+  constructor() {
+    let isFirstChange = true;
+    effect(
+      () => {
+        const showAll = this.showAll();
+        if (isFirstChange) {
+          isFirstChange = false;
+          return;
+        }
+        this.store.dispatch(
+          SharedDataAccessGesuchEvents.loadAllDebounced({
+            filter: { showAll: showAll },
+          }),
+        );
+      },
+      { allowSignalWrites: true },
+    );
 
-  ngOnInit() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.loadAll());
+    const showAllChanged = toSignal(this.showAllControl.valueChanges);
+    effect(
+      () => {
+        const showAll = showAllChanged();
+        this.router.navigate(['.'], {
+          queryParams: showAll ? { ['show-all']: showAll } : undefined,
+          replaceUrl: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
   }
 
-  trackByIndex(index: number) {
-    return index;
+  ngOnInit() {
+    this.showAllControl.setValue(this.showAll());
+    this.store.dispatch(
+      SharedDataAccessGesuchEvents.loadAll({
+        filter: { showAll: this.showAll() },
+      }),
+    );
   }
 }
