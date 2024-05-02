@@ -17,15 +17,9 @@ import {
   selectGesuchAppDataAccessAbschlusssView,
 } from '@dv/gesuch-app/data-access/abschluss';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
-import {
-  GENERIC_REQUIRED_ERROR,
-  ValidationError,
-} from '@dv/shared/model/error';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
-
-export const DEFAULT_ERROR_KEY = 'shared.gesuch.validation.generic';
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
@@ -88,44 +82,3 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       });
   }
 }
-
-/**
- * Returns a translation key and params for a given validation error
- *
- * It handles 4 cases:
- * 1. If the messageTemplate is GENERIC_REQUIRED_ERROR, it returns the translation key and the section name
- *    derived from the propertyPath or the DEFAULT_ERROR_KEY if the path is not known
- * 2. If the messageTemplate is found in the translations, it is returned as the key
- * 3. If the messageTemplate is not found and the message is not empty, the message is returned as the key
- * 4. If the messageTemplate is not found and the message is empty, null is returned
- */
-export const getTranslationFromValidation =
-  (translations: Record<string, string>) =>
-  (
-    validationError: ValidationError,
-  ): { key: string; params?: Record<string, string> } | null => {
-    if (validationError.messageTemplate === GENERIC_REQUIRED_ERROR) {
-      const path = validationError.propertyPath?.split('.') ?? [];
-      if (path.length === 3) {
-        const sectionKey = `shared.${path[path.length - 1]}.title`;
-        if (sectionKey in translations) {
-          return {
-            key: `shared.gesuch.validation.${validationError.messageTemplate}`,
-            params: { section: translations[sectionKey] },
-          };
-        }
-      }
-      return {
-        key: DEFAULT_ERROR_KEY,
-      };
-    }
-
-    const key = `shared.gesuch.validation.${validationError.messageTemplate}`;
-    if (key in translations) {
-      return { key };
-    }
-
-    const message =
-      validationError.message.length > 0 ? validationError.message : null;
-    return message ? { key: message } : null;
-  };

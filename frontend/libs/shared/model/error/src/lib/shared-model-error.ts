@@ -38,7 +38,7 @@ const ErrorTypes = {
   validationError: z.object({
     error: z.object({
       validationErrors: z.array(ValidationError),
-      validationWarnings: z.optional(z.array(ValidationWarning)),
+      validationWarnings: z.array(ValidationWarning),
     }),
   }),
   unknownHttpError: z.object({

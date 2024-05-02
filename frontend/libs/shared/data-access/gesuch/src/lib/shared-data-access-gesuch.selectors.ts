@@ -28,7 +28,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       loading,
       gesuch,
       gesuchFormular,
-      readonly: gesuch?.gesuchStatus === Gesuchstatus.FEHLERHAFT,
+      readonly: gesuch?.gesuchStatus === Gesuchstatus.KOMPLETT_EINGEREICHT,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
