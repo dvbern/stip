@@ -3,7 +3,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { AbschlussPhase } from '@dv/gesuch-app/model/gesuch-abschluss';
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 
