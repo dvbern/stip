@@ -15,10 +15,23 @@
       <button
         type="button"
         class="btn btn-primary align-self-center col-12 col-md-auto"
+        [disabled]="blockedReasonSig()?.data"
         (click)="askForPublish$.emit()"
       >
         {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.button' | translate }}
       </button>
     </div>
   </div>
+  @if (blockedReasonSig(); as blockedReasonRd) {
+    <div class="row mt-4">
+      <div class="col-12">
+        @if (blockedReasonRd | rdIsPending) {
+          <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+        }
+        @if (blockedReasonRd?.data; as blockedReason) {
+          <span class="text-danger">{{ blockedReason | translate }}</span>
+        }
+      </div>
+    </div>
+  }
 </ngb-alert>

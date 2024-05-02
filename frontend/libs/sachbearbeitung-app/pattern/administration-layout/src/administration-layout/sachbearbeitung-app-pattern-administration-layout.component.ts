@@ -18,6 +18,7 @@ import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
+import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-administration-layout',
@@ -37,11 +38,13 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
     './sachbearbeitung-app-pattern-administration-layout.component.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppPatternAdministrationLayoutComponent {
   @Input() option?: AdminOption | ChildAdminOption;
   navClicked = new EventEmitter();
 
   route = inject(Router);
+  headerService = inject(SharedUtilHeaderService);
   options = AdminOptions;
 }

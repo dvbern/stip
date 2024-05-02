@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchsjahrDto;
 import ch.dvbern.stip.generated.dto.GueltigkeitStatusDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ public class GesuchsperiodeDto  implements Serializable {
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
-  private @Valid UUID gesuchsjahrId;
+  private @Valid GesuchsjahrDto gesuchsjahr;
   private @Valid LocalDate einreichefristNormal;
   private @Valid LocalDate einreichefristReduziert;
 
@@ -169,21 +170,21 @@ public class GesuchsperiodeDto  implements Serializable {
 
   /**
    **/
-  public GesuchsperiodeDto gesuchsjahrId(UUID gesuchsjahrId) {
-    this.gesuchsjahrId = gesuchsjahrId;
+  public GesuchsperiodeDto gesuchsjahr(GesuchsjahrDto gesuchsjahr) {
+    this.gesuchsjahr = gesuchsjahr;
     return this;
   }
 
   
-  @JsonProperty("gesuchsjahrId")
+  @JsonProperty("gesuchsjahr")
   @NotNull
-  public UUID getGesuchsjahrId() {
-    return gesuchsjahrId;
+  public GesuchsjahrDto getGesuchsjahr() {
+    return gesuchsjahr;
   }
 
-  @JsonProperty("gesuchsjahrId")
-  public void setGesuchsjahrId(UUID gesuchsjahrId) {
-    this.gesuchsjahrId = gesuchsjahrId;
+  @JsonProperty("gesuchsjahr")
+  public void setGesuchsjahr(GesuchsjahrDto gesuchsjahr) {
+    this.gesuchsjahr = gesuchsjahr;
   }
 
   /**
@@ -239,14 +240,14 @@ public class GesuchsperiodeDto  implements Serializable {
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiode.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiode.gesuchsperiodeStopp) &&
         Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
-        Objects.equals(this.gesuchsjahrId, gesuchsperiode.gesuchsjahrId) &&
+        Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
         Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, gesuchsjahrId, einreichefristNormal, einreichefristReduziert);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, gesuchsjahr, einreichefristNormal, einreichefristReduziert);
   }
 
   @Override
@@ -261,7 +262,7 @@ public class GesuchsperiodeDto  implements Serializable {
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
-    sb.append("    gesuchsjahrId: ").append(toIndentedString(gesuchsjahrId)).append("\n");
+    sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("}");
