@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -49,37 +48,37 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class EinnahmenKostenUpdateDtoSpec {
   public static final String JSON_PROPERTY_NETTOERWERBSEINKOMMEN = "nettoerwerbseinkommen";
-  private BigDecimal nettoerwerbseinkommen;
+  private Integer nettoerwerbseinkommen;
 
   public static final String JSON_PROPERTY_ALIMENTE = "alimente";
-  private BigDecimal alimente;
+  private Integer alimente;
 
   public static final String JSON_PROPERTY_ZULAGEN = "zulagen";
-  private BigDecimal zulagen;
+  private Integer zulagen;
 
   public static final String JSON_PROPERTY_RENTEN = "renten";
-  private BigDecimal renten;
+  private Integer renten;
 
   public static final String JSON_PROPERTY_EO_LEISTUNGEN = "eoLeistungen";
-  private BigDecimal eoLeistungen;
+  private Integer eoLeistungen;
 
   public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
-  private BigDecimal ergaenzungsleistungen;
+  private Integer ergaenzungsleistungen;
 
   public static final String JSON_PROPERTY_BEITRAEGE = "beitraege";
-  private BigDecimal beitraege;
+  private Integer beitraege;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI = "ausbildungskostenSekundarstufeZwei";
-  private BigDecimal ausbildungskostenSekundarstufeZwei;
+  private Integer ausbildungskostenSekundarstufeZwei;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN_TERTIAERSTUFE = "ausbildungskostenTertiaerstufe";
-  private BigDecimal ausbildungskostenTertiaerstufe;
+  private Integer ausbildungskostenTertiaerstufe;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
-  private BigDecimal fahrkosten;
+  private Integer fahrkosten;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
-  private BigDecimal wohnkosten;
+  private Integer wohnkosten;
 
   public static final String JSON_PROPERTY_WG_WOHNEND = "wgWohnend";
   private Boolean wgWohnend;
@@ -94,12 +93,12 @@ public class EinnahmenKostenUpdateDtoSpec {
   private Integer auswaertigeMittagessenProWoche;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
-  private BigDecimal betreuungskostenKinder;
+  private Integer betreuungskostenKinder;
 
   public EinnahmenKostenUpdateDtoSpec() {
   }
 
-  public EinnahmenKostenUpdateDtoSpec nettoerwerbseinkommen(BigDecimal nettoerwerbseinkommen) {
+  public EinnahmenKostenUpdateDtoSpec nettoerwerbseinkommen(Integer nettoerwerbseinkommen) {
     
     this.nettoerwerbseinkommen = nettoerwerbseinkommen;
     return this;
@@ -113,19 +112,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_NETTOERWERBSEINKOMMEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getNettoerwerbseinkommen() {
+  public Integer getNettoerwerbseinkommen() {
     return nettoerwerbseinkommen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_NETTOERWERBSEINKOMMEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNettoerwerbseinkommen(BigDecimal nettoerwerbseinkommen) {
+  public void setNettoerwerbseinkommen(Integer nettoerwerbseinkommen) {
     this.nettoerwerbseinkommen = nettoerwerbseinkommen;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec alimente(BigDecimal alimente) {
+  public EinnahmenKostenUpdateDtoSpec alimente(Integer alimente) {
     
     this.alimente = alimente;
     return this;
@@ -139,19 +138,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_ALIMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getAlimente() {
+  public Integer getAlimente() {
     return alimente;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ALIMENTE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAlimente(BigDecimal alimente) {
+  public void setAlimente(Integer alimente) {
     this.alimente = alimente;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec zulagen(BigDecimal zulagen) {
+  public EinnahmenKostenUpdateDtoSpec zulagen(Integer zulagen) {
     
     this.zulagen = zulagen;
     return this;
@@ -165,19 +164,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_ZULAGEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getZulagen() {
+  public Integer getZulagen() {
     return zulagen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ZULAGEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZulagen(BigDecimal zulagen) {
+  public void setZulagen(Integer zulagen) {
     this.zulagen = zulagen;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec renten(BigDecimal renten) {
+  public EinnahmenKostenUpdateDtoSpec renten(Integer renten) {
     
     this.renten = renten;
     return this;
@@ -191,19 +190,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_RENTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getRenten() {
+  public Integer getRenten() {
     return renten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_RENTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRenten(BigDecimal renten) {
+  public void setRenten(Integer renten) {
     this.renten = renten;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec eoLeistungen(BigDecimal eoLeistungen) {
+  public EinnahmenKostenUpdateDtoSpec eoLeistungen(Integer eoLeistungen) {
     
     this.eoLeistungen = eoLeistungen;
     return this;
@@ -217,19 +216,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_EO_LEISTUNGEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getEoLeistungen() {
+  public Integer getEoLeistungen() {
     return eoLeistungen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_EO_LEISTUNGEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEoLeistungen(BigDecimal eoLeistungen) {
+  public void setEoLeistungen(Integer eoLeistungen) {
     this.eoLeistungen = eoLeistungen;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec ergaenzungsleistungen(BigDecimal ergaenzungsleistungen) {
+  public EinnahmenKostenUpdateDtoSpec ergaenzungsleistungen(Integer ergaenzungsleistungen) {
     
     this.ergaenzungsleistungen = ergaenzungsleistungen;
     return this;
@@ -243,19 +242,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getErgaenzungsleistungen() {
+  public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setErgaenzungsleistungen(BigDecimal ergaenzungsleistungen) {
+  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec beitraege(BigDecimal beitraege) {
+  public EinnahmenKostenUpdateDtoSpec beitraege(Integer beitraege) {
     
     this.beitraege = beitraege;
     return this;
@@ -269,19 +268,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_BEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getBeitraege() {
+  public Integer getBeitraege() {
     return beitraege;
   }
 
 
   @JsonProperty(JSON_PROPERTY_BEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBeitraege(BigDecimal beitraege) {
+  public void setBeitraege(Integer beitraege) {
     this.beitraege = beitraege;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec ausbildungskostenSekundarstufeZwei(BigDecimal ausbildungskostenSekundarstufeZwei) {
+  public EinnahmenKostenUpdateDtoSpec ausbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
     
     this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
     return this;
@@ -295,19 +294,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getAusbildungskostenSekundarstufeZwei() {
+  public Integer getAusbildungskostenSekundarstufeZwei() {
     return ausbildungskostenSekundarstufeZwei;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungskostenSekundarstufeZwei(BigDecimal ausbildungskostenSekundarstufeZwei) {
+  public void setAusbildungskostenSekundarstufeZwei(Integer ausbildungskostenSekundarstufeZwei) {
     this.ausbildungskostenSekundarstufeZwei = ausbildungskostenSekundarstufeZwei;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec ausbildungskostenTertiaerstufe(BigDecimal ausbildungskostenTertiaerstufe) {
+  public EinnahmenKostenUpdateDtoSpec ausbildungskostenTertiaerstufe(Integer ausbildungskostenTertiaerstufe) {
     
     this.ausbildungskostenTertiaerstufe = ausbildungskostenTertiaerstufe;
     return this;
@@ -321,19 +320,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_TERTIAERSTUFE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getAusbildungskostenTertiaerstufe() {
+  public Integer getAusbildungskostenTertiaerstufe() {
     return ausbildungskostenTertiaerstufe;
   }
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_TERTIAERSTUFE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungskostenTertiaerstufe(BigDecimal ausbildungskostenTertiaerstufe) {
+  public void setAusbildungskostenTertiaerstufe(Integer ausbildungskostenTertiaerstufe) {
     this.ausbildungskostenTertiaerstufe = ausbildungskostenTertiaerstufe;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec fahrkosten(BigDecimal fahrkosten) {
+  public EinnahmenKostenUpdateDtoSpec fahrkosten(Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
     return this;
@@ -347,19 +346,19 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getFahrkosten() {
+  public Integer getFahrkosten() {
     return fahrkosten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkosten(BigDecimal fahrkosten) {
+  public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec wohnkosten(BigDecimal wohnkosten) {
+  public EinnahmenKostenUpdateDtoSpec wohnkosten(Integer wohnkosten) {
     
     this.wohnkosten = wohnkosten;
     return this;
@@ -373,14 +372,14 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getWohnkosten() {
+  public Integer getWohnkosten() {
     return wohnkosten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWohnkosten(BigDecimal wohnkosten) {
+  public void setWohnkosten(Integer wohnkosten) {
     this.wohnkosten = wohnkosten;
   }
 
@@ -489,7 +488,7 @@ public class EinnahmenKostenUpdateDtoSpec {
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec betreuungskostenKinder(BigDecimal betreuungskostenKinder) {
+  public EinnahmenKostenUpdateDtoSpec betreuungskostenKinder(Integer betreuungskostenKinder) {
     
     this.betreuungskostenKinder = betreuungskostenKinder;
     return this;
@@ -503,14 +502,14 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getBetreuungskostenKinder() {
+  public Integer getBetreuungskostenKinder() {
     return betreuungskostenKinder;
   }
 
 
   @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetreuungskostenKinder(BigDecimal betreuungskostenKinder) {
+  public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
     this.betreuungskostenKinder = betreuungskostenKinder;
   }
 

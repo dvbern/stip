@@ -79,6 +79,11 @@ public class TestUtil {
         return faker.date().between(startDate, endDate).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    public static int getRandomInt() {
+        final var faker = new Faker(new Locale("de-CH"), new RandomService());
+        return (int) faker.number().randomNumber();
+    }
+
     public static BigDecimal getRandomBigDecimal() {
         return getRandomBigDecimal(100, 10_000);
     }

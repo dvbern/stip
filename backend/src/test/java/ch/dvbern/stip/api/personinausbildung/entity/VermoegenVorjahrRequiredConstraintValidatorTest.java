@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import org.junit.jupiter.api.Test;
@@ -20,7 +18,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
         assertThat(validator.isValid(pia, null), is(false));
 
-        pia.setVermoegenVorjahr(new BigDecimal(1));
+        pia.setVermoegenVorjahr(1);
         assertThat(validator.isValid(pia, null), is(true));
     }
 
@@ -34,7 +32,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
         assertThat(validator.isValid(pia, null), is(false));
 
-        pia.setVermoegenVorjahr(new BigDecimal(1));
+        pia.setVermoegenVorjahr(1);
         assertThat(validator.isValid(pia, null), is(true));
     }
 
@@ -70,7 +68,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
         assertThat(validator.isValid(pia, null), is(false));
 
-        pia.setVermoegenVorjahr(new BigDecimal(1));
+        pia.setVermoegenVorjahr(1);
         assertThat(validator.isValid(pia, null), is(true));
     }
 
@@ -80,7 +78,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
         final var pia = new PersonInAusbildung()
             .setAdresse(new Adresse().setPlz("3000"))
-            .setVermoegenVorjahr(new BigDecimal(1));
+            .setVermoegenVorjahr(1);
 
         assertThat(validator.isValid(pia, null), is(false));
 

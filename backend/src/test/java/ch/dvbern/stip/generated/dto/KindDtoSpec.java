@@ -71,7 +71,7 @@ public class KindDtoSpec {
   private String nachname;
 
   public static final String JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE = "erhalteneAlimentebeitraege";
-  private BigDecimal erhalteneAlimentebeitraege;
+  private Integer erhalteneAlimentebeitraege;
 
   public static final String JSON_PROPERTY_COPY_OF_ID = "copyOfId";
   private UUID copyOfId;
@@ -287,7 +287,7 @@ public class KindDtoSpec {
   }
 
 
-  public KindDtoSpec erhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+  public KindDtoSpec erhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
     return this;
@@ -301,14 +301,14 @@ public class KindDtoSpec {
   @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getErhalteneAlimentebeitraege() {
+  public Integer getErhalteneAlimentebeitraege() {
     return erhalteneAlimentebeitraege;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setErhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+  public void setErhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
   }
 

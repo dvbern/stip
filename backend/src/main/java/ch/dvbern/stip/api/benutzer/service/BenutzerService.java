@@ -11,7 +11,6 @@ import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenReposit
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
-import ch.dvbern.stip.api.benutzereinstellungen.repo.BenutzereinstellungenRepository;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
@@ -38,7 +37,6 @@ public class BenutzerService {
 
     private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
     private final BenutzerRepository benutzerRepository;
-    private final BenutzereinstellungenRepository benutzereinstellungenRepository;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
@@ -94,9 +92,8 @@ public class BenutzerService {
         return newBenutzer;
     }
 
-    public Optional<BenutzerDto> getBenutzer(UUID id) {
-        var optionalFall = benutzerRepository.findByIdOptional(id);
-        return optionalFall.map(benutzerMapper::toDto);
+    public Optional<Benutzer> getBenutzer(final UUID id) {
+        return benutzerRepository.findByIdOptional(id);
     }
 
     @Transactional
