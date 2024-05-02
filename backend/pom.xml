@@ -38,6 +38,7 @@
     <javafaker.version>1.0.2</javafaker.version>
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
+    <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -265,10 +266,10 @@
       <version>${javafaker.version}</version>
       <scope>test</scope>
     </dependency>
-      <dependency>
-        <groupId>com.savoirtech.json</groupId>
-        <artifactId>json-comparator</artifactId>
-        <version>${savoirtech.json-comparator.version}</version>
+    <dependency>
+      <groupId>com.savoirtech.json</groupId>
+      <artifactId>json-comparator</artifactId>
+      <version>${savoirtech.json-comparator.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -387,6 +388,52 @@
           </execution>
         </executions>
       </plugin>
+      <!-- <editor-fold desc="liquibase-maven-plugin: diff" defaultstate="collapsed">-->
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>${liquibase-maven-plugin.version}</version>
+        <configuration>
+          <changeLogDirectory>src/main/resources/db/migration</changeLogDirectory>
+          <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
+
+          <!-- Old state -->
+          <url>jdbc:postgresql://localhost:5432/stip</url>
+          <driver>org.postgresql.Driver</driver>
+
+          <!-- Target state -->
+          <referenceUrl>hibernate:ejb3:LiquibasePU</referenceUrl>
+          <username>stip</username>
+          <password>stip</password>
+          <goal>diff</goal>
+          
+          <verbose>true</verbose>
+          <logging>warning</logging>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm</artifactId>
+            <version>${quarkus.platform.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase-maven-plugin.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate6</artifactId>
+            <version>${liquibase-maven-plugin.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+            <version>${quarkus.platform.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <!-- </editor-fold> -->
     </plugins>
   </build>
   <profiles>
