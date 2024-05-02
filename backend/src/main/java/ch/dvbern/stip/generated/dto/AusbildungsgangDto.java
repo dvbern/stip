@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.BildungsartDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungsgangDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung;
+  private @Valid BildungsartDto ausbildungsrichtung;
   private @Valid String ausbildungsort;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
@@ -48,7 +49,7 @@ public class AusbildungsgangDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangDto ausbildungsrichtung(ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung) {
+  public AusbildungsgangDto ausbildungsrichtung(BildungsartDto ausbildungsrichtung) {
     this.ausbildungsrichtung = ausbildungsrichtung;
     return this;
   }
@@ -56,12 +57,12 @@ public class AusbildungsgangDto  implements Serializable {
   
   @JsonProperty("ausbildungsrichtung")
   @NotNull
-  public ch.dvbern.stip.api.common.type.Bildungsart getAusbildungsrichtung() {
+  public BildungsartDto getAusbildungsrichtung() {
     return ausbildungsrichtung;
   }
 
   @JsonProperty("ausbildungsrichtung")
-  public void setAusbildungsrichtung(ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung) {
+  public void setAusbildungsrichtung(BildungsartDto ausbildungsrichtung) {
     this.ausbildungsrichtung = ausbildungsrichtung;
   }
 

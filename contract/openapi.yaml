@@ -1499,28 +1499,18 @@ components:
       type: string
     Bildungsart:
       description: ''
-      enum:
-        - GYMNASIALE_MATURITAETSSCHULEN
-        - SCHULEN_FUER_ALLGEMEINBILDUNG
-        - VOLLZEITBERUFSSCHULEN
-        - LEHREN_ANLEHREN
-        - BERUFSMATURITAET_NACH_LEHRE
-        - HOEHERE_BERUFSBILDUNG
-        - FACHHOCHSCHULEN
-        - UNIVERSITAETEN_ETH
-      type: string
-    BildungsartWithStufe:
       type: object
+      required:
+        - beschreibung
+        - bildungsstufe
+        - bfs
       properties:
-        bildungsart:
-          $ref: '#/components/schemas/Bildungsart'
+        beschreibung:
+          type: string
         bildungsstufe:
-          $ref: '#/components/schemas/Bildungsstufe'
-    Bildungsstufe:
-      type: string
-      enum:
-        - SEKUNDAR
-        - TERTIAER
+          type: string
+        bfs:
+          type: integer
     LebenslaufAusbildungsArt:
       description: ''
       enum:
@@ -2186,7 +2176,7 @@ components:
           description: ''
           type: string
         ausbildungsrichtung:
-          $ref: '#/components/schemas/BildungsartWithStufe'
+          $ref: '#/components/schemas/Bildungsart'
           description: ''
         ausbildungsort:
           $ref: '#/components/schemas/Ausbildungsort'

@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.bildungsart.service.BildungsartMapper;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.EntityIdReference;
