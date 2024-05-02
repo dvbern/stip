@@ -8,6 +8,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class,
     uses =
@@ -16,13 +17,22 @@ import org.mapstruct.Mapping;
             GesuchsperiodeMapper.class
         }
 )
-public interface GesuchMapper {
-
+public abstract class GesuchMapper {
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
-    @Mapping(target = "bearbeiter", constant = "John Doe")
-    GesuchDto toDto(Gesuch gesuch);
+    @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
+    public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = "fallId", target = "fall.id")
     @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
-    Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
+    public abstract Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
+
+    @Named("getFullNameOfSachbearbeiter")
+    String getFullNameOfSachbearbeiter(Gesuch gesuch) {
+        final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
+        if (zuordnung == null) {
+            return "";
+        }
+
+        return zuordnung.getSachbearbeiter().getFullName();
+    }
 }
