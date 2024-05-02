@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -50,14 +49,14 @@ class GesuchFormularMapperTest {
             )
             .setEinnahmenKosten(
                 new EinnahmenKosten()
-                    .setRenten(new BigDecimal(1))
+                    .setRenten(1)
             );
 
         final var updateFamsit = new FamiliensituationUpdateDto();
         updateFamsit.setElternteilUnbekanntVerstorben(false);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setRenten(new BigDecimal(1));
+        updateEinnahmenKosten.setRenten(1);
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setFamiliensituation(updateFamsit);
@@ -111,13 +110,13 @@ class GesuchFormularMapperTest {
         targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         final var target = new GesuchFormular()
             .setPersonInAusbildung(targetPia)
-            .setEinnahmenKosten(new EinnahmenKosten().setWohnkosten(new BigDecimal(1)));
+            .setEinnahmenKosten(new EinnahmenKosten().setWohnkosten(1));
 
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setWohnkosten(new BigDecimal(1));
+        updateEinnahmenKosten.setWohnkosten(1);
 
         final var update = new GesuchFormularUpdateDto();
         update.setPersonInAusbildung(updatePia);
@@ -136,7 +135,7 @@ class GesuchFormularMapperTest {
         updateFamsit.setGerichtlicheAlimentenregelung(true);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setAlimente(new BigDecimal(1));
+        updateEinnahmenKosten.setAlimente(1);
 
         final var update = new GesuchFormularUpdateDto();
         update.setFamiliensituation(updateFamsit);
@@ -194,7 +193,7 @@ class GesuchFormularMapperTest {
             }});
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setBetreuungskostenKinder(BigDecimal.ONE);
+        updateEinnahmenKosten.setBetreuungskostenKinder(1);
 
         final var update = new GesuchFormularUpdateDto();
         update.setEinnahmenKosten(updateEinnahmenKosten);

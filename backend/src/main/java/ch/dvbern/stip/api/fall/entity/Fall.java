@@ -17,15 +17,19 @@
 
 package ch.dvbern.stip.api.fall.entity;
 
+import java.util.Set;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -36,7 +40,6 @@ import org.hibernate.envers.Audited;
 @Entity
 @Table(indexes = {
     @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-    @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
     @Index(name = "IX_fall_mandant", columnList = "mandant")
 })
 @Getter
@@ -51,7 +54,9 @@ public class Fall extends AbstractMandantEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
     private Benutzer gesuchsteller;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
-    private Benutzer sachbearbeiter;
+    @OneToOne(optional = true, mappedBy = "fall")
+    private Zuordnung sachbearbeiterZuordnung;
+
+    @OneToMany(mappedBy = "fall")
+    private Set<Gesuch> gesuch;
 }

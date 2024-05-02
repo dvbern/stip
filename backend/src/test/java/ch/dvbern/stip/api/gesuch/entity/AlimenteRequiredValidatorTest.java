@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -44,7 +42,7 @@ class AlimenteRequiredValidatorTest {
     void alimenteRegelungAlimenteNoViolation() {
         GesuchFormular gesuchFormular =
             gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
-        gesuchFormular.getEinnahmenKosten().setAlimente(BigDecimal.ONE);
+        gesuchFormular.getEinnahmenKosten().setAlimente(1);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 
         assertThat(validator.isValid(gesuchFormular, null)).isTrue();
@@ -54,7 +52,7 @@ class AlimenteRequiredValidatorTest {
     void noAlimenteRegelungAlimenteViolation() {
         GesuchFormular gesuchFormular =
             gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), new GesuchFormular());
-        gesuchFormular.getEinnahmenKosten().setAlimente(BigDecimal.ONE);
+        gesuchFormular.getEinnahmenKosten().setAlimente(1);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
         assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext())).isFalse();

@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -21,7 +20,7 @@ class BetreuungskostenRequiredConstraintValidatorTest {
 
         assertThat(validator.isValid(formular, null), is(false));
 
-        formular.setEinnahmenKosten(new EinnahmenKosten().setBetreuungskostenKinder(BigDecimal.ONE));
+        formular.setEinnahmenKosten(new EinnahmenKosten().setBetreuungskostenKinder(1));
 
         assertThat(validator.isValid(formular, null), is(true));
     }

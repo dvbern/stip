@@ -32,7 +32,7 @@ public class KindUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
-  private @Valid BigDecimal erhalteneAlimentebeitraege;
+  private @Valid Integer erhalteneAlimentebeitraege;
 
   /**
    **/
@@ -188,19 +188,19 @@ public class KindUpdateDto  implements Serializable {
 
   /**
    **/
-  public KindUpdateDto erhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+  public KindUpdateDto erhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
     return this;
   }
 
   
   @JsonProperty("erhalteneAlimentebeitraege")
-  public BigDecimal getErhalteneAlimentebeitraege() {
+  public Integer getErhalteneAlimentebeitraege() {
     return erhalteneAlimentebeitraege;
   }
 
   @JsonProperty("erhalteneAlimentebeitraege")
-  public void setErhalteneAlimentebeitraege(BigDecimal erhalteneAlimentebeitraege) {
+  public void setErhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
   }
 
