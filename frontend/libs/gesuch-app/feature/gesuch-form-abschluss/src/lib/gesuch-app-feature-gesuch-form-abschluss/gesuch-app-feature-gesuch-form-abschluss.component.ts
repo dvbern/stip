@@ -11,6 +11,7 @@ import {
   toObservable,
   toSignal,
 } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -26,6 +27,7 @@ import {
   GENERIC_REQUIRED_ERROR,
   ValidationError,
 } from '@dv/shared/model/error';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { onTranslationChanges$ } from '@dv/shared/util-fn/translation-helper';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
@@ -42,6 +44,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
   private translate = inject(TranslateService);
   private translationsSig = toSignal(onTranslationChanges$(this.translate));
+  private dialog = inject(MatDialog);
 
   viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlusssView);
   validationMessagesSig = computed(() => {
@@ -59,9 +62,11 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       ? [{ key: DEFAULT_ERROR_KEY }]
       : parsedValidations;
   });
+
   defaultErrorKey = DEFAULT_ERROR_KEY;
 
   constructor() {
+    // validate form only if no formErrors are present
     combineLatest([
       getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig).pipe(
         filter(isDefined),
@@ -87,9 +92,25 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   abschliessen(gesuchId: string) {
-    this.store.dispatch(
-      GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({ gesuchId }),
-    );
+    const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.abschluss.readyToSend.text',
+      message: 'shared.form.abschluss.readyToSend.warning',
+      confirmText: 'shared.form.abschluss.abschliessen',
+      cancelText: 'shared.ui.no',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed())
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.store.dispatch(
+            GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({
+              gesuchId,
+            }),
+          );
+        }
+      });
   }
 }
 
