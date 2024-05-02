@@ -15,6 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 import {
   MatDatepicker,
   MatDatepickerApply,
@@ -40,6 +41,7 @@ import {
   SharedUiFormReadonlyDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
+import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiRdIsPendingPipe,
@@ -76,12 +78,14 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiHeaderSuffixDirective,
     PublishComponent,
     TranslatedPropertyPipe,
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
     MatDatepickerApply,
+    MatChipsModule,
   ],
   templateUrl: './gesuchsperiode-detail.component.html',
   providers: [provideDvDateAdapter()],

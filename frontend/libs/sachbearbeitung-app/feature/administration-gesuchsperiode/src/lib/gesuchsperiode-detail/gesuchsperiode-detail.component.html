@@ -1,3 +1,11 @@
+<ng-template dvHeaderSuffix>
+  @if (store.currentGesuchsperiodeViewSig(); as view) {
+    <mat-chip class="ms-2" [color]="view?.statusColor" highlighted>{{
+      'shared.gesuch.status.' + view.gueltigkeitStatus | translate
+    }}</mat-chip>
+  }
+</ng-template>
+
 <div class="mt-4 row d-flex g-4">
   @if (store.currentGesuchsperiodeViewSig()?.isEditable) {
     @if (idSig(); as id) {
