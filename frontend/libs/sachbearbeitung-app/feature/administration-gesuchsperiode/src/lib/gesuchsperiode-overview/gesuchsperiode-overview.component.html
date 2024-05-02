@@ -42,7 +42,9 @@
             {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.status' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
-            {{ 'shared.gesuch.status.' + gesuchsperiode.gueltigkeitStatus | translate }}
+            <mat-chip [color]="gesuchsperiode.statusColor" highlighted>{{
+              'shared.gesuch.status.' + gesuchsperiode.gueltigkeitStatus | translate
+            }}</mat-chip>
           </td>
         </ng-container>
 
@@ -71,7 +73,7 @@
                   [attr.aria-label]="
                     'sachbearbeitung-app.admin.gesuchsperiode.table.loeschen' | translate: gesuchsperiode
                   "
-                  (click)="store.deleteGesuchsperiode$(gesuchsperiode.id); $event.stopPropagation()"
+                  (click)="deleteGesuchsperiode(gesuchsperiode); $event.stopPropagation()"
                 >
                   <i class="material-symbols-rounded fs-5">delete</i>
                 </button>
@@ -138,7 +140,9 @@
             {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.status' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
-            {{ 'shared.gesuch.status.' + gesuchsjahr.gueltigkeitStatus | translate }}
+            <mat-chip [color]="gesuchsjahr.statusColor" highlighted>{{
+              'shared.gesuch.status.' + gesuchsjahr.gueltigkeitStatus | translate
+            }}</mat-chip>
           </td>
         </ng-container>
 
@@ -171,7 +175,7 @@
                     type="button"
                     class="btn btn-link me-2"
                     [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | translate: gesuchsjahr"
-                    (click)="store.deleteGesuchsjahr$(gesuchsjahr.id); $event.stopPropagation()"
+                    (click)="deleteGesuchsjahr(gesuchsjahr); $event.stopPropagation()"
                   >
                     <i class="material-symbols-rounded fs-5">delete</i>
                   </button>
