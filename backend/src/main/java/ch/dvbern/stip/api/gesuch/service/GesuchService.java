@@ -26,6 +26,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -41,6 +42,7 @@ import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
@@ -70,6 +72,8 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchFormularRepository gesuchFormularRepository;
+    private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
+    private final ZuordnungService zuordnungService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -77,12 +81,23 @@ public class GesuchService {
     }
 
     @Transactional
-    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) throws ValidationsException {
+    public void updateGesuch(
+        final UUID gesuchId,
+        final GesuchUpdateDto gesuchUpdateDto,
+        final String tenantId
+    ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
         preventUpdateVonGesuchIfReadOnly(gesuch);
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
+
+        final var updatePia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        if (updatePia != null) {
+            szsWorker.queueZuweisung(gesuch, tenantId);
+        }
     }
 
     private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
@@ -122,9 +137,28 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
+    public List<GesuchDto> findAllForCurrentBenutzer() {
+        return findAllForBenutzer(benutzerService.getOrCreateCurrentBenutzer().getId());
+    }
+
     @Transactional
-    public List<GesuchDto> findAllForBenutzer(UUID benutzerId) {
-        return gesuchRepository.findAllForBenutzer(benutzerId).map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findAllForBenutzer(final UUID benutzerId) {
+        final var benutzer = benutzerService.getBenutzer(benutzerId);
+        if (benutzer.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        final var gesuche = switch (benutzer.get().getBenutzerTyp()) {
+            case GESUCHSTELLER -> gesuchRepository.findAllForGs(benutzerId);
+            case SACHBEARBEITER -> gesuchRepository.findAllForSb(benutzerId);
+            default -> throw new NotFoundException();
+        };
+
+        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
+    }
+
+    public List<GesuchDto> findAll() {
+        return gesuchRepository.findAll().stream().map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional

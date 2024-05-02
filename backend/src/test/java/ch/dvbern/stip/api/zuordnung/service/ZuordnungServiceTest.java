@@ -98,7 +98,7 @@ class ZuordnungServiceTest {
 
     @Test
     void testCreateZuordnungOnFall() {
-        zuordnungService.updateZuordnungOnFall();
+        zuordnungService.updateZuordnungOnAllFaelle();
         assertThat(zuordnungen.size(), is(1));
         assertThat(zuordnungen.get(0).getFall().getId(), is(fallId));
     }
@@ -118,7 +118,7 @@ class ZuordnungServiceTest {
             .setId(UUID.randomUUID())
         );
 
-        zuordnungService.updateZuordnungOnFall();
+        zuordnungService.updateZuordnungOnAllFaelle();
         assertThat(oldSbId, is(not(sachbearbeiterId)));
         assertThat(zuordnungen.size(), is(1));
         assertThat(zuordnungen.get(0).getSachbearbeiter().getId(), is(sachbearbeiterId));
