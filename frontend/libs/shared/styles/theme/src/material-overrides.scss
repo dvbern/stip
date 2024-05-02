@@ -1,5 +1,7 @@
+@use 'sass:map';
 @use '@angular/cdk' as cdk;
 @use '@angular/material' as mat;
+@use './material-colors.scss' as dvColors;
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -7,17 +9,31 @@
 $gesuch-app-primary: mat.define-palette(mat.$blue-grey-palette);
 $gesuch-app-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
 
-// The warn palette is optional (defaults to red).
-$gesuch-app-warn: mat.define-palette(mat.$red-palette);
+// The warn palette is optional (defaults to yellow).
+$gesuch-app-success: mat.define-palette(dvColors.$md-dv-success);
+$gesuch-app-warn: mat.define-palette(dvColors.$md-dv-warning);
+$gesuch-app-danger: mat.define-palette(dvColors.$md-dv-danger);
+$gesuch-app-info: mat.define-palette(dvColors.$md-dv-info);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$gesuch-app-theme: mat.define-light-theme(
+$gesuch-app-theme: map.deep-merge(
+  mat.define-light-theme(
+    (
+      color: (
+        primary: $gesuch-app-primary,
+        accent: $gesuch-app-accent,
+        warn: $gesuch-app-warn,
+      ),
+    )
+  ),
   (
+    success: $gesuch-app-success,
+    danger: $gesuch-app-danger,
     color: (
-      primary: $gesuch-app-primary,
-      accent: $gesuch-app-accent,
-      warn: $gesuch-app-warn,
+      success: $gesuch-app-success,
+      danger: $gesuch-app-danger,
+      info: $gesuch-app-info,
     ),
   )
 );
@@ -27,6 +43,27 @@ $gesuch-app-theme: mat.define-light-theme(
 // that you are using.
 @include mat.all-component-themes($gesuch-app-theme);
 @include cdk.a11y-visually-hidden();
+
+// Snackbar overlay settings for container size
+// modify the parent container of the snackbar to center it
+.cdk-overlay-pane:not(.mat-mdc-snack-bar-handset):has(
+    > .mat-mdc-snack-bar-container
+  ) {
+  position: relative !important;
+  margin: 120px auto 0 auto !important;
+  flex-basis: var(--content-max-width);
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-self: flex-start;
+
+  .mat-mdc-snack-bar-container {
+    position: absolute;
+    top: 0;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+}
 
 .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid)
   .mdc-floating-label {
@@ -64,17 +101,49 @@ $gesuch-app-theme: mat.define-light-theme(
     padding: 0;
   }
 }
+// Used for readonly mat-form-fields, see dvSharedUiFormReadonly
+form.readonly .mat-mdc-form-field {
+  --mdc-outlined-text-field-disabled-outline-color: transparent;
+  --mdc-outlined-text-field-disabled-input-text-color: black;
+  --mdc-outlined-text-field-disabled-label-text-color: black;
+  --mat-select-disabled-trigger-text-color: black;
+  --mdc-outlined-text-field-container-shape: 0;
+
+  .mat-mdc-input-element,
+  .mat-mdc-select {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  .mdc-text-field--outlined {
+    background-color: transparent;
+  }
+  .mat-mdc-form-field-hint,
+  .mat-mdc-form-field-icon-suffix,
+  .mat-mdc-select-arrow-wrapper {
+    display: none;
+  }
+  .mdc-text-field--outlined .mdc-floating-label {
+    left: 0;
+  }
+}
 .mat-mdc-table .mat-mdc-header-row {
   --mat-table-header-container-height: 20px;
 }
 .mat-mdc-table {
   .mat-mdc-header-cell {
-    border-bottom: 0;
     padding-top: 20px;
-  }
-  .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
     padding-bottom: 20px;
-    padding-top: 0;
+  }
+  .combined-header-row {
+    .mat-mdc-header-cell {
+      border-bottom: 0;
+      padding-top: 20px;
+      padding-bottom: 0px;
+    }
+    .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
+      padding-bottom: 20px;
+      padding-top: 0;
+    }
   }
 }
 .mat-mdc-paginator-page-size-label {
@@ -112,16 +181,56 @@ table tr.mat-mdc-row {
 .mat-mdc-progress-bar {
   --mdc-linear-progress-active-indicator-height: 2px;
   --mdc-linear-progress-track-height: 2px;
-  --mdc-linear-progress-active-indicator-color: #{$success};
-  --mdc-linear-progress-track-color: #{lighten($success, 45%)};
 }
 
-.mat-mdc-progress-bar.mat-accent {
-  --mdc-linear-progress-active-indicator-color: #{$info};
-  --mdc-linear-progress-track-color: #{lighten($info, 35%)};
+.mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
 }
 
-.mat-mdc-progress-bar.mat-warn {
-  --mdc-linear-progress-active-indicator-color: #{$warn};
-  --mdc-linear-progress-track-color: #{lighten($warn, 25%)};
+$dv-custom-colors: (
+  success: $gesuch-app-success,
+  danger: $gesuch-app-danger,
+  info: $gesuch-app-info,
+);
+
+.app-container,
+.cdk-overlay-container {
+  @each $name, $color in $dv-custom-colors {
+    .mat-#{$name}:not([disabled]) {
+      $base-color: mat.get-color-from-palette($color, 500);
+      $contrast-color: mat.get-color-from-palette($color, 500-contrast);
+      background-color: $base-color;
+      color: $contrast-color;
+      --mdc-chip-label-text-color: #{$contrast-color};
+      --mdc-snackbar-container-color: #{$base-color};
+    }
+    .mat-#{$name}[disabled] {
+      $contrast-color: mat.get-color-from-palette($color, 100-contrast);
+      background-color: mat.get-color-from-palette($color, 100);
+      color: $contrast-color;
+      --mdc-chip-disabled-label-text-color: #{$contrast-color};
+    }
+  }
+}
+
+$dv-all-colors: (
+  primary: $gesuch-app-primary,
+  accent: $gesuch-app-accent,
+  warn: $gesuch-app-warn,
+  success: $gesuch-app-success,
+  danger: $gesuch-app-danger,
+  info: $gesuch-app-info,
+);
+
+.cdk-overlay-container {
+  @each $name, $color in $dv-all-colors {
+    .mat-#{$name} {
+      $base-color: mat.get-color-from-palette($color, 500);
+      $mild-color: mat.get-color-from-palette($color, 100);
+      --mdc-snackbar-container-color: #{$base-color};
+      --mdc-linear-progress-active-indicator-color: #{$base-color};
+      --mdc-linear-progress-track-color: #{$mild-color};
+    }
+  }
 }

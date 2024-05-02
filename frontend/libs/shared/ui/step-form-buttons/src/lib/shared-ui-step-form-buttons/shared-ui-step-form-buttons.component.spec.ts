@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GesuchAppUiStepFormButtonsComponent } from './shared-ui-step-form-buttons.component';
+import { SharedUiStepFormButtonsComponent } from './shared-ui-step-form-buttons.component';
 
 describe('GesuchAppUiStepFormButtonsComponent', () => {
-  let component: GesuchAppUiStepFormButtonsComponent;
-  let fixture: ComponentFixture<GesuchAppUiStepFormButtonsComponent>;
+  let component: SharedUiStepFormButtonsComponent;
+  let fixture: ComponentFixture<SharedUiStepFormButtonsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GesuchAppUiStepFormButtonsComponent],
+      imports: [SharedUiStepFormButtonsComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GesuchAppUiStepFormButtonsComponent);
+    fixture = TestBed.createComponent(SharedUiStepFormButtonsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

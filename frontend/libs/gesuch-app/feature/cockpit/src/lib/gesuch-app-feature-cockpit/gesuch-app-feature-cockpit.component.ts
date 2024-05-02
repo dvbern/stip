@@ -8,12 +8,6 @@ import {
   inject,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {
-  NgbDropdown,
-  NgbDropdownItem,
-  NgbDropdownMenu,
-  NgbDropdownToggle,
-} from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -42,11 +36,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     TranslateModule,
     GesuchAppPatternMainLayoutComponent,
     SharedUiLanguageSelectorComponent,
-    NgbDropdown,
-    NgbDropdownMenu,
-    NgbDropdownToggle,
     SharedUiIconChipComponent,
-    NgbDropdownItem,
     SharedUiLoadingComponent,
   ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',

@@ -52,23 +52,20 @@
         />
 
         <div class="d-flex gap-4 align-items-center">
-          <div ngbDropdown>
-            <button
-              type="button"
-              class="btn btn-light btn-nav shadow-none d-flex align-items-center pe-1"
-              id="userMenu"
-              data-testid="button-user-menu"
-              ngbDropdownToggle
-            >
-              <span>{{ benutzerNameSig() }}</span>
-              <i class="material-symbols-rounded ms-2">expand_more</i>
-            </button>
+          <button
+            type="button"
+            class="btn btn-nav shadow-none fw-normal d-flex align-items-center pe-1"
+            data-testid="button-user-menu"
+            [matMenuTriggerFor]="menu"
+          >
+            <span>{{ benutzerNameSig() }}</span>
+            <i class="material-symbols-rounded ms-2">expand_more</i>
+          </button>
 
-            <div ngbDropdownMenu aria-labelledby="userMenu">
-              <button type="button" data-testid="button-profile" ngbDropdownItem>Profil</button>
-              <button type="button" data-testid="button-logout" ngbDropdownItem (click)="logout()">Logout</button>
-            </div>
-          </div>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button type="button" data-testid="button-profile" mat-menu-item>Profil</button>
+            <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">Logout</button>
+          </mat-menu>
         </div>
       </div>
     </div>

@@ -12,12 +12,12 @@ export const selectSharedDataAccessGesuchsperiodesView = createSelector(
     gesuchsperiodes: state.gesuchsperiodes.map((p) => ({
       ...p,
       semester:
-        getMonth(Date.parse(p.gueltigAb)) === 7
+        getMonth(Date.parse(p.gesuchsperiodeStart)) === 7
           ? GesuchsperiodeSemester.HERBST
           : GesuchsperiodeSemester.FRUEHLING,
       yearsLabel: [
-        format(Date.parse(p.gueltigAb), 'yy'),
-        format(Date.parse(p.gueltigBis), 'yy'),
+        format(Date.parse(p.gesuchsperiodeStart), 'yy'),
+        format(Date.parse(p.gesuchsperiodeStopp), 'yy'),
       ].join('/'),
     })),
   }),

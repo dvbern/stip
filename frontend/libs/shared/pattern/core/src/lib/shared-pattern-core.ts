@@ -41,7 +41,6 @@ import {
   sharedDataAccessConfigEffects,
   sharedDataAccessConfigsFeature,
 } from '@dv/shared/data-access/config';
-import { sharedDataAccessGlobalNotificationsFeature } from '@dv/shared/data-access/global-notification';
 import {
   SharedDataAccessLanguageEvents,
   sharedDataAccessLanguageEffects,
@@ -125,7 +124,6 @@ export function provideSharedPatternCore(
         },
       },
     ),
-    provideState(sharedDataAccessGlobalNotificationsFeature),
     provideState(sharedDataAccessBenutzersFeature),
     provideState(sharedDataAccessConfigsFeature),
     provideState(sharedDataAccessLanguageFeature),

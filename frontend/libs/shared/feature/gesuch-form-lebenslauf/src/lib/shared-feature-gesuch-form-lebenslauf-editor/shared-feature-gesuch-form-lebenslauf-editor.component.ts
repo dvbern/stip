@@ -39,7 +39,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -70,7 +70,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MatInputModule,
     MatSelectModule,
     MaskitoDirective,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     MatCheckboxModule,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',

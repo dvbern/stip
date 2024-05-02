@@ -71,6 +71,7 @@
   "shared.form.error.email": "Die eingegebene E-Mail ist ungültig",
   "shared.form.error.telefonnummer": "Die Telefonnummer ist ungültig",
   "shared.weiterangaben": "Weitere Angaben",
+  "shared.table.noData": "Keine Daten verfügbar",
   "shared.table.paginator.itemsPerPage": "Anzahl Elemente pro Seite",
   "shared.table.paginator.nextPage": "Nächste Seite",
   "shared.table.paginator.lastPage": "Letzte Seite",
@@ -97,6 +98,10 @@
   "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Bitte füllen Sie die Angaben zu den Eltern aus.",
   "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Bitte füllen Sie das Feld \"Renten\" bei den Einnahmen & Kosten aus.",
   "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "Der Abschnitt \"{{section}}\" ist nicht vollständig.",
+
+  "shared.gesuch.status.ENTWURF": "Entwurf",
+  "shared.gesuch.status.PUBLIZIERT": "Publik - Aktiv",
+  "shared.gesuch.status.ARCHIVIERT": "Archiviert",
 
   "shared.form.next": "Nächstes",
   "shared.form.previous": "Vorheriges",
@@ -387,6 +392,10 @@
   "shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER": "Beleg über Betreuungskosten eigene Kinder (ohne Verpflegungskosten)",
   "shared.form.einnahmenkosten.file.LOHNABRECHNUNG": "Kopie der aktuellen Lohnabrechnung",
   "shared.form.einnahmenkosten.file.VERDIENST": "Sofern im Vorjahr Ausbildungsbeiträge bezogen wurden: Kopie sämtlicher monatlichen Lohnabrechnungen über Ihren realisierten Verdienst während des vorangehenden Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August: Lohnbelege August bis Juli des Vorjahres resp. bei Ausbildungsbeginn im September: Lohnbelege September bis August des Vorjahres (= im Normalfall 12 Lohnbelege)",
+
+  "shared.form.gesuchsjahr.bezeichnungDe.label": "Bezeichnung(DE)",
+  "shared.form.gesuchsjahr.bezeichnungFr.label": "Bezeichnung(FR)",
+  "shared.form.gesuchsjahr.jahr.label": "Jahr",
 
   "shared.abschluss.title": "Freigabe",
   "shared.form.abschluss.notReady": "Sie können das Gesuch erst freigeben wenn sie alle Pflichfelder ausgefüllt haben.",

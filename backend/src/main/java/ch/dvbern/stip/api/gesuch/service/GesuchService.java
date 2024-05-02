@@ -130,7 +130,7 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new);
 
         var tranche = new GesuchTranche()
-            .setGueltigkeit(new DateRange(periode.getGueltigAb(), periode.getGueltigBis()))
+            .setGueltigkeit(new DateRange(periode.getGesuchsperiodeStart(), periode.getGesuchsperiodeStopp()))
             .setGesuch(gesuch)
             .setGesuchFormular(new GesuchFormular());
 

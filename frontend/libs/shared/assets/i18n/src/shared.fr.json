@@ -71,6 +71,7 @@
   "shared.form.error.email": "L'adresse e-mail est invalide",
   "shared.form.error.telefonnummer": "Le numéro de téléphone est invalide",
   "shared.weiterangaben": "Plus de détails",
+  "shared.table.noData": "Aucune donnée disponible",
   "shared.table.paginator.itemsPerPage": "Nombre d'éléments par page",
   "shared.table.paginator.nextPage": "Page suivante",
   "shared.table.paginator.lastPage": "Dernière page",
@@ -96,6 +97,10 @@
   "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Veuillez remplir les informations sur les parents.",
   "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Veuillez remplir le champ \"Pensions\" dans les recettes et les coûts.",
   "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "La section \"{{section}}\" n'est pas complète.",
+
+  "shared.gesuch.status.ENTWURF": "Brouillon",
+  "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
+  "shared.gesuch.status.ARCHIVIERT": "Archivé",
 
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
@@ -386,6 +391,10 @@
   "shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER": "Justificatif des frais de garde des propres enfants (sans frais de repas)",
   "shared.form.einnahmenkosten.file.LOHNABRECHNUNG": "Copie du décompte de salaire actuel",
   "shared.form.einnahmenkosten.file.VERDIENST": "Si des subsides de formation ont été perçus l’année précédente : Copie de tous les décomptes de salaire mensuels indiquant les revenus touchés durant l’année de formation précédente, c’est-à-dire si la formation débute en août : justificatifs de salaire d’août à juillet de l’année de formation précédente, et si la formation débute en septembre : justificatifs de salaire de septembre à août de l’année de formation précédente (= en règle générale, 12 justificatifs)",
+
+  "shared.form.gesuchsjahr.bezeichnungDe.label": "Désignation(DE)",
+  "shared.form.gesuchsjahr.bezeichnungFr.label": "Désignation(FR)",
+  "shared.form.gesuchsjahr.jahr.label": "Année",
 
   "shared.abschluss.title": "Validation",
   "shared.form.abschluss.notReady": "Vous ne pouvez valider la demande que lorsque vous avez rempli tous les champs obligatoires.",
