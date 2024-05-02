@@ -18,3 +18,6 @@ So, in Sprint 18, for the Ticket KSTIP-972 the changelog would be
     0.18.0-KSTIP-972.xml
     
 This will keep the changelogs in a nice order grouped by the version as well as minimize potential conflicts as each ticket gets their own changelog.
+
+## Known pain points
+Liquibase will always generate a not null constraint, even if the column may be null in some cases, i.e. when using `groups` on a property like `@NotNull(groups = ...)`. And as we have some nullable references, particularly in the `GesuchFormular` entity, every newly generated migration will try and make those columns not nullable, meaning we have to manually delete those `<changeSet/>` entries every time when generating.
