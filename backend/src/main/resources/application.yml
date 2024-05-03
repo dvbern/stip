@@ -46,6 +46,8 @@ quarkus:
   hibernate-orm:
     persistence-xml:
       ignore: true
+    database:
+        generation: "none"
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
