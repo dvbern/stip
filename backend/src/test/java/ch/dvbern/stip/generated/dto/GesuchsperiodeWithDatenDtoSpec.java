@@ -1383,9 +1383,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
    * 
    * @return preisProMahlzeit
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPreisProMahlzeit() {
     return preisProMahlzeit;
@@ -1393,7 +1393,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPreisProMahlzeit(Integer preisProMahlzeit) {
     this.preisProMahlzeit = preisProMahlzeit;
   }
@@ -1409,9 +1409,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
    * 
    * @return maxSaeule3a
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getMaxSaeule3a() {
     return maxSaeule3a;
@@ -1419,7 +1419,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setMaxSaeule3a(Integer maxSaeule3a) {
     this.maxSaeule3a = maxSaeule3a;
   }
@@ -1435,9 +1435,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
    * 
    * @return anzahlWochenLehre
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlWochenLehre() {
     return anzahlWochenLehre;
@@ -1445,7 +1445,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
     this.anzahlWochenLehre = anzahlWochenLehre;
   }
@@ -1461,9 +1461,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
    * 
    * @return anzahlWochenSchule
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlWochenSchule() {
     return anzahlWochenSchule;
@@ -1471,7 +1471,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
