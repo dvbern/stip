@@ -13,5 +13,6 @@
   "gesuch-app.cockpit.gesuch.remove": "Supprimer",
   "gesuch-app.cockpit.gesuch.semester.herbst": "Automne",
   "gesuch-app.cockpit.gesuch.semester.fruehling": "Printemps",
-  "gesuch-app.cockpit.gesuch.img.alt": "Personne au bureau"
+  "gesuch-app.cockpit.gesuch.img.alt": "Personne au bureau",
+  "gesuch-app.gesuch.not-found-redirection": "La demande n'a pas été trouvée<br/>Vous avez été redirigé vers la page d'accueil"
 }

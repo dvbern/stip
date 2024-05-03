@@ -19,6 +19,7 @@
   "shared.genericError.validation": "Une tentative d'enregistrement de valeurs non valables a été effectuée.",
   "shared.genericError.http": "Une erreur inattendue s'est produite lors de la connexion au serveur.",
   "shared.genericError.general": "Une erreur est survenue.",
+  "shared.genericError.forbidden": "Vous n'êtes pas autorisé à accéder à cette page.",
   "shared.datepicker.month.1": "Jan",
   "shared.datepicker.month.2": "Fev",
   "shared.datepicker.month.3": "Mar",

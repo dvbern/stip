@@ -13,17 +13,27 @@ import { Observable, filter, switchMap } from 'rxjs';
 
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { RemoteData } from '@dv/shared/util/remote-data';
 
 @Component({
   selector:
     'dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish',
   standalone: true,
-  imports: [TranslateModule, NgbAlertModule, SharedUiIconChipComponent],
+  imports: [
+    TranslateModule,
+    NgbAlertModule,
+    SharedUiIconChipComponent,
+    SharedUiRdIsPendingPipe,
+    SharedUiLoadingComponent,
+  ],
   templateUrl: './publish.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublishComponent {
   typeSig = input.required<'gesuchsperiode' | 'gesuchsjahr'>();
+  blockedReasonSig = input<RemoteData<string> | null>();
   unsavedChangesSig = input.required<boolean>();
   @Output() publish: Observable<unknown>;
   askForPublish$ = new EventEmitter();

@@ -1,19 +1,21 @@
 <ng-template #notificationTemplate>
-  <div class="p-3" matSnackBarLabel>
+  <div class="py-3" matSnackBarLabel>
     @if (store.mostImportantNotificationSig(); as globalNotification) {
       @for (notification of globalNotification?.list; track notification.id) {
         <div class="d-flex align-items-center">
-          <div class="flex-grow-1">
-            @if (notification.messageKey) {
-              {{ notification.messageKey | translate }}
-            } @else if (notification.message) {
+          @if (notification.messageKey) {
+            <div class="flex-grow-1" [innerHTML]="notification.messageKey | translate"></div>
+          } @else if (notification.message) {
+            <div class="flex-grow-1">
               {{ notification.message }}
-            } @else {
+            </div>
+          } @else {
+            <div class="flex-grow-1">
               {{ 'shared.genericError.general' | translate }}
-            }
-          </div>
+            </div>
+          }
           @if (!globalNotification.autohide) {
-            <button type="button" class="dv-button-icon text-white" (click)="removeNotification(notification.id)">
+            <button type="button" class="dv-button-icon text-white ms-2" (click)="removeNotification(notification.id)">
               <span class="material-symbols-rounded align-middle fs-4">close</span>
             </button>
           }

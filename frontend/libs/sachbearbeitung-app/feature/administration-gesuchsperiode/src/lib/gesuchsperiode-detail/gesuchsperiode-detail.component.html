@@ -1,3 +1,11 @@
+<ng-template dvHeaderSuffix>
+  @if (store.currentGesuchsperiodeViewSig(); as view) {
+    <mat-chip class="ms-2" [color]="view?.statusColor" highlighted>{{
+      'shared.gesuch.status.' + view.gueltigkeitStatus | translate
+    }}</mat-chip>
+  }
+</ng-template>
+
 <div class="mt-4 row d-flex g-4">
   @if (store.currentGesuchsperiodeViewSig()?.isEditable) {
     @if (idSig(); as id) {
@@ -5,6 +13,7 @@
         <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
           class="col-12 col-md-3 col-xl-3"
           typeSig="gesuchsperiode"
+          [blockedReasonSig]="publishBlockedReasonSig()"
           [unsavedChangesSig]="unsavedChangesSig()"
           (publish)="publish(id)"
         ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
@@ -60,28 +69,32 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- Gesuchsjahr -->
-        @if (store.gesuchsjahre() | rdIsPending) {
-          <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-        } @else {
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-            <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
-            <mat-select
-              formControlName="gesuchsjahrId"
-              data-testid="form-gesuchsperiode-gesuchsjahr"
-              [placeholder]="'shared.form.select.empty' | translate"
-            >
-              @for (jahr of store.gesuchsjahre.data(); track $index) {
-                <mat-option [attr.data-testid]="'gesuchsjahr-' + jahr" [value]="jahr.id">
-                  {{ jahr | translatedProp: 'bezeichnung' : translate.currentLang }}
-                </mat-option>
-              }
-            </mat-select>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-        }
+        <!-- Gesuchsjahr/Ausbildungsjahr -->
+
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
+          @if (store.gesuchsjahre() | rdIsPending) {
+            <dv-shared-ui-loading
+              class="position-absolute top-50 start-50 translate-middle"
+              type="icon"
+            ></dv-shared-ui-loading>
+          }
+          <mat-select
+            formControlName="gesuchsjahrId"
+            data-testid="form-gesuchsperiode-gesuchsjahr"
+            [placeholder]="'shared.form.select.empty' | translate"
+            [disabled]="store.gesuchsjahre() | rdIsPending"
+          >
+            @for (jahr of store.gesuchsjahre.data(); track $index) {
+              <mat-option [attr.data-testid]="'gesuchsjahr-' + jahr" [value]="jahr.id">
+                {{ jahr | translatedProp: 'bezeichnung' : translate.currentLang }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
       </div>
 
       <div class="row g-4 mt-1">
@@ -98,7 +111,7 @@
             [matDatepicker]="gesuchsperiodeStartDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #gesuchsperiodeStartDatepicker startView="year"></mat-datepicker>
+          <mat-datepicker #gesuchsperiodeStartDatepicker></mat-datepicker>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -185,45 +198,8 @@
             [matDatepicker]="einreicherfristReduziertDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker #einreicherfristReduziertDatepicker startView="year"></mat-datepicker>
+          <mat-datepicker #einreicherfristReduziertDatepicker></mat-datepicker>
           <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.info </mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!-- Ausbildungskosten (pers. Budget) -->
-      <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
-      </h2>
-
-      <div class="row g-4">
-        <!-- Sekundarstufe II -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
-          <input
-            formControlName="ausbKosten_SekII"
-            data-testid="form-gesuchsperiode-AusbKosten_SekII"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Teritärstufe -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
-          <input
-            formControlName="ausbKosten_Tertiaer"
-            data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -309,21 +285,6 @@
       </div>
 
       <div class="row g-4 mt-1">
-        <!-- Vermoegensfreibetrag -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.vermoegensfreibetrag.label' | translate }}</mat-label>
-          <input
-            formControlName="vermoegensfreibetrag"
-            data-testid="form-gesuchsperiode-vermoegensfreibetrag"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-
         <!-- VermogenSatzAngerechnet -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
@@ -340,9 +301,7 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
-      </div>
 
-      <div class="row g-4 mt-1">
         <!-- Integrationszulage -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.integrationszulage.label' | translate }}</mat-label>
@@ -357,7 +316,9 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
+      </div>
 
+      <div class="row g-4 mt-1">
         <!-- Limite_EkFreibetrag_Integrationszulag -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label
@@ -374,9 +335,7 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
-      </div>
 
-      <div class="row g-4 mt-1">
         <!-- StipLimite_Minimalstipendium -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
@@ -385,6 +344,107 @@
           <input
             formControlName="stipLimite_Minimalstipendium"
             data-testid="form-gesuchsperiode-stipLimite_Minimalstipendium"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <!-- Preis pro Mahlzeit -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.preisProMahlzeit.label' | translate }}</mat-label>
+          <input
+            formControlName="preisProMahlzeit"
+            data-testid="form-gesuchsperiode-preisProMahlzeit"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Max Säule 3a -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.maxSaeule3a.label' | translate }}</mat-label>
+          <input
+            formControlName="maxSaeule3a"
+            data-testid="form-gesuchsperiode-maxSaeule3a"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <!-- Anzahl Wochen Lehre -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenLehre.label' | translate }}</mat-label>
+          <input
+            formControlName="anzahlWochenLehre"
+            data-testid="form-gesuchsperiode-anzahlWochenLehre"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Anzahl Wochen Schule -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenSchule.label' | translate }}</mat-label>
+          <input
+            formControlName="anzahlWochenSchule"
+            data-testid="form-gesuchsperiode-anzahlWochenSchule"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Ausbildungskosten (pers. Budget) -->
+      <h2 class="h3 pt-5 mb-4">
+        {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
+      </h2>
+
+      <div class="row g-4">
+        <!-- Sekundarstufe II -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
+          <input
+            formControlName="ausbKosten_SekII"
+            data-testid="form-gesuchsperiode-AusbKosten_SekII"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Teritärstufe -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
+          <input
+            formControlName="ausbKosten_Tertiaer"
+            data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
             matInput
             [maskito]="maskitoNumber"
             type="text"

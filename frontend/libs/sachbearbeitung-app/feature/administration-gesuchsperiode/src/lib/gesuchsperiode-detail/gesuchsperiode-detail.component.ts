@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   Signal,
+  computed,
   effect,
   inject,
   input,
@@ -14,6 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 import {
   MatDatepicker,
   MatDatepickerApply,
@@ -32,12 +34,14 @@ import { MaskitoDirective } from '@maskito/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
+import { GesuchsperiodeWithDaten } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
+import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiRdIsPendingPipe,
@@ -50,6 +54,7 @@ import {
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoNumber, maskitoYear } from '@dv/shared/util/maskito-util';
+import { isPending, pending, success } from '@dv/shared/util/remote-data';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 import { PublishComponent } from '../publish/publish.component';
@@ -73,12 +78,14 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiHeaderSuffixDirective,
     PublishComponent,
     TranslatedPropertyPipe,
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,
     MatDatepickerApply,
+    MatChipsModule,
   ],
   templateUrl: './gesuchsperiode-detail.component.html',
   providers: [provideDvDateAdapter()],
@@ -114,7 +121,6 @@ export class GesuchsperiodeDetailComponent {
     freibetrag_erwerbseinkommen: [<string | null>null, [Validators.required]],
     einkommensfreibetrag: [<string | null>null, [Validators.required]],
     elternbeteiligungssatz: [<string | null>null, [Validators.required]],
-    vermoegensfreibetrag: [<string | null>null, [Validators.required]],
     vermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
     integrationszulage: [<string | null>null, [Validators.required]],
     limite_EkFreibetrag_Integrationszulag: [
@@ -146,6 +152,42 @@ export class GesuchsperiodeDetailComponent {
       <string | null>null,
       [Validators.required],
     ],
+    preisProMahlzeit: [<string | null>null, [Validators.required]],
+    maxSaeule3a: [<string | null>null, [Validators.required]],
+    anzahlWochenLehre: [<string | null>null, [Validators.required]],
+    anzahlWochenSchule: [<string | null>null, [Validators.required]],
+  });
+
+  gesuchsjahrChangedSig = toSignal(
+    this.form.controls.gesuchsjahrId.valueChanges,
+  );
+  publishBlockedReasonSig = computed(() => {
+    const gesuchsjahrId =
+      this.gesuchsjahrChangedSig() ??
+      this.store.currentGesuchsperiode.data()?.gesuchsjahrId;
+    const gesuchsjahr = this.store.gesuchsjahre
+      .data()
+      ?.find((g) => g.id === gesuchsjahrId);
+
+    if (
+      isPending(this.store.currentGesuchsperiode()) ||
+      isPending(this.store.gesuchsjahre())
+    ) {
+      return pending();
+    }
+
+    if (!gesuchsjahr) {
+      return success(
+        'sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr',
+      );
+    }
+
+    if (gesuchsjahr.gueltigkeitStatus === 'ENTWURF') {
+      return success(
+        'sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf',
+      );
+    }
+    return null;
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
@@ -156,7 +198,6 @@ export class GesuchsperiodeDetailComponent {
     'freibetrag_erwerbseinkommen',
     'elternbeteiligungssatz',
     'einkommensfreibetrag',
-    'vermoegensfreibetrag',
     'vermogenSatzAngerechnet',
     'integrationszulage',
     'limite_EkFreibetrag_Integrationszulag',
@@ -182,6 +223,10 @@ export class GesuchsperiodeDetailComponent {
     'wohnkosten_persoenlich_3pers',
     'wohnkosten_persoenlich_4pers',
     'wohnkosten_persoenlich_5pluspers',
+    'preisProMahlzeit',
+    'maxSaeule3a',
+    'anzahlWochenLehre',
+    'anzahlWochenSchule',
   ]);
 
   constructor() {
@@ -202,10 +247,30 @@ export class GesuchsperiodeDetailComponent {
       { allowSignalWrites: true },
     );
     effect(() => {
-      const gesuchsperiode =
-        this.store.currentGesuchsperiodeViewSig() ??
-        this.store.lastPublishedGesuchsperiodeViewSig();
+      const gesuchsperiode = this.store.currentGesuchsperiodeViewSig();
       if (!gesuchsperiode) {
+        const latestGesuchsperiode = this.store.latestGesuchsperiodeViewSig();
+        if (latestGesuchsperiode) {
+          const removeMetadaten = unsetGivenProperties<GesuchsperiodeWithDaten>(
+            [
+              'bezeichnungDe',
+              'bezeichnungFr',
+              'fiskaljahr',
+              'gesuchsjahrId',
+              'gesuchsperiodeStart',
+              'gesuchsperiodeStopp',
+              'aufschaltterminStart',
+              'aufschaltterminStopp',
+              'einreichefristNormal',
+              'einreichefristReduziert',
+            ],
+          );
+          this.form.patchValue({
+            ...latestGesuchsperiode,
+            ...this.numberConverter.toString(latestGesuchsperiode),
+            ...removeMetadaten,
+          });
+        }
         return;
       }
       this.form.patchValue({
@@ -252,3 +317,9 @@ export class GesuchsperiodeDetailComponent {
     this.handleSave({ shouldPublishAfterSave: true });
   }
 }
+
+const unsetGivenProperties = <T>(keys: (keyof T)[]) => {
+  return keys.reduce((acc, key) => {
+    return { ...acc, [key]: null };
+  }, {});
+};
