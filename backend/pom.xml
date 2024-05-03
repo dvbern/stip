@@ -398,7 +398,6 @@
           <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
           <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
           <propertyFile>liquibase.properties</propertyFile>
-          
           <!-- Old state -->
           <driver>org.postgresql.Driver</driver>
 

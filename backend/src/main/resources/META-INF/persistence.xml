@@ -6,6 +6,7 @@
     <description>Only used for liquibase:diff</description>
     <properties>
       <property name="hibernate.search.enabled" value="false"/>
+      <property name="hibernate.physical_naming_strategy" value="ch.dvbern.stip.api.common.entity.LiquibaseQuarkusCompatiblePhysicalNamingStrategy"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
       <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
       <property name="jakarta.persistence.validation.mode" value="NONE"/>

@@ -43,6 +43,8 @@ quarkus:
     password: "${STIP_DB_PASSWORD}"
     jdbc:
       url: "${STIP_DB_URL}"
+  hibernate-envers:
+    object-quoting-strategy: "QUOTE_ALL_OBJECTS"
   hibernate-orm:
     persistence-xml:
       ignore: true
@@ -138,3 +140,8 @@ openapi:
     serverVisibility: "hidden"
 bucket:
   name: "${STIP_S3_BUCKET_NAME}"
+
+org:
+  hibernate:
+    envers:
+      audit_table_suffix: "_aud"
