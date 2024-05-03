@@ -92,6 +92,11 @@ public interface GesuchResource {
     Response getGesucheForFall(@PathParam("fallId") UUID fallId);
 
     @GET
+    @Path("/benutzer/me")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesucheForMe();
+
+    @GET
     @Path("/{gesuchId}/requiredDokumente")
     @Produces({ "application/json", "text/plain" })
     Response getRequiredGesuchDokumentTyp(@PathParam("gesuchId") UUID gesuchId);

@@ -14,15 +14,10 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import {
-  NgbDropdown,
-  NgbDropdownItem,
-  NgbDropdownMenu,
-  NgbDropdownToggle,
-  NgbOffcanvas,
-  NgbOffcanvasModule,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbOffcanvas, NgbOffcanvasModule } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { KeycloakService } from 'keycloak-angular';
@@ -45,12 +40,10 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
     RouterOutlet,
     RouterLink,
     NgbOffcanvasModule,
+    MatMenuModule,
+    MatButtonModule,
     SharedUiLanguageSelectorComponent,
     SharedUiIconChipComponent,
-    NgbDropdown,
-    NgbDropdownToggle,
-    NgbDropdownMenu,
-    NgbDropdownItem,
   ],
   templateUrl: './shared-pattern-app-header.component.html',
   styleUrls: ['./shared-pattern-app-header.component.scss'],

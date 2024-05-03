@@ -33,6 +33,7 @@ import { FamilyPO } from './po/familiy.po';
 import { GeschwisterPO } from './po/geschwister.po';
 import { KinderPO } from './po/kinder.po';
 import { LebenslaufPO } from './po/lebenslauf.po';
+import { PartnerPO } from './po/partner.po';
 import { PersonPO } from './po/person.po';
 
 const adresse: Adresse = {
@@ -56,7 +57,7 @@ const person: PersonInAusbildung = {
   geburtsdatum: '25.12.1990',
   nationalitaet: 'CH',
   heimatort: 'Bern',
-  zivilstand: 'LEDIG',
+  zivilstand: 'VERHEIRATET',
   wohnsitz: 'EIGENER_HAUSHALT',
   sozialhilfebeitraege: false,
   korrespondenzSprache: 'DEUTSCH',
@@ -247,6 +248,7 @@ test.afterAll(async () => {
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   test('Gesuch minimal', async ({ page, cockpit }) => {
+    test.slow();
     // Step 1: Person ============================================================
     await expectStepTitleToContainText('Person in Ausbildung', page);
     const personPO = new PersonPO(page);
@@ -305,12 +307,13 @@ test.describe('Neues gesuch erstellen', () => {
     await geschwisterPO.elems.buttonContinue.click();
 
     // Step 7: Partner =============================================================
-    // await expectStepTitleToContainText('Ehe- / Konkubinatspartner', page);
-    // const partnerPO = new PartnerPO(page);
+    await expectStepTitleToContainText('Ehe- / Konkubinatspartner', page);
+    const partnerPO = new PartnerPO(page);
+    await expect(partnerPO.elems.loading).toBeHidden();
 
-    // await expect(partnerPO.elems.loading).toBeHidden();
+    await partnerPO.fillPartnerForm(partner);
 
-    // await partnerPO.elems.buttonSaveContinue.click();
+    await partnerPO.elems.buttonSaveContinue.click();
 
     // Step 8: Kinder =============================================================
     await expectStepTitleToContainText('Kinder', page);

@@ -1,3 +1,4 @@
+import { Provider } from '@angular/core';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MatDialogConfig,
@@ -9,7 +10,7 @@ import {
 
 export function provideMaterialDefaultOptions(
   options?: MatFormFieldDefaultOptions,
-) {
+): Provider[] {
   return [
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,

@@ -1,18 +1,24 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import {
   catchError,
   concatMap,
+  debounceTime,
+  distinctUntilChanged,
   exhaustMap,
   filter,
   map,
+  merge,
+  skip,
   switchMap,
   tap,
 } from 'rxjs';
 
 import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
@@ -28,12 +34,18 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import { GesuchFormularUpdate, GesuchService } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
+import {
+  handleNotFound,
+  noGlobalErrorsIf,
+  shouldIgnoreNotFoundErrorsIf,
+} from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { selectRouteId } from './shared-data-access-gesuch.selectors';
+
+export const LOAD_ALL_DEBOUNCE_TIME = 300;
 
 export const loadOwnGesuchs = createEffect(
   (
@@ -66,13 +78,17 @@ export const loadOwnGesuchs = createEffect(
   },
   { functional: true },
 );
+
 export const loadAllGesuchs = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.loadAll),
+    return combineLoadAllActions$(actions$).pipe(
       filter(isDefined),
-      concatMap(() =>
-        gesuchService.getGesuche$().pipe(
+      switchMap(({ filter }) => {
+        const getCall = filter?.showAll
+          ? gesuchService.getGesuche$()
+          : gesuchService.getGesucheForMe$();
+
+        return getCall.pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -83,8 +99,8 @@ export const loadAllGesuchs = createEffect(
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
-        ),
-      ),
+        );
+      }),
     );
   },
   { functional: true },
@@ -95,6 +111,8 @@ export const loadGesuch = createEffect(
     actions$ = inject(Actions),
     store = inject(Store),
     gesuchService = inject(GesuchService),
+    router = inject(Router),
+    globalNotifications = inject(GlobalNotificationStore),
   ) => {
     return actions$.pipe(
       ofType(
@@ -118,16 +136,30 @@ export const loadGesuch = createEffect(
             'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
           );
         }
-        return gesuchService.getGesuch$({ gesuchId: id }).pipe(
-          map((gesuch) =>
-            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        );
+        return gesuchService
+          .getGesuch$({ gesuchId: id }, undefined, undefined, {
+            context: noGlobalErrorsIf(
+              true,
+              handleNotFound((error) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR',
+                  messageKey: 'gesuch-app.gesuch.not-found-redirection',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              }),
+            ),
+          })
+          .pipe(
+            map((gesuch) =>
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
       }),
     );
   },
@@ -384,4 +416,29 @@ const prepareFormularData = (
       },
     },
   };
+};
+
+const combineLoadAllActions$ = (actions$: Actions) => {
+  /** Used to initially load all gesuche */
+  const loadAll$ = actions$.pipe(ofType(SharedDataAccessGesuchEvents.loadAll));
+  /** Used to reload the gesuche after a filter change */
+  const loadAllDebounced$ = merge(
+    // Merge the initial load to compare the new values with the initial in distinctUntilChanged
+    loadAll$,
+    actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.loadAllDebounced),
+      debounceTime(LOAD_ALL_DEBOUNCE_TIME),
+    ),
+  );
+  return merge(
+    loadAll$,
+    loadAllDebounced$.pipe(
+      distinctUntilChanged(
+        (prev, curr) =>
+          JSON.stringify(prev.filter) === JSON.stringify(curr.filter),
+      ),
+      // skip the first value, because it's the same as the initial load
+      skip(1),
+    ),
+  );
 };

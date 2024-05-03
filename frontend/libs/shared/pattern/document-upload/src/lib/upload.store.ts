@@ -15,10 +15,7 @@ import {
 } from 'rxjs/operators';
 
 import { Dokument, GesuchService } from '@dv/shared/model/gesuch';
-import {
-  noGlobalErrorsIf,
-  shouldIgnoreErrorsIf,
-} from '@dv/shared/pattern/http-error-interceptor';
+import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 import {

@@ -15,7 +15,7 @@ import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-g
 import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
@@ -27,7 +27,7 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
     TranslateModule,
     NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',

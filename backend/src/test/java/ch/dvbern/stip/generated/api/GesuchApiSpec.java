@@ -77,7 +77,11 @@ public class GesuchApiSpec {
                 getGesuche(),
                 getGesucheForBenutzer(),
                 getGesucheForFall(),
+<<<<<<< HEAD
                 getRequiredGesuchDokumentTyp(),
+=======
+                getGesucheForMe(),
+>>>>>>> origin/HEAD
                 updateGesuch(),
                 validateGesuchPages()
         );
@@ -135,8 +139,13 @@ public class GesuchApiSpec {
         return new GetGesucheForFallOper(createReqSpec());
     }
 
+<<<<<<< HEAD
     public GetRequiredGesuchDokumentTypOper getRequiredGesuchDokumentTyp() {
         return new GetRequiredGesuchDokumentTypOper(createReqSpec());
+=======
+    public GetGesucheForMeOper getGesucheForMe() {
+        return new GetGesucheForMeOper(createReqSpec());
+>>>>>>> origin/HEAD
     }
 
     public UpdateGesuchOper updateGesuch() {
@@ -1124,6 +1133,7 @@ public class GesuchApiSpec {
         }
     }
     /**
+<<<<<<< HEAD
      * 
      * 
      *
@@ -1134,18 +1144,37 @@ public class GesuchApiSpec {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/gesuch/{gesuchId}/requiredDokumente";
+=======
+     * Get all Gesuche for me
+     * 
+     *
+     * return List&lt;GesuchDtoSpec&gt;
+     */
+    public static class GetGesucheForMeOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/benutzer/me";
+>>>>>>> origin/HEAD
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
+<<<<<<< HEAD
         public GetRequiredGesuchDokumentTypOper(RequestSpecBuilder reqSpec) {
+=======
+        public GetGesucheForMeOper(RequestSpecBuilder reqSpec) {
+>>>>>>> origin/HEAD
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
+<<<<<<< HEAD
          * GET /gesuch/{gesuchId}/requiredDokumente
+=======
+         * GET /gesuch/benutzer/me
+>>>>>>> origin/HEAD
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1156,6 +1185,7 @@ public class GesuchApiSpec {
         }
 
         /**
+<<<<<<< HEAD
          * GET /gesuch/{gesuchId}/requiredDokumente
          * @param handler handler
          * @return List&lt;DokumentTypDtoSpec&gt;
@@ -1176,12 +1206,27 @@ public class GesuchApiSpec {
             return this;
         }
 
+=======
+         * GET /gesuch/benutzer/me
+         * @param handler handler
+         * @return List&lt;GesuchDtoSpec&gt;
+         */
+        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+>>>>>>> origin/HEAD
         /**
          * Customize request specification
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
+<<<<<<< HEAD
         public GetRequiredGesuchDokumentTypOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+=======
+        public GetGesucheForMeOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+>>>>>>> origin/HEAD
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1191,7 +1236,11 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
+<<<<<<< HEAD
         public GetRequiredGesuchDokumentTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+=======
+        public GetGesucheForMeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+>>>>>>> origin/HEAD
             respSpecCustomizer.accept(respSpec);
             return this;
         }

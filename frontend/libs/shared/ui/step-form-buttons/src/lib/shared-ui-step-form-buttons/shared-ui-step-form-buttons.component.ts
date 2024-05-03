@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
   styleUrls: ['./shared-ui-step-form-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppUiStepFormButtonsComponent {
+export class SharedUiStepFormButtonsComponent {
   @HostBinding('class') classes =
     'col-12 col-xl-8 mt-5 d-flex flex-column gap-3 flex-md-row align-items-center justify-content-center';
 }

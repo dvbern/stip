@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.repo;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> {
-
     private final EntityManager entityManager;
 
     public Stream<Gesuchsperiode> findAllActiveForDate(LocalDate date) {
@@ -24,10 +24,18 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         var query = queryFactory
             .select(gesuchsperiode)
             .from(gesuchsperiode)
-            .where(gesuchsperiode.aufschaltdatum.before(date)
-                .and(gesuchsperiode.gueltigkeit.gueltigBis.after(date)
-                    .or(gesuchsperiode.gueltigkeit.gueltigBis.eq(date))));
+            .where(gesuchsperiode.aufschaltterminStart.before(date)
+                .and(gesuchsperiode.aufschaltterminStopp.after(date)
+                    .or(gesuchsperiode.aufschaltterminStopp.eq(date))));
         return query.stream();
     }
 
+    public Optional<Gesuchsperiode> getLatest() {
+        final var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchsperiode)
+            .orderBy(gesuchsperiode.timestampErstellt.desc())
+            .stream()
+            .findFirst();
+    }
 }

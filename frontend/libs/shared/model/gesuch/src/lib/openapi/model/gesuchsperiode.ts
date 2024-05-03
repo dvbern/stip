@@ -9,12 +9,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Gesuchsjahr } from './gesuchsjahr';
+import { GueltigkeitStatus } from './gueltigkeitStatus';
 
 export interface Gesuchsperiode { 
     id: string;
-    gueltigAb: string;
-    gueltigBis: string;
-    einreichfrist?: string;
-    aufschaltdatum?: string;
+    bezeichnungDe: string;
+    bezeichnungFr: string;
+    gueltigkeitStatus: GueltigkeitStatus;
+    gesuchsperiodeStart: string;
+    gesuchsperiodeStopp: string;
+    /**
+     * dd.MM.YYYY
+     */
+    aufschaltterminStart: string;
+    einreichefristNormal?: string;
+    einreichefristReduziert?: string;
+    gesuchsjahr: Gesuchsjahr;
 }
+
+
 

@@ -6,7 +6,7 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedUtilFormService } from './shared-util-form.service';
@@ -50,5 +50,28 @@ describe('SharedUtilFormService', () => {
     });
     expect(wndw.addEventListener).toHaveBeenCalled();
     expect(wndw.removeEventListener).toHaveBeenCalled();
+  });
+
+  it('should create a number converter for a form group', () => {
+    const form = new FormGroup({
+      preis: new FormControl<string | null>(null, [Validators.required]),
+      menge: new FormControl<string | null>(null),
+    });
+    const state = {
+      preis: 123,
+      menge: 456,
+    };
+    form.patchValue({ preis: '123' });
+    const { toNumber, toString } = service.createNumberConverter(form, [
+      'preis',
+      'menge',
+    ]);
+    expect(toNumber().preis).toBe(123);
+    expect(toNumber().menge).toBe(null);
+    expect(toString(state).preis).toBe('123');
+    expect(toString(state).menge).toBe('456');
+
+    form.patchValue({ menge: '456' });
+    expect(toNumber().menge).toBe(456);
   });
 });
