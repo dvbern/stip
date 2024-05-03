@@ -88,7 +88,11 @@ INSERT INTO gesuchsperiode (id,
                             wohnkosten_persoenlich_3pers,
                             wohnkosten_persoenlich_4pers,
                             wohnkosten_persoenlich_5pluspers,
-                            gueltigkeit_status)
+                            gueltigkeit_status,
+                            preis_pro_mahlzeit,
+                            max_saeule_3a,
+                            anzahl_wochen_lehre,
+                            anzahl_wochen_schule)
 VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         '2023-05-31 08:35:52',
         '2023-05-30 08:35:43',
@@ -137,7 +141,11 @@ VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         1,
         1,
         1,
-        'ENTWURF');
+        'ENTWURF',
+        1,
+        1,
+        1,
+        1);
 
 INSERT INTO ausbildungsstaette (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version,
                                 name_de, name_fr)

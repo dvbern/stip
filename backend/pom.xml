@@ -25,6 +25,7 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.6.4</quarkus.platform.version>
     <querydsl.version>5.0.0</querydsl.version>
+    <savoirtech.json-comparator.version>1.1.1</savoirtech.json-comparator.version>
     <skipITs>true</skipITs>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <sonar.exclusions>
@@ -262,6 +263,12 @@
       <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
       <version>${javafaker.version}</version>
+      <scope>test</scope>
+    </dependency>
+      <dependency>
+        <groupId>com.savoirtech.json</groupId>
+        <artifactId>json-comparator</artifactId>
+        <version>${savoirtech.json-comparator.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

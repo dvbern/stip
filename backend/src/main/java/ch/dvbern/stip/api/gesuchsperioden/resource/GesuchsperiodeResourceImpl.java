@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuchsperioden.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
@@ -68,6 +67,7 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     }
 
     @Override
+    @RolesAllowed(ROLE_ADMIN)
     public Response publishGesuchsperiode(UUID gesuchperiodeId) {
         final var gesuchsperiode = gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
         return Response.ok(gesuchsperiode).build();

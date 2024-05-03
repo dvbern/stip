@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -177,4 +176,16 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "gueltigkeit_status")
     @Enumerated(EnumType.STRING)
     private GueltigkeitStatus gueltigkeitStatus = GueltigkeitStatus.ENTWURF;
+
+    @Column(nullable = false, name = "preis_pro_mahlzeit")
+    private Integer preisProMahlzeit;
+
+    @Column(nullable = false, name = "max_saeule_3a")
+    private Integer maxSaeule3a;
+
+    @Column(nullable = false, name = "anzahl_wochen_lehre")
+    private Integer anzahlWochenLehre;
+
+    @Column(nullable = false, name = "anzahl_wochen_schule")
+    private Integer anzahlWochenSchule;
 }

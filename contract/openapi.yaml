@@ -2468,6 +2468,10 @@ components:
         - wohnkosten_persoenlich_3pers
         - wohnkosten_persoenlich_4pers
         - wohnkosten_persoenlich_5pluspers
+        - preisProMahlzeit
+        - maxSaeule3a
+        - anzahlWochenLehre
+        - anzahlWochenSchule
       properties:
         bezeichnungDe:
           description: ''
@@ -2598,6 +2602,18 @@ components:
           description: ''
           type: integer
         wohnkosten_persoenlich_5pluspers:
+          description: ''
+          type: integer
+        preisProMahlzeit:
+          description: ''
+          type: integer
+        maxSaeule3a:
+          description: ''
+          type: integer
+        anzahlWochenLehre:
+          description: ''
+          type: integer
+        anzahlWochenSchule:
           description: ''
           type: integer
     AusbildungsstaetteUpdate:
