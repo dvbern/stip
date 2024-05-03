@@ -3,11 +3,12 @@
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd" objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-  <changeSet id="1714641991729-1" author="fuju (generated)">
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  <changeSet id="1714726067701-1" author="fuju (generated)">
     <createSequence incrementBy="50" sequenceName="revinfo_seq" startValue="1"/>
   </changeSet>
-  <changeSet id="1714641991729-2" author="fuju (generated)">
+  <changeSet id="1714726067701-2" author="fuju (generated)">
     <createTable tableName="adresse">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_adresse"/>
@@ -44,7 +45,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-3" author="fuju (generated)">
+  <changeSet id="1714726067701-3" author="fuju (generated)">
     <createTable tableName="adresse_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_adresse_aud"/>
@@ -66,7 +67,7 @@
       <column name="ort" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-4" author="fuju (generated)">
+  <changeSet id="1714726067701-4" author="fuju (generated)">
     <createTable tableName="ausbildung">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ausbildung"/>
@@ -108,7 +109,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-5" author="fuju (generated)">
+  <changeSet id="1714726067701-5" author="fuju (generated)">
     <createTable tableName="ausbildung_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ausbildung_aud"/>
@@ -133,7 +134,7 @@
       <column name="pensum" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-6" author="fuju (generated)">
+  <changeSet id="1714726067701-6" author="fuju (generated)">
     <createTable tableName="ausbildungsgang">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ausbildungsgang"/>
@@ -169,7 +170,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-7" author="fuju (generated)">
+  <changeSet id="1714726067701-7" author="fuju (generated)">
     <createTable tableName="ausbildungsgang_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ausbildungsgang_aud"/>
@@ -190,7 +191,7 @@
       <column name="ausbildungsrichtung" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-8" author="fuju (generated)">
+  <changeSet id="1714726067701-8" author="fuju (generated)">
     <createTable tableName="ausbildungsstaette">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ausbildungsstaette"/>
@@ -216,7 +217,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-9" author="fuju (generated)">
+  <changeSet id="1714726067701-9" author="fuju (generated)">
     <createTable tableName="ausbildungsstaette_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ausbildungsstaette_aud"/>
@@ -233,7 +234,7 @@
       <column name="name_fr" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-10" author="fuju (generated)">
+  <changeSet id="1714726067701-10" author="fuju (generated)">
     <createTable tableName="auszahlung">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auszahlung"/>
@@ -271,7 +272,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-11" author="fuju (generated)">
+  <changeSet id="1714726067701-11" author="fuju (generated)">
     <createTable tableName="auszahlung_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_auszahlung_aud"/>
@@ -292,7 +293,7 @@
       <column name="iban" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-12" author="fuju (generated)">
+  <changeSet id="1714726067701-12" author="fuju (generated)">
     <createTable tableName="benutzer">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_benutzer"/>
@@ -332,7 +333,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-13" author="fuju (generated)">
+  <changeSet id="1714726067701-13" author="fuju (generated)">
     <createTable tableName="benutzer_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_benutzer_aud"/>
@@ -355,7 +356,7 @@
       <column name="benutzereinstellungen_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-14" author="fuju (generated)">
+  <changeSet id="1714726067701-14" author="fuju (generated)">
     <createTable tableName="benutzereinstellungen">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_benutzereinstellungen"/>
@@ -381,7 +382,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-15" author="fuju (generated)">
+  <changeSet id="1714726067701-15" author="fuju (generated)">
     <createTable tableName="benutzereinstellungen_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_benutzereinstellungen_aud"/>
@@ -398,7 +399,7 @@
       <column name="digitale_kommunikation" type="BOOLEAN"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-16" author="fuju (generated)">
+  <changeSet id="1714726067701-16" author="fuju (generated)">
     <createTable tableName="dokument">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dokument"/>
@@ -436,7 +437,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-17" author="fuju (generated)">
+  <changeSet id="1714726067701-17" author="fuju (generated)">
     <createTable tableName="dokument_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dokument_aud"/>
@@ -457,7 +458,7 @@
       <column name="object_id" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-18" author="fuju (generated)">
+  <changeSet id="1714726067701-18" author="fuju (generated)">
     <createTable tableName="einnahmen_kosten">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_einnahmen_kosten"/>
@@ -502,7 +503,7 @@
       <column name="betreuungskosten_kinder" type="INT"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-19" author="fuju (generated)">
+  <changeSet id="1714726067701-19" author="fuju (generated)">
     <createTable tableName="einnahmen_kosten_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_einnahmen_kosten_aud"/>
@@ -534,7 +535,7 @@
       <column name="betreuungskosten_kinder" type="INT"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-20" author="fuju (generated)">
+  <changeSet id="1714726067701-20" author="fuju (generated)">
     <createTable tableName="eltern">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_eltern"/>
@@ -597,7 +598,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-21" author="fuju (generated)">
+  <changeSet id="1714726067701-21" author="fuju (generated)">
     <createTable tableName="eltern_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_eltern_aud"/>
@@ -628,7 +629,7 @@
       <column name="copy_of_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-22" author="fuju (generated)">
+  <changeSet id="1714726067701-22" author="fuju (generated)">
     <createTable tableName="fall">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_fall"/>
@@ -656,7 +657,7 @@
       <column name="sachbearbeiter_zuordnung_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-23" author="fuju (generated)">
+  <changeSet id="1714726067701-23" author="fuju (generated)">
     <createTable tableName="fall_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_fall_aud"/>
@@ -675,7 +676,7 @@
       <column name="sachbearbeiter_zuordnung_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-24" author="fuju (generated)">
+  <changeSet id="1714726067701-24" author="fuju (generated)">
     <createTable tableName="familiensituation">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_familiensituation"/>
@@ -714,7 +715,7 @@
       <column name="wer_zahlt_alimente" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-25" author="fuju (generated)">
+  <changeSet id="1714726067701-25" author="fuju (generated)">
     <createTable tableName="familiensituation_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_familiensituation_aud"/>
@@ -744,7 +745,7 @@
       <column name="wer_zahlt_alimente" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-26" author="fuju (generated)">
+  <changeSet id="1714726067701-26" author="fuju (generated)">
     <createTable tableName="geschwister">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_geschwister"/>
@@ -788,7 +789,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-27" author="fuju (generated)">
+  <changeSet id="1714726067701-27" author="fuju (generated)">
     <createTable tableName="geschwister_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_geschwister_aud"/>
@@ -812,7 +813,7 @@
       <column name="copy_of_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-28" author="fuju (generated)">
+  <changeSet id="1714726067701-28" author="fuju (generated)">
     <createTable tableName="gesuch">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch"/>
@@ -850,7 +851,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-29" author="fuju (generated)">
+  <changeSet id="1714726067701-29" author="fuju (generated)">
     <createTable tableName="gesuch_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_aud"/>
@@ -871,7 +872,7 @@
       <column name="gesuch_status_aenderung_datum" type="DATETIME"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-30" author="fuju (generated)">
+  <changeSet id="1714726067701-30" author="fuju (generated)">
     <createTable tableName="gesuch_dokument">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_dokument"/>
@@ -900,7 +901,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-31" author="fuju (generated)">
+  <changeSet id="1714726067701-31" author="fuju (generated)">
     <createTable tableName="gesuch_dokument_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_dokument_aud"/>
@@ -918,7 +919,7 @@
       <column name="dokument_typ" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-32" author="fuju (generated)">
+  <changeSet id="1714726067701-32" author="fuju (generated)">
     <createTable tableName="gesuch_formular">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_formular"/>
@@ -939,15 +940,25 @@
       <column name="user_mutiert" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="person_in_ausbildung_id" type="UUID"/>
-      <column name="ausbildung_id" type="UUID"/>
-      <column name="familiensituation_id" type="UUID"/>
+      <column name="person_in_ausbildung_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ausbildung_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="familiensituation_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
       <column name="partner_id" type="UUID"/>
-      <column name="auszahlung_id" type="UUID"/>
-      <column name="einnahmen_kosten_id" type="UUID"/>
+      <column name="auszahlung_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="einnahmen_kosten_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-33" author="fuju (generated)">
+  <changeSet id="1714726067701-33" author="fuju (generated)">
     <createTable tableName="gesuch_formular_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_formular_aud"/>
@@ -969,7 +980,7 @@
       <column name="einnahmen_kosten_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-34" author="fuju (generated)">
+  <changeSet id="1714726067701-34" author="fuju (generated)">
     <createTable tableName="gesuch_tranche">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_tranche"/>
@@ -1001,7 +1012,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-35" author="fuju (generated)">
+  <changeSet id="1714726067701-35" author="fuju (generated)">
     <createTable tableName="gesuch_tranche_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuch_tranche_aud"/>
@@ -1020,7 +1031,7 @@
       <column name="gueltig_bis" type="DATE"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-36" author="fuju (generated)">
+  <changeSet id="1714726067701-36" author="fuju (generated)">
     <createTable tableName="gesuchsjahr">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuchsjahr"/>
@@ -1047,7 +1058,7 @@
       <column name="gueltigkeit_status" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-37" author="fuju (generated)">
+  <changeSet id="1714726067701-37" author="fuju (generated)">
     <createTable tableName="gesuchsjahr_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuchsjahr_aud"/>
@@ -1067,7 +1078,7 @@
       <column name="gueltigkeit_status" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-38" author="fuju (generated)">
+  <changeSet id="1714726067701-38" author="fuju (generated)">
     <createTable tableName="gesuchsperiode">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuchsperiode"/>
@@ -1134,9 +1145,6 @@
         <constraints nullable="false"/>
       </column>
       <column name="elternbeteiligungssatz" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="vermoegensfreibetrag" type="INT">
         <constraints nullable="false"/>
       </column>
       <column name="vermogen_satz_angerechnet" type="INT">
@@ -1231,7 +1239,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-39" author="fuju (generated)">
+  <changeSet id="1714726067701-39" author="fuju (generated)">
     <createTable tableName="gesuchsperiode_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gesuchsperiode_aud"/>
@@ -1261,7 +1269,6 @@
       <column name="freibetrag_erwerbseinkommen" type="INT"/>
       <column name="einkommensfreibetrag" type="INT"/>
       <column name="elternbeteiligungssatz" type="INT"/>
-      <column name="vermoegensfreibetrag" type="INT"/>
       <column name="vermogen_satz_angerechnet" type="INT"/>
       <column name="integrationszulage" type="INT"/>
       <column name="limite_ek_freibetrag_integrationszulag" type="INT"/>
@@ -1294,7 +1301,7 @@
       <column name="anzahl_wochen_schule" type="INT"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-40" author="fuju (generated)">
+  <changeSet id="1714726067701-40" author="fuju (generated)">
     <createTable tableName="kind">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_kind"/>
@@ -1339,7 +1346,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-41" author="fuju (generated)">
+  <changeSet id="1714726067701-41" author="fuju (generated)">
     <createTable tableName="kind_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_kind_aud"/>
@@ -1364,7 +1371,7 @@
       <column name="copy_of_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-42" author="fuju (generated)">
+  <changeSet id="1714726067701-42" author="fuju (generated)">
     <createTable tableName="lebenslauf_item">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_lebenslauf_item"/>
@@ -1409,7 +1416,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-43" author="fuju (generated)">
+  <changeSet id="1714726067701-43" author="fuju (generated)">
     <createTable tableName="lebenslauf_item_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_lebenslauf_item_aud"/>
@@ -1436,7 +1443,7 @@
       <column name="copy_of_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-44" author="fuju (generated)">
+  <changeSet id="1714726067701-44" author="fuju (generated)">
     <createTable tableName="partner">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_partner"/>
@@ -1480,7 +1487,7 @@
       <column name="fahrkosten" type="INT"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-45" author="fuju (generated)">
+  <changeSet id="1714726067701-45" author="fuju (generated)">
     <createTable tableName="partner_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_partner_aud"/>
@@ -1505,7 +1512,7 @@
       <column name="fahrkosten" type="INT"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-46" author="fuju (generated)">
+  <changeSet id="1714726067701-46" author="fuju (generated)">
     <createTable tableName="person_in_ausbildung">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_person_in_ausbildung"/>
@@ -1579,7 +1586,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-47" author="fuju (generated)">
+  <changeSet id="1714726067701-47" author="fuju (generated)">
     <createTable tableName="person_in_ausbildung_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_person_in_ausbildung_aud"/>
@@ -1618,7 +1625,7 @@
       <column name="korrespondenz_sprache" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-48" author="fuju (generated)">
+  <changeSet id="1714726067701-48" author="fuju (generated)">
     <createTable tableName="revinfo">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_revinfo"/>
@@ -1626,10 +1633,12 @@
       <column name="revtstmp" type="BIGINT"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-49" author="fuju (generated)">
+  <changeSet id="1714726067701-49" author="fuju (generated)">
     <createTable tableName="sachbearbeiter_zuordnung_stammdaten">
       <column name="id" type="UUID">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sachbearbeiter_zuordnung_stammdaten"/>
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="pk_sachbearbeiter_zuordnung_stammdaten"/>
       </column>
       <column name="mandant" type="VARCHAR(255)">
         <constraints nullable="false"/>
@@ -1654,15 +1663,19 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-50" author="fuju (generated)">
+  <changeSet id="1714726067701-50" author="fuju (generated)">
     <createTable tableName="sachbearbeiter_zuordnung_stammdaten_aud">
       <column name="rev" type="INT">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sachbearbeiter_zuordnung_stammdaten_aud"/>
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="pk_sachbearbeiter_zuordnung_stammdaten_aud"/>
       </column>
       <column name="mandant" type="VARCHAR(255)"/>
       <column name="revtype" type="SMALLINT"/>
       <column name="id" type="UUID">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sachbearbeiter_zuordnung_stammdaten_aud"/>
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="pk_sachbearbeiter_zuordnung_stammdaten_aud"/>
       </column>
       <column name="timestamp_erstellt" type="DATETIME"/>
       <column name="timestamp_mutiert" type="DATETIME"/>
@@ -1673,7 +1686,7 @@
       <column name="benutzer_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-51" author="fuju (generated)">
+  <changeSet id="1714726067701-51" author="fuju (generated)">
     <createTable tableName="zuordnung">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_zuordnung"/>
@@ -1705,7 +1718,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-52" author="fuju (generated)">
+  <changeSet id="1714726067701-52" author="fuju (generated)">
     <createTable tableName="zuordnung_aud">
       <column name="rev" type="INT">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_zuordnung_aud"/>
@@ -1724,441 +1737,681 @@
       <column name="zuordnung_type" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
-  <changeSet id="1714641991729-53" author="fuju (generated)">
+  <changeSet id="1714726067701-53" author="fuju (generated)">
     <addUniqueConstraint columnNames="adresse_id" constraintName="uc_auszahlung_adresse" tableName="auszahlung"/>
   </changeSet>
-  <changeSet id="1714641991729-54" author="fuju (generated)">
-    <addUniqueConstraint columnNames="benutzereinstellungen_id" constraintName="uc_benutzer_benutzereinstellungen" tableName="benutzer"/>
+  <changeSet id="1714726067701-54" author="fuju (generated)">
+    <addUniqueConstraint columnNames="benutzereinstellungen_id"
+                         constraintName="uc_benutzer_benutzereinstellungen"
+                         tableName="benutzer"/>
   </changeSet>
-  <changeSet id="1714641991729-55" author="fuju (generated)">
+  <changeSet id="1714726067701-55" author="fuju (generated)">
     <addUniqueConstraint columnNames="keycloak_id" constraintName="uc_benutzer_keycloak" tableName="benutzer"/>
   </changeSet>
-  <changeSet id="1714641991729-56" author="fuju (generated)">
+  <changeSet id="1714726067701-56" author="fuju (generated)">
     <addUniqueConstraint columnNames="adresse_id" constraintName="uc_eltern_adresse" tableName="eltern"/>
   </changeSet>
-  <changeSet id="1714641991729-57" author="fuju (generated)">
+  <changeSet id="1714726067701-57" author="fuju (generated)">
     <addUniqueConstraint columnNames="gesuchsteller_id" constraintName="uc_fall_gesuchsteller" tableName="fall"/>
   </changeSet>
-  <changeSet id="1714641991729-58" author="fuju (generated)">
-    <addUniqueConstraint columnNames="sachbearbeiter_zuordnung_id" constraintName="uc_fall_sachbearbeiter_zuordnung" tableName="fall"/>
+  <changeSet id="1714726067701-58" author="fuju (generated)">
+    <addUniqueConstraint columnNames="sachbearbeiter_zuordnung_id"
+                         constraintName="uc_fall_sachbearbeiter_zuordnung"
+                         tableName="fall"/>
   </changeSet>
-  <changeSet id="1714641991729-59" author="fuju (generated)">
-    <addUniqueConstraint columnNames="ausbildung_id" constraintName="uc_gesuch_formular_ausbildung" tableName="gesuch_formular"/>
+  <changeSet id="1714726067701-59" author="fuju (generated)">
+    <addUniqueConstraint columnNames="ausbildung_id"
+                         constraintName="uc_gesuch_formular_ausbildung"
+                         tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-60" author="fuju (generated)">
-    <addUniqueConstraint columnNames="auszahlung_id" constraintName="uc_gesuch_formular_auszahlung" tableName="gesuch_formular"/>
+  <changeSet id="1714726067701-60" author="fuju (generated)">
+    <addUniqueConstraint columnNames="auszahlung_id"
+                         constraintName="uc_gesuch_formular_auszahlung"
+                         tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-61" author="fuju (generated)">
-    <addUniqueConstraint columnNames="einnahmen_kosten_id" constraintName="uc_gesuch_formular_einnahmen_kosten" tableName="gesuch_formular"/>
+  <changeSet id="1714726067701-61" author="fuju (generated)">
+    <addUniqueConstraint columnNames="einnahmen_kosten_id"
+                         constraintName="uc_gesuch_formular_einnahmen_kosten"
+                         tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-62" author="fuju (generated)">
-    <addUniqueConstraint columnNames="familiensituation_id" constraintName="uc_gesuch_formular_familiensituation" tableName="gesuch_formular"/>
+  <changeSet id="1714726067701-62" author="fuju (generated)">
+    <addUniqueConstraint columnNames="familiensituation_id"
+                         constraintName="uc_gesuch_formular_familiensituation"
+                         tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-63" author="fuju (generated)">
-    <addUniqueConstraint columnNames="partner_id" constraintName="uc_gesuch_formular_partner" tableName="gesuch_formular"/>
+  <changeSet id="1714726067701-63" author="fuju (generated)">
+    <addUniqueConstraint columnNames="partner_id"
+                         constraintName="uc_gesuch_formular_partner"
+                         tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-64" author="fuju (generated)">
-    <addUniqueConstraint columnNames="person_in_ausbildung_id" constraintName="uc_gesuch_formular_person_in_ausbildung" tableName="gesuch_formular"/>
+  <changeSet id="1714726067701-64" author="fuju (generated)">
+    <addUniqueConstraint columnNames="person_in_ausbildung_id"
+                         constraintName="uc_gesuch_formular_person_in_ausbildung"
+                         tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-65" author="fuju (generated)">
-    <addUniqueConstraint columnNames="gesuch_formular_id" constraintName="uc_gesuch_tranche_gesuch_formular" tableName="gesuch_tranche"/>
+  <changeSet id="1714726067701-65" author="fuju (generated)">
+    <addUniqueConstraint columnNames="gesuch_formular_id"
+                         constraintName="uc_gesuch_tranche_gesuch_formular"
+                         tableName="gesuch_tranche"/>
   </changeSet>
-  <changeSet id="1714641991729-66" author="fuju (generated)">
+  <changeSet id="1714726067701-66" author="fuju (generated)">
     <addUniqueConstraint columnNames="adresse_id" constraintName="uc_partner_adresse" tableName="partner"/>
   </changeSet>
-  <changeSet id="1714641991729-67" author="fuju (generated)">
-    <addUniqueConstraint columnNames="adresse_id" constraintName="uc_person_in_ausbildung_adresse" tableName="person_in_ausbildung"/>
+  <changeSet id="1714726067701-67" author="fuju (generated)">
+    <addUniqueConstraint columnNames="adresse_id"
+                         constraintName="uc_person_in_ausbildung_adresse"
+                         tableName="person_in_ausbildung"/>
   </changeSet>
-  <changeSet id="1714641991729-68" author="fuju (generated)">
-    <addUniqueConstraint columnNames="benutzer_id" constraintName="uc_sachbearbeiter_zuordnung_stammdaten_benutzer" tableName="sachbearbeiter_zuordnung_stammdaten"/>
+  <changeSet id="1714726067701-68" author="fuju (generated)">
+    <addUniqueConstraint columnNames="benutzer_id"
+                         constraintName="uc_sachbearbeiter_zuordnung_stammdaten_benutzer"
+                         tableName="sachbearbeiter_zuordnung_stammdaten"/>
   </changeSet>
-  <changeSet id="1714641991729-69" author="fuju (generated)">
+  <changeSet id="1714726067701-69" author="fuju (generated)">
     <addUniqueConstraint columnNames="fall_id" constraintName="uc_zuordnung_fall" tableName="zuordnung"/>
   </changeSet>
-  <changeSet id="1714641991729-72" author="fuju (generated)">
+  <changeSet id="1714726067701-72" author="fuju (generated)">
     <createIndex indexName="IX_adresse_mandant" tableName="adresse">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-74" author="fuju (generated)">
+  <changeSet id="1714726067701-74" author="fuju (generated)">
     <createIndex indexName="IX_ausbildung_mandant" tableName="ausbildung">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-76" author="fuju (generated)">
+  <changeSet id="1714726067701-76" author="fuju (generated)">
     <createIndex indexName="IX_ausbildungsgang_mandant" tableName="ausbildungsgang">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-78" author="fuju (generated)">
+  <changeSet id="1714726067701-78" author="fuju (generated)">
     <createIndex indexName="IX_auszahlung_mandant" tableName="auszahlung">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-79" author="fuju (generated)">
+  <changeSet id="1714726067701-79" author="fuju (generated)">
     <createIndex indexName="IX_benuter_mandant" tableName="benutzer">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-81" author="fuju (generated)">
+  <changeSet id="1714726067701-81" author="fuju (generated)">
     <createIndex indexName="IX_benutzer_keycloak_id" tableName="benutzer" unique="true">
       <column name="keycloak_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-82" author="fuju (generated)">
+  <changeSet id="1714726067701-82" author="fuju (generated)">
     <createIndex indexName="IX_benutzereinstellungen_mandant" tableName="benutzereinstellungen">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-84" author="fuju (generated)">
+  <changeSet id="1714726067701-84" author="fuju (generated)">
     <createIndex indexName="IX_dokument_mandant" tableName="dokument">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-85" author="fuju (generated)">
+  <changeSet id="1714726067701-85" author="fuju (generated)">
     <createIndex indexName="IX_einnahme_kosten_mandant" tableName="einnahmen_kosten">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-87" author="fuju (generated)">
+  <changeSet id="1714726067701-87" author="fuju (generated)">
     <createIndex indexName="IX_eltern_mandant" tableName="eltern">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-89" author="fuju (generated)">
+  <changeSet id="1714726067701-89" author="fuju (generated)">
     <createIndex indexName="IX_fall_mandant" tableName="fall">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-90" author="fuju (generated)">
+  <changeSet id="1714726067701-90" author="fuju (generated)">
     <createIndex indexName="IX_familiensituation_mandant" tableName="familiensituation">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-91" author="fuju (generated)">
+  <changeSet id="1714726067701-91" author="fuju (generated)">
     <createIndex indexName="IX_geschwister_mandant" tableName="geschwister">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-93" author="fuju (generated)">
+  <changeSet id="1714726067701-93" author="fuju (generated)">
     <createIndex indexName="IX_gesuch_dokument_gesuch_id_dokument_typ" tableName="gesuch_dokument">
       <column name="gesuch_id"/>
       <column name="dokument_typ"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-94" author="fuju (generated)">
+  <changeSet id="1714726067701-94" author="fuju (generated)">
     <createIndex indexName="IX_gesuch_dokument_mandant" tableName="gesuch_dokument">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-98" author="fuju (generated)">
+  <changeSet id="1714726067701-98" author="fuju (generated)">
     <createIndex indexName="IX_gesuch_formular_mandant" tableName="gesuch_formular">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-102" author="fuju (generated)">
+  <changeSet id="1714726067701-102" author="fuju (generated)">
     <createIndex indexName="IX_gesuch_mandant" tableName="gesuch">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-105" author="fuju (generated)">
+  <changeSet id="1714726067701-105" author="fuju (generated)">
     <createIndex indexName="IX_gesuchsjahr_mandant" tableName="gesuchsjahr">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-106" author="fuju (generated)">
+  <changeSet id="1714726067701-106" author="fuju (generated)">
     <createIndex indexName="IX_gesuchsperiode_aufschalttermin_start" tableName="gesuchsperiode">
       <column name="aufschalttermin_start"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-108" author="fuju (generated)">
+  <changeSet id="1714726067701-108" author="fuju (generated)">
     <createIndex indexName="IX_gesuchsperiode_mandant" tableName="gesuchsperiode">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-109" author="fuju (generated)">
+  <changeSet id="1714726067701-109" author="fuju (generated)">
     <createIndex indexName="IX_kind_mandant" tableName="kind">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-110" author="fuju (generated)">
+  <changeSet id="1714726067701-110" author="fuju (generated)">
     <createIndex indexName="IX_lebenslauf_item_mandant" tableName="lebenslauf_item">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-112" author="fuju (generated)">
+  <changeSet id="1714726067701-112" author="fuju (generated)">
     <createIndex indexName="IX_partner_mandant" tableName="partner">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-114" author="fuju (generated)">
+  <changeSet id="1714726067701-114" author="fuju (generated)">
     <createIndex indexName="IX_person_in_ausbildung_mandant" tableName="person_in_ausbildung">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-116" author="fuju (generated)">
-    <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_mandant" tableName="sachbearbeiter_zuordnung_stammdaten">
+  <changeSet id="1714726067701-116" author="fuju (generated)">
+    <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_mandant"
+                 tableName="sachbearbeiter_zuordnung_stammdaten">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-118" author="fuju (generated)">
+  <changeSet id="1714726067701-118" author="fuju (generated)">
     <createIndex indexName="IX_zuordnung_mandant" tableName="zuordnung">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-120" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="adresse_aud" constraintName="FK_ADRESSE_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-120" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="adresse_aud"
+                             constraintName="FK_ADRESSE_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-121" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="ausbildungsgang_aud" constraintName="FK_AUSBILDUNGSGANG_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-121" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="ausbildungsgang_aud"
+                             constraintName="FK_AUSBILDUNGSGANG_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-122" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="ausbildungsstaette_id" baseTableName="ausbildungsgang" constraintName="FK_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ID" referencedColumnNames="id" referencedTableName="ausbildungsstaette"/>
+  <changeSet id="1714726067701-122" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="ausbildungsstaette_id"
+                             baseTableName="ausbildungsgang"
+                             constraintName="FK_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="ausbildungsstaette"/>
 
     <createIndex indexName="IX_ausbildungsgang_ausbildungsstaette_id" tableName="ausbildungsgang">
       <column name="ausbildungsstaette_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-123" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="ausbildungsstaette_aud" constraintName="FK_AUSBILDUNGSSTAETTE_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-123" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="ausbildungsstaette_aud"
+                             constraintName="FK_AUSBILDUNGSSTAETTE_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-124" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="ausbildung_aud" constraintName="FK_AUSBILDUNG_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-124" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="ausbildung_aud"
+                             constraintName="FK_AUSBILDUNG_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-125" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="ausbildungsgang_id" baseTableName="ausbildung" constraintName="FK_AUSBILDUNG_AUSBILDUNGSGANG_ID" referencedColumnNames="id" referencedTableName="ausbildungsgang"/>
+  <changeSet id="1714726067701-125" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="ausbildungsgang_id"
+                             baseTableName="ausbildung"
+                             constraintName="FK_AUSBILDUNG_AUSBILDUNGSGANG_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="ausbildungsgang"/>
 
     <createIndex indexName="IX_ausbildung_ausbildungsgang_id" tableName="ausbildung">
       <column name="ausbildungsgang_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-126" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="auszahlung" constraintName="FK_AUSZAHLUNG_ADRESSE_ID" referencedColumnNames="id" referencedTableName="adresse"/>
+  <changeSet id="1714726067701-126" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="adresse_id"
+                             baseTableName="auszahlung"
+                             constraintName="FK_AUSZAHLUNG_ADRESSE_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="adresse"/>
 
     <createIndex indexName="IX_auszahlung_adresse_id" tableName="auszahlung">
       <column name="adresse_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-127" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="auszahlung_aud" constraintName="FK_AUSZAHLUNG_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-127" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="auszahlung_aud"
+                             constraintName="FK_AUSZAHLUNG_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-128" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="benutzereinstellungen_aud" constraintName="FK_BENUTZEREINSTELLUNGEN_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-128" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="benutzereinstellungen_aud"
+                             constraintName="FK_BENUTZEREINSTELLUNGEN_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-129" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="benutzer_aud" constraintName="FK_BENUTZER_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-129" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="benutzer_aud"
+                             constraintName="FK_BENUTZER_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-130" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="benutzereinstellungen_id" baseTableName="benutzer" constraintName="FK_BENUTZER_BENUTZEREINSTELLUNGEN_ID" referencedColumnNames="id" referencedTableName="benutzereinstellungen"/>
+  <changeSet id="1714726067701-130" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="benutzereinstellungen_id"
+                             baseTableName="benutzer"
+                             constraintName="FK_BENUTZER_BENUTZEREINSTELLUNGEN_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="benutzereinstellungen"/>
 
     <createIndex indexName="IX_benutzer_benutzereinstellungen_id" tableName="benutzer">
       <column name="benutzereinstellungen_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-131" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="dokument_aud" constraintName="FK_DOKUMENT_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-131" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="dokument_aud"
+                             constraintName="FK_DOKUMENT_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-132" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="dokument" constraintName="FK_DOKUMENT_GESUCH_DOKUMENT_ID" referencedColumnNames="id" referencedTableName="gesuch_dokument"/>
+  <changeSet id="1714726067701-132" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id"
+                             baseTableName="dokument"
+                             constraintName="FK_DOKUMENT_GESUCH_DOKUMENT_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch_dokument"/>
 
     <createIndex indexName="IX_dokument_gesuch_dokument_id" tableName="dokument">
       <column name="gesuch_dokument_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-133" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="einnahmen_kosten_aud" constraintName="FK_EINNAHMEN_KOSTEN_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-133" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="einnahmen_kosten_aud"
+                             constraintName="FK_EINNAHMEN_KOSTEN_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-134" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="eltern" constraintName="FK_ELTERN_ADRESSE_ID" referencedColumnNames="id" referencedTableName="adresse"/>
+  <changeSet id="1714726067701-134" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="adresse_id"
+                             baseTableName="eltern"
+                             constraintName="FK_ELTERN_ADRESSE_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="adresse"/>
 
     <createIndex indexName="IX_eltern_adresse_id" tableName="eltern">
       <column name="adresse_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-135" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="eltern_aud" constraintName="FK_ELTERN_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-135" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="eltern_aud"
+                             constraintName="FK_ELTERN_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-136" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="eltern" constraintName="FK_ELTERN_ON_GESUCH_FORMULAR" referencedColumnNames="id" referencedTableName="gesuch_formular"/>
+  <changeSet id="1714726067701-136" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id"
+                             baseTableName="eltern"
+                             constraintName="FK_ELTERN_ON_GESUCH_FORMULAR"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-137" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="fall_aud" constraintName="FK_FALL_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-137" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="fall_aud"
+                             constraintName="FK_FALL_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-138" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuchsteller_id" baseTableName="fall" constraintName="FK_FALL_GESUCHSTELLER_ID" referencedColumnNames="id" referencedTableName="benutzer"/>
+  <changeSet id="1714726067701-138" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuchsteller_id"
+                             baseTableName="fall"
+                             constraintName="FK_FALL_GESUCHSTELLER_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="benutzer"/>
 
     <createIndex indexName="IX_fall_gesuchsteller_id" tableName="fall">
       <column name="gesuchsteller_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-139" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="sachbearbeiter_zuordnung_id" baseTableName="fall" constraintName="FK_FALL_SACHBEARBEITER_ID" referencedColumnNames="id" referencedTableName="zuordnung"/>
+  <changeSet id="1714726067701-139" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="sachbearbeiter_zuordnung_id"
+                             baseTableName="fall"
+                             constraintName="FK_FALL_SACHBEARBEITER_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="zuordnung"/>
   </changeSet>
-  <changeSet id="1714641991729-140" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="familiensituation_aud" constraintName="FK_FAMILIENSITUATION_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-140" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="familiensituation_aud"
+                             constraintName="FK_FAMILIENSITUATION_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-141" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="geschwister_aud" constraintName="FK_GESCHWISTER_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-141" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="geschwister_aud"
+                             constraintName="FK_GESCHWISTER_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-142" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="geschwister" constraintName="FK_GESCHWISTER_ON_GESUCH_FORMULAR" referencedColumnNames="id" referencedTableName="gesuch_formular"/>
+  <changeSet id="1714726067701-142" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id"
+                             baseTableName="geschwister"
+                             constraintName="FK_GESCHWISTER_ON_GESUCH_FORMULAR"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-143" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchsjahr_aud" constraintName="FK_GESUCHSJAHR_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-143" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="gesuchsjahr_aud"
+                             constraintName="FK_GESUCHSJAHR_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-144" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchsperiode_aud" constraintName="FK_GESUCHSPERIODE_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-144" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="gesuchsperiode_aud"
+                             constraintName="FK_GESUCHSPERIODE_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-145" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuchsjahr_id" baseTableName="gesuchsperiode" constraintName="FK_GESUCHSPERIODE_GESUCHSJAHR_ID" referencedColumnNames="id" referencedTableName="gesuchsjahr"/>
+  <changeSet id="1714726067701-145" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuchsjahr_id"
+                             baseTableName="gesuchsperiode"
+                             constraintName="FK_GESUCHSPERIODE_GESUCHSJAHR_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuchsjahr"/>
 
     <createIndex indexName="IX_gesuchsperiode_gesuchsjahr_id" tableName="gesuchsperiode">
       <column name="gesuchsjahr_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-146" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_aud" constraintName="FK_GESUCH_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-146" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="gesuch_aud"
+                             constraintName="FK_GESUCH_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-147" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_dokument_aud" constraintName="FK_GESUCH_DOKUMENT_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-147" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="gesuch_dokument_aud"
+                             constraintName="FK_GESUCH_DOKUMENT_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-148" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="gesuch_dokument" constraintName="FK_GESUCH_DOKUMENT_GESUCH_ID" referencedColumnNames="id" referencedTableName="gesuch"/>
+  <changeSet id="1714726067701-148" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id"
+                             baseTableName="gesuch_dokument"
+                             constraintName="FK_GESUCH_DOKUMENT_GESUCH_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch"/>
 
     <createIndex indexName="IX_gesuch_dokument_gesuch_id" tableName="gesuch_dokument">
       <column name="gesuch_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-149" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="gesuch" constraintName="FK_GESUCH_FALL_ID" referencedColumnNames="id" referencedTableName="fall"/>
+  <changeSet id="1714726067701-149" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="fall_id"
+                             baseTableName="gesuch"
+                             constraintName="FK_GESUCH_FALL_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="fall"/>
 
     <createIndex indexName="IX_gesuch_fall_id" tableName="gesuch">
       <column name="fall_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-150" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_formular_aud" constraintName="FK_GESUCH_FORMULAR_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-150" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="gesuch_formular_aud"
+                             constraintName="FK_GESUCH_FORMULAR_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-151" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="ausbildung_id" baseTableName="gesuch_formular" constraintName="FK_GESUCH_FORMULAR_AUSBILDUNG_ID" referencedColumnNames="id" referencedTableName="ausbildung"/>
+  <changeSet id="1714726067701-151" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="ausbildung_id"
+                             baseTableName="gesuch_formular"
+                             constraintName="FK_GESUCH_FORMULAR_AUSBILDUNG_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="ausbildung"/>
 
     <createIndex indexName="IX_gesuch_formular_ausbildung_id" tableName="gesuch_formular">
       <column name="ausbildung_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-152" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="auszahlung_id" baseTableName="gesuch_formular" constraintName="FK_GESUCH_FORMULAR_AUSZAHLUNG_ID" referencedColumnNames="id" referencedTableName="auszahlung"/>
+  <changeSet id="1714726067701-152" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="auszahlung_id"
+                             baseTableName="gesuch_formular"
+                             constraintName="FK_GESUCH_FORMULAR_AUSZAHLUNG_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="auszahlung"/>
 
     <createIndex indexName="FK_gesuch_formular_auszahlung_id" tableName="gesuch_formular">
       <column name="auszahlung_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-153" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="einnahmen_kosten_id" baseTableName="gesuch_formular" constraintName="FK_GESUCH_FORMULAR_EINNAHMEN_KOSTEN_ID" referencedColumnNames="id" referencedTableName="einnahmen_kosten"/>
+  <changeSet id="1714726067701-153" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="einnahmen_kosten_id"
+                             baseTableName="gesuch_formular"
+                             constraintName="FK_GESUCH_FORMULAR_EINNAHMEN_KOSTEN_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="einnahmen_kosten"/>
 
     <createIndex indexName="FK_gesuch_formular_einnahmen_kosten_id" tableName="gesuch_formular">
       <column name="einnahmen_kosten_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-154" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="familiensituation_id" baseTableName="gesuch_formular" constraintName="FK_GESUCH_FORMULAR_FAMILIENSITUATION_ID" referencedColumnNames="id" referencedTableName="familiensituation"/>
+  <changeSet id="1714726067701-154" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="familiensituation_id"
+                             baseTableName="gesuch_formular"
+                             constraintName="FK_GESUCH_FORMULAR_FAMILIENSITUATION_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="familiensituation"/>
 
     <createIndex indexName="IX_gesuch_formular_familiensituation_id" tableName="gesuch_formular">
       <column name="familiensituation_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-155" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="partner_id" baseTableName="gesuch_formular" constraintName="FK_GESUCH_FORMULAR_PARTNER_ID" referencedColumnNames="id" referencedTableName="partner"/>
+  <changeSet id="1714726067701-155" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="partner_id"
+                             baseTableName="gesuch_formular"
+                             constraintName="FK_GESUCH_FORMULAR_PARTNER_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="partner"/>
 
     <createIndex indexName="IX_gesuch_formular_partner_id" tableName="gesuch_formular">
       <column name="partner_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-156" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="person_in_ausbildung_id" baseTableName="gesuch_formular" constraintName="FK_GESUCH_FORMULAR_PERSON_IN_AUSBILDUNG_ID" referencedColumnNames="id" referencedTableName="person_in_ausbildung"/>
+  <changeSet id="1714726067701-156" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="person_in_ausbildung_id"
+                             baseTableName="gesuch_formular"
+                             constraintName="FK_GESUCH_FORMULAR_PERSON_IN_AUSBILDUNG_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="person_in_ausbildung"/>
 
     <createIndex indexName="IX_gesuch_formular_person_in_ausbildung_id" tableName="gesuch_formular">
       <column name="person_in_ausbildung_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-157" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuchsperiode_id" baseTableName="gesuch" constraintName="FK_GESUCH_GESUCHSPERIODE_ID" referencedColumnNames="id" referencedTableName="gesuchsperiode"/>
+  <changeSet id="1714726067701-157" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuchsperiode_id"
+                             baseTableName="gesuch"
+                             constraintName="FK_GESUCH_GESUCHSPERIODE_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuchsperiode"/>
 
     <createIndex indexName="IX_gesuch_gesuchsperiode_id" tableName="gesuch">
       <column name="gesuchsperiode_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-158" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_tranche_aud" constraintName="FK_GESUCH_TRANCHE_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-158" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="gesuch_tranche_aud"
+                             constraintName="FK_GESUCH_TRANCHE_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-159" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="gesuch_tranche" constraintName="FK_GESUCH_TRANCHE_GESUCH_FORMULAR_ID" referencedColumnNames="id" referencedTableName="gesuch_formular"/>
+  <changeSet id="1714726067701-159" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id"
+                             baseTableName="gesuch_tranche"
+                             constraintName="FK_GESUCH_TRANCHE_GESUCH_FORMULAR_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch_formular"/>
 
     <createIndex indexName="IX_gesuch_tranche_gesuch_formular_id" tableName="gesuch_tranche">
       <column name="gesuch_formular_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-160" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="gesuch_tranche" constraintName="FK_GESUCH_TRANCHE_GESUCH_ID" referencedColumnNames="id" referencedTableName="gesuch"/>
+  <changeSet id="1714726067701-160" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id"
+                             baseTableName="gesuch_tranche"
+                             constraintName="FK_GESUCH_TRANCHE_GESUCH_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch"/>
 
     <createIndex indexName="IX_gesuch_tranche_gesuch_id" tableName="gesuch_tranche">
       <column name="gesuch_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-161" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="kind_aud" constraintName="FK_KIND_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-161" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="kind_aud"
+                             constraintName="FK_KIND_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-162" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="kind" constraintName="FK_KIND_ON_GESUCH_FORMULAR" referencedColumnNames="id" referencedTableName="gesuch_formular"/>
+  <changeSet id="1714726067701-162" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id"
+                             baseTableName="kind"
+                             constraintName="FK_KIND_ON_GESUCH_FORMULAR"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-163" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="lebenslauf_item_aud" constraintName="FK_LEBENSLAUF_ITEM_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-163" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="lebenslauf_item_aud"
+                             constraintName="FK_LEBENSLAUF_ITEM_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-164" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="lebenslauf_item" constraintName="FK_LEBENSLAUF_ITEM_ON_GESUCH_FORMULAR" referencedColumnNames="id" referencedTableName="gesuch_formular"/>
+  <changeSet id="1714726067701-164" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="gesuch_formular_id"
+                             baseTableName="lebenslauf_item"
+                             constraintName="FK_LEBENSLAUF_ITEM_ON_GESUCH_FORMULAR"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch_formular"/>
   </changeSet>
-  <changeSet id="1714641991729-165" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="partner" constraintName="FK_PARTNER_ADRESSE_ID" referencedColumnNames="id" referencedTableName="adresse"/>
+  <changeSet id="1714726067701-165" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="adresse_id"
+                             baseTableName="partner"
+                             constraintName="FK_PARTNER_ADRESSE_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="adresse"/>
 
     <createIndex indexName="IX_partner_adresse_id" tableName="partner">
       <column name="adresse_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-166" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="partner_aud" constraintName="FK_PARTNER_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-166" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="partner_aud"
+                             constraintName="FK_PARTNER_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-167" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="person_in_ausbildung" constraintName="FK_PERSON_IN_AUSBILDUNG_ADRESSE_ID" referencedColumnNames="id" referencedTableName="adresse"/>
+  <changeSet id="1714726067701-167" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="adresse_id"
+                             baseTableName="person_in_ausbildung"
+                             constraintName="FK_PERSON_IN_AUSBILDUNG_ADRESSE_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="adresse"/>
 
     <createIndex indexName="IX_person_in_ausbildung_adresse_id" tableName="person_in_ausbildung">
       <column name="adresse_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-168" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="person_in_ausbildung_aud" constraintName="FK_PERSON_IN_AUSBILDUNG_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-168" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="person_in_ausbildung_aud"
+                             constraintName="FK_PERSON_IN_AUSBILDUNG_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-169" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sachbearbeiter_zuordnung_stammdaten_aud" constraintName="FK_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-169" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="sachbearbeiter_zuordnung_stammdaten_aud"
+                             constraintName="FK_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-170" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="benutzer_id" baseTableName="sachbearbeiter_zuordnung_stammdaten" constraintName="FK_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN_BENUTZER_ID" referencedColumnNames="id" referencedTableName="benutzer"/>
+  <changeSet id="1714726067701-170" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="benutzer_id"
+                             baseTableName="sachbearbeiter_zuordnung_stammdaten"
+                             constraintName="FK_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN_BENUTZER_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="benutzer"/>
 
-    <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_benutzer_id" tableName="sachbearbeiter_zuordnung_stammdaten">
+    <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_benutzer_id"
+                 tableName="sachbearbeiter_zuordnung_stammdaten">
       <column name="benutzer_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-171" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="zuordnung_aud" constraintName="FK_ZUORDNUNG_AUD_ON_REV" referencedColumnNames="rev" referencedTableName="revinfo"/>
+  <changeSet id="1714726067701-171" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="zuordnung_aud"
+                             constraintName="FK_ZUORDNUNG_AUD_ON_REV"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"/>
   </changeSet>
-  <changeSet id="1714641991729-172" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="zuordnung" constraintName="FK_ZUORDNUNG_FALL_ID" referencedColumnNames="id" referencedTableName="fall"/>
+  <changeSet id="1714726067701-172" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="fall_id"
+                             baseTableName="zuordnung"
+                             constraintName="FK_ZUORDNUNG_FALL_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="fall"/>
 
     <createIndex indexName="IX_zuordnung_fall_id" tableName="zuordnung">
       <column name="fall_id"/>
     </createIndex>
   </changeSet>
-  <changeSet id="1714641991729-173" author="fuju (generated)">
-    <addForeignKeyConstraint baseColumnNames="sachbearbeiter_id" baseTableName="zuordnung" constraintName="FK_ZUORDNUNG_SACHBEARBEITER_ID" referencedColumnNames="id" referencedTableName="benutzer"/>
+  <changeSet id="1714726067701-173" author="fuju (generated)">
+    <addForeignKeyConstraint baseColumnNames="sachbearbeiter_id"
+                             baseTableName="zuordnung"
+                             constraintName="FK_ZUORDNUNG_SACHBEARBEITER_ID"
+                             referencedColumnNames="id"
+                             referencedTableName="benutzer"/>
 
     <createIndex indexName="IX_zuordnung_sachbearbeiter_id" tableName="zuordnung">
       <column name="sachbearbeiter_id"/>
