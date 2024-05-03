@@ -64,6 +64,8 @@ quarkus:
 
 '%dev':
   quarkus:
+    liquibase:
+      clean-at-start:
     mailer:
       mock: false
     s3:
