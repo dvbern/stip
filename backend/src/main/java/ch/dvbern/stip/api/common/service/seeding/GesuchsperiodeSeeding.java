@@ -87,7 +87,7 @@ public class GesuchsperiodeSeeding {
             .setFreibetragErwerbseinkommen(6000)
             .setEinkommensfreibetrag(6000)
             .setElternbeteiligungssatz(50)
-            .setVermoegensfreibetrag(30000)
+            .setFreibetragVermoegen(30000)
             .setVermogenSatzAngerechnet(15)
             .setIntegrationszulage(2400)
             .setLimiteEkFreibetragIntegrationszulag(13200)
