@@ -69,14 +69,15 @@ include:
       mirror-when: "always"
 
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/nx@v0.8.0'
+  - component: 'gitlab.dvbern.ch/components/build/nx@v1.2.1'
     inputs:
       name: ".nx"
       e2e-test-package-version: '13.6.2'
       context-dir: 'frontend'
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
       e2e-test-image-version: v1.41.1-jammy
-      install-e2e-test-package: 'false'
+      install-e2e-test-package: false
+      e2e-on: 'default'
 
 .install-argocd:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
@@ -113,7 +114,7 @@ start-e2e:
     - if: $PIPELINE_TYPE == "default"
       when: always
 
-run-e2e:
+run-e2e:  
   stage: e2e
   extends: .nx-e2e-test
   resource_group: "e2e"

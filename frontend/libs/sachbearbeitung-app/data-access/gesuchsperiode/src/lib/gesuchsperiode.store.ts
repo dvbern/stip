@@ -15,6 +15,7 @@ import {
   GesuchsperiodeWithDaten,
   GueltigkeitStatus,
   NullableGesuchsperiodeWithDaten,
+  StatusColor,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -23,10 +24,7 @@ import {
   handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
-import {
-  formatBackendLocalDate,
-  fromBackendLocalDate,
-} from '@dv/shared/util/validator-date';
+import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 
 type GesuchsperiodeState = {
   gesuchsjahre: CachedRemoteData<Gesuchsjahr[]>;
@@ -54,37 +52,38 @@ export class GesuchsperiodeStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   gesuchsperiodenListViewSig = computed(() => {
-    return fromCachedDataSig(this.gesuchsperioden)?.map((g) => ({
-      ...g,
-      gesuchsperiode:
-        formatBackendLocalDate(g.gesuchsperiodeStart, 'de') +
-        ' - ' +
-        formatBackendLocalDate(g.gesuchsperiodeStopp, 'de'),
-      gesuchsjahr: fromBackendLocalDate(g.einreichefristNormal)?.getFullYear(),
-      isEditable: isEditable(g),
-    }));
+    return fromCachedDataSig(this.gesuchsperioden)?.map((g) =>
+      prepareView({
+        ...g,
+        gesuchsperiode:
+          formatBackendLocalDate(g.gesuchsperiodeStart, 'de') +
+          ' - ' +
+          formatBackendLocalDate(g.gesuchsperiodeStopp, 'de'),
+      }),
+    );
   });
 
   gesuchsjahreListViewSig = computed(() => {
-    return fromCachedDataSig(this.gesuchsjahre)?.map((g) => ({
-      ...g,
-      ausbildungsjahr: `${g.technischesJahr}/${(g.technischesJahr + 1)
-        .toString()
-        .slice(-2)}`,
-      isEditable: isEditable(g),
-    }));
+    return fromCachedDataSig(this.gesuchsjahre)?.map((g) =>
+      prepareView({
+        ...g,
+        ausbildungsjahr: `${g.technischesJahr}/${(g.technischesJahr + 1)
+          .toString()
+          .slice(-2)}`,
+      }),
+    );
   });
 
   currentGesuchsperiodeViewSig = computed(() => {
-    return prepareView(this.currentGesuchsperiode.data());
+    return prepareNullableView(this.currentGesuchsperiode.data());
   });
 
   currentGesuchsjahrViewSig = computed(() => {
-    return prepareView(this.currentGesuchsjahr.data());
+    return prepareNullableView(this.currentGesuchsjahr.data());
   });
 
-  lastPublishedGesuchsperiodeViewSig = computed(() => {
-    return prepareView(this.latestGesuchsperiode.data()?.value);
+  latestGesuchsperiodeViewSig = computed(() => {
+    return prepareNullableView(this.latestGesuchsperiode.data()?.value);
   });
 
   resetCurrentData() {
@@ -374,14 +373,26 @@ const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
   value: T,
 ) => value.gueltigkeitStatus === 'ENTWURF';
 
+const statusColorMap: Record<GueltigkeitStatus, StatusColor> = {
+  ENTWURF: 'warn',
+  ARCHIVIERT: 'primary',
+  PUBLIZIERT: 'success',
+} as const;
+
 const prepareView = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
-  value: T | null | undefined,
+  value: T,
 ) => {
-  if (!value) return undefined;
   const editable = isEditable(value);
   return {
     ...value,
+    statusColor: statusColorMap[value.gueltigkeitStatus],
     isEditable: editable,
     isReadonly: !editable,
   };
 };
+
+const prepareNullableView = <
+  T extends { gueltigkeitStatus: GueltigkeitStatus },
+>(
+  value: T | undefined | null,
+) => (value ? prepareView(value) : undefined);

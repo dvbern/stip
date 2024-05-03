@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -101,9 +100,6 @@ public class Gesuchsperiode extends AbstractMandantEntity {
 
     @Column(nullable = false, name = "elternbeteiligungssatz")
     private Integer elternbeteiligungssatz;
-
-    @Column(nullable = false, name = "vermoegensfreibetrag")
-    private Integer vermoegensfreibetrag;
 
     @Column(nullable = false, name = "vermogen_satz_angerechnet")
     private Integer vermogenSatzAngerechnet;

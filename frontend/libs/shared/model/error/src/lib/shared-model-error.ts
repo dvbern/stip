@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { z } from 'zod';
 
 import {
@@ -34,6 +35,22 @@ export type ValidationWarning = Extends<
   DvValidationWarning
 >;
 
+export const UnknownHttpError = z.object({
+  error: z.string().or(z.record(z.unknown())).or(z.null()),
+  headers: z.unknown(),
+  message: z.string(),
+  name: z.string(),
+  ok: z.boolean(),
+  status: z.number(),
+  statusText: z.string(),
+  url: z.string().nullable(),
+});
+
+export type UnknownHttpError = Extends<
+  z.infer<typeof UnknownHttpError>,
+  HttpErrorResponse
+>;
+
 const ErrorTypes = {
   validationError: z.object({
     error: z.object({
@@ -41,9 +58,7 @@ const ErrorTypes = {
       validationWarnings: z.optional(z.array(ValidationWarning)),
     }),
   }),
-  unknownHttpError: z.object({
-    error: z.string().or(z.record(z.unknown())),
-  }),
+  unknownHttpError: UnknownHttpError,
   unknownError: z.unknown(),
 };
 type ErrorTypes = {
@@ -66,8 +81,9 @@ export const SharedModelError = z.intersection(
           validationWarnings,
         }),
     ),
-    ErrorTypes.unknownHttpError.transform(({ error }) => {
+    ErrorTypes.unknownHttpError.transform(({ error, ...http }) => {
       return createError('unknownHttpError', {
+        ...http,
         messageKey: 'shared.genericError.http',
         error,
       });

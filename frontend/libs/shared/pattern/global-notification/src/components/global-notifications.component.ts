@@ -11,19 +11,21 @@ import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { StatusColor } from '@dv/shared/model/gesuch';
 import { NotificationType } from '@dv/shared/model/global-notification';
 
-const PANEL_MAP: Record<NotificationType, string> = {
-  SEVERE: 'error',
-  ERROR: 'error',
-  INFO: 'accent',
-  WARNING: 'warn',
-  SUCCESS: 'success',
+const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
+  SEVERE: 'mat-danger',
+  ERROR: 'mat-danger',
+  INFO: 'mat-info',
+  WARNING: 'mat-warn',
+  SUCCESS: 'mat-success',
 };
 const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [
   'INFO',
   'SUCCESS',
 ];
+const NOTIFICATION_TIME = 5000;
 
 @Component({
   selector: 'dv-global-notifications',
@@ -69,7 +71,7 @@ export class GlobalNotificationsComponent {
           return notification;
         }),
         filter((notification) => !!notification?.autohide),
-        debounceTime(3000),
+        debounceTime(NOTIFICATION_TIME),
         takeUntilDestroyed(),
       )
       .subscribe(() => {

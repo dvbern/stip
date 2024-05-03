@@ -17,10 +17,25 @@ VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae3', '2023-06-12 15:26:47.000000', '2
         'Admin', 0, 'Schärer', 'Philipp', '756.2222.2222.24', 'AKTIV', 'bern', 'GESUCHSTELLER',
         'be468db0-017e-4516-b2bb-6077bae8d78a');
 
+INSERT INTO sachbearbeiter_zuordnung_stammdaten (id, mandant, version, timestamp_erstellt, timestamp_mutiert,
+                                                 user_erstellt, user_mutiert, buchstaben_de, buchstaben_fr, benutzer_id)
+VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae4', 'bern', 0, now(), now(), 'Admin', 'Admin', 'A-Z', 'A-Z',
+        '9477487f-3ac4-4d02-b57c-e0cefb292ae3');
+
 INSERT INTO fall (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, fall_nummer, mandant,
                   gesuchsteller_id)
 VALUES ('4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b', '2023-06-20 14:22:43.418364', '2023-06-20 14:22:43.418364', 'TODO',
         'TODO', 0, 1, 'bern', '9477487f-3ac4-4d02-b57c-e0cefb292ae5');
+
+-- Gesuchsperiode
+
+DELETE
+FROM gesuchsperiode
+WHERE id = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
+
+DELETE
+FROM gesuchsjahr
+WHERE id = '9596bb3e-10ea-4493-8aed-a6ef510f806b';
 
 INSERT INTO gesuchsjahr(id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, bezeichnung_de,
                         bezeichnung_fr, technisches_jahr, gueltigkeit_status, mandant)
@@ -50,7 +65,6 @@ INSERT INTO gesuchsperiode (id,
                             freibetrag_erwerbseinkommen,
                             einkommensfreibetrag,
                             elternbeteiligungssatz,
-                            vermoegensfreibetrag,
                             vermogen_satz_angerechnet,
                             integrationszulage,
                             limite_ek_freibetrag_integrationszulag,
@@ -98,7 +112,6 @@ VALUES ('3fa85f64-5717-4562-b3fc-2c963f66afa6',
         '2024-12-31',
         current_date,
         current_date,
-        1,
         1,
         1,
         1,
