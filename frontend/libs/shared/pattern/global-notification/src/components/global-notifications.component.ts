@@ -25,6 +25,7 @@ const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [
   'INFO',
   'SUCCESS',
 ];
+const NOTIFICATION_TIME = 5000;
 
 @Component({
   selector: 'dv-global-notifications',
@@ -70,7 +71,7 @@ export class GlobalNotificationsComponent {
           return notification;
         }),
         filter((notification) => !!notification?.autohide),
-        debounceTime(3000),
+        debounceTime(NOTIFICATION_TIME),
         takeUntilDestroyed(),
       )
       .subscribe(() => {
