@@ -1,7 +1,7 @@
 export type StatusColor =
-  | 'success'
-  | 'warn'
-  | 'danger'
   | 'primary'
+  | 'warn'
   | 'accent'
+  | 'success'
+  | 'caution'
   | 'info';

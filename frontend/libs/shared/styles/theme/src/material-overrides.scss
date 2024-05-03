@@ -11,8 +11,8 @@ $gesuch-app-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to yellow).
 $gesuch-app-success: mat.define-palette(dvColors.$md-dv-success);
-$gesuch-app-warn: mat.define-palette(dvColors.$md-dv-warning);
-$gesuch-app-danger: mat.define-palette(dvColors.$md-dv-danger);
+$gesuch-app-caution: mat.define-palette(dvColors.$md-dv-caution);
+$gesuch-app-warn: mat.define-palette(dvColors.$md-dv-warn);
 $gesuch-app-info: mat.define-palette(dvColors.$md-dv-info);
 
 // Create the theme object. A theme consists of configurations for individual
@@ -29,11 +29,11 @@ $gesuch-app-theme: map.deep-merge(
   ),
   (
     success: $gesuch-app-success,
-    danger: $gesuch-app-danger,
+    info: $gesuch-app-info,
     color: (
       success: $gesuch-app-success,
-      danger: $gesuch-app-danger,
       info: $gesuch-app-info,
+      caution: $gesuch-app-caution,
     ),
   )
 );
@@ -190,7 +190,7 @@ table tr.mat-mdc-row {
 
 $dv-custom-colors: (
   success: $gesuch-app-success,
-  danger: $gesuch-app-danger,
+  caution: $gesuch-app-caution,
   info: $gesuch-app-info,
 );
 
@@ -219,7 +219,7 @@ $dv-all-colors: (
   accent: $gesuch-app-accent,
   warn: $gesuch-app-warn,
   success: $gesuch-app-success,
-  danger: $gesuch-app-danger,
+  caution: $gesuch-app-caution,
   info: $gesuch-app-info,
 );
 
