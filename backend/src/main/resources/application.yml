@@ -71,6 +71,8 @@ quarkus:
     hibernate-orm:
       database:
         generation: "none"
+    liquibase:
+      clean-at-start: true
     mailer:
       mock: false
     s3:
