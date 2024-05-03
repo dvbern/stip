@@ -112,7 +112,7 @@ start-e2e:
     action: start
   rules:
     - if: $PIPELINE_TYPE == "default"
-      when: always
+      when: on_success
 
 run-e2e:  
   stage: e2e
