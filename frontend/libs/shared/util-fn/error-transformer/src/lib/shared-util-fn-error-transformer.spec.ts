@@ -33,6 +33,7 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
     const error = {
       error: {
         validationErrors,
+        validationWarnings: [],
       },
       message: 'Bad Request',
       status: 400,
@@ -40,12 +41,14 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
     expect(sharedUtilFnErrorTransformer(error)).toEqual({
       type: 'validationError',
       validationErrors,
+      validationWarnings: [],
       message: 'Es darf nur ein Gesuch pro Gesuchsteller eingereicht werden',
       messageKey: 'shared.genericError.validation',
       status: error.status,
     });
   });
 });
+
 describe('sharedUtilFnErrorTransformer - filter', () => {
   const validationErrorsCollection = [
     [
@@ -84,12 +87,14 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
     {
       error: {
         validationErrors: validationErrorsCollection[0],
+        validationWarnings: [],
       },
       status: 400,
     },
     {
       error: {
         validationErrors: validationErrorsCollection[1],
+        validationWarnings: [],
       },
       status: 400,
     },
@@ -103,6 +108,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       {
         type: 'validationError',
         validationErrors: validationErrorsCollection[0],
+        validationWarnings: [],
         message: 'error validation 1',
         messageKey: 'shared.genericError.validation',
         status: 400,
@@ -110,6 +116,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       {
         type: 'validationError',
         validationErrors: validationErrorsCollection[1],
+        validationWarnings: [],
         message: 'error validation 3',
         messageKey: 'shared.genericError.validation',
         status: 400,

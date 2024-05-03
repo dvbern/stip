@@ -14,7 +14,7 @@ import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
 import {
   GesuchAppDataAccessAbschlussApiEvents,
-  selectGesuchAppDataAccessAbschlusssView,
+  selectGesuchAppDataAccessAbschlussView,
 } from '@dv/gesuch-app/data-access/abschluss';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -33,7 +33,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
 
-  viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlusssView);
+  viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlussView);
 
   constructor() {
     // validate form only if no formErrors form validatePages are present

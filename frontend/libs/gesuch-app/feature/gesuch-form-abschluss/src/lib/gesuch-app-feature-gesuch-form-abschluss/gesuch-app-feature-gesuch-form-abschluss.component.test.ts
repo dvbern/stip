@@ -3,18 +3,19 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { Gesuchstatus } from '@dv/shared/model/gesuch';
+import { selectGesuchAppDataAccessAbschlussView } from '@dv/gesuch-app/data-access/abschluss';
+import { AbschlussPhase } from '@dv/gesuch-app/model/gesuch-abschluss';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 
 import { GesuchAppFeatureGesuchFormAbschlussComponent } from './gesuch-app-feature-gesuch-form-abschluss.component';
 
-// const abschlussPhase: Record<AbschlussPhase, string> = {
-//   NOT_READY: 'NOT_READY',
-//   READY_TO_SEND: 'READY_TO_SEND',
-//   SUBMITTED: 'SUBMITTED',
-// };
+const abschlussPhase: Record<AbschlussPhase, string> = {
+  NOT_READY: 'NOT_READY',
+  READY_TO_SEND: 'READY_TO_SEND',
+  SUBMITTED: 'SUBMITTED',
+};
 
-async function setup() {
+async function setup(abschlussPhase: AbschlussPhase) {
   return await render(GesuchAppFeatureGesuchFormAbschlussComponent, {
     imports: [
       TranslateTestingModule.withTranslations({}),
@@ -22,46 +23,18 @@ async function setup() {
     ],
     providers: [
       provideMockStore({
-        initialState: {
-          abschluss: {
-            checkResult: {
-              success: false,
-              error: {
-                type: 'validationError',
-                validationErrors: [
-                  {
-                    messageTemplate: 'test',
-                    message: 'test',
-                    propertyPath: 'test',
-                  },
-                ],
-                validationWarnings: [
-                  {
-                    messageTemplate: 'test',
-                    message: 'test',
-                    propertyPath: 'test',
-                  },
-                ],
+        selectors: [
+          {
+            selector: selectGesuchAppDataAccessAbschlussView,
+            value: {
+              abschlussPhase,
+              gesuch: {
+                id: '1',
               },
+              canCheck: true,
             },
           },
-          gesuchs: {
-            validations: {
-              errors: [],
-              warnings: [
-                {
-                  messageTemplate: 'test',
-                  message: 'test',
-                  propertyPath: 'test',
-                },
-              ],
-            },
-            gesuch: {
-              id: '1',
-            },
-            gesuchStatus: Gesuchstatus.IN_BEARBEITUNG_GS,
-          },
-        },
+        ],
       }),
       provideMaterialDefaultOptions(),
     ],
@@ -69,8 +42,30 @@ async function setup() {
 }
 
 describe(GesuchAppFeatureGesuchFormAbschlussComponent.name, () => {
-  it('should render a success alert if no validaton Errors are present', async () => {
-    const { getByTestId, detectChanges } = await setup();
+  it('should render a warning alert if the gesuch is not ready', async () => {
+    const { getByTestId, detectChanges } = await setup(
+      abschlussPhase.NOT_READY as AbschlussPhase,
+    );
+
+    detectChanges();
+
+    expect(getByTestId('alert-warning')).toBeInTheDocument();
+  });
+
+  it('should render a info alert if the gesuch is ready to send', async () => {
+    const { getByTestId, detectChanges } = await setup(
+      abschlussPhase.READY_TO_SEND as AbschlussPhase,
+    );
+
+    detectChanges();
+
+    expect(getByTestId('alert-info')).toBeInTheDocument();
+  });
+
+  it('should render a success alert if the gesuch was submitted', async () => {
+    const { getByTestId, detectChanges } = await setup(
+      abschlussPhase.SUBMITTED as AbschlussPhase,
+    );
 
     detectChanges();
 

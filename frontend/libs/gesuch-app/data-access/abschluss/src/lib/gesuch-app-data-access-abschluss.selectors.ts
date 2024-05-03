@@ -6,7 +6,7 @@ import { SharedModelError } from '@dv/shared/model/error';
 
 import { gesuchAppDataAccessAbschlussFeature } from './gesuch-app-data-access-abschluss.feature';
 
-export const selectGesuchAppDataAccessAbschlusssView = createSelector(
+export const selectGesuchAppDataAccessAbschlussView = createSelector(
   gesuchAppDataAccessAbschlussFeature.selectAbschlussState,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
@@ -22,7 +22,6 @@ export const selectGesuchAppDataAccessAbschlusssView = createSelector(
       lastUpdate,
       validations: allValidations,
       canCheck: validations?.errors?.length === 0,
-      canAbschliessen: state.checkResult?.success, // delete
       abschlussPhase: toAbschlussPhase(gesuch, !!state.checkResult?.success),
     };
   },
