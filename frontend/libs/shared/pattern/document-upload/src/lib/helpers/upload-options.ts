@@ -19,9 +19,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
   PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG: 'shared.form.person.file.ZIVILSTAND',
   PERSON_AUSWEIS: 'shared.form.person.file.HEIMATORT',
-  ELTERN_DOK: 'shared.form.person.file.ELTERN_DOK',
-  AUSBILDUNG_DOK: 'shared.form.person.file.AUSBILDUNG_DOK',
-  PARTNER_DOK: 'shared.form.person.file.PARTNER_DOK',
   FAMILIENSITUATION_GEBURTSSCHEIN:
     'shared.form.familiensituation.file.GEBURTSSCHEIN',
   FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER:
@@ -55,7 +52,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION:
     'shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION',
   KINDER_ALIMENTENVERORDUNG: 'shared.form.kinder.file.ALIMENTENVERORDNUNG',
-  PARNTER_AUSBILUNG_LOHNABRECHNUNG:
+  PARNTER_AUSBILDUNG_LOHNABRECHNUNG:
     'shared.form.partner.file.AUSBILDUNG_LOHNABRECHNUNG',
   PARTNER_BELEG_OV_ABONNEMENT: 'shared.form.partner.file.OV_ABONNEMENT',
   AUSZAHLUNG_ABTRETUNGSERKLAERUNG:
@@ -150,18 +147,20 @@ export function createUploadOptionsFactory<
   };
 }
 
-export function createDocumentOptions(
-  gesuchId: string,
-  allowTypes: string,
-  dokumentTyp: DokumentTyp,
-  initialDocuments?: Dokument[],
-  singleUpload = false,
-): DocumentOptions {
+export function createDocumentOptions(options: {
+  gesuchId: string;
+  allowTypes: string;
+  dokumentTyp: DokumentTyp;
+  initialDocuments?: Dokument[];
+  singleUpload?: boolean;
+}): DocumentOptions {
+  const { gesuchId, allowTypes, dokumentTyp, initialDocuments, singleUpload } =
+    options;
   return {
     allowTypes,
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
     dokumentTyp,
-    singleUpload,
+    singleUpload: singleUpload ?? false,
     gesuchId,
     initialDocuments,
   };

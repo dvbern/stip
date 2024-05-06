@@ -18,13 +18,14 @@ import {
 } from '@dv/gesuch-app/data-access/abschluss';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, SharedUiLoadingComponent],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

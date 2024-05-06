@@ -24,6 +24,15 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
   reducer: createReducer(
     initialState,
     on(
+      GesuchAppDataAccessAbschlussApiEvents.check,
+      (state): State => ({
+        ...state,
+        checkResult: undefined,
+        loading: true,
+        error: undefined,
+      }),
+    ),
+    on(
       GesuchAppDataAccessAbschlussApiEvents.gesuchCheckSuccess,
       (state, { error }): State => ({
         ...state,
@@ -40,7 +49,7 @@ export const gesuchAppDataAccessAbschlussFeature = createFeature({
       (state, { error }): State => ({
         ...state,
         checkResult: { success: false, error },
-        loading: true,
+        loading: false,
         error: undefined,
       }),
     ),
