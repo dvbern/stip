@@ -1,12 +1,10 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.type.Bildungsart;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -48,8 +46,8 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     @Column
     private String bezeichnungFr;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Bildungsart ausbildungsrichtung;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bildungsart_id", nullable = false)
+    private Bildungsart bildungsart;
+
 }

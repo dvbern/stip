@@ -1,4 +1,4 @@
-CREATE TABLE bildungsstufe
+CREATE TABLE bildungsart
 (
 	id					UUID         	NOT NULL,
 	timestamp_erstellt	TIMESTAMP    	NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE bildungsstufe
 	bfs					INTEGER			NOT NULL
 );
 
-CREATE TABLE bildungsstufe_aud
+CREATE TABLE bildungsart_aud
 (
 	id					UUID         	NOT NULL,
 	timestamp_erstellt	TIMESTAMP    	NOT NULL,

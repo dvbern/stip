@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
@@ -299,7 +300,7 @@ class GesuchFormularMapperTest {
         return new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
-            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            new AusbildungMapperImpl(new AusbildungsgangMapperImpl(), new EntityReferenceMapperImpl(), new DateMapperImpl()),
             new LebenslaufItemMapperImpl(new DateMapperImpl()),
             new PartnerMapperImpl(),
             new AuszahlungMapperImpl(),

@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.bildungsart.service.BildungsartMapper;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.EntityIdReference;
@@ -15,7 +14,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = BildungsartMapper.class)
+@Mapper(config = MappingConfig.class, uses = AusbildungsgangMapper.class)
 public interface AusbildungMapper {
     @Mapping(source = "ausbildungBegin",
         target = "ausbildungBegin",

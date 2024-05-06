@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -757,7 +757,7 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.getGesuch().setGesuchDokuments(
@@ -787,7 +787,7 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
