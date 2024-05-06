@@ -3,8 +3,8 @@ package ch.dvbern.stip.api.generator.api.model.gesuch;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.UUID;
 
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
@@ -21,9 +21,10 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth())
                 .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN)));
             model.setAusbildungNichtGefunden(false);
-            model.setAusbildungsgangId(UUID.fromString("3a8c2023-f29e-4466-a2d7-411a7d032f42"));
+            model.setAusbildungsgangId(TestConstants.TEST_AUSBILDUNGSGANG_ID);
             model.setFachrichtung(faker.educator().course());
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
+            model.setIsAusbildungAusland(false);
         });
 
     public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung =
