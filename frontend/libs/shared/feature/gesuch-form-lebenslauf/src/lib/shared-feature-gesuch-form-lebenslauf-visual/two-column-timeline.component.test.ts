@@ -50,8 +50,8 @@ describe(TwoColumnTimelineComponent.name, () => {
     const { getAllByTestId } = await setup({ lebenslaufItems: items });
 
     const labels = getAllByTestId('two-column-timeline-sub-label');
-    const oneHasBerufsbezeichnung = labels.some(
-      (label) => label.textContent?.includes(berufsbezeichnung),
+    const oneHasBerufsbezeichnung = labels.some((label) =>
+      label.textContent?.includes(berufsbezeichnung),
     );
     expect(oneHasBerufsbezeichnung).toBeTruthy();
   });
@@ -69,8 +69,8 @@ describe(TwoColumnTimelineComponent.name, () => {
     const { getAllByTestId } = await setup({ lebenslaufItems: items });
 
     const labels = getAllByTestId('two-column-timeline-label');
-    const oneHasTitelDesAbschlusses = labels.some(
-      (label) => label.textContent?.includes(titelDesAbschlusses),
+    const oneHasTitelDesAbschlusses = labels.some((label) =>
+      label.textContent?.includes(titelDesAbschlusses),
     );
     expect(oneHasTitelDesAbschlusses).toBeTruthy();
   });
@@ -88,8 +88,8 @@ describe(TwoColumnTimelineComponent.name, () => {
     const { getAllByTestId } = await setup({ lebenslaufItems: items });
 
     const labels = getAllByTestId('two-column-timeline-sub-label');
-    const oneHasFachrichtung = labels.some(
-      (label) => label.textContent?.includes(fachrichtung),
+    const oneHasFachrichtung = labels.some((label) =>
+      label.textContent?.includes(fachrichtung),
     );
     expect(oneHasFachrichtung).toBeTruthy();
   });
@@ -106,13 +106,12 @@ describe(TwoColumnTimelineComponent.name, () => {
 
     const labels = getAllByTestId('two-column-timeline-label');
 
-    const oneHasBildungsart = labels.some(
-      (label) =>
-        label.textContent?.includes(
-          translations.de[
-            'shared.form.lebenslauf.item.subtype.bildungsart.FACHMATURITAET'
-          ],
-        ),
+    const oneHasBildungsart = labels.some((label) =>
+      label.textContent?.includes(
+        translations.de[
+          'shared.form.lebenslauf.item.subtype.bildungsart.FACHMATURITAET'
+        ],
+      ),
     );
     expect(oneHasBildungsart).toBeTruthy();
   });

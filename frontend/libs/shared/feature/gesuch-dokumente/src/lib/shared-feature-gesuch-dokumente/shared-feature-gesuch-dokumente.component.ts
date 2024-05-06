@@ -44,32 +44,32 @@ function getFormStep(
     return unknownStep;
   }
 
-  if (
-    dokumentTyp === DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
-  ) {
-    return gesuchFormSteps.DOKUMENTE;
-  }
-
-  if (
-    dokumentTyp === DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER ||
-    dokumentTyp === DokumentTyp.EK_BELEG_KINDERZULAGEN
-  ) {
-    return gesuchFormSteps.EINNAHMEN_KOSTEN;
-  }
-
-  if (dokumentTyp === DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE) {
-    return gesuchFormSteps.GESCHWISTER;
-  }
-
-  const step = Object.keys(gesuchFormSteps).find((key) => {
-    if (key === 'EINNAHMEN_KOSTEN') {
-      return dokumentTyp.includes('EK');
+  switch (dokumentTyp) {
+    case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
+      return gesuchFormSteps.DOKUMENTE;
     }
+    case DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER:
+    case DokumentTyp.EK_BELEG_KINDERZULAGEN: {
+      return gesuchFormSteps.EINNAHMEN_KOSTEN;
+    }
+    case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
+      return gesuchFormSteps.GESCHWISTER;
+    }
+    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
+    case DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT: {
+      return gesuchFormSteps.PARTNER;
+    }
+    default: {
+      const step = Object.keys(gesuchFormSteps).find((key) => {
+        if (key === 'EINNAHMEN_KOSTEN') {
+          return dokumentTyp.includes('EK');
+        }
+        return dokumentTyp.includes(key);
+      }) as keyof typeof gesuchFormSteps;
 
-    return dokumentTyp.includes(key);
-  }) as keyof typeof gesuchFormSteps;
-
-  return step ? gesuchFormSteps[step] : unknownStep;
+      return step ? gesuchFormSteps[step] : unknownStep;
+    }
+  }
 }
 
 @Component({
@@ -81,8 +81,8 @@ function getFormStep(
     SharedUiLoadingComponent,
     TranslateModule,
     MatTableModule,
-    SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -113,12 +113,12 @@ export class SharedFeatureGesuchDokumenteComponent {
         throw new Error('Document type is missing');
       }
 
-      const documentOptions = createDocumentOptions(
+      const documentOptions = createDocumentOptions({
         gesuchId,
         allowTypes,
         dokumentTyp,
-        document.dokumente,
-      );
+        initialDocuments: document.dokumente,
+      });
 
       const formStep = getFormStep(dokumentTyp);
 
@@ -135,12 +135,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       (dokumentTyp) => {
         const formStep = getFormStep(dokumentTyp);
 
-        const documentOptions = createDocumentOptions(
+        const documentOptions = createDocumentOptions({
           gesuchId,
           allowTypes,
           dokumentTyp,
-          [],
-        );
+          initialDocuments: [],
+        });
 
         return {
           dokumentTyp,

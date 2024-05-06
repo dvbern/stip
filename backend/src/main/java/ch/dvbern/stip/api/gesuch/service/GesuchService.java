@@ -74,9 +74,9 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
-    private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
