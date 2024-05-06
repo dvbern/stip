@@ -46,7 +46,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -89,7 +89,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormAddressComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',

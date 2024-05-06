@@ -27,7 +27,7 @@ import {
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 
 function getFormStep(
@@ -81,8 +81,8 @@ function getFormStep(
     SharedUiLoadingComponent,
     TranslateModule,
     MatTableModule,
-    GesuchAppUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',

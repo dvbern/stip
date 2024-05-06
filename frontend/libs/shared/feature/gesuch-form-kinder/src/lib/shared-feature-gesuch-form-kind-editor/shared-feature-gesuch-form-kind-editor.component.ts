@@ -45,7 +45,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -94,7 +94,7 @@ const MEDIUM_AGE = 20;
     MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
     SharedPatternDocumentUploadComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],

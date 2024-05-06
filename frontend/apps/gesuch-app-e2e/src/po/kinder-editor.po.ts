@@ -53,10 +53,6 @@ export class KinderEditorPO {
       item.ausbildungssituation,
     );
 
-    await this.elems.formKindErhalteneAlimentebeitraege.fill(
-      `${item.erhalteneAlimentebeitraege ?? 0}`,
-    );
-
     await expectFormToBeValid(this.elems.form);
 
     await this.elems.buttonSave.click();

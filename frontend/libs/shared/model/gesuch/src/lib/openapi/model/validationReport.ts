@@ -23,6 +23,6 @@ export interface ValidationReport {
     /**
      * 
      */
-    validationWarnings?: Array<ValidationWarning>;
+    validationWarnings: Array<ValidationWarning>;
 }
 

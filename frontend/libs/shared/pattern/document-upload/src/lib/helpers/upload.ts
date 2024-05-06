@@ -55,9 +55,9 @@ export const UPLOAD_THEME_MAP: Record<
   DocumentView['state'],
   DocumentView['theme']
 > = {
-  error: { icon: 'warning', type: 'danger', color: 'warn' },
-  uploading: { icon: 'sync', type: 'info', color: 'accent' },
-  done: { icon: 'check', type: 'success', color: 'primary' },
+  error: { icon: 'warning', type: 'warn', color: 'warn' },
+  uploading: { icon: 'sync', type: 'info', color: 'info' },
+  done: { icon: 'check', type: 'success', color: 'success' },
 };
 
 export const checkDocumentState = (

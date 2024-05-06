@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchsjahrDto;
+import ch.dvbern.stip.generated.dto.GueltigkeitStatusDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -22,10 +24,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchsperiodeDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
-  private @Valid LocalDate einreichfrist;
-  private @Valid LocalDate aufschaltdatum;
+  private @Valid String bezeichnungDe;
+  private @Valid String bezeichnungFr;
+  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
+  private @Valid LocalDate gesuchsperiodeStart;
+  private @Valid LocalDate gesuchsperiodeStopp;
+  private @Valid LocalDate aufschaltterminStart;
+  private @Valid GesuchsjahrDto gesuchsjahr;
+  private @Valid LocalDate einreichefristNormal;
+  private @Valid LocalDate einreichefristReduziert;
 
   /**
    **/
@@ -48,76 +55,172 @@ public class GesuchsperiodeDto  implements Serializable {
 
   /**
    **/
-  public GesuchsperiodeDto gueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
+  public GesuchsperiodeDto bezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
   
-  @JsonProperty("gueltigAb")
+  @JsonProperty("bezeichnungDe")
   @NotNull
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
   }
 
-  @JsonProperty("gueltigAb")
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
+  @JsonProperty("bezeichnungDe")
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
   }
 
   /**
    **/
-  public GesuchsperiodeDto gueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
+  public GesuchsperiodeDto bezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
   
-  @JsonProperty("gueltigBis")
+  @JsonProperty("bezeichnungFr")
   @NotNull
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
   }
 
-  @JsonProperty("gueltigBis")
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeDto einreichfrist(LocalDate einreichfrist) {
-    this.einreichfrist = einreichfrist;
-    return this;
-  }
-
-  
-  @JsonProperty("einreichfrist")
-  public LocalDate getEinreichfrist() {
-    return einreichfrist;
-  }
-
-  @JsonProperty("einreichfrist")
-  public void setEinreichfrist(LocalDate einreichfrist) {
-    this.einreichfrist = einreichfrist;
+  @JsonProperty("bezeichnungFr")
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
   }
 
   /**
    **/
-  public GesuchsperiodeDto aufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
+  public GesuchsperiodeDto gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
     return this;
   }
 
   
-  @JsonProperty("aufschaltdatum")
-  public LocalDate getAufschaltdatum() {
-    return aufschaltdatum;
+  @JsonProperty("gueltigkeitStatus")
+  @NotNull
+  public GueltigkeitStatusDto getGueltigkeitStatus() {
+    return gueltigkeitStatus;
   }
 
-  @JsonProperty("aufschaltdatum")
-  public void setAufschaltdatum(LocalDate aufschaltdatum) {
-    this.aufschaltdatum = aufschaltdatum;
+  @JsonProperty("gueltigkeitStatus")
+  public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+    this.gesuchsperiodeStart = gesuchsperiodeStart;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchsperiodeStart")
+  @NotNull
+  public LocalDate getGesuchsperiodeStart() {
+    return gesuchsperiodeStart;
+  }
+
+  @JsonProperty("gesuchsperiodeStart")
+  public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+    this.gesuchsperiodeStart = gesuchsperiodeStart;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+    this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchsperiodeStopp")
+  @NotNull
+  public LocalDate getGesuchsperiodeStopp() {
+    return gesuchsperiodeStopp;
+  }
+
+  @JsonProperty("gesuchsperiodeStopp")
+  public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+    this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+  }
+
+  /**
+   * dd.MM.YYYY
+   **/
+  public GesuchsperiodeDto aufschaltterminStart(LocalDate aufschaltterminStart) {
+    this.aufschaltterminStart = aufschaltterminStart;
+    return this;
+  }
+
+  
+  @JsonProperty("aufschaltterminStart")
+  @NotNull
+  public LocalDate getAufschaltterminStart() {
+    return aufschaltterminStart;
+  }
+
+  @JsonProperty("aufschaltterminStart")
+  public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
+    this.aufschaltterminStart = aufschaltterminStart;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto gesuchsjahr(GesuchsjahrDto gesuchsjahr) {
+    this.gesuchsjahr = gesuchsjahr;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchsjahr")
+  @NotNull
+  public GesuchsjahrDto getGesuchsjahr() {
+    return gesuchsjahr;
+  }
+
+  @JsonProperty("gesuchsjahr")
+  public void setGesuchsjahr(GesuchsjahrDto gesuchsjahr) {
+    this.gesuchsjahr = gesuchsjahr;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto einreichefristNormal(LocalDate einreichefristNormal) {
+    this.einreichefristNormal = einreichefristNormal;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichefristNormal")
+  public LocalDate getEinreichefristNormal() {
+    return einreichefristNormal;
+  }
+
+  @JsonProperty("einreichefristNormal")
+  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
+    this.einreichefristNormal = einreichefristNormal;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto einreichefristReduziert(LocalDate einreichefristReduziert) {
+    this.einreichefristReduziert = einreichefristReduziert;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichefristReduziert")
+  public LocalDate getEinreichefristReduziert() {
+    return einreichefristReduziert;
+  }
+
+  @JsonProperty("einreichefristReduziert")
+  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
+    this.einreichefristReduziert = einreichefristReduziert;
   }
 
 
@@ -131,15 +234,20 @@ public class GesuchsperiodeDto  implements Serializable {
     }
     GesuchsperiodeDto gesuchsperiode = (GesuchsperiodeDto) o;
     return Objects.equals(this.id, gesuchsperiode.id) &&
-        Objects.equals(this.gueltigAb, gesuchsperiode.gueltigAb) &&
-        Objects.equals(this.gueltigBis, gesuchsperiode.gueltigBis) &&
-        Objects.equals(this.einreichfrist, gesuchsperiode.einreichfrist) &&
-        Objects.equals(this.aufschaltdatum, gesuchsperiode.aufschaltdatum);
+        Objects.equals(this.bezeichnungDe, gesuchsperiode.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, gesuchsperiode.bezeichnungFr) &&
+        Objects.equals(this.gueltigkeitStatus, gesuchsperiode.gueltigkeitStatus) &&
+        Objects.equals(this.gesuchsperiodeStart, gesuchsperiode.gesuchsperiodeStart) &&
+        Objects.equals(this.gesuchsperiodeStopp, gesuchsperiode.gesuchsperiodeStopp) &&
+        Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
+        Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
+        Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
+        Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, einreichfrist, aufschaltdatum);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, gesuchsjahr, einreichefristNormal, einreichefristReduziert);
   }
 
   @Override
@@ -148,10 +256,15 @@ public class GesuchsperiodeDto  implements Serializable {
     sb.append("class GesuchsperiodeDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
-    sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
-    sb.append("    aufschaltdatum: ").append(toIndentedString(aufschaltdatum)).append("\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
+    sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
+    sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
+    sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
+    sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
+    sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
+    sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -100,7 +100,7 @@ async function validateSelectors(tree: Tree, project: Project) {
   findFiles(
     tree,
     path.join(sourceRoot, 'lib'),
-    /(component|pipe|directive)\.ts$/,
+    /(component|pipe)\.ts$/,
   ).forEach((filePath) => {
     const fileContent = tree.read(filePath, 'utf-8');
     const selectors = Array.from(
@@ -123,7 +123,7 @@ async function validateSelectors(tree: Tree, project: Project) {
   if (incorrectSelectors.length) {
     const violation = `Project ${chalk.inverse(
       projectName,
-    )} has components, directive or pipes with selector that doesn't match its location.
+    )} has components or pipes with selector that doesn't match its location.
 
 ${incorrectSelectors
   .map(({ filePath, selector }) => {

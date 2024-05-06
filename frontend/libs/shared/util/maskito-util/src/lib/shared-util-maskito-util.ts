@@ -19,6 +19,13 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
   thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
 });
 
+export const maskitoYear = maskitoNumberOptionsGenerator({
+  min: 0,
+  max: 9999,
+  precision: 0,
+  thousandSeparator: '',
+});
+
 export function fromFormatedNumber(formatedNumber: string): number;
 export function fromFormatedNumber(
   formatedNumber: string | null,

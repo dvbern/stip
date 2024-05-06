@@ -173,6 +173,138 @@ paths:
       operationId: getDeploymentConfig
       summary: Returniert der Deployment Configuration.
       description: Gibt zuerueck die Version und Stage aus das Backend
+  /gesuchsjahr:
+    get:
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned all Gesuchsjahre
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchsjahre
+      summary: Gets all Gesuchsjahre
+    post:
+      tags:
+        - Gesuchsjahr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsjahrCreate'
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned new created Gesuchsjahr
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createGesuchsjahr
+      summary: Creates a new Gesuchsjahr
+  /gesuchsjahr/{gesuchsjahrId}:
+    parameters:
+      - name: gesuchsjahrId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned Gesuchsjahr
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchsjahr
+      summary: Returns a Gesuchsjahr with the given id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsjahrUpdate'
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned updated Gesuchsjahr
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateGesuchsjahr
+      summary: Updates a Gesuchsjahr with the given id
+    delete:
+      tags:
+        - Gesuchsjahr
+      responses:
+        204:
+          description: Gesuchsjahr deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteGesuchsjahr
+      summary: Deletes a Gesuchsjahr with the given id
+  /gesuchsjahr/publish/{gesuchsjahrId}:
+    parameters:
+      - name: gesuchsjahrId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          description: Gesuchsjahr published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+      operationId: publishGesuchsjahr
+      summary: Publishes a Gesuchsjahr with the given id
   /gesuchsperiode:
     get:
       tags:
@@ -199,8 +331,12 @@ paths:
       tags:
         - Gesuchsperiode
       responses:
-        '201':
-          description: Created `Gesuchsperiode`
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+          description: Gesuchsperiode created
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -208,6 +344,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createGesuchsperiode
+  /gesuchsperiode/latest:
+    get:
+      tags:
+        - Gesuchsperiode
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchsperiodeWithDaten'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getLatest
+      summary: Returniert die neuste GesuchsperiodeWithDaten
   /gesuchsperiode/aktive:
     get:
       tags:
@@ -232,21 +389,21 @@ paths:
       operationId: getAktiveGesuchsperioden
       summary: Get all active Gesuchsperioden
   '/gesuchsperiode/{gesuchsperiodeId}':
+    parameters:
+      - name: gesuchsperiodeId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - Gesuchsperiode
-      parameters:
-        - name: gesuchsperiodeId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuchsperiode'
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -257,7 +414,67 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchsperiode
-      summary: Returniert der Gesuchsperiode mit der gegebene Id.
+      summary: Returniert die GesuchsperiodeWithDaten mit der gegebene Id.
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsperiodeUpdate'
+      tags:
+        - Gesuchsperiode
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+          description: Returned updated Gesuchsperiode
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateGesuchsperiode
+      summary: Updates a Gesuchperiode with the given id
+    delete:
+      tags:
+        - Gesuchsperiode
+      responses:
+        204:
+          description: Gesuchsperiode deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteGesuchsperiode
+      summary: Deletes a Gesuchsperiode with the given id
+  /gesuchsperiode/publish/{gesuchsperiodeId}:
+    parameters:
+      - name: gesuchsperiodeId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuchsperiode
+      responses:
+        200:
+          description: Gesuchsperiode published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+      operationId: publishGesuchsperiode
+      summary: Publishes a Gesuchsperiode with the given id
   /stammdaten/land:
     get:
       tags:
@@ -391,6 +608,27 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
+  '/gesuch/benutzer/me':
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Return alle Gesuche die mit mir zusammenhängen
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheForMe
+      summary: Get all Gesuche for me
   '/gesuch/benutzer/{benutzerId}':
     get:
       tags:
@@ -1100,6 +1338,11 @@ components:
         - STIPENDIUM_AKZEPTIERT
         - STIPENDIUM_AUSBEZAHLT
       type: string
+    GueltigkeitStatus:
+      enum:
+        - ENTWURF
+        - PUBLIZIERT
+        - ARCHIVIERT
     LocalDate:
       format: date
       type: string
@@ -1201,17 +1444,47 @@ components:
           type: integer
         mandant:
           type: string
-    GesuchsperiodeCreate:
+    Gesuchsjahr:
+      type: object
+      required:
+        - id
+        - bezeichnungDe
+        - bezeichnungFr
+        - technischesJahr
+        - gueltigkeitStatus
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        technischesJahr:
+          type: integer
+        gueltigkeitStatus:
+          $ref: '#/components/schemas/GueltigkeitStatus'
+    GesuchsjahrCreate:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+        - technischesJahr
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        technischesJahr:
+          type: integer
+    GesuchsjahrUpdate:
       type: object
       properties:
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-        einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
-          $ref: '#/components/schemas/LocalDate'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        technischesJahr:
+          type: integer
     DokumentCreate:
       required:
         - fileUpload
@@ -1603,35 +1876,6 @@ components:
             - adresse.id
           type: object
         - $ref: '#/components/schemas/PersonInAusbildungUpdate'
-    Gesuchsperiode:
-      required:
-        - id
-        - gueltigAb
-        - gueltigBis
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        gueltigAb:
-          $ref: '#/components/schemas/LocalDate'
-        gueltigBis:
-          $ref: '#/components/schemas/LocalDate'
-        einreichfrist:
-          $ref: '#/components/schemas/LocalDate'
-        aufschaltdatum:
-          $ref: '#/components/schemas/LocalDate'
-          example: '2022-12-12'
-      example:
-        - id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
-          gueltigAb: '2022-02-01'
-          gueltigBis: '2023-01-31'
-          einreichfrist: '2022-06-30'
-          aufschaltdatum: '2022-06-01'
-        - id: 3fa85f64-5717-4562-b3fc-2c963f66afa3
-          gueltigAb: '2022-02-01'
-          gueltigBis: '2023-01-31'
-          einreichfrist: '2022-06-30'
-          aufschaltdatum: '2022-06-01'
     ElternTyp:
       description: ''
       enum:
@@ -2186,6 +2430,256 @@ components:
     Ausbildungsort:
       description: ''
       type: string
+    GesuchsperiodeWithDaten:
+      required:
+        - id
+        - gueltigkeitStatus
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gueltigkeitStatus:
+          $ref: '#/components/schemas/GueltigkeitStatus'
+      allOf:
+        - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    NullableGesuchsperiodeWithDaten:
+      properties:
+        value:
+          $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+    Gesuchsperiode:
+      required:
+        - id
+        - bezeichnungDe
+        - bezeichnungFr
+        - gesuchsperiodeStart
+        - gesuchsperiodeStopp
+        - aufschaltterminStart
+        - gueltigkeitStatus
+        - gesuchsjahr
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        gueltigkeitStatus:
+          $ref: '#/components/schemas/GueltigkeitStatus'
+        gesuchsperiodeStart:
+          $ref: '#/components/schemas/LocalDate'
+        gesuchsperiodeStopp:
+          $ref: '#/components/schemas/LocalDate'
+        aufschaltterminStart:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        einreichefristNormal:
+          $ref: '#/components/schemas/LocalDate'
+        einreichefristReduziert:
+          $ref: '#/components/schemas/LocalDate'
+        gesuchsjahr:
+          $ref: '#/components/schemas/Gesuchsjahr'
+    GesuchsperiodeCreate:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    GesuchsperiodeUpdate:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    GesuchsperiodeDaten:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+        - fiskaljahr
+        - gesuchsjahrId
+        - gesuchsperiodeStart
+        - gesuchsperiodeStopp
+        - aufschaltterminStart
+        - aufschaltterminStopp
+        - einreichefristNormal
+        - einreichefristReduziert
+        - ausbKosten_SekII
+        - ausbKosten_Tertiaer
+        - freibetrag_vermoegen
+        - freibetrag_erwerbseinkommen
+        - elternbeteiligungssatz
+        - einkommensfreibetrag
+        - vermogenSatzAngerechnet
+        - integrationszulage
+        - limite_EkFreibetrag_Integrationszulag
+        - stipLimite_Minimalstipendium
+        - person_1
+        - personen_2
+        - personen_3
+        - personen_4
+        - personen_5
+        - personen_6
+        - personen_7
+        - proWeiterePerson
+        - kinder_00_18
+        - jugendliche_erwachsene_19_25
+        - erwachsene_26_99
+        - wohnkosten_fam_1pers
+        - wohnkosten_fam_2pers
+        - wohnkosten_fam_3pers
+        - wohnkosten_fam_4pers
+        - wohnkosten_fam_5pluspers
+        - wohnkosten_persoenlich_1pers
+        - wohnkosten_persoenlich_2pers
+        - wohnkosten_persoenlich_3pers
+        - wohnkosten_persoenlich_4pers
+        - wohnkosten_persoenlich_5pluspers
+        - preisProMahlzeit
+        - maxSaeule3a
+        - anzahlWochenLehre
+        - anzahlWochenSchule
+      properties:
+        bezeichnungDe:
+          description: ''
+          type: string
+        bezeichnungFr:
+          description: ''
+          type: string
+        einreichfrist:
+          $ref: '#/components/schemas/LocalDate'
+        fiskaljahr:
+          description: ''
+          type: integer
+        gesuchsjahrId:
+          $ref: '#/components/schemas/UUID'
+          description: ''
+        gesuchsperiodeStart:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        gesuchsperiodeStopp:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        aufschaltterminStart:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        aufschaltterminStopp:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        einreichefristNormal:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        einreichefristReduziert:
+          format: date
+          description: dd.MM.YYYY
+          type: string
+        ausbKosten_SekII:
+          description: ''
+          type: integer
+        ausbKosten_Tertiaer:
+          description: ''
+          type: integer
+        freibetrag_vermoegen:
+          description: ''
+          type: integer
+        freibetrag_erwerbseinkommen:
+          description: ''
+          type: integer
+        einkommensfreibetrag:
+          description: ''
+          type: integer
+        elternbeteiligungssatz:
+          description: ''
+          type: integer
+        vermogenSatzAngerechnet:
+          description: ''
+          type: integer
+        integrationszulage:
+          description: ''
+          type: integer
+        limite_EkFreibetrag_Integrationszulag:
+          description: ''
+          type: integer
+        stipLimite_Minimalstipendium:
+          description: ''
+          type: integer
+        person_1:
+          description: ''
+          type: integer
+        personen_2:
+          description: ''
+          type: integer
+        personen_3:
+          description: ''
+          type: integer
+        personen_4:
+          description: ''
+          type: integer
+        personen_5:
+          description: ''
+          type: integer
+        personen_6:
+          description: ''
+          type: integer
+        personen_7:
+          description: ''
+          type: integer
+        proWeiterePerson:
+          description: ''
+          type: integer
+        kinder_00_18:
+          description: ''
+          type: integer
+        jugendliche_erwachsene_19_25:
+          description: ''
+          type: integer
+        erwachsene_26_99:
+          description: ''
+          type: integer
+        wohnkosten_fam_1pers:
+          description: ''
+          type: integer
+        wohnkosten_fam_2pers:
+          description: ''
+          type: integer
+        wohnkosten_fam_3pers:
+          description: ''
+          type: integer
+        wohnkosten_fam_4pers:
+          description: ''
+          type: integer
+        wohnkosten_fam_5pluspers:
+          description: ''
+          type: integer
+        wohnkosten_persoenlich_1pers:
+          description: ''
+          type: integer
+        wohnkosten_persoenlich_2pers:
+          description: ''
+          type: integer
+        wohnkosten_persoenlich_3pers:
+          description: ''
+          type: integer
+        wohnkosten_persoenlich_4pers:
+          description: ''
+          type: integer
+        wohnkosten_persoenlich_5pluspers:
+          description: ''
+          type: integer
+        preisProMahlzeit:
+          description: ''
+          type: integer
+        maxSaeule3a:
+          description: ''
+          type: integer
+        anzahlWochenLehre:
+          description: ''
+          type: integer
+        anzahlWochenSchule:
+          description: ''
+          type: integer
     AusbildungsstaetteUpdate:
       required:
         - nameFr

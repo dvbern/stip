@@ -89,6 +89,8 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.removeTriggered,
+      SharedDataAccessGesuchEvents.loadAll,
+      SharedDataAccessGesuchEvents.loadAllDebounced,
       SharedEventGesuchFormPerson.saveTriggered,
       SharedEventGesuchFormEducation.saveTriggered,
       SharedEventGesuchFormFamiliensituation.saveTriggered,
