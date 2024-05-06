@@ -45,7 +45,6 @@ import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -66,7 +65,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchService {
-
     private final GesuchRepository gesuchRepository;
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
@@ -77,7 +75,6 @@ public class GesuchService {
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
-    private final ZuordnungService zuordnungService;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
 
