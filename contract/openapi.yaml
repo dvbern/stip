@@ -1472,8 +1472,8 @@ components:
         titelDesAbschlusses:
           description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
           type: string
-        taetigskeitsart:
-          $ref: '#/components/schemas/Taetigskeitsart'
+        taetigkeitsart:
+          $ref: '#/components/schemas/Taetigkeitsart'
           description: Required wenn bildungsart = null
         taetigkeitsBeschreibung:
           description: Required wenn taetigkeitsart != null
@@ -1770,7 +1770,7 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/FamiliensituationUpdate'
-    Taetigskeitsart:
+    Taetigkeitsart:
       enum:
         - ERWERBSTAETIGKEIT
         - ANDERE_TAETIGKEIT

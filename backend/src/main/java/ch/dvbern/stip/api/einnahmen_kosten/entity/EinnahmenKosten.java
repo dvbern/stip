@@ -11,47 +11,77 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+
 @Audited
 @Entity
-@Table(indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant"))
+@Table(
+    name = "einnahmen_kosten",
+    indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "nettoerwerbseinkommen", nullable = false)
     private Integer nettoerwerbseinkommen;
+
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "fahrkosten", nullable = false)
     private Integer fahrkosten;
+
     @Nullable
-    @Column(nullable = true)
+    @Column(name = "wohnkosten")
     private Integer wohnkosten;
+
     @Nullable
-    @Column(nullable = true)
+    @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
+
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "verdienst_realisiert", nullable = false)
     private Boolean verdienstRealisiert;
-    @Column
+
+    @Nullable
+    @Column(name = "alimente")
     private Integer alimente;
-    @Column
+
+    @Nullable
+    @Column(name = "zulagen")
     private Integer zulagen;
-    @Column
+
+    @Nullable
+    @Column(name = "renten")
     private Integer renten;
-    @Column
+
+    @Nullable
+    @Column(name = "eo_leistungen")
     private Integer eoLeistungen;
-    @Column
+
+    @Nullable
+    @Column(name = "ergaenzungsleistungen")
     private Integer ergaenzungsleistungen;
-    @Column
+
+    @Nullable
+    @Column(name = "beitraege")
     private Integer beitraege;
-    @Column
+
+    @Nullable
+    @Column(name = "ausbildungskosten_sekundarstufe_zwei")
     private Integer ausbildungskostenSekundarstufeZwei;
-    @Column
+
+    @Nullable
+    @Column(name = "ausbildungskosten_tertiaerstufe")
     private Integer ausbildungskostenTertiaerstufe;
-    @Column
+
+    @Nullable
+    @Column(name = "will_darlehen")
     private Boolean willDarlehen;
-    @Column
+
+    @Nullable
+    @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
-    @Column
+
+    @Nullable
+    @Column(name = "betreuungskosten_kinder")
     private Integer betreuungskostenKinder;
 }

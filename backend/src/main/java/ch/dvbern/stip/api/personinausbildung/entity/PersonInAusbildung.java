@@ -59,94 +59,92 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @EinreisedatumRequiredIfNiederlassungsstatusConstraint
 @VermoegenVorjahrRequiredConstraint
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
-    @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
-})
+@Table(
+    name = "person_in_ausbildung",
+    indexes = {
+        @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
+        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class PersonInAusbildung extends AbstractFamilieEntity {
-
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
     private @Valid Adresse adresse;
 
     @NotNull
     @AhvConstraint
-    @Column(nullable = false)
+    @Column(name = "sozialversicherungsnummer", nullable = false)
     private String sozialversicherungsnummer;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "anrede", nullable = false)
     @Enumerated(EnumType.STRING)
     private Anrede anrede;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz", nullable = false)
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
     private String identischerZivilrechtlicherWohnsitzOrt;
 
+    @Nullable
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz")
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
     @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "telefonnummer", nullable = false)
     private String telefonnummer;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "nationalitaet", nullable = false)
     private Land nationalitaet = Land.CH;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "heimatort")
     private String heimatort;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(name = "niederlassungsstatus")
     private Niederlassungsstatus niederlassungsstatus;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "einreisedatum")
     private LocalDate einreisedatum;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(name = "zivilstand")
     private Zivilstand zivilstand;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "sozialhilfebeitraege", nullable = false)
     private boolean sozialhilfebeitraege = true;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "vormundschaft", nullable = false)
     private boolean vormundschaft = false;
 
     @Nullable
-    @Column(nullable = true)
+    @Column(name = "vermoegen_vorjahr")
     private Integer vermoegenVorjahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "korrespondenz_sprache", nullable = false)
     private Sprache korrespondenzSprache;
-
-    public boolean isQuellenbesteuert() {
-        return nationalitaet != Land.CH &&
-            (
-                niederlassungsstatus == Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B ||
-                niederlassungsstatus == Niederlassungsstatus.FLUECHTLING
-            );
-    }
 }

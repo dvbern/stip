@@ -16,7 +16,10 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = @Index(name = "IX_gesuchsjahr_mandant", columnList = "mandant"))
+@Table(
+    name = "gesuchsjahr",
+    indexes = @Index(name = "IX_gesuchsjahr_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 @AllArgsConstructor

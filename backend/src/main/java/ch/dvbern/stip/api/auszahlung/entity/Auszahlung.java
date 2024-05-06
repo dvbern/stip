@@ -25,37 +25,39 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_auszahlung_adresse_id", columnList = "adresse_id"),
-    @Index(name = "IX_auszahlung_mandant", columnList = "mandant")
-})
+@Table(
+    name = "auszahlung",
+    indexes = {
+        @Index(name = "IX_auszahlung_adresse_id", columnList = "adresse_id"),
+        @Index(name = "IX_auszahlung_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Auszahlung extends AbstractMandantEntity {
-
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "kontoinhaber", nullable = false)
     @Enumerated(EnumType.STRING)
     private Kontoinhaber kontoinhaber;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "vorname", nullable = false)
     private String vorname;
 
     @NotNull
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Column(name = "nachname", nullable = false)
+    private String nachname;
+
+    @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"), nullable = false)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"), nullable = false)
     private Adresse adresse;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "iban", nullable = false)
     @IbanConstraint
     private String iban;
-
-    @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
-    private String nachname;
 }

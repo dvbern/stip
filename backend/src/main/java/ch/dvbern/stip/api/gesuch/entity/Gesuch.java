@@ -36,36 +36,39 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
-    @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
-    @Index(name = "IX_gesuch_mandant", columnList = "mandant")
-})
+@Table(
+    name = "gesuch",
+    indexes = {
+        @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
+        @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
+        @Index(name = "IX_gesuch_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Gesuch extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_fall_id"))
+    @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_gesuch_fall_id"))
     private Fall fall;
 
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_gesuchsperiode_id"))
+    @JoinColumn(name = "gesuchsperiode_id", foreignKey = @ForeignKey(name = "FK_gesuch_gesuchsperiode_id"))
     private Gesuchsperiode gesuchsperiode;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "gesuch_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     @NotNull
     @Min(0)
-    @Column(nullable = false)
+    @Column(name = "gesuch_nummer", nullable = false)
     private int gesuchNummer = 0;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "gesuch_status_aenderung_datum", nullable = false)
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
 
     @NotNull

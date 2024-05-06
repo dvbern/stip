@@ -1,0 +1,2250 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="fuju (generated)" id="1714730764944-1">
+        <createSequence incrementBy="50" sequenceName="revinfo_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-2">
+        <createTable tableName="adresse">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="adressePK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_adresse" type="VARCHAR(255)"/>
+            <column name="hausnummer" type="VARCHAR(255)"/>
+            <column name="land" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ort" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="plz" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="strasse" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-3">
+        <createTable tableName="adresse_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="co_adresse" type="VARCHAR(255)"/>
+            <column name="hausnummer" type="VARCHAR(255)"/>
+            <column name="land" type="VARCHAR(255)"/>
+            <column name="ort" type="VARCHAR(255)"/>
+            <column name="plz" type="VARCHAR(255)"/>
+            <column name="strasse" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-4">
+        <createTable tableName="ausbildung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ausbildungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alternative_ausbildungsgang" type="VARCHAR(255)"/>
+            <column name="alternative_ausbildungsland" type="VARCHAR(255)"/>
+            <column name="alternative_ausbildungsstaette" type="VARCHAR(255)"/>
+            <column name="ausbildung_begin" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildung_end" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildung_nicht_gefunden" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fachrichtung" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pensum" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildungsgang_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-5">
+        <createTable tableName="ausbildung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="alternative_ausbildungsgang" type="VARCHAR(255)"/>
+            <column name="alternative_ausbildungsland" type="VARCHAR(255)"/>
+            <column name="alternative_ausbildungsstaette" type="VARCHAR(255)"/>
+            <column name="ausbildung_begin" type="date"/>
+            <column name="ausbildung_end" type="date"/>
+            <column name="ausbildung_nicht_gefunden" type="BOOLEAN"/>
+            <column name="fachrichtung" type="VARCHAR(255)"/>
+            <column name="pensum" type="VARCHAR(255)"/>
+            <column name="ausbildungsgang_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-6">
+        <createTable tableName="ausbildungsgang">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ausbildungsgangPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildungsort" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildungsrichtung" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bezeichnung_de" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bezeichnung_fr" type="VARCHAR(255)"/>
+            <column name="ausbildungsstaette_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-7">
+        <createTable tableName="ausbildungsgang_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="ausbildungsort" type="VARCHAR(255)"/>
+            <column name="ausbildungsrichtung" type="VARCHAR(255)"/>
+            <column name="bezeichnung_de" type="VARCHAR(255)"/>
+            <column name="bezeichnung_fr" type="VARCHAR(255)"/>
+            <column name="ausbildungsstaette_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-8">
+        <createTable tableName="ausbildungsstaette">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="ausbildungsstaettePK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="name_de" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_fr" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-9">
+        <createTable tableName="ausbildungsstaette_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="name_de" type="VARCHAR(255)"/>
+            <column name="name_fr" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-10">
+        <createTable tableName="auszahlung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="auszahlungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="iban" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="kontoinhaber" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="adresse_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-11">
+        <createTable tableName="auszahlung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="iban" type="VARCHAR(255)"/>
+            <column name="kontoinhaber" type="VARCHAR(255)"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="adresse_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-12">
+        <createTable tableName="benutzer">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="benutzerPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="benutzer_status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="benutzer_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="keycloak_id" type="VARCHAR(255)"/>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="benutzereinstellungen_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-13">
+        <createTable tableName="benutzer_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="benutzer_status" type="VARCHAR(255)"/>
+            <column name="benutzer_typ" type="VARCHAR(255)"/>
+            <column name="keycloak_id" type="VARCHAR(255)"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="benutzereinstellungen_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-14">
+        <createTable tableName="benutzereinstellungen">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="benutzereinstellungenPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="digitale_kommunikation" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-15">
+        <createTable tableName="benutzereinstellungen_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="digitale_kommunikation" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-16">
+        <createTable tableName="dokument">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="dokumentPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filename" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filepath" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filesize" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="object_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_dokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-17">
+        <createTable tableName="dokument_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="filename" type="VARCHAR(255)"/>
+            <column name="filepath" type="VARCHAR(255)"/>
+            <column name="filesize" type="VARCHAR(255)"/>
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="gesuch_dokument_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-18">
+        <createTable tableName="einnahmen_kosten">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="einnahmen_kostenPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alimente" type="INTEGER"/>
+            <column name="ausbildungskosten_sekundarstufe_zwei" type="INTEGER"/>
+            <column name="ausbildungskosten_tertiaerstufe" type="INTEGER"/>
+            <column name="auswaertige_mittagessen_pro_woche" type="INTEGER"/>
+            <column name="beitraege" type="INTEGER"/>
+            <column name="betreuungskosten_kinder" type="INTEGER"/>
+            <column name="eo_leistungen" type="INTEGER"/>
+            <column name="ergaenzungsleistungen" type="INTEGER"/>
+            <column name="fahrkosten" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nettoerwerbseinkommen" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="renten" type="INTEGER"/>
+            <column name="verdienst_realisiert" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wg_wohnend" type="BOOLEAN"/>
+            <column name="will_darlehen" type="BOOLEAN"/>
+            <column name="wohnkosten" type="INTEGER"/>
+            <column name="zulagen" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-19">
+        <createTable tableName="einnahmen_kosten_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="alimente" type="INTEGER"/>
+            <column name="ausbildungskosten_sekundarstufe_zwei" type="INTEGER"/>
+            <column name="ausbildungskosten_tertiaerstufe" type="INTEGER"/>
+            <column name="auswaertige_mittagessen_pro_woche" type="INTEGER"/>
+            <column name="beitraege" type="INTEGER"/>
+            <column name="betreuungskosten_kinder" type="INTEGER"/>
+            <column name="eo_leistungen" type="INTEGER"/>
+            <column name="ergaenzungsleistungen" type="INTEGER"/>
+            <column name="fahrkosten" type="INTEGER"/>
+            <column name="nettoerwerbseinkommen" type="INTEGER"/>
+            <column name="renten" type="INTEGER"/>
+            <column name="verdienst_realisiert" type="BOOLEAN"/>
+            <column name="wg_wohnend" type="BOOLEAN"/>
+            <column name="will_darlehen" type="BOOLEAN"/>
+            <column name="wohnkosten" type="INTEGER"/>
+            <column name="zulagen" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-20">
+        <createTable tableName="eltern">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="elternPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geburtsdatum" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausweisb_fluechtling" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="eltern_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ergaenzungsleistung_ausbezahlt" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identischer_zivilrechtlicher_wohnsitz" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identischer_zivilrechtlicher_wohnsitz_ort" type="VARCHAR(255)"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz_plz" type="VARCHAR(255)"/>
+            <column name="sozialhilfebeitraege_ausbezahlt" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
+            <column name="telefonnummer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="adresse_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-21">
+        <createTable tableName="eltern_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="geburtsdatum" type="date"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="ausweisb_fluechtling" type="BOOLEAN"/>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="eltern_typ" type="VARCHAR(255)"/>
+            <column name="ergaenzungsleistung_ausbezahlt" type="BOOLEAN"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz" type="BOOLEAN"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz_ort" type="VARCHAR(255)"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz_plz" type="VARCHAR(255)"/>
+            <column name="sozialhilfebeitraege_ausbezahlt" type="BOOLEAN"/>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
+            <column name="telefonnummer" type="VARCHAR(255)"/>
+            <column name="wohnkosten" type="INTEGER"/>
+            <column name="adresse_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-22">
+        <createTable tableName="fall">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="fallPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fall_nummer" type="BIGINT"/>
+            <column name="gesuchsteller_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-23">
+        <createTable tableName="fall_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="fall_nummer" type="BIGINT"/>
+            <column name="gesuchsteller_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-24">
+        <createTable tableName="familiensituation">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="familiensituationPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="eltern_verheiratet_zusammen" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="elternteil_unbekannt_verstorben" type="BOOLEAN"/>
+            <column name="gerichtliche_alimentenregelung" type="BOOLEAN"/>
+            <column name="mutter_unbekannt_grund" type="VARCHAR(255)"/>
+            <column name="mutter_unbekannt_verstorben" type="VARCHAR(255)"/>
+            <column name="mutter_wiederverheiratet" type="BOOLEAN"/>
+            <column name="obhut" type="VARCHAR(255)"/>
+            <column name="obhut_mutter" type="numeric(38, 2)"/>
+            <column name="obhut_vater" type="numeric(38, 2)"/>
+            <column name="sorgerecht" type="VARCHAR(255)"/>
+            <column name="vater_unbekannt_grund" type="VARCHAR(255)"/>
+            <column name="vater_unbekannt_verstorben" type="VARCHAR(255)"/>
+            <column name="vater_wiederverheiratet" type="BOOLEAN"/>
+            <column name="wer_zahlt_alimente" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-25">
+        <createTable tableName="familiensituation_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="eltern_verheiratet_zusammen" type="BOOLEAN"/>
+            <column name="elternteil_unbekannt_verstorben" type="BOOLEAN"/>
+            <column name="gerichtliche_alimentenregelung" type="BOOLEAN"/>
+            <column name="mutter_unbekannt_grund" type="VARCHAR(255)"/>
+            <column name="mutter_unbekannt_verstorben" type="VARCHAR(255)"/>
+            <column name="mutter_wiederverheiratet" type="BOOLEAN"/>
+            <column name="obhut" type="VARCHAR(255)"/>
+            <column name="obhut_mutter" type="numeric(38, 2)"/>
+            <column name="obhut_vater" type="numeric(38, 2)"/>
+            <column name="sorgerecht" type="VARCHAR(255)"/>
+            <column name="vater_unbekannt_grund" type="VARCHAR(255)"/>
+            <column name="vater_unbekannt_verstorben" type="VARCHAR(255)"/>
+            <column name="vater_wiederverheiratet" type="BOOLEAN"/>
+            <column name="wer_zahlt_alimente" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-26">
+        <createTable tableName="geschwister">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="geschwisterPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geburtsdatum" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz_anteil_mutter" type="numeric(38, 2)"/>
+            <column name="wohnsitz_anteil_vater" type="numeric(38, 2)"/>
+            <column name="ausbildungssituation" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-27">
+        <createTable tableName="geschwister_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="geburtsdatum" type="date"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="wohnsitz" type="VARCHAR(255)"/>
+            <column name="wohnsitz_anteil_mutter" type="numeric(38, 2)"/>
+            <column name="wohnsitz_anteil_vater" type="numeric(38, 2)"/>
+            <column name="ausbildungssituation" type="VARCHAR(255)"/>
+            <column name="copy_of_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-28">
+        <createTable tableName="gesuch">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuchPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_nummer" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_status_aenderung_datum" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fall_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchsperiode_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-29">
+        <createTable tableName="gesuch_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="gesuch_nummer" type="INTEGER"/>
+            <column name="gesuch_status" type="VARCHAR(255)"/>
+            <column name="gesuch_status_aenderung_datum" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="fall_id" type="UUID"/>
+            <column name="gesuchsperiode_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-30">
+        <createTable tableName="gesuch_dokument">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_dokumentPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-31">
+        <createTable tableName="gesuch_dokument_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="dokument_typ" type="VARCHAR(255)"/>
+            <column name="gesuch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-32">
+        <createTable tableName="gesuch_formular">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_formularPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildung_id" type="UUID"/>
+            <column name="auszahlung_id" type="UUID"/>
+            <column name="einnahmen_kosten_id" type="UUID"/>
+            <column name="familiensituation_id" type="UUID"/>
+            <column name="partner_id" type="UUID"/>
+            <column name="person_in_ausbildung_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-33">
+        <createTable tableName="gesuch_formular_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="ausbildung_id" type="UUID"/>
+            <column name="auszahlung_id" type="UUID"/>
+            <column name="einnahmen_kosten_id" type="UUID"/>
+            <column name="familiensituation_id" type="UUID"/>
+            <column name="partner_id" type="UUID"/>
+            <column name="person_in_ausbildung_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-34">
+        <createTable tableName="gesuch_tranche">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_tranchePK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="gueltig_ab" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gueltig_bis" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-35">
+        <createTable tableName="gesuch_tranche_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="gueltig_ab" type="date"/>
+            <column name="gueltig_bis" type="date"/>
+            <column name="gesuch_id" type="UUID"/>
+            <column name="gesuch_formular_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-36">
+        <createTable tableName="gesuchformular_eltern_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-37">
+        <createTable tableName="gesuchformular_geschwister_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-38">
+        <createTable tableName="gesuchformular_kind_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-39">
+        <createTable tableName="gesuchformular_lebenslaufitem_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-40">
+        <createTable tableName="gesuchsjahr">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuchsjahrPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bezeichnung_de" type="VARCHAR(255)"/>
+            <column name="bezeichnung_fr" type="VARCHAR(255)"/>
+            <column name="gueltigkeit_status" type="VARCHAR(255)"/>
+            <column name="technisches_jahr" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-41">
+        <createTable tableName="gesuchsjahr_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="bezeichnung_de" type="VARCHAR(255)"/>
+            <column name="bezeichnung_fr" type="VARCHAR(255)"/>
+            <column name="gueltigkeit_status" type="VARCHAR(255)"/>
+            <column name="technisches_jahr" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-42">
+        <createTable tableName="gesuchsperiode">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuchsperiodePK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="anzahl_wochen_lehre" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="anzahl_wochen_schule" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="aufschalttermin_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="aufschalttermin_stopp" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbkosten_sek_ii" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbkosten_tertiaer" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bezeichnung_de" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bezeichnung_fr" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="einkommensfreibetrag" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="einreichefrist_normal" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="einreichefrist_reduziert" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="elternbeteiligungssatz" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="erwachsene_26_99" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fiskaljahr" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="freibetrag_erwerbseinkommen" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="freibetrag_vermoegen" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchsperiode_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchsperiode_stopp" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gueltigkeit_status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="integrationszulage" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jugendliche_erwachsene_19_25" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="kinder_00_18" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="limite_ek_freibetrag_integrationszulag" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_saeule_3a" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="person_1" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personen_2" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personen_3" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personen_4" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personen_5" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personen_6" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personen_7" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preis_pro_mahlzeit" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pro_weitere_person" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stip_limite_minimalstipendium" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vermogen_satz_angerechnet" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_fam_1pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_fam_2pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_fam_3pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_fam_4pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_fam_5pluspers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_persoenlich_1pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_persoenlich_2pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_persoenlich_3pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_persoenlich_4pers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnkosten_persoenlich_5pluspers" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchsjahr_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-43">
+        <createTable tableName="gesuchsperiode_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="anzahl_wochen_lehre" type="INTEGER"/>
+            <column name="anzahl_wochen_schule" type="INTEGER"/>
+            <column name="aufschalttermin_start" type="date"/>
+            <column name="aufschalttermin_stopp" type="date"/>
+            <column name="ausbkosten_sek_ii" type="INTEGER"/>
+            <column name="ausbkosten_tertiaer" type="INTEGER"/>
+            <column name="bezeichnung_de" type="VARCHAR(255)"/>
+            <column name="bezeichnung_fr" type="VARCHAR(255)"/>
+            <column name="einkommensfreibetrag" type="INTEGER"/>
+            <column name="einreichefrist_normal" type="date"/>
+            <column name="einreichefrist_reduziert" type="date"/>
+            <column name="elternbeteiligungssatz" type="INTEGER"/>
+            <column name="erwachsene_26_99" type="INTEGER"/>
+            <column name="fiskaljahr" type="VARCHAR(255)"/>
+            <column name="freibetrag_erwerbseinkommen" type="INTEGER"/>
+            <column name="freibetrag_vermoegen" type="INTEGER"/>
+            <column name="gesuchsperiode_start" type="date"/>
+            <column name="gesuchsperiode_stopp" type="date"/>
+            <column name="gueltigkeit_status" type="VARCHAR(255)"/>
+            <column name="integrationszulage" type="INTEGER"/>
+            <column name="jugendliche_erwachsene_19_25" type="INTEGER"/>
+            <column name="kinder_00_18" type="INTEGER"/>
+            <column name="limite_ek_freibetrag_integrationszulag" type="INTEGER"/>
+            <column name="max_saeule_3a" type="INTEGER"/>
+            <column name="person_1" type="INTEGER"/>
+            <column name="personen_2" type="INTEGER"/>
+            <column name="personen_3" type="INTEGER"/>
+            <column name="personen_4" type="INTEGER"/>
+            <column name="personen_5" type="INTEGER"/>
+            <column name="personen_6" type="INTEGER"/>
+            <column name="personen_7" type="INTEGER"/>
+            <column name="preis_pro_mahlzeit" type="INTEGER"/>
+            <column name="pro_weitere_person" type="INTEGER"/>
+            <column name="stip_limite_minimalstipendium" type="INTEGER"/>
+            <column name="vermogen_satz_angerechnet" type="INTEGER"/>
+            <column name="wohnkosten_fam_1pers" type="INTEGER"/>
+            <column name="wohnkosten_fam_2pers" type="INTEGER"/>
+            <column name="wohnkosten_fam_3pers" type="INTEGER"/>
+            <column name="wohnkosten_fam_4pers" type="INTEGER"/>
+            <column name="wohnkosten_fam_5pluspers" type="INTEGER"/>
+            <column name="wohnkosten_persoenlich_1pers" type="INTEGER"/>
+            <column name="wohnkosten_persoenlich_2pers" type="INTEGER"/>
+            <column name="wohnkosten_persoenlich_3pers" type="INTEGER"/>
+            <column name="wohnkosten_persoenlich_4pers" type="INTEGER"/>
+            <column name="wohnkosten_persoenlich_5pluspers" type="INTEGER"/>
+            <column name="gesuchsjahr_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-44">
+        <createTable tableName="kind">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="kindPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geburtsdatum" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz_anteil_mutter" type="numeric(38, 2)"/>
+            <column name="wohnsitz_anteil_vater" type="numeric(38, 2)"/>
+            <column name="ausbildungssituation" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="erhaltene_alimentebeitraege" type="INTEGER"/>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-45">
+        <createTable tableName="kind_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="geburtsdatum" type="date"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="wohnsitz" type="VARCHAR(255)"/>
+            <column name="wohnsitz_anteil_mutter" type="numeric(38, 2)"/>
+            <column name="wohnsitz_anteil_vater" type="numeric(38, 2)"/>
+            <column name="ausbildungssituation" type="VARCHAR(255)"/>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="erhaltene_alimentebeitraege" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-46">
+        <createTable tableName="lebenslauf_item">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lebenslauf_itemPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildung_abgeschlossen" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="berufsbezeichnung" type="VARCHAR(255)"/>
+            <column name="bildungsart" type="VARCHAR(255)"/>
+            <column name="bis" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="fachrichtung" type="VARCHAR(255)"/>
+            <column name="taetigkeits_beschreibung" type="VARCHAR(255)"/>
+            <column name="taetigkeitsart" type="VARCHAR(255)"/>
+            <column name="titel_des_abschlusses" type="VARCHAR(255)"/>
+            <column name="von" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_formular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-47">
+        <createTable tableName="lebenslauf_item_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="ausbildung_abgeschlossen" type="BOOLEAN"/>
+            <column name="berufsbezeichnung" type="VARCHAR(255)"/>
+            <column name="bildungsart" type="VARCHAR(255)"/>
+            <column name="bis" type="date"/>
+            <column name="copy_of_id" type="UUID"/>
+            <column name="fachrichtung" type="VARCHAR(255)"/>
+            <column name="taetigkeits_beschreibung" type="VARCHAR(255)"/>
+            <column name="taetigkeitsart" type="VARCHAR(255)"/>
+            <column name="titel_des_abschlusses" type="VARCHAR(255)"/>
+            <column name="von" type="date"/>
+            <column name="wohnsitz" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-48">
+        <createTable tableName="partner">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="partnerPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geburtsdatum" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ausbildung_mit_einkommen_oder_erwerbstaetig" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fahrkosten" type="INTEGER"/>
+            <column name="jahreseinkommen" type="INTEGER"/>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="verpflegungskosten" type="INTEGER"/>
+            <column name="adresse_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-49">
+        <createTable tableName="partner_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="geburtsdatum" type="date"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="ausbildung_mit_einkommen_oder_erwerbstaetig" type="BOOLEAN"/>
+            <column name="fahrkosten" type="INTEGER"/>
+            <column name="jahreseinkommen" type="INTEGER"/>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
+            <column name="verpflegungskosten" type="INTEGER"/>
+            <column name="adresse_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-50">
+        <createTable tableName="person_in_ausbildung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_in_ausbildungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geburtsdatum" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nachname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vorname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wohnsitz_anteil_mutter" type="numeric(38, 2)"/>
+            <column name="wohnsitz_anteil_vater" type="numeric(38, 2)"/>
+            <column name="anrede" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="einreisedatum" type="date"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="heimatort" type="VARCHAR(255)"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identischer_zivilrechtlicher_wohnsitz_ort" type="VARCHAR(255)"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz_plz" type="VARCHAR(255)"/>
+            <column name="korrespondenz_sprache" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nationalitaet" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="niederlassungsstatus" type="VARCHAR(255)"/>
+            <column name="sozialhilfebeitraege" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telefonnummer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vermoegen_vorjahr" type="INTEGER"/>
+            <column name="vormundschaft" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zivilstand" type="VARCHAR(255)"/>
+            <column name="adresse_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-51">
+        <createTable tableName="person_in_ausbildung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="geburtsdatum" type="date"/>
+            <column name="nachname" type="VARCHAR(255)"/>
+            <column name="vorname" type="VARCHAR(255)"/>
+            <column name="wohnsitz" type="VARCHAR(255)"/>
+            <column name="wohnsitz_anteil_mutter" type="numeric(38, 2)"/>
+            <column name="wohnsitz_anteil_vater" type="numeric(38, 2)"/>
+            <column name="anrede" type="VARCHAR(255)"/>
+            <column name="einreisedatum" type="date"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="heimatort" type="VARCHAR(255)"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz" type="BOOLEAN"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz_ort" type="VARCHAR(255)"/>
+            <column name="identischer_zivilrechtlicher_wohnsitz_plz" type="VARCHAR(255)"/>
+            <column name="korrespondenz_sprache" type="VARCHAR(255)"/>
+            <column name="nationalitaet" type="VARCHAR(255)"/>
+            <column name="niederlassungsstatus" type="VARCHAR(255)"/>
+            <column name="sozialhilfebeitraege" type="BOOLEAN"/>
+            <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
+            <column name="telefonnummer" type="VARCHAR(255)"/>
+            <column name="vermoegen_vorjahr" type="INTEGER"/>
+            <column name="vormundschaft" type="BOOLEAN"/>
+            <column name="zivilstand" type="VARCHAR(255)"/>
+            <column name="adresse_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-52">
+        <createTable tableName="revinfo">
+            <column autoIncrement="true" name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="revinfoPK"/>
+            </column>
+            <column name="revtstmp" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-53">
+        <createTable tableName="sachbearbeiter_zuordnung_stammdaten">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sachbearbeiter_zuordnung_stammdatenPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="buchstaben_de" type="VARCHAR(255)"/>
+            <column name="buchstaben_fr" type="VARCHAR(255)"/>
+            <column name="benutzer_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-54">
+        <createTable tableName="sachbearbeiter_zuordnung_stammdaten_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="buchstaben_de" type="VARCHAR(255)"/>
+            <column name="buchstaben_fr" type="VARCHAR(255)"/>
+            <column name="benutzer_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-55">
+        <createTable tableName="zuordnung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="zuordnungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zuordnung_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fall_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sachbearbeiter_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-56">
+        <createTable tableName="zuordnung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="zuordnung_type" type="VARCHAR(255)"/>
+            <column name="fall_id" type="UUID"/>
+            <column name="sachbearbeiter_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-57">
+        <addPrimaryKey columnNames="rev, id" constraintName="adresse_audPK" tableName="adresse_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-58">
+        <addPrimaryKey columnNames="rev, id" constraintName="ausbildung_audPK" tableName="ausbildung_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-59">
+        <addPrimaryKey columnNames="rev, id" constraintName="ausbildungsgang_audPK" tableName="ausbildungsgang_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-60">
+        <addPrimaryKey columnNames="rev, id" constraintName="ausbildungsstaette_audPK" tableName="ausbildungsstaette_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-61">
+        <addPrimaryKey columnNames="rev, id" constraintName="auszahlung_audPK" tableName="auszahlung_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-62">
+        <addPrimaryKey columnNames="rev, id" constraintName="benutzer_audPK" tableName="benutzer_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-63">
+        <addPrimaryKey columnNames="rev, id" constraintName="benutzereinstellungen_audPK" tableName="benutzereinstellungen_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-64">
+        <addPrimaryKey columnNames="rev, id" constraintName="dokument_audPK" tableName="dokument_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-65">
+        <addPrimaryKey columnNames="rev, id" constraintName="einnahmen_kosten_audPK" tableName="einnahmen_kosten_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-66">
+        <addPrimaryKey columnNames="rev, id" constraintName="eltern_audPK" tableName="eltern_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-67">
+        <addPrimaryKey columnNames="rev, id" constraintName="fall_audPK" tableName="fall_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-68">
+        <addPrimaryKey columnNames="rev, id" constraintName="familiensituation_audPK" tableName="familiensituation_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-69">
+        <addPrimaryKey columnNames="rev, id" constraintName="geschwister_audPK" tableName="geschwister_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-70">
+        <addPrimaryKey columnNames="rev, id" constraintName="gesuch_audPK" tableName="gesuch_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-71">
+        <addPrimaryKey columnNames="rev, id" constraintName="gesuch_dokument_audPK" tableName="gesuch_dokument_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-72">
+        <addPrimaryKey columnNames="rev, id" constraintName="gesuch_formular_audPK" tableName="gesuch_formular_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-73">
+        <addPrimaryKey columnNames="rev, id" constraintName="gesuch_tranche_audPK" tableName="gesuch_tranche_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-74">
+        <addPrimaryKey columnNames="gesuch_formular_id, rev, id" constraintName="gesuchformular_eltern_audPK" tableName="gesuchformular_eltern_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-75">
+        <addPrimaryKey columnNames="gesuch_formular_id, rev, id" constraintName="gesuchformular_geschwister_audPK" tableName="gesuchformular_geschwister_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-76">
+        <addPrimaryKey columnNames="gesuch_formular_id, rev, id" constraintName="gesuchformular_kind_audPK" tableName="gesuchformular_kind_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-77">
+        <addPrimaryKey columnNames="gesuch_formular_id, rev, id" constraintName="gesuchformular_lebenslaufitem_audPK" tableName="gesuchformular_lebenslaufitem_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-78">
+        <addPrimaryKey columnNames="rev, id" constraintName="gesuchsjahr_audPK" tableName="gesuchsjahr_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-79">
+        <addPrimaryKey columnNames="rev, id" constraintName="gesuchsperiode_audPK" tableName="gesuchsperiode_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-80">
+        <addPrimaryKey columnNames="rev, id" constraintName="kind_audPK" tableName="kind_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-81">
+        <addPrimaryKey columnNames="rev, id" constraintName="lebenslauf_item_audPK" tableName="lebenslauf_item_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-82">
+        <addPrimaryKey columnNames="rev, id" constraintName="partner_audPK" tableName="partner_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-83">
+        <addPrimaryKey columnNames="rev, id" constraintName="person_in_ausbildung_audPK" tableName="person_in_ausbildung_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-84">
+        <addPrimaryKey columnNames="rev, id" constraintName="sachbearbeiter_zuordnung_stammdaten_audPK" tableName="sachbearbeiter_zuordnung_stammdaten_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-85">
+        <addPrimaryKey columnNames="rev, id" constraintName="zuordnung_audPK" tableName="zuordnung_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-86">
+        <addUniqueConstraint columnNames="keycloak_id" constraintName="IX_benutzer_keycloak_id" tableName="benutzer"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-87">
+        <addUniqueConstraint columnNames="adresse_id" constraintName="UC_AUSZAHLUNGADRESSE_ID_COL" tableName="auszahlung"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-88">
+        <addUniqueConstraint columnNames="benutzereinstellungen_id" constraintName="UC_BENUTZERBENUTZEREINSTELLUNGEN_ID_COL" tableName="benutzer"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-89">
+        <addUniqueConstraint columnNames="adresse_id" constraintName="UC_ELTERNADRESSE_ID_COL" tableName="eltern"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-90">
+        <addUniqueConstraint columnNames="gesuchsteller_id" constraintName="UC_FALLGESUCHSTELLER_ID_COL" tableName="fall"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-91">
+        <addUniqueConstraint columnNames="ausbildung_id" constraintName="UC_GESUCH_FORMULARAUSBILDUNG_ID_COL" tableName="gesuch_formular"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-92">
+        <addUniqueConstraint columnNames="auszahlung_id" constraintName="UC_GESUCH_FORMULARAUSZAHLUNG_ID_COL" tableName="gesuch_formular"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-93">
+        <addUniqueConstraint columnNames="einnahmen_kosten_id" constraintName="UC_GESUCH_FORMULAREINNAHMEN_KOSTEN_ID_COL" tableName="gesuch_formular"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-94">
+        <addUniqueConstraint columnNames="familiensituation_id" constraintName="UC_GESUCH_FORMULARFAMILIENSITUATION_ID_COL" tableName="gesuch_formular"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-95">
+        <addUniqueConstraint columnNames="partner_id" constraintName="UC_GESUCH_FORMULARPARTNER_ID_COL" tableName="gesuch_formular"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-96">
+        <addUniqueConstraint columnNames="person_in_ausbildung_id" constraintName="UC_GESUCH_FORMULARPERSON_IN_AUSBILDUNG_ID_COL" tableName="gesuch_formular"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-97">
+        <addUniqueConstraint columnNames="gesuch_formular_id" constraintName="UC_GESUCH_TRANCHEGESUCH_FORMULAR_ID_COL" tableName="gesuch_tranche"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-98">
+        <addUniqueConstraint columnNames="adresse_id" constraintName="UC_PARTNERADRESSE_ID_COL" tableName="partner"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-99">
+        <addUniqueConstraint columnNames="adresse_id" constraintName="UC_PERSON_IN_AUSBILDUNGADRESSE_ID_COL" tableName="person_in_ausbildung"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-100">
+        <addUniqueConstraint columnNames="benutzer_id" constraintName="UC_SACHBEARBEITER_ZUORDNUNG_STAMMDATENBENUTZER_ID_COL" tableName="sachbearbeiter_zuordnung_stammdaten"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-101">
+        <addUniqueConstraint columnNames="fall_id" constraintName="UC_ZUORDNUNGFALL_ID_COL" tableName="zuordnung"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-102">
+        <createIndex indexName="IX_adresse_mandant" tableName="adresse">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-103">
+        <createIndex indexName="IX_ausbildung_ausbildungsgang_id" tableName="ausbildung">
+            <column name="ausbildungsgang_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-104">
+        <createIndex indexName="IX_ausbildung_mandant" tableName="ausbildung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-105">
+        <createIndex indexName="IX_ausbildungsgang_ausbildungsstaette_id" tableName="ausbildungsgang">
+            <column name="ausbildungsstaette_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-106">
+        <createIndex indexName="IX_ausbildungsgang_mandant" tableName="ausbildungsgang">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-107">
+        <createIndex indexName="IX_auszahlung_mandant" tableName="auszahlung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-108">
+        <createIndex indexName="IX_benuter_mandant" tableName="benutzer">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-109">
+        <createIndex indexName="IX_benutzereinstellungen_mandant" tableName="benutzereinstellungen">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-110">
+        <createIndex indexName="IX_dokument_gesuch_dokument_id" tableName="dokument">
+            <column name="gesuch_dokument_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-111">
+        <createIndex indexName="IX_dokument_mandant" tableName="dokument">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-112">
+        <createIndex indexName="IX_einnahme_kosten_mandant" tableName="einnahmen_kosten">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-113">
+        <createIndex indexName="IX_eltern_mandant" tableName="eltern">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-114">
+        <createIndex indexName="IX_fall_mandant" tableName="fall">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-115">
+        <createIndex indexName="IX_familiensituation_mandant" tableName="familiensituation">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-116">
+        <createIndex indexName="IX_geschwister_mandant" tableName="geschwister">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-117">
+        <createIndex indexName="IX_gesuch_dokument_gesuch_id" tableName="gesuch_dokument">
+            <column name="gesuch_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-118">
+        <createIndex indexName="IX_gesuch_dokument_gesuch_id_dokument_typ" tableName="gesuch_dokument">
+            <column name="gesuch_id"/>
+            <column name="dokument_typ"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-119">
+        <createIndex indexName="IX_gesuch_dokument_mandant" tableName="gesuch_dokument">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-120">
+        <createIndex indexName="IX_gesuch_fall_id" tableName="gesuch">
+            <column name="fall_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-121">
+        <createIndex indexName="IX_gesuch_formular_mandant" tableName="gesuch_formular">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-122">
+        <createIndex indexName="IX_gesuch_gesuchsperiode_id" tableName="gesuch">
+            <column name="gesuchsperiode_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-123">
+        <createIndex indexName="IX_gesuch_mandant" tableName="gesuch">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-124">
+        <createIndex indexName="IX_gesuch_tranche_gesuch_id" tableName="gesuch_tranche">
+            <column name="gesuch_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-125">
+        <createIndex indexName="IX_gesuchsjahr_mandant" tableName="gesuchsjahr">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-126">
+        <createIndex indexName="IX_gesuchsperiode_aufschalttermin_start" tableName="gesuchsperiode">
+            <column name="aufschalttermin_start"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-127">
+        <createIndex indexName="IX_gesuchsperiode_gesuchsjahr_id" tableName="gesuchsperiode">
+            <column name="gesuchsjahr_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-128">
+        <createIndex indexName="IX_gesuchsperiode_mandant" tableName="gesuchsperiode">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-129">
+        <createIndex indexName="IX_kind_mandant" tableName="kind">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-130">
+        <createIndex indexName="IX_lebenslauf_item_mandant" tableName="lebenslauf_item">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-131">
+        <createIndex indexName="IX_partner_mandant" tableName="partner">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-132">
+        <createIndex indexName="IX_person_in_ausbildung_mandant" tableName="person_in_ausbildung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-133">
+        <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_mandant" tableName="sachbearbeiter_zuordnung_stammdaten">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-134">
+        <createIndex indexName="IX_zuordnung_mandant" tableName="zuordnung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-135">
+        <createIndex indexName="IX_zuordnung_sachbearbeiter_id" tableName="zuordnung">
+            <column name="sachbearbeiter_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-136">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="zuordnung_aud" constraintName="FK15imbowy9n9xm41it21mgl4dm" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-137">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="ausbildungsstaette_aud" constraintName="FK1xp7fgub9rmmbs9t72p4qr3w0" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-138">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchformular_eltern_aud" constraintName="FK3tn8cglhl6i8c4vh7bvwegri4" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-139">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sachbearbeiter_zuordnung_stammdaten_aud" constraintName="FK3wtusi6iqqxnx8p4m9qhqvolp" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-140">
+        <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="kind" constraintName="FK3xvj8yumn3sc0dh87ha436w6l" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-141">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="benutzereinstellungen_aud" constraintName="FK43mte4vu2s7s9dsv27riq3vy" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-142">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="auszahlung_aud" constraintName="FK5ak4oc85o9jxgsm9g1i5ldv5a" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-143">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_dokument_aud" constraintName="FK73vi05nxxi5p761r4pj73aejj" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-144">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="kind_aud" constraintName="FK8i4febfygx85q24mxbsva18ky" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-145">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchformular_kind_aud" constraintName="FK8qji9f6a8jd2e2q3ql617o647" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-146">
+        <addForeignKeyConstraint baseColumnNames="ausbildungsgang_id" baseTableName="ausbildung" constraintName="FK_ausbildung_ausbildungsgang_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ausbildungsgang" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-147">
+        <addForeignKeyConstraint baseColumnNames="ausbildungsstaette_id" baseTableName="ausbildungsgang" constraintName="FK_ausbildungsgang_ausbildungsstaette_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ausbildungsstaette" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-148">
+        <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="auszahlung" constraintName="FK_auszahlung_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-149">
+        <addForeignKeyConstraint baseColumnNames="benutzereinstellungen_id" baseTableName="benutzer" constraintName="FK_benutzer_benutzereinstellungen_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzereinstellungen" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-150">
+        <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="dokument" constraintName="FK_dokument_gesuch_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-151">
+        <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="eltern" constraintName="FK_eltern_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-152">
+        <addForeignKeyConstraint baseColumnNames="gesuchsteller_id" baseTableName="fall" constraintName="FK_fall_gesuchsteller_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzer" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-153">
+        <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="gesuch_dokument" constraintName="FK_gesuch_dokument_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-154">
+        <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="gesuch" constraintName="FK_gesuch_fall_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-155">
+        <addForeignKeyConstraint baseColumnNames="ausbildung_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_ausbildung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ausbildung" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-156">
+        <addForeignKeyConstraint baseColumnNames="auszahlung_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_auszahlung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="auszahlung" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-157">
+        <addForeignKeyConstraint baseColumnNames="einnahmen_kosten_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_einnahmen_kosten_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="einnahmen_kosten" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-158">
+        <addForeignKeyConstraint baseColumnNames="familiensituation_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_familiensituation_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="familiensituation" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-159">
+        <addForeignKeyConstraint baseColumnNames="partner_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_partner_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="partner" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-160">
+        <addForeignKeyConstraint baseColumnNames="person_in_ausbildung_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_person_in_ausbildung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="person_in_ausbildung" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-161">
+        <addForeignKeyConstraint baseColumnNames="gesuchsperiode_id" baseTableName="gesuch" constraintName="FK_gesuch_gesuchsperiode_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuchsperiode" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-162">
+        <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="gesuch_tranche" constraintName="FK_gesuch_tranche_gesuch_formular_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-163">
+        <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="gesuch_tranche" constraintName="FK_gesuch_tranche_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-164">
+        <addForeignKeyConstraint baseColumnNames="gesuchsjahr_id" baseTableName="gesuchsperiode" constraintName="FK_gesuchsperiode_gesuchsjahr_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuchsjahr" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-165">
+        <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="partner" constraintName="FK_partner_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-166">
+        <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="person_in_ausbildung" constraintName="FK_person_in_ausbildung_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-167">
+        <addForeignKeyConstraint baseColumnNames="benutzer_id" baseTableName="sachbearbeiter_zuordnung_stammdaten" constraintName="FK_sachbearbeiter_zuordnung_stammdaten_benutzer_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzer" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-168">
+        <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="zuordnung" constraintName="FK_zuordnung_fall_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-169">
+        <addForeignKeyConstraint baseColumnNames="sachbearbeiter_id" baseTableName="zuordnung" constraintName="FK_zuordnung_sachbearbeiter_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzer" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-170">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="lebenslauf_item_aud" constraintName="FKa4h9rqh9wfeq46wrqf8nxxuym" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-171">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_aud" constraintName="FKau3w8os8gh8oyci7fpr5jrnoq" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-172">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="geschwister_aud" constraintName="FKb25sq8mq7uw9obrqfoo115gi5" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-173">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_tranche_aud" constraintName="FKce4hg4fkrh3lxjf5m0wx398ei" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-174">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="adresse_aud" constraintName="FKeartnqqce0eqjl4tiv5my51ee" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-175">
+        <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="geschwister" constraintName="FKerbwyg311kch5ts2srwetj0y7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-176">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="familiensituation_aud" constraintName="FKh00xtricpc6bcs50m5njbuaky" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-177">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchsjahr_aud" constraintName="FKhifvf0kdtqt6ro868rgwix46e" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-178">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="einnahmen_kosten_aud" constraintName="FKhwx2uy5prrjqsju9ra0g57qkf" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-179">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchformular_lebenslaufitem_aud" constraintName="FKhyqgrlnnuhnb0cmdfgvaur7w4" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-180">
+        <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="eltern" constraintName="FKi3qy034p4cvs59oeg7kcjevsb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-181">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchsperiode_aud" constraintName="FKjd1ewwubxbgphr1pmogojntav" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-182">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="person_in_ausbildung_aud" constraintName="FKjevk4dbt3gbnoljy6pv0rota3" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-183">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="dokument_aud" constraintName="FKk1lje21u4ksjamyfue7t3hyda" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-184">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="eltern_aud" constraintName="FKlg4el202qo4b7kk1qf0unqqg0" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-185">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="fall_aud" constraintName="FKmkfehw6pmws35qorifenrvu7e" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-186">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_formular_aud" constraintName="FKmlpprf0ynkxlho8g49okkpxql" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-187">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="ausbildungsgang_aud" constraintName="FKplmpna7thl18ch04gr4oidg3g" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-188">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchformular_geschwister_aud" constraintName="FKq8ycqv2ltudwhc4e4cr643sdu" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-189">
+        <addForeignKeyConstraint baseColumnNames="gesuch_formular_id" baseTableName="lebenslauf_item" constraintName="FKr9jvgycwc2isbt6xjtjs0d5d6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-190">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="benutzer_aud" constraintName="FKswc4iahf0lnluku84fvkpp5wy" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-191">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="partner_aud" constraintName="FKu14stet717iktedsoqw1jfm8" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1714730764944-192">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="ausbildung_aud" constraintName="FKx7f5k6rlok39plp3sysv47im" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
