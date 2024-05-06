@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.common.service.seeding;
+package ch.dvbern.stip.api.util;
 
 import java.util.List;
 
@@ -9,20 +9,19 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.bildungsart.repo.BildungsartRepository;
 import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.common.service.seeding.Seeder;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Singleton
 @RequiredArgsConstructor
-@Slf4j
-public class AusbildungSeeding extends Seeder {
+public class AusbildungTestSeeding extends Seeder {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final BildungsartRepository bildungsartRepository;
 
-    protected Bildungsart bildungsart;
+    private Bildungsart bildungsart;
 
     @Override
     @Startup
@@ -32,13 +31,14 @@ public class AusbildungSeeding extends Seeder {
 
     @Override
     protected void doSeed() {
-        if (ausbildungsstaetteRepository.count() == 0) {
-            LOG.info("Seeding Uni and FH");
+        createBildungsart();
+        seedUni();
+        seedFh();
+    }
 
-            createBildungsart();
-            seedUni();
-            seedFh();
-        }
+    @Override
+    protected List<String> getProfiles() {
+        return List.of("test");
     }
 
     protected void createBildungsart() {
@@ -63,6 +63,8 @@ public class AusbildungSeeding extends Seeder {
             .setBezeichnungFr("Bsc. Informatique")
             .setBildungsart(bildungsart)
             .setAusbildungsstaette(uniBern);
+
+        TestConstants.TEST_AUSBILDUNGSGANG_ID = uniBeGang1.getId();
 
         final var uniBeGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
