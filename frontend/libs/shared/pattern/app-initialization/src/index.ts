@@ -1,90 +1,81 @@
-/**
- * Pattern is an eagerly loaded feature
- * or in other words a combination of other utils, data-access, ui, etc...
- * which are imported eagerly in eager part of the application or other lazy loaded features
- *
- * Please, put implementation in the /lib folder which should be a sibling od this index.ts file.
- *
- *
- * Examples:
- *
- * 1. collection of preconfigured providers
- * export function provide<Scope>Pattern<Name>() {
- *   return [
- *     ...providers (and their configuration, ...)
- *   ]
- * }
- *
- * 2. a piece of reusable logic  (eg components + data accesses)
- *    which is shared by multiple lazy loaded features
- *    eg generic comments feature, document management feature, ...
- */
-
-import { HttpClient } from '@angular/common/http';
-import { APP_INITIALIZER, NgZone, importProvidersFrom } from '@angular/core';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { switchMap } from 'rxjs/operators';
+import { APP_INITIALIZER, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { first, switchMap, take, tap } from 'rxjs/operators';
 
 import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { TenantService } from '@dv/shared/model/gesuch';
+import { shouldNotAuthorizeRequestIf } from '@dv/shared/util/http';
 
-function initializeKeycloak(
-  ngZone: NgZone,
-  keycloak: KeycloakService,
-  http: HttpClient,
+function registerTokenReceivedHandler(
+  oauthService: OAuthService,
+  router: Router,
+): void {
+  oauthService.events.pipe(
+    first((e) => e.type === 'token_received'),
+    tap(() => {
+      if (oauthService.state) {
+        router.navigate([oauthService.state]);
+      }
+    }),
+    take(1),
+  );
+}
+function initializeOidc(
+  router: Router,
+  tenantService: TenantService,
+  oauthService: OAuthService,
   compileTimeConfig: SharedModelCompiletimeConfig,
 ) {
   return () =>
-    http
-      .get<{
-        clientAuth: {
-          authServerUrl: string;
-          realm: string;
-        };
-        // TODO: Use generated openapi services
-      }>('/api/v1/tenant/current')
+    tenantService
+      .getCurrentTenant$(undefined, undefined, {
+        context: shouldNotAuthorizeRequestIf(true),
+      })
       .pipe(
         switchMap(({ clientAuth }) => {
-          return new Promise<boolean>((resolve, reject) => {
-            ngZone.runOutsideAngular(() => {
-              keycloak
-                .init({
-                  config: {
-                    url: clientAuth.authServerUrl,
-                    realm: clientAuth.realm,
-                    clientId: compileTimeConfig.authClientId,
-                  },
-                  initOptions: {
-                    onLoad: 'login-required',
-                    checkLoginIframe: true,
-                  },
-                  // TODO: Add silent check sso
-                  shouldAddToken: (request) => {
-                    const { method, url } = request;
-
-                    const acceptablePaths = ['/api/v1'];
-                    const isAcceptablePathMatch = acceptablePaths.some((path) =>
-                      url.startsWith(path),
-                    );
-
-                    return !(method !== 'OPTIONS' && isAcceptablePathMatch);
-                  },
-                })
-                .then(() => resolve(true))
-                .catch((err) => reject(err));
-            });
+          oauthService.configure({
+            issuer: `${clientAuth.authServerUrl}/realms/${clientAuth.realm}`,
+            redirectUri: window.location.origin + '/',
+            clientId: compileTimeConfig.authClientId,
+            scope: 'openid profile email offline_access',
+            responseType: 'code',
+            showDebugInformation: false,
+            silentRefreshRedirectUri:
+              window.location.origin + '/assets/auth/silent-refresh.html',
+            sessionChecksEnabled: true,
+            clearHashAfterLogin: false,
+            useSilentRefresh: true,
+            nonceStateSeparator: 'semicolon',
           });
+          return oauthService
+            .loadDiscoveryDocumentAndTryLogin()
+            .then((success) => {
+              let nextStep: PromiseLike<unknown> = Promise.resolve(undefined);
+              // perform a silent refresh when the access token is expired
+              if (!oauthService.hasValidAccessToken()) {
+                nextStep = oauthService.silentRefresh().catch(() => {
+                  // if the silent refresh fails, redirect to the login page
+                  oauthService.initLoginFlow();
+                });
+              }
+
+              registerTokenReceivedHandler(oauthService, router);
+              oauthService.setupAutomaticSilentRefresh();
+
+              return nextStep.then(() => success);
+            });
         }),
       );
 }
 
 export const provideSharedPatternAppInitialization = () => {
   return [
-    importProvidersFrom(KeycloakAngularModule),
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
+      useFactory: initializeOidc,
       multi: true,
-      deps: [NgZone, KeycloakService, HttpClient, SharedModelCompiletimeConfig],
+      deps: [NgZone, TenantService, OAuthService, SharedModelCompiletimeConfig],
     },
   ];
 };
