@@ -17,16 +17,24 @@
 
 package ch.dvbern.stip.api.fall.entity;
 
+import java.util.Set;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,24 +42,37 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-    @Index(name = "IX_fall_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-    @Index(name = "IX_fall_mandant", columnList = "mandant")
-})
+@Table(
+    name = "fall",
+    indexes = {
+        @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
+        @Index(name = "IX_fall_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Fall extends AbstractMandantEntity {
-
-    @Column(columnDefinition = "int8 DEFAULT nextval('fall_nummer_seq')",
-        insertable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FALL_NUMMER_SEQ")
+    @SequenceGenerator(name = "fall_nummer_seq", sequenceName = "FALL_NUMMER_SEQ", initialValue = 1, allocationSize = 1)
+    @Column(name = "fall_nummer", insertable = false)
     private Long fallNummer;
 
-    @OneToOne(optional = true, fetch = FetchType.LAZY, orphanRemoval = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"), nullable = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "gesuchsteller_id",
+        foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"),
+        nullable = false
+    )
     private Benutzer gesuchsteller;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id"), nullable = true)
-    private Benutzer sachbearbeiter;
+    @Nullable
+    @JoinColumn(
+        name = "sachbearbeiter_zuordnung_id",
+        foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
+    )
+    @OneToOne(mappedBy = "fall")
+    private Zuordnung sachbearbeiterZuordnung;
+
+    @OneToMany(mappedBy = "fall")
+    private Set<Gesuch> gesuch;
 }

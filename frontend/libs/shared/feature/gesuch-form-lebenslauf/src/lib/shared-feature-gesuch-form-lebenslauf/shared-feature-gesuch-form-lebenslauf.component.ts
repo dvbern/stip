@@ -17,7 +17,7 @@ import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
 import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   dateFromMonthYearString,
   printDateAsMonthYear,
@@ -39,7 +39,7 @@ const MIN_EDUCATION_AGE = 16; // August
     NgbAlert,
     TranslateModule,
     TwoColumnTimelineComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
@@ -156,12 +156,14 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
 
   handleContinue() {
     const { gesuch } = this.viewSig();
-    this.store.dispatch(
-      SharedEventGesuchFormLebenslauf.nextTriggered({
-        id: gesuch!.id!,
-        origin: LEBENSLAUF,
-      }),
-    );
+    if (gesuch?.id) {
+      this.store.dispatch(
+        SharedEventGesuchFormLebenslauf.nextTriggered({
+          id: gesuch.id,
+          origin: LEBENSLAUF,
+        }),
+      );
+    }
   }
 
   handleEditorClose() {

@@ -1,6 +1,6 @@
 <button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="loading">
-  {{ 'shared.form.save' | translate }}
+  {{ labelKey | translate }}
 </button>
 @if (loading) {
-  <dv-shared-ui-loading loadingTextKey="shared.ui.saving.text" [compact]="true"></dv-shared-ui-loading>
+  <dv-shared-ui-loading loadingTextKey="shared.ui.saving.text" type="compact"></dv-shared-ui-loading>
 }

@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -32,14 +32,9 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { createFilterableColumns } from '@dv/shared/util-fn/table-helper';
-
-import {
-  selectSachbearbeitungAppBuchstabenZuteilung,
-  selectSachbearbeitungAppBuchstabenZuteilungState,
-} from './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.selector';
 
 const CHAR = '[a-z]{1,3} ?';
 const RANGE = `${CHAR}- ?(${CHAR})?`;
@@ -50,17 +45,17 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MaskitoModule,
+    MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
     TranslateModule,
-    SharedUiLoadingComponent,
     SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiRdIsPendingPipe,
   ],
   providers: [
     provideMaterialDefaultOptions({
@@ -78,8 +73,6 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   private elementRef = inject(ElementRef);
   private formBuilder = inject(FormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  zuteilungSig = selectSachbearbeitungAppBuchstabenZuteilung();
-  stateSig = selectSachbearbeitungAppBuchstabenZuteilungState();
   store = inject(SachbearbeiterStore);
   filterChangedSig = signal<string | null>(null);
   displayedColumns = [
@@ -105,7 +98,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   };
 
   formSig = computed(() => {
-    const zuweisungen = this.zuteilungSig();
+    const zuweisungen = this.store.zuweisungenViewSig();
     const createFormGroup = (z?: BuchstabenZuordnung) =>
       this.formBuilder.group({
         enabledDe: [z?.enabledDe],
@@ -130,7 +123,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
       return new MatTableDataSource([]);
     }
     const filter = this.filterChangedSig();
-    const zuweisungen = this.zuteilungSig();
+    const zuweisungen = this.store.zuweisungenViewSig();
 
     const datasource = new MatTableDataSource(zuweisungen);
     datasource.filterPredicate = (data, filter) => {
@@ -159,7 +152,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     this.formUtils.focusFirstInvalid(this.elementRef);
     const formValues = this.buildUpdatedGesuchFromForm();
     if (form.valid && formValues) {
-      this.store.saveSachbearbeiterZuweisung(formValues);
+      this.store.saveSachbearbeiterZuweisung$(formValues);
       form.markAsPristine();
     }
   }

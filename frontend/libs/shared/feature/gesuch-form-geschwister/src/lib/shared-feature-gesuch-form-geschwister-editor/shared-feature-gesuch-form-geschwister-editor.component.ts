@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -44,7 +44,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -81,9 +81,9 @@ const MEDIUM_AGE = 20;
     MatRadioModule,
     SharedUiFormMessageErrorDirective,
     NgbInputDatepicker,
-    MaskitoModule,
+    MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',

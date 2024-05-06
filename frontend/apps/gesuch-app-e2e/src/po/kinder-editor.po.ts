@@ -15,6 +15,7 @@ export class KinderEditorPO {
     geburtsdatum: Locator;
     wohnsitzSelect: Locator;
     ausbildungssituationRadio: Locator;
+    formKindErhalteneAlimentebeitraege: Locator;
 
     buttonSave: Locator;
     buttonCancel: Locator;
@@ -30,6 +31,9 @@ export class KinderEditorPO {
       wohnsitzSelect: page.getByTestId('form-kind-wohnsitz'),
       ausbildungssituationRadio: page.getByTestId(
         'form-kind-ausbildungssituation',
+      ),
+      formKindErhalteneAlimentebeitraege: page.getByTestId(
+        'form-kind-erhalteneAlimentebeitraege',
       ),
 
       buttonSave: page.getByTestId('button-save'),
@@ -47,6 +51,10 @@ export class KinderEditorPO {
     await selectMatOption(
       this.elems.ausbildungssituationRadio,
       item.ausbildungssituation,
+    );
+
+    await this.elems.formKindErhalteneAlimentebeitraege.fill(
+      `${item.erhalteneAlimentebeitraege ?? 0}`,
     );
 
     await expectFormToBeValid(this.elems.form);

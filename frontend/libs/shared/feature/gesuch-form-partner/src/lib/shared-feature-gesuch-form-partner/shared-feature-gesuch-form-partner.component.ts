@@ -18,7 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -46,7 +46,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import {
@@ -82,10 +82,10 @@ const MEDIUM_AGE_ADULT = 30;
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MaskitoModule,
+    MaskitoDirective,
     NgbInputDatepicker,
     SharedUiFormMessageErrorDirective,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     MatCheckboxModule,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,

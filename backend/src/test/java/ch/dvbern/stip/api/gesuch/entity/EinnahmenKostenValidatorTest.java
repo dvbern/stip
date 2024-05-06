@@ -1,9 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -25,7 +23,7 @@ class EinnahmenKostenValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         gesuchFormular.setPersonInAusbildung(personInAusbildung);
         Kind kind = new Kind();
-        Set kindSet = new HashSet<Kind>();
+        final var kindSet = new HashSet<Kind>();
         kindSet.add(kind);
         gesuchFormular.setKinds(kindSet);
         return gesuchFormular;
@@ -38,7 +36,7 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
         assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isFalse();
-        gesuchFormular.getEinnahmenKosten().setZulagen(BigDecimal.ONE);
+        gesuchFormular.getEinnahmenKosten().setZulagen(1);
         assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
     }
@@ -76,7 +74,7 @@ class EinnahmenKostenValidatorTest {
         gesuchFormular.setAusbildung(ausbildung);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isFalse();
-        gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(BigDecimal.ONE);
+        gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(1);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
         gesuchFormular.getAusbildung().getAusbildungsgang().setBildungsart(new Bildungsart());
@@ -84,7 +82,7 @@ class EinnahmenKostenValidatorTest {
             gesuchFormular,
             TestUtil.initValidatorContext()))
             .isFalse();
-        gesuchFormular.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(BigDecimal.ONE);
+        gesuchFormular.getEinnahmenKosten().setAusbildungskostenTertiaerstufe(1);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(
             gesuchFormular,
             TestUtil.initValidatorContext()))
@@ -106,7 +104,7 @@ class EinnahmenKostenValidatorTest {
 
         assertThat(validator.isValid(gesuch, null)).isFalse();
 
-        gesuch.getEinnahmenKosten().setWohnkosten(new BigDecimal(1));
+        gesuch.getEinnahmenKosten().setWohnkosten(1);
         assertThat(validator.isValid(gesuch, null)).isTrue();
     }
 }

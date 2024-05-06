@@ -20,18 +20,17 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Getter
 @Setter
 public abstract class AbstractPerson extends AbstractMandantEntity {
-
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "nachname", nullable = false)
     private String nachname;
 
     @NotBlank(message = VALIDATION_VORNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "vorname", nullable = false)
     private String vorname;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "geburtsdatum", nullable = false)
     private LocalDate geburtsdatum;
 }

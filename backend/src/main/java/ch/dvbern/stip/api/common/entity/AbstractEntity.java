@@ -41,27 +41,27 @@ import org.hibernate.proxy.HibernateProxy;
 @Getter
 @Setter
 public abstract class AbstractEntity implements Serializable {
-
     @Id
-    @Column(nullable = false, updatable = false, length = 36)
+    @Column(name = "id", nullable = false, updatable = false, length = 36)
     @UuidGenerator
     private UUID id;
 
+    @Column(name = "version")
     @Version
     private long version;
 
-    @Column(nullable = false)
+    @Column(name = "timestamp_erstellt", nullable = false)
     private LocalDateTime timestampErstellt;
 
-    @Column(nullable = false)
+    @Column(name = "timestamp_mutiert", nullable = false)
     private LocalDateTime timestampMutiert;
 
     @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "user_erstellt", nullable = false)
     private String userErstellt;
 
     @Size(max = Constants.DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "user_mutiert", nullable = false)
     private String userMutiert;
 
     // java:S2097 https://sonarqube-next.dvbern.ch/coding_rules?open=java%3AS2097&rule_key=java%3AS2097

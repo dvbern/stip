@@ -41,7 +41,7 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
-  private @Valid BigDecimal vermoegenVorjahr;
+  private @Valid Integer vermoegenVorjahr;
   private @Valid Boolean vormundschaft;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
@@ -407,19 +407,19 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
   /**
    * Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
    **/
-  public PersonInAusbildungUpdateDto vermoegenVorjahr(BigDecimal vermoegenVorjahr) {
+  public PersonInAusbildungUpdateDto vermoegenVorjahr(Integer vermoegenVorjahr) {
     this.vermoegenVorjahr = vermoegenVorjahr;
     return this;
   }
 
   
   @JsonProperty("vermoegenVorjahr")
-  public BigDecimal getVermoegenVorjahr() {
+  public Integer getVermoegenVorjahr() {
     return vermoegenVorjahr;
   }
 
   @JsonProperty("vermoegenVorjahr")
-  public void setVermoegenVorjahr(BigDecimal vermoegenVorjahr) {
+  public void setVermoegenVorjahr(Integer vermoegenVorjahr) {
     this.vermoegenVorjahr = vermoegenVorjahr;
   }
 

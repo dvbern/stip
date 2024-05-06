@@ -25,6 +25,7 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.6.4</quarkus.platform.version>
     <querydsl.version>5.0.0</querydsl.version>
+    <savoirtech.json-comparator.version>1.1.1</savoirtech.json-comparator.version>
     <skipITs>true</skipITs>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <sonar.exclusions>
@@ -37,6 +38,7 @@
     <javafaker.version>1.0.2</javafaker.version>
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
+    <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -74,7 +76,7 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-flyway</artifactId>
+      <artifactId>quarkus-liquibase</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -111,6 +113,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-envers</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
@@ -261,6 +267,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.savoirtech.json</groupId>
+      <artifactId>json-comparator</artifactId>
+      <version>${savoirtech.json-comparator.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>1.7</version>
@@ -376,6 +388,46 @@
           </execution>
         </executions>
       </plugin>
+      <!-- <editor-fold desc="liquibase-maven-plugin: diff" defaultstate="collapsed">-->
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>${liquibase-maven-plugin.version}</version>
+        <configuration>
+          <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
+          <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
+          <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
+          <propertyFile>liquibase.properties</propertyFile>
+          <!-- Old state -->
+          <driver>org.postgresql.Driver</driver>
+
+          <!-- Target state -->
+          <referenceUrl>hibernate:ejb3:LiquibasePU</referenceUrl>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm</artifactId>
+            <version>${quarkus.platform.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase-maven-plugin.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate6</artifactId>
+            <version>${liquibase-maven-plugin.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+            <version>${quarkus.platform.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <!-- </editor-fold> -->
     </plugins>
   </build>
   <profiles>
@@ -523,6 +575,7 @@
                     ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
                     Land=ch.dvbern.stip.api.stammdaten.type.Land,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
+                    Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
                     Ausbildungsland=ch.dvbern.stip.api.ausbildung.type.Ausbildungsland,
                     Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart,
                     Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,

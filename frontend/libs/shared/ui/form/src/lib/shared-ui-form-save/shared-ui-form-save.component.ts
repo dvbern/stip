@@ -17,6 +17,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormSaveComponent {
+  @Input() labelKey = 'shared.form.save';
   @Input() loading = false;
 
   @HostBinding('class') class = 'd-flex gap-3 flex-row align-items-start';

@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
-import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -348,7 +349,7 @@ class GesuchValidatorTest {
 
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
-        lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
+        lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
         Gesuch gesuch = prepareDummyGesuch();
@@ -386,7 +387,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationLebenslauf() {
         LebenslaufItem lebenslaufItem = new LebenslaufItem();
         lebenslaufItem.setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE);
-        lebenslaufItem.setTaetigskeitsart(Taetigskeitsart.ERWERBSTAETIGKEIT);
+        lebenslaufItem.setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT);
         lebenslaufItem.setVon(LocalDate.of(2020, 10, 1));
         lebenslaufItem.setBis(LocalDate.of(2020, 12, 1));
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
@@ -476,10 +477,19 @@ class GesuchValidatorTest {
     private void assertAll(String[] messages, Gesuch gesuch, boolean expected) {
         Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
         if (expected) {
-            assertThat(violations.size() >= messages.length, is(true));
+            assertThat(
+                String.format(
+                    "Expected at least %s messages, got %s:\nExpected messages: %s",
+                    messages.length,
+                    violations.size(),
+                    Arrays.toString(messages)
+                ),
+                violations.size() >= messages.length,
+                is(true)
+            );
         }
         for (String message : messages) {
-            assertThat(violations.stream()
+            assertThat(message, violations.stream()
                 .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
                     .equals(message)), is(expected));
         }

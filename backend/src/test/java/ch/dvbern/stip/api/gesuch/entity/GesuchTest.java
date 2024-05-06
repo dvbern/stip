@@ -37,14 +37,14 @@ class GesuchTest {
     @Test
     void getTrancheByDateNotPresent() {
         var gesuch = initGesuch();
-        LocalDate ausserhalbPeriode = gesuch.getGesuchsperiode().getGueltigkeit().getGueltigBis().plusDays(1);
+        LocalDate ausserhalbPeriode = gesuch.getGesuchsperiode().getGesuchsperiodeStopp().plusDays(1);
         MatcherAssert.assertThat(gesuch.getGesuchTrancheValidOnDate(ausserhalbPeriode).isPresent(), Matchers.is(false));
     }
 
     @Test
     void getTrancheByDatePresent() {
         Gesuch gesuch = initGesuch();
-        LocalDate innerhalbPeriode = gesuch.getGesuchsperiode().getGueltigkeit().getGueltigBis();
+        LocalDate innerhalbPeriode = gesuch.getGesuchsperiode().getGesuchsperiodeStopp();
         MatcherAssert.assertThat(gesuch.getGesuchTrancheValidOnDate(innerhalbPeriode).isPresent(), Matchers.is(true));
     }
 }

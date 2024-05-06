@@ -104,7 +104,16 @@
                   "type:util-fn",
                   "type:model"
                 ],
-                "bannedExternalImports": ["@ngrx/*"]
+                "bannedExternalImports": [
+                  "@ngrx/component-store",
+                  "@ngrx/effects",
+                  "@ngrx/entity",
+                  "@ngrx/eslint-plugin",
+                  "@ngrx/router-store",
+                  "@ngrx/signals",
+                  "@ngrx/store",
+                  "@ngrx/store-devtools"
+                ]
               },
               {
                 "sourceTag": "type:util-fn",

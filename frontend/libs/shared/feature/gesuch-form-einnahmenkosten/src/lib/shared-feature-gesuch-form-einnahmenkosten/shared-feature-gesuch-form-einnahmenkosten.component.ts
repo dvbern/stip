@@ -19,7 +19,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -42,7 +42,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -71,11 +71,11 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
-    MaskitoModule,
+    MaskitoDirective,
     NgbAlert,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
   ],

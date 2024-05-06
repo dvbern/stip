@@ -13,6 +13,6 @@ import org.hibernate.envers.Audited;
 @Setter
 public abstract class AbstractMandantEntity extends AbstractEntity {
     @TenantId
-    @Column(nullable = false)
+    @Column(name = "mandant", nullable = false)
     private String mandant;
 }

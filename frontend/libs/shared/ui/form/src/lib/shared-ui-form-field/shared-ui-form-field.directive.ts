@@ -1,9 +1,11 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   ContentChildren,
   Directive,
   DoCheck,
   QueryList,
+  effect,
   inject,
 } from '@angular/core';
 import { FormControlName } from '@angular/forms';
@@ -12,6 +14,7 @@ import { Subject, combineLatest, of } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 import { SharedUiFormMessageErrorDirective } from '../shared-ui-form-message/shared-ui-form-message-error.directive';
+import { SharedUiFormReadonlyDirective } from '../shared-ui-form-readonly/shared-ui-form-readonly.directive';
 
 @Directive({
   selector: '[dvSharedUiFormField]',
@@ -25,6 +28,8 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
   // Can be used on a MatFormField or FormControlName component/directive, useful for radio-groups for example
   matFormField = inject(MatFormField, { optional: true });
   selfControl = inject(FormControlName, { optional: true });
+  readonlyChecker = inject(SharedUiFormReadonlyDirective, { optional: true });
+  changeDetector = inject(ChangeDetectorRef);
 
   private get nullableControl() {
     return this.matFormField?._control?.ngControl ?? this.selfControl;
@@ -36,6 +41,19 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
       );
     }
     return this.nullableControl;
+  }
+
+  constructor() {
+    const checker = this.readonlyChecker;
+    if (checker && this.matFormField) {
+      const formField = this.matFormField;
+      effect(() => {
+        if (checker.isReadonly()) {
+          formField.subscriptSizing = 'dynamic';
+          this.changeDetector.markForCheck();
+        }
+      });
+    }
   }
 
   ngDoCheck(): void {

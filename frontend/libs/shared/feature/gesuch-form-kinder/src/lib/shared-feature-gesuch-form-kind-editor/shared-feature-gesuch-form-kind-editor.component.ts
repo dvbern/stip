@@ -22,7 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -45,7 +45,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -70,6 +70,7 @@ import {
   parseStringAndPrintForBackendLocalDate,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;
@@ -90,10 +91,10 @@ const MEDIUM_AGE = 20;
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    MaskitoModule,
+    MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
     SharedPatternDocumentUploadComponent,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],
@@ -219,7 +220,9 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       ...wohnsitzAnteileString(this.kind),
       erhalteneAlimentebeitraege:
         this.kind.erhalteneAlimentebeitraege?.toString(),
-      alimentenregelungExistiert: this.kind.erhalteneAlimentebeitraege !== null,
+      alimentenregelungExistiert: isDefined(
+        this.kind.erhalteneAlimentebeitraege,
+      ),
     });
   }
 

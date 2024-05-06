@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         return ImmutablePair.of("einnahmenKosten", requiredDocs);
     }
 
-    private boolean greaterThanZero(final BigDecimal base) {
-        return base != null && base.compareTo(BigDecimal.ZERO) > 0;
+    private boolean greaterThanZero(final Integer base) {
+        return base != null && base > 0;
     }
 }

@@ -193,13 +193,13 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
   describe('should have conditional required validation for some fields', () => {
     it('field zulagen should be optional if no kind has been specified', async () => {
-      const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.FAMILIE,
-        {
+      const { getByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE, {
           kinds: undefined,
-        },
-      );
+        });
       await userEvent.click(getByTestId('button-save-continue'));
+
+      detectChanges();
 
       expect(getByTestId('form-einnahmen-kosten-zulagen')).toHaveClass(
         'ng-valid',
@@ -207,12 +207,15 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
     });
 
     it('field zulagen should not be optional if a kind has been specified', async () => {
-      const { getByTestId } = await setupWithPreparedGesuchWithWohnsitz(
-        Wohnsitz.FAMILIE,
-        { kinds: [{} as never] },
-      );
+      const { getByTestId, detectChanges } =
+        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE, {
+          kinds: [{} as never],
+        });
 
       await userEvent.click(getByTestId('button-save-continue'));
+
+      detectChanges();
+
       expect(getByTestId('form-einnahmen-kosten-zulagen')).toHaveClass(
         'ng-invalid',
       );

@@ -27,9 +27,10 @@ public class AusbildungDto  implements Serializable {
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
   private @Valid Boolean ausbildungNichtGefunden;
-  private @Valid String alternativeAusbildungsland;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
+  private @Valid String ausbildungsort;
+  private @Valid Boolean isAusbildungAusland;
 
   /**
    **/
@@ -149,25 +150,6 @@ public class AusbildungDto  implements Serializable {
   /**
    * Required wenn andere ausbildungNichtGefunden &#x3D; true
    **/
-  public AusbildungDto alternativeAusbildungsland(String alternativeAusbildungsland) {
-    this.alternativeAusbildungsland = alternativeAusbildungsland;
-    return this;
-  }
-
-  
-  @JsonProperty("alternativeAusbildungsland")
-  public String getAlternativeAusbildungsland() {
-    return alternativeAusbildungsland;
-  }
-
-  @JsonProperty("alternativeAusbildungsland")
-  public void setAlternativeAusbildungsland(String alternativeAusbildungsland) {
-    this.alternativeAusbildungsland = alternativeAusbildungsland;
-  }
-
-  /**
-   * Required wenn andere ausbildungNichtGefunden &#x3D; true
-   **/
   public AusbildungDto alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
     this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
     return this;
@@ -203,6 +185,43 @@ public class AusbildungDto  implements Serializable {
     this.alternativeAusbildungsgang = alternativeAusbildungsgang;
   }
 
+  /**
+   * Not required if isAusbildungAusland &#x3D; true
+   **/
+  public AusbildungDto ausbildungsort(String ausbildungsort) {
+    this.ausbildungsort = ausbildungsort;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungsort")
+  public String getAusbildungsort() {
+    return ausbildungsort;
+  }
+
+  @JsonProperty("ausbildungsort")
+  public void setAusbildungsort(String ausbildungsort) {
+    this.ausbildungsort = ausbildungsort;
+  }
+
+  /**
+   **/
+  public AusbildungDto isAusbildungAusland(Boolean isAusbildungAusland) {
+    this.isAusbildungAusland = isAusbildungAusland;
+    return this;
+  }
+
+  
+  @JsonProperty("isAusbildungAusland")
+  public Boolean getIsAusbildungAusland() {
+    return isAusbildungAusland;
+  }
+
+  @JsonProperty("isAusbildungAusland")
+  public void setIsAusbildungAusland(Boolean isAusbildungAusland) {
+    this.isAusbildungAusland = isAusbildungAusland;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -219,14 +238,15 @@ public class AusbildungDto  implements Serializable {
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildung.pensum) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
-        Objects.equals(this.alternativeAusbildungsland, ausbildung.alternativeAusbildungsland) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
-        Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang);
+        Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
+        Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungsgang, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, ausbildungNichtGefunden, alternativeAusbildungsland, alternativeAusbildungsstaette, alternativeAusbildungsgang);
+    return Objects.hash(ausbildungsgang, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -240,9 +260,10 @@ public class AusbildungDto  implements Serializable {
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
-    sb.append("    alternativeAusbildungsland: ").append(toIndentedString(alternativeAusbildungsland)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
+    sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
+    sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("}");
     return sb.toString();
   }

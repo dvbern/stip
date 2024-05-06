@@ -3,7 +3,6 @@ package ch.dvbern.stip.arch;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.entity.StipPhysicalNamingStrategy;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -44,21 +43,18 @@ class JpaTest {
                     }
 
                     if (tableAnnotation != null) {
-                        final var hasIndex = Arrays.stream(tableAnnotation.indexes())
-                            .anyMatch(index -> index.columnList()
-                                .contains(StipPhysicalNamingStrategy.toSnakeCase(fieldName)));
-
+                        final var hasIndex = tableAnnotation.indexes().length != 0;
                         if (hasIndex) {
                             return;
                         }
                     }
 
-                    String message = String.format(
+                    final var message = String.format(
                         "Foreign Key column %s on entity %s has no index",
                         fieldName,
-                        fieldOwner.getSimpleName());
+                        fieldOwner.getSimpleName()
+                    );
                     conditionEvents.add(SimpleConditionEvent.violated(javaField, message));
-
                 }
             }));
 

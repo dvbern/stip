@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.TaetigkeitsartDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   private @Valid String berufsbezeichnung;
   private @Valid String fachrichtung;
   private @Valid String titelDesAbschlusses;
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart taetigskeitsart;
+  private @Valid TaetigkeitsartDto taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
 
   /**
@@ -207,20 +208,20 @@ public class LebenslaufItemUpdateDto  implements Serializable {
 
   /**
    **/
-  public LebenslaufItemUpdateDto taetigskeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart taetigskeitsart) {
-    this.taetigskeitsart = taetigskeitsart;
+  public LebenslaufItemUpdateDto taetigkeitsart(TaetigkeitsartDto taetigkeitsart) {
+    this.taetigkeitsart = taetigkeitsart;
     return this;
   }
 
   
-  @JsonProperty("taetigskeitsart")
-  public ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart getTaetigskeitsart() {
-    return taetigskeitsart;
+  @JsonProperty("taetigkeitsart")
+  public TaetigkeitsartDto getTaetigkeitsart() {
+    return taetigkeitsart;
   }
 
-  @JsonProperty("taetigskeitsart")
-  public void setTaetigskeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart taetigskeitsart) {
-    this.taetigskeitsart = taetigskeitsart;
+  @JsonProperty("taetigkeitsart")
+  public void setTaetigkeitsart(TaetigkeitsartDto taetigkeitsart) {
+    this.taetigkeitsart = taetigkeitsart;
   }
 
   /**
@@ -261,13 +262,13 @@ public class LebenslaufItemUpdateDto  implements Serializable {
         Objects.equals(this.berufsbezeichnung, lebenslaufItemUpdate.berufsbezeichnung) &&
         Objects.equals(this.fachrichtung, lebenslaufItemUpdate.fachrichtung) &&
         Objects.equals(this.titelDesAbschlusses, lebenslaufItemUpdate.titelDesAbschlusses) &&
-        Objects.equals(this.taetigskeitsart, lebenslaufItemUpdate.taetigskeitsart) &&
+        Objects.equals(this.taetigkeitsart, lebenslaufItemUpdate.taetigkeitsart) &&
         Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItemUpdate.taetigkeitsBeschreibung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(von, bis, wohnsitz, id, bildungsart, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigskeitsart, taetigkeitsBeschreibung);
+    return Objects.hash(von, bis, wohnsitz, id, bildungsart, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung);
   }
 
   @Override
@@ -284,7 +285,7 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     sb.append("    berufsbezeichnung: ").append(toIndentedString(berufsbezeichnung)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    titelDesAbschlusses: ").append(toIndentedString(titelDesAbschlusses)).append("\n");
-    sb.append("    taetigskeitsart: ").append(toIndentedString(taetigskeitsart)).append("\n");
+    sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
     sb.append("}");
     return sb.toString();

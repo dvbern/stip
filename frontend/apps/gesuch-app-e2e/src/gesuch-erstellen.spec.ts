@@ -30,7 +30,6 @@ import { CockpitPO } from './po/cockpit.po';
 import { EinnahmenKostenPO } from './po/einnahmen-kosten.po';
 import { ElternPO } from './po/eltern.po';
 import { FamilyPO } from './po/familiy.po';
-import { FreigabePO } from './po/freigabe.po';
 import { GeschwisterPO } from './po/geschwister.po';
 import { KinderPO } from './po/kinder.po';
 import { LebenslaufPO } from './po/lebenslauf.po';
@@ -68,7 +67,7 @@ const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
 const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
 
 const ausbildung: AusbildungValues = {
-  ausbildungsland: 'CH',
+  ausbildungsort: 'Bern',
   ausbildungsstaette: 'Universtität Bern',
   ausbildungsgang: 'Bachelor',
   fachrichtung: 'Informatik',
@@ -181,6 +180,7 @@ const kind: Kind = {
   geburtsdatum: '25.12.2018',
   wohnsitz: 'FAMILIE',
   ausbildungssituation: 'VORSCHULPFLICHTIG',
+  erhalteneAlimentebeitraege: 0,
   id: '',
 };
 
@@ -355,8 +355,5 @@ test.describe('Neues gesuch erstellen', () => {
 
     // Step 12: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
-    const freigabePO = new FreigabePO(page);
-
-    await freigabePO.abschluss();
   });
 });

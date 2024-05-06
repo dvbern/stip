@@ -79,7 +79,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
     });
 
     it('should display berufsbezeichnung if one of {EIDGENOESSISCHES_BERUFSATTEST, EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS} is selected', async () => {
-      const { queryByTestId } = await setup('AUSBILDUNG');
+      const { queryByTestId, detectChanges } = await setup('AUSBILDUNG');
 
       const bildungsartenWhichNeedBerufsbezeichnung = [
         LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
@@ -98,6 +98,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           bildungsart,
         );
 
+        detectChanges();
+
         expect(
           queryByTestId('lebenslauf-editor-berufsbezeichnung'),
         ).toBeInTheDocument();
@@ -109,12 +111,14 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           bildungsart,
         );
 
+        detectChanges();
+
         expect(queryByTestId('lebenslauf-editor-berufsbezeichnung')).toBeNull();
       }
     });
 
     it('should reset berufsbezeichnung if field is hidden', async () => {
-      await setup('AUSBILDUNG');
+      const { detectChanges } = await setup('AUSBILDUNG');
       const user = userEvent.setup();
       const value = 'Mein Beruf';
 
@@ -122,19 +126,27 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
       ).toBeNull();
 
+      detectChanges();
+
       await clickMatSelectOption(
         'lebenslauf-editor-ausbildungsart-select',
         LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
       );
 
+      detectChanges();
+
       expect(
         screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
       ).toBeInTheDocument();
+
+      detectChanges();
 
       await user.type(
         screen.getByTestId('lebenslauf-editor-berufsbezeichnung'),
         value,
       );
+
+      detectChanges();
 
       expect(
         screen.getByTestId('lebenslauf-editor-berufsbezeichnung'),
@@ -145,6 +157,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.FACHMATURITAET,
       );
 
+      detectChanges();
+
       expect(
         screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
       ).toBeNull();
@@ -153,6 +167,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         'lebenslauf-editor-ausbildungsart-select',
         LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
       );
+
+      detectChanges();
 
       expect(
         screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
@@ -164,7 +180,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
     });
 
     it('should reset fachrichtung if field is hidden', async () => {
-      await setup('AUSBILDUNG');
+      const { detectChanges } = await setup('AUSBILDUNG');
 
       const value = 'Meine Fachrichtung';
 
@@ -175,6 +191,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
       );
 
+      detectChanges();
+
       expect(
         screen.queryByTestId('lebenslauf-editor-fachrichtung'),
       ).toBeInTheDocument();
@@ -183,6 +201,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         screen.getByTestId('lebenslauf-editor-fachrichtung'),
         value,
       );
+
+      detectChanges();
 
       expect(screen.getByTestId('lebenslauf-editor-fachrichtung')).toHaveValue(
         value,
@@ -193,12 +213,16 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.FACHMATURITAET,
       );
 
+      detectChanges();
+
       expect(screen.queryByTestId('lebenslauf-editor-fachrichtung')).toBeNull();
 
       await clickMatSelectOption(
         'lebenslauf-editor-ausbildungsart-select',
         LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
       );
+
+      detectChanges();
 
       expect(
         screen.queryByTestId('lebenslauf-editor-fachrichtung'),
@@ -210,7 +234,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
     });
 
     it('should reset titelDesAbschlusses if field is hidden', async () => {
-      await setup('AUSBILDUNG');
+      const { detectChanges } = await setup('AUSBILDUNG');
       const value = 'Mein Beruf';
 
       expect(
@@ -222,6 +246,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
       );
 
+      detectChanges();
+
       expect(
         screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
       ).toBeInTheDocument();
@@ -230,6 +256,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         screen.getByTestId('lebenslauf-editor-titel-des-abschlusses'),
         value,
       );
+
+      detectChanges();
 
       expect(
         screen.getByTestId('lebenslauf-editor-titel-des-abschlusses'),
@@ -240,6 +268,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         LebenslaufAusbildungsArt.FACHMATURITAET,
       );
 
+      detectChanges();
+
       expect(
         screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
       ).toBeNull();
@@ -248,6 +278,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         'lebenslauf-editor-ausbildungsart-select',
         LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
       );
+
+      detectChanges();
 
       expect(
         screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
@@ -259,7 +291,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
     });
 
     it('should display fachrichtung if one of {BACHELOR_HOCHSCHULE_UNI, BACHELOR_FACHHOCHSCHULE, MASTER} is selected', async () => {
-      await setup('AUSBILDUNG');
+      const { detectChanges } = await setup('AUSBILDUNG');
       const bildungsartenWhichNeedFachrichtung = [
         LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
         LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
@@ -278,6 +310,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           bildungsart,
         );
 
+        detectChanges();
+
         expect(
           screen.queryByTestId('lebenslauf-editor-fachrichtung'),
         ).toBeNull();
@@ -289,6 +323,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           bildungsart,
         );
 
+        detectChanges();
+
         expect(
           screen.queryByTestId('lebenslauf-editor-fachrichtung'),
         ).toBeInTheDocument();
@@ -296,7 +332,7 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
     });
 
     it('should display titelDesAbschlusses if ANDERER_BILDUNGSABSCHLUSS is selected', async () => {
-      await setup('AUSBILDUNG');
+      const { detectChanges } = await setup('AUSBILDUNG');
       const bildungsartenWhichNeedTitelDesAbschlusses = [
         LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
       ];
@@ -313,6 +349,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           bildungsart,
         );
 
+        detectChanges();
+
         expect(
           screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
         ).toBeNull();
@@ -323,6 +361,8 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
           'lebenslauf-editor-ausbildungsart-select',
           bildungsart,
         );
+
+        detectChanges();
 
         expect(
           screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),

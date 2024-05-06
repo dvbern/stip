@@ -9,7 +9,6 @@ import ch.dvbern.stip.generated.dto.BildungsartDtoSpec;
 public class AusbildungsgangCreateDtoSpecModel {
     public static final AusbildungsgangCreateDtoSpec ausbildungsgangCreateDtoSpec =
         TestUtil.createUpdateDtoSpec(AusbildungsgangCreateDtoSpec::new, (model, faker) -> {
-            model.setAusbildungsort("Bern");
             model.setBezeichnungDe("Bachelor Informatik");
             model.setBezeichnungFr("Bachelor Informatik");
             model.setAusbildungsrichtung(new BildungsartDtoSpec());

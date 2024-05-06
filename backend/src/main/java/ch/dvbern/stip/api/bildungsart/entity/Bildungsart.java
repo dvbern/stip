@@ -8,7 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
@@ -17,7 +17,7 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 @Table
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class Bildungsart extends AbstractEntity {
 	@Column(name = "beschreibung", nullable = false)
 	private String beschreibung;

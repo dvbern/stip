@@ -20,7 +20,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -50,7 +50,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -73,10 +73,10 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiFormMessageErrorDirective,
     SharedUiProgressBarComponent,
     TranslateModule,
-    MaskitoModule,
+    MaskitoDirective,
     SharedUiFormAddressComponent,
     NgbAlert,
-    GesuchAppUiStepFormButtonsComponent,
+    SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
   ],

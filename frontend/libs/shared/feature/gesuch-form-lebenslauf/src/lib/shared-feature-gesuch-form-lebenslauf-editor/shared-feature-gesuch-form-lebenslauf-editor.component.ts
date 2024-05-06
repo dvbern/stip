@@ -21,7 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -39,7 +39,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { GesuchAppUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -69,8 +69,8 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MaskitoModule,
-    GesuchAppUiStepFormButtonsComponent,
+    MaskitoDirective,
+    SharedUiStepFormButtonsComponent,
     MatCheckboxModule,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
