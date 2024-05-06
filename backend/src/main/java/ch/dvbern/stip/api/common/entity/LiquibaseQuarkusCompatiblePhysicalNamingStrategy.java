@@ -13,12 +13,8 @@ public class LiquibaseQuarkusCompatiblePhysicalNamingStrategy implements Physica
             return null;
         }
 
-        String lowerCase = name.getText().toLowerCase(Locale.US);
-        Identifier result = Identifier.toIdentifier(lowerCase, name.isQuoted());
-
-        System.out.println("Why no work");
-
-        return result;
+        final var lowerCase = name.getText().toLowerCase(Locale.US);
+        return Identifier.toIdentifier(lowerCase, name.isQuoted());
     }
 
     @Override
