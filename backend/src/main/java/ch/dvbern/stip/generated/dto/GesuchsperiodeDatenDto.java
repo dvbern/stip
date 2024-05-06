@@ -62,11 +62,11 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   private @Valid Integer wohnkostenPersoenlich3pers;
   private @Valid Integer wohnkostenPersoenlich4pers;
   private @Valid Integer wohnkostenPersoenlich5pluspers;
-  private @Valid LocalDate einreichfrist;
   private @Valid Integer preisProMahlzeit;
   private @Valid Integer maxSaeule3a;
   private @Valid Integer anzahlWochenLehre;
   private @Valid Integer anzahlWochenSchule;
+  private @Valid LocalDate einreichfrist;
 
   /**
    * 
@@ -888,24 +888,6 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   /**
-   **/
-  public GesuchsperiodeDatenDto einreichfrist(LocalDate einreichfrist) {
-    this.einreichfrist = einreichfrist;
-    return this;
-  }
-
-  
-  @JsonProperty("einreichfrist")
-  public LocalDate getEinreichfrist() {
-    return einreichfrist;
-  }
-
-  @JsonProperty("einreichfrist")
-  public void setEinreichfrist(LocalDate einreichfrist) {
-    this.einreichfrist = einreichfrist;
-  }
-
-  /**
    * 
    **/
   public GesuchsperiodeDatenDto preisProMahlzeit(Integer preisProMahlzeit) {
@@ -915,6 +897,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   
   @JsonProperty("preisProMahlzeit")
+  @NotNull
   public Integer getPreisProMahlzeit() {
     return preisProMahlzeit;
   }
@@ -934,6 +917,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   
   @JsonProperty("maxSaeule3a")
+  @NotNull
   public Integer getMaxSaeule3a() {
     return maxSaeule3a;
   }
@@ -953,6 +937,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   
   @JsonProperty("anzahlWochenLehre")
+  @NotNull
   public Integer getAnzahlWochenLehre() {
     return anzahlWochenLehre;
   }
@@ -972,6 +957,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
 
   
   @JsonProperty("anzahlWochenSchule")
+  @NotNull
   public Integer getAnzahlWochenSchule() {
     return anzahlWochenSchule;
   }
@@ -979,6 +965,24 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   @JsonProperty("anzahlWochenSchule")
   public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDatenDto einreichfrist(LocalDate einreichfrist) {
+    this.einreichfrist = einreichfrist;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichfrist")
+  public LocalDate getEinreichfrist() {
+    return einreichfrist;
+  }
+
+  @JsonProperty("einreichfrist")
+  public void setEinreichfrist(LocalDate einreichfrist) {
+    this.einreichfrist = einreichfrist;
   }
 
 
@@ -1032,16 +1036,16 @@ public class GesuchsperiodeDatenDto  implements Serializable {
         Objects.equals(this.wohnkostenPersoenlich3pers, gesuchsperiodeDaten.wohnkostenPersoenlich3pers) &&
         Objects.equals(this.wohnkostenPersoenlich4pers, gesuchsperiodeDaten.wohnkostenPersoenlich4pers) &&
         Objects.equals(this.wohnkostenPersoenlich5pluspers, gesuchsperiodeDaten.wohnkostenPersoenlich5pluspers) &&
-        Objects.equals(this.einreichfrist, gesuchsperiodeDaten.einreichfrist) &&
         Objects.equals(this.preisProMahlzeit, gesuchsperiodeDaten.preisProMahlzeit) &&
         Objects.equals(this.maxSaeule3a, gesuchsperiodeDaten.maxSaeule3a) &&
         Objects.equals(this.anzahlWochenLehre, gesuchsperiodeDaten.anzahlWochenLehre) &&
-        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeDaten.anzahlWochenSchule);
+        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeDaten.anzahlWochenSchule) &&
+        Objects.equals(this.einreichfrist, gesuchsperiodeDaten.einreichfrist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, einreichfrist, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, einreichfrist);
   }
 
   @Override
@@ -1090,11 +1094,11 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     sb.append("    wohnkostenPersoenlich3pers: ").append(toIndentedString(wohnkostenPersoenlich3pers)).append("\n");
     sb.append("    wohnkostenPersoenlich4pers: ").append(toIndentedString(wohnkostenPersoenlich4pers)).append("\n");
     sb.append("    wohnkostenPersoenlich5pluspers: ").append(toIndentedString(wohnkostenPersoenlich5pluspers)).append("\n");
-    sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("    preisProMahlzeit: ").append(toIndentedString(preisProMahlzeit)).append("\n");
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    anzahlWochenLehre: ").append(toIndentedString(anzahlWochenLehre)).append("\n");
     sb.append("    anzahlWochenSchule: ").append(toIndentedString(anzahlWochenSchule)).append("\n");
+    sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("}");
     return sb.toString();
   }

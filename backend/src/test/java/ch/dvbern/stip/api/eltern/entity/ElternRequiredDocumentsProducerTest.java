@@ -19,11 +19,11 @@ class ElternRequiredDocumentsProducerTest {
     @Test
     void requiresIfInBern() {
         RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createBern(ElternTyp.VATER)),
+            producer.getForElternteil(createNotBern(ElternTyp.VATER)),
             DokumentTyp.ELTERN_STEUERUNTERLAGEN_VATER
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createBern(ElternTyp.MUTTER)),
+            producer.getForElternteil(createNotBern(ElternTyp.MUTTER)),
             DokumentTyp.ELTERN_STEUERUNTERLAGEN_MUTTER
         );
     }
@@ -76,27 +76,31 @@ class ElternRequiredDocumentsProducerTest {
         );
     }
 
-    private Eltern createBern(final ElternTyp elternTyp) {
-        return createWithTyp(elternTyp).setAdresse(new Adresse().setPlz("3000"));
+    private Eltern createNotBern(final ElternTyp elternTyp) {
+        return createWithTyp(elternTyp).setAdresse(new Adresse().setPlz("7000"));
     }
 
     private Eltern createSozialhilfebeitraege(final ElternTyp elternTyp) {
-        return createWithTyp(elternTyp).setSozialhilfebeitraegeAusbezahlt(true);
+        return setBernAdresse(createWithTyp(elternTyp).setSozialhilfebeitraegeAusbezahlt(true));
     }
 
     private Eltern createErgaenzungsleistung(final ElternTyp elternTyp) {
-        return createWithTyp(elternTyp).setErgaenzungsleistungAusbezahlt(true);
+        return setBernAdresse(createWithTyp(elternTyp).setErgaenzungsleistungAusbezahlt(true));
     }
 
     private Eltern createAusweisbFluechtling(final ElternTyp elternTyp) {
-        return createWithTyp(elternTyp).setAusweisbFluechtling(true);
+        return setBernAdresse(createWithTyp(elternTyp).setAusweisbFluechtling(true));
     }
 
     private Eltern createWohnkosten(final ElternTyp elternTyp) {
-        return createWithTyp(elternTyp).setWohnkosten(1);
+        return setBernAdresse(createWithTyp(elternTyp).setWohnkosten(1));
     }
 
     private Eltern createWithTyp(final ElternTyp typ) {
         return new Eltern().setElternTyp(typ);
+    }
+
+    private Eltern setBernAdresse(final Eltern eltern) {
+        return eltern.setAdresse(new Adresse().setPlz("3000"));
     }
 }

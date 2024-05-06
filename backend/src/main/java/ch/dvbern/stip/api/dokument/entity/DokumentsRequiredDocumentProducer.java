@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.partner.entity;
+package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,30 +6,28 @@ import java.util.List;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class PartnerRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class DokumentsRequiredDocumentProducer implements RequiredDocumentProducer {
+
     @Override
     public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var partner = formular.getPartner();
-        if (partner == null) {
+        if (formular == null) {
             return ImmutablePair.of("", List.of());
         }
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
 
-        // if fahrkosten > 0
-        if (partner.getFahrkosten() != null && partner.getFahrkosten() > 0) {
-            requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
+        final var pia = formular.getPersonInAusbildung();
+        final var kinds = formular.getKinds();
+        if (!kinds.isEmpty() && pia != null && pia.getZivilstand() == Zivilstand.LEDIG) {
+            requiredDocs.add(DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
         }
 
-        if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
-            requiredDocs.add(DokumentTyp.PARTNER_DOK);
-        }
-
-        return ImmutablePair.of("partner", requiredDocs);
+        return ImmutablePair.of("dokuments", requiredDocs);
     }
 }

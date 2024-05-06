@@ -66,7 +66,7 @@ export const KINDER = {
   iconSymbolName: 'emoji_people',
 };
 
-export const AUSZAHLUNGEN = {
+export const AUSZAHLUNG = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
   currentStepNumber: 9,
@@ -103,7 +103,7 @@ export const gesuchFormSteps = {
   GESCHWISTER,
   PARTNER,
   KINDER,
-  AUSZAHLUNGEN,
+  AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
   DOKUMENTE,
   ABSCHLUSS,
@@ -155,7 +155,7 @@ export const isStepValid = (
     [GESCHWISTER.route]: 'geschwisters',
     [PARTNER.route]: 'partner',
     [KINDER.route]: 'kinds',
-    [AUSZAHLUNGEN.route]: 'auszahlung',
+    [AUSZAHLUNG.route]: 'auszahlung',
     [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
   };
   const field = stepFieldMap[step.route];

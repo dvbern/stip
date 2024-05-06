@@ -2,18 +2,20 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelError } from '@dv/shared/model/error';
-import { Dokument } from '@dv/shared/model/gesuch';
+import { DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
 
 import { SharedDataAccessDokumenteApiEvents } from './shared-data-access-dokumente.events';
 
 export interface State {
-  dokumentes: Dokument[];
+  dokumentes: GesuchDokument[];
+  requiredDocumentTypes: DokumentTyp[];
   loading: boolean;
   error: SharedModelError | undefined;
 }
 
 const initialState: State = {
   dokumentes: [],
+  requiredDocumentTypes: [],
   loading: false,
   error: undefined,
 };
@@ -31,7 +33,6 @@ export const sharedDataAccessDokumentesFeature = createFeature({
         error: undefined,
       }),
     ),
-
     on(
       SharedDataAccessDokumenteApiEvents.dokumentesLoadedSuccess,
       (state, { dokumentes }): State => ({
@@ -42,11 +43,28 @@ export const sharedDataAccessDokumentesFeature = createFeature({
       }),
     ),
     on(
+      SharedDataAccessDokumenteApiEvents.getRequiredDocumentTypeSuccess,
+      (state, { requiredDocumentTypes }): State => ({
+        ...state,
+        requiredDocumentTypes,
+        loading: false,
+        error: undefined,
+      }),
+    ),
+    on(
       SharedDataAccessDokumenteApiEvents.dokumentesLoadedFailure,
-      // add other failure events here (if handled the same way)
       (state, { error }): State => ({
         ...state,
         dokumentes: [],
+        loading: false,
+        error,
+      }),
+    ),
+    on(
+      SharedDataAccessDokumenteApiEvents.getRequiredDocumentTypeFailure,
+      (state, { error }): State => ({
+        ...state,
+        requiredDocumentTypes: [],
         loading: false,
         error,
       }),

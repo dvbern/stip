@@ -190,7 +190,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     );
 
     return nettoerwerbseinkommen > 0 ? DokumentTyp.EK_LOHNABRECHNUNG : null;
-  });
+  }, {});
 
   alimenteSig = toSignal(this.form.controls.alimente.valueChanges);
 

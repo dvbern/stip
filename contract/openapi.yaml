@@ -881,6 +881,58 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+  '/gesuch/{gesuchId}/dokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: GesuchDokumente returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokument'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumente
+  '/gesuch/{gesuchId}/requiredDokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Required DokumentTyp returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DokumentTyp'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getRequiredGesuchDokumentTyp
   '/gesuch/{gesuchId}/einreichen':
     patch:
       tags:
@@ -1345,6 +1397,17 @@ components:
           type: array
           items:
             type: string
+    GesuchDokument:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Dokument:
       required:
         - id
@@ -2133,6 +2196,7 @@ components:
       description: ''
       required:
         - validationErrors
+        - validationWarnings
       type: object
       properties:
         validationErrors:
