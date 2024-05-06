@@ -76,7 +76,6 @@ include:
       context-dir: 'frontend'
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
       e2e-test-image-version: v1.41.1-jammy
-      allow-e2e-test-failure: true
       install-e2e-test-package: false
       e2e-on: 'default'
 
