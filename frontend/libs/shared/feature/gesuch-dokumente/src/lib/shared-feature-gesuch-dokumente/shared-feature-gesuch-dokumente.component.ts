@@ -55,7 +55,7 @@ function getFormStep(
     case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
       return gesuchFormSteps.GESCHWISTER;
     }
-    case DokumentTyp.PARNTER_AUSBILDUNG_LOHNABRECHNUNG:
+    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
     case DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT: {
       return gesuchFormSteps.PARTNER;
     }

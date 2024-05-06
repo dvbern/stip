@@ -27,7 +27,7 @@ public class PartnerRequiredDocumentsProducer implements RequiredDocumentProduce
         }
 
         if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
-            requiredDocs.add(DokumentTyp.PARNTER_AUSBILDUNG_LOHNABRECHNUNG);
+            requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
         }
 
         return ImmutablePair.of("partner", requiredDocs);

@@ -160,7 +160,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     );
 
     return jahreseinkommen > 0
-      ? DokumentTyp.PARNTER_AUSBILDUNG_LOHNABRECHNUNG
+      ? DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG
       : null;
   });
 
