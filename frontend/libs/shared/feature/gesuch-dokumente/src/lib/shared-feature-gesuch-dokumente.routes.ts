@@ -20,7 +20,7 @@ export const sharedFeatureGesuchDokumenteRoutes: Route[] = [
     children: [
       {
         path: ':id',
-        title: 'shared.doukumente.title',
+        title: 'shared.dokumente.title',
         component: SharedFeatureGesuchDokumenteComponent,
       },
       // add more routes here (siblings)

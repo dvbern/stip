@@ -6,7 +6,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 public class AbstractEntityListener {
-
     @PrePersist
     protected void prePersist(AbstractEntity entity) {
         LocalDateTime now = LocalDateTime.now();

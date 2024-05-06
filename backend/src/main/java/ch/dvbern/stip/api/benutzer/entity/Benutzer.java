@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Entity
 @Table(
+    name = "benutzer",
     indexes = {
         @Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
         @Index(name = "IX_benuter_mandant", columnList = "mandant"),
@@ -37,38 +39,39 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Getter
 @Setter
 public class Benutzer extends AbstractMandantEntity {
-
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(name = "keycloak_id", nullable = true, unique = true)
+    @Column(name = "keycloak_id", unique = true)
     private String keycloakId;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "nachname", nullable = false)
     private String nachname;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "vorname", nullable = false)
     private String vorname;
 
     @AhvConstraint(optional = true)
-    @Column(nullable = true)
+    @Column(name = "sozialversicherungsnummer")
+    @Nullable
     private String sozialversicherungsnummer;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "benutzer_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private BenutzerStatus benutzerStatus;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "benutzer_typ", nullable = false)
     @Enumerated(EnumType.STRING)
     private BenutzerTyp benutzerTyp = BenutzerTyp.GESUCHSTELLER;
 
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"), nullable = false)
+    @JoinColumn(name = "benutzereinstellungen_id", foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"), nullable = false)
     private @Valid Benutzereinstellungen benutzereinstellungen;
 
     public String getFullName() {

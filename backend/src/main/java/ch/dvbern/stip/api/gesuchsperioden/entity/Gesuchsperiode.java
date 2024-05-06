@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,11 +41,14 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_gesuchsperiode_aufschalttermin_start", columnList = "aufschalttermin_start"),
-    @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant"),
-    @Index(name = "IX_gesuchsperiode_gesuchsjahr_id", columnList = "gesuchsjahr_id")
-})
+@Table(
+    name = "gesuchsperiode",
+    indexes = {
+        @Index(name = "IX_gesuchsperiode_aufschalttermin_start", columnList = "aufschalttermin_start"),
+        @Index(name = "IX_gesuchsperiode_mandant", columnList = "mandant"),
+        @Index(name = "IX_gesuchsperiode_gesuchsjahr_id", columnList = "gesuchsjahr_id")
+    }
+)
 @Getter
 @Setter
 public class Gesuchsperiode extends AbstractMandantEntity {
@@ -58,7 +62,7 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     private String fiskaljahr;
 
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuchsperiode_gesuchsjahr_id"), nullable = false)
     private @Valid Gesuchsjahr gesuchsjahr;
 

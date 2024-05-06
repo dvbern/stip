@@ -22,11 +22,14 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_zuordnung_fall_id", columnList = "fall_id"),
-    @Index(name = "IX_zuordnung_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-    @Index(name = "IX_zuordnung_mandant", columnList = "mandant")
-})
+@Table(
+    name = "zuordnung",
+    indexes = {
+        @Index(name = "IX_zuordnung_fall_id", columnList = "fall_id"),
+        @Index(name = "IX_zuordnung_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
+        @Index(name = "IX_zuordnung_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class Zuordnung extends AbstractMandantEntity {
@@ -37,7 +40,11 @@ public class Zuordnung extends AbstractMandantEntity {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "sachbearbeiter_id", foreignKey = @ForeignKey(name = "FK_zuordnung_sachbearbeiter_id"), nullable = false)
+    @JoinColumn(
+        name = "sachbearbeiter_id",
+        foreignKey = @ForeignKey(name = "FK_zuordnung_sachbearbeiter_id"),
+        nullable = false
+    )
     private Benutzer sachbearbeiter;
 
     @NotNull

@@ -33,11 +33,11 @@ import lombok.Setter;
 public class DateRange implements Serializable, Comparable<DateRange> {
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "gueltig_ab", nullable = false)
     private LocalDate gueltigAb;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "gueltig_bis", nullable = false)
     private LocalDate gueltigBis;
 
     public DateRange(LocalDate gueltigAb, LocalDate gueltigBis) {

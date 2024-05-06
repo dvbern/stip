@@ -5,6 +5,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,62 +29,68 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Audited
 @Entity
 @IdentischerZivilrechtlicherWohnsitzRequiredConstraint
-@Table(indexes = {
-    @Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
-    @Index(name = "IX_eltern_mandant", columnList = "mandant")
-})
+@Table(
+    name = "eltern",
+    indexes = {
+        @Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
+        @Index(name = "IX_eltern_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 @AhvIfSwissConstraint
 public class Eltern extends AbstractPerson {
-
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"), nullable = false)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"), nullable = false)
     private Adresse adresse;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "sozialversicherungsnummer")
     private String sozialversicherungsnummer;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "eltern_typ", nullable = false)
     @Enumerated(EnumType.STRING)
     private ElternTyp elternTyp;
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = false)
+    @Column(name = "telefonnummer", nullable = false)
     private String telefonnummer;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "wohnkosten", nullable = false)
     private Integer wohnkosten;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "sozialhilfebeitraege_ausbezahlt", nullable = false)
     private Boolean sozialhilfebeitraegeAusbezahlt;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "ausweisb_fluechtling", nullable = false)
     private Boolean ausweisbFluechtling;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "ergaenzungsleistung_ausbezahlt", nullable = false)
     private Boolean ergaenzungsleistungAusbezahlt;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz", nullable = false)
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
+    @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
     private String identischerZivilrechtlicherWohnsitzOrt;
 
+    @Nullable
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(nullable = true)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz")
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "copy_of_id")
     private UUID copyOfId;
 }

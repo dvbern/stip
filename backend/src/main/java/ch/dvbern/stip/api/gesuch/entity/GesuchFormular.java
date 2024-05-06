@@ -117,80 +117,78 @@ import org.hibernate.envers.Audited;
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
-    @Index(name = "IX_gesuch_formular_ausbildung_id", columnList = "ausbildung_id"),
-    @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
-    @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
-    @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
-    @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
-    @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
-})
+@Table(
+    name = "gesuch_formular",
+    indexes = {
+        @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
+        @Index(name = "IX_gesuch_formular_ausbildung_id", columnList = "ausbildung_id"),
+        @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
+        @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
+        @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
+        @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
+        @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class GesuchFormular extends AbstractMandantEntity {
-
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"), nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "person_in_ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"))
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"), nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
     @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Ausbildung ausbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"), nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "familiensituation_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"))
     @HasPageValidation(FamiliensituationPageValidation.class)
     private @Valid Familiensituation familiensituation;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"), nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "partner_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_partner_id"))
     @HasPageValidation(PartnerPageValidation.class)
     private @Valid Partner partner;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"), nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "auszahlung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_auszahlung_id"))
     @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Auszahlung auszahlung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"), nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "einnahmen_kosten_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"))
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 
-    @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("von")
     @HasPageValidation(LebenslaufItemPageValidation.class)
-    private Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
+    private @Valid Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
 
-    @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     @HasPageValidation(GeschwisterPageValidation.class)
-    private Set<Geschwister> geschwisters = new LinkedHashSet<>();
+    private @Valid Set<Geschwister> geschwisters = new LinkedHashSet<>();
 
-    @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(ElternPageValidation.class)
-    private Set<Eltern> elterns = new LinkedHashSet<>();
+    private @Valid Set<Eltern> elterns = new LinkedHashSet<>();
 
-    @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     @HasPageValidation(KindPageValidation.class)
-    private Set<Kind> kinds = new LinkedHashSet<>();
+    private @Valid Set<Kind> kinds = new LinkedHashSet<>();
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
     private @Valid GesuchTranche tranche;

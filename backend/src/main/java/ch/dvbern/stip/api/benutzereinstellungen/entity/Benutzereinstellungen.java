@@ -11,12 +11,15 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Table(indexes = @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant"))
+@Table(
+    name = "benutzereinstellungen",
+    indexes = @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant")
+)
 @Audited
 @Getter
 @Setter
 public class Benutzereinstellungen extends AbstractMandantEntity {
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "digitale_kommunikation", nullable = false)
     private boolean digitaleKommunikation = true;
 }

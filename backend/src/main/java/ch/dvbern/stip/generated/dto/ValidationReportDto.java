@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class ValidationReportDto  implements Serializable {
   private @Valid List<ValidationErrorDto> validationErrors = new ArrayList<>();
-  private @Valid List<ValidationWarningDto> validationWarnings;
+  private @Valid List<ValidationWarningDto> validationWarnings = new ArrayList<>();
 
   /**
    * 
@@ -75,6 +75,7 @@ public class ValidationReportDto  implements Serializable {
 
   
   @JsonProperty("validationWarnings")
+  @NotNull
   public List<ValidationWarningDto> getValidationWarnings() {
     return validationWarnings;
   }

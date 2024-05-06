@@ -5,35 +5,12 @@ describe('selectSharedDataAccessDokumentesView', () => {
   it('selects view', () => {
     const state: State = {
       dokumentes: [],
+      requiredDocumentTypes: [],
       loading: false,
       error: undefined,
     };
-    const gesuch = {
-      gesuchId: undefined,
-      allowTypes: undefined,
-      gesuch: null,
-      gesuchs: [],
-      gesuchFormular: null,
-      loading: false,
-      error: undefined,
-      readonly: false,
-      trancheId: '',
-      cachedGesuchFormular: null,
-      cache: {
-        gesuchId: null,
-        gesuchFormular: null,
-      },
-      lastUpdate: null,
-      validations: { errors: [] },
-      invalidFormularProps: {
-        lastUpdate: null,
-        validations: { errors: undefined, warnings: undefined },
-      },
-    };
-    const result = selectSharedDataAccessDokumentesView.projector(
-      state,
-      gesuch,
-    );
+
+    const result = selectSharedDataAccessDokumentesView.projector(state);
     expect(result).toEqual(state);
   });
 });
