@@ -5,8 +5,9 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
-import ch.dvbern.stip.api.lebenslauf.type.Taetigskeitsart;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,47 +25,54 @@ import org.hibernate.envers.Audited;
 @LebenslaufItemAusbildungFachrichtungConstraint
 @LebenslaufItemAusbildungTitelDesAbschlussesConstraint
 @Entity
-@Table(indexes = @Index(name = "IX_lebenslauf_item_mandant", columnList = "mandant"))
+@Table(
+    name = "lebenslauf_item",
+    indexes = @Index(name = "IX_lebenslauf_item_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 public class LebenslaufItem extends AbstractMandantEntity {
-
-    @Column(nullable = true)
+    @Column(name = "bildungsart")
     @Enumerated(EnumType.STRING)
     private LebenslaufAusbildungsArt bildungsart;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "von", nullable = false)
     private LocalDate von;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "bis", nullable = false)
     private LocalDate bis;
 
-    @Column(nullable = true)
+    @Column(name = "taetigkeitsart")
     @Enumerated(EnumType.STRING)
-    private Taetigskeitsart taetigskeitsart;
+    private Taetigkeitsart taetigkeitsart;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "taetigkeits_beschreibung")
     private String taetigkeitsBeschreibung;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "berufsbezeichnung")
     private String berufsbezeichnung;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "fachrichtung")
     private String fachrichtung;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "titel_des_abschlusses")
     private String titelDesAbschlusses;
 
-    @Column(nullable = false)
+    @Column(name = "ausbildung_abgeschlossen", nullable = false)
     private boolean ausbildungAbgeschlossen = false;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "wohnsitz", nullable = false)
     private WohnsitzKanton wohnsitz;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "copy_of_id")
     private UUID copyOfId;
 }

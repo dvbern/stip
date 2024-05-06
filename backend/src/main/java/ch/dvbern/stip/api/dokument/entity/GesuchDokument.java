@@ -40,17 +40,20 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(indexes = {
-    @Index(name = "IX_gesuch_dokument_gesuch_id", columnList = "gesuch_id"),
-    @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ"),
-    @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
-})
+@Table(
+    name = "gesuch_dokument",
+    indexes = {
+        @Index(name = "IX_gesuch_dokument_gesuch_id", columnList = "gesuch_id"),
+        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ"),
+        @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
+    }
+)
 @Getter
 @Setter
 public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_id"))
+    @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_id"))
     private Gesuch gesuch;
 
     @NotNull

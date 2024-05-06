@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.common.entity;
 import java.math.BigDecimal;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,18 +22,19 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public abstract class AbstractFamilieEntity extends AbstractPerson {
-
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "wohnsitz", nullable = false)
     private Wohnsitz wohnsitz;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "wohnsitz_anteil_mutter")
     @DecimalMax("100.00")
     @DecimalMin("0.00")
     private BigDecimal wohnsitzAnteilMutter;
 
-    @Column(nullable = true)
+    @Nullable
+    @Column(name = "wohnsitz_anteil_vater")
     @DecimalMax("100.00")
     @DecimalMin("0.00")
     private BigDecimal wohnsitzAnteilVater;
