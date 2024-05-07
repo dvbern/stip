@@ -1,12 +1,18 @@
-<html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Silent Refresh</title>
+  </head>
   <body>
     <script>
-      var checks = [/[\?|&|#]code=/, /[\?|&|#]error=/, /[\?|&|#]token=/, /[\?|&|#]id_token=/];
+      var checks = [/[?&#]code=/, /[?&#]error=/, /[?&#]token=/, /[?&#]id_token=/];
 
       function isResponse(str) {
         if (!str) return false;
-        for (var i = 0; i < checks.length; i++) {
-          if (str.match(checks[i])) return true;
+        for (const element of checks) {
+          if (str.match(element)) return true;
         }
         return false;
       }
