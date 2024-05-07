@@ -39,10 +39,6 @@ export class SharedFeatureDownloadComponent implements OnInit {
   });
 
   ngOnInit() {
-    console.log(
-      'SharedFeatureDownloadComponent created',
-      this.oauthService.hasValidAccessToken(),
-    );
     if (this.dcmnt) {
       const dcmnt = this.dcmnt;
 
