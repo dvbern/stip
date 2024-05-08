@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
-import { KeycloakService } from 'keycloak-angular';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 export const hasBenutzer: CanActivateFn = () => {
-  const keycloakService = inject(KeycloakService);
+  const oauthService = inject(OAuthService);
   // TODO: show landing page if not logged in
-  return keycloakService.isLoggedIn();
+  return oauthService.hasValidAccessToken();
 };
