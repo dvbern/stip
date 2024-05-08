@@ -18,6 +18,13 @@ export interface KeycloakResponse {
   scope: string;
 }
 
+export type E2eUser = `GESUCHSTELLER_${1 | 2}` | 'SACHBEARBEITER_1' | 'ADMIN_1';
+
+export type AuthenticatedTest = {
+  storageState: string;
+  authentication: E2eUser;
+};
+
 export const baseConfig = defineConfig({
   use: {
     trace: 'on-first-retry',

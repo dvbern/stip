@@ -27,6 +27,7 @@
           [href]="downloadLinkSig()"
           target="_blank"
           [title]="document.file.filename"
+          [attr.data-testid]="'document-download-' + document.file.filename"
         >
           <span class="material-symbols-rounded align-middle text-muted">download</span>
         </a>
