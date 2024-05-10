@@ -305,16 +305,18 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.form.controls,
           this.viewSig().readonly,
         );
-        this.updateVisbility(
-          this.form.controls.wohnsitzAnteilMutter,
-          this.showWohnsitzSplitterSig(),
-          { resetOnInvisible: true },
-        );
-        this.updateVisbility(
-          this.form.controls.wohnsitzAnteilVater,
-          this.showWohnsitzSplitterSig(),
-          { resetOnInvisible: true },
-        );
+        this.updateVisbilityAndDisbledState({
+          formControl: this.form.controls.wohnsitzAnteilMutter,
+          visible: this.showWohnsitzSplitterSig(),
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+        this.updateVisbilityAndDisbledState({
+          formControl: this.form.controls.wohnsitzAnteilVater,
+          visible: this.showWohnsitzSplitterSig(),
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
       },
       { allowSignalWrites: true },
     );
@@ -362,16 +364,18 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     effect(
       () => {
         const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
-        this.updateVisibilityAndDisabledState(
-          this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
-          !zivilrechtlichIdentisch,
-          this.viewSig().readonly,
-        );
-        this.updateVisibilityAndDisabledState(
-          this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
-          !zivilrechtlichIdentisch,
-          this.viewSig().readonly,
-        );
+        this.updateVisbilityAndDisbledState({
+          formControl:
+            this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
+          visible: !zivilrechtlichIdentisch,
+          disabled: this.viewSig().readonly,
+        });
+        this.updateVisbilityAndDisbledState({
+          formControl:
+            this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
+          visible: !zivilrechtlichIdentisch,
+          disabled: this.viewSig().readonly,
+        });
         this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
         this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
       },
@@ -386,44 +390,61 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         const nationalitaetChanged = nationalitaetChangedSig();
         // If nationality is Switzerland
         if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
-          this.updateVisibilityAndDisabledState(
-            this.form.controls.heimatort,
-            true,
-            this.viewSig().readonly,
-          );
-          this.updateVisibilityAndDisabledState(
-            this.form.controls.vormundschaft,
-            true,
-            this.viewSig().readonly,
-          );
-          this.updateVisbility(this.form.controls.niederlassungsstatus, false, {
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.heimatort,
+            visible: true,
+            disabled: this.viewSig().readonly,
+          });
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.vormundschaft,
+            visible: true,
+            disabled: this.viewSig().readonly,
+          });
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.niederlassungsstatus,
+            visible: false,
+            disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
         }
         // No nationality was selected
         else if (!isDefined(nationalitaetChanged)) {
-          this.updateVisbility(this.form.controls.niederlassungsstatus, false, {
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.niederlassungsstatus,
+            visible: false,
+            disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
-          this.updateVisbility(this.form.controls.heimatort, false, {
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.heimatort,
+            visible: false,
+            disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
-          this.updateVisbility(this.form.controls.vormundschaft, false, {
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.vormundschaft,
+            visible: false,
+            disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
         }
         // Any other nationality was selected
         else {
-          this.updateVisibilityAndDisabledState(
-            this.form.controls.niederlassungsstatus,
-            true,
-            this.viewSig().readonly,
-          );
-          this.updateVisbility(this.form.controls.heimatort, false, {
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.niederlassungsstatus,
+            visible: true,
+            disabled: this.viewSig().readonly,
+          });
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.heimatort,
+            visible: false,
+            disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
-          this.updateVisbility(this.form.controls.vormundschaft, false, {
-            resetOnInvisible: true,
+          this.updateVisbilityAndDisbledState({
+            formControl: this.form.controls.vormundschaft,
+            visible: false,
+            disabled: this.viewSig().readonly,
           });
         }
       },
@@ -443,13 +464,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.form.controls.einreisedatum,
           showEinreisedatum,
         );
-        this.updateVisbility(
-          this.form.controls.einreisedatum,
-          showEinreisedatum,
-          {
-            resetOnInvisible: true,
-          },
-        );
+        this.updateVisbilityAndDisbledState({
+          formControl: this.form.controls.einreisedatum,
+          visible: showEinreisedatum,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
       },
       { allowSignalWrites: true },
     );
@@ -459,12 +479,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         const niederlassungsstatus = this.niederlassungsstatusChangedSig();
         const plz = this.plzChangedSig();
 
-        this.updateVisibilityAndDisabledState(
-          this.form.controls.vermoegenVorjahr,
-          isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
+        this.updateVisbilityAndDisbledState({
+          formControl: this.form.controls.vermoegenVorjahr,
+          visible:
+            isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
             (!!plz && !isFromBern(plz)),
-          this.viewSig().readonly,
-        );
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
       },
       { allowSignalWrites: true },
     );
@@ -592,30 +614,23 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     };
   }
 
-  private updateVisibilityAndDisabledState(
-    formControl: FormControl,
-    visibile: boolean,
-    disabled: boolean,
-    opts = { resetOnInvisible: true },
-  ): void {
-    this.formUtils.setDisabledState(formControl, disabled);
-    this.updateVisbility(formControl, visibile, opts);
-  }
-
-  private updateVisbility(
-    formControl: FormControl,
-    visible: boolean,
-    opts: { resetOnInvisible: boolean },
-  ): void {
+  private updateVisbilityAndDisbledState(options: {
+    formControl: FormControl;
+    visible: boolean;
+    disabled: boolean;
+    resetOnInvisible?: boolean;
+  }): void {
     this.hiddenFieldsSetSig.update((hiddenFieldsSet) => {
-      if (visible) {
-        hiddenFieldsSet.delete(formControl);
-        formControl.enable();
+      if (options.visible) {
+        hiddenFieldsSet.delete(options.formControl);
+        if (!options.disabled) {
+          options.formControl.enable();
+        }
       } else {
-        hiddenFieldsSet.add(formControl);
-        formControl.disable();
-        if (opts.resetOnInvisible) {
-          formControl.reset();
+        hiddenFieldsSet.add(options.formControl);
+        options.formControl.disable();
+        if (options?.resetOnInvisible) {
+          options.formControl.reset();
         }
       }
       return hiddenFieldsSet;
