@@ -293,12 +293,12 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
-    // When Land  null, disable staette
+    // When Land null, disable staette
     effect(
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsstaette,
-          !this.ausbildungsLandSig(),
+          this.viewSig().readonly || !this.ausbildungsLandSig(),
           false,
         );
       },
@@ -315,7 +315,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
-          !staetteSig() || this.viewSig().readonly,
+          this.viewSig().readonly || !staetteSig(),
           !this.viewSig().readonly,
         );
       },
@@ -337,8 +337,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
-          (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()) ||
-            this.viewSig().readonly,
+          this.viewSig().readonly ||
+            (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
           !this.viewSig().readonly,
         );
       },

@@ -69,6 +69,7 @@ import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
@@ -145,7 +146,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
   appSettings = inject(AppSettings);
-  hiddenFieldsSetSig = signal(new Set());
+  hiddenFieldsSetSig = signal(new Set<FormControl>());
   isSozialversicherungsnummerInfoShown = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
@@ -305,13 +306,15 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.form.controls,
           this.viewSig().readonly,
         );
-        this.updateVisbilityAndDisbledState({
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.wohnsitzAnteilMutter,
           visible: this.showWohnsitzSplitterSig(),
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
         });
-        this.updateVisbilityAndDisbledState({
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.wohnsitzAnteilVater,
           visible: this.showWohnsitzSplitterSig(),
           disabled: this.viewSig().readonly,
@@ -364,13 +367,15 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     effect(
       () => {
         const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
-        this.updateVisbilityAndDisbledState({
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl:
             this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
           visible: !zivilrechtlichIdentisch,
           disabled: this.viewSig().readonly,
         });
-        this.updateVisbilityAndDisbledState({
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl:
             this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
           visible: !zivilrechtlichIdentisch,
@@ -390,17 +395,20 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         const nationalitaetChanged = nationalitaetChangedSig();
         // If nationality is Switzerland
         if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.heimatort,
             visible: true,
             disabled: this.viewSig().readonly,
           });
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.vormundschaft,
             visible: true,
             disabled: this.viewSig().readonly,
           });
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.niederlassungsstatus,
             visible: false,
             disabled: this.viewSig().readonly,
@@ -409,19 +417,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         }
         // No nationality was selected
         else if (!isDefined(nationalitaetChanged)) {
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.niederlassungsstatus,
             visible: false,
             disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.heimatort,
             visible: false,
             disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.vormundschaft,
             visible: false,
             disabled: this.viewSig().readonly,
@@ -430,18 +441,21 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         }
         // Any other nationality was selected
         else {
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.niederlassungsstatus,
             visible: true,
             disabled: this.viewSig().readonly,
           });
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.heimatort,
             visible: false,
             disabled: this.viewSig().readonly,
             resetOnInvisible: true,
           });
-          this.updateVisbilityAndDisbledState({
+          updateVisbilityAndDisbledState({
+            hiddenFieldsSetSig: this.hiddenFieldsSetSig,
             formControl: this.form.controls.vormundschaft,
             visible: false,
             disabled: this.viewSig().readonly,
@@ -464,7 +478,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.form.controls.einreisedatum,
           showEinreisedatum,
         );
-        this.updateVisbilityAndDisbledState({
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.einreisedatum,
           visible: showEinreisedatum,
           disabled: this.viewSig().readonly,
@@ -479,7 +494,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         const niederlassungsstatus = this.niederlassungsstatusChangedSig();
         const plz = this.plzChangedSig();
 
-        this.updateVisbilityAndDisbledState({
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.vermoegenVorjahr,
           visible:
             isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
@@ -514,7 +530,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          this.form.disable();
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },
@@ -612,29 +628,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         },
       },
     };
-  }
-
-  private updateVisbilityAndDisbledState(options: {
-    formControl: FormControl;
-    visible: boolean;
-    disabled: boolean;
-    resetOnInvisible?: boolean;
-  }): void {
-    this.hiddenFieldsSetSig.update((hiddenFieldsSet) => {
-      if (options.visible) {
-        hiddenFieldsSet.delete(options.formControl);
-        if (!options.disabled) {
-          options.formControl.enable();
-        }
-      } else {
-        hiddenFieldsSet.add(options.formControl);
-        options.formControl.disable();
-        if (options?.resetOnInvisible) {
-          options.formControl.reset();
-        }
-      }
-      return hiddenFieldsSet;
-    });
   }
 }
 

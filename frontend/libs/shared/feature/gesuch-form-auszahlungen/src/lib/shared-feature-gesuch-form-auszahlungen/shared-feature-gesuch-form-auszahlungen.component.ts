@@ -193,7 +193,7 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
         const { readonly } = this.viewSig();
         if (readonly) {
           Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
+            control.disable({ emitEvent: false }),
           );
         }
       },

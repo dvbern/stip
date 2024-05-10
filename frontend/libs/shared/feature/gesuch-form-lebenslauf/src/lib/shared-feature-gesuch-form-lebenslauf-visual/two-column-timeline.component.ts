@@ -97,12 +97,11 @@ export class TwoColumnTimelineComponent implements OnChanges {
     );
 
     // planned ausbildung
-    const ausbildungsstaette = ausbildungsstaettes.find(
-      (staette) =>
-        staette.ausbildungsgaenge?.some(
-          (ausbildungsgang) =>
-            plannedAusbildung?.ausbildungsgangId === ausbildungsgang.id,
-        ),
+    const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
+      staette.ausbildungsgaenge?.some(
+        (ausbildungsgang) =>
+          plannedAusbildung?.ausbildungsgangId === ausbildungsgang.id,
+      ),
     );
     const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
       (each) => each.id === plannedAusbildung?.ausbildungsgangId,
