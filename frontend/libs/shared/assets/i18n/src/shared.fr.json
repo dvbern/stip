@@ -64,6 +64,7 @@
   "shared.form.error.invalidIBAN": "L'IBAN saisi n'est pas valide",
   "shared.form.error.ahv": "Veuillez fournir un numéro de sécurité sociale valide",
   "shared.form.error.notUniqueAhv": "Le numéro AVS indiqué a déjà été utilisé dans cette demande",
+  "shared.form.error.alreadyUsedAhv": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande",
   "shared.form.error.range": "Veuillez saisir une valeur comprise entre {{min}} et {{max}}.",
   "shared.form.error.dateFormat": "Veuillez saisir une date valide",
   "shared.form.error.minDatePast": "La date est trop éloignée dans le passé",
@@ -93,11 +94,8 @@
   "shared.dokumente.table.upload": "Télécharger",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
-  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.zulagen.required.message}": "Veuillez remplir le champ \"Allocations pour enfants\" dans les recettes et les coûts.",
-  "shared.gesuch.validation.{jakarta.validation.constraints.partner.not.null.required.message}": "Veuillez remplir les informations sur le conjoint / concubin.",
-  "shared.gesuch.validation.{jakarta.validation.constraints.familiensituation.eltern.entity.message}": "Veuillez remplir les informations sur les parents.",
-  "shared.gesuch.validation.{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}": "Veuillez remplir le champ \"Pensions\" dans les recettes et les coûts.",
-  "shared.gesuch.validation.{jakarta.validation.constraints.NotNull.message}": "La section \"{{section}}\" n'est pas complète.",
+  "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande.<br>Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis:",
+  "shared.gesuch.validation.uniqueSvnummer.link": "Personne en formation",
 
   "shared.gesuch.status.ENTWURF": "Brouillon",
   "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
@@ -178,6 +176,7 @@
   "shared.form.person.korrespondenzSprache.label": "Langue de correspondance",
   "shared.form.person.korrespondenzSprache.DEUTSCH": "Allemand",
   "shared.form.person.korrespondenzSprache.FRANZOESISCH": "Français",
+  "shared.form.person.validation.uniqueSvnummer": "Le numéro AVS indiqué a déjà été utilisé dans cette demande.",
 
   "shared.education.title": "Formation",
   "shared.form.education.place.title": "Informations sur la formation",

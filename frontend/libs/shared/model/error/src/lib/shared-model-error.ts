@@ -68,6 +68,8 @@ type ErrorTypes = {
   >;
 };
 
+export type SharedModelValidationError = z.infer<typeof ValidationError>;
+
 export type SharedModelErrorTypes = keyof typeof ErrorTypes;
 
 export const SharedModelError = z.intersection(
