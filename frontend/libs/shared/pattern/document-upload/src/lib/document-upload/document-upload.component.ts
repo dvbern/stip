@@ -16,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { distinctUntilChanged, skip } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -66,17 +67,33 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
     toObservable(this.store.hasUploadedEntriesSig)
       .pipe(skip(1), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(() => {
+        const initialDocuments = this.optionsSig().initialDocuments;
+
         this.globalStore.dispatch(
           SharedDataAccessGesuchEvents.gesuchValidateSteps({
             id: this.optionsSig().gesuchId,
           }),
         );
+
+        if (initialDocuments) {
+          this.globalStore.dispatch(
+            SharedEventGesuchDokumente.loadDocuments({
+              gesuchId: this.optionsSig().gesuchId,
+            }),
+          );
+        }
       });
   }
 
   ngOnInit() {
-    // Only load the documents with the initial required options, not on every change with for example an effect
-    this.store.loadDocuments(this.optionsSig());
+    const initialDocuments = this.optionsSig()?.initialDocuments;
+
+    if (initialDocuments) {
+      this.store.setInitialDocuments(initialDocuments);
+    } else {
+      // Only load the documents with the initial required options, not on every change with for example an effect
+      this.store.loadDocuments(this.optionsSig());
+    }
   }
 
   @HostBinding('class') class = 'd-block align-self-start position-relative';

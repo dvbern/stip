@@ -10,7 +10,9 @@ include:
       allow-test-failure: false
       allow-e2e-test-failure: false
       e2e-on: 'never'
-
+      lint-on: '(branch|mr|default)'
+      test-on: '(branch|mr|default)'
+      
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.8.0'
     inputs:
       sonar-scanner: cli

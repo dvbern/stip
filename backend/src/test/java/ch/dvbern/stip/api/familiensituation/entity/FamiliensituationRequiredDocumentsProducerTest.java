@@ -40,4 +40,15 @@ class FamiliensituationRequiredDocumentsProducerTest {
             DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         );
     }
+
+    @Test
+    void requiresIfAlimentenregelung() {
+        formular.setFamiliensituation(
+            new Familiensituation()
+                .setGerichtlicheAlimentenregelung(true)
+        );
+
+        final var requiredDocuments = producer.getRequiredDocuments(formular);
+        RequiredDocsUtil.requiresOneAndType(requiredDocuments, DokumentTyp.FAMILIENSITUATION_TRENNUNGSKONVENTION);
+    }
 }

@@ -99,9 +99,9 @@ public class ValidationReportDtoSpec {
    * 
    * @return validationWarnings
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<ValidationWarningDtoSpec> getValidationWarnings() {
     return validationWarnings;
@@ -109,7 +109,7 @@ public class ValidationReportDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setValidationWarnings(List<ValidationWarningDtoSpec> validationWarnings) {
     this.validationWarnings = validationWarnings;
   }

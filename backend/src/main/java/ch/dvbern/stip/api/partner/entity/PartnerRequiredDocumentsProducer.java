@@ -26,6 +26,10 @@ public class PartnerRequiredDocumentsProducer implements RequiredDocumentProduce
             requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
         }
 
+        if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
+            requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
+        }
+
         return ImmutablePair.of("partner", requiredDocs);
     }
 }

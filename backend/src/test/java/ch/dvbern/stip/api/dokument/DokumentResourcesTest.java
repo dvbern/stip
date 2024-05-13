@@ -72,7 +72,7 @@ class DokumentResourcesTest {
         gesuchApiSpec.createDokument();
         given()
             .pathParam("gesuchId", gesuchId)
-            .pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+            .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
             .when()
@@ -90,7 +90,7 @@ class DokumentResourcesTest {
         gesuchApiSpec.createDokument();
         given()
             .pathParam("gesuchId", gesuchId)
-            .pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+            .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
             .when()
@@ -105,7 +105,7 @@ class DokumentResourcesTest {
     void test_list_and_read_dokument_for_gesuch() throws IOException {
         var dokumentDtoList = gesuchApiSpec.getDokumenteForTyp()
             .gesuchIdPath(gesuchId)
-            .dokumentTypPath(DokumentTyp.ELTERN_DOK)
+            .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
@@ -118,7 +118,7 @@ class DokumentResourcesTest {
 
         given()
             .pathParam("gesuchId", gesuchId)
-            .pathParam("dokumentTyp", DokumentTyp.ELTERN_DOK)
+            .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .pathParam("dokumentId", dokumentId)
             .when().get("/api/v1" + GesuchApiSpec.GetDokumentOper.REQ_URI)
             .then()
@@ -133,7 +133,7 @@ class DokumentResourcesTest {
         gesuchApiSpec.deleteDokument()
             .gesuchIdPath(gesuchId)
             .dokumentIdPath(dokumentId)
-            .dokumentTypPath(DokumentTyp.ELTERN_DOK)
+            .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());

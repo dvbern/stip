@@ -1,6 +1,6 @@
 import { Signal, computed } from '@angular/core';
 
-import { DokumentTyp } from '@dv/shared/model/gesuch';
+import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
 
 import { DocumentOptions } from '../upload.model';
 
@@ -19,9 +19,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
   PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG: 'shared.form.person.file.ZIVILSTAND',
   PERSON_AUSWEIS: 'shared.form.person.file.HEIMATORT',
-  ELTERN_DOK: 'shared.form.person.file.ELTERN_DOK',
-  AUSBILDUNG_DOK: 'shared.form.person.file.AUSBILDUNG_DOK',
-  PARTNER_DOK: 'shared.form.person.file.PARTNER_DOK',
   FAMILIENSITUATION_GEBURTSSCHEIN:
     'shared.form.familiensituation.file.GEBURTSSCHEIN',
   FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER:
@@ -55,7 +52,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION:
     'shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION',
   KINDER_ALIMENTENVERORDUNG: 'shared.form.kinder.file.ALIMENTENVERORDNUNG',
-  PARNTER_AUSBILUNG_LOHNABRECHNUNG:
+  PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
     'shared.form.partner.file.AUSBILDUNG_LOHNABRECHNUNG',
   PARTNER_BELEG_OV_ABONNEMENT: 'shared.form.partner.file.OV_ABONNEMENT',
   AUSZAHLUNG_ABTRETUNGSERKLAERUNG:
@@ -126,11 +123,11 @@ export function createUploadOptionsFactory<
    * ```
    *
    * @param lazyDokumentTyp - a function that should return the {@link DokumentTyp} or `null | undefined` if the upload is not required
-   * @param options - additional options for the upload
+   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization, but display the provided documents instead.
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
-    options?: { singleUpload?: boolean },
+    options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
     return computed<DocumentOptions | null>(() => {
       const gesuchId = view().gesuchId;
@@ -143,8 +140,28 @@ export function createUploadOptionsFactory<
             dokumentTyp,
             singleUpload: options?.singleUpload ?? false,
             gesuchId,
+            initialDocuments: options?.initialDocuments,
           }
         : null;
     });
+  };
+}
+
+export function createDocumentOptions(options: {
+  gesuchId: string;
+  allowTypes: string;
+  dokumentTyp: DokumentTyp;
+  initialDocuments?: Dokument[];
+  singleUpload?: boolean;
+}): DocumentOptions {
+  const { gesuchId, allowTypes, dokumentTyp, initialDocuments, singleUpload } =
+    options;
+  return {
+    allowTypes,
+    titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+    dokumentTyp,
+    singleUpload: singleUpload ?? false,
+    gesuchId,
+    initialDocuments,
   };
 }

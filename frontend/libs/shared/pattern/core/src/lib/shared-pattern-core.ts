@@ -30,6 +30,7 @@ import {
   TranslateLoader,
   TranslateModule,
 } from '@ngx-translate/core';
+import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 
 import {
@@ -79,6 +80,7 @@ export function provideSharedPatternCore(
 ): ApplicationConfig['providers'] {
   return [
     // providers
+    provideOAuthClient(),
     provideSharedPatternAppInitialization(),
     provideSharedAppSettings(compileTimeConfig.appType),
     provideAnimations(),

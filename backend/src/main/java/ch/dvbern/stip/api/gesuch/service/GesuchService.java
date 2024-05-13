@@ -33,17 +33,20 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
+import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -62,7 +65,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchService {
-
     private final GesuchRepository gesuchRepository;
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
@@ -71,9 +73,10 @@ public class GesuchService {
     private final GesuchsperiodenService gesuchsperiodeService;
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
-    private final GesuchFormularRepository gesuchFormularRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
-    private final ZuordnungService zuordnungService;
+    private final GesuchDokumentMapper gesuchDokumentMapper;
+    private final RequiredDokumentService requiredDokumentService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -226,6 +229,19 @@ public class GesuchService {
         violations.addAll(validator.validate(gesuchFormular));
 
         return ValidationsExceptionMapper.toDto(violations);
+    }
+
+    @Transactional
+    public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
+        return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
+    }
+
+    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular();
+        return requiredDokumentService.getRequiredDokumenteForGesuch(formular);
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {

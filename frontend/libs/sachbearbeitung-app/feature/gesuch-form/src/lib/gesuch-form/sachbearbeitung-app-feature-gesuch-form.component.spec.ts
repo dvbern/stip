@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
@@ -12,6 +13,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(),
         provideMockStore({
           initialState: {
             gesuchs: {

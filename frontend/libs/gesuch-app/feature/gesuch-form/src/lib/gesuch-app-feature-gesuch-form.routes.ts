@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
-  AUSZAHLUNGEN,
+  AUSZAHLUNG,
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
@@ -50,9 +50,9 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
       ),
   },
   {
-    path: AUSZAHLUNGEN.route,
+    path: AUSZAHLUNG.route,
     resolve: {
-      step: () => AUSZAHLUNGEN,
+      step: () => AUSZAHLUNG,
     },
     title: 'shared.auszahlung.title',
     loadChildren: () =>

@@ -5,6 +5,8 @@ We use Liquibase to generate and ultimately apply our migrations. The Liquibase 
 We use the Liquibase Maven plugin to automatically generate changelogs based on the DB and the JPA entities, where the JPA entities are our source of truth. To do this, execute
 
     mvnw liquibase:diff
+
+**Imporant:** Ensure that you run this command against a DB with the old state, so that any diff generated and applied is truly only the diff you intend. To ensure that, you can activate Liquibases's clean-at-start by either editing `application.yml` and setting `liquibase: clean-at-start: true` or setting the `QUARKUS_LIQUIBASE_CLEAN_AT_START` env variable to `true`.
     
 This will generate a `XXXXX_diffchange.xml` changelog with only your changes in the `src/resources/db/migration` directory. You should always check the generated changelog for any potential errors. For example, Liquibase will generate `NOT NULL` constraints on properties with the `@NotNull` annotation, which is nice, but it will also generate those constraints on properties that have `@NotNull(groups = ...)` i.e. conditionally not null properties, which will break things.
 

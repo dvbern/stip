@@ -1,10 +1,10 @@
-@if (viewSig().loading) {
+@if (gesuchViewSig().loading) {
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
 } @else {
   <div class="col-12">
-    <div class="container card pb-4 pt-5 mt-5 shadow">
+    <div class="container card pb-3 pt-3 mt-5 shadow">
       <div class="row overflow-auto">
-        <table class="document-table" mat-table [dataSource]="dokumenteDataSourceSig()">
+        <table class="document-table" mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn">
           <caption class="cdk-visually-hidden">
             {{
               'shared.dokumente.table.description' | translate
@@ -20,7 +20,7 @@
               *matHeaderCellDef
             ></th>
             <td class="status-cell" mat-cell *matCellDef="let dokument">
-              @if (dokument.status) {
+              @if (dokument.id) {
                 <span class="badge-round bg-success">
                   <i class="material-symbols-rounded fs-6">check</i>
                 </span>
@@ -38,7 +38,7 @@
               {{ 'shared.dokumente.table.requiredDocuments' | translate }}
             </th>
             <td mat-cell *matCellDef="let dokument">
-              {{ dokument.documentName }}
+              {{ dokument.titleKey | translate }}
             </td>
           </ng-container>
 
@@ -47,20 +47,10 @@
             <th mat-header-cell *matHeaderCellDef>
               {{ 'shared.dokumente.table.formStep' | translate }}
             </th>
-            <td mat-cell *matCellDef="let dokument">
-              <a [routerLink]="['/gesuch', dokument.formStep.route, viewSig().gesuchId]">
+            <td class="text-nowrap" mat-cell *matCellDef="let dokument">
+              <a [routerLink]="['/gesuch', dokument.formStep.route, gesuchViewSig().gesuchId]">
                 {{ dokument.formStep.translationKey | translate }}
               </a>
-            </td>
-          </ng-container>
-
-          <!-- filename -->
-          <ng-container matColumnDef="filename">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ 'shared.dokumente.table.filename' | translate }}
-            </th>
-            <td mat-cell *matCellDef="let dokument">
-              {{ dokument.filename }}
             </td>
           </ng-container>
 
@@ -74,44 +64,16 @@
             ></th>
             <td mat-cell class="action-cell" *matCellDef="let dokument">
               <div class="action-cell-content">
-                @if (dokument.status) {
-                  <button
-                    type="button"
-                    [title]="'shared.dokumente.table.download' | translate"
-                    class="btn btn-sm btn-link"
-                    (click)="downloadDocument(dokument.id)"
-                  >
-                    <i class="material-symbols-rounded">download</i>
-                  </button>
-                  <button
-                    type="button"
-                    [title]="'shared.dokumente.table.delete' | translate"
-                    class="btn btn-sm btn-link"
-                    (click)="handleDocumentDelete(dokument.id)"
-                  >
-                    <i class="material-symbols-rounded fs-4">delete</i>
-                  </button>
-                } @else {
-                  <button
-                    type="button"
-                    [title]="'shared.dokumente.table.upload' | translate"
-                    class="btn btn-outline-primary btn-sm"
-                    (click)="uploadDocument(dokument.objectId)"
-                  >
-                    <i class="material-symbols-rounded">upload</i>
-                  </button>
-                }
+                <dv-shared-pattern-document-upload
+                  [optionsSig]="dokument.documentOptions"
+                ></dv-shared-pattern-document-upload>
               </div>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-          <tr
-            [ngClass]="{ warning: dokument.status === false }"
-            mat-row
-            *matRowDef="let dokument; columns: displayedColumns"
-          ></tr>
+          <tr [ngClass]="{ warning: !dokument.id }" mat-row *matRowDef="let dokument; columns: displayedColumns"></tr>
         </table>
       </div>
     </div>
