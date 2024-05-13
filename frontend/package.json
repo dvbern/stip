@@ -39,7 +39,8 @@
     "format:test": "nx format:check --all",
     "format:write": "nx format:write --all",
     "openapi": "ts-node scripts/openapi-build.ts",
-    "openapi:extract-current-templates": "openapi-generator-cli author template -g typescript-angular -o scripts/conf/openapi-templates/default-6.5.0"
+    "openapi:extract-current-templates": "openapi-generator-cli author template -g typescript-angular -o scripts/conf/openapi-templates/default-6.5.0",
+    "set-version": "ts-node scripts/version-from-pom.ts"
   },
   "private": true,
   "dependencies": {
