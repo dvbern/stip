@@ -45,8 +45,8 @@ public class ZuordnungService {
         // Load all StammdatenSachbearbeiterZuordnungen from DB
         final var stammdaten = sachbearbeiterZuordnungStammdatenRepository.findAll().stream().toList();
         final var zuordnungen = zuordnungRepository
-                .findAllWithType(ZuordnungType.AUTOMATIC)
-                .collect(Collectors.toMap(zuordnung -> zuordnung.getFall().getId(), zuordnung -> zuordnung));
+            .findAllWithType(ZuordnungType.AUTOMATIC)
+            .collect(Collectors.toMap(zuordnung -> zuordnung.getFall().getId(), zuordnung -> zuordnung));
 
         final var newZuordnungen = new ArrayList<Zuordnung>();
 
@@ -62,27 +62,21 @@ public class ZuordnungService {
             if (zuordnung == null) {
                 // If none exists, create a new one and add it to the list to persist
                 zuordnung = new Zuordnung()
-                        .setZuordnungType(ZuordnungType.AUTOMATIC)
-                        .setFall(newest.getFall())
-                        .setSachbearbeiter(sbToAssign.get());
+                    .setZuordnungType(ZuordnungType.AUTOMATIC)
+                    .setFall(newest.getFall())
+                    .setSachbearbeiter(sbToAssign.get());
 
                 newZuordnungen.add(zuordnung);
             } else {
                 // If one exists, update it
                 zuordnung
-                        .setSachbearbeiter(sbToAssign.get())
-                        .setZuordnungType(ZuordnungType.AUTOMATIC);
+                    .setSachbearbeiter(sbToAssign.get())
+                    .setZuordnungType(ZuordnungType.AUTOMATIC);
             }
         });
 
         // Persist the new Zuordnungen
         zuordnungRepository.persist(newZuordnungen);
-
-        // All existing automatic Zuordnungen should have been edited, if not, then at least one Fall has no bearbeiter
-        // In that case, drop those, so we can easily query them
-        if (!zuordnungen.isEmpty()) {
-            zuordnungRepository.deleteByFallIds(zuordnungen.keySet());
-        }
     }
 
     private Optional<Benutzer> findSbToAssign(
