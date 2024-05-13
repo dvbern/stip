@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.common.validation;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 
 import static java.lang.Thread.currentThread;
@@ -19,9 +20,11 @@ public class CustomConstraintViolation {
         );
     private final String message;
     private final String messageTemplate;
+    private final String propertyPath;
 
-    public CustomConstraintViolation(String messageTamplate) {
+    public CustomConstraintViolation(String messageTamplate, String propertyPath) {
         this.messageTemplate = messageTamplate;
         this.message = VALIDATION_MESSAGE_BUNDLE.getString(messageTamplate);
+        this.propertyPath = propertyPath;
     }
 }
