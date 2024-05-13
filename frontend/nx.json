@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build", "^prepare"],
+      "dependsOn": ["^build", "prepare"],
       "inputs": ["production", "^production"],
       "cache": true
     },
