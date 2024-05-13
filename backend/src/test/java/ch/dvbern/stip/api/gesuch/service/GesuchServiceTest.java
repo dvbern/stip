@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -810,21 +811,25 @@ class GesuchServiceTest {
 
     @Test
     void pageValidation() {
-        final var gesuch = new GesuchFormular();
-        var reportDto = gesuchService.validatePages(gesuch);
+        final var gesuch = new Gesuch();
+        final var gesuchTranche = new GesuchTranche();
+        final var gesuchFormular = new GesuchFormular();
+        gesuchTranche.setGesuch(gesuch);
+        gesuchFormular.setTranche(gesuchTranche);
+        var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         assertThat(reportDto.getValidationErrors(), is(empty()));
 
-        gesuch.setEinnahmenKosten(new EinnahmenKosten());
-        reportDto = gesuchService.validatePages(gesuch);
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
+        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         var violationCount = reportDto.getValidationErrors().size();
         assertThat(reportDto.getValidationErrors(), is(not(empty())));
 
-        gesuch.setFamiliensituation(
+        gesuchFormular.setFamiliensituation(
             new Familiensituation()
                 .setElternteilUnbekanntVerstorben(true)
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
-        reportDto = gesuchService.validatePages(gesuch);
+        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         assertThat(reportDto.getValidationErrors().size(), is(greaterThan(violationCount)));
     }
 
