@@ -25,6 +25,7 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setFachrichtung(faker.educator().course());
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
             model.setIsAusbildungAusland(false);
+            model.setAusbildungsort("Bern");
         });
 
     public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung =
