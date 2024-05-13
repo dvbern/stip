@@ -6,6 +6,12 @@
   "sourceRoot": "apps/sachbearbeitung-app/src",
   "tags": ["type:app", "scope:sachbearbeitung-app"],
   "targets": {
+    "prepare": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "set-version"
+      }
+    },
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
