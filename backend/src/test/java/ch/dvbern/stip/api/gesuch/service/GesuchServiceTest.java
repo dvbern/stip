@@ -733,13 +733,11 @@ class GesuchServiceTest {
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(
-            Stream.of(
-                (Gesuch) new Gesuch()
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
+            new Gesuch()
                 .setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT)
                 .setId(UUID.randomUUID())
-            )
-        );
+        ));
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
