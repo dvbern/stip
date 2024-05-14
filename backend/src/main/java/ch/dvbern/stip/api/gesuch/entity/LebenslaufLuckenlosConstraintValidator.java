@@ -30,9 +30,6 @@ public class LebenslaufLuckenlosConstraintValidator
         LocalDate start = gesuchFormular.getPersonInAusbildung().getGeburtsdatum().withMonth(8).withDayOfMonth(1);
         start = start.plusYears(16);
         LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin();
-        if (start.getYear() >= stop.getYear() && gesuchFormular.getLebenslaufItems().isEmpty()) {
-            return true;
-        }
         List<DateRange> dateRanges = new ArrayList<>();
         gesuchFormular.getLebenslaufItems().stream().forEach(
             lebenslaufItem -> dateRanges.add(new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
