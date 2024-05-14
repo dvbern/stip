@@ -1,7 +1,8 @@
-import { createFeature, createReducer, on } from '@ngrx/store';
+import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 
 import { SharedModelError } from '@dv/shared/model/error';
 import { DeploymentConfig } from '@dv/shared/model/gesuch';
+import { VERSION } from '@dv/shared/model/version';
 
 import { SharedDataAccessConfigEvents } from './shared-data-access-config.events';
 
@@ -52,11 +53,13 @@ export const sharedDataAccessConfigsFeature = createFeature({
   ),
 });
 
-export const {
-  name, // feature name
-  reducer,
-  selectConfigsState,
-  selectDeploymentConfig,
-  selectLoading,
-  selectError,
-} = sharedDataAccessConfigsFeature;
+const selectVersion = createSelector(
+  sharedDataAccessConfigsFeature.selectDeploymentConfig,
+  (config) => ({
+    frontend: VERSION,
+    backend: config?.version,
+    sameVersion: config?.version === VERSION,
+  }),
+);
+
+export { selectVersion };

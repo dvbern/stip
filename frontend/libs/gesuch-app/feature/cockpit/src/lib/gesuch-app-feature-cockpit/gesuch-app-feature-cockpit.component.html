@@ -12,7 +12,7 @@
       <!-- main column -->
       <div class="col-lg-8 mb-lg-5">
         <!-- progress -->
-        @if (cockpitView().loading) {
+        @if (cockpitViewSig().loading) {
           <div class="my-4">
             <dv-shared-ui-loading data-testid="cockpit-loadig" class="text-white"></dv-shared-ui-loading>
           </div>
@@ -21,7 +21,7 @@
         <!-- period 1-2 -->
         @if (fall$ | async; as fall) {
           <div>
-            @for (periode of cockpitView().gesuchsperiodes; track trackByPerioden($index, periode)) {
+            @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
               <div
                 class="card mb-5 shadow-lg"
                 [class.col-md-6]="!periode.gesuchId"
@@ -184,15 +184,5 @@
 
   <!-- DESKTOP HEADER (RIGHT) -->
   <div class="header-desktop-right d-flex gap-4 align-items-center"></div>
-  <div class="position-absolute me-2 bottom-0 end-0 text-white text-end">
-    Version:
-    @if (cockpitView().version.sameVersion) {
-      {{ cockpitView().version.frontend }}
-    } @else {
-      @if (cockpitView().version.backend; as backendVersion) {
-        Backend: {{ backendVersion }}
-      }
-      - Frontend: {{ cockpitView().version.frontend }}
-    }
-  </div>
+  <dv-shared-ui-version-text [version]="cockpitViewSig().version" class="text-white"></dv-shared-ui-version-text>
 </dv-gesuch-app-pattern-main-layout>

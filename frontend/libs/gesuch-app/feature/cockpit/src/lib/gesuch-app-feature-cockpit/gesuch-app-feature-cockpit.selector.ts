@@ -1,17 +1,16 @@
 import { createSelector } from '@ngrx/store';
 import { addDays, isAfter, isBefore } from 'date-fns';
 
-import { sharedDataAccessConfigsFeature } from '@dv/shared/data-access/config';
+import { selectVersion } from '@dv/shared/data-access/config';
 import { sharedDataAccessGesuchsFeature } from '@dv/shared/data-access/gesuch';
 import { selectSharedDataAccessGesuchsperiodesView } from '@dv/shared/data-access/gesuchsperiode';
-import { VERSION } from '@dv/shared/model/version';
 
 export const selectGesuchAppFeatureCockpitView = createSelector(
   selectSharedDataAccessGesuchsperiodesView,
   sharedDataAccessGesuchsFeature.selectGesuchs,
   sharedDataAccessGesuchsFeature.selectLoading,
-  sharedDataAccessConfigsFeature.selectDeploymentConfig,
-  (gesuchsPerioden, gesuche, gesucheLoading, config) => ({
+  selectVersion,
+  (gesuchsPerioden, gesuche, gesucheLoading, version) => ({
     ...gesuchsPerioden,
 
     gesuchsperiodes: gesuchsPerioden.gesuchsperiodes
@@ -26,10 +25,6 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
         gesuchId: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id)
           ?.id,
       })),
-    version: {
-      frontend: VERSION,
-      backend: config?.version,
-      sameVersion: config?.version === VERSION,
-    },
+    version,
   }),
 );

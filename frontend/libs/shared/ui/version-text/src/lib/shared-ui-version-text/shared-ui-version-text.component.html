@@ -1,0 +1,8 @@
+@if (version.sameVersion) {
+  Version: {{ version.frontend }}
+} @else {
+  @if (version.backend; as backendVersion) {
+    Version Backend: {{ backendVersion }} -
+  }
+  Version Frontend: {{ version.frontend }}
+}
