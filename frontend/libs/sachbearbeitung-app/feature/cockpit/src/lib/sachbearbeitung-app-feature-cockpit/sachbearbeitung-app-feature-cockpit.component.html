@@ -172,4 +172,15 @@
       </div>
     </div>
   </div>
+  <div class="position-absolute me-2 bottom-0 end-0 text-end text-muted">
+    Version:
+    @if (cockpitViewSig().version.sameVersion) {
+      {{ cockpitViewSig().version.frontend }}
+    } @else {
+      @if (cockpitViewSig().version.backend; as backendVersion) {
+        Backend: {{ backendVersion }}
+      }
+      - Frontend: {{ cockpitViewSig().version.frontend }}
+    }
+  </div>
 </dv-sachbearbeitung-app-pattern-overview-layout>

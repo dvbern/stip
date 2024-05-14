@@ -8,7 +8,17 @@ if (!version) {
   throw Error("'VERSION' environment variable is not set! Aborting build.");
 }
 
-const file = resolve(__dirname, '..', 'libs', 'shared', 'version.ts');
+const file = resolve(
+  __dirname,
+  '..',
+  'libs',
+  'shared',
+  'model',
+  'version',
+  'src',
+  'lib',
+  'version.ts',
+);
 writeFileSync(
   file,
   `// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECK INTO GIT
