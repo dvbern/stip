@@ -48,6 +48,9 @@ public class ApiClient {
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
     }
+    public DokumentApiSpec dokument() {
+        return DokumentApiSpec.dokument(config.reqSpecSupplier);
+    }
     public FallApiSpec fall() {
         return FallApiSpec.fall(config.reqSpecSupplier);
     }

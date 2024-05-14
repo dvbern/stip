@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -44,6 +45,7 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
+    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private UUID gesuchId;
     private UUID dokumentId;
@@ -69,14 +71,14 @@ class DokumentResourcesTest {
     @Order(2)
     void test_create_dokument_with_wrong_mime_type() {
         File file = new File(TEST_XML_FILE_LOCATION);
-        gesuchApiSpec.createDokument();
+        dokumentApiSpec.createDokument();
         given()
             .pathParam("gesuchId", gesuchId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
             .when()
-            .post("/api/v1" + GesuchApiSpec.CreateDokumentOper.REQ_URI)
+            .post("/api/v1" + DokumentApiSpec.CreateDokumentOper.REQ_URI)
             .then()
             .statusCode(Status.BAD_REQUEST.getStatusCode());
     }
@@ -87,14 +89,14 @@ class DokumentResourcesTest {
     void test_create_dokument_for_gesuch() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_FILE_LOCATION);
-        gesuchApiSpec.createDokument();
+        dokumentApiSpec.createDokument();
         given()
             .pathParam("gesuchId", gesuchId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
             .when()
-            .post("/api/v1" + GesuchApiSpec.CreateDokumentOper.REQ_URI)
+            .post("/api/v1" + DokumentApiSpec.CreateDokumentOper.REQ_URI)
             .then()
             .statusCode(Status.CREATED.getStatusCode());
     }
@@ -103,7 +105,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(4)
     void test_list_and_read_dokument_for_gesuch() throws IOException {
-        var dokumentDtoList = gesuchApiSpec.getDokumenteForTyp()
+        var dokumentDtoList = dokumentApiSpec.getDokumenteForTyp()
             .gesuchIdPath(gesuchId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
@@ -120,7 +122,7 @@ class DokumentResourcesTest {
             .pathParam("gesuchId", gesuchId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .pathParam("dokumentId", dokumentId)
-            .when().get("/api/v1" + GesuchApiSpec.GetDokumentOper.REQ_URI)
+            .when().get("/api/v1" + DokumentApiSpec.GetDokumentOper.REQ_URI)
             .then()
             .statusCode(200)
             .body(equalTo(readFileData()));
@@ -130,7 +132,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(5)
     void test_delete_dokument() {
-        gesuchApiSpec.deleteDokument()
+        dokumentApiSpec.deleteDokument()
             .gesuchIdPath(gesuchId)
             .dokumentIdPath(dokumentId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)

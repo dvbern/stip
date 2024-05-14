@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ConfigResourceTest {
-
     public final ConfigurationApiSpec configurationApiSpec =
         ConfigurationApiSpec._configuration(RequestSpecUtil.quarkusSpec());
 

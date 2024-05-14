@@ -119,6 +119,14 @@
       <artifactId>quarkus-vertx</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt-build</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
       <version>${mapstruct.version}</version>
@@ -603,6 +611,7 @@
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
                     </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                    <useTags>true</useTags>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
