@@ -97,19 +97,18 @@ public class DokumentResourceImpl implements DokumentResource {
             .recoverWithItem(Response.serverError().build());
     }
 
-    // TODO cleanup
     @Override
     @Blocking
     public RestMulti<Buffer> getDokument(UUID dokumentId, String token) {
         JsonWebToken jwt;
         try {
-            jwt = jwtParser.verify(token, "6a5336d35a192000260cbc9b41a1cb39");
+            jwt = jwtParser.verify(token, configService.getSecret());
         } catch (ParseException e) {
             throw new UnauthorizedException();
         }
 
-        final var allowedDokumentId = UUID.fromString(
-            (String) jwt.claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM)
+        final var allowedDokumentId = UUID.fromString((String)
+            jwt.claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM)
                 .orElseThrow(BadRequestException::new)
         );
 
