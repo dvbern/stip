@@ -15,10 +15,10 @@ import { StatusColor } from '@dv/shared/model/gesuch';
 import { NotificationType } from '@dv/shared/model/global-notification';
 
 const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
-  SEVERE: 'mat-danger',
-  ERROR: 'mat-danger',
+  SEVERE: 'mat-warn',
+  ERROR: 'mat-warn',
   INFO: 'mat-info',
-  WARNING: 'mat-warn',
+  WARNING: 'mat-caution',
   SUCCESS: 'mat-success',
 };
 const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [

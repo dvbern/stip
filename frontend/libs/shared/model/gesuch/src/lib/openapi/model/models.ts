@@ -39,6 +39,7 @@ export * from './geschwister';
 export * from './geschwisterUpdate';
 export * from './gesuch';
 export * from './gesuchCreate';
+export * from './gesuchDokument';
 export * from './gesuchFormular';
 export * from './gesuchFormularUpdate';
 export * from './gesuchTranche';

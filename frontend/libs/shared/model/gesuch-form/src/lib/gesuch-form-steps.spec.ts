@@ -6,7 +6,7 @@ import {
 
 import {
   AUSBILDUNG,
-  AUSZAHLUNGEN,
+  AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
@@ -50,7 +50,7 @@ const validationCases = typeGuard<
   [GESCHWISTER, 'geschwisters'],
   [PARTNER, 'partner'],
   [KINDER, 'kinds'],
-  [AUSZAHLUNGEN, 'auszahlung'],
+  [AUSZAHLUNG, 'auszahlung'],
   [EINNAHMEN_KOSTEN, 'einnahmenKosten'],
 ]).map(
   ([step, ...rest]) =>

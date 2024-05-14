@@ -4,13 +4,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  OnInit,
   computed,
   inject,
   input,
 } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { addSeconds } from 'date-fns';
-import { KeycloakService } from 'keycloak-angular';
 import { debounceTime, filter, take } from 'rxjs';
 
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -22,11 +23,11 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
   templateUrl: './shared-feature-download.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureDownloadComponent {
+export class SharedFeatureDownloadComponent implements OnInit {
   gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
   typeSig = input.required<string>({ alias: 'type' });
   dokumentIdSig = input.required<string>({ alias: 'dokumentId' });
-  keycloakService = inject(KeycloakService);
+  oauthService = inject(OAuthService);
   dcmnt = inject(DOCUMENT, { optional: true });
   appRef = inject(ApplicationRef);
 
@@ -37,26 +38,26 @@ export class SharedFeatureDownloadComponent {
     return `/api/v1/gesuch/${this.gesuchIdSig()}/dokument/${this.typeSig()}/${this.dokumentIdSig()}`;
   });
 
-  constructor() {
+  ngOnInit() {
     if (this.dcmnt) {
       const dcmnt = this.dcmnt;
-      this.keycloakService.getToken().then((token) => {
-        dcmnt.cookie = `token=${token}; expires=${addSeconds(
-          new Date(),
-          30,
-        )}; Secure; Path=${this.apiPathSig()}`;
-        dcmnt.location.href = this.apiPathSig();
 
-        this.appRef.isStable
-          .pipe(
-            filter((isStable) => isStable),
-            debounceTime(1000),
-            take(1),
-          )
-          .subscribe(() => {
-            dcmnt.defaultView?.close();
-          });
-      });
+      const token = this.oauthService.getAccessToken();
+      dcmnt.cookie = `token=${token}; expires=${addSeconds(
+        new Date(),
+        30,
+      ).toUTCString()}; Secure; Path=${this.apiPathSig()}`;
+      dcmnt.location.href = this.apiPathSig();
+
+      this.appRef.isStable
+        .pipe(
+          filter((isStable) => isStable),
+          debounceTime(1000),
+          take(1),
+        )
+        .subscribe(() => {
+          dcmnt.defaultView?.close();
+        });
     }
   }
 }

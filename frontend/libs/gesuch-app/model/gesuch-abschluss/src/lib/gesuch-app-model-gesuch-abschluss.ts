@@ -11,6 +11,8 @@ export const toAbschlussPhase = (
   switch (gesuch.gesuchStatus) {
     case 'IN_BEARBEITUNG_GS':
       return isComplete ? 'READY_TO_SEND' : 'NOT_READY';
+    case 'KOMPLETT_EINGEREICHT':
+      return 'SUBMITTED';
     default:
       return 'SUBMITTED';
   }

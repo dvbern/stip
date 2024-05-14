@@ -2,7 +2,7 @@ import { importProvidersFrom } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { KeycloakAngularModule } from 'keycloak-angular';
+import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import {
   CompiletimeConfig,
@@ -16,10 +16,10 @@ export function provideSharedPatternJestTestSetup(
   },
 ) {
   return [
+    provideOAuthClient(),
     importProvidersFrom([
       RouterTestingModule,
       TranslateModule.forRoot(),
-      KeycloakAngularModule,
       NoopAnimationsModule,
     ]),
     {

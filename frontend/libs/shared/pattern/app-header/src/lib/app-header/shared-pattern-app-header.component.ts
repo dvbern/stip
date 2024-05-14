@@ -20,7 +20,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgbOffcanvas, NgbOffcanvasModule } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { KeycloakService } from 'keycloak-angular';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
 import {
@@ -59,7 +59,7 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
 
   protected readonly Breakpoints = Breakpoints;
   protected breakpointObserver = inject(BreakpointObserver);
-  private keyCloakService = inject(KeycloakService);
+  private oauthService = inject(OAuthService);
   private offCanvasService = inject(NgbOffcanvas);
   private store = inject(Store);
   private cd = inject(ChangeDetectorRef);
@@ -96,7 +96,7 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
   }
 
   logout() {
-    this.keyCloakService.logout();
+    this.oauthService.revokeTokenAndLogout();
   }
 
   handleLanguageChangeHeader(language: Language) {

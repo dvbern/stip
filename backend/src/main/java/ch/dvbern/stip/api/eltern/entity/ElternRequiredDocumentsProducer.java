@@ -47,7 +47,7 @@ public class ElternRequiredDocumentsProducer {
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
 
-        if (plzOrtService.isInBern(elternteil.getAdresse())) {
+        if (!plzOrtService.isInBern(elternteil.getAdresse())) {
             requiredDocs.add(STEUERUNTERLAGEN_MAP.get(elternteil.getElternTyp()));
         }
 

@@ -881,6 +881,58 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+  '/gesuch/{gesuchId}/dokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: GesuchDokumente returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokument'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumente
+  '/gesuch/{gesuchId}/requiredDokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Required DokumentTyp returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DokumentTyp'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getRequiredGesuchDokumentTyp
   '/gesuch/{gesuchId}/einreichen':
     patch:
       tags:
@@ -1231,7 +1283,7 @@ components:
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
         - KINDER_ALIMENTENVERORDUNG
-        - PARNTER_AUSBILUNG_LOHNABRECHNUNG
+        - PARTNER_AUSBILDUNG_LOHNABRECHNUNG
         - PARTNER_BELEG_OV_ABONNEMENT
         - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
         - EK_BELEG_ALIMENTE
@@ -1245,9 +1297,6 @@ components:
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
-        - AUSBILDUNG_DOK
-        - ELTERN_DOK
-        - PARTNER_DOK
       type: string
     ElternAbwesenheitsGrund:
       enum:
@@ -1345,6 +1394,17 @@ components:
           type: array
           items:
             type: string
+    GesuchDokument:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Dokument:
       required:
         - id
@@ -2130,6 +2190,7 @@ components:
       description: ''
       required:
         - validationErrors
+        - validationWarnings
       type: object
       properties:
         validationErrors:

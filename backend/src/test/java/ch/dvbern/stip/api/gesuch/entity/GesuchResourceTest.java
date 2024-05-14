@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -57,6 +58,7 @@ class GesuchResourceTest {
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
+    private Integer expectedDokTypes;
 
     @Test
     @TestAsGesuchsteller
@@ -118,7 +120,9 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void uploadAllDocumentTypes() {
-        for (final var dokType : DokumentTypDtoSpec.values()) {
+        final var dokTypes = DokumentTypDtoSpec.values();
+        expectedDokTypes = dokTypes.length;
+        for (final var dokType : dokTypes) {
             uploadDocumentWithType(dokType);
         }
     }
@@ -461,6 +465,23 @@ class GesuchResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(22)
+    void testGetGesuchDokumente() {
+        var gesuchDokumente = gesuchApiSpec.getGesuchDokumente()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentDtoSpec[].class);
+
+        assertThat(gesuchDokumente.length, is(expectedDokTypes));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(23)
     void testDeleteGesuch() {
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)

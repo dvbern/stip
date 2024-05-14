@@ -1,10 +1,9 @@
-import { selectGesuchAppDataAccessAbschlusssView } from './gesuch-app-data-access-abschluss.selectors';
+import { selectGesuchAppDataAccessAbschlussView } from './gesuch-app-data-access-abschluss.selectors';
 
-describe('selectGesuchAppDataAccessAbschlusssView', () => {
+describe('selectGesuchAppDataAccessAbschlussView', () => {
   it('selects view', () => {
     const state = {
       abschlussPhase: 'NOT_READY',
-      canAbschliessen: undefined,
       canCheck: true,
       checkResult: undefined,
       error: undefined,
@@ -13,7 +12,7 @@ describe('selectGesuchAppDataAccessAbschlusssView', () => {
       loading: false,
       validations: [],
     };
-    const result = selectGesuchAppDataAccessAbschlusssView.projector(
+    const result = selectGesuchAppDataAccessAbschlussView.projector(
       state,
       null,
       null,

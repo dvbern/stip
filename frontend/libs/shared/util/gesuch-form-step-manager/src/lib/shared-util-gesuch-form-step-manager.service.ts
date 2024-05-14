@@ -5,7 +5,7 @@ import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
-  AUSZAHLUNGEN,
+  AUSZAHLUNG,
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
@@ -39,7 +39,7 @@ const BaseSteps = [
   GESCHWISTER,
   PARTNER,
   KINDER,
-  AUSZAHLUNGEN,
+  AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
   DOKUMENTE,
 ];

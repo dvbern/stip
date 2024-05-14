@@ -48,8 +48,6 @@ quarkus:
   hibernate-orm:
     persistence-xml:
       ignore: true
-    database:
-        generation: "none"
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
@@ -70,11 +68,6 @@ quarkus:
 
 '%dev':
   quarkus:
-    hibernate-orm:
-      database:
-        generation: "none"
-    liquibase:
-      clean-at-start: true
     mailer:
       mock: false
     s3:

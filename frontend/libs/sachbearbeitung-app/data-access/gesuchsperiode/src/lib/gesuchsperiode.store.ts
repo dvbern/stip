@@ -374,7 +374,7 @@ const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatus }>(
 ) => value.gueltigkeitStatus === 'ENTWURF';
 
 const statusColorMap: Record<GueltigkeitStatus, StatusColor> = {
-  ENTWURF: 'warn',
+  ENTWURF: 'caution',
   ARCHIVIERT: 'primary',
   PUBLIZIERT: 'success',
 } as const;

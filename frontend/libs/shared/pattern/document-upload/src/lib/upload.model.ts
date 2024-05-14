@@ -6,6 +6,7 @@ export interface DocumentOptions {
   gesuchId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
+  initialDocuments?: Dokument[];
 }
 
 export interface DocumentUpload {
@@ -18,7 +19,7 @@ export interface DocumentUpload {
 export interface DocumentView extends DocumentUpload {
   state: 'uploading' | 'done' | 'error';
   theme:
-    | { icon: 'warning'; type: 'danger'; color: 'danger' }
+    | { icon: 'warning'; type: 'warn'; color: 'warn' }
     | { icon: 'sync'; type: 'info'; color: 'info' }
     | { icon: 'check'; type: 'success'; color: 'success' };
 }

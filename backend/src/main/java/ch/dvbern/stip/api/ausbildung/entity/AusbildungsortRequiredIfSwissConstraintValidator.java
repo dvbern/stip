@@ -8,9 +8,9 @@ public class AusbildungsortRequiredIfSwissConstraintValidator
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
         if (ausbildung.isAusbildungAusland()) {
-            return ausbildung.getAusbildungsort() != null;
-        } else {
             return ausbildung.getAusbildungsort() == null;
+        } else {
+            return ausbildung.getAusbildungsort() != null;
         }
     }
 }

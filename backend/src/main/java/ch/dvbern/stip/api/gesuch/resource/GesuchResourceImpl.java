@@ -170,6 +170,13 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
+    public Response getGesuchDokumente(UUID gesuchId) {
+        var gesuchDokumente = gesuchService.getGesuchDokumenteForGesuch(gesuchId);
+        return Response.ok(gesuchDokumente).build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
     public Response getGesuche() {
         return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
     }
@@ -185,11 +192,18 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response getGesucheForFall(UUID fallId) {
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
     }
-
+    
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesucheForMe() {
-    return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
+        return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
+    }
+
+    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @Override
+    public Response getRequiredGesuchDokumentTyp(UUID gesuchId) {
+        final var requiredTypes = gesuchService.getRequiredDokumentTypes(gesuchId);
+        return Response.ok(requiredTypes).build();
     }
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
