@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.LebenslaufAusbildungsArtDtoSpec;
-import ch.dvbern.stip.generated.dto.TaetigkeitsartDtoSpec;
+import ch.dvbern.stip.generated.dto.TaetigskeitsartDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzKantonDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LebenslaufItemDtoSpec.JSON_PROPERTY_BERUFSBEZEICHNUNG,
   LebenslaufItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
   LebenslaufItemDtoSpec.JSON_PROPERTY_TITEL_DES_ABSCHLUSSES,
-  LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITSART,
+  LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGSKEITSART,
   LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG,
   LebenslaufItemDtoSpec.JSON_PROPERTY_COPY_OF_ID
 })
@@ -74,8 +74,8 @@ public class LebenslaufItemDtoSpec {
   public static final String JSON_PROPERTY_TITEL_DES_ABSCHLUSSES = "titelDesAbschlusses";
   private String titelDesAbschlusses;
 
-  public static final String JSON_PROPERTY_TAETIGKEITSART = "taetigkeitsart";
-  private TaetigkeitsartDtoSpec taetigkeitsart;
+  public static final String JSON_PROPERTY_TAETIGSKEITSART = "taetigskeitsart";
+  private TaetigskeitsartDtoSpec taetigskeitsart;
 
   public static final String JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG = "taetigkeitsBeschreibung";
   private String taetigkeitsBeschreibung;
@@ -320,29 +320,29 @@ public class LebenslaufItemDtoSpec {
   }
 
 
-  public LebenslaufItemDtoSpec taetigkeitsart(TaetigkeitsartDtoSpec taetigkeitsart) {
+  public LebenslaufItemDtoSpec taetigskeitsart(TaetigskeitsartDtoSpec taetigskeitsart) {
     
-    this.taetigkeitsart = taetigkeitsart;
+    this.taetigskeitsart = taetigskeitsart;
     return this;
   }
 
    /**
-   * Get taetigkeitsart
-   * @return taetigkeitsart
+   * Get taetigskeitsart
+   * @return taetigskeitsart
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITSART)
+  @JsonProperty(JSON_PROPERTY_TAETIGSKEITSART)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public TaetigkeitsartDtoSpec getTaetigkeitsart() {
-    return taetigkeitsart;
+  public TaetigskeitsartDtoSpec getTaetigskeitsart() {
+    return taetigskeitsart;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITSART)
+  @JsonProperty(JSON_PROPERTY_TAETIGSKEITSART)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTaetigkeitsart(TaetigkeitsartDtoSpec taetigkeitsart) {
-    this.taetigkeitsart = taetigkeitsart;
+  public void setTaetigskeitsart(TaetigskeitsartDtoSpec taetigskeitsart) {
+    this.taetigskeitsart = taetigskeitsart;
   }
 
 
@@ -415,14 +415,14 @@ public class LebenslaufItemDtoSpec {
         Objects.equals(this.berufsbezeichnung, lebenslaufItem.berufsbezeichnung) &&
         Objects.equals(this.fachrichtung, lebenslaufItem.fachrichtung) &&
         Objects.equals(this.titelDesAbschlusses, lebenslaufItem.titelDesAbschlusses) &&
-        Objects.equals(this.taetigkeitsart, lebenslaufItem.taetigkeitsart) &&
+        Objects.equals(this.taetigskeitsart, lebenslaufItem.taetigskeitsart) &&
         Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung) &&
         Objects.equals(this.copyOfId, lebenslaufItem.copyOfId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bildungsart, von, bis, wohnsitz, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung, copyOfId);
+    return Objects.hash(id, bildungsart, von, bis, wohnsitz, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigskeitsart, taetigkeitsBeschreibung, copyOfId);
   }
 
   @Override
@@ -438,7 +438,7 @@ public class LebenslaufItemDtoSpec {
     sb.append("    berufsbezeichnung: ").append(toIndentedString(berufsbezeichnung)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    titelDesAbschlusses: ").append(toIndentedString(titelDesAbschlusses)).append("\n");
-    sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
+    sb.append("    taetigskeitsart: ").append(toIndentedString(taetigskeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
     sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
