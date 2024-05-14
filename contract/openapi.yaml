@@ -2399,7 +2399,7 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - ausbildungsrichtung
+        - bildungsart
         - ausbildungsstaetteId
       type: object
       properties:
@@ -2409,7 +2409,7 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        ausbildungsrichtung:
+        bildungsart:
           $ref: '#/components/schemas/Bildungsart'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
@@ -2418,7 +2418,7 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - ausbildungsrichtung
+        - bildungsart
         - ausbildungsstaette
       type: object
       properties:
@@ -2428,7 +2428,7 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        ausbildungsrichtung:
+        bildungsart:
           $ref: '#/components/schemas/Bildungsart'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
@@ -2713,7 +2713,7 @@ components:
           type: string
     Ausbildungsgang:
       required:
-        - ausbildungsrichtung
+        - bildungsart
         - id
       type: object
       properties:
@@ -2725,7 +2725,7 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        ausbildungsrichtung:
+        bildungsart:
           $ref: '#/components/schemas/Bildungsart'
           description: ''
         ausbildungsstaetteId:

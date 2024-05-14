@@ -9,7 +9,7 @@ public class AusbildungsgangUpdateDtoSpecModel {
         TestUtil.createUpdateDtoSpec(AusbildungsgangUpdateDtoSpec::new, (model, faker) -> {
             model.setBezeichnungDe("Bachelor Informatik");
             model.setBezeichnungFr("Bachelor Informatik");
-            model.setAusbildungsrichtung(new BildungsartDtoSpec());
+            model.setBildungsart(new BildungsartDtoSpec());
             model.setAusbildungsstaetteId(AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec.getId());
         });
 }
