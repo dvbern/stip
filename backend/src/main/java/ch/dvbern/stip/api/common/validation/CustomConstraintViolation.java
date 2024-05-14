@@ -3,7 +3,6 @@ package ch.dvbern.stip.api.common.validation;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import jakarta.annotation.Nullable;
 import lombok.Getter;
 
 import static java.lang.Thread.currentThread;
