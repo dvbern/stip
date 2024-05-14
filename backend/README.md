@@ -31,6 +31,26 @@ triggered by enabling the `generate-stubs-from-contract` Maven profile. One migh
   * maven will wait by the test phase that you connect a remote jvm debugger
   * Once the remote jvm debugger is connected the tests are executed and breakpoints can be accessed
 
+## Debugging in vscode
+  * Debugging the backend under vscode is relatively simple. All you need is the quarkus extensions (and all of its dependencies) and the following launch.json file in your .vscode directory:  
+  ```
+  {
+      "version": "0.2.0",
+      "configurations": [
+          {
+              "preLaunchTask": "quarkus:dev",
+              "type": "java",
+              "request": "attach",
+              "hostName": "localhost",
+              "projectName": "stip-api",
+              "name": "Debug Quarkus application",
+              "port": 5005
+          }
+      ]
+  }
+  ```
+  * If you simply open the backend in vscode with the quarkus extension installed and launch a debug session this launch.json file is automatically created. The only thing that needs to be manually added is the "projectName" config parameter (in this case it is 'stip-api').  
+
 ## Contributing Guidelines
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the process for submitting pull requests to us.

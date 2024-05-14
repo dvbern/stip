@@ -1,8 +1,9 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { KeycloakAngularModule } from 'keycloak-angular';
+import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { SharedPatternAppHeaderComponent } from './shared-pattern-app-header.component';
 
@@ -12,13 +13,13 @@ describe('SharedPatternAppHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SharedPatternAppHeaderComponent,
-        RouterTestingModule,
-        KeycloakAngularModule,
-        TranslateModule.forRoot(),
+      imports: [SharedPatternAppHeaderComponent, TranslateModule.forRoot()],
+      providers: [
+        provideHttpClient(),
+        provideRouter([]),
+        provideOAuthClient(),
+        provideMockStore(),
       ],
-      providers: [provideMockStore()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedPatternAppHeaderComponent);
