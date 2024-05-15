@@ -7,6 +7,7 @@
 }
 
 main.page-body {
+  position: relative;
   margin-top: var(--header-size);
   flex: 1 0 calc(100vh - var(--header-size));
 }

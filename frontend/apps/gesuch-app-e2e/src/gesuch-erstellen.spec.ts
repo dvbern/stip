@@ -69,8 +69,8 @@ const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
 
 const ausbildung: AusbildungValues = {
   ausbildungsland: 'CH',
-  ausbildungsstaette: 'Universtität Bern',
-  ausbildungsgang: 'Bachelor',
+  ausbildungsstaette: 'Universität Bern',
+  ausbildungsgang: 'Bsc. Biologie',
   fachrichtung: 'Informatik',
   ausbildungBegin: nextMonth,
   ausbildungEnd: inTwoYears,

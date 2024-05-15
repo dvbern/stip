@@ -30,7 +30,7 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.environment", defaultValue = "local")
     String environment;
 
-    @ConfigProperty(name = "kstip.version")
+    @ConfigProperty(name = "quarkus.application.version")
     String version;
 
     @Getter
@@ -54,7 +54,8 @@ public class ConfigService {
     String secret;
 
     public DeploymentConfigDto getDeploymentConfiguration() {
-        return new DeploymentConfigDto().version(version)
+        return new DeploymentConfigDto()
+            .version(version)
             .environment(environment)
             .allowedMimeTypes(allowedMimeTypes.stream().toList());
     }

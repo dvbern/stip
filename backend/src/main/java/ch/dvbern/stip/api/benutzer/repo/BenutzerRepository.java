@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class BenutzerRepository implements BaseRepository<Benutzer> {
-
     private final EntityManager entityManager;
 
     public Optional<Benutzer> findByKeycloakId(String keycloakId) {
