@@ -1,4 +1,4 @@
-stages: [test, build, e2e, mirror, deploy]
+stages: [test, build, e2e, mirror, deploy, review-e2e]
 
 variables:
   ARGOCD_APP: stip
@@ -114,6 +114,15 @@ start-e2e:
     - if: $PIPELINE_TYPE == "default"
       when: on_success
 
+start-review-e2e:
+  extends: start-e2e
+  stage: review-e2e
+  needs:
+    - argocd:review-app:start
+  rules:
+    - if: $PIPELINE_TYPE == "mr"
+      when: on_success
+
 run-e2e:  
   stage: e2e
   extends: .nx-e2e-test
@@ -123,6 +132,15 @@ run-e2e:
     E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
   needs:
     - start-e2e
+
+run-review-e2e:
+  extends: run-e2e
+  stage: review-e2e
+  needs:
+    - start-review-e2e
+  variables:
+    E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb.$DVB_OCP_MERCURY_ROUTER"
 
 stop-e2e:
   when: always
@@ -144,4 +162,14 @@ stop-e2e:
     action: stop
   rules:
     - if: $PIPELINE_TYPE == "default"
+      when: always
+
+stop-review-e2e:
+  extends: stop-e2e
+  when: always
+  stage: review-e2e
+  needs:
+    - run-review-e2e
+  rules:
+    - if: $PIPELINE_TYPE == "mr"
       when: always
