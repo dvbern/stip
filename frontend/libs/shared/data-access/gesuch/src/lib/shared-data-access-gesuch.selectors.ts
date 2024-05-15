@@ -8,6 +8,10 @@ import {
   SharedModelGesuchFormularProps,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
+import {
+  SPECIAL_VALIDATION_ERRORS,
+  isSpecialValidationError,
+} from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -56,6 +60,9 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
             currentForm,
           ),
         },
+        specialValidationErrors: state.validations?.errors
+          .filter(isSpecialValidationError)
+          .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
       },
     };
   },
@@ -65,9 +72,9 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
  * Returns true if the gesuchFormular has the given property
  */
 export const isFormularProp =
-  (gesuchFormular: SharedModelGesuchFormular | null) =>
-  (prop: string): prop is SharedModelGesuchFormularProps => {
-    if (!gesuchFormular) return false;
+  (gesuchFormular?: SharedModelGesuchFormular | null) =>
+  (prop?: string): prop is SharedModelGesuchFormularProps => {
+    if (!prop || !gesuchFormular) return false;
     return Object.keys(gesuchFormular).includes(prop);
   };
 
@@ -76,7 +83,13 @@ const transformValidationMessage = (
   currentForm?: SharedModelGesuchFormular | null,
 ) => {
   return messages
-    ?.map((m) => m.propertyPath)
+    ?.filter(isDefined)
+    .filter(
+      (error) =>
+        isFormularProp(currentForm)(error.propertyPath) ||
+        isSpecialValidationError(error),
+    )
+    .map((error) => error.propertyPath)
     .filter(isDefined)
-    .filter(isFormularProp(currentForm ?? null));
+    .filter(isFormularProp(currentForm));
 };

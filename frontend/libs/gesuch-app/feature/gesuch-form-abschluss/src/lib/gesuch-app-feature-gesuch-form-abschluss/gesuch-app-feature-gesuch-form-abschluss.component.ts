@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
@@ -25,7 +26,12 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiLoadingComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslateModule,
+    SharedUiLoadingComponent,
+  ],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
