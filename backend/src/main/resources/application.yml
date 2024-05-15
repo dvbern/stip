@@ -18,6 +18,7 @@ quarkus:
     migrate-at-start: true
     change-log: "db/migration/changelog.xml"
     validate-on-migrate: true
+    clean-at-start: true
   oidc:
     bern:
       auth-server-url: "${keycloak.url}/realms/bern"
