@@ -70,7 +70,7 @@ export * from './personInAusbildungUpdate';
 export * from './sachbearbeiterZuordnungStammdaten';
 export * from './sachbearbeiterZuordnungStammdatenList';
 export * from './sprache';
-export * from './taetigskeitsart';
+export * from './taetigkeitsart';
 export * from './tenantAuthConfig';
 export * from './tenantInfo';
 export * from './validationError';
