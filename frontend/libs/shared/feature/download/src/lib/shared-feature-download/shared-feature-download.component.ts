@@ -5,15 +5,14 @@ import {
   Component,
   HostBinding,
   OnInit,
-  computed,
   inject,
   input,
 } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { addSeconds } from 'date-fns';
-import { debounceTime, filter, take } from 'rxjs';
+import { debounceTime, exhaustMap, filter, take, tap } from 'rxjs';
 
+import { DokumentService, DokumentTyp } from '@dv/shared/model/gesuch';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
@@ -25,35 +24,41 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 })
 export class SharedFeatureDownloadComponent implements OnInit {
   gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
-  typeSig = input.required<string>({ alias: 'type' });
+  typeSig = input.required<DokumentTyp>({ alias: 'type' });
   dokumentIdSig = input.required<string>({ alias: 'dokumentId' });
   oauthService = inject(OAuthService);
+  dokumentService = inject(DokumentService);
   dcmnt = inject(DOCUMENT, { optional: true });
   appRef = inject(ApplicationRef);
 
   @HostBinding('class') class =
     'd-flex flex-column position-absolute top-0 bottom-0 start-0 end-0 p-5';
 
-  private apiPathSig = computed(() => {
-    return `/api/v1/gesuch/${this.gesuchIdSig()}/dokument/${this.typeSig()}/${this.dokumentIdSig()}`;
-  });
+  private getDownloadPath = (token: string) => {
+    return `/api/v1/dokument/${this.dokumentIdSig()}/download?token=${token}`;
+  };
 
   ngOnInit() {
     if (this.dcmnt) {
       const dcmnt = this.dcmnt;
 
-      const token = this.oauthService.getAccessToken();
-      dcmnt.cookie = `token=${token}; expires=${addSeconds(
-        new Date(),
-        30,
-      ).toUTCString()}; Secure; Path=${this.apiPathSig()}`;
-      dcmnt.location.href = this.apiPathSig();
-
-      this.appRef.isStable
+      this.dokumentService
+        .getDokumentDownloadToken$({
+          gesuchId: this.gesuchIdSig(),
+          dokumentId: this.dokumentIdSig(),
+          dokumentTyp: this.typeSig(),
+        })
         .pipe(
-          filter((isStable) => isStable),
-          debounceTime(1000),
-          take(1),
+          tap((token) => {
+            dcmnt.location.href = this.getDownloadPath(token);
+          }),
+          exhaustMap(() =>
+            this.appRef.isStable.pipe(
+              filter((isStable) => isStable),
+              debounceTime(1000),
+              take(1),
+            ),
+          ),
         )
         .subscribe(() => {
           dcmnt.defaultView?.close();
