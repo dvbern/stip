@@ -33,7 +33,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 public class Ausbildungsgang extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(name = "ausbildungsstaette_id", foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"), nullable = true)
+    @JoinColumn(
+        name = "ausbildungsstaette_id",
+        foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"),
+        nullable = true
+    )
     private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
@@ -47,7 +51,11 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     private String bezeichnungFr;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "bildungsart_id", nullable = false)
+    @JoinColumn(
+        name = "bildungsart_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "FK_ausbildungsgang_bildungsart_id")
+    )
     private Bildungsart bildungsart;
 
 }
