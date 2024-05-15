@@ -202,10 +202,7 @@
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.einnahmenkosten.kosten.title' | translate }}
       </h3>
-      @if (
-        !hiddenFieldsSetSig().has(form.controls.ausbildungskostenSekundarstufeZwei) ||
-        !hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)
-      ) {
+      @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenSekundarstufeZwei)) {
         <div class="row g-4">
           <!-- AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI -->
           @if (!form.controls.ausbildungskostenSekundarstufeZwei.disabled) {
@@ -228,9 +225,9 @@
           }
         </div>
       }
-      <div class="row g-4 mt-1">
-        <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
-        @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
+        <div class="row g-4 mt-1">
+          <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ 'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label' | translate }}</mat-label>
             <input
@@ -245,8 +242,8 @@
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
           </mat-form-field>
-        }
-      </div>
+        </div>
+      }
 
       <div class="row g-4 mt-1">
         <!-- BETREUUNGKOSTEN_KINDER -->

@@ -77,7 +77,7 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.save": "Sauvegarder",
   "sachbearbeitung-app.admin.ausbildungsgaenge.bezeichnungDe": "Désignation Allemand",
   "sachbearbeitung-app.admin.ausbildungsgaenge.bezeichnungFr": "Désignation Français",
-  "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsrichtung": "Direction stage",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.bildungsart": "Direction stage",
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsort": "Endroit de stage",
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Annuler",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Voulez-vous vraiment supprimer le stage \"{{ bezeichnungFr }}\" ?",

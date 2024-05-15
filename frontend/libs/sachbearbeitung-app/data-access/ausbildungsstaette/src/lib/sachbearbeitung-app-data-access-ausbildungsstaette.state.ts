@@ -16,11 +16,15 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
+import { UpdateOrCreate, isNewEntry } from '@dv/shared/model/api';
 import {
   Ausbildungsgang,
+  AusbildungsgangCreate,
   AusbildungsgangService,
   Ausbildungsstaette,
   AusbildungsstaetteService,
+  Bildungsart,
+  BildungsartService,
 } from '@dv/shared/model/gesuch';
 import {
   RemoteData,
@@ -32,6 +36,7 @@ import {
 
 export interface AdminAusbildungsstaetteState {
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
+  bildungsarten: RemoteData<Bildungsart[]>;
   response: RemoteData<Ausbildungsstaette[]>;
 }
 
@@ -60,6 +65,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
     const initialState: AdminAusbildungsstaetteState = {
       tableData,
+      bildungsarten: initial(),
       response: initial(),
     };
 
@@ -70,6 +76,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
       store,
       ausbildungsStaetteService = inject(AusbildungsstaetteService),
       ausbildungsgangService = inject(AusbildungsgangService),
+      bildungsartService = inject(BildungsartService),
     ) => ({
       setPaginator: (paginator: MatPaginator) => {
         patchState(store, (state) => {
@@ -338,7 +345,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
       },
       handleCreateUpdateAusbildungsgang: rxMethod<{
         staette: AusbildungsstaetteTableData;
-        gang: Ausbildungsgang;
+        gang: UpdateOrCreate<AusbildungsgangCreate, Ausbildungsgang>;
       }>(
         pipe(
           tap(() => {
@@ -351,14 +358,14 @@ export const AdminAusbildungsstaetteStore = signalStore(
               throw new Error('Ausbildungsstaette ID is undefined');
             }
 
-            if (gang.id === 'new') {
+            if (isNewEntry(gang)) {
               return ausbildungsgangService
                 .createAusbildungsgang$({
                   ausbildungsgangCreate: {
                     ausbildungsstaetteId: staette.id,
+                    bildungsartId: gang.bildungsartId,
                     bezeichnungDe: gang.bezeichnungDe ?? '',
                     bezeichnungFr: gang.bezeichnungFr ?? '',
-                    ausbildungsrichtung: gang.ausbildungsrichtung,
                   },
                 })
                 .pipe(
@@ -408,7 +415,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 ausbildungsgangId: gang.id,
                 ausbildungsgangUpdate: {
                   ausbildungsstaetteId: staette.id,
-                  ausbildungsrichtung: gang.ausbildungsrichtung,
+                  bildungsartId: gang.bildungsart.id,
                   bezeichnungDe: gang.bezeichnungDe ?? '',
                   bezeichnungFr: gang.bezeichnungFr ?? '',
                 },
@@ -417,6 +424,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 tapResponse({
                   next: (gang: Ausbildungsgang) => {
                     patchState(store, (state) => {
+                      console.log('GANG', gang);
                       const data = state.tableData.data.map((s) => {
                         if (s.id === staette.id) {
                           const ausbildungsgaenge = s.ausbildungsgaenge?.map(
@@ -507,6 +515,31 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 }),
               );
           }),
+          takeUntilDestroyed(),
+        ),
+      ),
+      loadBildungsarten: rxMethod(
+        pipe(
+          tap(() => {
+            patchState(store, {
+              bildungsarten: pending(),
+            });
+          }),
+          switchMap(() =>
+            bildungsartService.getBildungsarten$().pipe(
+              tapResponse({
+                next: (bildungsarten) =>
+                  patchState(store, {
+                    bildungsarten: success(bildungsarten),
+                  }),
+                error: (error: HttpErrorResponse) => {
+                  patchState(store, {
+                    bildungsarten: failure(error),
+                  });
+                },
+              }),
+            ),
+          ),
           takeUntilDestroyed(),
         ),
       ),
