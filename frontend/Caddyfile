@@ -26,7 +26,7 @@
                 X-Content-Type-Options nosniff
 
                 # clickjacking protection
-                X-Frame-Options DENY
+                X-Frame-Options SAMEORIGIN
 
                 # keep referrer data off of HTTP connections
                 Referrer-Policy no-referrer-when-downgrade
