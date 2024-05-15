@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { concatMap, filter, take } from 'rxjs';
 
-import { selectDeploymentConfig } from '@dv/shared/data-access/config';
+import { sharedDataAccessConfigsFeature } from '@dv/shared/data-access/config';
 import { SHARED_MODEL_CONFIG_RESOURCE } from '@dv/shared/model/config';
 import { UNAUTHORIZED } from '@dv/shared/util/http';
 
@@ -24,7 +24,7 @@ export function SharedPatternInterceptorDeploymentConfig(
   }
 
   return store
-    .select(selectDeploymentConfig)
+    .select(sharedDataAccessConfigsFeature.selectDeploymentConfig)
     .pipe(
       filter((deploymentConfig) => deploymentConfig !== undefined),
       take(1),

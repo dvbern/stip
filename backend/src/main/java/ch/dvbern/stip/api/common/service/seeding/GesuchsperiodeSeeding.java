@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.Startup;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +25,7 @@ public class GesuchsperiodeSeeding {
 
     @Startup
     void seed() {
-//        if (ConfigUtils.getProfiles().contains("dev")) {
+        if (ConfigUtils.getProfiles().contains("dev")) {
             QuarkusTransaction.requiringNew().run(() -> {
                 DataTenantResolver.setTenantId("bern");
 
@@ -53,7 +54,7 @@ public class GesuchsperiodeSeeding {
                 gesuchsjahrRepository.persistAndFlush(newJahr);
                 gesuchsperiodeRepository.persist(newPerioden);
             });
-//        }
+        }
     }
 
     Gesuchsjahr getJahrForSeeding() {

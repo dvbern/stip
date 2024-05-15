@@ -23,6 +23,7 @@ import { Language } from '@dv/shared/model/language';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
@@ -38,6 +39,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiLanguageSelectorComponent,
     SharedUiIconChipComponent,
     SharedUiLoadingComponent,
+    SharedUiVersionTextComponent,
   ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
   styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
@@ -68,7 +70,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   );
   // -----
 
-  cockpitView = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
+  cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   // Do not initialize signals in computed directly, just usage
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
