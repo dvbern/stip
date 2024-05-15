@@ -2399,7 +2399,7 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - bildungsart
+        - bildungsartId
         - ausbildungsstaetteId
       type: object
       properties:
@@ -2409,8 +2409,8 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        bildungsart:
-          $ref: '#/components/schemas/Bildungsart'
+        bildungsartId:
+          $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
     AusbildungsgangCreate:
@@ -2418,7 +2418,7 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - bildungsart
+        - bildungsartId
         - ausbildungsstaette
       type: object
       properties:
@@ -2428,8 +2428,8 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        bildungsart:
-          $ref: '#/components/schemas/Bildungsart'
+        bildungsartId:
+          $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
     Ausbildungsort:

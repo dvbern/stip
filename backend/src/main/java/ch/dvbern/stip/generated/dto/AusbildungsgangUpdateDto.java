@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BildungsartDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -25,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsgangUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid BildungsartDto bildungsart;
+  private @Valid UUID bildungsartId;
   private @Valid UUID ausbildungsstaetteId;
 
   /**
@@ -70,21 +69,21 @@ public class AusbildungsgangUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangUpdateDto bildungsart(BildungsartDto bildungsart) {
-    this.bildungsart = bildungsart;
+  public AusbildungsgangUpdateDto bildungsartId(UUID bildungsartId) {
+    this.bildungsartId = bildungsartId;
     return this;
   }
 
   
-  @JsonProperty("bildungsart")
+  @JsonProperty("bildungsartId")
   @NotNull
-  public BildungsartDto getBildungsart() {
-    return bildungsart;
+  public UUID getBildungsartId() {
+    return bildungsartId;
   }
 
-  @JsonProperty("bildungsart")
-  public void setBildungsart(BildungsartDto bildungsart) {
-    this.bildungsart = bildungsart;
+  @JsonProperty("bildungsartId")
+  public void setBildungsartId(UUID bildungsartId) {
+    this.bildungsartId = bildungsartId;
   }
 
   /**
@@ -118,13 +117,13 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     AusbildungsgangUpdateDto ausbildungsgangUpdate = (AusbildungsgangUpdateDto) o;
     return Objects.equals(this.bezeichnungDe, ausbildungsgangUpdate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangUpdate.bezeichnungFr) &&
-        Objects.equals(this.bildungsart, ausbildungsgangUpdate.bildungsart) &&
+        Objects.equals(this.bildungsartId, ausbildungsgangUpdate.bildungsartId) &&
         Objects.equals(this.ausbildungsstaetteId, ausbildungsgangUpdate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsart, ausbildungsstaetteId);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsartId, ausbildungsstaetteId);
   }
 
   @Override
@@ -134,7 +133,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    bildungsart: ").append(toIndentedString(bildungsart)).append("\n");
+    sb.append("    bildungsartId: ").append(toIndentedString(bildungsartId)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
     sb.append("}");
     return sb.toString();

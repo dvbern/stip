@@ -21,9 +21,7 @@ export interface Ausbildungsgang {
      * 
      */
     bezeichnungFr?: string;
-    ausbildungsrichtung: Bildungsart;
+    bildungsart: Bildungsart;
     ausbildungsstaetteId?: string;
 }
-
-
 

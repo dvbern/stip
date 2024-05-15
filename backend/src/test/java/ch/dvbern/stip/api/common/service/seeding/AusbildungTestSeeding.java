@@ -49,7 +49,7 @@ public class AusbildungTestSeeding extends Seeder {
 
         bildungsartRepository.persistAndFlush(art);
         bildungsart = art;
-		TestConstants.BILDUNGSART_ID = bildungsart.getId();
+		TestConstants.TEST_BILDUNGSART_ID = bildungsart.getId();
     }
 
     private void seedUni() {

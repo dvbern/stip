@@ -36,9 +36,8 @@ public final class TestConstants {
     public static final String IBAN_AT_NUMMER_VALID = "AT483200000012345864";
 
     public static UUID TEST_AUSBILDUNGSGANG_ID;
+    public static UUID TEST_BILDUNGSART_ID;
 
     public static final DateRange GUELTIGKEIT_PERIODE_23_24 =
         new DateRange(LocalDate.of(2023, 8, 1), LocalDate.of(2024, 7, 31));
-
-    public static UUID BILDUNGSART_ID;
 }

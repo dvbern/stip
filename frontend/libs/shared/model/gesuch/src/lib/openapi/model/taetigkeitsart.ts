@@ -10,19 +10,10 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
-export interface AusbildungsgangUpdate { 
-    /**
-     * 
-     */
-    bezeichnungDe: string;
-    /**
-     * 
-     */
-    bezeichnungFr: string;
-    bildungsartId: string;
-    ausbildungsstaetteId: string;
-}
+export type Taetigkeitsart = 'ERWERBSTAETIGKEIT' | 'ANDERE_TAETIGKEIT';
+
+export const Taetigkeitsart = {
+    ERWERBSTAETIGKEIT: 'ERWERBSTAETIGKEIT' as Taetigkeitsart,
+    ANDERE_TAETIGKEIT: 'ANDERE_TAETIGKEIT' as Taetigkeitsart
+};
 

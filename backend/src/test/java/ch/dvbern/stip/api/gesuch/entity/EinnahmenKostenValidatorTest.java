@@ -6,6 +6,7 @@ import java.util.HashSet;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
+import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -70,14 +71,14 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungsgang(new Ausbildungsgang());
-        ausbildung.getAusbildungsgang().setBildungsart(new Bildungsart());
+        ausbildung.getAusbildungsgang().setBildungsart(new Bildungsart().setBildungsstufe(Bildungsstufe.SEKUNDAR_2));
         gesuchFormular.setAusbildung(ausbildung);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isFalse();
         gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(1);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
-        gesuchFormular.getAusbildung().getAusbildungsgang().setBildungsart(new Bildungsart());
+        gesuchFormular.getAusbildung().getAusbildungsgang().setBildungsart(new Bildungsart().setBildungsstufe(Bildungsstufe.TERTIAER));
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(
             gesuchFormular,
             TestUtil.initValidatorContext()))
