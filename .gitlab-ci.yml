@@ -141,6 +141,9 @@ run-review-e2e:
   variables:
     E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
     E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+  rules:
+    - if: $PIPELINE_TYPE == "mr"
+      when: always
 
 stop-e2e:
   when: always
