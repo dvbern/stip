@@ -84,7 +84,7 @@ export class LebenslaufEditorPO {
   async addTaetigkeit(item: LebenslaufItem) {
     await selectMatOption(
       this.elems.taetigkeitsartSelect,
-      item.taetigskeitsart ?? 'ERWERBSTAETIGKEIT',
+      item.taetigkeitsart ?? 'ERWERBSTAETIGKEIT',
     );
 
     await this.elems.taetigkeitsBeschreibung.fill(

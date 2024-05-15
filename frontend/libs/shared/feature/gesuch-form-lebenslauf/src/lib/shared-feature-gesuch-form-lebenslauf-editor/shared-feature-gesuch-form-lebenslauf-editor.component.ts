@@ -31,7 +31,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   LebenslaufAusbildungsArt,
   LebenslaufItemUpdate,
-  Taetigskeitsart,
+  Taetigkeitsart,
   WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
@@ -110,8 +110,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     berufsbezeichnung: [<string | undefined>undefined, [Validators.required]],
     fachrichtung: [<string | undefined>undefined, [Validators.required]],
     titelDesAbschlusses: [<string | undefined>undefined, [Validators.required]],
-    taetigskeitsart: [
-      <Taetigskeitsart | undefined>undefined,
+    taetigkeitsart: [
+      <Taetigkeitsart | undefined>undefined,
       [Validators.required],
     ],
     von: ['', []],
@@ -283,8 +283,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
               ? Validators.required
               : Validators.nullValidator,
           ]);
-          this.form.controls.taetigskeitsart.clearValidators();
-          this.form.controls.taetigskeitsart.setValidators([
+          this.form.controls.taetigkeitsart.clearValidators();
+          this.form.controls.taetigkeitsart.setValidators([
             item.type === 'TAETIGKEIT'
               ? Validators.required
               : Validators.nullValidator,
@@ -298,7 +298,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
         }
 
         if (item.type === 'AUSBILDUNG') {
-          this.formUtils.setRequired(this.form.controls.taetigskeitsart, false);
+          this.formUtils.setRequired(this.form.controls.taetigkeitsart, false);
           this.formUtils.setRequired(
             this.form.controls.taetigkeitsBeschreibung,
             false,
@@ -309,8 +309,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
         if (item.type === 'TAETIGKEIT') {
           this.form.controls.bildungsart.clearValidators();
           this.form.controls.bildungsart.updateValueAndValidity();
-          this.form.controls.taetigskeitsart.setValidators(Validators.required);
-          this.form.controls.taetigskeitsart.updateValueAndValidity();
+          this.form.controls.taetigkeitsart.setValidators(Validators.required);
+          this.form.controls.taetigkeitsart.updateValueAndValidity();
           this.form.controls.taetigkeitsBeschreibung.setValidators(
             Validators.required,
           );
@@ -351,7 +351,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
           this.form,
           this.itemSig().type === 'AUSBILDUNG'
             ? ['bildungsart', 'wohnsitz', 'ausbildungAbgeschlossen']
-            : ['taetigskeitsart', 'taetigkeitsBeschreibung'],
+            : ['taetigkeitsart', 'taetigkeitsBeschreibung'],
         ),
       });
       this.form.markAsPristine();
@@ -385,5 +385,5 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   protected readonly bildungsartValues = Object.values(
     LebenslaufAusbildungsArt,
   );
-  protected readonly taetigskeitsartValues = Object.values(Taetigskeitsart);
+  protected readonly taetigkeitsartValues = Object.values(Taetigkeitsart);
 }

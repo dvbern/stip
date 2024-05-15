@@ -97,12 +97,11 @@ export class TwoColumnTimelineComponent implements OnChanges {
     );
 
     // planned ausbildung
-    const ausbildungsstaette = ausbildungsstaettes.find(
-      (staette) =>
-        staette.ausbildungsgaenge?.some(
-          (ausbildungsgang) =>
-            plannedAusbildung?.ausbildungsgang.id === ausbildungsgang.id,
-        ),
+    const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
+      staette.ausbildungsgaenge?.some(
+        (ausbildungsgang) =>
+          plannedAusbildung?.ausbildungsgang.id === ausbildungsgang.id,
+      ),
     );
     const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
       (each) => each.id === plannedAusbildung?.ausbildungsgang.id,
@@ -137,8 +136,8 @@ export class TwoColumnTimelineComponent implements OnChanges {
     lebenslaufItem: LebenslaufItemUpdate,
   ): TimelineRawItem['label'] {
     if (
-      lebenslaufItem.taetigskeitsart !== undefined &&
-      lebenslaufItem.taetigskeitsart !== null
+      lebenslaufItem.taetigkeitsart !== undefined &&
+      lebenslaufItem.taetigkeitsart !== null
     ) {
       return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
     }
