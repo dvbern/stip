@@ -36,8 +36,8 @@ public class AusbildungSeeding extends Seeder {
 
     private void seedUni() {
         final var uniBern = new Ausbildungsstaette()
-            .setNameDe("Uni Bern")
-            .setNameFr("Uni Berne");
+            .setNameDe("Universität Bern")
+            .setNameFr("Université de Berne");
 
         ausbildungsstaetteRepository.persistAndFlush(uniBern);
 
