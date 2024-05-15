@@ -145,7 +145,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
         final var token = Jwt
             .claims()
-            .upn(benutzerService.getOrCreateCurrentBenutzer().getFullName())
+            .upn(benutzerService.getCurrentBenutzername())
             .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
             .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
             .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
