@@ -43,8 +43,8 @@ public class AusbildungSeeding extends Seeder {
 
     protected void createBildungsart() {
         final var art = new Bildungsart()
-            .setBeschreibung("Test Beschreibung")
-            .setBfs(1)
+            .setBeschreibung("Universität")
+            .setBfs(-1)
             .setBildungsstufe(Bildungsstufe.TERTIAER);
 
         bildungsartRepository.persistAndFlush(art);

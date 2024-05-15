@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -29,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BildungsartDtoSpec.JSON_PROPERTY_BESCHREIBUNG,
   BildungsartDtoSpec.JSON_PROPERTY_BILDUNGSSTUFE,
-  BildungsartDtoSpec.JSON_PROPERTY_BFS
+  BildungsartDtoSpec.JSON_PROPERTY_BFS,
+  BildungsartDtoSpec.JSON_PROPERTY_ID
 })
 @JsonTypeName("Bildungsart")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -42,6 +44,9 @@ public class BildungsartDtoSpec {
 
   public static final String JSON_PROPERTY_BFS = "bfs";
   private Integer bfs;
+
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
 
   public BildungsartDtoSpec() {
   }
@@ -123,6 +128,32 @@ public class BildungsartDtoSpec {
     this.bfs = bfs;
   }
 
+
+  public BildungsartDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,12 +165,13 @@ public class BildungsartDtoSpec {
     BildungsartDtoSpec bildungsart = (BildungsartDtoSpec) o;
     return Objects.equals(this.beschreibung, bildungsart.beschreibung) &&
         Objects.equals(this.bildungsstufe, bildungsart.bildungsstufe) &&
-        Objects.equals(this.bfs, bildungsart.bfs);
+        Objects.equals(this.bfs, bildungsart.bfs) &&
+        Objects.equals(this.id, bildungsart.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(beschreibung, bildungsstufe, bfs);
+    return Objects.hash(beschreibung, bildungsstufe, bfs, id);
   }
 
   @Override
@@ -149,6 +181,7 @@ public class BildungsartDtoSpec {
     sb.append("    beschreibung: ").append(toIndentedString(beschreibung)).append("\n");
     sb.append("    bildungsstufe: ").append(toIndentedString(bildungsstufe)).append("\n");
     sb.append("    bfs: ").append(toIndentedString(bfs)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

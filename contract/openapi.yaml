@@ -1243,6 +1243,29 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
+  /bildungsart:
+    get:
+      tags:
+        - Bildungsart
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bildungsart'
+          description: Returns all Bildungsarten
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBildungsarten
+      summary: Gets all Bildgunsarten
 components:
   schemas:
     Anrede:
@@ -1844,6 +1867,8 @@ components:
           type: string
         bfs:
           type: integer
+        id:
+          $ref: '#/components/schemas/UUID'
     LebenslaufAusbildungsArt:
       description: ''
       enum:

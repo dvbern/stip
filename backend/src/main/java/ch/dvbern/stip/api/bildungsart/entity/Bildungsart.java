@@ -28,5 +28,4 @@ public class Bildungsart extends AbstractEntity {
 
 	@Column(name = "bfs", nullable = false)
 	private int bfs;
-
 }

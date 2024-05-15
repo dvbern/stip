@@ -17,5 +17,6 @@ export interface Bildungsart {
     beschreibung: string;
     bildungsstufe: string;
     bfs: number;
+    id?: string;
 }
 

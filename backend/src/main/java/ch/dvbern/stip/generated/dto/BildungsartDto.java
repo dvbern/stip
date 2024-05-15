@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ public class BildungsartDto  implements Serializable {
   private @Valid String beschreibung;
   private @Valid String bildungsstufe;
   private @Valid Integer bfs;
+  private @Valid UUID id;
 
   /**
    **/
@@ -82,6 +84,24 @@ public class BildungsartDto  implements Serializable {
     this.bfs = bfs;
   }
 
+  /**
+   **/
+  public BildungsartDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -94,12 +114,13 @@ public class BildungsartDto  implements Serializable {
     BildungsartDto bildungsart = (BildungsartDto) o;
     return Objects.equals(this.beschreibung, bildungsart.beschreibung) &&
         Objects.equals(this.bildungsstufe, bildungsart.bildungsstufe) &&
-        Objects.equals(this.bfs, bildungsart.bfs);
+        Objects.equals(this.bfs, bildungsart.bfs) &&
+        Objects.equals(this.id, bildungsart.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(beschreibung, bildungsstufe, bfs);
+    return Objects.hash(beschreibung, bildungsstufe, bfs, id);
   }
 
   @Override
@@ -110,6 +131,7 @@ public class BildungsartDto  implements Serializable {
     sb.append("    beschreibung: ").append(toIndentedString(beschreibung)).append("\n");
     sb.append("    bildungsstufe: ").append(toIndentedString(bildungsstufe)).append("\n");
     sb.append("    bfs: ").append(toIndentedString(bfs)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
