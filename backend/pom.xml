@@ -4,8 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>${revision}</version>
   <properties>
+    <revision>local</revision>
     <archunit.version>1.0.1</archunit.version>
     <assertj.version>3.24.2</assertj.version>
     <checkerframework.version>3.19.0</checkerframework.version>
