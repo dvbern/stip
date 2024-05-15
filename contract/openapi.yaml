@@ -1853,6 +1853,10 @@ components:
         - ERWERBSTAETIGKEIT
         - ANDERE_TAETIGKEIT
       type: string
+    Bildungsstufe:
+      enum:
+        - SEKUNDAR_2
+        - TERTIAER
     Bildungsart:
       description: ''
       type: object
@@ -1864,7 +1868,7 @@ components:
         beschreibung:
           type: string
         bildungsstufe:
-          type: string
+          $ref: '#/components/schemas/Bildungsstufe'
         bfs:
           type: integer
         id:

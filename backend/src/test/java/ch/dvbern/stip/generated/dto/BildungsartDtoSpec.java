@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BildungsstufeDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,7 +41,7 @@ public class BildungsartDtoSpec {
   private String beschreibung;
 
   public static final String JSON_PROPERTY_BILDUNGSSTUFE = "bildungsstufe";
-  private String bildungsstufe;
+  private BildungsstufeDtoSpec bildungsstufe;
 
   public static final String JSON_PROPERTY_BFS = "bfs";
   private Integer bfs;
@@ -77,7 +78,7 @@ public class BildungsartDtoSpec {
   }
 
 
-  public BildungsartDtoSpec bildungsstufe(String bildungsstufe) {
+  public BildungsartDtoSpec bildungsstufe(BildungsstufeDtoSpec bildungsstufe) {
     
     this.bildungsstufe = bildungsstufe;
     return this;
@@ -91,14 +92,14 @@ public class BildungsartDtoSpec {
   @JsonProperty(JSON_PROPERTY_BILDUNGSSTUFE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getBildungsstufe() {
+  public BildungsstufeDtoSpec getBildungsstufe() {
     return bildungsstufe;
   }
 
 
   @JsonProperty(JSON_PROPERTY_BILDUNGSSTUFE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungsstufe(String bildungsstufe) {
+  public void setBildungsstufe(BildungsstufeDtoSpec bildungsstufe) {
     this.bildungsstufe = bildungsstufe;
   }
 

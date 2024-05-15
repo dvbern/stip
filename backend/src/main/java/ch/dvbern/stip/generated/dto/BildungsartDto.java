@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BildungsartDto  implements Serializable {
   private @Valid String beschreibung;
-  private @Valid String bildungsstufe;
+  private @Valid ch.dvbern.stip.api.bildungsart.type.Bildungsstufe bildungsstufe;
   private @Valid Integer bfs;
   private @Valid UUID id;
 
@@ -48,7 +48,7 @@ public class BildungsartDto  implements Serializable {
 
   /**
    **/
-  public BildungsartDto bildungsstufe(String bildungsstufe) {
+  public BildungsartDto bildungsstufe(ch.dvbern.stip.api.bildungsart.type.Bildungsstufe bildungsstufe) {
     this.bildungsstufe = bildungsstufe;
     return this;
   }
@@ -56,12 +56,12 @@ public class BildungsartDto  implements Serializable {
   
   @JsonProperty("bildungsstufe")
   @NotNull
-  public String getBildungsstufe() {
+  public ch.dvbern.stip.api.bildungsart.type.Bildungsstufe getBildungsstufe() {
     return bildungsstufe;
   }
 
   @JsonProperty("bildungsstufe")
-  public void setBildungsstufe(String bildungsstufe) {
+  public void setBildungsstufe(ch.dvbern.stip.api.bildungsart.type.Bildungsstufe bildungsstufe) {
     this.bildungsstufe = bildungsstufe;
   }
 
