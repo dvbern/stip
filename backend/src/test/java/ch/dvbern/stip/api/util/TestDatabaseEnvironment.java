@@ -19,7 +19,7 @@ public class TestDatabaseEnvironment implements QuarkusTestResourceLifecycleMana
     public Map<String, String> start() {
         String dbName = "stip";
         String dbUser = "stip";
-        String dbPassword = UUID.randomUUID().toString();
+        String dbPassword = "stip";
 
         postgres
             .withDatabaseName(dbName)
