@@ -33,9 +33,9 @@ public interface DokumentResource {
     Response deleteDokument(@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{dokumentId}/download")
+    @Path("/download")
     @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@PathParam("dokumentId") UUID dokumentId,@QueryParam("token") @NotNull   String token);
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
     @Path("/{gesuchId}/{dokumentTyp}/{dokumentId}")

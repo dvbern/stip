@@ -822,13 +822,8 @@ paths:
                 $ref: '#/components/schemas/ValidationReport'
           description: Die Validierung wurde erflogreich durchgeführt
       operationId: validateGesuchPages
-  '/dokument/{dokumentId}/download':
+  '/dokument/download':
     parameters:
-      - name: dokumentId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: token
         schema:
           type: string

@@ -99,7 +99,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Override
     @Blocking
-    public RestMulti<Buffer> getDokument(UUID dokumentId, String token) {
+    public RestMulti<Buffer> getDokument(String token) {
         JsonWebToken jwt;
         try {
             jwt = jwtParser.verify(token, configService.getSecret());
@@ -107,14 +107,10 @@ public class DokumentResourceImpl implements DokumentResource {
             throw new UnauthorizedException();
         }
 
-        final var allowedDokumentId = UUID.fromString((String)
+        final var dokumentId = UUID.fromString((String)
             jwt.claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM)
                 .orElseThrow(BadRequestException::new)
         );
-
-        if (!dokumentId.equals(allowedDokumentId)) {
-            throw new UnauthorizedException();
-        }
 
         final var dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         return RestMulti.fromUniResponse(

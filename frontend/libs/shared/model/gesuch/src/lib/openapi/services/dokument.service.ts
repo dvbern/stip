@@ -38,7 +38,6 @@ export interface DokumentServiceDeleteDokumentRequestParams {
 }
 
 export interface DokumentServiceGetDokumentRequestParams {
-    dokumentId: string;
     token: string;
 }
 
@@ -322,10 +321,6 @@ export class DokumentService {
      public getDokument$(requestParameters: DokumentServiceGetDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpResponse<Blob>>;
      public getDokument$(requestParameters: DokumentServiceGetDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpEvent<Blob>>;
      public getDokument$(requestParameters: DokumentServiceGetDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<any> {
-        const dokumentId = requestParameters.dokumentId;
-        if (dokumentId === null || dokumentId === undefined) {
-            throw new Error('Required parameter dokumentId was null or undefined when calling getDokument$.');
-        }
         const token = requestParameters.token;
         if (token === null || token === undefined) {
             throw new Error('Required parameter token was null or undefined when calling getDokument$.');
@@ -370,7 +365,7 @@ export class DokumentService {
         }
 
 
-        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/download`;
+        const localVarPath = `/dokument/download`;
         return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

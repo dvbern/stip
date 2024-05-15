@@ -274,14 +274,13 @@ public class DokumentApiSpec {
      * get Dokument
      * 
      *
-     * @see #dokumentIdPath  (required)
      * @see #tokenQuery  (required)
      * return File
      */
     public static class GetDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/{dokumentId}/download";
+        public static final String REQ_URI = "/dokument/download";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -293,7 +292,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{dokumentId}/download
+         * GET /dokument/download
          * @param handler handler
          * @param <T> type
          * @return type
@@ -304,24 +303,13 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{dokumentId}/download
+         * GET /dokument/download
          * @param handler handler
          * @return File
          */
         public File executeAs(Function<Response, Response> handler) {
             TypeRef<File> type = new TypeRef<File>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String DOKUMENT_ID_PATH = "dokumentId";
-
-        /**
-         * @param dokumentId (UUID)  (required)
-         * @return operation
-         */
-        public GetDokumentOper dokumentIdPath(Object dokumentId) {
-            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
-            return this;
         }
 
         public static final String TOKEN_QUERY = "token";

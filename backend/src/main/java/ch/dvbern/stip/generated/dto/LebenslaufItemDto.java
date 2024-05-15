@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.TaetigkeitsartDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -32,7 +31,7 @@ public class LebenslaufItemDto  implements Serializable {
   private @Valid String berufsbezeichnung;
   private @Valid String fachrichtung;
   private @Valid String titelDesAbschlusses;
-  private @Valid TaetigkeitsartDto taetigkeitsart;
+  private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
   private @Valid UUID copyOfId;
 
@@ -210,19 +209,19 @@ public class LebenslaufItemDto  implements Serializable {
 
   /**
    **/
-  public LebenslaufItemDto taetigkeitsart(TaetigkeitsartDto taetigkeitsart) {
+  public LebenslaufItemDto taetigkeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart) {
     this.taetigkeitsart = taetigkeitsart;
     return this;
   }
 
   
   @JsonProperty("taetigkeitsart")
-  public TaetigkeitsartDto getTaetigkeitsart() {
+  public ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart getTaetigkeitsart() {
     return taetigkeitsart;
   }
 
   @JsonProperty("taetigkeitsart")
-  public void setTaetigkeitsart(TaetigkeitsartDto taetigkeitsart) {
+  public void setTaetigkeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart) {
     this.taetigkeitsart = taetigkeitsart;
   }
 

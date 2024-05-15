@@ -130,7 +130,6 @@ class DokumentResourcesTest {
             .asString();
 
         dokumentApiSpec.getDokument()
-            .dokumentIdPath(dokumentId)
             .tokenQuery(token)
             .execute(ResponseBody::prettyPeek)
             .then()

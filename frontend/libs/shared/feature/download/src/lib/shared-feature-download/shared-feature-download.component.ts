@@ -35,7 +35,7 @@ export class SharedFeatureDownloadComponent implements OnInit {
     'd-flex flex-column position-absolute top-0 bottom-0 start-0 end-0 p-5';
 
   private getDownloadPath = (token: string) => {
-    return `/api/v1/dokument/${this.dokumentIdSig()}/download?token=${token}`;
+    return `/api/v1/dokument/download?token=${token}`;
   };
 
   ngOnInit() {
