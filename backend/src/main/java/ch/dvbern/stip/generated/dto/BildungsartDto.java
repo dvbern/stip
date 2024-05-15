@@ -93,6 +93,7 @@ public class BildungsartDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }

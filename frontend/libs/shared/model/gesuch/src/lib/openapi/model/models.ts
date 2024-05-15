@@ -20,6 +20,7 @@ export * from './benutzerUpdate';
 export * from './benutzereinstellungen';
 export * from './benutzereinstellungenUpdate';
 export * from './bildungsart';
+export * from './bildungsstufe';
 export * from './deploymentConfig';
 export * from './dokument';
 export * from './dokumentTyp';

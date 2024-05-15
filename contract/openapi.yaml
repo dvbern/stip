@@ -1861,6 +1861,7 @@ components:
       description: ''
       type: object
       required:
+        - id
         - beschreibung
         - bildungsstufe
         - bfs
