@@ -19,6 +19,12 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
   thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
 });
 
+export const maskitoYear = maskitoNumberOptionsGenerator({
+  min: 0,
+  precision: 0,
+  thousandSeparator: '',
+});
+
 export function maskitoMaxNumber(max: number) {
   return maskitoNumberOptionsGenerator({
     min: 0,
