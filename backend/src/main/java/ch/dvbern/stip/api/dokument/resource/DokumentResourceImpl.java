@@ -143,7 +143,6 @@ public class DokumentResourceImpl implements DokumentResource {
             throw new NotFoundException();
         }
 
-        // TODO application.yaml per environment
         final var token = Jwt
             .claims()
             .upn(benutzerService.getOrCreateCurrentBenutzer().getFullName())

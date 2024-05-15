@@ -31,7 +31,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   LebenslaufAusbildungsArt,
   LebenslaufItemUpdate,
-  Taetigskeitsart,
+  Taetigkeitsart,
   WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
@@ -111,7 +111,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     fachrichtung: [<string | undefined>undefined, [Validators.required]],
     titelDesAbschlusses: [<string | undefined>undefined, [Validators.required]],
     taetigskeitsart: [
-      <Taetigskeitsart | undefined>undefined,
+      <Taetigkeitsart | undefined>undefined,
       [Validators.required],
     ],
     von: ['', []],
@@ -385,5 +385,5 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   protected readonly bildungsartValues = Object.values(
     LebenslaufAusbildungsArt,
   );
-  protected readonly taetigskeitsartValues = Object.values(Taetigskeitsart);
+  protected readonly taetigskeitsartValues = Object.values(Taetigkeitsart);
 }

@@ -14,7 +14,7 @@ import {
   takeUntil,
 } from 'rxjs/operators';
 
-import { Dokument, GesuchService } from '@dv/shared/model/gesuch';
+import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
@@ -73,7 +73,7 @@ export class UploadStore {
     });
   });
 
-  private documentService = inject(GesuchService);
+  private documentService = inject(DokumentService);
   private loadDocuments$ = new Subject<DocumentOptions>();
   private removeDocument$ = new Subject<
     { dokumentId: string } & DocumentOptions

@@ -3,7 +3,6 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -17,7 +16,6 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -26,11 +24,8 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchResourceImpl implements GesuchResource {
-
     private final GesuchService gesuchService;
     private final GesuchDokumentService gesuchDokumentService;
-    private final ConfigService configService;
-    private final S3AsyncClient s3;
     private final TenantService tenantService;
 
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })

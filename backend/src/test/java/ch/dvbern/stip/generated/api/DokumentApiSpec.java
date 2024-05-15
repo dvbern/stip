@@ -108,7 +108,7 @@ public class DokumentApiSpec {
     public static class CreateDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/dokument/{dokumentTyp}";
+        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -121,7 +121,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/dokument/{dokumentTyp}
+         * POST /dokument/{gesuchId}/{dokumentTyp}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -195,7 +195,7 @@ public class DokumentApiSpec {
     public static class DeleteDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -207,7 +207,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * DELETE /gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}
+         * DELETE /dokument/{gesuchId}/{dokumentTyp}/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -367,7 +367,7 @@ public class DokumentApiSpec {
     public static class GetDokumentDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -379,7 +379,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{gesuchId}/{dokumentTyp}/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -390,7 +390,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{gesuchId}/{dokumentTyp}/{dokumentId}
          * @param handler handler
          * @return String
          */
@@ -463,7 +463,7 @@ public class DokumentApiSpec {
     public static class GetDokumenteForTypOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/dokument/{dokumentTyp}";
+        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -475,7 +475,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/dokument/{dokumentTyp}
+         * GET /dokument/{gesuchId}/{dokumentTyp}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -486,7 +486,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/dokument/{dokumentTyp}
+         * GET /dokument/{gesuchId}/{dokumentTyp}
          * @param handler handler
          * @return List&lt;DokumentDtoSpec&gt;
          */
