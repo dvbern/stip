@@ -118,13 +118,24 @@ class DokumentResourcesTest {
 
         dokumentId = dokumentDtoList[0].getId();
 
-        given()
-            .pathParam("gesuchId", gesuchId)
-            .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
-            .pathParam("dokumentId", dokumentId)
-            .when().get("/api/v1" + DokumentApiSpec.GetDokumentOper.REQ_URI)
+        final var token = dokumentApiSpec.getDokumentDownloadToken()
+            .dokumentIdPath(dokumentId)
+            .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
             .then()
-            .statusCode(200)
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .asString();
+
+        dokumentApiSpec.getDokument()
+            .dokumentIdPath(dokumentId)
+            .tokenQuery(token)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
             .body(equalTo(readFileData()));
     }
 

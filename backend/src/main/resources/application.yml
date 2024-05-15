@@ -120,6 +120,10 @@ quarkus:
   kstip:
     allowed:
       mimetypes: "text/plain,image/png"
+    pre-signed-request:
+      issuer: "https://stip.kibon.ch"
+      expires-in-minutes: 10
+      secret: "6a5336d35a192000260cbc9b41a1cb39"
 '%prod':
   quarkus:
     s3:
