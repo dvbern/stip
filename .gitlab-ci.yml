@@ -140,7 +140,7 @@ run-review-e2e:
     - start-review-e2e
   variables:
     E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
-    E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER"
 
 stop-e2e:
   when: always
@@ -166,8 +166,8 @@ stop-e2e:
 
 stop-review-e2e:
   extends: stop-e2e
-  when: always
   stage: review-e2e
+  when: always
   needs:
     - run-review-e2e
   rules:
