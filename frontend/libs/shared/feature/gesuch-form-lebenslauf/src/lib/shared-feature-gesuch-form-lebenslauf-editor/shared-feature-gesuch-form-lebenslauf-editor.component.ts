@@ -170,7 +170,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.berufsbezeichnung,
-          !this.showBerufsbezeichnungSig(),
+          this.viewSig().readonly || !this.showBerufsbezeichnungSig(),
           true,
         );
       },
@@ -180,7 +180,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
-          !this.showFachrichtungSig(),
+          this.viewSig().readonly || !this.showFachrichtungSig(),
           true,
         );
       },
@@ -190,7 +190,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.titelDesAbschlusses,
-          !this.showTitelDesAbschlussesSig(),
+          this.viewSig().readonly || !this.showTitelDesAbschlussesSig(),
           true,
         );
       },
@@ -200,9 +200,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

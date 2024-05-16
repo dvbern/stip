@@ -394,9 +394,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

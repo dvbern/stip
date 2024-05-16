@@ -169,7 +169,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
-          !this.showWohnsitzSplitterSig() || this.viewSig().readonly,
+          this.viewSig().readonly || !this.showWohnsitzSplitterSig(),
         );
       },
       { allowSignalWrites: true },
@@ -196,9 +196,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

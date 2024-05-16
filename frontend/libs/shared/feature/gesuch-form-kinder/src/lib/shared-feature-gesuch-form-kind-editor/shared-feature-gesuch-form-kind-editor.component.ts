@@ -44,6 +44,7 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -95,6 +96,7 @@ const MEDIUM_AGE = 20;
     SharedUiWohnsitzSplitterComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],
@@ -191,9 +193,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },
