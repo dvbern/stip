@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
-import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import com.github.javafaker.Faker;
@@ -105,8 +105,8 @@ public class TestUtil {
         return new File(TEST_PNG_FILE_LOCATION);
     }
 
-    public static void uploadFile(GesuchApiSpec gesuchApiSpec, UUID gesuchId, DokumentTypDtoSpec dokTyp, File file) {
-        gesuchApiSpec.createDokument()
+    public static void uploadFile(DokumentApiSpec dokumentApiSpec, UUID gesuchId, DokumentTypDtoSpec dokTyp, File file) {
+        dokumentApiSpec.createDokument()
             .gesuchIdPath(gesuchId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {

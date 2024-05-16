@@ -114,7 +114,11 @@ public class GesuchService {
     @Transactional
     public List<GesuchDto> findAllWithPersonInAusbildung() {
         return gesuchRepository.findAllWithFormular()
-            .filter(gesuch -> this.getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null)
+            .filter(gesuch ->
+                getCurrentGesuchTrancheDto(gesuch)
+                    .getGesuchFormular()
+                    .getPersonInAusbildung() != null
+            )
             .map(this::mapWithTrancheToWorkWith)
             .toList();
     }
@@ -213,10 +217,10 @@ public class GesuchService {
             throw new NotFoundException();
         }
 
-        return validatePages(formular);
+        return validatePages(formular, gesuch.getId());
     }
 
-    public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular) {
+    public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular, UUID gesuchId) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
         validationGroups.add(DocumentsRequiredValidationGroup.class);
 
@@ -228,7 +232,19 @@ public class GesuchService {
         );
         violations.addAll(validator.validate(gesuchFormular));
 
-        return ValidationsExceptionMapper.toDto(violations);
+        final var violationDtos = ValidationsExceptionMapper.toDto(violations);
+
+        try {
+            validateNoOtherGesuchEingereichtWithSameSvNumber(gesuchFormular, gesuchId);
+        }
+        catch (CustomValidationsException exception) {
+            CustomValidationsExceptionMapper
+                .toDto(exception)
+                .getValidationErrors()
+                .forEach(violationDtos::addValidationErrorsItem);
+        }
+
+        return violationDtos;
     }
 
     @Transactional
@@ -245,16 +261,19 @@ public class GesuchService {
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
-        GesuchTrancheDto tranche = getCurrentGesuchTranche(gesuch);
+        GesuchTrancheDto tranche = getCurrentGesuchTrancheDto(gesuch);
         GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
         gesuchDto.setGesuchTrancheToWorkWith(tranche);
         return gesuchDto;
     }
 
-    private GesuchTrancheDto getCurrentGesuchTranche(Gesuch gesuch) {
+    private GesuchTranche getCurrentGesuchTranche(Gesuch gesuch) {
         return gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
-            .map(gesuchTrancheMapper::toDto)
             .orElseThrow();
+    }
+
+    private GesuchTrancheDto getCurrentGesuchTrancheDto(Gesuch gesuch) {
+        return gesuchTrancheMapper.toDto(getCurrentGesuchTranche(gesuch));
     }
 
     private void validateGesuchEinreichen(Gesuch gesuch) {
@@ -278,17 +297,32 @@ public class GesuchService {
     }
 
     private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
-        if (getCurrentGesuchTranche(gesuch).getGesuchFormular().getPersonInAusbildung() != null) {
-            Stream<Gesuch> gesuchStream = gesuchRepository
-                .findGesucheBySvNummer(getCurrentGesuchTranche(gesuch).getGesuchFormular()
-                    .getPersonInAusbildung()
-                    .getSozialversicherungsnummer());
+        validateNoOtherGesuchEingereichtWithSameSvNumber(
+            getCurrentGesuchTranche(gesuch).getGesuchFormular(),
+            gesuch.getId()
+        );
+    }
 
-            if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht())) {
+    private void validateNoOtherGesuchEingereichtWithSameSvNumber(
+        final GesuchFormular gesuchFormular,
+        final UUID gesuchId
+    ) {
+        if (gesuchFormular.getPersonInAusbildung() != null) {
+            Stream<Gesuch> gesuchStream = gesuchRepository
+                .findGesucheBySvNummer(
+                    gesuchFormular
+                        .getPersonInAusbildung()
+                        .getSozialversicherungsnummer()
+                );
+
+            if (gesuchStream.anyMatch(g -> g.getGesuchStatus().isEingereicht() && g.getId() != gesuchId)) {
                 throw new CustomValidationsException(
                     "Es darf nur ein Gesuch pro Gesuchsteller (Person in Ausbildung mit derselben SV-Nummer) "
                         + "eingereicht werden",
-                    new CustomConstraintViolation(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE)
+                    new CustomConstraintViolation(
+                        VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE,
+                        "personInAusbildung"
+                    )
                 );
             }
         }

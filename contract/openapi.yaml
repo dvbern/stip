@@ -55,10 +55,10 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  '/gesuch/{gesuchId}/dokument/{dokumentTyp}':
+  '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:
-        - Gesuch
+        - Dokument
       parameters:
         - name: dokumentTyp
           schema:
@@ -97,7 +97,7 @@ paths:
               $ref: '#/components/schemas/DokumentCreate'
         required: true
       tags:
-        - Gesuch
+        - Dokument
       parameters:
         - name: dokumentTyp
           schema:
@@ -822,10 +822,16 @@ paths:
                 $ref: '#/components/schemas/ValidationReport'
           description: Die Validierung wurde erflogreich durchgeführt
       operationId: validateGesuchPages
-  '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
+  '/dokument/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
     get:
       tags:
-        - Gesuch
+        - Dokument
       responses:
         '200':
           content:
@@ -837,9 +843,22 @@ paths:
       operationId: getDokument
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}':
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: File returned
+      operationId: getDokumentDownloadToken
+      summary: get Dokument Download Token
     delete:
       tags:
-        - Gesuch
+        - Dokument
       parameters:
         - name: dokumentTyp
           schema:
