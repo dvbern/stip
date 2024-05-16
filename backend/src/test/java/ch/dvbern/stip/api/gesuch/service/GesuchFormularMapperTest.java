@@ -299,7 +299,7 @@ class GesuchFormularMapperTest {
         return new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
-            new AusbildungMapperImpl(new AusbildungsgangMapperImpl(new EntityReferenceMapperImpl()), new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
             new LebenslaufItemMapperImpl(new DateMapperImpl()),
             new PartnerMapperImpl(),
             new AuszahlungMapperImpl(),
