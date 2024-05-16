@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.ausbildung.util;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.util.NullDiffUtil;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
@@ -15,6 +17,6 @@ public class AusbildungDiffUtil {
             return true;
         }
 
-        return target.isAusbildungAusland() != update.getIsAusbildungAusland();
+        return !Objects.equals(target.getIsAusbildungAusland(), update.getIsAusbildungAusland());
     }
 }
