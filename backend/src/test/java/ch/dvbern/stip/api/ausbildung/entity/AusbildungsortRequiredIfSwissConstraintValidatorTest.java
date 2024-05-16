@@ -9,7 +9,7 @@ class AusbildungsortRequiredIfSwissConstraintValidatorTest {
     @Test
     void test() {
         final var ausbildung = new Ausbildung()
-            .setAusbildungAusland(true);
+            .setIsAusbildungAusland(true);
 
         final var validator = new AusbildungsortRequiredIfSwissConstraintValidator();
 
@@ -18,7 +18,7 @@ class AusbildungsortRequiredIfSwissConstraintValidatorTest {
         ausbildung.setAusbildungsort("Bern");
         assertThat("Ausbildung im Ausland mit Ort", validator.isValid(ausbildung, null), is(false));
 
-        ausbildung.setAusbildungAusland(false);
+        ausbildung.setIsAusbildungAusland(false);
         assertThat("Ausbildung in CH mit Ort", validator.isValid(ausbildung, null), is(true));
 
         ausbildung.setAusbildungsort(null);
