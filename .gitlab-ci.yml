@@ -78,6 +78,7 @@ include:
       e2e-test-image-version: v1.41.1-jammy
       install-e2e-test-package: false
       e2e-on: 'default'
+      e2e-artifacts-dir: $E2E_ARTIFACTS
 
 .install-argocd:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
@@ -121,6 +122,7 @@ run-e2e:
   variables:
     E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
     E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_ARTIFACTS: "__not-configured__"
   needs:
     - start-e2e
 
@@ -132,6 +134,7 @@ run-review-e2e:
   variables:
     E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
     E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_ARTIFACTS: "dist/**"
   rules:
     - if: $PIPELINE_TYPE == "mr"
       when: always
