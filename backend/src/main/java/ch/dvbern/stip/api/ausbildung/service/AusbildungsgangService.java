@@ -49,9 +49,9 @@ public class AusbildungsgangService {
     private void persistsAusbildungsgang(
         AusbildungsgangUpdateDto ausbildungsgangUpdate,
         Ausbildungsgang ausbildungsgangToUpdate) {
+        ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
         ausbildungsgangToUpdate
             .setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaetteId()));
-        ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
         ausbildungsgangToUpdate.setBildungsart(loadBildungsart(ausbildungsgangUpdate.getBildungsartId()));
         ausbildungsgangRepository.persist(ausbildungsgangToUpdate);
     }
