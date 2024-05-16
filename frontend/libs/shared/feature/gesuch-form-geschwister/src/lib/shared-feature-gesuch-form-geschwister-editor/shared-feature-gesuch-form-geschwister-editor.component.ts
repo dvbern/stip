@@ -43,6 +43,7 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -85,6 +86,7 @@ const MEDIUM_AGE = 20;
     SharedUiWohnsitzSplitterComponent,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],

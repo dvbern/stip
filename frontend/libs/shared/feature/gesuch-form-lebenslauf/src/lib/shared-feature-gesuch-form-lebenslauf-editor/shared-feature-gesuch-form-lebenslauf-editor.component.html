@@ -1,4 +1,11 @@
-<form [formGroup]="form" data-testid="form-lebenslauf-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+<form
+  [formGroup]="form"
+  [dvSharedUiFormReadonly]="viewSig().readonly"
+  data-testid="form-lebenslauf-form"
+  novalidate
+  class="mt-4"
+  (ngSubmit)="handleSave()"
+>
   @if (itemSig().type === 'AUSBILDUNG') {
     <div class="row g-4 my-2">
       <!-- Ausbildungsart -->

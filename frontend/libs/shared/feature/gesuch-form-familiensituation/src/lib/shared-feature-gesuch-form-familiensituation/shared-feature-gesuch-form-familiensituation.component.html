@@ -1,7 +1,14 @@
 @if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-family-loading"></dv-shared-ui-loading>
 } @else {
-  <form [formGroup]="form" data-testid="form-family-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+  <form
+    [formGroup]="form"
+    [dvSharedUiFormReadonly]="viewSig().readonly"
+    data-testid="form-family-form"
+    novalidate
+    class="mt-4"
+    (ngSubmit)="handleSave()"
+  >
     <div class="col-12 col-xl-6 col-md-9">
       <dv-shared-ui-stepper-navigation
         [nextStepVisible]="hasNextStep()"

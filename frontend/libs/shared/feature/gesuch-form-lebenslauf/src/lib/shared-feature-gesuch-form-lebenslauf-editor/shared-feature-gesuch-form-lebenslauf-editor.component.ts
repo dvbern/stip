@@ -38,6 +38,7 @@ import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -72,6 +73,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MaskitoDirective,
     SharedUiStepFormButtonsComponent,
     MatCheckboxModule,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],

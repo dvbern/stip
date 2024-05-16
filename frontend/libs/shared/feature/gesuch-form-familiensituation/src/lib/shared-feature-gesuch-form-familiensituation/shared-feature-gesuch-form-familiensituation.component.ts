@@ -50,6 +50,7 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
@@ -97,6 +98,7 @@ const animationTime = 500;
     SharedUiStepperNavigationComponent,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],

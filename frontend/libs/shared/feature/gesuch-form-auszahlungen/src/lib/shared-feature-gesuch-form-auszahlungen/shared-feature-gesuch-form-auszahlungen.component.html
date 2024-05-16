@@ -14,7 +14,14 @@
     </div>
   }
   @if (!viewSig().loading && viewSig().hasNecessaryPreSteps) {
-    <form [formGroup]="form" data-testid="form-auszahlung-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+    <form
+      [formGroup]="form"
+      [dvSharedUiFormReadonly]="viewSig().readonly"
+      data-testid="form-auszahlung-form"
+      novalidate
+      class="mt-4"
+      (ngSubmit)="handleSave()"
+    >
       <div class="row g-4 my-2">
         <!-- kontoinhaber -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
