@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
@@ -53,6 +54,7 @@ import static org.hamcrest.Matchers.notNullValue;
 class GesuchResourceTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
+    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
@@ -504,7 +506,7 @@ class GesuchResourceTest {
 
     private void uploadDocumentWithType(final DokumentTypDtoSpec dokTyp) {
         final var file = TestUtil.getTestPng();
-        TestUtil.uploadFile(gesuchApiSpec, gesuchId, dokTyp, file);
+        TestUtil.uploadFile(dokumentApiSpec, gesuchId, dokTyp, file);
     }
 
     private Optional<GesuchDtoSpec> findGesuchWithId(GesuchDtoSpec[] gesuche, UUID gesuchId) {

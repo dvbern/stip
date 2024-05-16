@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -34,6 +35,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     public static final String VALID_IBAN = "CH5604835012345678009";
     private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
 
     @Test
     @Order(1)
@@ -43,7 +45,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
         final var file = TestUtil.getTestPng();
         for (final var dokType : DokumentTypDtoSpec.values()) {
-            TestUtil.uploadFile(gesuchApiSpec, gesuchId, dokType, file);
+            TestUtil.uploadFile(dokumentApiSpec, gesuchId, dokType, file);
         }
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)

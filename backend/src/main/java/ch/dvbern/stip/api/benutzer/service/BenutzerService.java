@@ -145,4 +145,8 @@ public class BenutzerService {
             createOrUpdateSachbearbeiterStammdaten(entry.getSachbearbeiter(), entry.getZuordnung());
         }
     }
+
+    public String getCurrentBenutzername() {
+        return getOrCreateCurrentBenutzer().getFullName();
+    }
 }

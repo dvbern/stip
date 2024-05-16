@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 
 @Path("/config/deployment")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
-public interface ConfigResource {
+public interface ConfigurationResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
