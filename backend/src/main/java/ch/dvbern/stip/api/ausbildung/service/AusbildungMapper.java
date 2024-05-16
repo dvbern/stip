@@ -19,7 +19,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = AusbildungsgangMapper.class)
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
-    @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
+    @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgang.id")
     @Mapping(
         source = "ausbildungBegin",
         target = "ausbildungBegin",
@@ -32,7 +32,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     )
     public abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
 
-    @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgangId")
+    @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgang.id")
     @Mapping(
         source = "ausbildungBegin",
         target = "ausbildungBegin",
