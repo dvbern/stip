@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -74,6 +75,7 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentService gesuchDokumentService;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
@@ -257,7 +259,14 @@ public class GesuchService {
         final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
-        return requiredDokumentService.getRequiredDokumenteForGesuch(formular);
+
+        requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).stream().forEach(
+            gesuchDokument -> gesuchDokument.getDokumente().forEach(
+                dokument -> gesuchDokumentService.deleteDokument(dokument.getId())
+            )
+        );
+
+        return requiredDokumentService.getRequiredDokumentsForGesuch(formular);
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
