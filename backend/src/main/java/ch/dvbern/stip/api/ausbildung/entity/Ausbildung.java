@@ -81,5 +81,5 @@ public class Ausbildung extends AbstractMandantEntity {
 
     @NotNull
     @Column(name = "is_ausbildung_ausland")
-    private boolean isAusbildungAusland = false;
+    private Boolean isAusbildungAusland = false;
 }

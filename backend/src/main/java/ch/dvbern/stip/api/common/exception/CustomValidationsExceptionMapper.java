@@ -19,6 +19,7 @@ public final class CustomValidationsExceptionMapper {
         ValidationErrorDto validationErrorDto = new ValidationErrorDto();
         validationErrorDto.setMessage(validationsException.getConstraintViolation().getMessage());
         validationErrorDto.setMessageTemplate(validationsException.getConstraintViolation().getMessageTemplate());
+        validationErrorDto.setPropertyPath(validationsException.getConstraintViolation().getPropertyPath());
         validationsReportDto.setValidationErrors(List.of(validationErrorDto));
 
         return validationsReportDto;

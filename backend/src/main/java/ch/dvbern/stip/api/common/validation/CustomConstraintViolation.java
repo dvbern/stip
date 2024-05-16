@@ -19,9 +19,11 @@ public class CustomConstraintViolation {
         );
     private final String message;
     private final String messageTemplate;
+    private final String propertyPath;
 
-    public CustomConstraintViolation(String messageTamplate) {
+    public CustomConstraintViolation(String messageTamplate, String propertyPath) {
         this.messageTemplate = messageTamplate;
         this.message = VALIDATION_MESSAGE_BUNDLE.getString(messageTamplate);
+        this.propertyPath = propertyPath;
     }
 }
