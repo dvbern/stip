@@ -20,33 +20,46 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MappingConfig.class)
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
-    @Mapping(source = "ausbildungBegin",
+    @Mapping(
+        source = "ausbildungBegin",
         target = "ausbildungBegin",
-        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
-    @Mapping(source = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class }
+    )
+    @Mapping(
+        source = "ausbildungEnd",
         target = "ausbildungEnd",
-        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
-    abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
+        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
+    )
+    public abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
 
     @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgangId")
-    @Mapping(source = "ausbildungBegin",
+    @Mapping(
+        source = "ausbildungBegin",
         target = "ausbildungBegin",
-        qualifiedBy = { DateMapper.class, DateToMonthYear.class })
-    @Mapping(source = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, DateToMonthYear.class }
+    )
+    @Mapping(
+        source = "ausbildungEnd",
         target = "ausbildungEnd",
-        qualifiedBy = { DateMapper.class, DateToMonthYear.class })
-    abstract AusbildungDto toDto(Ausbildung ausbildung);
+        qualifiedBy = { DateMapper.class, DateToMonthYear.class }
+    )
+    public abstract AusbildungDto toDto(Ausbildung ausbildung);
+
 
     @Mapping(source = "ausbildungsgangId",
         target = "ausbildungsgang",
         qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class })
-    @Mapping(source = "ausbildungBegin",
+    @Mapping(
+        source = "ausbildungBegin",
         target = "ausbildungBegin",
-        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
-    @Mapping(source = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class }
+    )
+    @Mapping(
+        source = "ausbildungEnd",
         target = "ausbildungEnd",
-        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
-    abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
+        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
+    )
+    public abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 
     @Override
     @BeforeMapping
@@ -55,7 +68,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         final @MappingTarget Ausbildung targetFormular
     ) {
         resetFieldIf(
-            () ->AusbildungDiffUtil.hasIsAusbildungAuslandChanged(targetFormular, newFormular),
+            () -> AusbildungDiffUtil.hasIsAusbildungAuslandChanged(targetFormular, newFormular),
             "Clear Ausbildungsort because IsAusbildungAusland has changed",
             () -> {
                 if (newFormular != null && Boolean.TRUE.equals(newFormular.getIsAusbildungAusland())) {
