@@ -28,11 +28,10 @@ public class GeschwisterDto  implements Serializable {
   private @Valid LocalDate geburtsdatum;
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
-  private @Valid UUID id;
   private @Valid String nachname;
+  private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
-  private @Valid UUID copyOfId;
 
   /**
    **/
@@ -113,25 +112,6 @@ public class GeschwisterDto  implements Serializable {
 
   /**
    **/
-  public GeschwisterDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
   public GeschwisterDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
@@ -147,6 +127,24 @@ public class GeschwisterDto  implements Serializable {
   @JsonProperty("nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public GeschwisterDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -187,24 +185,6 @@ public class GeschwisterDto  implements Serializable {
     this.wohnsitzAnteilVater = wohnsitzAnteilVater;
   }
 
-  /**
-   **/
-  public GeschwisterDto copyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-    return this;
-  }
-
-  
-  @JsonProperty("copyOfId")
-  public UUID getCopyOfId() {
-    return copyOfId;
-  }
-
-  @JsonProperty("copyOfId")
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -219,16 +199,15 @@ public class GeschwisterDto  implements Serializable {
         Objects.equals(this.geburtsdatum, geschwister.geburtsdatum) &&
         Objects.equals(this.wohnsitz, geschwister.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, geschwister.ausbildungssituation) &&
-        Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.nachname, geschwister.nachname) &&
+        Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
-        Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
-        Objects.equals(this.copyOfId, geschwister.copyOfId);
+        Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, nachname, wohnsitzAnteilMutter, wohnsitzAnteilVater, copyOfId);
+    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater);
   }
 
   @Override
@@ -240,11 +219,10 @@ public class GeschwisterDto  implements Serializable {
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

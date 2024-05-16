@@ -33,13 +33,12 @@ public class ElternDto  implements Serializable {
   private @Valid Boolean sozialhilfebeitraegeAusbezahlt;
   private @Valid Boolean ausweisbFluechtling;
   private @Valid Boolean ergaenzungsleistungAusbezahlt;
-  private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
   private @Valid String nachname;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
   private @Valid String sozialversicherungsnummer;
-  private @Valid UUID copyOfId;
+  private @Valid UUID id;
 
   /**
    **/
@@ -215,25 +214,6 @@ public class ElternDto  implements Serializable {
 
   /**
    **/
-  public ElternDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
   public ElternDto elternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
     this.elternTyp = elternTyp;
     return this;
@@ -328,20 +308,20 @@ public class ElternDto  implements Serializable {
 
   /**
    **/
-  public ElternDto copyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
+  public ElternDto id(UUID id) {
+    this.id = id;
     return this;
   }
 
   
-  @JsonProperty("copyOfId")
-  public UUID getCopyOfId() {
-    return copyOfId;
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
   }
 
-  @JsonProperty("copyOfId")
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
 
@@ -363,18 +343,17 @@ public class ElternDto  implements Serializable {
         Objects.equals(this.sozialhilfebeitraegeAusbezahlt, eltern.sozialhilfebeitraegeAusbezahlt) &&
         Objects.equals(this.ausweisbFluechtling, eltern.ausweisbFluechtling) &&
         Objects.equals(this.ergaenzungsleistungAusbezahlt, eltern.ergaenzungsleistungAusbezahlt) &&
-        Objects.equals(this.id, eltern.id) &&
         Objects.equals(this.elternTyp, eltern.elternTyp) &&
         Objects.equals(this.nachname, eltern.nachname) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, eltern.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, eltern.identischerZivilrechtlicherWohnsitzPLZ) &&
         Objects.equals(this.sozialversicherungsnummer, eltern.sozialversicherungsnummer) &&
-        Objects.equals(this.copyOfId, eltern.copyOfId);
+        Objects.equals(this.id, eltern.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, wohnkosten, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, id, elternTyp, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, copyOfId);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, wohnkosten, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, elternTyp, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id);
   }
 
   @Override
@@ -391,13 +370,12 @@ public class ElternDto  implements Serializable {
     sb.append("    sozialhilfebeitraegeAusbezahlt: ").append(toIndentedString(sozialhilfebeitraegeAusbezahlt)).append("\n");
     sb.append("    ausweisbFluechtling: ").append(toIndentedString(ausweisbFluechtling)).append("\n");
     sb.append("    ergaenzungsleistungAusbezahlt: ").append(toIndentedString(ergaenzungsleistungAusbezahlt)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

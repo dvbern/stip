@@ -28,7 +28,6 @@ export * from './einnahmenKosten';
 export * from './einnahmenKostenUpdate';
 export * from './eltern';
 export * from './elternAbwesenheitsGrund';
-export * from './elternAllOf';
 export * from './elternTyp';
 export * from './elternUnbekanntheitsGrund';
 export * from './elternUpdate';

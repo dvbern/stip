@@ -1978,39 +1978,18 @@ components:
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/ElternUpdate'
     Geschwister:
       title: Root Type for Geschwister
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/GeschwisterUpdate'
     Kind:
       title: Root Type for Geschwister
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf

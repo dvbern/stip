@@ -16,7 +16,6 @@ import { ElternTyp } from './elternTyp';
  * 
  */
 export interface Eltern { 
-    copyOfId?: string;
     vorname: string;
     adresse: Adresse;
     identischerZivilrechtlicherWohnsitz: boolean;
@@ -38,7 +37,7 @@ export interface Eltern {
     sozialhilfebeitraegeAusbezahlt: boolean;
     ausweisbFluechtling: boolean;
     ergaenzungsleistungAusbezahlt: boolean;
-    id: string;
+    id?: string;
     elternTyp: ElternTyp;
     nachname: string;
 }
