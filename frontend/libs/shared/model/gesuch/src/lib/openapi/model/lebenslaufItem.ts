@@ -17,8 +17,7 @@ import { Taetigkeitsart } from './taetigkeitsart';
  * 
  */
 export interface LebenslaufItem { 
-    copyOfId?: string;
-    id: string;
+    id?: string;
     bildungsart?: LebenslaufAusbildungsArt;
     /**
      * Datum im Format mm.YYYY

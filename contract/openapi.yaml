@@ -2017,13 +2017,6 @@ components:
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/LebenslaufItemUpdate'
     Partner:
       type: object
