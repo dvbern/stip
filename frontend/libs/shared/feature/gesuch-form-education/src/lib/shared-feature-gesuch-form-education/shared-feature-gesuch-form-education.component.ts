@@ -32,10 +32,6 @@ import { startWith } from 'rxjs';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import {
-  AusbildungsLand,
-  ortToAusbidlungsLand,
-} from '@dv/shared/model/ausbildung';
-import {
   AusbildungsPensum,
   Ausbildungsgang,
   Ausbildungsstaette,
@@ -90,20 +86,17 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
-  readonly ausbildungslandValues: AusbildungsLand[] = ['CH', 'AUSLAND'];
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   languageSig = this.store.selectSignal(selectLanguage);
 
   form = this.formBuilder.group({
-    ausbildungsland: this.formBuilder.control<AusbildungsLand | null>(null, {
-      validators: Validators.required,
-    }),
+    ausbildungsort: [<string | undefined>undefined, [Validators.required]],
+    isAusbildungAusland: [false, []],
     ausbildungsstaette: [<string | undefined>undefined, [Validators.required]],
     ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
     fachrichtung: [<string | null>null, [Validators.required]],
     ausbildungNichtGefunden: [false, []],
-    alternativeAusbildungsland: [<string | undefined>undefined],
     alternativeAusbildungsgang: [<string | undefined>undefined],
     alternativeAusbildungsstaette: [<string | undefined>undefined],
     ausbildungBegin: ['', []],
@@ -115,14 +108,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormEducationView);
 
-  ausbildungsLandSig = toSignal(
-    this.form.controls.ausbildungsland.valueChanges,
-  );
-  ausbildungsstaetteByLandSig = computed(() => {
-    const ausbildungsland = this.ausbildungsLandSig();
-    const ausbildungsstaettes = this.viewSig().ausbildungsstaetteByLand;
-    return ausbildungsland ? ausbildungsstaettes[ausbildungsland] : [];
-  });
   ausbildungsstaetteSig = toSignal(
     this.form.controls.ausbildungsstaette.valueChanges,
   );
@@ -131,12 +116,12 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   > = computed(() => {
     const currentAusbildungsstaette = this.ausbildungsstaetteSig();
     const toReturn = currentAusbildungsstaette
-      ? this.ausbildungsstaetteByLandSig().filter((ausbildungsstaette) => {
+      ? this.viewSig().ausbildungsstaettes.filter((ausbildungsstaette) => {
           return this.getTranslatedAusbildungstaetteName(ausbildungsstaette)
             ?.toLowerCase()
             .includes(currentAusbildungsstaette.toLowerCase());
         })
-      : this.ausbildungsstaetteByLandSig();
+      : this.viewSig().ausbildungsstaettes;
     return toReturn.map((ausbildungsstaette) => {
       return {
         ...ausbildungsstaette,
@@ -177,17 +162,13 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         const value = this.ausbildungNichtGefundenChangedSig();
         const {
-          ausbildungsland,
-          alternativeAusbildungsland,
           alternativeAusbildungsgang,
           alternativeAusbildungsstaette,
           ausbildungsgang,
           ausbildungsstaette,
         } = this.form.controls;
-        this.formUtils.setRequired(ausbildungsland, !value);
         this.formUtils.setRequired(ausbildungsgang, !value);
         this.formUtils.setRequired(ausbildungsstaette, !value);
-        this.formUtils.setRequired(alternativeAusbildungsland, !!value);
         this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
         this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
       },
@@ -275,13 +256,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
             (ausbildungsgang) =>
               ausbildungsgang.id === ausbildung?.ausbildungsgangId,
           );
-          const currentAusbildungsOrt =
-            ausbildungsstaette?.ausbildungsgaenge?.[0].ausbildungsort;
           this.form.patchValue({
             ...ausbildung,
-            ausbildungsland: currentAusbildungsOrt
-              ? ortToAusbidlungsLand(currentAusbildungsOrt)
-              : null,
             ausbildungsstaette:
               this.getTranslatedAusbildungstaetteName(ausbildungsstaette),
             ausbildungsgang: ausbildungsgang?.id,
@@ -293,12 +269,22 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
-    // When Land  null, disable staette
+    const isAusbildungAuslandSig = toSignal(
+      this.form.controls.isAusbildungAusland.valueChanges.pipe(
+        startWith(this.form.value.isAusbildungAusland),
+      ),
+    );
     effect(
       () => {
+        const isAusbildungAusland = !!isAusbildungAuslandSig();
+
+        if (isAusbildungAusland) {
+          this.form.controls.ausbildungsort.reset();
+        }
+
         this.formUtils.setDisabledState(
-          this.form.controls.ausbildungsstaette,
-          !this.ausbildungsLandSig(),
+          this.form.controls.ausbildungsort,
+          isAusbildungAusland,
           false,
         );
       },
@@ -366,12 +352,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     return index;
   }
 
-  handleLandChangedByUser() {
-    this.form.controls.ausbildungsstaette.reset();
-    this.form.controls.ausbildungsgang.reset();
-    this.form.controls.fachrichtung.reset();
-  }
-
   handleStaetteChangedByUser() {
     this.form.controls.ausbildungsgang.reset();
     this.form.controls.fachrichtung.reset();
@@ -437,7 +417,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         ...gesuchFormular,
         ausbildung: {
           ...formValue,
-          ausbildungsland: undefined,
           ausbildungsgangId: ausbildungsgang ?? undefined,
           ausbildungsstaette: undefined,
         },

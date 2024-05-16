@@ -181,9 +181,8 @@
 
   "shared.education.title": "Ausbildung",
   "shared.form.education.place.title": "Ausbildungsangaben",
-  "shared.form.education.ausbildungsland.label": "Ausbildungsland",
-  "shared.form.education.ausbildungsland.CH": "Schweiz",
-  "shared.form.education.ausbildungsland.AUSLAND": "Ausland",
+  "shared.form.education.isAusbildungAusland.label": "Ist die Ausbildung im Ausland?",
+  "shared.form.education.ausbildungsort.label": "Ausbildungsort",
   "shared.form.education.ausbildungsstaette.label": "Ausbildungsstätte",
   "shared.form.education.ausbildungsgang.label": "Ausbildungsgang",
   "shared.form.education.fachrichtung.label": "Fachrichtung",

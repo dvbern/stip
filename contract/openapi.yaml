@@ -2378,15 +2378,17 @@ components:
           type: string
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
-        alternativeAusbildungsland:
-          description: Required wenn andere ausbildungNichtGefunden = true
-          type: string
         alternativeAusbildungsstaette:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
+        ausbildungsort:
+          description: Not required if isAusbildungAusland = true
+          type: string
+        isAusbildungAusland:
+          type: boolean
     Ausbildungsstaette:
       anyOf:
         - required: []
@@ -2406,7 +2408,6 @@ components:
         - bezeichnungFr
         - ausbildungsrichtung
         - ausbildungsstaetteId
-        - ausbildungsort
       type: object
       properties:
         bezeichnungDe:
@@ -2419,8 +2420,6 @@ components:
           $ref: '#/components/schemas/Bildungsart'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
     AusbildungsgangCreate:
       description: ''
       required:
@@ -2428,7 +2427,6 @@ components:
         - bezeichnungFr
         - ausbildungsrichtung
         - ausbildungsstaette
-        - ausbildungsort
       type: object
       properties:
         bezeichnungDe:
@@ -2441,8 +2439,6 @@ components:
           $ref: '#/components/schemas/Bildungsart'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
     Ausbildungsort:
       description: ''
       type: string
@@ -2724,7 +2720,6 @@ components:
           type: string
     Ausbildungsgang:
       required:
-        - ausbildungsort
         - ausbildungsrichtung
         - id
       type: object
@@ -2739,9 +2734,6 @@ components:
           type: string
         ausbildungsrichtung:
           $ref: '#/components/schemas/Bildungsart'
-          description: ''
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
           description: ''
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'

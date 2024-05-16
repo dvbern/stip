@@ -122,6 +122,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.einnahmen.kosten.betreuungskostenKinder.required.message}";
     public static final String VALIDATION_DOCUMENTS_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.gesuchFormular.documents.required.message}";
+    public static final String VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE =
+        "{jakarta.validation.constraints.ausbildung.ausbildungsort.if.swiss.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

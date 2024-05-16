@@ -1,17 +1,17 @@
 keycloak:
-  url: "${STIP_OIDC_AUTH_SERVER}"
-  frontend-url: "${STIP_OIDC_AUTH_SERVER_FRONTEND:${keycloak.url}}"
-  client-id: "stip-api"
+  url: '${STIP_OIDC_AUTH_SERVER}'
+  frontend-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND:${keycloak.url}}'
+  client-id: 'stip-api'
 
 kstip:
-  version: "0.1-SNAPSHOT"
-  environment: "local"
+  version: '0.1-SNAPSHOT'
+  environment: 'local'
   allowed:
-    mimetypes: "image/tiff,image/jpeg,image/png,application/pdf"
+    mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
   pre-signed-request:
-    issuer: "https://stip.kibon.ch"
+    issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
-    secret: "${STIP_PRE_SIGNED_REQUEST_SECRET}"
+    secret: '${STIP_PRE_SIGNED_REQUEST_SECRET}'
 
 quarkus:
   execution-model-annotations:
@@ -20,50 +20,51 @@ quarkus:
     detection-mode: WARN
   liquibase:
     migrate-at-start: true
-    change-log: "db/migration/changelog.xml"
+    change-log: 'db/migration/changelog.xml'
     validate-on-migrate: true
+    clean-at-start: true
   oidc:
     bern:
-      auth-server-url: "${keycloak.url}/realms/bern"
-      client-id: "${keycloak.client-id}"
+      auth-server-url: '${keycloak.url}/realms/bern'
+      client-id: '${keycloak.client-id}'
       application-type: service
   s3:
     aws:
       credentials:
         type: static
         static-provider:
-          access-key-id: "${STIP_S3_ACCESS_KEY}"
-          secret-access-key: "${STIP_S3_ACCESS_SECRET}"
-      region: "${STIP_S3_REGION}"
+          access-key-id: '${STIP_S3_ACCESS_KEY}'
+          secret-access-key: '${STIP_S3_ACCESS_SECRET}'
+      region: '${STIP_S3_REGION}'
     path-style-access: true
   mailer:
     port: 25
-    auth-methods: "DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN"
-    host: "mailext.dvbern.ch"
-    from: "kstip@dvbern.ch"
+    auth-methods: 'DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN'
+    host: 'mailext.dvbern.ch'
+    from: 'kstip@dvbern.ch'
   datasource:
-    username: "${STIP_DB_USERNAME}"
-    db-kind: "postgresql"
-    password: "${STIP_DB_PASSWORD}"
+    username: '${STIP_DB_USERNAME}'
+    db-kind: 'postgresql'
+    password: '${STIP_DB_PASSWORD}'
     jdbc:
-      url: "${STIP_DB_URL}"
+      url: '${STIP_DB_URL}'
   hibernate-envers:
-    object-quoting-strategy: "QUOTE_ALL_OBJECTS"
+    object-quoting-strategy: 'QUOTE_ALL_OBJECTS'
   hibernate-orm:
     persistence-xml:
       ignore: true
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
-    multitenant: "DISCRIMINATOR"
-  default-locale: "de"
+    multitenant: 'DISCRIMINATOR'
+  default-locale: 'de'
   security:
     jaxrs:
       deny-unannotated-endpoints: true
   jacoco:
-    excludes: "ch/dvbern/stip/generated/**,ch/dvbern/stip/**/Q*,ch/dvbern/stip/**/*MapperImpl*"
+    excludes: 'ch/dvbern/stip/generated/**,ch/dvbern/stip/**/Q*,ch/dvbern/stip/**/*MapperImpl*'
   application:
-    name: "stip-api"
+    name: 'stip-api'
   keycloak:
     devservices:
       enabled: false
@@ -75,59 +76,59 @@ quarkus:
     mailer:
       mock: false
     s3:
-      endpoint-override: "${STIP_S3_ENDPOINT}"
+      endpoint-override: '${STIP_S3_ENDPOINT}'
     swagger-ui:
-      oauth2-redirect-url: "http://localhost:8080/q/swagger-ui/oauth2-redirect.html"
+      oauth2-redirect-url: 'http://localhost:8080/q/swagger-ui/oauth2-redirect.html'
     oidc:
       bern:
         tls:
-          trust-store-file-type: "jks"
-          trust-store-cert-alias: "apps-mercury-ocp-dvbern-ch"
-          trust-store-file: "./src/main/resources/development.jks"
-          trust-store-password: "changeit"
+          trust-store-file-type: 'jks'
+          trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
+          trust-store-file: './src/main/resources/development.jks'
+          trust-store-password: 'changeit'
     smallrye-openapi:
-      security-scheme: "oauth2-implicit"
-      security-scheme-name: "auth-dev-bern"
-      oauth2-implicit-authorization-url: "${STIP_OIDC_AUTH_SERVER}/realms/bern/protocol/openid-connect/auth"
+      security-scheme: 'oauth2-implicit'
+      security-scheme-name: 'auth-dev-bern'
+      oauth2-implicit-authorization-url: '${STIP_OIDC_AUTH_SERVER}/realms/bern/protocol/openid-connect/auth'
   kstip:
     pre-signed-request:
-      issuer: "https://stip.kibon.ch"
+      issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 5
 
 '%test':
   quarkus:
     hibernate-orm:
-      sql-load-script: "db/test/init_test.sql"
+      sql-load-script: 'db/test/init_test.sql'
       database:
-        generation: "drop-and-create"
+        generation: 'drop-and-create'
     oidc:
-      auth-server-url: "${keycloak.url}/realms/quarkus/"
-      client-id: "${keycloak.client-id}"
+      auth-server-url: '${keycloak.url}/realms/quarkus/'
+      client-id: '${keycloak.client-id}'
       application-type: service
     s3:
       aws:
         credentials:
           static-provider:
-            access-key-id: "test-key"
-            secret-access-key: "test-secret"
-        region: "eu-central-2"
+            access-key-id: 'test-key'
+            secret-access-key: 'test-secret'
+        region: 'eu-central-2'
       devservices:
-        buckets: "${bucket.name}"
+        buckets: '${bucket.name}'
   bucket:
-    name: "stip-usercontent-test"
+    name: 'stip-usercontent-test'
   keycloak:
-    url: "http://dummy.keycloak"
+    url: 'http://dummy.keycloak'
   kstip:
     allowed:
-      mimetypes: "text/plain,image/png"
+      mimetypes: 'text/plain,image/png'
     pre-signed-request:
-      issuer: "https://stip.kibon.ch"
+      issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
-      secret: "6a5336d35a192000260cbc9b41a1cb39"
+      secret: '6a5336d35a192000260cbc9b41a1cb39'
 '%prod':
   quarkus:
     s3:
-      endpoint-override: "${STIP_S3_ENDPOINT}"
+      endpoint-override: '${STIP_S3_ENDPOINT}'
 mp:
   openapi:
     scan:
@@ -135,18 +136,18 @@ mp:
     extensions:
       servers:
         relative: true
-      path: "/openapi.yml"
+      path: '/openapi.yml'
       enabled: true
 openapi:
   ui:
-    swaggerHeaderVisibility: "hidden"
-    yamlUrl: "/openapi.yml"
-    swaggerUiTheme: "feeling-blue"
-    serverVisibility: "hidden"
+    swaggerHeaderVisibility: 'hidden'
+    yamlUrl: '/openapi.yml'
+    swaggerUiTheme: 'feeling-blue'
+    serverVisibility: 'hidden'
 bucket:
-  name: "${STIP_S3_BUCKET_NAME}"
+  name: '${STIP_S3_BUCKET_NAME}'
 
 org:
   hibernate:
     envers:
-      audit_table_suffix: "_aud"
+      audit_table_suffix: '_aud'

@@ -25,7 +25,6 @@ public class AusbildungsgangCreateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung;
-  private @Valid String ausbildungsort;
   private @Valid UUID ausbildungsstaetteId;
 
   /**
@@ -88,26 +87,6 @@ public class AusbildungsgangCreateDto  implements Serializable {
   }
 
   /**
-   * 
-   **/
-  public AusbildungsgangCreateDto ausbildungsort(String ausbildungsort) {
-    this.ausbildungsort = ausbildungsort;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsort")
-  @NotNull
-  public String getAusbildungsort() {
-    return ausbildungsort;
-  }
-
-  @JsonProperty("ausbildungsort")
-  public void setAusbildungsort(String ausbildungsort) {
-    this.ausbildungsort = ausbildungsort;
-  }
-
-  /**
    **/
   public AusbildungsgangCreateDto ausbildungsstaetteId(UUID ausbildungsstaetteId) {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
@@ -138,13 +117,12 @@ public class AusbildungsgangCreateDto  implements Serializable {
     return Objects.equals(this.bezeichnungDe, ausbildungsgangCreate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangCreate.bezeichnungFr) &&
         Objects.equals(this.ausbildungsrichtung, ausbildungsgangCreate.ausbildungsrichtung) &&
-        Objects.equals(this.ausbildungsort, ausbildungsgangCreate.ausbildungsort) &&
         Objects.equals(this.ausbildungsstaetteId, ausbildungsgangCreate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsort, ausbildungsstaetteId);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaetteId);
   }
 
   @Override
@@ -155,7 +133,6 @@ public class AusbildungsgangCreateDto  implements Serializable {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungsrichtung: ").append(toIndentedString(ausbildungsrichtung)).append("\n");
-    sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
     sb.append("}");
     return sb.toString();
