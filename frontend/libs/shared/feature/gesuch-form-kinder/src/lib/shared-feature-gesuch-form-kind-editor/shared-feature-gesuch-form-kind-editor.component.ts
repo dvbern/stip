@@ -189,22 +189,24 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
+
+    effect(
+      () => {
+        this.formUtils.setDisabledState(
+          this.form.controls.erhalteneAlimentebeitraege,
+          this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
+          !this.viewSig().readonly,
+        );
+      },
+      { allowSignalWrites: true },
+    );
+
     effect(
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
           this.form.disable({ emitEvent: false });
         }
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.formUtils.setDisabledState(
-          this.form.controls.erhalteneAlimentebeitraege,
-          !this.alimentenregelungExistiertSig(),
-          true,
-        );
       },
       { allowSignalWrites: true },
     );
