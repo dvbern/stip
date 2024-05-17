@@ -30,7 +30,7 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.environment", defaultValue = "local")
     String environment;
 
-    @ConfigProperty(name = "kstip.version")
+    @ConfigProperty(name = "quarkus.application.version")
     String version;
 
     @Getter
@@ -41,8 +41,21 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.allowed.mimetypes")
     Set<String> allowedMimeTypes;
 
+    @Getter
+    @ConfigProperty(name = "kstip.pre-signed-request.issuer")
+    String issuer;
+
+    @Getter
+    @ConfigProperty(name = "kstip.pre-signed-request.expires-in-minutes")
+    Integer expiresInMinutes;
+
+    @Getter
+    @ConfigProperty(name = "kstip.pre-signed-request.secret")
+    String secret;
+
     public DeploymentConfigDto getDeploymentConfiguration() {
-        return new DeploymentConfigDto().version(version)
+        return new DeploymentConfigDto()
+            .version(version)
             .environment(environment)
             .allowedMimeTypes(allowedMimeTypes.stream().toList());
     }

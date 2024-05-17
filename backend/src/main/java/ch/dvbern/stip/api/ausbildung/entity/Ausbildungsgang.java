@@ -39,10 +39,6 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
-    @Column(name = "ausbildungsort", nullable = false)
-    private String ausbildungsort;
-
-    @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(name = "bezeichnung_de", nullable = false)
     private String bezeichnungDe;

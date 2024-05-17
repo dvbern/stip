@@ -121,7 +121,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     'bezeichnungDe',
     'bezeichnungFr',
     'ausbildungsrichtung',
-    'ausbildungsort',
     'actions',
   ];
 
@@ -131,7 +130,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     bezeichnungDe: ['', Validators.required],
     bezeichnungFr: ['', Validators.required],
     ausbildungsrichtung: ['', Validators.required],
-    ausbildungsort: ['', Validators.required],
   });
 
   constructor() {

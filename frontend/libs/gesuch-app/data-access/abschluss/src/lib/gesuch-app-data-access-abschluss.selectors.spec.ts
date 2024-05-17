@@ -11,6 +11,7 @@ describe('selectGesuchAppDataAccessAbschlussView', () => {
       lastUpdate: null,
       loading: false,
       validations: [],
+      specialValidationErrors: [],
     };
     const result = selectGesuchAppDataAccessAbschlussView.projector(
       state,

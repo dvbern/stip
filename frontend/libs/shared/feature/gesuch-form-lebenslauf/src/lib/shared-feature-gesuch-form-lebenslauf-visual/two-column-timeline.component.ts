@@ -136,8 +136,8 @@ export class TwoColumnTimelineComponent implements OnChanges {
     lebenslaufItem: LebenslaufItemUpdate,
   ): TimelineRawItem['label'] {
     if (
-      lebenslaufItem.taetigskeitsart !== undefined &&
-      lebenslaufItem.taetigskeitsart !== null
+      lebenslaufItem.taetigkeitsart !== undefined &&
+      lebenslaufItem.taetigkeitsart !== null
     ) {
       return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
     }

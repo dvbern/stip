@@ -3,6 +3,10 @@ import { createSelector } from '@ngrx/store';
 import { toAbschlussPhase } from '@dv/gesuch-app/model/gesuch-abschluss';
 import { sharedDataAccessGesuchsFeature } from '@dv/shared/data-access/gesuch';
 import { SharedModelError } from '@dv/shared/model/error';
+import {
+  SPECIAL_VALIDATION_ERRORS,
+  isSpecialValidationError,
+} from '@dv/shared/model/gesuch-form';
 
 import { gesuchAppDataAccessAbschlussFeature } from './gesuch-app-data-access-abschluss.feature';
 
@@ -13,15 +17,17 @@ export const selectGesuchAppDataAccessAbschlussView = createSelector(
   sharedDataAccessGesuchsFeature.selectValidations,
   (state, gesuch, lastUpdate, validations) => {
     const checkValidationErrors = getValidationErrors(state.checkResult?.error);
-    const allValidations = (validations?.errors ?? []).concat(
-      checkValidationErrors ?? [],
-    );
+    const allErrors = validations?.errors ?? [];
+    const allValidations = allErrors.concat(checkValidationErrors ?? []);
     return {
       ...state,
       gesuch,
       lastUpdate,
       validations: allValidations,
-      canCheck: validations?.errors?.length === 0,
+      specialValidationErrors: allValidations
+        .filter(isSpecialValidationError)
+        .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
+      canCheck: allErrors.length === 0,
       abschlussPhase: toAbschlussPhase(gesuch, !!state.checkResult?.success),
     };
   },

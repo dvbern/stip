@@ -26,7 +26,9 @@
     "e2e": "nx run-many --target=e2e",
     "e2e:gs": "nx e2e gesuch-app-e2e",
     "e2e:sb": "nx e2e sachbearbeitung-app-e2e",
+    "prebuild:gs": "npm run set-version",
     "build:gs": "nx build gesuch-app",
+    "prebuild:sb": "npm run set-version",
     "build:sb": "nx build sachbearbeitung-app",
     "analyze:gs": "nx build gesuch-app --output-hashing=none --named-chunks --source-map && source-map-explorer dist/apps/gesuch-app/*.js --html dist/apps/gesuch-app/sme/index.html && http-server ./dist/apps/gesuch-app/sme/",
     "analyze:sb": "nx build sachbearbeitung-app --output-hashing=none --named-chunks --source-map && source-map-explorer dist/apps/sachbearbeitung-app/*.js --html dist/apps/sachbearbeitung-app/sme/index.html && http-server ./dist/apps/sachbearbeitung-app/sme/",
@@ -39,7 +41,8 @@
     "format:test": "nx format:check --all",
     "format:write": "nx format:write --all",
     "openapi": "ts-node scripts/openapi-build.ts",
-    "openapi:extract-current-templates": "openapi-generator-cli author template -g typescript-angular -o scripts/conf/openapi-templates/default-6.5.0"
+    "openapi:extract-current-templates": "openapi-generator-cli author template -g typescript-angular -o scripts/conf/openapi-templates/default-6.5.0",
+    "set-version": "ts-node scripts/version-from-pom.ts"
   },
   "private": true,
   "dependencies": {

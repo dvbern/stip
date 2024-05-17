@@ -55,10 +55,10 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  '/gesuch/{gesuchId}/dokument/{dokumentTyp}':
+  '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:
-        - Gesuch
+        - Dokument
       parameters:
         - name: dokumentTyp
           schema:
@@ -97,7 +97,7 @@ paths:
               $ref: '#/components/schemas/DokumentCreate'
         required: true
       tags:
-        - Gesuch
+        - Dokument
       parameters:
         - name: dokumentTyp
           schema:
@@ -822,10 +822,16 @@ paths:
                 $ref: '#/components/schemas/ValidationReport'
           description: Die Validierung wurde erflogreich durchgeführt
       operationId: validateGesuchPages
-  '/gesuch/{gesuchId}/dokument/{dokumentTyp}/{dokumentId}':
+  '/dokument/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
     get:
       tags:
-        - Gesuch
+        - Dokument
       responses:
         '200':
           content:
@@ -837,9 +843,22 @@ paths:
       operationId: getDokument
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}':
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: File returned
+      operationId: getDokumentDownloadToken
+      summary: get Dokument Download Token
     delete:
       tags:
-        - Gesuch
+        - Dokument
       parameters:
         - name: dokumentTyp
           schema:
@@ -2359,15 +2378,17 @@ components:
           type: string
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
-        alternativeAusbildungsland:
-          description: Required wenn andere ausbildungNichtGefunden = true
-          type: string
         alternativeAusbildungsstaette:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
+        ausbildungsort:
+          description: Not required if isAusbildungAusland = true
+          type: string
+        isAusbildungAusland:
+          type: boolean
     Ausbildungsstaette:
       anyOf:
         - required: []
@@ -2387,7 +2408,6 @@ components:
         - bezeichnungFr
         - ausbildungsrichtung
         - ausbildungsstaetteId
-        - ausbildungsort
       type: object
       properties:
         bezeichnungDe:
@@ -2400,8 +2420,6 @@ components:
           $ref: '#/components/schemas/Bildungsart'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
     AusbildungsgangCreate:
       description: ''
       required:
@@ -2409,7 +2427,6 @@ components:
         - bezeichnungFr
         - ausbildungsrichtung
         - ausbildungsstaette
-        - ausbildungsort
       type: object
       properties:
         bezeichnungDe:
@@ -2422,8 +2439,6 @@ components:
           $ref: '#/components/schemas/Bildungsart'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
     Ausbildungsort:
       description: ''
       type: string
@@ -2705,7 +2720,6 @@ components:
           type: string
     Ausbildungsgang:
       required:
-        - ausbildungsort
         - ausbildungsrichtung
         - id
       type: object
@@ -2720,9 +2734,6 @@ components:
           type: string
         ausbildungsrichtung:
           $ref: '#/components/schemas/Bildungsart'
-          description: ''
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
           description: ''
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -29,6 +30,7 @@ import { isAfter, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { selectSharedDataAccessGesuchValidationView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
@@ -139,6 +141,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
+  validationViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchValidationView,
+  );
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
@@ -301,6 +306,24 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
+    const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
+      const {
+        invalidFormularProps: { specialValidationErrors },
+      } = this.validationViewSig();
+      if (
+        specialValidationErrors?.some(
+          (e) => e.field === 'sozialversicherungsnummer',
+        ) &&
+        // remove error once the field has changed
+        control.pristine
+      ) {
+        control.markAsTouched();
+        return { alreadyUsedAhv: true };
+      } else {
+        return null;
+      }
+    };
+
     effect(
       () => {
         updateWohnsitzControlsState(
@@ -333,6 +356,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         const svValidators = [
           Validators.required,
           sharedUtilValidatorAhv('personInAusbildung', gesuchFormular),
+          isUniqueSozialversicherungsnummer,
         ];
         this.form.controls.sozialversicherungsnummer.clearValidators();
         this.form.controls.sozialversicherungsnummer.addValidators(

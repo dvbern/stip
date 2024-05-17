@@ -32,8 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_AUSBILDUNGSRICHTUNG,
-  AusbildungsgangCreateDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID,
-  AusbildungsgangCreateDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT
+  AusbildungsgangCreateDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID
 })
 @JsonTypeName("AusbildungsgangCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,9 +48,6 @@ public class AusbildungsgangCreateDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID = "ausbildungsstaetteId";
   private UUID ausbildungsstaetteId;
-
-  public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
-  private String ausbildungsort;
 
   public AusbildungsgangCreateDtoSpec() {
   }
@@ -159,32 +155,6 @@ public class AusbildungsgangCreateDtoSpec {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
 
-
-  public AusbildungsgangCreateDtoSpec ausbildungsort(String ausbildungsort) {
-    
-    this.ausbildungsort = ausbildungsort;
-    return this;
-  }
-
-   /**
-   * 
-   * @return ausbildungsort
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getAusbildungsort() {
-    return ausbildungsort;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsort(String ausbildungsort) {
-    this.ausbildungsort = ausbildungsort;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -197,13 +167,12 @@ public class AusbildungsgangCreateDtoSpec {
     return Objects.equals(this.bezeichnungDe, ausbildungsgangCreate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangCreate.bezeichnungFr) &&
         Objects.equals(this.ausbildungsrichtung, ausbildungsgangCreate.ausbildungsrichtung) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangCreate.ausbildungsstaetteId) &&
-        Objects.equals(this.ausbildungsort, ausbildungsgangCreate.ausbildungsort);
+        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangCreate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaetteId, ausbildungsort);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaetteId);
   }
 
   @Override
@@ -214,7 +183,6 @@ public class AusbildungsgangCreateDtoSpec {
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungsrichtung: ").append(toIndentedString(ausbildungsrichtung)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
-    sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("}");
     return sb.toString();
   }

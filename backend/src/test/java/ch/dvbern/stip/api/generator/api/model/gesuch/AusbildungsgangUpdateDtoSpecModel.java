@@ -11,6 +11,5 @@ public class AusbildungsgangUpdateDtoSpecModel {
             model.setBezeichnungFr("Bachelor Informatik");
             model.setAusbildungsrichtung(BildungsartDtoSpec.UNIVERSITAETEN_ETH);
             model.setAusbildungsstaetteId(AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec.getId());
-            model.setAusbildungsort("Bern");
         });
 }

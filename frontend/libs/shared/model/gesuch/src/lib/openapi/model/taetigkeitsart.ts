@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 
-export type Taetigskeitsart = 'ERWERBSTAETIGKEIT' | 'ANDERE_TAETIGKEIT';
+export type Taetigkeitsart = 'ERWERBSTAETIGKEIT' | 'ANDERE_TAETIGKEIT';
 
-export const Taetigskeitsart = {
-    ERWERBSTAETIGKEIT: 'ERWERBSTAETIGKEIT' as Taetigskeitsart,
-    ANDERE_TAETIGKEIT: 'ANDERE_TAETIGKEIT' as Taetigskeitsart
+export const Taetigkeitsart = {
+    ERWERBSTAETIGKEIT: 'ERWERBSTAETIGKEIT' as Taetigkeitsart,
+    ANDERE_TAETIGKEIT: 'ANDERE_TAETIGKEIT' as Taetigkeitsart
 };
 

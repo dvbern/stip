@@ -153,6 +153,7 @@ async function sleep(msec: number) {
     'Ausbildungsstaette',
     'Benutzer',
     'Configuration',
+    'Dokument',
     'Fall',
     'Gesuch',
     'Gesuchsperiode',

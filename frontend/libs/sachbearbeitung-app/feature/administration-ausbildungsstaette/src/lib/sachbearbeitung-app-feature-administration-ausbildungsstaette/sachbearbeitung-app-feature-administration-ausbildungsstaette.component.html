@@ -241,27 +241,6 @@
                     </td>
                   </ng-container>
 
-                  <!-- ausbildungsort -->
-                  <ng-container matColumnDef="ausbildungsort">
-                    <th mat-header-cell *matHeaderCellDef>
-                      {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsort' | translate }}
-                    </th>
-                    <td mat-cell *matCellDef="let ausbildungsgang">
-                      @if (editedAusbildungsgang === ausbildungsgang) {
-                        <mat-form-field>
-                          <input
-                            formControlName="ausbildungsort"
-                            type="text"
-                            matInput
-                            (click)="$event.stopPropagation()"
-                          />
-                        </mat-form-field>
-                      } @else {
-                        {{ ausbildungsgang.ausbildungsort }}
-                      }
-                    </td>
-                  </ng-container>
-
                   <!-- actions -->
                   <ng-container matColumnDef="actions">
                     <th class="action-cell" mat-header-cell *matHeaderCellDef>

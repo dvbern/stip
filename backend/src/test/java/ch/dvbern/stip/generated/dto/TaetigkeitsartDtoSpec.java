@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets Taetigskeitsart
+ * Gets or Sets Taetigkeitsart
  */
-public enum TaetigskeitsartDtoSpec {
+public enum TaetigkeitsartDtoSpec {
   
   ERWERBSTAETIGKEIT("ERWERBSTAETIGKEIT"),
   
@@ -32,7 +32,7 @@ public enum TaetigskeitsartDtoSpec {
 
   private String value;
 
-  TaetigskeitsartDtoSpec(String value) {
+  TaetigkeitsartDtoSpec(String value) {
     this.value = value;
   }
 
@@ -47,8 +47,8 @@ public enum TaetigskeitsartDtoSpec {
   }
 
   @JsonCreator
-  public static TaetigskeitsartDtoSpec fromValue(String value) {
-    for (TaetigskeitsartDtoSpec b : TaetigskeitsartDtoSpec.values()) {
+  public static TaetigkeitsartDtoSpec fromValue(String value) {
+    for (TaetigkeitsartDtoSpec b : TaetigkeitsartDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }
