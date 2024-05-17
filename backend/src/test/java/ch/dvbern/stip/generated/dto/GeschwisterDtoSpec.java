@@ -39,8 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterDtoSpec.JSON_PROPERTY_ID,
   GeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   GeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
-  GeschwisterDtoSpec.JSON_PROPERTY_NACHNAME,
-  GeschwisterDtoSpec.JSON_PROPERTY_COPY_OF_ID
+  GeschwisterDtoSpec.JSON_PROPERTY_NACHNAME
 })
 @JsonTypeName("Geschwister")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -68,9 +67,6 @@ public class GeschwisterDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
-
-  public static final String JSON_PROPERTY_COPY_OF_ID = "copyOfId";
-  private UUID copyOfId;
 
   public GeschwisterDtoSpec() {
   }
@@ -189,9 +185,9 @@ public class GeschwisterDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
     return id;
@@ -199,7 +195,7 @@ public class GeschwisterDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -282,32 +278,6 @@ public class GeschwisterDtoSpec {
     this.nachname = nachname;
   }
 
-
-  public GeschwisterDtoSpec copyOfId(UUID copyOfId) {
-    
-    this.copyOfId = copyOfId;
-    return this;
-  }
-
-   /**
-   * Get copyOfId
-   * @return copyOfId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_COPY_OF_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getCopyOfId() {
-    return copyOfId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_COPY_OF_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -324,13 +294,12 @@ public class GeschwisterDtoSpec {
         Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
-        Objects.equals(this.nachname, geschwister.nachname) &&
-        Objects.equals(this.copyOfId, geschwister.copyOfId);
+        Objects.equals(this.nachname, geschwister.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, copyOfId);
+    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname);
   }
 
   @Override
@@ -345,7 +314,6 @@ public class GeschwisterDtoSpec {
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

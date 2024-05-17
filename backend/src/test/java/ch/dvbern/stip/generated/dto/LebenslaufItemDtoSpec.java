@@ -41,8 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LebenslaufItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
   LebenslaufItemDtoSpec.JSON_PROPERTY_TITEL_DES_ABSCHLUSSES,
   LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITSART,
-  LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG,
-  LebenslaufItemDtoSpec.JSON_PROPERTY_COPY_OF_ID
+  LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG
 })
 @JsonTypeName("LebenslaufItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -80,9 +79,6 @@ public class LebenslaufItemDtoSpec {
   public static final String JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG = "taetigkeitsBeschreibung";
   private String taetigkeitsBeschreibung;
 
-  public static final String JSON_PROPERTY_COPY_OF_ID = "copyOfId";
-  private UUID copyOfId;
-
   public LebenslaufItemDtoSpec() {
   }
 
@@ -96,9 +92,9 @@ public class LebenslaufItemDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
     return id;
@@ -106,7 +102,7 @@ public class LebenslaufItemDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -371,32 +367,6 @@ public class LebenslaufItemDtoSpec {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
-
-  public LebenslaufItemDtoSpec copyOfId(UUID copyOfId) {
-    
-    this.copyOfId = copyOfId;
-    return this;
-  }
-
-   /**
-   * Get copyOfId
-   * @return copyOfId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_COPY_OF_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getCopyOfId() {
-    return copyOfId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_COPY_OF_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -416,13 +386,12 @@ public class LebenslaufItemDtoSpec {
         Objects.equals(this.fachrichtung, lebenslaufItem.fachrichtung) &&
         Objects.equals(this.titelDesAbschlusses, lebenslaufItem.titelDesAbschlusses) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItem.taetigkeitsart) &&
-        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung) &&
-        Objects.equals(this.copyOfId, lebenslaufItem.copyOfId);
+        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bildungsart, von, bis, wohnsitz, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung, copyOfId);
+    return Objects.hash(id, bildungsart, von, bis, wohnsitz, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung);
   }
 
   @Override
@@ -440,7 +409,6 @@ public class LebenslaufItemDtoSpec {
     sb.append("    titelDesAbschlusses: ").append(toIndentedString(titelDesAbschlusses)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -45,8 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ElternDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNG_AUSBEZAHLT,
   ElternDtoSpec.JSON_PROPERTY_ID,
   ElternDtoSpec.JSON_PROPERTY_ELTERN_TYP,
-  ElternDtoSpec.JSON_PROPERTY_NACHNAME,
-  ElternDtoSpec.JSON_PROPERTY_COPY_OF_ID
+  ElternDtoSpec.JSON_PROPERTY_NACHNAME
 })
 @JsonTypeName("Eltern")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -95,9 +94,6 @@ public class ElternDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
-
-  public static final String JSON_PROPERTY_COPY_OF_ID = "copyOfId";
-  private UUID copyOfId;
 
   public ElternDtoSpec() {
   }
@@ -424,9 +420,9 @@ public class ElternDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
     return id;
@@ -434,7 +430,7 @@ public class ElternDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -491,32 +487,6 @@ public class ElternDtoSpec {
     this.nachname = nachname;
   }
 
-
-  public ElternDtoSpec copyOfId(UUID copyOfId) {
-    
-    this.copyOfId = copyOfId;
-    return this;
-  }
-
-   /**
-   * Get copyOfId
-   * @return copyOfId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_COPY_OF_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getCopyOfId() {
-    return copyOfId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_COPY_OF_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -540,13 +510,12 @@ public class ElternDtoSpec {
         Objects.equals(this.ergaenzungsleistungAusbezahlt, eltern.ergaenzungsleistungAusbezahlt) &&
         Objects.equals(this.id, eltern.id) &&
         Objects.equals(this.elternTyp, eltern.elternTyp) &&
-        Objects.equals(this.nachname, eltern.nachname) &&
-        Objects.equals(this.copyOfId, eltern.copyOfId);
+        Objects.equals(this.nachname, eltern.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, wohnkosten, sozialversicherungsnummer, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, id, elternTyp, nachname, copyOfId);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, wohnkosten, sozialversicherungsnummer, geburtsdatum, sozialhilfebeitraegeAusbezahlt, ausweisbFluechtling, ergaenzungsleistungAusbezahlt, id, elternTyp, nachname);
   }
 
   @Override
@@ -568,7 +537,6 @@ public class ElternDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

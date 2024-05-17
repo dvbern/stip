@@ -251,12 +251,12 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
             (ausbildungsstaette) =>
               ausbildungsstaette.ausbildungsgaenge?.find(
                 (ausbildungsgang) =>
-                  ausbildungsgang.id === ausbildung.ausbildungsgangId,
+                  ausbildungsgang.id === ausbildung.ausbildungsgang.id,
               ),
           );
           const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
             (ausbildungsgang) =>
-              ausbildungsgang.id === ausbildung?.ausbildungsgangId,
+              ausbildungsgang.id === ausbildung?.ausbildungsgang.id,
           );
           this.form.patchValue({
             ...ausbildung,
@@ -301,11 +301,18 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     );
     effect(
       () => {
+        const staette = staetteSig();
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
-          this.viewSig().readonly || !staetteSig(),
+          this.viewSig().readonly || !staette,
           !this.viewSig().readonly,
         );
+
+        if (!staette) {
+          this.form.controls.ausbildungsgang.reset();
+          this.form.controls.fachrichtung.reset();
+          this.form.controls.ausbildungsort.reset();
+        }
       },
       { allowSignalWrites: true },
     );
@@ -352,13 +359,9 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     return index;
   }
 
-  handleStaetteChangedByUser() {
-    this.form.controls.ausbildungsgang.reset();
-    this.form.controls.fachrichtung.reset();
-  }
-
   handleGangChangedByUser() {
     this.form.controls.fachrichtung.reset();
+    this.form.controls.ausbildungsort.reset();
   }
 
   handleManuellChangedByUser() {
@@ -367,6 +370,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     this.form.controls.ausbildungsgang.reset();
     this.form.controls.alternativeAusbildungsgang.reset();
     this.form.controls.fachrichtung.reset();
+    this.form.controls.ausbildungsort.reset();
   }
 
   handleSave() {

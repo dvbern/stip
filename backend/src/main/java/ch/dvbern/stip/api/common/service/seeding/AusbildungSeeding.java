@@ -6,7 +6,9 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
-import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
+import ch.dvbern.stip.api.bildungsart.repo.BildungsartRepository;
+import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +20,38 @@ import lombok.extern.slf4j.Slf4j;
 public class AusbildungSeeding extends Seeder {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
+    private final BildungsartRepository bildungsartRepository;
+
+    protected Bildungsart bildungsart;
 
     @Override
     @Startup
-    void startup() {
+    public void startup() {
         seed();
     }
 
     @Override
-    void doSeed() {
+    protected void doSeed() {
         if (ausbildungsstaetteRepository.count() == 0) {
             LOG.info("Seeding Uni and FH");
+
+            createBildungsart();
             seedUni();
             seedFh();
         }
     }
 
-    private void seedUni() {
+    protected void createBildungsart() {
+        final var art = new Bildungsart()
+            .setBeschreibung("Universität")
+            .setBfs(-1)
+            .setBildungsstufe(Bildungsstufe.TERTIAER);
+
+        bildungsartRepository.persistAndFlush(art);
+        bildungsart = art;
+    }
+
+    protected void seedUni() {
         final var uniBern = new Ausbildungsstaette()
             .setNameDe("Universität Bern")
             .setNameFr("Université de Berne");
@@ -44,19 +61,19 @@ public class AusbildungSeeding extends Seeder {
         final var uniBeGang1 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-            .setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH)
+            .setBildungsart(bildungsart)
             .setAusbildungsstaette(uniBern);
 
         final var uniBeGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-            .setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH)
+            .setBildungsart(bildungsart)
             .setAusbildungsstaette(uniBern);
 
         ausbildungsgangRepository.persist(List.of(uniBeGang1, uniBeGang2));
     }
 
-    private void seedFh() {
+    protected void seedFh() {
         final var bfh = new Ausbildungsstaette()
             .setNameDe("Berner Fachhochschule")
             .setNameFr("Haute école spécialisée bernoise");
@@ -66,13 +83,13 @@ public class AusbildungSeeding extends Seeder {
         final var bfhGang1 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-            .setAusbildungsrichtung(Bildungsart.FACHHOCHSCHULEN)
+            .setBildungsart(bildungsart)
             .setAusbildungsstaette(bfh);
 
         final var bfhGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-            .setAusbildungsrichtung(Bildungsart.FACHHOCHSCHULEN)
+            .setBildungsart(bildungsart)
             .setAusbildungsstaette(bfh);
 
         ausbildungsgangRepository.persist(List.of(bfhGang1, bfhGang2));

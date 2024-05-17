@@ -100,11 +100,11 @@ export class TwoColumnTimelineComponent implements OnChanges {
     const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
       staette.ausbildungsgaenge?.some(
         (ausbildungsgang) =>
-          plannedAusbildung?.ausbildungsgangId === ausbildungsgang.id,
+          plannedAusbildung?.ausbildungsgang.id === ausbildungsgang.id,
       ),
     );
     const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-      (each) => each.id === plannedAusbildung?.ausbildungsgangId,
+      (each) => each.id === plannedAusbildung?.ausbildungsgang.id,
     );
 
     timelineRawItems.push({

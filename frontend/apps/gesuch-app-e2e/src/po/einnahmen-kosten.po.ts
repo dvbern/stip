@@ -87,10 +87,6 @@ export class EinnahmenKostenPO {
 
     await this.elems.zulagen.fill(`${einnahmenKosten.zulagen ?? 0}`);
 
-    await this.elems.ausbildungskostenSekundarstufeZwei.fill(
-      `${einnahmenKosten.ausbildungskostenSekundarstufeZwei ?? 0}`,
-    );
-
     await this.elems.ausbildungskostenTertiaerstufe.fill(
       `${einnahmenKosten.ausbildungskostenTertiaerstufe ?? 0}`,
     );

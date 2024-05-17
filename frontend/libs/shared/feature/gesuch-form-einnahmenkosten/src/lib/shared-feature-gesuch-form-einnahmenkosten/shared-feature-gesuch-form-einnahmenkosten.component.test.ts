@@ -328,6 +328,15 @@ function createEmptyAusbildung(): Ausbildung {
     ausbildungBegin: '',
     ausbildungEnd: '',
     pensum: 'VOLLZEIT',
+    ausbildungsgang: {
+      id: '',
+      bildungsart: {
+        id: '',
+        bfs: -1,
+        beschreibung: '',
+        bildungsstufe: 'SEKUNDAR_2',
+      },
+    },
   };
 }
 

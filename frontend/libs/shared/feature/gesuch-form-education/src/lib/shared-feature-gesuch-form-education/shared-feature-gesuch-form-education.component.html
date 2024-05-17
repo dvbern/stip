@@ -31,7 +31,6 @@
             matInput
             [matAutocomplete]="staetten"
             [placeholder]="'shared.form.select.empty' | translate"
-            (change)="handleStaetteChangedByUser()"
           />
           @if (form.controls.ausbildungsstaette.value) {
             <button
@@ -83,7 +82,7 @@
           <mat-select
             formControlName="ausbildungsgang"
             data-testid="form-education-ausbildungsgang"
-            (change)="handleGangChangedByUser()"
+            (valueChange)="handleGangChangedByUser()"
             [placeholder]="'shared.form.select.empty' | translate"
           >
             @for (l of ausbildungsgangOptionsSig(); track trackByIndex($index)) {

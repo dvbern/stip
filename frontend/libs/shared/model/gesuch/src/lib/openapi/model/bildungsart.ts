@@ -9,20 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Bildungsstufe } from './bildungsstufe';
 
 /**
  * 
  */
-export type Bildungsart = 'GYMNASIALE_MATURITAETSSCHULEN' | 'SCHULEN_FUER_ALLGEMEINBILDUNG' | 'VOLLZEITBERUFSSCHULEN' | 'LEHREN_ANLEHREN' | 'BERUFSMATURITAET_NACH_LEHRE' | 'HOEHERE_BERUFSBILDUNG' | 'FACHHOCHSCHULEN' | 'UNIVERSITAETEN_ETH';
+export interface Bildungsart { 
+    beschreibung: string;
+    bildungsstufe: Bildungsstufe;
+    bfs: number;
+    id: string;
+}
 
-export const Bildungsart = {
-    GYMNASIALE_MATURITAETSSCHULEN: 'GYMNASIALE_MATURITAETSSCHULEN' as Bildungsart,
-    SCHULEN_FUER_ALLGEMEINBILDUNG: 'SCHULEN_FUER_ALLGEMEINBILDUNG' as Bildungsart,
-    VOLLZEITBERUFSSCHULEN: 'VOLLZEITBERUFSSCHULEN' as Bildungsart,
-    LEHREN_ANLEHREN: 'LEHREN_ANLEHREN' as Bildungsart,
-    BERUFSMATURITAET_NACH_LEHRE: 'BERUFSMATURITAET_NACH_LEHRE' as Bildungsart,
-    HOEHERE_BERUFSBILDUNG: 'HOEHERE_BERUFSBILDUNG' as Bildungsart,
-    FACHHOCHSCHULEN: 'FACHHOCHSCHULEN' as Bildungsart,
-    UNIVERSITAETEN_ETH: 'UNIVERSITAETEN_ETH' as Bildungsart
-};
+
 

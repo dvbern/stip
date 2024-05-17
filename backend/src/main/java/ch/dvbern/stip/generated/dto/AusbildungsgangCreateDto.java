@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsgangCreateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung;
+  private @Valid UUID bildungsartId;
   private @Valid UUID ausbildungsstaetteId;
 
   /**
@@ -69,21 +69,21 @@ public class AusbildungsgangCreateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangCreateDto ausbildungsrichtung(ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung) {
-    this.ausbildungsrichtung = ausbildungsrichtung;
+  public AusbildungsgangCreateDto bildungsartId(UUID bildungsartId) {
+    this.bildungsartId = bildungsartId;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsrichtung")
+  @JsonProperty("bildungsartId")
   @NotNull
-  public ch.dvbern.stip.api.common.type.Bildungsart getAusbildungsrichtung() {
-    return ausbildungsrichtung;
+  public UUID getBildungsartId() {
+    return bildungsartId;
   }
 
-  @JsonProperty("ausbildungsrichtung")
-  public void setAusbildungsrichtung(ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung) {
-    this.ausbildungsrichtung = ausbildungsrichtung;
+  @JsonProperty("bildungsartId")
+  public void setBildungsartId(UUID bildungsartId) {
+    this.bildungsartId = bildungsartId;
   }
 
   /**
@@ -116,13 +116,13 @@ public class AusbildungsgangCreateDto  implements Serializable {
     AusbildungsgangCreateDto ausbildungsgangCreate = (AusbildungsgangCreateDto) o;
     return Objects.equals(this.bezeichnungDe, ausbildungsgangCreate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangCreate.bezeichnungFr) &&
-        Objects.equals(this.ausbildungsrichtung, ausbildungsgangCreate.ausbildungsrichtung) &&
+        Objects.equals(this.bildungsartId, ausbildungsgangCreate.bildungsartId) &&
         Objects.equals(this.ausbildungsstaetteId, ausbildungsgangCreate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaetteId);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsartId, ausbildungsstaetteId);
   }
 
   @Override
@@ -132,7 +132,7 @@ public class AusbildungsgangCreateDto  implements Serializable {
     
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    ausbildungsrichtung: ").append(toIndentedString(ausbildungsrichtung)).append("\n");
+    sb.append("    bildungsartId: ").append(toIndentedString(bildungsartId)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
     sb.append("}");
     return sb.toString();

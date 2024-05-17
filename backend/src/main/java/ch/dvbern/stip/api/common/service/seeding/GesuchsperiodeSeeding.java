@@ -24,12 +24,12 @@ public class GesuchsperiodeSeeding extends Seeder{
 
     @Override
     @Startup
-    void startup() {
+    public void startup() {
         seed();
     }
 
     @Override
-    void doSeed() {
+    protected void doSeed() {
         LOG.info("Seeding Gesuchsperiode");
         Gesuchsjahr newJahr = null;
         if (gesuchsperiodeRepository.count() == 0) {

@@ -50,6 +50,7 @@ import {
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
+  maskitoMaxNumber,
   maskitoNumber,
   maskitoPositiveNumber,
 } from '@dv/shared/util/maskito-util';
@@ -121,6 +122,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
+  //TODO: KSTIP-619 replace harcoded values with stammdaten
+  maskitoTeritaer = maskitoMaxNumber(3000);
+  maskitoSekundaer = maskitoMaxNumber(2000);
   maskitoNumber = maskitoNumber;
   maskitoPositiveNumber = maskitoPositiveNumber;
   hiddenFieldsSetSig = signal(new Set());
@@ -166,11 +170,15 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     // TODO: Use stammdaten info once available
     const ausbildungsgang = ausbildungsstaettes
       .find((a) =>
-        a.ausbildungsgaenge?.some((g) => g.id === ausbildung.ausbildungsgangId),
+        a.ausbildungsgaenge?.some(
+          (g) => g.id === ausbildung.ausbildungsgang.id,
+        ),
       )
-      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgangId);
-    const willSekundarstufeZwei = ausbildungsgang?.bezeichnungDe === 'Bachelor';
-    const willTertiaerstufe = ausbildungsgang?.bezeichnungDe === 'Master';
+      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang.id);
+    const willSekundarstufeZwei =
+      ausbildungsgang?.bildungsart.bildungsstufe === 'SEKUNDAR_2';
+    const willTertiaerstufe =
+      ausbildungsgang?.bildungsart.bildungsstufe === 'TERTIAER';
 
     return {
       hasData: true,
@@ -300,8 +308,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           hasData,
           hatElternteilVerloren,
           hatKinder,
-          // willSekundarstufeZwei,
-          // willTertiaerstufe,
+          willSekundarstufeZwei,
+          willTertiaerstufe,
           istErwachsen,
         } = this.formStateSig();
 
@@ -319,17 +327,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           !hatElternteilVerloren,
         );
         this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
-        // KSTIP-918: use correct sekundarstufe/tertiaerstufe check once properties are available
-        // <
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,
-          false,
+          !willSekundarstufeZwei,
         );
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenTertiaerstufe,
-          false,
+          !willTertiaerstufe,
         );
-        // >
         this.setDisabledStateAndHide(
           this.form.controls.willDarlehen,
           !istErwachsen,
