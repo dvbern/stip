@@ -15,57 +15,188 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BildungsstufeDtoSpec;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * 
  */
-public enum BildungsartDtoSpec {
-  
-  GYMNASIALE_MATURITAETSSCHULEN("GYMNASIALE_MATURITAETSSCHULEN"),
-  
-  SCHULEN_FUER_ALLGEMEINBILDUNG("SCHULEN_FUER_ALLGEMEINBILDUNG"),
-  
-  VOLLZEITBERUFSSCHULEN("VOLLZEITBERUFSSCHULEN"),
-  
-  LEHREN_ANLEHREN("LEHREN_ANLEHREN"),
-  
-  BERUFSMATURITAET_NACH_LEHRE("BERUFSMATURITAET_NACH_LEHRE"),
-  
-  HOEHERE_BERUFSBILDUNG("HOEHERE_BERUFSBILDUNG"),
-  
-  FACHHOCHSCHULEN("FACHHOCHSCHULEN"),
-  
-  UNIVERSITAETEN_ETH("UNIVERSITAETEN_ETH");
+@JsonPropertyOrder({
+  BildungsartDtoSpec.JSON_PROPERTY_BESCHREIBUNG,
+  BildungsartDtoSpec.JSON_PROPERTY_BILDUNGSSTUFE,
+  BildungsartDtoSpec.JSON_PROPERTY_BFS,
+  BildungsartDtoSpec.JSON_PROPERTY_ID
+})
+@JsonTypeName("Bildungsart")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+public class BildungsartDtoSpec {
+  public static final String JSON_PROPERTY_BESCHREIBUNG = "beschreibung";
+  private String beschreibung;
 
-  private String value;
+  public static final String JSON_PROPERTY_BILDUNGSSTUFE = "bildungsstufe";
+  private BildungsstufeDtoSpec bildungsstufe;
 
-  BildungsartDtoSpec(String value) {
-    this.value = value;
+  public static final String JSON_PROPERTY_BFS = "bfs";
+  private Integer bfs;
+
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
+  public BildungsartDtoSpec() {
   }
 
-  @JsonValue
-  public String getValue() {
-    return value;
+  public BildungsartDtoSpec beschreibung(String beschreibung) {
+    
+    this.beschreibung = beschreibung;
+    return this;
+  }
+
+   /**
+   * Get beschreibung
+   * @return beschreibung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BESCHREIBUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getBeschreibung() {
+    return beschreibung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BESCHREIBUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBeschreibung(String beschreibung) {
+    this.beschreibung = beschreibung;
+  }
+
+
+  public BildungsartDtoSpec bildungsstufe(BildungsstufeDtoSpec bildungsstufe) {
+    
+    this.bildungsstufe = bildungsstufe;
+    return this;
+  }
+
+   /**
+   * Get bildungsstufe
+   * @return bildungsstufe
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BILDUNGSSTUFE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public BildungsstufeDtoSpec getBildungsstufe() {
+    return bildungsstufe;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BILDUNGSSTUFE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBildungsstufe(BildungsstufeDtoSpec bildungsstufe) {
+    this.bildungsstufe = bildungsstufe;
+  }
+
+
+  public BildungsartDtoSpec bfs(Integer bfs) {
+    
+    this.bfs = bfs;
+    return this;
+  }
+
+   /**
+   * Get bfs
+   * @return bfs
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getBfs() {
+    return bfs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBfs(Integer bfs) {
+    this.bfs = bfs;
+  }
+
+
+  public BildungsartDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    BildungsartDtoSpec bildungsart = (BildungsartDtoSpec) o;
+    return Objects.equals(this.beschreibung, bildungsart.beschreibung) &&
+        Objects.equals(this.bildungsstufe, bildungsart.bildungsstufe) &&
+        Objects.equals(this.bfs, bildungsart.bfs) &&
+        Objects.equals(this.id, bildungsart.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(beschreibung, bildungsstufe, bfs, id);
   }
 
   @Override
   public String toString() {
-    return String.valueOf(value);
+    StringBuilder sb = new StringBuilder();
+    sb.append("class BildungsartDtoSpec {\n");
+    sb.append("    beschreibung: ").append(toIndentedString(beschreibung)).append("\n");
+    sb.append("    bildungsstufe: ").append(toIndentedString(bildungsstufe)).append("\n");
+    sb.append("    bfs: ").append(toIndentedString(bfs)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("}");
+    return sb.toString();
   }
 
-  @JsonCreator
-  public static BildungsartDtoSpec fromValue(String value) {
-    for (BildungsartDtoSpec b : BildungsartDtoSpec.values()) {
-      if (b.value.equals(value)) {
-        return b;
-      }
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
     }
-    throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    return o.toString().replace("\n", "\n    ");
   }
+
 }
 

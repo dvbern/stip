@@ -9,10 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Ausbildungsgang } from './ausbildungsgang';
 import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface Ausbildung { 
-    ausbildungsgangId?: string;
+    ausbildungsgang: Ausbildungsgang;
     fachrichtung: string;
     ausbildungNichtGefunden?: boolean;
     /**

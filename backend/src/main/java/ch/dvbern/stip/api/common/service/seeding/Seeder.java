@@ -1,26 +1,27 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
+import java.util.Collections;
 import java.util.List;
 
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import io.quarkus.narayana.jta.QuarkusTransaction;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import org.checkerframework.dataflow.qual.Pure;
 
 public abstract class Seeder {
     protected void seed() {
         final var tenant = getTenant();
-        // TODO KSTIP-1004
-//        if (!Collections.disjoint(ConfigUtils.getProfiles(), getProfiles())) {
+        if (!Collections.disjoint(ConfigUtils.getProfiles(), getProfiles())) {
             QuarkusTransaction.requiringNew().run(() -> {
                 DataTenantResolver.setTenantId(tenant);
                 doSeed();
             });
-//        }
+        }
     }
 
-    abstract void startup();
+    public abstract void startup();
 
-    abstract void doSeed();
+    protected abstract void doSeed();
 
     /**
      * Returns a list of profiles on which to run seeding.

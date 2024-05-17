@@ -9,7 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Bildungsart } from './bildungsart';
 
 /**
  * 
@@ -23,9 +22,7 @@ export interface AusbildungsgangUpdate {
      * 
      */
     bezeichnungFr: string;
-    ausbildungsrichtung: Bildungsart;
+    bildungsartId: string;
     ausbildungsstaetteId: string;
 }
-
-
 

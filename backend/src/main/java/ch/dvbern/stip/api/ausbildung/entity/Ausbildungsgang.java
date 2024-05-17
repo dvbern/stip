@@ -1,13 +1,11 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.type.Bildungsart;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -35,7 +33,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 public class Ausbildungsgang extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(name = "ausbildungsstaette_id", foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"), nullable = true)
+    @JoinColumn(
+        name = "ausbildungsstaette_id",
+        foreignKey = @ForeignKey(name = "FK_ausbildungsgang_ausbildungsstaette_id"),
+        nullable = true
+    )
     private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
@@ -48,8 +50,12 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     @Column(name = "bezeichnung_fr")
     private String bezeichnungFr;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ausbildungsrichtung", nullable = false)
-    private Bildungsart ausbildungsrichtung;
+    @ManyToOne(optional = false)
+    @JoinColumn(
+        name = "bildungsart_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "FK_ausbildungsgang_bildungsart_id")
+    )
+    private Bildungsart bildungsart;
+
 }

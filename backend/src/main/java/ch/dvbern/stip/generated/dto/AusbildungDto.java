@@ -1,8 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -21,16 +21,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class AusbildungDto  implements Serializable {
+  private @Valid AusbildungsgangDto ausbildungsgang;
   private @Valid String fachrichtung;
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
-  private @Valid UUID ausbildungsgangId;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
+
+  /**
+   **/
+  public AusbildungDto ausbildungsgang(AusbildungsgangDto ausbildungsgang) {
+    this.ausbildungsgang = ausbildungsgang;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungsgang")
+  @NotNull
+  public AusbildungsgangDto getAusbildungsgang() {
+    return ausbildungsgang;
+  }
+
+  @JsonProperty("ausbildungsgang")
+  public void setAusbildungsgang(AusbildungsgangDto ausbildungsgang) {
+    this.ausbildungsgang = ausbildungsgang;
+  }
 
   /**
    **/
@@ -108,24 +127,6 @@ public class AusbildungDto  implements Serializable {
   @JsonProperty("pensum")
   public void setPensum(AusbildungsPensumDto pensum) {
     this.pensum = pensum;
-  }
-
-  /**
-   **/
-  public AusbildungDto ausbildungsgangId(UUID ausbildungsgangId) {
-    this.ausbildungsgangId = ausbildungsgangId;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsgangId")
-  public UUID getAusbildungsgangId() {
-    return ausbildungsgangId;
-  }
-
-  @JsonProperty("ausbildungsgangId")
-  public void setAusbildungsgangId(UUID ausbildungsgangId) {
-    this.ausbildungsgangId = ausbildungsgangId;
   }
 
   /**
@@ -231,11 +232,11 @@ public class AusbildungDto  implements Serializable {
       return false;
     }
     AusbildungDto ausbildung = (AusbildungDto) o;
-    return Objects.equals(this.fachrichtung, ausbildung.fachrichtung) &&
+    return Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
+        Objects.equals(this.fachrichtung, ausbildung.fachrichtung) &&
         Objects.equals(this.ausbildungBegin, ausbildung.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildung.pensum) &&
-        Objects.equals(this.ausbildungsgangId, ausbildung.ausbildungsgangId) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
@@ -245,7 +246,7 @@ public class AusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fachrichtung, ausbildungBegin, ausbildungEnd, pensum, ausbildungsgangId, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(ausbildungsgang, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -253,11 +254,11 @@ public class AusbildungDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungDto {\n");
     
+    sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
-    sb.append("    ausbildungsgangId: ").append(toIndentedString(ausbildungsgangId)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");

@@ -77,7 +77,7 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.save": "Speichern",
   "sachbearbeitung-app.admin.ausbildungsgaenge.bezeichnungDe": "Bezeichnung Deutsch",
   "sachbearbeitung-app.admin.ausbildungsgaenge.bezeichnungFr": "Bezeichnung Französisch",
-  "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsrichtung": "Ausbildungsrichtung",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.bildungsart": "Ausbildungsrichtung",
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsort": "Ausbildungsort",
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Abbrechen",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Wollen Sie den Ausbildungsgang \"{{ bezeichnungDe }}\" wirklich löschen?",
