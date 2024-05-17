@@ -44,6 +44,7 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -95,6 +96,7 @@ const MEDIUM_AGE = 20;
     SharedUiWohnsitzSplitterComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],
@@ -187,24 +189,24 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
+
     effect(
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.erhalteneAlimentebeitraege,
-          !this.alimentenregelungExistiertSig(),
-          true,
+          this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
+          !this.viewSig().readonly,
         );
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(
+      () => {
+        const { readonly } = this.viewSig();
+        if (readonly) {
+          this.form.disable({ emitEvent: false });
+        }
       },
       { allowSignalWrites: true },
     );

@@ -3,7 +3,14 @@
   <dv-shared-ui-loading data-testid="form-ausbildung-loading"></dv-shared-ui-loading>
 } @else {
   <!-- form -->
-  <form [formGroup]="form" data-testid="form-education-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+  <form
+    [formGroup]="form"
+    [dvSharedUiFormReadonly]="viewSig().readonly"
+    data-testid="form-education-form"
+    novalidate
+    class="mt-4"
+    (ngSubmit)="handleSave()"
+  >
     <h3 class="mt-4">
       {{ 'shared.form.education.place.title' | translate }}
     </h3>

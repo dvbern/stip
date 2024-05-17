@@ -5,6 +5,7 @@
   } @else {
     <form
       [formGroup]="form"
+      [dvSharedUiFormReadonly]="viewSig().readonly"
       novalidate
       class="mt-4"
       data-testid="form-partner-form"

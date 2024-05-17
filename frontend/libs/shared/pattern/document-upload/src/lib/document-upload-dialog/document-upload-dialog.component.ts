@@ -43,10 +43,15 @@ export class SharedPatternDocumentUploadDialogComponent {
   uploadViewSig = computed(() => ({
     gesuchId: this.data.options.gesuchId,
     type: this.data.options.dokumentTyp,
-    loading: this.data.store.isLoading(),
+    readonly: this.data.options.readonly,
+    // loading: this.data.store.isLoading(),
   }));
+
   showUplaodSig = computed(() => {
     const { options, store } = this.data;
+    if (options.readonly) {
+      return false;
+    }
     if (!options.singleUpload) {
       return true;
     }

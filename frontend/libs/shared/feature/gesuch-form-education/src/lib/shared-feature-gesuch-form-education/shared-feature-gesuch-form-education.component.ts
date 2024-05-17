@@ -40,6 +40,7 @@ import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -76,6 +77,7 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MaskitoDirective,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-education.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -284,7 +286,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
 
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsort,
-          isAusbildungAusland,
+          this.viewSig().readonly || isAusbildungAusland,
           false,
         );
       },
@@ -302,7 +304,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         const staette = staetteSig();
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
-          !staette || this.viewSig().readonly,
+          this.viewSig().readonly || !staette,
           !this.viewSig().readonly,
         );
 
@@ -330,8 +332,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
-          (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()) ||
-            this.viewSig().readonly,
+          this.viewSig().readonly ||
+            (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
           !this.viewSig().readonly,
         );
       },
@@ -342,9 +344,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },
