@@ -1,4 +1,4 @@
-stages: [test, build, e2e, mirror, deploy, review-e2e]
+stages: [test, build, mirror, deploy, review-e2e]
 
 variables:
   ARGOCD_APP: stip
@@ -78,7 +78,6 @@ include:
       e2e-test-image-version: v1.41.1-jammy
       install-e2e-test-package: false
       e2e-on: 'default'
-      e2e-artifacts-dir: $E2E_ARTIFACTS
 
 .install-argocd:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
