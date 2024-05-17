@@ -78,6 +78,7 @@ include:
       e2e-test-image-version: v1.41.1-jammy
       install-e2e-test-package: false
       e2e-on: 'default'
+      e2e-artifacts-dir: $E2E_ARTIFACTS
 
 .install-argocd:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
