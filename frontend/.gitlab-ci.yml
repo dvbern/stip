@@ -1,7 +1,7 @@
 stages: [build, validate, test, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/fuju/build/nx@8e4a1347387f92395606ebacdc676461defbd018'
+  - component: 'gitlab.dvbern.ch/components/build/nx@v1.3.0'
     inputs:
       app-name: '*-app'
       test-app-name: '*'
