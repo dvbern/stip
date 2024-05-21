@@ -30,7 +30,7 @@ public interface DokumentResource {
     @DELETE
     @Path("/{gesuchId}/{dokumentTyp}/{dokumentId}")
     @Produces({ "text/plain" })
-    Response deleteDokument(@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId);
+    io.smallrye.mutiny.Uni<Response> deleteDokument(@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/download")

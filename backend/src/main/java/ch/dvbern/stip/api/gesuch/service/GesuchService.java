@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -249,6 +250,32 @@ public class GesuchService {
         return violationDtos;
     }
 
+    private void removeSuperfluousDokumentsForGesuch(GesuchFormular formular) {
+        List<String> dokumentObjectIds = new ArrayList<>();
+
+        requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).forEach(
+            gesuchDokument -> gesuchDokument.getDokumente().forEach(
+                dokument -> dokumentObjectIds.add(
+                    gesuchDokumentService.deleteDokument(dokument.getId())
+                )
+            )
+        );
+
+        if (!dokumentObjectIds.isEmpty()) {
+            gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
+    }
+
+    public List<GesuchDokumentDto> getAndCheckGesuchDokumenteForGesuch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular();
+
+        removeSuperfluousDokumentsForGesuch(formular);
+        return getGesuchDokumenteForGesuch(gesuchId);
+    }
+
     @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
         return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
@@ -259,12 +286,6 @@ public class GesuchService {
         final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
-
-        requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).stream().forEach(
-            gesuchDokument -> gesuchDokument.getDokumente().forEach(
-                dokument -> gesuchDokumentService.deleteDokument(dokument.getId())
-            )
-        );
 
         return requiredDokumentService.getRequiredDokumentsForGesuch(formular);
     }

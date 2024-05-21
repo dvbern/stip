@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -14,13 +16,27 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+
+import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
+import software.amazon.awssdk.core.async.ResponsePublisher;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -31,6 +47,8 @@ public class GesuchDokumentService {
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchRepository gesuchRepository;
+    private final S3AsyncClient s3;
+    private final ConfigService configService;
 
     @Transactional
     public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload, String objectId) {
@@ -73,7 +91,7 @@ public class GesuchDokumentService {
         return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 
-    public PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName, String objectId) {
+    private PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName, String objectId) {
         return PutObjectRequest.builder()
             .bucket(bucketName)
             .key(GESUCH_DOKUMENT_PATH + objectId)
@@ -81,10 +99,27 @@ public class GesuchDokumentService {
             .build();
     }
 
-    public GetObjectRequest buildGetRequest(String bucketName, String objectKey) {
+    private GetObjectRequest buildGetRequest(String bucketName, String objectKey) {
         return GetObjectRequest.builder()
             .bucket(bucketName)
             .key(GESUCH_DOKUMENT_PATH + objectKey)
+            .build();
+    }
+
+    private DeleteObjectRequest buildDeleteObjectRequest(String bucketName, String objectKey) {
+        return DeleteObjectRequest.builder()
+            .bucket(bucketName)
+            .key(GESUCH_DOKUMENT_PATH + objectKey)
+            .build();
+    }
+
+    private DeleteObjectsRequest buildDeleteObjectsRequest(String bucketName, List<String> objectIds) {
+        final var objectIdentifiers = objectIds.stream().map(
+            objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
+        ).toList();
+        return DeleteObjectsRequest.builder()
+            .bucket(bucketName)
+            .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
             .build();
     }
 
@@ -94,10 +129,62 @@ public class GesuchDokumentService {
             .forEach(gesuchDokumentRepository::delete);
     }
 
+    public Uni<Void> deleteDokumentsFromS3Blocking(List<String> objectIds) {
+        var future = s3.deleteObjects(
+            buildDeleteObjectsRequest(
+                configService.getBucketName(),
+                objectIds
+            )
+        );
+        future.join();
+
+        return Uni.createFrom().voidItem();
+    }
+
+    public void executeDeleteDokumentsFromS3(List<String> objectIds) {
+        Uni.createFrom()
+        .item(objectIds)
+        .emitOn(Infrastructure.getDefaultWorkerPool())
+        .subscribe()
+        .with(this::deleteDokumentsFromS3Blocking, Throwable::printStackTrace);
+    }
+
     @Transactional
-    public void deleteDokument(UUID dokumentId) {
+    public String deleteDokument(UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var dokumentObjectId = dokument.getObjectId();
         dokumentRepository.delete(dokument);
         gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(dokument.getGesuchDokument().getId());
+        return dokumentObjectId;
+    }
+
+    public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(String objectId, FileUpload fileUpload) {
+        return s3.putObject(
+            buildPutRequest(
+                fileUpload,
+                configService.getBucketName(),
+                objectId
+            ),
+            AsyncRequestBody.fromFile(fileUpload.uploadedFile())
+        );
+    }
+
+    public CompletableFuture<ResponsePublisher<GetObjectResponse>> getGetDokumentFuture(String objectId) {
+        return s3.getObject(
+            buildGetRequest(
+                configService.getBucketName(),
+                objectId
+            ),
+            AsyncResponseTransformer.toPublisher()
+        );
+    }
+
+    public CompletableFuture<DeleteObjectResponse> getDeleteDokumentFuture(String objectId) {
+        return s3.deleteObject(
+            buildDeleteObjectRequest(
+                configService.getBucketName(),
+                objectId
+            )
+        );
     }
 }

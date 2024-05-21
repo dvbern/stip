@@ -66,7 +66,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesuchDokumente(UUID gesuchId) {
-        var gesuchDokumente = gesuchService.getGesuchDokumenteForGesuch(gesuchId);
+        var gesuchDokumente = gesuchService.getAndCheckGesuchDokumenteForGesuch(gesuchId);
         return Response.ok(gesuchDokumente).build();
     }
 
