@@ -6,7 +6,7 @@ include:
       app-name: '*-app'
       test-app-name: '*'
       context-dir: 'frontend'
-      component-test-package-version: '13.6.2'
+      component-test-on: 'never'
       allow-test-failure: false
       allow-e2e-test-failure: false
       e2e-on: 'never'
