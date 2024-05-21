@@ -45,8 +45,14 @@ public class ApiClient {
     public BenutzerApiSpec benutzer() {
         return BenutzerApiSpec.benutzer(config.reqSpecSupplier);
     }
+    public BildungsartApiSpec bildungsart() {
+        return BildungsartApiSpec.bildungsart(config.reqSpecSupplier);
+    }
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
+    }
+    public DokumentApiSpec dokument() {
+        return DokumentApiSpec.dokument(config.reqSpecSupplier);
     }
     public FallApiSpec fall() {
         return FallApiSpec.fall(config.reqSpecSupplier);

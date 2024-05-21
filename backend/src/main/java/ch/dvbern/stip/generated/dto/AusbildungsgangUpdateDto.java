@@ -24,9 +24,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsgangUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung;
+  private @Valid UUID bildungsartId;
   private @Valid UUID ausbildungsstaetteId;
-  private @Valid String ausbildungsort;
 
   /**
    * 
@@ -70,21 +69,21 @@ public class AusbildungsgangUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangUpdateDto ausbildungsrichtung(ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung) {
-    this.ausbildungsrichtung = ausbildungsrichtung;
+  public AusbildungsgangUpdateDto bildungsartId(UUID bildungsartId) {
+    this.bildungsartId = bildungsartId;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsrichtung")
+  @JsonProperty("bildungsartId")
   @NotNull
-  public ch.dvbern.stip.api.common.type.Bildungsart getAusbildungsrichtung() {
-    return ausbildungsrichtung;
+  public UUID getBildungsartId() {
+    return bildungsartId;
   }
 
-  @JsonProperty("ausbildungsrichtung")
-  public void setAusbildungsrichtung(ch.dvbern.stip.api.common.type.Bildungsart ausbildungsrichtung) {
-    this.ausbildungsrichtung = ausbildungsrichtung;
+  @JsonProperty("bildungsartId")
+  public void setBildungsartId(UUID bildungsartId) {
+    this.bildungsartId = bildungsartId;
   }
 
   /**
@@ -106,26 +105,6 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
 
-  /**
-   * 
-   **/
-  public AusbildungsgangUpdateDto ausbildungsort(String ausbildungsort) {
-    this.ausbildungsort = ausbildungsort;
-    return this;
-  }
-
-  
-  @JsonProperty("ausbildungsort")
-  @NotNull
-  public String getAusbildungsort() {
-    return ausbildungsort;
-  }
-
-  @JsonProperty("ausbildungsort")
-  public void setAusbildungsort(String ausbildungsort) {
-    this.ausbildungsort = ausbildungsort;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -138,14 +117,13 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     AusbildungsgangUpdateDto ausbildungsgangUpdate = (AusbildungsgangUpdateDto) o;
     return Objects.equals(this.bezeichnungDe, ausbildungsgangUpdate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangUpdate.bezeichnungFr) &&
-        Objects.equals(this.ausbildungsrichtung, ausbildungsgangUpdate.ausbildungsrichtung) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangUpdate.ausbildungsstaetteId) &&
-        Objects.equals(this.ausbildungsort, ausbildungsgangUpdate.ausbildungsort);
+        Objects.equals(this.bildungsartId, ausbildungsgangUpdate.bildungsartId) &&
+        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangUpdate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, ausbildungsrichtung, ausbildungsstaetteId, ausbildungsort);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsartId, ausbildungsstaetteId);
   }
 
   @Override
@@ -155,9 +133,8 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    ausbildungsrichtung: ").append(toIndentedString(ausbildungsrichtung)).append("\n");
+    sb.append("    bildungsartId: ").append(toIndentedString(bildungsartId)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
-    sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("}");
     return sb.toString();
   }

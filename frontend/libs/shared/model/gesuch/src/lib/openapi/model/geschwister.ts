@@ -16,7 +16,6 @@ import { Wohnsitz } from './wohnsitz';
  * 
  */
 export interface Geschwister { 
-    copyOfId?: string;
     vorname: string;
     /**
      * dd.MM.YYYY
@@ -24,7 +23,7 @@ export interface Geschwister {
     geburtsdatum: string;
     wohnsitz: Wohnsitz;
     ausbildungssituation: Ausbildungssituation;
-    id: string;
+    id?: string;
     /**
      * Required wenn Wohnsitz.MUTTER_VATER.
      */

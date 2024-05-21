@@ -6,6 +6,12 @@
   "sourceRoot": "apps/sachbearbeitung-app/src",
   "tags": ["type:app", "scope:sachbearbeitung-app"],
   "targets": {
+    "prepare": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "set-version"
+      }
+    },
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
@@ -32,6 +38,11 @@
             "glob": "**/*",
             "input": "libs/shared/assets/images/src",
             "output": "assets/images"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/auth/src",
+            "output": "assets/auth/"
           },
           "apps/sachbearbeitung-app/src/favicon.ico",
           "apps/sachbearbeitung-app/src/assets"

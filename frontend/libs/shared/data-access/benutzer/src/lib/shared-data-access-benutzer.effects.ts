@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, switchMap } from 'rxjs';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { catchError, filter, map, switchMap } from 'rxjs';
 
 import { BenutzerService } from '@dv/shared/model/gesuch';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -8,9 +9,14 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 import { SharedDataAccessBenutzerApiEvents } from './shared-data-access-benutzer.events';
 
 export const loadCurrentBenutzer = createEffect(
-  (events$ = inject(Actions), benutzerService = inject(BenutzerService)) => {
+  (
+    events$ = inject(Actions),
+    benutzerService = inject(BenutzerService),
+    oauthService = inject(OAuthService),
+  ) => {
     return events$.pipe(
       ofType(SharedDataAccessBenutzerApiEvents.loadCurrentBenutzer),
+      filter(() => oauthService.hasValidIdToken()),
       switchMap(() =>
         benutzerService.getCurrentBenutzer$().pipe(
           map((benutzer) =>

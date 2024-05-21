@@ -7,6 +7,7 @@ export interface DocumentOptions {
   allowTypes: string;
   dokumentTyp: DokumentTyp;
   initialDocuments?: Dokument[];
+  readonly: boolean;
 }
 
 export interface DocumentUpload {
@@ -32,4 +33,5 @@ export interface DocumentState {
 export interface UploadView {
   gesuchId: string;
   type: DokumentTyp;
+  readonly: boolean;
 }

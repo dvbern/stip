@@ -21,7 +21,7 @@ export class SharedUiFormReadonlyDirective {
   @Input() set dvSharedUiFormReadonly(readonly: boolean | undefined) {
     if (readonly) {
       this.isReadonly.set(true);
-      this.formGroup.form.disable();
+      this.formGroup.form.disable({ emitEvent: false });
       this.renderer.addClass(this.elementRef.nativeElement, 'readonly');
     }
   }

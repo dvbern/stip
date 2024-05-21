@@ -12,7 +12,7 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
   (gesuchsView, ausbildungsstaettesView) => {
     const lastLebenslaufDate = gesuchsView.gesuchFormular?.lebenslaufItems
       ?.slice()
-      ?.filter((item) => !item.taetigskeitsart)
+      ?.filter((item) => !item.taetigkeitsart)
       ?.map((item) => parseDateForVariant(item.bis, new Date(), 'monthYear'))
       ?.filter(isDefined)
       ?.sort((dateA, dateB) => compareDesc(dateA, dateB))?.[0];
@@ -26,8 +26,6 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
         : undefined,
       ausbildung: gesuchsView.gesuchFormular?.ausbildung,
       ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
-      ausbildungsstaetteByLand:
-        ausbildungsstaettesView.ausbildungsstaetteByLand,
       minEndDatum: addMonths(minEndDatum, 1),
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
       readonly: gesuchsView.readonly,

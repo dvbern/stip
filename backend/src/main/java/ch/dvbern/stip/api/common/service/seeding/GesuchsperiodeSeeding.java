@@ -8,52 +8,53 @@ import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
-import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
-import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 @Singleton
 @RequiredArgsConstructor
-public class GesuchsperiodeSeeding {
+@Slf4j
+public class GesuchsperiodeSeeding extends Seeder{
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
 
+    @Override
     @Startup
-    void seed() {
-//        if (ConfigUtils.getProfiles().contains("dev")) {
-            QuarkusTransaction.requiringNew().run(() -> {
-                DataTenantResolver.setTenantId("bern");
+    public void startup() {
+        seed();
+    }
 
-                Gesuchsjahr newJahr = null;
-                if (gesuchsperiodeRepository.count() == 0) {
-                    newJahr = getJahrForSeeding();
-                }
+    @Override
+    protected void doSeed() {
+        LOG.info("Seeding Gesuchsperiode");
+        Gesuchsjahr newJahr = null;
+        if (gesuchsperiodeRepository.count() == 0) {
+            newJahr = getJahrForSeeding();
+        }
 
-                if (newJahr == null) {
-                    return;
-                }
+        if (newJahr == null) {
+            return;
+        }
 
-                final var newPerioden = List.of(
-                    getPeriodeForSeeding(
-                        newJahr,
-                        LocalDate.of(2022, 8, 1),
-                        LocalDate.of(2023, 7, 31)
-                    ),
-                    getPeriodeForSeeding(
-                        newJahr,
-                        LocalDate.of(2023, 8, 1),
-                        LocalDate.of(2024, 6, 30)
-                    )
-                );
+        final var newPerioden = List.of(
+            getPeriodeForSeeding(
+                newJahr,
+                LocalDate.of(2022, 8, 1),
+                LocalDate.of(2023, 7, 31)
+            ),
+            getPeriodeForSeeding(
+                newJahr,
+                LocalDate.of(2023, 8, 1),
+                LocalDate.of(2024, 6, 30)
+            )
+        );
 
-                gesuchsjahrRepository.persistAndFlush(newJahr);
-                gesuchsperiodeRepository.persist(newPerioden);
-            });
-//        }
+        gesuchsjahrRepository.persistAndFlush(newJahr);
+        gesuchsperiodeRepository.persist(newPerioden);
     }
 
     Gesuchsjahr getJahrForSeeding() {

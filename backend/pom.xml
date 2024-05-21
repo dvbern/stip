@@ -4,8 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>${revision}</version>
   <properties>
+    <revision>local</revision>
     <archunit.version>1.0.1</archunit.version>
     <assertj.version>3.24.2</assertj.version>
     <checkerframework.version>3.19.0</checkerframework.version>
@@ -117,6 +118,14 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt-build</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
@@ -398,7 +407,6 @@
           <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
           <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
           <propertyFile>liquibase.properties</propertyFile>
-
           <!-- Old state -->
           <driver>org.postgresql.Driver</driver>
 
@@ -576,13 +584,13 @@
                     ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
                     Land=ch.dvbern.stip.api.stammdaten.type.Land,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
-                    Bildungsart=ch.dvbern.stip.api.common.type.Bildungsart,
-                    Taetigskeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
+                    Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
                     Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
+                    Bildungsstufe=ch.dvbern.stip.api.bildungsart.type.Bildungsstufe
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
@@ -603,6 +611,7 @@
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
                     </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                    <useTags>true</useTags>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

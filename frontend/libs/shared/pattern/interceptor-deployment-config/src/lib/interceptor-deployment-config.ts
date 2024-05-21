@@ -1,17 +1,18 @@
 import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { KeycloakService } from 'keycloak-angular';
-import { combineLatest, concatMap, filter, from, take } from 'rxjs';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { concatMap, filter, take } from 'rxjs';
 
-import { selectDeploymentConfig } from '@dv/shared/data-access/config';
+import { sharedDataAccessConfigsFeature } from '@dv/shared/data-access/config';
 import { SHARED_MODEL_CONFIG_RESOURCE } from '@dv/shared/model/config';
+import { UNAUTHORIZED } from '@dv/shared/util/http';
 
 export function SharedPatternInterceptorDeploymentConfig(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ) {
-  const keyCloakService = inject(KeycloakService);
+  const oauthService = inject(OAuthService);
   const store = inject(Store);
 
   if (
@@ -22,26 +23,32 @@ export function SharedPatternInterceptorDeploymentConfig(
     return next(req);
   }
 
-  return combineLatest([
-    store.select(selectDeploymentConfig).pipe(
+  return store
+    .select(sharedDataAccessConfigsFeature.selectDeploymentConfig)
+    .pipe(
       filter((deploymentConfig) => deploymentConfig !== undefined),
       take(1),
-    ),
-    from(
-      keyCloakService.isLoggedIn()
-        ? keyCloakService.addTokenToHeader(req.headers)
-        : [req.headers],
-    ),
-  ]).pipe(
-    concatMap(([deploymentConfig, headers]) => {
-      const { environment = '', version = '' } = deploymentConfig ?? {};
-      return next(
-        req.clone({
-          headers: headers
+    )
+    .pipe(
+      concatMap((deploymentConfig) => {
+        const { environment = '', version = '' } = deploymentConfig ?? {};
+        let headers = req.headers;
+        // Do not add custom headers to requests to the keycloak server
+        if (
+          req.url.startsWith('http') &&
+          !new URL(req.url).pathname.startsWith('/realms')
+        ) {
+          headers = headers
             .append('environment', environment)
-            .append('version', version),
-        }),
-      );
-    }),
-  );
+            .append('version', version);
+        }
+        if (!req.context.has(UNAUTHORIZED) && oauthService.hasValidIdToken()) {
+          headers = headers.append(
+            'Authorization',
+            oauthService.authorizationHeader(),
+          );
+        }
+        return next(req.clone({ headers }));
+      }),
+    );
 }

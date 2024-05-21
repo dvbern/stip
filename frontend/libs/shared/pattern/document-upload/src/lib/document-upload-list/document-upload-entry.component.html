@@ -35,7 +35,7 @@
           type="button"
           class="dv-button-icon flex-shrink-0 delete-icon ms-2"
           [attr.aria-label]="'shared.form.delete' | translate"
-          [disabled]="loadingSig()"
+          [disabled]="uploadViewSig().readonly || loadingSig()"
           (click)="checkForRemove$.emit()"
         >
           <span class="material-symbols-rounded align-middle text-muted">delete</span>

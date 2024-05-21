@@ -31,6 +31,8 @@ async function setup(abschlussPhase: AbschlussPhase) {
               gesuch: {
                 id: '1',
               },
+              validations: [],
+              specialValidationErrors: [],
               canCheck: true,
             },
           },

@@ -39,6 +39,7 @@ nb-configuration.xml
 # Local environment
 .tool-versions
 .env
+liquibase.properties
 .openapi-generator/*.sha256
 developer_local_settings
 docker-compose.override.yml

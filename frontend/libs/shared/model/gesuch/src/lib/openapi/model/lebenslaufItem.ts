@@ -11,14 +11,13 @@
  */
 import { WohnsitzKanton } from './wohnsitzKanton';
 import { LebenslaufAusbildungsArt } from './lebenslaufAusbildungsArt';
-import { Taetigskeitsart } from './taetigskeitsart';
+import { Taetigkeitsart } from './taetigkeitsart';
 
 /**
  * 
  */
 export interface LebenslaufItem { 
-    copyOfId?: string;
-    id: string;
+    id?: string;
     bildungsart?: LebenslaufAusbildungsArt;
     /**
      * Datum im Format mm.YYYY
@@ -45,7 +44,7 @@ export interface LebenslaufItem {
      * Required wenn bildungsart = \"ANDERER_AUSBILDUNGSABSCHLUSS\"
      */
     titelDesAbschlusses?: string;
-    taetigskeitsart?: Taetigskeitsart;
+    taetigkeitsart?: Taetigkeitsart;
     /**
      * Required wenn taetigkeitsart != null
      */

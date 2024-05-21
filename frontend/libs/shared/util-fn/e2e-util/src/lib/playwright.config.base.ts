@@ -29,9 +29,11 @@ export const baseConfig = defineConfig({
   use: {
     trace: 'on-first-retry',
     ignoreHTTPSErrors: true,
-    screenshot: 'on',
+    screenshot: {
+      mode: 'only-on-failure',
+    },
     video: {
-      mode: 'on-first-retry',
+      mode: 'retain-on-failure',
       // size: { width: 1920, height: 1080 },
       // smaller video size to reduce file size
       size: { width: 1280, height: 720 },

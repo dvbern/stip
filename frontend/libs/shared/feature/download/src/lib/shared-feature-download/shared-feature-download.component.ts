@@ -4,15 +4,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  computed,
+  OnInit,
   inject,
   input,
 } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { addSeconds } from 'date-fns';
-import { KeycloakService } from 'keycloak-angular';
-import { debounceTime, filter, take } from 'rxjs';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { debounceTime, exhaustMap, filter, take, tap } from 'rxjs';
 
+import { DokumentService, DokumentTyp } from '@dv/shared/model/gesuch';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
@@ -22,41 +22,47 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
   templateUrl: './shared-feature-download.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureDownloadComponent {
+export class SharedFeatureDownloadComponent implements OnInit {
   gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
-  typeSig = input.required<string>({ alias: 'type' });
+  typeSig = input.required<DokumentTyp>({ alias: 'type' });
   dokumentIdSig = input.required<string>({ alias: 'dokumentId' });
-  keycloakService = inject(KeycloakService);
+  oauthService = inject(OAuthService);
+  dokumentService = inject(DokumentService);
   dcmnt = inject(DOCUMENT, { optional: true });
   appRef = inject(ApplicationRef);
 
   @HostBinding('class') class =
     'd-flex flex-column position-absolute top-0 bottom-0 start-0 end-0 p-5';
 
-  private apiPathSig = computed(() => {
-    return `/api/v1/gesuch/${this.gesuchIdSig()}/dokument/${this.typeSig()}/${this.dokumentIdSig()}`;
-  });
+  private getDownloadPath = (token: string) => {
+    return `/api/v1/dokument/download?token=${token}`;
+  };
 
-  constructor() {
+  ngOnInit() {
     if (this.dcmnt) {
       const dcmnt = this.dcmnt;
-      this.keycloakService.getToken().then((token) => {
-        dcmnt.cookie = `token=${token}; expires=${addSeconds(
-          new Date(),
-          30,
-        )}; Secure; Path=${this.apiPathSig()}`;
-        dcmnt.location.href = this.apiPathSig();
 
-        this.appRef.isStable
-          .pipe(
-            filter((isStable) => isStable),
-            debounceTime(1000),
-            take(1),
-          )
-          .subscribe(() => {
-            dcmnt.defaultView?.close();
-          });
-      });
+      this.dokumentService
+        .getDokumentDownloadToken$({
+          gesuchId: this.gesuchIdSig(),
+          dokumentId: this.dokumentIdSig(),
+          dokumentTyp: this.typeSig(),
+        })
+        .pipe(
+          tap((token) => {
+            dcmnt.location.href = this.getDownloadPath(token);
+          }),
+          exhaustMap(() =>
+            this.appRef.isStable.pipe(
+              filter((isStable) => isStable),
+              debounceTime(1000),
+              take(1),
+            ),
+          ),
+        )
+        .subscribe(() => {
+          dcmnt.defaultView?.close();
+        });
     }
   }
 }

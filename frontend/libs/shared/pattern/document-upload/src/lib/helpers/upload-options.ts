@@ -106,6 +106,7 @@ export function createUploadOptionsFactory<
   T extends Signal<{
     gesuchId: string | undefined;
     allowTypes: string | undefined;
+    readonly: boolean;
   }>,
 >(view: T) {
   /**
@@ -132,6 +133,7 @@ export function createUploadOptionsFactory<
     return computed<DocumentOptions | null>(() => {
       const gesuchId = view().gesuchId;
       const allowTypes = view().allowTypes;
+      const readonly = view().readonly;
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && gesuchId && allowTypes
         ? {
@@ -141,6 +143,7 @@ export function createUploadOptionsFactory<
             singleUpload: options?.singleUpload ?? false,
             gesuchId,
             initialDocuments: options?.initialDocuments,
+            readonly,
           }
         : null;
     });
@@ -153,9 +156,16 @@ export function createDocumentOptions(options: {
   dokumentTyp: DokumentTyp;
   initialDocuments?: Dokument[];
   singleUpload?: boolean;
+  readonly: boolean;
 }): DocumentOptions {
-  const { gesuchId, allowTypes, dokumentTyp, initialDocuments, singleUpload } =
-    options;
+  const {
+    gesuchId,
+    allowTypes,
+    dokumentTyp,
+    initialDocuments,
+    singleUpload,
+    readonly,
+  } = options;
   return {
     allowTypes,
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -163,5 +173,6 @@ export function createDocumentOptions(options: {
     singleUpload: singleUpload ?? false,
     gesuchId,
     initialDocuments,
+    readonly,
   };
 }

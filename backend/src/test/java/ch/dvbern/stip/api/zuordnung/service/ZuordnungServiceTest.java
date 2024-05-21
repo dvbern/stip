@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
+import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -74,6 +75,11 @@ class ZuordnungServiceTest {
             }
         ).when(zuordnungRepo).persist(Mockito.anyIterable());
 
+        final var benutzerRepo = Mockito.mock(BenutzerRepository.class);
+        Mockito.when(benutzerRepo.findByBenutzerTyp(Mockito.any())).thenReturn(
+            Stream.of(new Benutzer().setBenutzerTyp(BenutzerTyp.ADMIN))
+        );
+
         final var pia = (PersonInAusbildung) new PersonInAusbildung()
             .setKorrespondenzSprache(Sprache.DEUTSCH)
             .setNachname("Alfred");
@@ -93,7 +99,7 @@ class ZuordnungServiceTest {
         final var gesuchsRepo = Mockito.mock(GesuchRepository.class);
         Mockito.when(gesuchsRepo.findAllNewestWithPia()).thenReturn(Stream.of(gesuch));
 
-        zuordnungService = new ZuordnungService(szsRepo, zuordnungRepo, gesuchsRepo);
+        zuordnungService = new ZuordnungService(szsRepo, zuordnungRepo, gesuchsRepo, benutzerRepo);
     }
 
     @Test

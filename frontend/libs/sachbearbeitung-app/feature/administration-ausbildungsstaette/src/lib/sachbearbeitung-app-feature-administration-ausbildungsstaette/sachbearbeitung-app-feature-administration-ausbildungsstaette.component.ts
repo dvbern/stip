@@ -34,13 +34,14 @@ import { merge } from 'rxjs';
 
 import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
-import { Ausbildungsgang, Bildungsart } from '@dv/shared/model/gesuch';
+import { Ausbildungsgang, Bildungsstufe } from '@dv/shared/model/gesuch';
 import {
   ConfirmDialogData,
   SharedUiConfirmDialogComponent,
 } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
@@ -60,6 +61,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     ReactiveFormsModule,
     MatPaginatorModule,
     MatSelectModule,
+    TypeSafeMatCellDefDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.html',
@@ -115,13 +117,10 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     nameFr: ['', Validators.required],
   });
 
-  bildungsartValues = Object.values(Bildungsart);
-
   displayedChildColumns: string[] = [
     'bezeichnungDe',
     'bezeichnungFr',
-    'ausbildungsrichtung',
-    'ausbildungsort',
+    'bildungsart',
     'actions',
   ];
 
@@ -130,8 +129,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   gangForm = this.fb.nonNullable.group({
     bezeichnungDe: ['', Validators.required],
     bezeichnungFr: ['', Validators.required],
-    ausbildungsrichtung: ['', Validators.required],
-    ausbildungsort: ['', Validators.required],
+    bildungsartId: ['', Validators.required],
   });
 
   constructor() {
@@ -150,6 +148,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       }
     });
     this.store.loadAusbildungsstaetten({});
+    this.store.loadBildungsarten({});
   }
 
   ngAfterViewInit() {
@@ -236,12 +235,16 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   // Ausbildungsgang ==========================================================
 
   addAusbildungsgang(staette: AusbildungsstaetteTableData) {
-    const newRow = {
+    const newRow: Ausbildungsgang = {
       id: 'new',
       bezeichnungDe: '',
       bezeichnungFr: '',
-      ausbildungsrichtung: Bildungsart.LEHREN_ANLEHREN,
-      ausbildungsort: '',
+      bildungsart: {
+        id: '',
+        beschreibung: '',
+        bfs: 0,
+        bildungsstufe: Bildungsstufe.SEKUNDAR_2,
+      },
     };
 
     this.editedAusbildungsgang = newRow;
@@ -255,7 +258,14 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
 
   editAusbildungsgang(ausbildungsgang: Ausbildungsgang) {
     this.editedAusbildungsgang = ausbildungsgang;
-    this.gangForm.patchValue(ausbildungsgang, { emitEvent: false });
+    this.gangForm.patchValue(
+      {
+        bezeichnungDe: ausbildungsgang.bezeichnungDe,
+        bezeichnungFr: ausbildungsgang.bezeichnungFr,
+        bildungsartId: ausbildungsgang.bildungsart.id,
+      },
+      { emitEvent: false },
+    );
   }
 
   cancelEditAusbildungsgang(
@@ -277,8 +287,6 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
     const gang = {
       ...this.editedAusbildungsgang,
       ...this.gangForm.value,
-      ausbildungsrichtung: this.gangForm.value
-        .ausbildungsrichtung as Bildungsart,
     };
 
     this.store.handleCreateUpdateAusbildungsgang({ staette, gang });

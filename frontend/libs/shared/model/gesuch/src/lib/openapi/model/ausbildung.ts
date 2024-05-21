@@ -9,10 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Ausbildungsgang } from './ausbildungsgang';
 import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface Ausbildung { 
-    ausbildungsgangId?: string;
+    ausbildungsgang: Ausbildungsgang;
     fachrichtung: string;
     ausbildungNichtGefunden?: boolean;
     /**
@@ -27,15 +28,16 @@ export interface Ausbildung {
     /**
      * Required wenn andere ausbildungNichtGefunden = true
      */
-    alternativeAusbildungsland?: string;
-    /**
-     * Required wenn andere ausbildungNichtGefunden = true
-     */
     alternativeAusbildungsstaette?: string;
     /**
      * Required wenn andere ausbildungNichtGefunden = true
      */
     alternativeAusbildungsgang?: string;
+    /**
+     * Not required if isAusbildungAusland = true
+     */
+    ausbildungsort?: string;
+    isAusbildungAusland?: boolean;
 }
 
 

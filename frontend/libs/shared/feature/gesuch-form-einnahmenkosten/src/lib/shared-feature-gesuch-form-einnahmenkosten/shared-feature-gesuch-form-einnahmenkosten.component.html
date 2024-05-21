@@ -4,7 +4,14 @@
 } @else {
   <!-- form -->
   @if (formStateSig().hasData) {
-    <form [formGroup]="form" data-testid="form-einnahmen-kosten-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+    <form
+      [formGroup]="form"
+      [dvSharedUiFormReadonly]="viewSig().readonly"
+      data-testid="form-einnahmen-kosten-form"
+      novalidate
+      class="mt-4"
+      (ngSubmit)="handleSave()"
+    >
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.einnahmenkosten.einnahmen.title' | translate }}
       </h3>
@@ -202,10 +209,7 @@
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.einnahmenkosten.kosten.title' | translate }}
       </h3>
-      @if (
-        !hiddenFieldsSetSig().has(form.controls.ausbildungskostenSekundarstufeZwei) ||
-        !hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)
-      ) {
+      @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenSekundarstufeZwei)) {
         <div class="row g-4">
           <!-- AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI -->
           @if (!form.controls.ausbildungskostenSekundarstufeZwei.disabled) {
@@ -218,7 +222,7 @@
                 data-testid="form-einnahmen-kosten-ausbildungskostenSekundarstufeZwei"
                 matInput
                 type="text"
-                [maskito]="maskitoNumber"
+                [maskito]="maskitoSekundaer"
               />
               <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info</mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
@@ -228,9 +232,9 @@
           }
         </div>
       }
-      <div class="row g-4 mt-1">
-        <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
-        @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
+        <div class="row g-4 mt-1">
+          <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ 'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label' | translate }}</mat-label>
             <input
@@ -238,15 +242,15 @@
               data-testid="form-einnahmen-kosten-ausbildungskostenTertiaerstufe"
               matInput
               type="text"
-              [maskito]="maskitoNumber"
+              [maskito]="maskitoTeritaer"
             />
             <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.info</mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
           </mat-form-field>
-        }
-      </div>
+        </div>
+      }
 
       <div class="row g-4 mt-1">
         <!-- BETREUUNGKOSTEN_KINDER -->

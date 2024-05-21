@@ -28,12 +28,11 @@ public class KindDto  implements Serializable {
   private @Valid LocalDate geburtsdatum;
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
-  private @Valid UUID id;
   private @Valid String nachname;
+  private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
   private @Valid Integer erhalteneAlimentebeitraege;
-  private @Valid UUID copyOfId;
 
   /**
    **/
@@ -114,25 +113,6 @@ public class KindDto  implements Serializable {
 
   /**
    **/
-  public KindDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
   public KindDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
@@ -148,6 +128,24 @@ public class KindDto  implements Serializable {
   @JsonProperty("nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public KindDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -206,24 +204,6 @@ public class KindDto  implements Serializable {
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
   }
 
-  /**
-   **/
-  public KindDto copyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-    return this;
-  }
-
-  
-  @JsonProperty("copyOfId")
-  public UUID getCopyOfId() {
-    return copyOfId;
-  }
-
-  @JsonProperty("copyOfId")
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -238,17 +218,16 @@ public class KindDto  implements Serializable {
         Objects.equals(this.geburtsdatum, kind.geburtsdatum) &&
         Objects.equals(this.wohnsitz, kind.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, kind.ausbildungssituation) &&
-        Objects.equals(this.id, kind.id) &&
         Objects.equals(this.nachname, kind.nachname) &&
+        Objects.equals(this.id, kind.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, kind.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, kind.wohnsitzAnteilVater) &&
-        Objects.equals(this.erhalteneAlimentebeitraege, kind.erhalteneAlimentebeitraege) &&
-        Objects.equals(this.copyOfId, kind.copyOfId);
+        Objects.equals(this.erhalteneAlimentebeitraege, kind.erhalteneAlimentebeitraege);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, nachname, wohnsitzAnteilMutter, wohnsitzAnteilVater, erhalteneAlimentebeitraege, copyOfId);
+    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, erhalteneAlimentebeitraege);
   }
 
   @Override
@@ -260,12 +239,11 @@ public class KindDto  implements Serializable {
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    erhalteneAlimentebeitraege: ").append(toIndentedString(erhalteneAlimentebeitraege)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

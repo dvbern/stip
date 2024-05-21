@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -732,7 +733,11 @@ class GesuchServiceTest {
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
+            new Gesuch()
+                .setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT)
+                .setId(UUID.randomUUID())
+        ));
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
@@ -758,7 +763,7 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.getGesuch().setGesuchDokuments(
@@ -788,7 +793,7 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setAusbildungsrichtung(Bildungsart.UNIVERSITAETEN_ETH));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -810,21 +815,25 @@ class GesuchServiceTest {
 
     @Test
     void pageValidation() {
-        final var gesuch = new GesuchFormular();
-        var reportDto = gesuchService.validatePages(gesuch);
+        final var gesuch = new Gesuch();
+        final var gesuchTranche = new GesuchTranche();
+        final var gesuchFormular = new GesuchFormular();
+        gesuchTranche.setGesuch(gesuch);
+        gesuchFormular.setTranche(gesuchTranche);
+        var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         assertThat(reportDto.getValidationErrors(), is(empty()));
 
-        gesuch.setEinnahmenKosten(new EinnahmenKosten());
-        reportDto = gesuchService.validatePages(gesuch);
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
+        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         var violationCount = reportDto.getValidationErrors().size();
         assertThat(reportDto.getValidationErrors(), is(not(empty())));
 
-        gesuch.setFamiliensituation(
+        gesuchFormular.setFamiliensituation(
             new Familiensituation()
                 .setElternteilUnbekanntVerstorben(true)
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
-        reportDto = gesuchService.validatePages(gesuch);
+        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         assertThat(reportDto.getValidationErrors().size(), is(greaterThan(violationCount)));
     }
 
