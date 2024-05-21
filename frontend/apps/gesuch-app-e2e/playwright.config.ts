@@ -1,43 +1,17 @@
 import { nxE2EPreset } from '@nx/playwright/preset';
-import { Project, defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 import * as dotenv from 'dotenv';
 
 import {
   AuthenticatedTest,
   GS_STORAGE_STATE,
   baseConfig,
+  createTestConfigWithSetup,
 } from '@dv/shared/util-fn/e2e-util';
 
 dotenv.config({ path: '../../.env' });
 
 const baseURL = process.env['E2E_BASEURL_GS'];
-
-// GET CWD
-console.log(process.cwd());
-
-const createTestConfig = (
-  dir: string,
-  name: string,
-  baseStorageState: string,
-  feature: AuthenticatedTest,
-): [ReturnType<typeof defineConfig<AuthenticatedTest>>, Project] => {
-  return [
-    {
-      name,
-      testMatch: /.*\.setup\.ts/,
-      use: feature,
-    },
-    {
-      name: `${name}-chromium`,
-      testDir: `src/tests/${dir}`,
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: feature.storageState,
-      },
-      dependencies: [name],
-    },
-  ];
-};
 
 export default defineConfig<AuthenticatedTest>({
   ...nxE2EPreset(__filename, { testDir: './src' }),
@@ -48,13 +22,21 @@ export default defineConfig<AuthenticatedTest>({
   },
   projects: [
     // Setup project for authentication.
-    ...createTestConfig('gesuch', 'simple-full-gesuch', GS_STORAGE_STATE, {
-      authentication: 'GESUCHSTELLER_1',
-      storageState: `gesuch_${GS_STORAGE_STATE}`,
+    ...createTestConfigWithSetup({
+      dir: 'gesuch',
+      name: 'simple-full-gesuch',
+      storageStatePath: `gesuch_${GS_STORAGE_STATE}`,
+      fixtures: {
+        authentication: 'GESUCHSTELLER_1',
+      },
     }),
-    ...createTestConfig('upload', 'dokument-upload', GS_STORAGE_STATE, {
-      authentication: 'GESUCHSTELLER_2',
-      storageState: `upload_${GS_STORAGE_STATE}`,
+    ...createTestConfigWithSetup({
+      dir: 'upload',
+      name: 'dokument-upload',
+      storageStatePath: `upload_${GS_STORAGE_STATE}`,
+      fixtures: {
+        authentication: 'GESUCHSTELLER_2',
+      },
     }),
   ],
 });

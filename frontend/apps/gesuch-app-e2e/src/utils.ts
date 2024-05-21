@@ -1,8 +1,9 @@
 import { test as base } from '@playwright/test';
 
 import {
-  GS_STORAGE_STATE,
+  AuthenticatedTest,
   TestContexts,
+  authenticatedTestOptions,
   createTestContexts,
   deleteGesuch,
 } from '@dv/shared/util-fn/e2e-util';
@@ -17,7 +18,8 @@ import { CockpitPO } from './po/cockpit.po';
 export const initializeTest = () => {
   let contexts: TestContexts;
   let gesuchId: string;
-  const test = base.extend<{ cockpit: CockpitPO }>({
+  const test = base.extend<{ cockpit: CockpitPO } & AuthenticatedTest>({
+    ...authenticatedTestOptions,
     cockpit: async ({ page }, use) => {
       const cockpit = new CockpitPO(page);
 
@@ -51,18 +53,20 @@ export const initializeTest = () => {
     },
   });
 
-  test.beforeAll(async ({ playwright, baseURL, browser }) => {
+  test.beforeAll(async ({ playwright, baseURL, browser, storageState }) => {
     contexts = await createTestContexts({
       browser,
       playwright,
-      storageState: GS_STORAGE_STATE,
+      storageState,
       baseURL,
     });
   });
 
   test.afterAll(async () => {
-    await deleteGesuch(contexts.api, gesuchId);
-    await contexts.dispose();
+    if (contexts) {
+      await deleteGesuch(contexts.api, gesuchId);
+      await contexts.dispose();
+    }
   });
 
   return {
