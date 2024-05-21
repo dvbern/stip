@@ -69,15 +69,15 @@ include:
       mirror-when: "always"
 
 
-  # - component: 'gitlab.dvbern.ch/components/build/nx@v1.2.1'
-  #   inputs:
-  #     name: ".nx"
-  #     e2e-test-package-version: '13.6.2'
-  #     context-dir: 'frontend'
-  #     e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
-  #     e2e-test-image-version: v1.41.1-jammy
-  #     install-e2e-test-package: false
-  #     e2e-on: 'default'
+  - component: 'gitlab.dvbern.ch/components/build/nx@v1.2.1'
+    inputs:
+      name: ".nx"
+      e2e-test-package-version: '13.6.2'
+      context-dir: 'frontend'
+      e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
+      e2e-test-image-version: v1.41.1-jammy
+      install-e2e-test-package: false
+      e2e-on: 'default'
 
 .install-argocd:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
@@ -93,67 +93,67 @@ include:
       echo "$ARGOCD_SERVER"
       curl -ksSL -o /usr/local/bin/argocd https://$E2E_ARGOCD_SERVER/download/argocd-linux-amd64
 
-# start-e2e:
-#   stage: e2e
-#   resource_group: "argocd:dev"
-#   extends: .install-argocd
-#   script:
-#     - argocd app sync stip-e2e --insecure
-#     - argocd app set stip-e2e --helm-set image.tag=$VERSION --insecure
-#     - argocd app set stip-e2e --helm-set api.replicaCount=1 --insecure
-#     - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=1 --insecure
-#     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=1 --insecure
-#     - argocd app set stip-e2e --helm-set postgres-cluster.enabled=true --insecure
-#     - argocd app sync stip-e2e --insecure
-#     - argocd app wait stip-e2e --insecure
-#   environment:
-#     name: e2e
-#     url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
-#     action: start
-#   rules:
-#     - if: $PIPELINE_TYPE == "default"
-#       when: on_success
+start-e2e:
+  stage: e2e
+  resource_group: "argocd:dev"
+  extends: .install-argocd
+  script:
+    - argocd app sync stip-e2e --insecure
+    - argocd app set stip-e2e --helm-set image.tag=$VERSION --insecure
+    - argocd app set stip-e2e --helm-set api.replicaCount=1 --insecure
+    - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=1 --insecure
+    - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=1 --insecure
+    - argocd app set stip-e2e --helm-set postgres-cluster.enabled=true --insecure
+    - argocd app sync stip-e2e --insecure
+    - argocd app wait stip-e2e --insecure
+  environment:
+    name: e2e
+    url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    action: start
+  rules:
+    - if: $PIPELINE_TYPE == "default"
+      when: on_success
 
-# run-e2e:  
-#   stage: e2e
-#   extends: .nx-e2e-test
-#   resource_group: "e2e"
-#   variables:
-#     E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
-#     E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
-#   needs:
-#     - start-e2e
+run-e2e:  
+  stage: e2e
+  extends: .nx-e2e-test
+  resource_group: "e2e"
+  variables:
+    E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+  needs:
+    - start-e2e
 
-# run-review-e2e:
-#   extends: run-e2e
-#   stage: review-e2e
-#   needs:
-#     - argocd:review-app:start
-#   variables:
-#     E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
-#     E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER"
-#   rules:
-#     - if: $PIPELINE_TYPE == "mr"
-#       when: always
+run-review-e2e:
+  extends: run-e2e
+  stage: review-e2e
+  needs:
+    - argocd:review-app:start
+  variables:
+    E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+  rules:
+    - if: $PIPELINE_TYPE == "mr"
+      when: always
 
-# stop-e2e:
-#   when: always
-#   stage: e2e
-#   needs:
-#     - run-e2e
-#   resource_group: "argocd:dev"
-#   extends: .install-argocd
-#   script:
-#     - argocd app set stip-e2e --helm-set api.replicaCount=0 --insecure
-#     - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=0 --insecure
-#     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=0 --insecure
-#     - argocd app set stip-e2e --helm-set postgres-cluster.enabled=false --insecure
-#     - argocd app sync stip-e2e --prune --insecure
-#     - argocd app wait stip-e2e --insecure
-#   environment:
-#     name: e2e
-#     url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
-#     action: stop
-#   rules:
-#     - if: $PIPELINE_TYPE == "default"
-#       when: always
+stop-e2e:
+  when: always
+  stage: e2e
+  needs:
+    - run-e2e
+  resource_group: "argocd:dev"
+  extends: .install-argocd
+  script:
+    - argocd app set stip-e2e --helm-set api.replicaCount=0 --insecure
+    - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=0 --insecure
+    - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=0 --insecure
+    - argocd app set stip-e2e --helm-set postgres-cluster.enabled=false --insecure
+    - argocd app sync stip-e2e --prune --insecure
+    - argocd app wait stip-e2e --insecure
+  environment:
+    name: e2e
+    url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    action: stop
+  rules:
+    - if: $PIPELINE_TYPE == "default"
+      when: always
