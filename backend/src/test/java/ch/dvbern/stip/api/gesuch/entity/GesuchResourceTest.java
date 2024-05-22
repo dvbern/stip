@@ -474,6 +474,7 @@ class GesuchResourceTest {
             .extract()
             .body()
             .as(GesuchDokumentDtoSpec[].class);
+        expectedDokTypes = 20; // The uploaded dokuments minus the superfluous ones
 
         assertThat(gesuchDokumente.length, is(expectedDokTypes));
     }

@@ -34,8 +34,8 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1980, 1, 1), LocalDate.of(2000, 1, 1)));
             model.setHeimatort(faker.address().cityName());
             model.setZivilstand(TestUtil.getRandomElementFromArray(ZivilstandDtoSpec.values()));
-            model.setSozialhilfebeitraege(faker.bool().bool());
-            model.setVormundschaft(faker.bool().bool());
+            model.setSozialhilfebeitraege(true);
+            model.setVormundschaft(false);
             model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");
             model.setIdentischerZivilrechtlicherWohnsitzPLZ("3000");
             model.setKorrespondenzSprache(TestUtil.getRandomElementFromArray(SpracheDtoSpec.values()));
