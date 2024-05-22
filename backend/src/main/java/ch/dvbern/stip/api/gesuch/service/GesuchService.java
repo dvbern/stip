@@ -266,7 +266,7 @@ public class GesuchService {
         }
     }
 
-    public List<GesuchDokumentDto> getAndCheckGesuchDokumenteForGesuch(final UUID gesuchId) {
+    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
