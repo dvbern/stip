@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -124,9 +125,24 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void deleteAllDokumentForGesuch(UUID gesuchId) {
+    public void deleteAllDokumentForGesuchInRepository(UUID gesuchId) {
         gesuchDokumentRepository.findAllForGesuch(gesuchId)
             .forEach(gesuchDokumentRepository::delete);
+    }
+
+    @Transactional
+    public List<String> getAllDokumentObjectIdsForGesuch(UUID gesuchId) {
+        return gesuchDokumentRepository.findAllForGesuch(gesuchId)
+            .map(GesuchDokument::getDokumente)
+            .flatMap(dokuments -> dokuments
+                .stream()
+                .map(Dokument::getObjectId)
+            ).toList();
+    }
+
+    public void deleteAllDokumentForGesuch(UUID gesuchId) {
+        executeDeleteDokumentsFromS3(getAllDokumentObjectIdsForGesuch(gesuchId));
+        deleteAllDokumentForGesuchInRepository(gesuchId);
     }
 
     public Uni<Void> deleteDokumentsFromS3Blocking(List<String> objectIds) {
