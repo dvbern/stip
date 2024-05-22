@@ -20,6 +20,12 @@ export interface KeycloakResponse {
 
 /**
  * Available users for e2e tests, ensure that the environment variables are set in CI
+ *
+ * In order to add new users, the following steps are required:
+ * 1. Create the password and add the desired username to the Stip Group in LastPass
+ * 2. Add the user to the environment variables in the local .env file
+ * 3. Add the user to the Keycloak realm https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/admin/master/console/
+ * 4. Add the user to the environment variables in the CI configuration https://gitlab.dvbern.ch/stip/stip/-/settings/ci_cd -> Variables
  */
 export type E2eUser = `GESUCHSTELLER_${1 | 2}` | 'SACHBEARBEITER_1' | 'ADMIN_1';
 
