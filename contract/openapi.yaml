@@ -1263,6 +1263,29 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
+  /bildungsart:
+    get:
+      tags:
+        - Bildungsart
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bildungsart'
+          description: Returns all Bildungsarten
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBildungsarten
+      summary: Gets all Bildgunsarten
 components:
   schemas:
     Anrede:
@@ -1840,11 +1863,6 @@ components:
         - ZH
         - AUSLAND
       type: string
-    Ausbildung:
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/AusbildungUpdate'
     Familiensituation:
       type: object
       allOf:
@@ -1855,18 +1873,27 @@ components:
         - ERWERBSTAETIGKEIT
         - ANDERE_TAETIGKEIT
       type: string
+    Bildungsstufe:
+      enum:
+        - SEKUNDAR_2
+        - TERTIAER
     Bildungsart:
       description: ''
-      enum:
-        - GYMNASIALE_MATURITAETSSCHULEN
-        - SCHULEN_FUER_ALLGEMEINBILDUNG
-        - VOLLZEITBERUFSSCHULEN
-        - LEHREN_ANLEHREN
-        - BERUFSMATURITAET_NACH_LEHRE
-        - HOEHERE_BERUFSBILDUNG
-        - FACHHOCHSCHULEN
-        - UNIVERSITAETEN_ETH
-      type: string
+      type: object
+      required:
+        - id
+        - beschreibung
+        - bildungsstufe
+        - bfs
+      properties:
+        beschreibung:
+          type: string
+        bildungsstufe:
+          $ref: '#/components/schemas/Bildungsstufe'
+        bfs:
+          type: integer
+        id:
+          $ref: '#/components/schemas/UUID'
     LebenslaufAusbildungsArt:
       description: ''
       enum:
@@ -1971,52 +1998,24 @@ components:
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/ElternUpdate'
     Geschwister:
       title: Root Type for Geschwister
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/GeschwisterUpdate'
     Kind:
       title: Root Type for Geschwister
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf
       description: ''
       type: object
       allOf:
-        - required:
-            - id
-          type: object
-          properties:
-            copyOfId:
-              $ref: '#/components/schemas/UUID'
-              description: ''
         - $ref: '#/components/schemas/LebenslaufItemUpdate'
     Partner:
       type: object
@@ -2355,7 +2354,7 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
-    AusbildungUpdate:
+    AusbildungBase:
       required:
         - fachrichtung
         - ausbildungBegin
@@ -2363,10 +2362,6 @@ components:
         - pensum
       type: object
       properties:
-        ausbildungsgangId:
-          $ref: '#/components/schemas/UUID'
-          description: |
-            Required wenn andere ausbildungNichtGefunden = false
         fachrichtung:
           type: string
         ausbildungNichtGefunden:
@@ -2379,15 +2374,36 @@ components:
           type: string
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
-        alternativeAusbildungsland:
-          description: Required wenn andere ausbildungNichtGefunden = true
-          type: string
         alternativeAusbildungsstaette:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
+        ausbildungsort:
+          description: Not required if isAusbildungAusland = true
+          type: string
+        isAusbildungAusland:
+          type: boolean
+    Ausbildung:
+      required:
+        - ausbildungsgang
+      type: object
+      properties:
+        ausbildungsgang:
+          $ref: '#/components/schemas/Ausbildungsgang'
+          description: ''
+      allOf:
+        - $ref: '#/components/schemas/AusbildungBase'
+    AusbildungUpdate:
+      type: object
+      properties:
+        ausbildungsgangId:
+          $ref: '#/components/schemas/UUID'
+          description: |
+            Required wenn andere ausbildungNichtGefunden = false
+      allOf:
+        - $ref: '#/components/schemas/AusbildungBase'
     Ausbildungsstaette:
       anyOf:
         - required: []
@@ -2405,9 +2421,8 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - ausbildungsrichtung
+        - bildungsartId
         - ausbildungsstaetteId
-        - ausbildungsort
       type: object
       properties:
         bezeichnungDe:
@@ -2416,20 +2431,17 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        ausbildungsrichtung:
-          $ref: '#/components/schemas/Bildungsart'
+        bildungsartId:
+          $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
     AusbildungsgangCreate:
       description: ''
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - ausbildungsrichtung
+        - bildungsartId
         - ausbildungsstaette
-        - ausbildungsort
       type: object
       properties:
         bezeichnungDe:
@@ -2438,12 +2450,10 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        ausbildungsrichtung:
-          $ref: '#/components/schemas/Bildungsart'
+        bildungsartId:
+          $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
     Ausbildungsort:
       description: ''
       type: string
@@ -2725,8 +2735,7 @@ components:
           type: string
     Ausbildungsgang:
       required:
-        - ausbildungsort
-        - ausbildungsrichtung
+        - bildungsart
         - id
       type: object
       properties:
@@ -2738,11 +2747,8 @@ components:
         bezeichnungFr:
           description: ''
           type: string
-        ausbildungsrichtung:
+        bildungsart:
           $ref: '#/components/schemas/Bildungsart'
-          description: ''
-        ausbildungsort:
-          $ref: '#/components/schemas/Ausbildungsort'
           description: ''
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'

@@ -38,6 +38,7 @@ import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -72,6 +73,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MaskitoDirective,
     SharedUiStepFormButtonsComponent,
     MatCheckboxModule,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],
@@ -168,7 +170,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.berufsbezeichnung,
-          !this.showBerufsbezeichnungSig(),
+          this.viewSig().readonly || !this.showBerufsbezeichnungSig(),
           true,
         );
       },
@@ -178,7 +180,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
-          !this.showFachrichtungSig(),
+          this.viewSig().readonly || !this.showFachrichtungSig(),
           true,
         );
       },
@@ -188,7 +190,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         this.formUtils.setDisabledState(
           this.form.controls.titelDesAbschlusses,
-          !this.showTitelDesAbschlussesSig(),
+          this.viewSig().readonly || !this.showTitelDesAbschlussesSig(),
           true,
         );
       },
@@ -198,9 +200,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

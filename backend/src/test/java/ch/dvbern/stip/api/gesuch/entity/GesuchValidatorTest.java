@@ -9,7 +9,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.common.type.Bildungsart;
+import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -455,7 +455,7 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationEinnahmenKostenAusbildung() {
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungsgang(new Ausbildungsgang());
-        ausbildung.getAusbildungsgang().setAusbildungsrichtung(Bildungsart.BERUFSMATURITAET_NACH_LEHRE);
+        ausbildung.getAusbildungsgang().setBildungsart(new Bildungsart());
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();

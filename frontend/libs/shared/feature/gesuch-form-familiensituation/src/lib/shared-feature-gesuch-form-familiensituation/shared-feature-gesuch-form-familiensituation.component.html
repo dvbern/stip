@@ -1,7 +1,14 @@
 @if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-family-loading"></dv-shared-ui-loading>
 } @else {
-  <form [formGroup]="form" data-testid="form-family-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+  <form
+    [formGroup]="form"
+    [dvSharedUiFormReadonly]="viewSig().readonly"
+    data-testid="form-family-form"
+    novalidate
+    class="mt-4"
+    (ngSubmit)="handleSave()"
+  >
     <div class="col-12 col-xl-6 col-md-9">
       <dv-shared-ui-stepper-navigation
         [nextStepVisible]="hasNextStep()"
@@ -75,7 +82,7 @@
               </mat-error>
             </mat-radio-group>
           </div>
-          @if (form.controls.werZahltAlimente.enabled) {
+          @if (!hiddenFieldsSetSig().has(form.controls.werZahltAlimente)) {
             <div class="row g-4 mt-3">
               <mat-form-field dvSharedUiFormField>
                 <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | translate }}</mat-label>
@@ -103,10 +110,14 @@
               </mat-form-field>
             </div>
           }
-          @if (form.controls.mutterWiederverheiratet.enabled && form.value.gerichtlicheAlimentenregelung) {
+          @if (
+            !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
+          ) {
             <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
           }
-          @if (form.controls.vaterWiederverheiratet.enabled && form.value.gerichtlicheAlimentenregelung) {
+          @if (
+            !hiddenFieldsSetSig().has(form.controls.vaterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
+          ) {
             <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
           }
         </div>
@@ -136,7 +147,7 @@
               </mat-error>
             </mat-radio-group>
           </div>
-          @if (form.controls.mutterUnbekanntVerstorben.enabled) {
+          @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntVerstorben)) {
             <div class="row g-4 mt-3">
               <span>{{ 'shared.form.familiensituation.elternteil-verstorben.label' | translate }}</span>
               <mat-radio-group
@@ -177,7 +188,7 @@
               </mat-radio-group>
             </div>
           }
-          @if (form.controls.mutterUnbekanntGrund.enabled) {
+          @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntGrund)) {
             <div class="row g-4 mt-3 flex-nowrap">
               <mat-radio-group
                 formControlName="mutterUnbekanntGrund"

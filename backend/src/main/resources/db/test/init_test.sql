@@ -161,8 +161,8 @@ INSERT INTO ausbildungsstaette (id, timestamp_erstellt, timestamp_mutiert, user_
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae5', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
         'Admin', 0, 'Universtität Bern', 'Université de Berne');
 INSERT INTO ausbildungsgang (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version,
-                             bezeichnung_de, bezeichnung_fr, ausbildungsstaette_id, ausbildungsort, ausbildungsrichtung,
+                             bezeichnung_de, bezeichnung_fr, ausbildungsstaette_id, ausbildungsrichtung,
                              mandant)
 VALUES ('3a8c2023-f29e-4466-a2d7-411a7d032f42', '2023-06-12 15:38:10.000000', '2023-06-12 15:38:06.000000', 'Admin',
-        'Admin', 0, 'Bachelor', 'Bachelor', '9477487f-3ac4-4d02-b57c-e0cefb292ae5', 'BERN', 'UNIVERSITAETEN_ETH',
+        'Admin', 0, 'Bachelor', 'Bachelor', '9477487f-3ac4-4d02-b57c-e0cefb292ae5', 'UNIVERSITAETEN_ETH',
         'bern');

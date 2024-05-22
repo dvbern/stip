@@ -43,6 +43,7 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -85,6 +86,7 @@ const MEDIUM_AGE = 20;
     SharedUiWohnsitzSplitterComponent,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -167,7 +169,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
-          !this.showWohnsitzSplitterSig() || this.viewSig().readonly,
+          this.viewSig().readonly || !this.showWohnsitzSplitterSig(),
         );
       },
       { allowSignalWrites: true },
@@ -194,9 +196,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       () => {
         const { readonly } = this.viewSig();
         if (readonly) {
-          Object.values(this.form.controls).forEach((control) =>
-            control.disable(),
-          );
+          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

@@ -100,6 +100,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     const documents = this.dokumenteSig().dokumentes;
     const requiredDocumentTypes = this.dokumenteSig().requiredDocumentTypes;
     const gesuchId = this.gesuchViewSig().gesuchId;
+    const readonly = this.gesuchViewSig().readonly;
     const allowTypes = this.gesuchViewSig().allowTypes;
 
     if (!gesuchId || !allowTypes) {
@@ -118,6 +119,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         allowTypes,
         dokumentTyp,
         initialDocuments: document.dokumente,
+        readonly,
       });
 
       const formStep = getFormStep(dokumentTyp);
@@ -140,6 +142,7 @@ export class SharedFeatureGesuchDokumenteComponent {
           allowTypes,
           dokumentTyp,
           initialDocuments: [],
+          readonly,
         });
 
         return {

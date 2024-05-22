@@ -30,8 +30,12 @@ async function setup() {
                 id: '1',
                 ausbildungsgaenge: [
                   {
-                    ausbildungsort: 'BERN',
-                    ausbildungsrichtung: 'FACHHOCHSCHULEN',
+                    bildungsart: {
+                      id: '',
+                      bfs: -1,
+                      beschreibung: '',
+                      bildungsstufe: 'SEKUNDAR_2',
+                    },
                     bezeichnungDe: 'gang1',
                     bezeichnungFr: 'gang1',
                     ausbildungsstaetteId: '1',
@@ -151,11 +155,9 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
     it('should have disabled inputs depending on each previous input state', async () => {
       const fields = {
         notFound: 'form-education-ausbildungNichtGefunden',
-        land: 'form-education-ausbildungsland',
         staette: 'form-education-ausbildungsstaette',
         gang: 'form-education-ausbildungsgang',
         alternativ: {
-          land: 'form-education-alternativeAusbildungsland',
           staette: 'form-education-alternativeAusbildungsstaette',
           gang: 'form-education-alternativeAusbildungsgang',
         },
@@ -164,13 +166,6 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       const { getByTestId, detectChanges } = await setup();
 
       detectChanges();
-
-      expect(getByTestId(fields.staette)).toBeDisabled();
-
-      await clickFirstMatSelectOption(fields.land);
-      detectChanges();
-
-      expect(getByTestId(fields.gang)).toHaveClass('mat-mdc-select-disabled');
 
       await clickFirstMatSelectOption(fields.staette);
       detectChanges();
@@ -199,7 +194,6 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
       detectChanges();
 
       for (const field of [
-        fields.alternativ.land,
         fields.alternativ.staette,
         fields.alternativ.gang,
         fields.fachrichtung,
@@ -216,6 +210,20 @@ describe(SharedFeatureGesuchFormEducationComponent.name, () => {
 
         expect(fieldEl).toHaveClass('ng-invalid');
       }
+    });
+
+    it('should disable ausbildungsort if isAusbildungAusland is checked', async () => {
+      const { getByTestId, detectChanges } = await setup();
+
+      detectChanges();
+
+      expect(getByTestId('form-education-ausbildungsort')).not.toBeDisabled();
+
+      await checkMatCheckbox('form-education-isAusbildungAusland');
+
+      detectChanges();
+
+      expect(getByTestId('form-education-ausbildungsort')).toBeDisabled();
     });
   });
 });

@@ -22,10 +22,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class LebenslaufItemDto  implements Serializable {
-  private @Valid UUID id;
   private @Valid String von;
   private @Valid String bis;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+  private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt bildungsart;
   private @Valid Boolean ausbildungAbgeschlossen;
   private @Valid String berufsbezeichnung;
@@ -33,26 +33,6 @@ public class LebenslaufItemDto  implements Serializable {
   private @Valid String titelDesAbschlusses;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
-  private @Valid UUID copyOfId;
-
-  /**
-   **/
-  public LebenslaufItemDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
 
   /**
    * Datum im Format mm.YYYY
@@ -111,6 +91,24 @@ public class LebenslaufItemDto  implements Serializable {
   @JsonProperty("wohnsitz")
   public void setWohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
     this.wohnsitz = wohnsitz;
+  }
+
+  /**
+   **/
+  public LebenslaufItemDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -244,24 +242,6 @@ public class LebenslaufItemDto  implements Serializable {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
-  /**
-   **/
-  public LebenslaufItemDto copyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-    return this;
-  }
-
-  
-  @JsonProperty("copyOfId")
-  public UUID getCopyOfId() {
-    return copyOfId;
-  }
-
-  @JsonProperty("copyOfId")
-  public void setCopyOfId(UUID copyOfId) {
-    this.copyOfId = copyOfId;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -272,23 +252,22 @@ public class LebenslaufItemDto  implements Serializable {
       return false;
     }
     LebenslaufItemDto lebenslaufItem = (LebenslaufItemDto) o;
-    return Objects.equals(this.id, lebenslaufItem.id) &&
-        Objects.equals(this.von, lebenslaufItem.von) &&
+    return Objects.equals(this.von, lebenslaufItem.von) &&
         Objects.equals(this.bis, lebenslaufItem.bis) &&
         Objects.equals(this.wohnsitz, lebenslaufItem.wohnsitz) &&
+        Objects.equals(this.id, lebenslaufItem.id) &&
         Objects.equals(this.bildungsart, lebenslaufItem.bildungsart) &&
         Objects.equals(this.ausbildungAbgeschlossen, lebenslaufItem.ausbildungAbgeschlossen) &&
         Objects.equals(this.berufsbezeichnung, lebenslaufItem.berufsbezeichnung) &&
         Objects.equals(this.fachrichtung, lebenslaufItem.fachrichtung) &&
         Objects.equals(this.titelDesAbschlusses, lebenslaufItem.titelDesAbschlusses) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItem.taetigkeitsart) &&
-        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung) &&
-        Objects.equals(this.copyOfId, lebenslaufItem.copyOfId);
+        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, von, bis, wohnsitz, bildungsart, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung, copyOfId);
+    return Objects.hash(von, bis, wohnsitz, id, bildungsart, ausbildungAbgeschlossen, berufsbezeichnung, fachrichtung, titelDesAbschlusses, taetigkeitsart, taetigkeitsBeschreibung);
   }
 
   @Override
@@ -296,10 +275,10 @@ public class LebenslaufItemDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class LebenslaufItemDto {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    von: ").append(toIndentedString(von)).append("\n");
     sb.append("    bis: ").append(toIndentedString(bis)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bildungsart: ").append(toIndentedString(bildungsart)).append("\n");
     sb.append("    ausbildungAbgeschlossen: ").append(toIndentedString(ausbildungAbgeschlossen)).append("\n");
     sb.append("    berufsbezeichnung: ").append(toIndentedString(berufsbezeichnung)).append("\n");
@@ -307,7 +286,6 @@ public class LebenslaufItemDto  implements Serializable {
     sb.append("    titelDesAbschlusses: ").append(toIndentedString(titelDesAbschlusses)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
-    sb.append("    copyOfId: ").append(toIndentedString(copyOfId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

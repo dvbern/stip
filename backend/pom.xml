@@ -407,7 +407,6 @@
           <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
           <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
           <propertyFile>liquibase.properties</propertyFile>
-
           <!-- Old state -->
           <driver>org.postgresql.Driver</driver>
 
@@ -585,13 +584,13 @@
                     ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
                     Land=ch.dvbern.stip.api.stammdaten.type.Land,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
-                    Bildungsart=ch.dvbern.stip.api.common.type.Bildungsart,
                     Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
                     Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
+                    Bildungsstufe=ch.dvbern.stip.api.bildungsart.type.Bildungsstufe
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

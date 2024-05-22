@@ -31,7 +31,13 @@ import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { GesuchFormularUpdate, GesuchService } from '@dv/shared/model/gesuch';
+import {
+  AusbildungUpdate,
+  GesuchFormularUpdate,
+  GesuchService,
+  GesuchUpdate,
+  SharedModelGesuchFormular,
+} from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
@@ -388,31 +394,15 @@ export const sharedDataAccessGesuchEffects = {
 
 const prepareFormularData = (
   id: string,
-  gesuchFormular: GesuchFormularUpdate,
-) => {
-  const { lebenslaufItems, geschwisters, elterns, kinds, ...formular } =
-    gesuchFormular;
+  gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
+): GesuchUpdate => {
+  const { ausbildung, ...formular } = gesuchFormular;
   return {
     gesuchTrancheToWorkWith: {
       id,
       gesuchFormular: {
         ...formular,
-        lebenslaufItems: lebenslaufItems?.map((i) => ({
-          ...i,
-          copyOfId: undefined,
-        })),
-        elterns: elterns?.map((i) => ({
-          ...i,
-          copyOfId: undefined,
-        })),
-        kinds: kinds?.map((i) => ({
-          ...i,
-          copyOfId: undefined,
-        })),
-        geschwisters: geschwisters?.map((i) => ({
-          ...i,
-          copyOfId: undefined,
-        })),
+        ausbildung: toAusbildung(ausbildung),
       },
     },
   };
@@ -441,4 +431,33 @@ const combineLoadAllActions$ = (actions$: Actions) => {
       skip(1),
     ),
   );
+};
+
+type PartialOrFull<K extends keyof SharedModelGesuchFormular> =
+  | GesuchFormularUpdate[K]
+  | Partial<SharedModelGesuchFormular>[K];
+const isPartial = <T, R extends T>(
+  value: T,
+  keyExists: keyof R,
+): value is R => {
+  return typeof value === 'object' && value && keyExists in value;
+};
+
+const toAusbildung = (ausbildung: PartialOrFull<'ausbildung'>) => {
+  if (!ausbildung) {
+    return undefined;
+  }
+  if (
+    isPartial<PartialOrFull<'ausbildung'>, AusbildungUpdate>(
+      ausbildung,
+      'ausbildungsgangId',
+    )
+  ) {
+    return ausbildung;
+  }
+  return {
+    ...ausbildung,
+    ausbildungsgang: undefined,
+    ausbildungsgangId: ausbildung.ausbildungsgang.id,
+  };
 };

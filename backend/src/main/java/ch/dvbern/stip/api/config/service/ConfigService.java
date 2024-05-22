@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.config.service;
 
+import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
@@ -52,6 +53,10 @@ public class ConfigService {
     @Getter
     @ConfigProperty(name = "kstip.pre-signed-request.secret")
     String secret;
+
+    @Getter
+    @ConfigProperty(name = "kstip.seeding.seed-on")
+    List<String> seedOnProfile;
 
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()

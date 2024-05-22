@@ -28,3 +28,5 @@ export const VERSION = '${version}';
     flag: 'w',
   },
 );
+
+console.info(`Setting version '${version}' in version.ts`);

@@ -68,7 +68,7 @@ const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
 const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
 
 const ausbildung: AusbildungValues = {
-  ausbildungsland: 'CH',
+  ausbildungsort: 'Bern',
   ausbildungsstaette: 'Universität Bern',
   ausbildungsgang: 'Bsc. Biologie',
   fachrichtung: 'Informatik',
@@ -96,7 +96,7 @@ const ausbildung2: LebenslaufItem = {
 };
 
 const taetigkeit: LebenslaufItem = {
-  taetigskeitsart: 'ERWERBSTAETIGKEIT',
+  taetigkeitsart: 'ERWERBSTAETIGKEIT',
   taetigkeitsBeschreibung: 'Serviceangestellter',
   von: '07.2019',
   bis: '07.2020',
