@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.bildungsart.repo.BildungsartRepository;
 import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class AusbildungSeeding extends Seeder {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final BildungsartRepository bildungsartRepository;
+    private final ConfigService configService;
 
     protected Bildungsart bildungsart;
 
@@ -39,6 +41,11 @@ public class AusbildungSeeding extends Seeder {
             seedUni();
             seedFh();
         }
+    }
+
+    @Override
+    protected List<String> getProfiles() {
+        return configService.getSeedOnProfile();
     }
 
     protected void createBildungsart() {

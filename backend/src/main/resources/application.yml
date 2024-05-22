@@ -12,6 +12,9 @@ kstip:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
     secret: '${STIP_PRE_SIGNED_REQUEST_SECRET}'
+  seeding:
+    seed-on:
+      - 'dev'
 
 quarkus:
   execution-model-annotations:
