@@ -77,6 +77,7 @@ include:
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
       e2e-test-image-version: v1.41.1-jammy
       install-e2e-test-package: false
+      e2e-artifacts-dir: 'dist/.playwright/'
       e2e-on: 'default'
 
 .install-argocd:
