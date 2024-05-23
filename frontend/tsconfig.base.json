@@ -49,6 +49,7 @@
       "@dv/shared/data-access/gesuchsperiode": ["libs/shared/data-access/gesuchsperiode/src/index.ts"],
       "@dv/shared/data-access/global-notification": ["libs/shared/data-access/global-notification/src/index.ts"],
       "@dv/shared/data-access/language": ["libs/shared/data-access/language/src/index.ts"],
+      "@dv/shared/data-access/plz": ["libs/shared/data-access/plz/src/index.ts"],
       "@dv/shared/data-access/stammdaten": ["libs/shared/data-access/stammdaten/src/index.ts"],
       "@dv/shared/event/gesuch-dokumente": ["libs/shared/event/gesuch-dokumente/src/index.ts"],
       "@dv/shared/event/gesuch-form-abschluss": ["libs/shared/event/gesuch-form-abschluss/src/index.ts"],
