@@ -6,6 +6,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -83,6 +84,7 @@ function getFormStep(
     MatTableModule,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
+    MatChipsModule,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -91,7 +93,13 @@ function getFormStep(
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
 
-  displayedColumns = ['status', 'documentName', 'formStep', 'actions'];
+  displayedColumns = [
+    'status',
+    'documentName',
+    'formStep',
+    'documentStatus',
+    'actions',
+  ];
 
   dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);

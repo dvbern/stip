@@ -54,6 +54,16 @@
             </td>
           </ng-container>
 
+          <!-- documentStatus -->
+          <ng-container matColumnDef="documentStatus">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ 'shared.dokumente.table.documentStatus' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let dokument">
+              <mat-chip [color]="'success'">Test</mat-chip>
+            </td>
+          </ng-container>
+
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th
