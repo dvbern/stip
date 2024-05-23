@@ -1,0 +1,8 @@
+<input placeholder="name" (change)="name = nameI.value" #nameI /><br />
+<input placeholder="vorname" (change)="vorname = vornameI.value" #vornameI /><br />
+<input placeholder="email" (change)="email = emailI.value" #emailI /><br />
+@for (role of benutzerverwaltungStore.availableRoles.data(); track role.id) {
+  <label><input type="checkbox" (change)="toggle(role, adminI.checked)" #adminI />{{ role.name }}</label
+  ><br />
+}
+<button class="btn btn-primary" type="button" (click)="save()">Benutzer erstellen</button>
