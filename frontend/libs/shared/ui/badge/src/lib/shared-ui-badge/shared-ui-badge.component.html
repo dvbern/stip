@@ -1,0 +1,17 @@
+<div class="d-flex gap-1 align-items-center">
+  @switch (type) {
+    @case ('success') {
+      <i class="material-symbols-rounded fs-4">check_circle</i>
+    }
+    @case ('warning') {
+      <i class="material-symbols-rounded fs-4">error</i>
+    }
+    @case ('danger') {
+      <i class="material-symbols-rounded fs-4">warning</i>
+    }
+    @case ('info') {
+      <i class="material-symbols-rounded fs-4">schedule</i>
+    }
+  }
+  <ng-content></ng-content>
+</div>
