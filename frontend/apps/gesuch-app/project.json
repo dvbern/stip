@@ -7,10 +7,14 @@
   "tags": ["type:app", "scope:gesuch-app"],
   "targets": {
     "prepare": {
+      "cache": false,
       "executor": "nx:run-script",
       "options": {
         "script": "set-version"
-      }
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/model/version/src/lib/version.ts"
+      ]
     },
     "build": {
       "executor": "@angular-devkit/build-angular:application",

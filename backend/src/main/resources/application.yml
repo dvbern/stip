@@ -12,6 +12,9 @@ kstip:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
     secret: '${STIP_PRE_SIGNED_REQUEST_SECRET}'
+  seeding:
+    seed-on:
+      - 'dev'
 
 quarkus:
   execution-model-annotations:
@@ -22,7 +25,6 @@ quarkus:
     migrate-at-start: true
     change-log: 'db/migration/changelog.xml'
     validate-on-migrate: true
-    clean-at-start: true
   oidc:
     bern:
       auth-server-url: '${keycloak.url}/realms/bern'

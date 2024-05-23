@@ -27,9 +27,7 @@ public abstract class Seeder {
      * Returns a list of profiles on which to run seeding.
      * */
     @Pure
-    protected List<String> getProfiles() {
-        return List.of("dev");
-    }
+    protected abstract List<String> getProfiles();
 
     /**
      * Returns the tenant for which the seeding is to be ran

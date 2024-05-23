@@ -1,17 +1,18 @@
 stages: [build, validate, test, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/components/build/nx@v1.2.1'
+  - component: 'gitlab.dvbern.ch/components/build/nx@v1.3.0'
     inputs:
       app-name: '*-app'
       test-app-name: '*'
       context-dir: 'frontend'
-      component-test-package-version: '13.6.2'
+      component-test-on: 'never'
       allow-test-failure: false
       allow-e2e-test-failure: false
       e2e-on: 'never'
       lint-on: '(branch|mr|default)'
       test-on: '(branch|mr|default)'
+      build-additional-args: '--verbose'
       
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.8.0'
     inputs:
