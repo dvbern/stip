@@ -18,9 +18,13 @@
 package ch.dvbern.stip.api.gesuch.type;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.common.util.OidcConstants;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
@@ -68,11 +72,17 @@ public enum Gesuchstatus {
         return this != IN_BEARBEITUNG_GS;
     }
 
-    public boolean benutzerCanEdit(BenutzerTyp benutzerTyp) {
-        return switch (benutzerTyp) {
-            case GESUCHSTELLER -> GESUCHSTELLER_CAN_EDIT.contains(this);
-            case SACHBEARBEITER -> SACHBEARBEITER_CAN_EDIT.contains(this);
-            case ADMIN -> ADMIN_CAN_EDIT.contains(this);
-        };
+    public boolean benutzerCanEdit(@NotNull Set<Rolle> rollen) {
+        final var identifiers = rollen.stream().map(Rolle::getKeycloakIdentifier).collect(Collectors.toSet());
+        final var editStates = new HashSet<Gesuchstatus>();
+        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            editStates.addAll(GESUCHSTELLER_CAN_EDIT);
+        } else if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
+            editStates.addAll(SACHBEARBEITER_CAN_EDIT);
+        } else if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
+            editStates.addAll(ADMIN_CAN_EDIT);
+        }
+
+        return editStates.contains(this);
     }
 }

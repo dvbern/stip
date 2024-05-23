@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.QBenutzer;
+import ch.dvbern.stip.api.benutzer.entity.QRolle;
 import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -28,13 +29,17 @@ public class BenutzerRepository implements BaseRepository<Benutzer> {
     }
 
     public Stream<Benutzer> findByBenutzerTyp(BenutzerTyp benutzerTyp) {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var benutzer = QBenutzer.benutzer;
+        return Stream.empty();
+    }
 
-        var query = queryFactory
+    public Stream<Benutzer> findByRolle(String stringRolle) {
+        final var benutzer = QBenutzer.benutzer;
+        final var rolle = QRolle.rolle;
+
+        return new JPAQueryFactory(entityManager)
             .select(benutzer)
-            .from(benutzer)
-            .where(benutzer.benutzerTyp.eq(benutzerTyp));
-        return query.stream();
+            .from(benutzer, rolle)
+            .where(rolle.keycloakIdentifier.eq(stringRolle))
+            .stream();
     }
 }
