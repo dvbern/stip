@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 import { <%= classify(name) %>Store } from './<%= dasherize(projectName) %>.store';
 
 describe('<%= classify(name) %>Store', () => {
-  // let store: BenutzerverwaltungStore;
   let store: <%= classify(name) %>Store;
 
   beforeEach(() => {
