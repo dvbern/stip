@@ -14,6 +14,7 @@ import io.quarkus.test.security.oidc.OidcSecurity;
 @TestSecurity(
     user = "sachbearbeiter",
     roles = {
+        "Sachbearbeiter",
         "GESUCH_READ",
         "GESUCH_UPDATE",
         "FALL_UPDATE",
@@ -22,7 +23,8 @@ import io.quarkus.test.security.oidc.OidcSecurity;
         "GESUCHSPERIODE_READ",
         "GESUCH_DELETE",
         "FALL_DELETE",
-        "FALL_READ"
+        "FALL_READ",
+        "AUSBILDUNG_READ"
     }
 )
 @OidcSecurity(

@@ -11,8 +11,10 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @AllArgsConstructor
@@ -33,28 +35,28 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
         return Response.ok(gesuchsjahre).build();
     }
 
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_CREATE)
     @Override
     public Response createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
         final var gesuchsjahr = gesuchsjahrService.createGesuchsjahr(gesuchsjahrCreateDto);
         return Response.ok(gesuchsjahr).build();
     }
 
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
     public Response updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
         final var gesuchsjahr = gesuchsjahrService.updateGesuchsjahr(gesuchsjahrId, gesuchsjahrUpdateDto);
         return Response.ok(gesuchsjahr).build();
     }
 
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
     public Response publishGesuchsjahr(UUID gesuchsjahrId) {
         final var gesuchsjahr = gesuchsjahrService.publishGesuchsjahr(gesuchsjahrId);
         return Response.ok(gesuchsjahr).build();
     }
 
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_DELETE)
     @Override
     public Response deleteGesuchsjahr(UUID gesuchsjahrId) {
         gesuchsjahrService.deleteGesuchsjahr(gesuchsjahrId);

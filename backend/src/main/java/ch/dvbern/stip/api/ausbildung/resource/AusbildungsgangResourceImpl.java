@@ -7,6 +7,7 @@ import ch.dvbern.stip.generated.api.AusbildungsgangResource;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -20,8 +21,8 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
-
     private final AusbildungsgangService ausbildungsgangService;
+    private final SecurityIdentity identity;
 
     @Override
     @RolesAllowed(AUSBILDUNG_CREATE)

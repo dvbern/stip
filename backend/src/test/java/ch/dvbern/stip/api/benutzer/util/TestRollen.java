@@ -18,6 +18,9 @@ public final class TestRollen {
     public static final String GESUCHSTELLER = "Gesuchsteller";
     public static final String[] GESUCHSTELLER_COMPOSITE;
 
+    public static final String JURIST = "Jurist";
+    public static final String[] JURIST_COMPOSITE;
+
     static {
         ALL_ROLLEN = new String[] {
             "Admin",
@@ -49,23 +52,33 @@ public final class TestRollen {
         };
 
         ADMIN_COMPOSITE = new String[] {
+            "Admin",
             "GESUCHSPERIODE_DELETE",
             "GESUCHSPERIODE_UPDATE",
             "GESUCHSPERIODE_CREATE",
-            "GESUCHSPERIODE_READ"
+            "GESUCHSPERIODE_READ",
+            "STAMMDATEN_CREATE",
+            "STAMMDATEN_DELETE",
+            "STAMMDATEN_READ",
+            "STAMMDATEN_UPDATE"
         };
 
         GESUCHSTELLER_COMPOSITE = new String[] {
+            "Gesuchsteller",
             "GESUCH_READ",
             "GESUCH_UPDATE",
             "FALL_UPDATE",
             "GESUCH_CREATE",
+            "GESUCH_DELETE",
             "FALL_CREATE",
             "GESUCHSPERIODE_READ",
-            "FALL_READ"
+            "FALL_READ",
+            "AUSBILDUNG_READ",
+            "STAMMDATEN_READ"
         };
 
         SACHBEARBEITER_COMPOSITE = new String[] {
+            "Sachbearbeiter",
             "GESUCH_READ",
             "GESUCH_UPDATE",
             "FALL_UPDATE",
@@ -74,7 +87,17 @@ public final class TestRollen {
             "GESUCHSPERIODE_READ",
             "GESUCH_DELETE",
             "FALL_DELETE",
-            "FALL_READ"
+            "FALL_READ",
+            "AUSBILDUNG_READ",
+            "STAMMDATEN_READ"
+        };
+
+        JURIST_COMPOSITE = new String[] {
+            "Jurist",
+            "AUSBILDUNG_CREATE",
+            "AUSBILDUNG_READ",
+            "AUSBILDUNG_UPDATE",
+            "AUSBILDUNG_DELETE"
         };
     }
 

@@ -18,13 +18,17 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
 @TestSecurity(
     user = "gesuchsteller",
     roles = {
+        "Gesuchsteller",
         "GESUCH_READ",
         "GESUCH_UPDATE",
         "FALL_UPDATE",
         "GESUCH_CREATE",
+        "GESUCH_DELETE",
         "FALL_CREATE",
         "GESUCHSPERIODE_READ",
-        "FALL_READ"
+        "FALL_READ",
+        "AUSBILDUNG_READ",
+        "STAMMDATEN_READ"
     }
 )
 @OidcSecurity(
