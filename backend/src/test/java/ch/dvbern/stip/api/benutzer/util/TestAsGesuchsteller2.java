@@ -10,13 +10,23 @@ import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.CLAIM_AHV_NUMMER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
 import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@TestSecurity(user = "gesuchsteller2", roles = ROLE_GESUCHSTELLER)
+@TestSecurity(
+    user = "gesuchsteller2",
+    roles = {
+        "GESUCH_READ",
+        "GESUCH_UPDATE",
+        "FALL_UPDATE",
+        "GESUCH_CREATE",
+        "FALL_CREATE",
+        "GESUCHSPERIODE_READ",
+        "FALL_READ"
+    }
+)
 @OidcSecurity(
     claims = {
         @Claim(key = "sub", value = GESUCHSTELLER_2_TEST_ID),

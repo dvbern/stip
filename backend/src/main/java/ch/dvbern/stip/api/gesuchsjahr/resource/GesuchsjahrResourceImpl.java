@@ -12,22 +12,21 @@ import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
 @RequestScoped
 @AllArgsConstructor
 public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
     private final GesuchsjahrService gesuchsjahrService;
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(STAMMDATEN_READ)
     @Override
     public Response getGesuchsjahr(UUID gesuchsjahrId) {
         final var gesuchsjahr = gesuchsjahrService.getGesuchsjahr(gesuchsjahrId);
         return Response.ok(gesuchsjahr).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(STAMMDATEN_READ)
     @Override
     public Response getGesuchsjahre() {
         final var gesuchsjahre = gesuchsjahrService.getGesuchsjahre();

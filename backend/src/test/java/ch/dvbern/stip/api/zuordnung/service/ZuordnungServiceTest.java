@@ -10,7 +10,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
+import ch.dvbern.stip.api.benutzer.util.TestRollen;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -44,10 +44,10 @@ class ZuordnungServiceTest {
     void setup() {
         final var query = Mockito.mock(PanacheQuery.class);
         Mockito.when(query.page(Mockito.any())).thenReturn(query);
-        Benutzer sb = (Benutzer) new Benutzer()
-            .setBenutzerTyp(BenutzerTyp.SACHBEARBEITER)
+        final var sb = (Benutzer) new Benutzer()
             .setVorname("John")
             .setNachname("Doe")
+            .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER))
             .setId(sachbearbeiterId);
         final var szs = (SachbearbeiterZuordnungStammdaten) new SachbearbeiterZuordnungStammdaten()
             .setBuchstabenDe("A-Z")
@@ -77,7 +77,7 @@ class ZuordnungServiceTest {
 
         final var benutzerRepo = Mockito.mock(BenutzerRepository.class);
         Mockito.when(benutzerRepo.findByBenutzerTyp(Mockito.any())).thenReturn(
-            Stream.of(new Benutzer().setBenutzerTyp(BenutzerTyp.ADMIN))
+            Stream.of(new Benutzer().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
         );
 
         final var pia = (PersonInAusbildung) new PersonInAusbildung()
@@ -118,7 +118,7 @@ class ZuordnungServiceTest {
             .setFall(fall)
             .setSachbearbeiter(
                 (Benutzer) new Benutzer()
-                    .setBenutzerTyp(BenutzerTyp.SACHBEARBEITER)
+                    .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER))
                     .setId(oldSbId)
             )
             .setId(UUID.randomUUID())
