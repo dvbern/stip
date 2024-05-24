@@ -50,15 +50,40 @@
               {{ 'shared.dokumente.table.status' | translate }}
             </th>
             <td class="status-cell" mat-cell *matCellDef="let dokument">
-              @if (dokument.id) {
-                <dv-shared-ui-badge type="info">{{
-                  'shared.dokumente.dokumentStatus.PENDING' | translate
-                }}</dv-shared-ui-badge>
-              } @else {
-                <dv-shared-ui-badge type="warning">{{
-                  'shared.dokumente.dokumentStatus.MISSING' | translate
-                }}</dv-shared-ui-badge>
-              }
+              <div class="d-flex gap-2">
+                @if (dokument.id) {
+                  @if (appType === 'sachbearbeitung-app') {
+                    <button
+                      (click)="acceptDocument(dokument)"
+                      type="button"
+                      class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+                    >
+                      <i class="material-symbols-rounded fs-4">check</i>
+                      <span>
+                        {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                      </span>
+                    </button>
+                    <button
+                      (click)="rejectDocument(dokument)"
+                      type="button"
+                      class="btn table-btn btn-danger d-flex align-items-center gap-1"
+                    >
+                      <i class="material-symbols-rounded fs-4">close</i>
+                      <span>
+                        {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                      </span>
+                    </button>
+                  } @else {
+                    <dv-shared-ui-badge type="info">{{
+                      'shared.dokumente.dokumentStatus.PENDING' | translate
+                    }}</dv-shared-ui-badge>
+                  }
+                } @else {
+                  <dv-shared-ui-badge type="warning">{{
+                    'shared.dokumente.dokumentStatus.MISSING' | translate
+                  }}</dv-shared-ui-badge>
+                }
+              </div>
             </td>
           </ng-container>
 

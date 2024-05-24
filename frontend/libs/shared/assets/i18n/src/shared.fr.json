@@ -92,6 +92,13 @@
   "shared.dokumente.table.download": "Télécharger",
   "shared.dokumente.table.delete": "Supprimer",
   "shared.dokumente.table.upload": "Télécharger",
+  "shared.dokumente.table.status": "Status",
+  "shared.dokumente.dokumentStatus.PENDING": "En attente",
+  "shared.dokumente.dokumentStatus.VALID": "Valide",
+  "shared.dokumente.dokumentStatus.REJECTED": "Rejeté",
+  "shared.dokumente.dokumentStatus.MISSING": "Manquant",
+  "shared.dokumente.dokumentStatus.action.accept": "Accepter",
+  "shared.dokumente.dokumentStatus.action.reject": "Rejeter",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande.<br>Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis:",

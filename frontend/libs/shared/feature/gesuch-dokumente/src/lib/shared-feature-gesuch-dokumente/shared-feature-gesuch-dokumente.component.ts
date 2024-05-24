@@ -190,6 +190,14 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
+  acceptDocument(document: TableDocument) {
+    alert(`Accept ${document.dokumentTyp}`);
+  }
+
+  rejectDocument(document: TableDocument) {
+    alert(`reject ${document.dokumentTyp}`);
+  }
+
   handleContinue() {
     const { gesuchId } = this.gesuchViewSig();
     if (gesuchId) {

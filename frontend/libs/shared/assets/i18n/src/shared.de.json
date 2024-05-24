@@ -97,6 +97,8 @@
   "shared.dokumente.dokumentStatus.VALID": "Validiert",
   "shared.dokumente.dokumentStatus.REJECTED": "Abgelehnt",
   "shared.dokumente.dokumentStatus.MISSING": "Ausstehend",
+  "shared.dokumente.dokumentStatus.action.accept": "Bestätigen",
+  "shared.dokumente.dokumentStatus.action.reject": "Ablehnen",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Die eingegebene AHV-Nummer wurde bereits in einem anderen Gesuch verwendet.<br>Bitte überprüfen Sie Ihre Eingaben bei:",

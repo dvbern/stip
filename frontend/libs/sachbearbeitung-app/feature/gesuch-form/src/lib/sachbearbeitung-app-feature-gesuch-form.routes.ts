@@ -3,6 +3,7 @@ import { Route } from '@angular/router';
 import {
   AUSBILDUNG,
   AUSZAHLUNG,
+  DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
   FAMILIENSITUATION,
@@ -122,6 +123,17 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
+      ),
+  },
+  {
+    path: DOKUMENTE.route,
+    resolve: {
+      step: () => DOKUMENTE,
+    },
+    title: 'shared.dokumente.title',
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-dokumente').then(
+        (m) => m.sharedAppFeatureGesuchDokumenteRoutes,
       ),
   },
 ];
