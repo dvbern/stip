@@ -174,7 +174,8 @@ public class GesuchService {
         final var gesuche = new HashMap<UUID, Gesuch>();
         if (rollen.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
             gesuche.putAll(toMap.apply(gesuchRepository.findAllForGs(benutzerId)));
-        } else if (rollen.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
+        }
+        if (rollen.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
             gesuche.putAll(toMap.apply(gesuchRepository.findAllForSb(benutzerId)));
         }
 
