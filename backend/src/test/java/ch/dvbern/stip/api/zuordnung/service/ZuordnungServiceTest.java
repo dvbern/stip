@@ -76,7 +76,7 @@ class ZuordnungServiceTest {
         ).when(zuordnungRepo).persist(Mockito.anyIterable());
 
         final var benutzerRepo = Mockito.mock(BenutzerRepository.class);
-        Mockito.when(benutzerRepo.findByBenutzerTyp(Mockito.any())).thenReturn(
+        Mockito.when(benutzerRepo.findByRolle(Mockito.any())).thenReturn(
             Stream.of(new Benutzer().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
         );
 

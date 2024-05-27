@@ -346,7 +346,7 @@ public class GesuchService {
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getOrCreateCurrentBenutzer();
-        if (!gesuch.getGesuchStatus().benutzerCanEdit(currentBenutzer.getRollen())) {
+        if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
             throw new IllegalStateException(
                 "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
             );

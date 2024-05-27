@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.QBenutzer;
 import ch.dvbern.stip.api.benutzer.entity.QRolle;
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,10 +25,6 @@ public class BenutzerRepository implements BaseRepository<Benutzer> {
             .from(benutzer)
             .where(benutzer.keycloakId.eq(keycloakId));
         return query.stream().findFirst();
-    }
-
-    public Stream<Benutzer> findByBenutzerTyp(BenutzerTyp benutzerTyp) {
-        return Stream.empty();
     }
 
     public Stream<Benutzer> findByRolle(String stringRolle) {
