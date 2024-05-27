@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -21,6 +22,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 public class GesuchsperiodeSeeding extends Seeder{
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
+    private final ConfigService configService;
 
     @Override
     @Startup
@@ -55,6 +57,11 @@ public class GesuchsperiodeSeeding extends Seeder{
 
         gesuchsjahrRepository.persistAndFlush(newJahr);
         gesuchsperiodeRepository.persist(newPerioden);
+    }
+
+    @Override
+    protected List<String> getProfiles() {
+        return configService.getSeedOnProfile();
     }
 
     Gesuchsjahr getJahrForSeeding() {
