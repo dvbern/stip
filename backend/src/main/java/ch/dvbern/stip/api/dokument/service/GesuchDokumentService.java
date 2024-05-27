@@ -41,7 +41,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchDokumentService {
-
     private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
@@ -68,12 +67,6 @@ public class GesuchDokumentService {
         return dokumentMapper.toDto(dokument);
     }
 
-    private GesuchDokument createGesuchDokument(Gesuch gesuch, DokumentTyp dokumentTyp) {
-        GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
-        gesuchDokumentRepository.persist(gesuchDokument);
-        return gesuchDokument;
-    }
-
     @Transactional
     public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
         GesuchDokument gesuchDokument =
@@ -89,38 +82,6 @@ public class GesuchDokumentService {
         Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
         Dokument dokument = dokumentRepository.findById(dokumentId);
         return Optional.ofNullable(dokumentMapper.toDto(dokument));
-    }
-
-    private PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName, String objectId) {
-        return PutObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectId)
-            .contentType(fileUpload.contentType())
-            .build();
-    }
-
-    private GetObjectRequest buildGetRequest(String bucketName, String objectKey) {
-        return GetObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectKey)
-            .build();
-    }
-
-    private DeleteObjectRequest buildDeleteObjectRequest(String bucketName, String objectKey) {
-        return DeleteObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectKey)
-            .build();
-    }
-
-    private DeleteObjectsRequest buildDeleteObjectsRequest(String bucketName, List<String> objectIds) {
-        final var objectIdentifiers = objectIds.stream().map(
-            objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
-        ).toList();
-        return DeleteObjectsRequest.builder()
-            .bucket(bucketName)
-            .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
-            .build();
     }
 
     @Transactional
@@ -156,12 +117,22 @@ public class GesuchDokumentService {
         return Uni.createFrom().voidItem();
     }
 
+    private DeleteObjectsRequest buildDeleteObjectsRequest(String bucketName, List<String> objectIds) {
+        final var objectIdentifiers = objectIds.stream().map(
+            objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
+        ).toList();
+        return DeleteObjectsRequest.builder()
+            .bucket(bucketName)
+            .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
+            .build();
+    }
+
     public void executeDeleteDokumentsFromS3(List<String> objectIds) {
         Uni.createFrom()
-        .item(objectIds)
-        .emitOn(Infrastructure.getDefaultWorkerPool())
-        .subscribe()
-        .with(this::deleteDokumentsFromS3Blocking, Throwable::printStackTrace);
+            .item(objectIds)
+            .emitOn(Infrastructure.getDefaultWorkerPool())
+            .subscribe()
+            .with(this::deleteDokumentsFromS3Blocking, Throwable::printStackTrace);
     }
 
     @Transactional
@@ -184,6 +155,14 @@ public class GesuchDokumentService {
         );
     }
 
+    private PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName, String objectId) {
+        return PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(GESUCH_DOKUMENT_PATH + objectId)
+            .contentType(fileUpload.contentType())
+            .build();
+    }
+
     public CompletableFuture<ResponsePublisher<GetObjectResponse>> getGetDokumentFuture(String objectId) {
         return s3.getObject(
             buildGetRequest(
@@ -194,6 +173,13 @@ public class GesuchDokumentService {
         );
     }
 
+    private GetObjectRequest buildGetRequest(String bucketName, String objectKey) {
+        return GetObjectRequest.builder()
+            .bucket(bucketName)
+            .key(GESUCH_DOKUMENT_PATH + objectKey)
+            .build();
+    }
+
     public CompletableFuture<DeleteObjectResponse> getDeleteDokumentFuture(String objectId) {
         return s3.deleteObject(
             buildDeleteObjectRequest(
@@ -201,5 +187,18 @@ public class GesuchDokumentService {
                 objectId
             )
         );
+    }
+
+    private DeleteObjectRequest buildDeleteObjectRequest(String bucketName, String objectKey) {
+        return DeleteObjectRequest.builder()
+            .bucket(bucketName)
+            .key(GESUCH_DOKUMENT_PATH + objectKey)
+            .build();
+    }
+
+    private GesuchDokument createGesuchDokument(Gesuch gesuch, DokumentTyp dokumentTyp) {
+        GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
+        gesuchDokumentRepository.persist(gesuchDokument);
+        return gesuchDokument;
     }
 }
