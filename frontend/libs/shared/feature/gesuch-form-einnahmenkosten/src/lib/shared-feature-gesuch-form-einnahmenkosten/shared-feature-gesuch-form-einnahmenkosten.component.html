@@ -222,7 +222,7 @@
                 data-testid="form-einnahmen-kosten-ausbildungskostenSekundarstufeZwei"
                 matInput
                 type="text"
-                [maskito]="maskitoSekundaer"
+                [maskito]="maskitoSekundaerSig()"
               />
               <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info</mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
@@ -242,7 +242,7 @@
               data-testid="form-einnahmen-kosten-ausbildungskostenTertiaerstufe"
               matInput
               type="text"
-              [maskito]="maskitoTeritaer"
+              [maskito]="maskitoTeritaerSig()"
             />
             <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.info</mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">

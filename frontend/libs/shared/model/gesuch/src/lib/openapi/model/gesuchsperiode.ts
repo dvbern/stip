@@ -26,6 +26,14 @@ export interface Gesuchsperiode {
     einreichefristNormal?: string;
     einreichefristReduziert?: string;
     gesuchsjahr: Gesuchsjahr;
+    /**
+     * 
+     */
+    ausbKosten_SekII: number;
+    /**
+     * 
+     */
+    ausbKosten_Tertiaer: number;
 }
 
 

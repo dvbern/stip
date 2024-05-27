@@ -52,7 +52,6 @@ import {
   fromFormatedNumber,
   maskitoMaxNumber,
   maskitoNumber,
-  maskitoPositiveNumber,
 } from '@dv/shared/util/maskito-util';
 import {
   getDateDifference,
@@ -122,11 +121,21 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
-  //TODO: KSTIP-619 replace harcoded values with stammdaten
-  maskitoTeritaer = maskitoMaxNumber(3000);
-  maskitoSekundaer = maskitoMaxNumber(2000);
+  maskitoTeritaerSig = computed(() => {
+    const { gesuch } = this.viewSig();
+    if (!gesuch) {
+      return maskitoNumber;
+    }
+    return maskitoMaxNumber(gesuch.gesuchsperiode.ausbKosten_Tertiaer);
+  });
+  maskitoSekundaerSig = computed(() => {
+    const { gesuch } = this.viewSig();
+    if (!gesuch) {
+      return maskitoNumber;
+    }
+    return maskitoMaxNumber(gesuch?.gesuchsperiode.ausbKosten_SekII);
+  });
   maskitoNumber = maskitoNumber;
-  maskitoPositiveNumber = maskitoPositiveNumber;
   hiddenFieldsSetSig = signal(new Set());
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
