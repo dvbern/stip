@@ -192,12 +192,12 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   // TODO: Implement the following methods in 993
   acceptDocument(document: TableDocument) {
-    alert(`Accept ${document.dokumentTyp}`);
+    alert(`Accept ${document.dokumentTyp} kommt in 993`);
   }
 
   // TODO: Implement the following methods in 993
   rejectDocument(document: TableDocument) {
-    alert(`reject ${document.dokumentTyp}`);
+    alert(`reject ${document.dokumentTyp} kommt in 993`);
   }
 
   handleContinue() {

@@ -3,6 +3,7 @@
   border: 1px solid;
   border-radius: var(--dv-border-radius);
   padding: 0.4rem 0.5rem;
+  min-width: 8rem;
 
   &.success {
     border-color: var(--dv-success);
