@@ -9,7 +9,7 @@ import {
 
 import { SharedFeatureGesuchDokumenteComponent } from './shared-feature-gesuch-dokumente/shared-feature-gesuch-dokumente.component';
 
-export const sharedAppFeatureGesuchDokumenteRoutes: Route[] = [
+export const sharedFeatureGesuchDokumenteRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',

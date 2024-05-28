@@ -134,7 +134,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     title: 'shared.dokumente.title',
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-dokumente').then(
-        (m) => m.sharedAppFeatureGesuchDokumenteRoutes,
+        (m) => m.sharedFeatureGesuchDokumenteRoutes,
       ),
   },
   {

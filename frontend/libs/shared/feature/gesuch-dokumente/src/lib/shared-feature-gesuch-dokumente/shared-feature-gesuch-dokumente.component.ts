@@ -190,10 +190,12 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
+  // TODO: Implement the following methods in 993
   acceptDocument(document: TableDocument) {
     alert(`Accept ${document.dokumentTyp}`);
   }
 
+  // TODO: Implement the following methods in 993
   rejectDocument(document: TableDocument) {
     alert(`reject ${document.dokumentTyp}`);
   }
