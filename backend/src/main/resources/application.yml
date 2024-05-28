@@ -15,6 +15,9 @@ kstip:
   seeding:
     seed-on:
       - 'dev'
+  plzdata:
+    cron: '*/15 * * * * ?'
+    featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
 
 quarkus:
   execution-model-annotations:
@@ -72,6 +75,9 @@ quarkus:
       enabled: false
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
+  rest-client:
+    GeoCollection-api:
+      url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
 
 '%dev':
   quarkus:
