@@ -16,7 +16,8 @@ kstip:
     seed-on:
       - 'dev'
   plzdata:
-    cron: '0 15 10 10" * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
+    cron: '*/15 * * * * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
+#    cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
     hashkey: 'checksum:multihash'
 

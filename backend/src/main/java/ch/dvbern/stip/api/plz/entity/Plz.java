@@ -29,13 +29,4 @@ public class Plz extends AbstractEntity {
     @NotNull
     @Column(name = "kantonskuerzel", nullable = false)
     private String kantonskuerzel;
-
-//    @Override
-//    public String toString() {
-//        return "Plz{" +
-//            "plz='" + plz + '\'' +
-//            ", ortschaftsname='" + ortschaftsname + '\'' +
-//            ", kantonskuerzel='" + kantonskuerzel + '\'' +
-//            '}';
-//    }
 }

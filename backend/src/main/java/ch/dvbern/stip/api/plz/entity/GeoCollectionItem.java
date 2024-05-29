@@ -9,7 +9,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 public class GeoCollectionItem {
-//    String type;
     List<GeoCollectionItemFeature> features;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
