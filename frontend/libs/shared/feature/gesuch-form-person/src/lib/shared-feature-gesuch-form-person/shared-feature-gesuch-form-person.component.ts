@@ -8,6 +8,7 @@ import {
   effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -309,7 +310,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
         invalidFormularProps: { specialValidationErrors },
-      } = this.validationViewSig();
+      } = untracked(this.validationViewSig);
       if (
         specialValidationErrors?.some(
           (e) => e.field === 'sozialversicherungsnummer',
