@@ -17,11 +17,11 @@ public class RolleRepository implements BaseRepository<Rolle> {
     private final EntityManager entityManager;
 
     public Set<Rolle> findByKeycloakIdentifier(Set<String> keycloakIdentifiers) {
-        final var qRolle = QRolle.rolle;
+        final var rolle = QRolle.rolle;
 
         final var fromDb = new JPAQueryFactory(entityManager)
-            .selectFrom(qRolle)
-            .where(qRolle.keycloakIdentifier.in(keycloakIdentifiers))
+            .selectFrom(rolle)
+            .where(rolle.keycloakIdentifier.in(keycloakIdentifiers))
             .stream()
             .toList();
 

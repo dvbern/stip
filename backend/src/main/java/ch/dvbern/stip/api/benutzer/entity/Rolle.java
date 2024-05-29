@@ -16,7 +16,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Table(
     name = "rolle",
     indexes = {
-        @Index(name = "IX_benutzer_mandant", columnList = "mandant"),
+        @Index(name = "IX_rolle_mandant", columnList = "mandant"),
         @Index(name = "IX_keycloak_identifier", columnList = "keycloak_identifier", unique = true)
     }
 )

@@ -20,7 +20,7 @@ public class RolleService {
     public Set<Rolle> mapOrCreateRoles(Set<String> keycloakRoles) {
         final var roles = rolleRepository.findByKeycloakIdentifier(keycloakRoles)
             .stream()
-            .collect(Collectors.toMap(Rolle::getKeycloakIdentifier, x -> x));
+            .collect(Collectors.toMap(Rolle::getKeycloakIdentifier, rolle -> rolle));
 
         final var toCreate = new HashSet<Rolle>();
         keycloakRoles.stream()

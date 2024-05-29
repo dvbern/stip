@@ -95,7 +95,7 @@ public class BenutzerService {
         final var benutzers = benutzerRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER).toList();
         final var sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository
             .findForBenutzers(benutzers.stream().map(AbstractEntity::getId).toList())
-            .collect(Collectors.toMap(x -> x.getBenutzer().getId(), x -> x));
+            .collect(Collectors.toMap(stammdaten -> stammdaten.getBenutzer().getId(), stammdaten -> stammdaten));
 
         return benutzers
             .stream()

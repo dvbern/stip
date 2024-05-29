@@ -169,7 +169,7 @@ public class GesuchService {
             .collect(Collectors.toSet());
 
         final Function<Stream<Gesuch>, Map<UUID, Gesuch>> toMap =
-            stream -> stream.collect(Collectors.toMap(AbstractEntity::getId, x -> x));
+            stream -> stream.collect(Collectors.toMap(AbstractEntity::getId, gesuch -> gesuch));
 
         final var gesuche = new HashMap<UUID, Gesuch>();
         if (rollen.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
