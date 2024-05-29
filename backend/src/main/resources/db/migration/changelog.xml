@@ -7,4 +7,5 @@
   <include file="db/migration/baseline.xml"/>
   <include file="db/migration/0.19/0.19.0-KSTIP-923.xml" />
   <include file="db/migration/0.19/0.19.0-KSTIP-619.xml" />
+  <include file="db/migration/0.20/0.20.0-KSTIP-46.xml" />
 </databaseChangeLog>
