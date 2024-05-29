@@ -202,6 +202,10 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
             fahrkosten: partnerForForm.fahrkosten?.toString(),
             verpflegungskosten: partnerForForm.verpflegungskosten?.toString(),
           });
+          SharedUiFormAddressComponent.patchForm(
+            this.form.controls.adresse,
+            partnerForForm.adresse,
+          );
         }
       },
       { allowSignalWrites: true },

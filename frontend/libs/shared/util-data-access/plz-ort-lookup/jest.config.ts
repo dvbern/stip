@@ -1,9 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-data-access-plz',
+  displayName: 'shared-util-data-access-plz-ort-lookup',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/data-access/plz',
+  coverageDirectory:
+    '../../../../coverage/libs/shared/util-data-access/plz-ort-lookup',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

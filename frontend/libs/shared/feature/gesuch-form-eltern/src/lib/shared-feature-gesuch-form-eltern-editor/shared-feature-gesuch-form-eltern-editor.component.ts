@@ -205,7 +205,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   });
 
   plzChangedSig = toSignal(
-    this.form.controls.adresse.controls.plz.valueChanges,
+    this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
 
   steuerunterlagenDocumentSig = this.createUploadOptionsSig(() => {

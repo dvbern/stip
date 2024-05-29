@@ -169,6 +169,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
               initalValue?.kontoinhaber,
               gesuchFormular,
             );
+            SharedUiFormAddressComponent.patchForm(
+              this.form.controls.adresse,
+              initalValue.adresse,
+            );
           }
         }
       },
@@ -281,6 +285,10 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           adresseId: valuesFrom.adresse?.id,
         },
         { emitEvent: false },
+      );
+      SharedUiFormAddressComponent.patchForm(
+        this.form.controls.adresse,
+        valuesFrom.adresse,
       );
     } else {
       this.form.reset(undefined, { emitEvent: false });

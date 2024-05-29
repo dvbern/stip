@@ -3,8 +3,9 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import Fuse from 'fuse.js';
-import { EMPTY, pipe, switchMap, tap } from 'rxjs';
+import { of, pipe, switchMap, tap } from 'rxjs';
 
+import { PlzOrtLookup } from '@dv/shared/model/plz-ort-lookup';
 import {
   CachedRemoteData,
   cachedPending,
@@ -12,27 +13,30 @@ import {
   initial,
 } from '@dv/shared/util/remote-data';
 
-// TODO: Replace placholder types and service with OpenAPI generated types and service
-type PlzLookup = {
-  plz: number;
-  ort: string;
-};
+@Injectable({ providedIn: 'root' })
 export class PlzService {
   getPlz$() {
-    return EMPTY;
+    return of([
+      { plz: 3000, ort: 'Bern' },
+      { plz: 3011, ort: 'Bern' },
+      { plz: 3084, ort: 'Wabern' },
+      { plz: 3094, ort: 'Schliern b. Köniz' },
+      { plz: 8000, ort: 'Zürich' },
+      { plz: 8452, ort: 'Adlikon' },
+    ]);
   }
 }
 
-type PlzState = {
-  plz: CachedRemoteData<PlzLookup[]>;
+type PlzOrtState = {
+  plz: CachedRemoteData<PlzOrtLookup[]>;
 };
 
-const initialState: PlzState = {
+const initialState: PlzOrtState = {
   plz: initial(),
 };
 
-@Injectable()
-export class PlzStore extends signalStore(
+@Injectable({ providedIn: 'root' })
+export class PlzOrtStore extends signalStore(
   withState(initialState),
   withDevtools('PlzStore'),
 ) {
@@ -41,8 +45,8 @@ export class PlzStore extends signalStore(
   plzViewSig = computed(() => {
     const plz = this.plz();
     return {
-      ...plz,
-      data: toPlzLookupView(plz.data),
+      plz,
+      list: toPlzLookupView(plz.data),
     };
   });
 
@@ -62,7 +66,7 @@ export class PlzStore extends signalStore(
   );
 }
 
-const toPlzLookupView = (plzLookups?: PlzLookup[]) => {
+const toPlzLookupView = (plzLookups?: PlzOrtLookup[]) => {
   if (!plzLookups) return undefined;
   return {
     rawList: plzLookups,

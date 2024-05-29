@@ -16,7 +16,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "dv",
+            "prefix": "lib",
             "style": "camelCase"
           }
         ],
@@ -24,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "dv",
+            "prefix": "lib",
             "style": "kebab-case"
           }
         ]

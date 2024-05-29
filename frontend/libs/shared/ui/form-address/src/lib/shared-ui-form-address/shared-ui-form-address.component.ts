@@ -17,6 +17,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -25,11 +26,13 @@ import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { Land } from '@dv/shared/model/gesuch';
+import { PlzOrtLookup } from '@dv/shared/model/plz-ort-lookup';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
+import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
@@ -37,8 +40,10 @@ type AddresseFormGroup = FormGroup<{
   coAdresse: FormControl<string | undefined>;
   strasse: FormControl<string | undefined>;
   hausnummer: FormControl<string | undefined>;
-  plz: FormControl<string | undefined>;
-  ort: FormControl<string | undefined>;
+  plzOrt: FormGroup<{
+    plz: FormControl<string | undefined>;
+    ort: FormControl<string | undefined>;
+  }>;
   land: FormControl<Land | undefined>;
 }>;
 
@@ -50,15 +55,16 @@ type AddresseFormGroup = FormGroup<{
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     SharedUiFormFieldDirective,
     SharedUiFormCountryComponent,
     SharedUiFormMessageErrorDirective,
+    SharedUiPlzOrtAutocompleteDirective,
   ],
   templateUrl: './shared-ui-form-address.component.html',
-  styleUrls: ['./shared-ui-form-address.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
@@ -72,6 +78,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   translatedLaender$ = this.laender$.pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
+  plzValues?: PlzOrtLookup[];
 
   touchedSig = signal(false);
 
@@ -80,8 +87,10 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
       coAdresse: [<string | undefined>undefined, []],
       strasse: [<string | undefined>undefined, [Validators.required]],
       hausnummer: [<string | undefined>undefined, []],
-      plz: [<string | undefined>undefined, [Validators.required]],
-      ort: [<string | undefined>undefined, [Validators.required]],
+      plzOrt: fb.group({
+        plz: [<string | undefined>undefined, [Validators.required]],
+        ort: [<string | undefined>undefined, [Validators.required]],
+      }),
       land: [
         <Land | undefined>undefined,
         {
@@ -92,7 +101,43 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   }
 
   static getRealValues(form: AddresseFormGroup) {
-    return convertTempFormToRealValues(form, ['strasse', 'plz', 'ort', 'land']);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { plzOrt: _, ...values } = convertTempFormToRealValues(form, [
+      'strasse',
+      'land',
+    ]);
+    const plzOrt = convertTempFormToRealValues(form.controls.plzOrt, [
+      'plz',
+      'ort',
+    ]);
+    return {
+      ...values,
+      plz: plzOrt.plz,
+      ort: plzOrt.ort,
+    };
+  }
+
+  static patchForm(
+    form: AddresseFormGroup,
+    values: {
+      coAdresse?: string;
+      strasse?: string;
+      hausnummer?: string;
+      plz?: string;
+      ort?: string;
+      land?: Land;
+    },
+  ) {
+    form.patchValue({
+      coAdresse: values.coAdresse,
+      strasse: values.strasse,
+      hausnummer: values.hausnummer,
+      plzOrt: {
+        plz: values.plz,
+        ort: values.ort,
+      },
+      land: values.land,
+    });
   }
 
   trackByIndex(index: number) {
