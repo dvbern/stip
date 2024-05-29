@@ -30,6 +30,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     private final TenantService tenantService;
 
     @Override
+    @RolesAllowed(STAMMDATEN_CREATE)
     public Response createOrUpdateSachbearbeiterStammdaten(
         UUID benutzerId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
