@@ -1,6 +1,7 @@
+import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { provideMockStore } from '@ngrx/store/testing';
-import { render } from '@testing-library/angular';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { RenderResult, render, within } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
@@ -9,6 +10,7 @@ import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-materi
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
+import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
 
 async function setup() {
   return await render(SharedFeatureGesuchFormPersonComponent, {
@@ -41,31 +43,138 @@ async function setup() {
 }
 
 describe(SharedFeatureGesuchFormPersonComponent.name, () => {
-  it('should not display vermoegenVorjahr if no PLZ has been filled', async () => {
-    const { queryByTestId, detectChanges } = await setup();
+  let store: MockStore;
+  let c: RenderResult<SharedFeatureGesuchFormPersonComponent>;
 
-    detectChanges();
+  beforeEach(async () => {
+    c = await setup();
 
-    expect(queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
+    store = TestBed.inject(MockStore);
   });
 
-  it('should not display vermoegenVorjahr if PLZ != Bern has been filled', async () => {
-    const { queryByTestId, getByTestId, detectChanges } = await setup();
+  describe('form field states', () => {
+    it('should not display vermoegenVorjahr if no PLZ has been filled', async () => {
+      c.detectChanges();
+      expect(c.queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
+    });
 
-    await userEvent.type(getByTestId('form-address-plz'), '2000');
+    it('should not display vermoegenVorjahr if PLZ != Bern has been filled', async () => {
+      await userEvent.type(c.getByTestId('form-address-plz'), '2000');
 
-    detectChanges();
+      c.detectChanges();
 
-    expect(queryByTestId('form-person-vermoegenVorjahr')).toBeInTheDocument();
+      expect(
+        c.queryByTestId('form-person-vermoegenVorjahr'),
+      ).toBeInTheDocument();
+    });
+
+    it('should display vermoegenVorjahr if PLZ = Bern has been filled', async () => {
+      await userEvent.type(c.getByTestId('form-address-plz'), '3000');
+
+      c.detectChanges();
+
+      expect(c.queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
+    });
   });
 
-  it('should display vermoegenVorjahr if PLZ = Bern has been filled', async () => {
-    const { queryByTestId, getByTestId, detectChanges } = await setup();
+  describe('it should disable the form and all controls within it', () => {
+    const textInputs = [
+      'form-person-sozialversicherungsnummer',
+      'form-person-nachname',
+      'form-person-vorname',
+      // 'form-person-identischer-zivilrechlicher-wohnsitz-plz',
+      // 'form-person-identischer-zivilrechlicher-wohnsitz-ort',
+      'form-person-email',
+      'form-person-telefonnummer',
+      'form-person-geburtsdatum',
+      'form-person-heimatort',
+      // 'form-person-einreisedatum',
+      // 'form-person-vermoegenVorjahr',
+      'form-address-plz',
+      'form-address-ort',
+      'form-address-strasse',
+      'form-address-hausnummer',
+      'form-address-coAdresse',
+    ];
 
-    await userEvent.type(getByTestId('form-address-plz'), '3000');
+    const matSelects = [
+      'form-person-anrede',
+      'form-person-zivilstand',
+      'form-person-nationalitaet',
+      'form-person-wohnsitz',
+      // 'form-person-niederlassungsstatus',
+      'form-address-land',
+    ];
 
-    detectChanges();
+    const matCheckbox = [
+      // 'form-person-digitaleKommunikation',
+      'form-person-identischerZivilrechtlicherWohnsitz',
+      // 'form-person-vormundschaft', // is not visible if not checked
+    ];
 
-    expect(queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
+    const radioGroups = [
+      // 'form-person-vermoegenVorjahr',
+      'form-person-sozialhilfeBeitraege',
+      'form-person-korrespondenzSprache',
+    ];
+
+    beforeAll(() => {
+      store.overrideSelector(selectSharedFeatureGesuchFormPersonView, {
+        loading: false,
+        gesuchId: '1',
+        allowTypes: '',
+        gesuch: null,
+        gesuchFormular: {
+          personInAusbildung: {} as PersonInAusbildung,
+        } as GesuchFormular,
+        benutzerEinstellungen: {
+          digitaleKommunikation: undefined,
+        },
+        laender: [],
+        readonly: true,
+      });
+
+      store.refreshState();
+
+      c.detectChanges();
+    });
+
+    afterAll(() => {
+      store.resetSelectors();
+    });
+
+    it('should disable the form if readonly is true', async () => {
+      expect(c.getByTestId('form-person-form')).toHaveClass('readonly');
+    });
+
+    it('should disable all text input fields', async () => {
+      textInputs.forEach((field) => {
+        expect(c.getByTestId(field)).toBeDisabled();
+      });
+    });
+
+    it('should disable all mat-select fields', async () => {
+      matSelects.forEach((field) => {
+        expect(c.getByTestId(field)).toHaveClass('mat-mdc-select-disabled');
+      });
+    });
+
+    // could also get the input by role and check if it is disabled
+    it('should disable all mat-checkbox fields', async () => {
+      matCheckbox.forEach((field) => {
+        expect(c.getByTestId(field)).toHaveClass('mdc-checkbox--disabled');
+      });
+    });
+
+    it('should disable all radio groups', async () => {
+      radioGroups.forEach((field) => {
+        const radioGroup = c.getByTestId(field);
+        const radioInputs = within(radioGroup).getAllByRole('radio');
+
+        radioInputs.forEach((radio) => {
+          expect(radio).toBeDisabled();
+        });
+      });
+    });
   });
 });
