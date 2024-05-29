@@ -16,8 +16,9 @@ kstip:
     seed-on:
       - 'dev'
   plzdata:
-    cron: '*/15 * * * * ?'
+    cron: '0 15 10 10" * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
+    hashkey: 'checksum:multihash'
 
 quarkus:
   execution-model-annotations:
