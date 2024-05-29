@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.common.statemachines.handlers;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.transitions.Transition;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class KomplettEingereichtHandler implements StateChangeHandler {
     private final MailService mailService;
+
+    private final GesuchStatusService gesuchStatusService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
@@ -30,5 +33,6 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
             pia.getEmail(),
             AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
         );
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 }
