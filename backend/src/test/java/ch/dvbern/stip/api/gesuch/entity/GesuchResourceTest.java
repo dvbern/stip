@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,7 +59,6 @@ class GesuchResourceTest {
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
-    private Integer expectedDokTypes;
 
     @Test
     @TestAsGesuchsteller
@@ -121,7 +121,6 @@ class GesuchResourceTest {
     @Order(4)
     void uploadAllDocumentTypes() {
         final var dokTypes = DokumentTypDtoSpec.values();
-        expectedDokTypes = dokTypes.length;
         for (final var dokType : dokTypes) {
             uploadDocumentWithType(dokType);
         }
@@ -465,6 +464,29 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(22)
     void testGetGesuchDokumente() {
+        final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
+            DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
+            DokumentTypDtoSpec.PERSON_AUSWEIS,
+            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
+            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER,
+            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_VATER,
+            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
+            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
+            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
+            DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
+            DokumentTypDtoSpec.PARTNER_AUSBILDUNG_LOHNABRECHNUNG,
+            DokumentTypDtoSpec.PARTNER_BELEG_OV_ABONNEMENT,
+            DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
+            DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
+            DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
+            DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
+            DokumentTypDtoSpec.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
+            DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
+            DokumentTypDtoSpec.EK_MIETVERTRAG,
+            DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
+            DokumentTypDtoSpec.EK_LOHNABRECHNUNG
+        };
+
         var gesuchDokumente = gesuchApiSpec.getGesuchDokumente()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
@@ -474,9 +496,25 @@ class GesuchResourceTest {
             .extract()
             .body()
             .as(GesuchDokumentDtoSpec[].class);
-        expectedDokTypes = 20; // The uploaded dokuments minus the superfluous ones
 
-        assertThat(gesuchDokumente.length, is(expectedDokTypes));
+        assertThat(
+            // Print a nice list of expected vs actual dokument types returned
+            String.format(
+                "Expected: \n%s\nbut was: \n%s",
+                Arrays.toString(expectedDokumentTypes),
+                Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
+            ),
+            expectedDokumentTypes.length, is(gesuchDokumente.length)
+        );
+
+        final var set = EnumSet.noneOf(DokumentTypDtoSpec.class);
+        set.addAll(Arrays.asList(expectedDokumentTypes));
+
+        // Checks if all dokument types returned from the API are in the list of expected types
+        assertThat(
+            set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
+            is(true)
+        );
     }
 
     @Test
