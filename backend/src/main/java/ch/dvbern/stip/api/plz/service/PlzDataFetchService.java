@@ -1,5 +1,20 @@
 package ch.dvbern.stip.api.plz.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
@@ -19,16 +34,6 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @RequiredArgsConstructor
 @ApplicationScoped
@@ -100,29 +105,7 @@ public class PlzDataFetchService {
     }
 
     private void loadNewData(URI uri) throws IOException, CsvException {
-        GeoCollectionDowloadService geoCollectionDowloadService = RestClientBuilder.newBuilder()
-            .baseUri(uri)
-            .build(GeoCollectionDowloadService.class);
-        final var file = geoCollectionDowloadService.getGeoCollectionDowload();
-
-        ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(file));
-        ZipEntry ze = zin.getNextEntry();
-        String csvFileData = "";
-        if (ze != null) {
-            if (ze.getName().endsWith(".csv")) {
-                final int fileLen = (int) ze.getSize();
-                final byte[] bytes = new byte[fileLen];
-
-                int bytesRead = 0;
-                while (bytesRead < fileLen) {
-                    bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
-                }
-
-                csvFileData = new String(bytes, StandardCharsets.UTF_8);
-
-            }
-        }
-        zin.close();
+        final String csvFileData = loadCsvFileData(uri);
         CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
             .withSkipLines(1)
             .withCSVParser(new CSVParserBuilder()
@@ -147,6 +130,32 @@ public class PlzDataFetchService {
         );
 
         storePlzData(plzList);
+    }
+
+    private String loadCsvFileData(URI uri) throws IOException {
+        GeoCollectionDowloadService geoCollectionDowloadService = RestClientBuilder.newBuilder()
+            .baseUri(uri)
+            .build(GeoCollectionDowloadService.class);
+        final byte[] file = geoCollectionDowloadService.getGeoCollectionDowload();
+
+        ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(file));
+        ZipEntry ze = zin.getNextEntry();
+        String csvFileData = "";
+        if (ze != null) {
+            if (ze.getName().endsWith(".csv")) {
+                final int fileLen = (int) ze.getSize();
+                final byte[] bytes = new byte[fileLen];
+
+                int bytesRead = 0;
+                while (bytesRead < fileLen) {
+                    bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
+                }
+
+                csvFileData = new String(bytes, StandardCharsets.UTF_8);
+            }
+        }
+        zin.close();
+        return csvFileData;
     }
 
     @Transactional
