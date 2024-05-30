@@ -1,46 +1,79 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
+import { SharedModelRoleList } from '@dv/shared/model/benutzer';
+import {
+  SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
+  SharedUiFormSaveComponent,
+} from '@dv/shared/ui/form';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 @Component({
   selector: 'lib-sachbearbeitung-app-feature-administration-benutzerverwaltung',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule,
+    TranslateModule,
+    SharedUiFormReadonlyDirective,
+    SharedUiFormMessageErrorDirective,
+    SharedUiFormSaveComponent,
+    SharedUiRdIsPendingPipe,
+  ],
   templateUrl:
     './sachbearbeitung-app-feature-administration-benutzerverwaltung.component.html',
-  styleUrl:
-    './sachbearbeitung-app-feature-administration-benutzerverwaltung.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureAdministrationBenutzerverwaltungComponent {
-  name?: string;
-  vorname?: string;
-  email?: string;
-  roles = new Set<{ id: string; name: string }>();
+  private formBuilder = inject(NonNullableFormBuilder);
+
   benutzerverwaltungStore = inject(BenutzerverwaltungStore);
+  form = this.formBuilder.group({
+    name: [<string | null>null, [Validators.required]],
+    vorname: [<string | null>null, [Validators.required]],
+    email: [<string | null>null, [Validators.required]],
+    roles: [<SharedModelRoleList>[], [Validators.required]],
+  });
+  isReadonly = signal(false);
 
   constructor() {
     this.benutzerverwaltungStore.loadAvailableRoles$();
   }
 
-  toggle(role: { id: string; name: string }, checked: boolean) {
-    if (checked) {
-      this.roles.add(role);
-    } else {
-      this.roles.delete(role);
-    }
-  }
-
   save() {
-    if (!this.name || !this.vorname || !this.email || this.roles.size === 0) {
+    if (this.form.invalid) {
       return;
     }
+    const values = convertTempFormToRealValues(this.form, [
+      'email',
+      'name',
+      'vorname',
+    ]);
     this.benutzerverwaltungStore.registerUser$({
-      name: this.name,
-      vorname: this.vorname,
-      email: this.email,
-      roles: Array.from(this.roles),
+      ...values,
+      onAfterSave: () => {
+        this.isReadonly.set(true);
+      },
     });
   }
 }

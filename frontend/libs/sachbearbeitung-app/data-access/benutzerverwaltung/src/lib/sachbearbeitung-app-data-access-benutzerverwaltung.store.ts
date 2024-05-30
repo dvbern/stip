@@ -5,6 +5,9 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { OAuthService } from 'angular-oauth2-oidc';
 import {
+  EMPTY,
+  Observable,
+  catchError,
   exhaustMap,
   filter,
   map,
@@ -13,12 +16,19 @@ import {
   tap,
   throwIfEmpty,
 } from 'rxjs';
-import * as z from 'zod';
 
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import {
+  SharedModelBenutzer,
+  SharedModelRoleList,
+  SharedModelUserAdminError,
+} from '@dv/shared/model/benutzer';
+import { noGlobalErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
+  failure,
   fromCachedDataSig,
   handleApiResponse,
   initial,
@@ -26,19 +36,14 @@ import {
   success,
 } from '@dv/shared/util/remote-data';
 
-const RoleList = z.array(z.object({ id: z.string(), name: z.string() }));
-type RoleList = z.infer<typeof RoleList>;
-
-const User = z.object({
-  id: z.string(),
-});
-type User = z.infer<typeof User>;
-
 const USABLE_ROLES = ['Sachbearbeiter', 'Admin'];
 
+type HttpResponseWithLocation = HttpResponse<unknown> & {
+  headers: { get: (header: 'Location') => string };
+};
 type BenutzerverwaltungState = {
-  availableRoles: CachedRemoteData<RoleList>;
-  usearCreated: RemoteData<User>;
+  availableRoles: CachedRemoteData<SharedModelRoleList>;
+  usearCreated: RemoteData<SharedModelBenutzer>;
 };
 
 const initialState: BenutzerverwaltungState = {
@@ -53,6 +58,7 @@ export class BenutzerverwaltungStore extends signalStore(
 ) {
   private http = inject(HttpClient);
   private authService = inject(OAuthService);
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
   private _oauthParams?: { url: string; realm: string };
   private get oauthParams() {
@@ -86,11 +92,13 @@ export class BenutzerverwaltungStore extends signalStore(
       }),
       switchMap(() =>
         this.http
-          .get<RoleList>(
+          .get<SharedModelRoleList>(
             `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles`,
           )
           .pipe(
-            map((roles) => RoleList.parse(roles).filter(byUsableRoles)),
+            map((roles) =>
+              SharedModelRoleList.parse(roles).filter(byUsableRoles),
+            ),
             handleApiResponse((availableRoles) =>
               patchState(this, { availableRoles }),
             ),
@@ -103,7 +111,8 @@ export class BenutzerverwaltungStore extends signalStore(
     name: string;
     vorname: string;
     email: string;
-    roles: RoleList;
+    roles: SharedModelRoleList;
+    onAfterSave?: () => void;
   }>(
     pipe(
       tap(() => {
@@ -111,63 +120,132 @@ export class BenutzerverwaltungStore extends signalStore(
           usearCreated: pending(),
         });
       }),
-      exhaustMap(({ name, vorname, email, roles }) =>
-        this.http
-          .post(
-            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users`,
-            {
-              enabled: true,
-              firstName: vorname,
-              lastName: name,
-              username: email,
-              email,
-            },
-            {
-              observe: 'response',
-            },
-          )
-          .pipe(
-            filter(hasLocationHeader),
-            throwIfEmpty(() => new Error('User creation failed')),
-            switchMap((response) =>
-              this.http
-                .get<User>(response.headers.get('Location'))
-                .pipe(map((user) => User.parse(user))),
-            ),
-            switchMap((user) =>
-              this.http
-                .post(
-                  `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
-                  roles,
-                )
-                .pipe(map(() => user)),
-            ),
-            switchMap((user) =>
-              this.http
-                .put(
-                  `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/execute-actions-email?redirect_uri=http://localhost:4201&client_id=stip-gesuch-app`,
-                  ['UPDATE_PASSWORD'],
-                )
-                .pipe(
-                  handleApiResponse(() => {
-                    patchState(this, { usearCreated: success(user) });
-                  }),
-                ),
+      exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
+        this.createUser$(vorname, name, email).pipe(
+          filter(hasLocationHeader),
+          throwIfEmpty(() => new Error('User creation failed')),
+          switchMap((response) => this.loadUser$(response)),
+          switchMap((user) => this.asignRoles(user, roles)),
+          switchMap((user) =>
+            this.notifyUser$(user).pipe(
+              handleApiResponse(
+                () => {
+                  patchState(this, { usearCreated: success(user) });
+                },
+                {
+                  onSuccess: (notifyUserWasSuccessfull) => {
+                    onAfterSave?.();
+                    if (notifyUserWasSuccessfull) {
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey:
+                          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
+                      });
+                    }
+                  },
+                },
+              ),
             ),
           ),
+          catchError((error) => {
+            patchState(this, { usearCreated: failure(error) });
+            return EMPTY;
+          }),
+        ),
       ),
     ),
   );
+
+  private createUser$(vorname: string, name: string, email: string) {
+    return this.http
+      .post(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users`,
+        {
+          enabled: true,
+          firstName: vorname,
+          lastName: name,
+          username: email,
+          email,
+        },
+        {
+          observe: 'response',
+          context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(this.interceptError('erstellen'));
+  }
+
+  private loadUser$(response: HttpResponseWithLocation) {
+    return this.http
+      .get<SharedModelBenutzer>(response.headers.get('Location'), {
+        context: noGlobalErrorsIf(true),
+      })
+      .pipe(
+        map((user) => SharedModelBenutzer.parse(user)),
+        this.interceptError('laden'),
+      );
+  }
+
+  private asignRoles(
+    user: { id: string },
+    roles: { id: string; name: string }[],
+  ) {
+    return this.http
+      .post(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
+        roles,
+        {
+          context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(
+        map(() => user),
+        this.interceptError('roleMapping'),
+      );
+  }
+
+  private notifyUser$(user: { id: string }) {
+    return this.http
+      .put(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/execute-actions-email?redirect_uri=http://localhost:4201&client_id=stip-gesuch-app`,
+        ['UPDATE_PASSWORD'],
+        {
+          context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(
+        this.interceptError('benachrichtigen'),
+        map(() => true),
+        catchError(() => [false]),
+      );
+  }
+
+  private interceptError(fallbackErrorType: string) {
+    return <T>(source: Observable<T>) => {
+      return source.pipe(
+        catchError((error) => {
+          const parsedErrorType = toKnownUserError(error, fallbackErrorType);
+          this.globalNotificationStore.createNotification({
+            type: 'ERROR',
+            messageKey: `sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.${parsedErrorType}`,
+          });
+          throw error;
+        }),
+      );
+    };
+  }
 }
 
 const hasLocationHeader = (
   response: HttpResponse<unknown>,
-): response is HttpResponse<unknown> & {
-  headers: { get: (header: 'Location') => string };
-} => {
+): response is HttpResponseWithLocation => {
   return response.headers.has('Location');
 };
 
-const byUsableRoles = (role: RoleList[number]) => {
+const byUsableRoles = (role: SharedModelRoleList[number]) => {
   return USABLE_ROLES.includes(role.name);
+};
+
+const toKnownUserError = (error: unknown, fallbackType: string) => {
+  const parsed = SharedModelUserAdminError.parse(error);
+  return parsed.type ?? fallbackType;
 };
