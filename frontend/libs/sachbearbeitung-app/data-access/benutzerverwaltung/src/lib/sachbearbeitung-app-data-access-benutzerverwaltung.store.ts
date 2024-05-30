@@ -34,6 +34,8 @@ const User = z.object({
 });
 type User = z.infer<typeof User>;
 
+const USABLE_ROLES = ['Sachbearbeiter', 'Admin'];
+
 type BenutzerverwaltungState = {
   availableRoles: CachedRemoteData<RoleList>;
   usearCreated: RemoteData<User>;
@@ -85,10 +87,10 @@ export class BenutzerverwaltungStore extends signalStore(
       switchMap(() =>
         this.http
           .get<RoleList>(
-            `${this.oauthParams.url}/auth/admin/realms/${this.oauthParams.realm}/roles`,
+            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles`,
           )
           .pipe(
-            map((roles) => RoleList.parse(roles)),
+            map((roles) => RoleList.parse(roles).filter(byUsableRoles)),
             handleApiResponse((availableRoles) =>
               patchState(this, { availableRoles }),
             ),
@@ -112,7 +114,7 @@ export class BenutzerverwaltungStore extends signalStore(
       exhaustMap(({ name, vorname, email, roles }) =>
         this.http
           .post(
-            `${this.oauthParams.url}/auth/admin/realms/${this.oauthParams.realm}/users`,
+            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users`,
             {
               enabled: true,
               firstName: vorname,
@@ -135,8 +137,16 @@ export class BenutzerverwaltungStore extends signalStore(
             switchMap((user) =>
               this.http
                 .post(
-                  `${this.oauthParams.url}/auth/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
+                  `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
                   roles,
+                )
+                .pipe(map(() => user)),
+            ),
+            switchMap((user) =>
+              this.http
+                .put(
+                  `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/execute-actions-email?redirect_uri=http://localhost:4201&client_id=stip-gesuch-app`,
+                  ['UPDATE_PASSWORD'],
                 )
                 .pipe(
                   handleApiResponse(() => {
@@ -155,5 +165,9 @@ const hasLocationHeader = (
 ): response is HttpResponse<unknown> & {
   headers: { get: (header: 'Location') => string };
 } => {
-  return !response.headers.has('Location');
+  return response.headers.has('Location');
+};
+
+const byUsableRoles = (role: RoleList[number]) => {
+  return USABLE_ROLES.includes(role.name);
 };
