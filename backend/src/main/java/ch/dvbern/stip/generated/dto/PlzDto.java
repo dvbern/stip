@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * PLZ und ortschaftsnamen für Type ahead funktionalitaet
+ * PLZ und ort für Type ahead funktionalitaet
  **/
 
 @JsonTypeName("plz")
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class PlzDto  implements Serializable {
   private @Valid String plz;
-  private @Valid String ortschaftsname;
+  private @Valid String ort;
   private @Valid String kantonskuerzel;
 
   /**
@@ -48,21 +48,21 @@ public class PlzDto  implements Serializable {
   /**
    * 
    **/
-  public PlzDto ortschaftsname(String ortschaftsname) {
-    this.ortschaftsname = ortschaftsname;
+  public PlzDto ort(String ort) {
+    this.ort = ort;
     return this;
   }
 
   
-  @JsonProperty("ortschaftsname")
+  @JsonProperty("ort")
   @NotNull
-  public String getOrtschaftsname() {
-    return ortschaftsname;
+  public String getOrt() {
+    return ort;
   }
 
-  @JsonProperty("ortschaftsname")
-  public void setOrtschaftsname(String ortschaftsname) {
-    this.ortschaftsname = ortschaftsname;
+  @JsonProperty("ort")
+  public void setOrt(String ort) {
+    this.ort = ort;
   }
 
   /**
@@ -96,13 +96,13 @@ public class PlzDto  implements Serializable {
     }
     PlzDto plz = (PlzDto) o;
     return Objects.equals(this.plz, plz.plz) &&
-        Objects.equals(this.ortschaftsname, plz.ortschaftsname) &&
+        Objects.equals(this.ort, plz.ort) &&
         Objects.equals(this.kantonskuerzel, plz.kantonskuerzel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(plz, ortschaftsname, kantonskuerzel);
+    return Objects.hash(plz, ort, kantonskuerzel);
   }
 
   @Override
@@ -111,7 +111,7 @@ public class PlzDto  implements Serializable {
     sb.append("class PlzDto {\n");
     
     sb.append("    plz: ").append(toIndentedString(plz)).append("\n");
-    sb.append("    ortschaftsname: ").append(toIndentedString(ortschaftsname)).append("\n");
+    sb.append("    ort: ").append(toIndentedString(ort)).append("\n");
     sb.append("    kantonskuerzel: ").append(toIndentedString(kantonskuerzel)).append("\n");
     sb.append("}");
     return sb.toString();

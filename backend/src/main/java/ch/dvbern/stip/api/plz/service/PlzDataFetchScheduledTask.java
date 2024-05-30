@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.plz.service;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import com.opencsv.exceptions.CsvException;
 import io.quarkus.narayana.jta.QuarkusTransaction;
+import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Singleton;
@@ -32,5 +33,10 @@ public class PlzDataFetchScheduledTask {
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }
+    }
+
+    @Startup
+    public void runAtStartup() {
+        run();
     }
 }

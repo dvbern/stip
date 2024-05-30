@@ -1,9 +1,5 @@
 package ch.dvbern.stip.api.plz.service;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
-import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
@@ -16,19 +12,17 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import io.quarkus.logging.Log;
-
-import io.quarkus.scheduler.Scheduled;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -69,6 +63,7 @@ public class PlzDataFetchService {
                     loadNewData(URI.create(uriNode.asText()));
                 }
             }
+            Log.warn("executed task: ");
             reportScheduledTaskExecution(geoCollectionAssetJSON);
         }
     }
@@ -146,7 +141,7 @@ public class PlzDataFetchService {
         plzHashSet.forEach(
             plzLineElement -> plzList.add(
                 new Plz()
-                    .setOrtschaftsname(plzLineElement.get(0))
+                    .setOrt(plzLineElement.get(0))
                     .setPlz(plzLineElement.get(1))
                     .setKantonskuerzel(plzLineElement.get(2))
             )

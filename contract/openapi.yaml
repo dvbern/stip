@@ -2843,17 +2843,17 @@ components:
           description: ''
           type: boolean
     plz:
-      description: "PLZ und ortschaftsnamen für Type ahead funktionalitaet"
+      description: "PLZ und ort für Type ahead funktionalitaet"
       type: object
       required:
         - plz
-        - ortschaftsname
+        - ort
         - kantonskuerzel
       properties:
         plz:
           description: ''
           type: string
-        ortschaftsname:
+        ort:
           description: ''
           type: string
         kantonskuerzel:

@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.plz.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import org.hibernate.envers.Audited;
 @Entity
 @Table(
     name = "plz",
-    uniqueConstraints = @UniqueConstraint(name = "UC_plz_ortschaftsname_kantonskuerzel", columnNames={"plz", "ortschaftsname", "kantonskuerzel"}),
+    uniqueConstraints = @UniqueConstraint(name = "UC_plz_ort_kantonskuerzel", columnNames={"plz", "ort", "kantonskuerzel"}),
     indexes = @Index(name = "IX_plz_kantonskuerzel", columnList = "kantonskuerzel")
 )
 @Audited
@@ -23,8 +22,8 @@ public class Plz extends AbstractEntity {
     private String plz;
 
     @NotNull
-    @Column(name = "ortschaftsname", nullable = false)
-    private String ortschaftsname;
+    @Column(name = "ort", nullable = false)
+    private String ort;
 
     @NotNull
     @Column(name = "kantonskuerzel", nullable = false)

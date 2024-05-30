@@ -24,11 +24,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * PLZ und ortschaftsnamen für Type ahead funktionalitaet
+ * PLZ und ort für Type ahead funktionalitaet
  */
 @JsonPropertyOrder({
   PlzDtoSpec.JSON_PROPERTY_PLZ,
-  PlzDtoSpec.JSON_PROPERTY_ORTSCHAFTSNAME,
+  PlzDtoSpec.JSON_PROPERTY_ORT,
   PlzDtoSpec.JSON_PROPERTY_KANTONSKUERZEL
 })
 @JsonTypeName("plz")
@@ -37,8 +37,8 @@ public class PlzDtoSpec {
   public static final String JSON_PROPERTY_PLZ = "plz";
   private String plz;
 
-  public static final String JSON_PROPERTY_ORTSCHAFTSNAME = "ortschaftsname";
-  private String ortschaftsname;
+  public static final String JSON_PROPERTY_ORT = "ort";
+  private String ort;
 
   public static final String JSON_PROPERTY_KANTONSKUERZEL = "kantonskuerzel";
   private String kantonskuerzel;
@@ -72,29 +72,29 @@ public class PlzDtoSpec {
   }
 
 
-  public PlzDtoSpec ortschaftsname(String ortschaftsname) {
+  public PlzDtoSpec ort(String ort) {
     
-    this.ortschaftsname = ortschaftsname;
+    this.ort = ort;
     return this;
   }
 
    /**
    * 
-   * @return ortschaftsname
+   * @return ort
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ORTSCHAFTSNAME)
+  @JsonProperty(JSON_PROPERTY_ORT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getOrtschaftsname() {
-    return ortschaftsname;
+  public String getOrt() {
+    return ort;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ORTSCHAFTSNAME)
+  @JsonProperty(JSON_PROPERTY_ORT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setOrtschaftsname(String ortschaftsname) {
-    this.ortschaftsname = ortschaftsname;
+  public void setOrt(String ort) {
+    this.ort = ort;
   }
 
 
@@ -133,13 +133,13 @@ public class PlzDtoSpec {
     }
     PlzDtoSpec plz = (PlzDtoSpec) o;
     return Objects.equals(this.plz, plz.plz) &&
-        Objects.equals(this.ortschaftsname, plz.ortschaftsname) &&
+        Objects.equals(this.ort, plz.ort) &&
         Objects.equals(this.kantonskuerzel, plz.kantonskuerzel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(plz, ortschaftsname, kantonskuerzel);
+    return Objects.hash(plz, ort, kantonskuerzel);
   }
 
   @Override
@@ -147,7 +147,7 @@ public class PlzDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class PlzDtoSpec {\n");
     sb.append("    plz: ").append(toIndentedString(plz)).append("\n");
-    sb.append("    ortschaftsname: ").append(toIndentedString(ortschaftsname)).append("\n");
+    sb.append("    ort: ").append(toIndentedString(ort)).append("\n");
     sb.append("    kantonskuerzel: ").append(toIndentedString(kantonskuerzel)).append("\n");
     sb.append("}");
     return sb.toString();
