@@ -22,9 +22,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
-
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.core.async.ResponsePublisher;
@@ -50,7 +48,12 @@ public class GesuchDokumentService {
     private final ConfigService configService;
 
     @Transactional
-    public DokumentDto uploadDokument(UUID gesuchId, DokumentTyp dokumentTyp, FileUpload fileUpload, String objectId) {
+    public DokumentDto uploadDokument(
+        final UUID gesuchId,
+        final DokumentTyp dokumentTyp,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
         Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
         GesuchDokument gesuchDokument =
             gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(), dokumentTyp).orElseGet(
@@ -68,7 +71,7 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public List<DokumentDto> findGesuchDokumenteForTyp(UUID gesuchId, DokumentTyp dokumentTyp) {
+    public List<DokumentDto> findGesuchDokumenteForTyp(final UUID gesuchId, final DokumentTyp dokumentTyp) {
         GesuchDokument gesuchDokument =
             gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElse(null);
         if (gesuchDokument == null) {
@@ -78,20 +81,20 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public Optional<DokumentDto> findDokument(UUID dokumentId) {
+    public Optional<DokumentDto> findDokument(final UUID dokumentId) {
         Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
         Dokument dokument = dokumentRepository.findById(dokumentId);
         return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 
     @Transactional
-    public void deleteAllDokumentForGesuchInRepository(UUID gesuchId) {
+    public void deleteAllDokumentForGesuchInRepository(final UUID gesuchId) {
         gesuchDokumentRepository.findAllForGesuch(gesuchId)
             .forEach(gesuchDokumentRepository::delete);
     }
 
     @Transactional
-    public List<String> getAllDokumentObjectIdsForGesuch(UUID gesuchId) {
+    public List<String> getAllDokumentObjectIdsForGesuch(final UUID gesuchId) {
         return gesuchDokumentRepository.findAllForGesuch(gesuchId)
             .map(GesuchDokument::getDokumente)
             .flatMap(dokuments -> dokuments
@@ -100,12 +103,12 @@ public class GesuchDokumentService {
             ).toList();
     }
 
-    public void deleteAllDokumentForGesuch(UUID gesuchId) {
+    public void deleteAllDokumentForGesuch(final UUID gesuchId) {
         executeDeleteDokumentsFromS3(getAllDokumentObjectIdsForGesuch(gesuchId));
         deleteAllDokumentForGesuchInRepository(gesuchId);
     }
 
-    public Uni<Void> deleteDokumentsFromS3Blocking(List<String> objectIds) {
+    public Uni<Void> deleteDokumentsFromS3Blocking(final List<String> objectIds) {
         var future = s3.deleteObjects(
             buildDeleteObjectsRequest(
                 configService.getBucketName(),
@@ -117,7 +120,7 @@ public class GesuchDokumentService {
         return Uni.createFrom().voidItem();
     }
 
-    private DeleteObjectsRequest buildDeleteObjectsRequest(String bucketName, List<String> objectIds) {
+    private DeleteObjectsRequest buildDeleteObjectsRequest(final String bucketName, final List<String> objectIds) {
         final var objectIdentifiers = objectIds.stream().map(
             objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
         ).toList();
@@ -127,7 +130,7 @@ public class GesuchDokumentService {
             .build();
     }
 
-    public void executeDeleteDokumentsFromS3(List<String> objectIds) {
+    public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
         Uni.createFrom()
             .item(objectIds)
             .emitOn(Infrastructure.getDefaultWorkerPool())
@@ -136,7 +139,7 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public String deleteDokument(UUID dokumentId) {
+    public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
         dokumentRepository.delete(dokument);
@@ -144,7 +147,10 @@ public class GesuchDokumentService {
         return dokumentObjectId;
     }
 
-    public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(String objectId, FileUpload fileUpload) {
+    public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(
+        final String objectId,
+        final FileUpload fileUpload
+    ) {
         return s3.putObject(
             buildPutRequest(
                 fileUpload,
@@ -155,7 +161,11 @@ public class GesuchDokumentService {
         );
     }
 
-    private PutObjectRequest buildPutRequest(FileUpload fileUpload, String bucketName, String objectId) {
+    private PutObjectRequest buildPutRequest(
+        final FileUpload fileUpload,
+        final String bucketName,
+        final String objectId
+    ) {
         return PutObjectRequest.builder()
             .bucket(bucketName)
             .key(GESUCH_DOKUMENT_PATH + objectId)
@@ -163,7 +173,7 @@ public class GesuchDokumentService {
             .build();
     }
 
-    public CompletableFuture<ResponsePublisher<GetObjectResponse>> getGetDokumentFuture(String objectId) {
+    public CompletableFuture<ResponsePublisher<GetObjectResponse>> getGetDokumentFuture(final String objectId) {
         return s3.getObject(
             buildGetRequest(
                 configService.getBucketName(),
@@ -173,14 +183,14 @@ public class GesuchDokumentService {
         );
     }
 
-    private GetObjectRequest buildGetRequest(String bucketName, String objectKey) {
+    private GetObjectRequest buildGetRequest(final String bucketName, final String objectKey) {
         return GetObjectRequest.builder()
             .bucket(bucketName)
             .key(GESUCH_DOKUMENT_PATH + objectKey)
             .build();
     }
 
-    public CompletableFuture<DeleteObjectResponse> getDeleteDokumentFuture(String objectId) {
+    public CompletableFuture<DeleteObjectResponse> getDeleteDokumentFuture(final String objectId) {
         return s3.deleteObject(
             buildDeleteObjectRequest(
                 configService.getBucketName(),
@@ -189,14 +199,14 @@ public class GesuchDokumentService {
         );
     }
 
-    private DeleteObjectRequest buildDeleteObjectRequest(String bucketName, String objectKey) {
+    private DeleteObjectRequest buildDeleteObjectRequest(final String bucketName, final String objectKey) {
         return DeleteObjectRequest.builder()
             .bucket(bucketName)
             .key(GESUCH_DOKUMENT_PATH + objectKey)
             .build();
     }
 
-    private GesuchDokument createGesuchDokument(Gesuch gesuch, DokumentTyp dokumentTyp) {
+    private GesuchDokument createGesuchDokument(final Gesuch gesuch, final DokumentTyp dokumentTyp) {
         GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;

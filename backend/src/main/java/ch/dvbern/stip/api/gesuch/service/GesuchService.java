@@ -41,6 +41,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -87,6 +88,7 @@ public class GesuchService {
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
+    private final ConfigService configService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -105,7 +107,11 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new);
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
-        final var updatePia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
+        final var newFormular = trancheToUpdate.getGesuchFormular();
+        removeSuperfluousDokumentsForGesuch(newFormular);
+
+        final var updatePia = gesuchUpdateDto
+            .getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung();
         if (updatePia != null) {
@@ -113,7 +119,7 @@ public class GesuchService {
         }
     }
 
-    private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
+    private void updateGesuchTranche(final GesuchTrancheUpdateDto trancheUpdate, final GesuchTranche trancheToUpdate) {
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
@@ -267,7 +273,7 @@ public class GesuchService {
         return violationDtos;
     }
 
-    private void removeSuperfluousDokumentsForGesuch(GesuchFormular formular) {
+    private void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
         List<String> dokumentObjectIds = new ArrayList<>();
 
         requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).forEach(
