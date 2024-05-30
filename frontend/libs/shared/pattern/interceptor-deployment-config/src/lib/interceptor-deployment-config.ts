@@ -36,7 +36,8 @@ export function SharedPatternInterceptorDeploymentConfig(
         // Do not add custom headers to requests to the keycloak server
         if (
           req.url.startsWith('http') &&
-          !new URL(req.url).pathname.startsWith('/realms')
+          !new URL(req.url).pathname.startsWith('/realms') &&
+          !new URL(req.url).pathname.startsWith('/admin/realms')
         ) {
           headers = headers
             .append('environment', environment)
