@@ -7,8 +7,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class BildungsartResourceImpl implements BildungsartResource {
     private final BildungsartService bildungsartService;
 
     @Override
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(AUSBILDUNG_READ)
     public Response getBildungsarten() {
         final var bildungsarten = bildungsartService.findAll();
         return Response.ok(bildungsarten).build();

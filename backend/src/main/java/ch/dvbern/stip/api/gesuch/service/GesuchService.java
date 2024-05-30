@@ -18,20 +18,27 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -155,13 +162,24 @@ public class GesuchService {
             throw new NotFoundException();
         }
 
-        final var gesuche = switch (benutzer.get().getBenutzerTyp()) {
-            case GESUCHSTELLER -> gesuchRepository.findAllForGs(benutzerId);
-            case SACHBEARBEITER -> gesuchRepository.findAllForSb(benutzerId);
-            default -> throw new NotFoundException();
-        };
+        final var rollen = benutzer.get()
+            .getRollen()
+            .stream()
+            .map(Rolle::getKeycloakIdentifier)
+            .collect(Collectors.toSet());
 
-        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
+        final Function<Stream<Gesuch>, Map<UUID, Gesuch>> toMap =
+            stream -> stream.collect(Collectors.toMap(AbstractEntity::getId, gesuch -> gesuch));
+
+        final var gesuche = new HashMap<UUID, Gesuch>();
+        if (rollen.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            gesuche.putAll(toMap.apply(gesuchRepository.findAllForGs(benutzerId)));
+        }
+        if (rollen.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
+            gesuche.putAll(toMap.apply(gesuchRepository.findAllForSb(benutzerId)));
+        }
+
+        return gesuche.values().stream().map(this::mapWithTrancheToWorkWith).toList();
     }
 
     public List<GesuchDto> findAll() {
@@ -236,8 +254,7 @@ public class GesuchService {
 
         try {
             validateNoOtherGesuchEingereichtWithSameSvNumber(gesuchFormular, gesuchId);
-        }
-        catch (CustomValidationsException exception) {
+        } catch (CustomValidationsException exception) {
             CustomValidationsExceptionMapper
                 .toDto(exception)
                 .getValidationErrors()
@@ -330,9 +347,10 @@ public class GesuchService {
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getOrCreateCurrentBenutzer();
-        if (!gesuch.getGesuchStatus().benutzerCanEdit(currentBenutzer.getBenutzerTyp())) {
-            throw new IllegalStateException("Cannot update or delete das Gesuchsformular when parent status is: "
-                + gesuch.getGesuchStatus());
+        if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
+            throw new IllegalStateException(
+                "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
+            );
         }
     }
 }

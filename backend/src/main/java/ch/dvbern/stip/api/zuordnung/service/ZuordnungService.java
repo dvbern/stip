@@ -10,7 +10,7 @@ import ch.dvbern.stip.api.benutzer.entity.BuchstabenRangeUtil;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -52,7 +52,7 @@ public class ZuordnungService {
 
         // Load the first admin to assign if no other SB is found
         final var admin = benutzerRepository
-            .findByBenutzerTyp(BenutzerTyp.ADMIN)
+            .findByRolle(OidcConstants.ROLE_ADMIN)
             .findFirst()
             .orElseThrow(NotFoundException::new);
 
