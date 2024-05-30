@@ -6,6 +6,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
@@ -23,6 +24,7 @@ import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -457,6 +459,7 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.isPresent(), is(true));
         assertThat(gesuchOpt.get().getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
+        assertThat(gesuchOpt.get().getGesuchStatus().toString(), gesuchOpt.get().getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
 
@@ -518,7 +521,7 @@ class GesuchResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsAdmin
     @Order(23)
     void testDeleteGesuch() {
         gesuchApiSpec.deleteGesuch()

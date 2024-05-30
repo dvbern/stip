@@ -9,12 +9,31 @@ import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@TestSecurity(user = "admin", roles = { ROLE_ADMIN, ROLE_SACHBEARBEITER })
+@TestSecurity(
+    user = "admin",
+    roles = {
+        "Admin",
+        "GESUCHSPERIODE_DELETE",
+        "GESUCHSPERIODE_UPDATE",
+        "GESUCHSPERIODE_CREATE",
+        "GESUCHSPERIODE_READ",
+        "GESUCH_READ",
+        "GESUCH_UPDATE",
+        "FALL_UPDATE",
+        "GESUCH_CREATE",
+        "FALL_CREATE",
+        "GESUCHSPERIODE_READ",
+        "GESUCH_DELETE",
+        "FALL_DELETE",
+        "FALL_READ",
+        "STAMMDATEN_CREATE",
+        "STAMMDATEN_DELETE",
+        "STAMMDATEN_READ",
+        "STAMMDATEN_UPDATE"
+    }
+)
 @OidcSecurity(
     claims = {
         @Claim(key = "sub", value = "c1dd0d38-0beb-4694-af37-10bb7da5b12a"),

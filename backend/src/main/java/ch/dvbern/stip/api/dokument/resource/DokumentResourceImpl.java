@@ -36,8 +36,9 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -48,14 +49,14 @@ public class DokumentResourceImpl implements DokumentResource {
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_READ)
     @Override
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {
         List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
@@ -115,7 +116,8 @@ public class DokumentResourceImpl implements DokumentResource {
         );
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_READ)
+    @Override
     public Response getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
@@ -134,8 +136,7 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok(token).build();
     }
 
-
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_DELETE)
     @Override
     @Blocking
     public Uni<Response> deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
