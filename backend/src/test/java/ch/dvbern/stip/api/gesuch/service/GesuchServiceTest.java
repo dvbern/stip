@@ -809,7 +809,7 @@ class GesuchServiceTest {
 
         assertThat(
             tranche.getGesuch().getGesuchStatus(),
-            Matchers.is(Gesuchstatus.KOMPLETT_EINGEREICHT)
+            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
         );
     }
 

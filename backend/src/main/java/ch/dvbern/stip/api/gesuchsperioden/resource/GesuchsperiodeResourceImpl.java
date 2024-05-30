@@ -13,36 +13,38 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     private final GesuchsperiodenService gesuchsperiodenService;
 
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_CREATE)
     @Override
     public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
         final var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
         return Response.ok(gesuchsperiode).build();
     }
 
+    @RolesAllowed(STAMMDATEN_DELETE)
     @Override
     public Response deleteGesuchsperiode(UUID gesuchsperiodeId) {
         gesuchsperiodenService.deleteGesuchsperiode(gesuchsperiodeId);
         return Response.noContent().build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(STAMMDATEN_READ)
     @Override
     public Response getAktiveGesuchsperioden() {
         final var activeGesuchsperioden = gesuchsperiodenService.getAllActive();
         return Response.ok(activeGesuchsperioden).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(STAMMDATEN_READ)
     @Override
     public Response getGesuchsperiode(UUID gesuchsperiodeId) {
         final var gesuchsperiod = gesuchsperiodenService
@@ -52,13 +54,13 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
         return Response.ok(gesuchsperiod).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(STAMMDATEN_READ)
     @Override
     public Response getGesuchsperioden() {
         return Response.ok(gesuchsperiodenService.getAllGesuchsperioden()).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(STAMMDATEN_READ)
     @Override
     public Response getLatest() {
         final var gesuchsperiode = gesuchsperiodenService.getLatest();
@@ -67,13 +69,13 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     }
 
     @Override
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_UPDATE)
     public Response publishGesuchsperiode(UUID gesuchperiodeId) {
         final var gesuchsperiode = gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
         return Response.ok(gesuchsperiode).build();
     }
 
-    @RolesAllowed(ROLE_ADMIN)
+    @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
     public Response updateGesuchsperiode(UUID gesuchsperiodeId, GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto) {
         final var gesuchsperiode = gesuchsperiodenService

@@ -3,14 +3,15 @@ package ch.dvbern.stip.api.benutzer.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
@@ -23,20 +24,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.jboss.logging.Logger;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class BenutzerService {
-
-    private static final Logger LOG = Logger.getLogger(BenutzerService.class);
-
     private final JsonWebToken jsonWebToken;
 
     private final BenutzerMapper benutzerMapper;
 
     private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
     private final BenutzerRepository benutzerRepository;
+    private final RolleService rolleService;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
@@ -65,16 +63,8 @@ public class BenutzerService {
 
     @Transactional
     public Benutzer updateBenutzerTypFromJWT(Benutzer benutzer) {
-        if (identity.hasRole(BenutzerTyp.GESUCHSTELLER.getRoleName())) {
-            benutzer.setBenutzerTyp(BenutzerTyp.GESUCHSTELLER);
-        } else if (identity.hasRole(BenutzerTyp.SACHBEARBEITER.getRoleName())) {
-            benutzer.setBenutzerTyp(BenutzerTyp.SACHBEARBEITER);
-        } else if (identity.hasRole(BenutzerTyp.ADMIN.getRoleName())) {
-            benutzer.setBenutzerTyp(BenutzerTyp.ADMIN);
-        } else {
-            LOG.error("A user without a role has signed in, they are (by default) allowed as Gesuchsteller");
-        }
-
+        final var roles = rolleService.mapOrCreateRoles(identity.getRoles());
+        benutzer.setRollen(roles);
         return benutzer;
     }
 
@@ -102,12 +92,24 @@ public class BenutzerService {
     }
 
     public List<BenutzerDto> getAllSachbearbeitendeMitZuordnungStammdaten() {
-        List<BenutzerDto> benutzerDtoList =
-            benutzerRepository.findByBenutzerTyp(BenutzerTyp.SACHBEARBEITER).map(benutzerMapper::toDto).toList();
-        benutzerDtoList.forEach(benutzerDto -> sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzerDto.getId())
-            .ifPresent(sachbearbeiterZuordnungStammdaten -> benutzerDto.setSachbearbeiterZuordnungStammdaten(
-                sachbearbeiterZuordnungStammdatenMapper.toDto(sachbearbeiterZuordnungStammdaten))));
-        return benutzerDtoList;
+        final var benutzers = benutzerRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER).toList();
+        final var sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdatenRepository
+            .findForBenutzers(benutzers.stream().map(AbstractEntity::getId).toList())
+            .collect(Collectors.toMap(stammdaten -> stammdaten.getBenutzer().getId(), stammdaten -> stammdaten));
+
+        return benutzers
+            .stream()
+            .map(benutzer -> {
+                var szs = sachbearbeiterZuordnungStammdaten.get(benutzer.getId());
+                if (szs == null) {
+                    szs = new SachbearbeiterZuordnungStammdaten();
+                }
+
+                final var dto = benutzerMapper.toDto(benutzer);
+                dto.setSachbearbeiterZuordnungStammdaten(sachbearbeiterZuordnungStammdatenMapper.toDto(szs));
+                return dto;
+            })
+            .toList();
     }
 
     @Transactional

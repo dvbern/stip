@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuchsjahr.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.model.GesuchsjahrTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -68,7 +69,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(3)
-    @TestAsSachbearbeiter
+    @TestAsGesuchsteller
     void readAsGsTest() {
         read();
     }
