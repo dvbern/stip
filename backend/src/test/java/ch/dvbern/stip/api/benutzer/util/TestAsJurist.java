@@ -11,33 +11,27 @@ import io.quarkus.test.security.oidc.OidcSecurity;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.CLAIM_AHV_NUMMER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
-import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_ID;
+import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @TestSecurity(
-    user = "gesuchsteller2",
+    user = "jurist",
     roles = {
-        "Gesuchsteller",
-        "GESUCH_READ",
-        "GESUCH_UPDATE",
-        "FALL_UPDATE",
-        "GESUCH_CREATE",
-        "GESUCH_DELETE",
-        "FALL_CREATE",
-        "GESUCHSPERIODE_READ",
-        "FALL_READ",
+        "Jurist",
+        "AUSBILDUNG_CREATE",
         "AUSBILDUNG_READ",
-        "STAMMDATEN_READ"
+        "AUSBILDUNG_UPDATE",
+        "AUSBILDUNG_DELETE"
     }
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = GESUCHSTELLER_2_TEST_ID),
+        @Claim(key = "sub", value = JURIST_ID),
         @Claim(key = CLAIM_AHV_NUMMER, value = AHV_NUMMER_VALID),
-        @Claim(key = "family_name", value = "Gesuchsteller 2"),
+        @Claim(key = "family_name", value = "Gesuchsteller"),
         @Claim(key = "given_name", value = "Hans")
     }
 )
-public @interface TestAsGesuchsteller2 {
+public @interface TestAsJurist {
 }
