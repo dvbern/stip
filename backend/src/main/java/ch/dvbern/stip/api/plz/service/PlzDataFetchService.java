@@ -63,7 +63,6 @@ public class PlzDataFetchService {
                     loadNewData(URI.create(uriNode.asText()));
                 }
             }
-            Log.warn("executed task: ");
             reportScheduledTaskExecution(geoCollectionAssetJSON);
         }
     }
@@ -147,8 +146,6 @@ public class PlzDataFetchService {
             )
         );
 
-//        Log.warn(plzList.size());
-//        Log.warn(plzHashSet);
         storePlzData(plzList);
     }
 
