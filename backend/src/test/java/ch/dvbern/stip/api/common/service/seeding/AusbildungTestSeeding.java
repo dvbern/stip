@@ -58,6 +58,7 @@ public class AusbildungTestSeeding extends Seeder {
             .setNameFr("Uni Berne");
 
         ausbildungsstaetteRepository.persistAndFlush(uniBern);
+        TestConstants.TEST_AUSBILDUNGSSTAETTE_ID = uniBern.getId();
 
         final var uniBeGang1 = (Ausbildungsgang) new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")

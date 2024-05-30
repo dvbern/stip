@@ -17,10 +17,10 @@
 
 package ch.dvbern.stip.api.gesuch.type;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import lombok.Getter;
 
 @Getter
@@ -43,14 +43,15 @@ public enum Gesuchstatus {
     STIPENDIUM_AKZEPTIERT,
     STIPENDIUM_AUSBEZAHLT;
 
-    private static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = EnumSet.of(
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(EnumSet.of(
         IN_BEARBEITUNG_GS,
         KOMPLETT_EINGEREICHT,
         ABKLAERUNG_MIT_GS,
         FEHLENDE_DOKUMENTE,
         FEHLENDE_DOKUMENTE_NACHFRIST
-    );
-    private static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT = EnumSet.of(
+    ));
+
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(EnumSet.of(
         BEREIT_FUER_BEARBEITUNG,
         FEHLERHAFT,
         IN_BEARBEITUNG_SB,
@@ -61,18 +62,13 @@ public enum Gesuchstatus {
         VERFUEGT,
         STIPENDIUM_AKZEPTIERT,
         STIPENDIUM_AUSBEZAHLT
+    ));
+
+    public static final Set<Gesuchstatus> ADMIN_CAN_EDIT = Collections.unmodifiableSet(
+        EnumSet.copyOf(SACHBEARBEITER_CAN_EDIT)
     );
-    private static final Set<Gesuchstatus> ADMIN_CAN_EDIT = EnumSet.copyOf(SACHBEARBEITER_CAN_EDIT);
 
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
-    }
-
-    public boolean benutzerCanEdit(BenutzerTyp benutzerTyp) {
-        return switch (benutzerTyp) {
-            case GESUCHSTELLER -> GESUCHSTELLER_CAN_EDIT.contains(this);
-            case SACHBEARBEITER -> SACHBEARBEITER_CAN_EDIT.contains(this);
-            case ADMIN -> ADMIN_CAN_EDIT.contains(this);
-        };
     }
 }

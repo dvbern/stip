@@ -3,14 +3,13 @@ package ch.dvbern.stip.api.ausbildung.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsstaetteCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsstaetteUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -55,9 +54,9 @@ class AusbildungsstaetteResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(2)
-    void createAusbildungsstaetteAsSachbearbeiter() {
+    void createAusbildungsstaetteAsJurist() {
         var response = api.createAusbildungsstaette()
                 .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec)
                 .execute(ResponseBody::prettyPeek)
@@ -87,7 +86,7 @@ class AusbildungsstaetteResourceTest {
 	@TestAsGesuchsteller
     @Order(4)
 	void getAusbildungsstaette() {
-		api.getAusbildungsstaette().ausbildungsstaetteIdPath(TestConstants.AUSBILDUNGSSTAETTE_ID)
+		api.getAusbildungsstaette().ausbildungsstaetteIdPath(TestConstants.TEST_AUSBILDUNGSSTAETTE_ID)
 				.execute(ResponseBody::prettyPeek)
 				.then()
 				.assertThat()
@@ -95,7 +94,7 @@ class AusbildungsstaetteResourceTest {
 	}
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(5)
     void updateAusbildungsstaetteNotFound() {
         var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
@@ -123,7 +122,7 @@ class AusbildungsstaetteResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(7)
     void updateAusbildungsstaette() {
         var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
@@ -156,7 +155,7 @@ class AusbildungsstaetteResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(9)
     void deleteAusbildungsstaetteNotFound() {
         api.deleteAusbildungsstaette().ausbildungsstaetteIdPath(UUID.randomUUID())
@@ -167,7 +166,7 @@ class AusbildungsstaetteResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(10)
     void deleteAusbildungsstaette() {
         api.deleteAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)

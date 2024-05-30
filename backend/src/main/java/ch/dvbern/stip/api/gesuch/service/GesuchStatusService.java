@@ -1,8 +1,13 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.common.statemachines.GesuchStateMachineUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -32,5 +37,24 @@ public class GesuchStatusService {
         );
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
+    }
+
+    public boolean benutzerCanEdit(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
+        final var identifiers = benutzer.getRollen()
+            .stream()
+            .map(Rolle::getKeycloakIdentifier)
+            .collect(Collectors.toSet());
+        final var editStates = new HashSet<Gesuchstatus>();
+        if (identifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            editStates.addAll(Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
+        }
+        if (identifiers.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
+            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
+        }
+        if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
+            editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);
+        }
+
+        return editStates.contains(gesuchstatus);
     }
 }
