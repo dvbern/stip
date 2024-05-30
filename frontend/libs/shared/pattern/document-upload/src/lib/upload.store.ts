@@ -1,5 +1,5 @@
 import { HttpEventType } from '@angular/common/http';
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalState } from '@ngrx/signals';
 import { Subject, merge, of } from 'rxjs';
@@ -12,6 +12,7 @@ import {
   shareReplay,
   take,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 
 import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
@@ -45,9 +46,7 @@ export class UploadStore {
     return this.state.documents().length > 0;
   });
 
-  hasUploadedEntriesSig = computed(() => {
-    return this.state.documents().some((d) => !d.isTemporary);
-  });
+  public documentChangedSig = signal({ hasChanged: false });
 
   /**
    * True if there are any documents in the state that are still uploading
@@ -124,7 +123,10 @@ export class UploadStore {
                   // Ignore http errors if the upload is already in error state
                   context: shouldIgnoreErrorsIf(!!dokumentToDelete?.error),
                 })
-                .pipe(map(() => action));
+                .pipe(
+                  map(() => action),
+                  tap(() => this.documentChangedSig.set({ hasChanged: true })),
+                );
         }),
         takeUntilDestroyed(),
       )
@@ -300,6 +302,7 @@ export class UploadStore {
       ),
     ).pipe(
       map((event) => ({ event, action, tempDokumentId })),
+      tap(() => this.documentChangedSig.set({ hasChanged: true })),
       // On error, emit an event with the error
       catchError((error) =>
         of({

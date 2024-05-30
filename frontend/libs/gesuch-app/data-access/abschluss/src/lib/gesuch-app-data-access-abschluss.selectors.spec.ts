@@ -17,7 +17,7 @@ describe('selectGesuchAppDataAccessAbschlussView', () => {
       state,
       null,
       null,
-      { errors: [] },
+      { errors: [], hasDocuments: null },
     );
     expect(result).toEqual(state);
   });

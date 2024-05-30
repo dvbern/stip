@@ -39,17 +39,16 @@ export class SharedPatternGesuchStepNavComponent {
     WARNING: 'error',
   };
   stepsSig = input<GesuchFormStepView[]>();
-  stepsViewSig = computed(
-    () =>
-      this.stepsSig()?.map((step) => ({
-        ...step,
-        isActive: this.route.isActive(`gesuch/${step.route}`, {
-          paths: 'subset',
-          queryParams: 'ignored',
-          fragment: 'ignored',
-          matrixParams: 'ignored',
-        }),
-      })),
+  stepsViewSig = computed(() =>
+    this.stepsSig()?.map((step) => ({
+      ...step,
+      isActive: this.route.isActive(`gesuch/${step.route}`, {
+        paths: 'subset',
+        queryParams: 'ignored',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+      }),
+    })),
   );
   viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
