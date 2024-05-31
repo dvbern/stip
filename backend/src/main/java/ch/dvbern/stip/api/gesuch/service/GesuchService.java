@@ -251,7 +251,8 @@ public class GesuchService {
         violations.addAll(validator.validate(gesuchFormular));
 
         final var validationReportDto = ValidationsExceptionMapper.toDto(violations);
-        validationReportDto.hasDocuments(!gesuchFormular.getTranche().getGesuch().getGesuchDokuments().isEmpty());
+        final var documents = gesuchFormular.getTranche().getGesuch().getGesuchDokuments();
+        validationReportDto.hasDocuments(documents != null && !documents.isEmpty());
 
         try {
             validateNoOtherGesuchEingereichtWithSameSvNumber(gesuchFormular, gesuchId);

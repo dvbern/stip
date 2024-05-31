@@ -821,7 +821,7 @@ class GesuchServiceTest {
         gesuchTranche.setGesuch(gesuch);
         gesuchFormular.setTranche(gesuchTranche);
         var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors(), Matchers.is(nullValue()));
+        assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));
 
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
         reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
