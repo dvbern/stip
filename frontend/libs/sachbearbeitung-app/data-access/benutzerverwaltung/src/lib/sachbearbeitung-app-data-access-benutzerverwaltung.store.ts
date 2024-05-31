@@ -43,12 +43,12 @@ type HttpResponseWithLocation = HttpResponse<unknown> & {
 };
 type BenutzerverwaltungState = {
   availableRoles: CachedRemoteData<SharedModelRoleList>;
-  usearCreated: RemoteData<SharedModelBenutzer>;
+  userCreated: RemoteData<SharedModelBenutzer>;
 };
 
 const initialState: BenutzerverwaltungState = {
   availableRoles: initial(),
-  usearCreated: initial(),
+  userCreated: initial(),
 };
 
 @Injectable()
@@ -80,7 +80,7 @@ export class BenutzerverwaltungStore extends signalStore(
   }
 
   usearCreatedViewSig = computed(() => {
-    return fromCachedDataSig(this.usearCreated);
+    return fromCachedDataSig(this.userCreated);
   });
 
   loadAvailableRoles$ = rxMethod<void>(
@@ -117,7 +117,7 @@ export class BenutzerverwaltungStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, {
-          usearCreated: pending(),
+          userCreated: pending(),
         });
       }),
       exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
@@ -130,7 +130,7 @@ export class BenutzerverwaltungStore extends signalStore(
             this.notifyUser$(user).pipe(
               handleApiResponse(
                 () => {
-                  patchState(this, { usearCreated: success(user) });
+                  patchState(this, { userCreated: success(user) });
                 },
                 {
                   onSuccess: (notifyUserWasSuccessfull) => {
@@ -147,7 +147,7 @@ export class BenutzerverwaltungStore extends signalStore(
             ),
           ),
           catchError((error) => {
-            patchState(this, { usearCreated: failure(error) });
+            patchState(this, { userCreated: failure(error) });
             return EMPTY;
           }),
         ),

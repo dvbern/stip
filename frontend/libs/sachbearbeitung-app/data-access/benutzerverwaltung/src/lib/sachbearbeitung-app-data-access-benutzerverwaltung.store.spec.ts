@@ -23,7 +23,7 @@ describe('BenutzerverwaltungStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.usearCreated()).toEqual({
+    expect(store.userCreated()).toEqual({
       data: undefined,
       error: undefined,
       type: 'initial',
