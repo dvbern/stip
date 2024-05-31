@@ -224,17 +224,17 @@
               [maskito]="maskitoNumber"
             />
             @if (istSekundarstufeGroesserAlsLimitSig()) {
-              <mat-hint>
+              <mat-hint class="mat-caution">
                 {{
                   'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.warning'
-                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_SekII }
+                    | translate: { max: sekundarstufeLimitSig() }
                 }}
               </mat-hint>
             } @else {
               <mat-hint>
                 {{
                   'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info'
-                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_SekII }
+                    | translate: { max: sekundarstufeLimitSig() }
                 }}</mat-hint
               >
             }
@@ -256,18 +256,18 @@
               type="text"
               [maskito]="maskitoNumber"
             />
-            @if (istSekundarstufeGroesserAlsLimitSig()) {
-              <mat-hint>
+            @if (istTeritaerstufeGroesserAlsLimitSig()) {
+              <mat-hint class="mat-caution">
                 {{
                   'shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.warning'
-                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_Tertiaer }
+                    | translate: { max: tertiaerstufeLimitSig() }
                 }}
               </mat-hint>
             } @else {
               <mat-hint>
                 {{
                   'shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.info'
-                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_Tertiaer }
+                    | translate: { max: tertiaerstufeLimitSig() }
                 }}</mat-hint
               >
             }

@@ -362,7 +362,7 @@
   "shared.form.einnahmenkosten.renten.info": "Rente d'enfant/d'orphelin, rente AI, rente CP, etc.",
   "shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.warning": "La saisie est réduite au montant maximal de {{ max }} CHF lors du calcul.",
   "shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.info": "frais effectifs, max. {{ max }} CHF/an",
-  "shared.form.einnahmenkosten.ausbildungskostenSekundaerstufeZwei.warning": "La saisie est réduite au montant maximal de {{ max }} CHF lors du calcul.",
+  "shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.warning": "La saisie est réduite au montant maximal de {{ max }} CHF lors du calcul.",
   "shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info": "frais effectifs, max. {{ max }} CHF/an",
   "shared.form.einnahmenkosten.eoLeistungen.label": "Prestations APG (en option)",
   "shared.form.einnahmenkosten.eoLeistungen.info": "Service militaire, service civil, protection civile",

@@ -51,7 +51,6 @@ import {
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
-  maskitoMaxNumber,
   maskitoNumber,
 } from '@dv/shared/util/maskito-util';
 import {
@@ -139,31 +138,29 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private sekundarstufeZweiChangedSig = toSignal(
     this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
   );
+  sekundarstufeLimitSig = computed(() => {
+    const view = this.viewSig();
+    return view.gesuch?.gesuchsperiode.ausbKosten_SekII;
+  });
   istSekundarstufeGroesserAlsLimitSig = computed(() => {
     const value = this.sekundarstufeZweiChangedSig();
-    const view = this.viewSig();
-    console.log('DEFINITION', { value, view });
-    if (!isDefined(value) || !isDefined(view.gesuch)) {
-      return false;
-    }
+    const limit = this.sekundarstufeLimitSig();
 
-    return (
-      fromFormatedNumber(value) > view.gesuch.gesuchsperiode.ausbKosten_SekII
-    );
+    return checkLimit(value, limit);
   });
 
   private teritaerstufeChangedSig = toSignal(
     this.form.controls.ausbildungskostenTertiaerstufe.valueChanges,
   );
+  tertiaerstufeLimitSig = computed(() => {
+    const view = this.viewSig();
+    return view.gesuch?.gesuchsperiode.ausbKosten_Tertiaer;
+  });
   istTeritaerstufeGroesserAlsLimitSig = computed(() => {
     const value = this.teritaerstufeChangedSig();
-    const view = this.viewSig();
+    const limit = this.tertiaerstufeLimitSig();
 
-    if (!isDefined(value) || !isDefined(view.gesuch)) {
-      return false;
-    }
-
-    return +value > view.gesuch.gesuchsperiode.ausbKosten_Tertiaer;
+    return checkLimit(value, limit);
   });
 
   maskitoNumber = maskitoNumber;
@@ -554,3 +551,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   protected readonly PERSON = PERSON;
 }
+
+const checkLimit = (value?: string | null, limit?: number) => {
+  if (!isDefined(value) || !isDefined(limit)) {
+    return false;
+  }
+
+  return fromFormatedNumber(value) > limit;
+};
