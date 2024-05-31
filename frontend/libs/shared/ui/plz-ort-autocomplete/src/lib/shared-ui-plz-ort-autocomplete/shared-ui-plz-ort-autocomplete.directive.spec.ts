@@ -1,7 +1,10 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
+import { PlzService } from '@dv/shared/model/gesuch';
 
 import { SharedUiPlzOrtAutocompleteDirective } from './shared-ui-plz-ort-autocomplete.directive';
 
@@ -33,6 +36,7 @@ describe('SharedUiPlzOrtAutocompleteComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestListComponent, SharedUiPlzOrtAutocompleteDirective],
+      providers: [PlzService, provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestListComponent);

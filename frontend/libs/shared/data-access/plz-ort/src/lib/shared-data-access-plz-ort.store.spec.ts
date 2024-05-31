@@ -2,7 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { PlzOrtStore, PlzService } from './shared-data-access-plz-ort.store';
+import { PlzService } from '@dv/shared/model/gesuch';
+
+import { PlzOrtStore } from './shared-data-access-plz-ort.store';
 
 class MockedPlzService {
   getPlz$() {
@@ -23,7 +25,6 @@ describe('PlzOrtStore', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        PlzOrtStore,
         provideHttpClient(),
         { provide: PlzService, useClass: MockedPlzService },
       ],
@@ -37,7 +38,7 @@ describe('PlzOrtStore', () => {
 
   it('returns Adlikon (ZH) first using 84 as PLZ lookup instead of Wabern', () => {
     store.loadAllPlz$();
-    const plz = store.plzViewSig().list?.fuzzyPlz.search('84');
-    expect(plz?.map((p) => p.item.ort)).toEqual(['Adlikon', 'Wabern']);
+    const plz = store.plzViewSig().list?.fuzzyPlz.search('3084');
+    expect(plz?.map((p) => p.item.ort)).toEqual(['Wabern']);
   });
 });

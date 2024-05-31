@@ -11,7 +11,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { Subject, combineLatest, filter, map } from 'rxjs';
 
-import { PlzOrtLookup } from '@dv/shared/model/plz-ort-lookup';
+import { Plz } from '@dv/shared/model/gesuch';
 import { isSuccess } from '@dv/shared/util/remote-data';
 import { PlzOrtLookupService } from '@dv/shared/util-data-access/plz-ort-lookup';
 
@@ -34,7 +34,7 @@ export class SharedUiPlzOrtAutocompleteDirective implements OnInit {
     }>
   >();
   onTouched$ = new Subject<void>();
-  plzLookupValuesSig = output<PlzOrtLookup[]>();
+  plzLookupValuesSig = output<Plz[]>();
 
   ngOnInit() {
     this.autocompleteSig()
@@ -50,8 +50,8 @@ export class SharedUiPlzOrtAutocompleteDirective implements OnInit {
           !plz
             ? []
             : plzLookup.list?.fuzzyPlz
-                .search(plz.toString())
-                .map((r) => r.item) ?? [],
+                .search(plz.toString(), { limit: 15 })
+                ?.map((r) => r.item) ?? [],
         ),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -60,7 +60,7 @@ export class SharedUiPlzOrtAutocompleteDirective implements OnInit {
       });
   }
 
-  private setValues(option: PlzOrtLookup) {
+  private setValues(option: Plz) {
     this.plzFormSig().controls.plz.setValue(option.plz.toString());
     this.plzFormSig().controls.ort.setValue(option.ort);
   }

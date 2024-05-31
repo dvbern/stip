@@ -159,6 +159,7 @@ async function sleep(msec: number) {
     'Gesuch',
     'Gesuchsperiode',
     'Gesuchsjahr',
+    'Plz',
     'Stammdaten',
     'Tenant',
   ];

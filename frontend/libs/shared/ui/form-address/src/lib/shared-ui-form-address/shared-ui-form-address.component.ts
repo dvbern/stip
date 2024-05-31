@@ -25,8 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { Land } from '@dv/shared/model/gesuch';
-import { PlzOrtLookup } from '@dv/shared/model/plz-ort-lookup';
+import { Land, Plz } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -78,7 +77,7 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   translatedLaender$ = this.laender$.pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
   );
-  plzValues?: PlzOrtLookup[];
+  plzValues?: Plz[];
 
   touchedSig = signal(false);
 
