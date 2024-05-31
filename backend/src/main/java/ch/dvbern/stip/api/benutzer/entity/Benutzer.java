@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.benutzer.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
-import ch.dvbern.stip.api.benutzer.type.BenutzerTyp;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
@@ -15,6 +17,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -64,10 +68,15 @@ public class Benutzer extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private BenutzerStatus benutzerStatus;
 
-    @NotNull
-    @Column(name = "benutzer_typ", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BenutzerTyp benutzerTyp = BenutzerTyp.GESUCHSTELLER;
+    @ManyToMany
+    @JoinTable(
+        name = "benutzer_rollen",
+        joinColumns = @JoinColumn(name = "benutzer_id"),
+        foreignKey = @ForeignKey(name = "FK_benutzer_rollen"),
+        inverseJoinColumns = @JoinColumn(name = "rolle_id"),
+        inverseForeignKey = @ForeignKey(name = "FK_rolle_rollen")
+    )
+    private Set<Rolle> rollen = new HashSet<>();
 
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

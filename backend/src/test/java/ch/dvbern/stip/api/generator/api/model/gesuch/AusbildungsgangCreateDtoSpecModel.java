@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDtoSpec;
@@ -12,6 +10,6 @@ public class AusbildungsgangCreateDtoSpecModel {
             model.setBezeichnungDe("Bachelor Informatik");
             model.setBezeichnungFr("Bachelor Informatik");
             model.setBildungsartId(TestConstants.TEST_BILDUNGSART_ID); //TODO: use test constance and update entity to hold id
-            model.setAusbildungsstaetteId(UUID.fromString("9477487f-3ac4-4d02-b57c-e0cefb292ae5"));
+            model.setAusbildungsstaetteId(TestConstants.TEST_AUSBILDUNGSSTAETTE_ID);
         });
 }

@@ -39,8 +39,9 @@ import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -52,14 +53,14 @@ public class DokumentResourceImpl implements DokumentResource {
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_READ)
     @Override
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {
         List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
@@ -133,7 +134,7 @@ public class DokumentResourceImpl implements DokumentResource {
         );
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_READ)
     public Response getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
@@ -152,7 +153,7 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok(token).build();
     }
 
-    @RolesAllowed({ ROLE_GESUCHSTELLER, ROLE_SACHBEARBEITER })
+    @RolesAllowed(GESUCH_DELETE)
     @Override
     public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
         gesuchDokumentService.deleteDokument(dokumentId);

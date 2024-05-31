@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.benutzer.repo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.QSachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
@@ -25,5 +27,13 @@ public class SachbearbeiterZuordnungStammdatenRepository implements BaseReposito
             .from(sachbearbeiterZuordnungStammdaten)
             .where(sachbearbeiterZuordnungStammdaten.benutzer.id.eq(benutzerId));
         return query.stream().findFirst();
+    }
+
+    public Stream<SachbearbeiterZuordnungStammdaten> findForBenutzers(List<UUID> benutzerIds) {
+        final var szs = QSachbearbeiterZuordnungStammdaten.sachbearbeiterZuordnungStammdaten;
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(szs)
+            .where(szs.benutzer.id.in(benutzerIds))
+            .stream();
     }
 }

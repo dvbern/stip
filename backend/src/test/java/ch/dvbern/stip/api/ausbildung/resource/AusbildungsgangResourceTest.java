@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.ausbildung.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungsgangUpdateDtoSpecModel;
@@ -15,6 +16,8 @@ import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import io.restassured.response.ResponseBody;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
@@ -57,9 +60,9 @@ class AusbildungsgangResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(2)
-    void createAusbildungsgangAsSachbearbeiter() {
+    void createAusbildungsgangAsJurist() {
         var response = ausbildungsgangApi.createAusbildungsgang()
             .body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec)
             .execute(ResponseBody::prettyPeek)
@@ -75,6 +78,7 @@ class AusbildungsgangResourceTest {
     @TestAsSachbearbeiter
     @Order(3)
     void getAusbildungsgang() {
+        RestAssured.defaultParser = Parser.JSON;
         var ausbildunggang = getAusbildungsgangeFromAPI(ausbildungsgangId);
         ausbildungsstaetteId = ausbildunggang.getAusbildungsstaetteId();
 
@@ -83,7 +87,7 @@ class AusbildungsgangResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(4)
     void createNewAusbildungsgangWithExistingAusbildungsstaette() {
         var ausbildungsstaettes = getAusbildungsstaettenFromApi();
@@ -102,7 +106,7 @@ class AusbildungsgangResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(5)
     void updateAusbildungsgangNotFound() {
         var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
@@ -131,7 +135,7 @@ class AusbildungsgangResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(7)
     void updateAusbildungsgang() {
         var ausbildungsstaettes = getAusbildungsstaettenFromApi();
@@ -165,7 +169,7 @@ class AusbildungsgangResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(9)
     void deleteAusbildungsgangNotFound() {
         ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
@@ -176,7 +180,7 @@ class AusbildungsgangResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(10)
     void deleteAusbildungsgang() {
         var numAusbildungsstaettenBevoreDelete = getAusbildungsstaettenFromApi().length;
