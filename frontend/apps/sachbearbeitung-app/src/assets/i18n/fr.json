@@ -53,7 +53,8 @@
   "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Année de la demande Détail Vue",
 
-  "sachbearbeitung-app.admin.benutzerverwaltung.user-erstellen.title": "Créer un utilisateur",
+  "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Aperçu d'utilisateurs",
+  "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Créer un utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.name.label": "Nom",
   "sachbearbeitung-app.admin.benutzerverwaltung.vorname.label": "Prénom",
   "sachbearbeitung-app.admin.benutzerverwaltung.email.label": "E-Mail",
