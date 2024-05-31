@@ -9,7 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -23,6 +23,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { combineLatest, map } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
@@ -58,6 +59,7 @@ import {
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
@@ -121,20 +123,49 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
-  maskitoTeritaerSig = computed(() => {
-    const { gesuch } = this.viewSig();
-    if (!gesuch) {
-      return maskitoNumber;
+
+  istSekundarstufeGroesserAlsLimite$ = combineLatest([
+    this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
+    toObservable(this.viewSig),
+  ]).pipe(
+    map(([value, view]) => {
+      if (value == null || view.gesuch == null) {
+        return false;
+      }
+      return +value > view.gesuch.gesuchsperiode.ausbKosten_SekII;
+    }),
+  );
+
+  private sekundarstufeZweiChangedSig = toSignal(
+    this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
+  );
+  istSekundarstufeGroesserAlsLimitSig = computed(() => {
+    const value = this.sekundarstufeZweiChangedSig();
+    const view = this.viewSig();
+    console.log('DEFINITION', { value, view });
+    if (!isDefined(value) || !isDefined(view.gesuch)) {
+      return false;
     }
-    return maskitoMaxNumber(gesuch.gesuchsperiode.ausbKosten_Tertiaer);
+
+    return (
+      fromFormatedNumber(value) > view.gesuch.gesuchsperiode.ausbKosten_SekII
+    );
   });
-  maskitoSekundaerSig = computed(() => {
-    const { gesuch } = this.viewSig();
-    if (!gesuch) {
-      return maskitoNumber;
+
+  private teritaerstufeChangedSig = toSignal(
+    this.form.controls.ausbildungskostenTertiaerstufe.valueChanges,
+  );
+  istTeritaerstufeGroesserAlsLimitSig = computed(() => {
+    const value = this.teritaerstufeChangedSig();
+    const view = this.viewSig();
+
+    if (!isDefined(value) || !isDefined(view.gesuch)) {
+      return false;
     }
-    return maskitoMaxNumber(gesuch?.gesuchsperiode.ausbKosten_SekII);
+
+    return +value > view.gesuch.gesuchsperiode.ausbKosten_Tertiaer;
   });
+
   maskitoNumber = maskitoNumber;
   hiddenFieldsSetSig = signal(new Set());
 

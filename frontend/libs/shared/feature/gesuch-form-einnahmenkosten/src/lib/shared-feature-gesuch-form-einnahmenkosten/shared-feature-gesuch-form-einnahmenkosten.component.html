@@ -212,24 +212,36 @@
       @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenSekundarstufeZwei)) {
         <div class="row g-4">
           <!-- AUSBILDUNGSKOSTEN_SEKUNDARSTUFE_ZWEI -->
-          @if (!form.controls.ausbildungskostenSekundarstufeZwei.disabled) {
-            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-              <mat-label>{{
-                'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.label' | translate
-              }}</mat-label>
-              <input
-                formControlName="ausbildungskostenSekundarstufeZwei"
-                data-testid="form-einnahmen-kosten-ausbildungskostenSekundarstufeZwei"
-                matInput
-                type="text"
-                [maskito]="maskitoSekundaerSig()"
-              />
-              <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info</mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-          }
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+            <mat-label>{{
+              'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.label' | translate
+            }}</mat-label>
+            <input
+              formControlName="ausbildungskostenSekundarstufeZwei"
+              data-testid="form-einnahmen-kosten-ausbildungskostenSekundarstufeZwei"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+            @if (istSekundarstufeGroesserAlsLimitSig()) {
+              <mat-hint>
+                {{
+                  'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.warning'
+                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_SekII }
+                }}
+              </mat-hint>
+            } @else {
+              <mat-hint>
+                {{
+                  'shared.form.einnahmenkosten.ausbildungskostenSekundarstufeZwei.info'
+                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_SekII }
+                }}</mat-hint
+              >
+            }
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
       }
       @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
@@ -242,9 +254,23 @@
               data-testid="form-einnahmen-kosten-ausbildungskostenTertiaerstufe"
               matInput
               type="text"
-              [maskito]="maskitoTeritaerSig()"
+              [maskito]="maskitoNumber"
             />
-            <mat-hint translate>shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.info</mat-hint>
+            @if (istSekundarstufeGroesserAlsLimitSig()) {
+              <mat-hint>
+                {{
+                  'shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.warning'
+                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_Tertiaer }
+                }}
+              </mat-hint>
+            } @else {
+              <mat-hint>
+                {{
+                  'shared.form.einnahmenkosten.ausbildungskostenTeritaerstufe.info'
+                    | translate: { max: viewSig().gesuch?.gesuchsperiode?.ausbKosten_Tertiaer }
+                }}</mat-hint
+              >
+            }
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
