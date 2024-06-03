@@ -66,12 +66,12 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
+                getAllGesucheSb(),
                 getGesuch(),
                 getGesuchDokumente(),
-                getGesuche(),
-                getGesucheForBenutzer(),
                 getGesucheForFall(),
-                getGesucheForMe(),
+                getGesucheGs(),
+                getGesucheSb(),
                 getRequiredGesuchDokumentTyp(),
                 updateGesuch(),
                 validateGesuchPages()
@@ -94,6 +94,10 @@ public class GesuchApiSpec {
         return new GesuchEinreichenValidierenOper(createReqSpec());
     }
 
+    public GetAllGesucheSbOper getAllGesucheSb() {
+        return new GetAllGesucheSbOper(createReqSpec());
+    }
+
     public GetGesuchOper getGesuch() {
         return new GetGesuchOper(createReqSpec());
     }
@@ -102,20 +106,16 @@ public class GesuchApiSpec {
         return new GetGesuchDokumenteOper(createReqSpec());
     }
 
-    public GetGesucheOper getGesuche() {
-        return new GetGesucheOper(createReqSpec());
-    }
-
-    public GetGesucheForBenutzerOper getGesucheForBenutzer() {
-        return new GetGesucheForBenutzerOper(createReqSpec());
-    }
-
     public GetGesucheForFallOper getGesucheForFall() {
         return new GetGesucheForFallOper(createReqSpec());
     }
 
-    public GetGesucheForMeOper getGesucheForMe() {
-        return new GetGesucheForMeOper(createReqSpec());
+    public GetGesucheGsOper getGesucheGs() {
+        return new GetGesucheGsOper(createReqSpec());
+    }
+
+    public GetGesucheSbOper getGesucheSb() {
+        return new GetGesucheSbOper(createReqSpec());
     }
 
     public GetRequiredGesuchDokumentTypOper getRequiredGesuchDokumentTyp() {
@@ -399,6 +399,67 @@ public class GesuchApiSpec {
         }
     }
     /**
+     * Returns gesuche filtered by status
+     * 
+     *
+     * return List&lt;GesuchDtoSpec&gt;
+     */
+    public static class GetAllGesucheSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/all/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllGesucheSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/all/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/all/sb
+         * @param handler handler
+         * @return List&lt;GesuchDtoSpec&gt;
+         */
+        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllGesucheSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllGesucheSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Returns the Gesuch with the given Id
      * 
      *
@@ -545,140 +606,6 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns all Gesuche
-     * 
-     *
-     * return List&lt;GesuchDtoSpec&gt;
-     */
-    public static class GetGesucheOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetGesucheOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch
-         * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
-         */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetGesucheOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetGesucheOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Get all Gesuch for Benutzende
-     * 
-     *
-     * @see #benutzerIdPath  (required)
-     * return List&lt;GesuchDtoSpec&gt;
-     */
-    public static class GetGesucheForBenutzerOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/benutzer/{benutzerId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetGesucheForBenutzerOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/benutzer/{benutzerId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/benutzer/{benutzerId}
-         * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
-         */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String BENUTZER_ID_PATH = "benutzerId";
-
-        /**
-         * @param benutzerId (UUID)  (required)
-         * @return operation
-         */
-        public GetGesucheForBenutzerOper benutzerIdPath(Object benutzerId) {
-            reqSpec.addPathParam(BENUTZER_ID_PATH, benutzerId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetGesucheForBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetGesucheForBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * Return alle Gesuche die gehören zu dieser Fall
      * 
      *
@@ -752,27 +679,27 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Get all Gesuche for me
+     * Returns gesuche filtered by gs
      * 
      *
      * return List&lt;GesuchDtoSpec&gt;
      */
-    public static class GetGesucheForMeOper implements Oper {
+    public static class GetGesucheGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/benutzer/me";
+        public static final String REQ_URI = "/gesuch/benutzer/me/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetGesucheForMeOper(RequestSpecBuilder reqSpec) {
+        public GetGesucheGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/benutzer/me
+         * GET /gesuch/benutzer/me/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -783,7 +710,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/benutzer/me
+         * GET /gesuch/benutzer/me/gs
          * @param handler handler
          * @return List&lt;GesuchDtoSpec&gt;
          */
@@ -797,7 +724,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetGesucheForMeOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetGesucheGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -807,7 +734,68 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetGesucheForMeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetGesucheGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns gesuche filtered by status and sb
+     * 
+     *
+     * return List&lt;GesuchDtoSpec&gt;
+     */
+    public static class GetGesucheSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/benutzer/me/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesucheSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/sb
+         * @param handler handler
+         * @return List&lt;GesuchDtoSpec&gt;
+         */
+        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesucheSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesucheSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

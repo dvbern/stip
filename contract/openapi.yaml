@@ -14,27 +14,6 @@ servers:
         description: ''
 paths:
   /gesuch:
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: |
-            Returns all Gesuche
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuche
-      summary: Returns all Gesuche
     post:
       requestBody:
         content:
@@ -55,6 +34,69 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
+  /gesuch/all/sb:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllGesucheSb
+      summary: Returns gesuche filtered by status
+  /gesuch/benutzer/me/sb:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by status and sb
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheSb
+      summary: Returns gesuche filtered by status and sb
+  /gesuch/benutzer/me/gs:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by gs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheGs
+      summary: Returns gesuche filtered by gs
   '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:
@@ -608,54 +650,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
-  '/gesuch/benutzer/me':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die mit mir zusammenhängen
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForMe
-      summary: Get all Gesuche for me
-  '/gesuch/benutzer/{benutzerId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Gesuchstellende
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForBenutzer
-      summary: Get all Gesuch for Benutzende
-    parameters:
-      - name: benutzerId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/fall/benutzer/{benutzerId}':
     get:
       tags:
