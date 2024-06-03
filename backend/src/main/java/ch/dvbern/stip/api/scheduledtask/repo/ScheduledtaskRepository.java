@@ -21,7 +21,7 @@ public class ScheduledtaskRepository implements BaseRepository<Scheduledtask> {
         return new JPAQueryFactory(entityManager)
             .selectFrom(scheduledtask)
             .where(scheduledtask.type.eq(type))
-            .orderBy(scheduledtask.timestamp.desc())
+            .orderBy(scheduledtask.lastExecution.desc())
             .stream()
             .findFirst();
     }
