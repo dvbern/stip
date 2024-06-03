@@ -120,16 +120,6 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
-    void uploadAllDocumentTypes() {
-        final var dokTypes = DokumentTypDtoSpec.values();
-        for (final var dokType : dokTypes) {
-            uploadDocumentWithType(dokType);
-        }
-    }
-
-    @Test
-    @TestAsGesuchsteller
     @Order(5)
     void testUpdateGesuchEndpointAusbildung() {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung;
@@ -417,6 +407,30 @@ class GesuchResourceTest {
             .body()
             .as(GesuchDtoSpec[].class);
         assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(true));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(19)
+    void uploadAllDocumentTypes() {
+        final var dokTypes = DokumentTypDtoSpec.values();
+        for (final var dokType : dokTypes) {
+            uploadDocumentWithType(dokType);
+        }
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(20)
+    void testUpdateToRemoveSuperfluousDocuments() {
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2);
+        // Ignore any potential server errors
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek);
     }
 
     @Test
