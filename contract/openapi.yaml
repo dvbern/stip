@@ -2505,6 +2505,8 @@ components:
         - aufschaltterminStart
         - gueltigkeitStatus
         - gesuchsjahr
+        - ausbKosten_SekII
+        - ausbKosten_Tertiaer
       type: object
       properties:
         id:
@@ -2529,6 +2531,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchsjahr:
           $ref: '#/components/schemas/Gesuchsjahr'
+        ausbKosten_SekII:
+          description: ''
+          type: integer
+        ausbKosten_Tertiaer:
+          description: ''
+          type: integer
     GesuchsperiodeCreate:
       type: object
       allOf:

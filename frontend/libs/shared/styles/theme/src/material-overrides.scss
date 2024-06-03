@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use 'sass:map';
 @use '@angular/cdk' as cdk;
 @use '@angular/material' as mat;
@@ -230,10 +231,11 @@ $dv-custom-colors: (
   info: $gesuch-app-info,
 );
 
-.app-container,
+.mat-mdc-chip,
 .cdk-overlay-container {
   @each $name, $color in $dv-custom-colors {
-    .mat-#{$name}:not([disabled]) {
+    &.mat-#{$name}:not([disabled]),
+    & .mat-#{$name}:not([disabled]) {
       $base-color: mat.get-color-from-palette($color, 500);
       $contrast-color: mat.get-color-from-palette($color, 500-contrast);
       background-color: $base-color;
@@ -241,7 +243,8 @@ $dv-custom-colors: (
       --mdc-chip-label-text-color: #{$contrast-color};
       --mdc-snackbar-container-color: #{$base-color};
     }
-    .mat-#{$name}[disabled] {
+    &.mat-#{$name}[disabled],
+    & .mat-#{$name}[disabled] {
       $contrast-color: mat.get-color-from-palette($color, 100-contrast);
       background-color: mat.get-color-from-palette($color, 100);
       color: $contrast-color;
@@ -269,4 +272,7 @@ $dv-all-colors: (
       --mdc-linear-progress-track-color: #{$mild-color};
     }
   }
+}
+.mat-mdc-form-field-hint.mat-caution {
+  color: mat.get-color-from-palette($gesuch-app-caution, 500);
 }
