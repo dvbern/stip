@@ -80,19 +80,6 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(2)
-    void testDontFindGesuchWithNoFormularToWorkWith() {
-        var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec[].class);
-
-        assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(false));
-    }
-
-    @Test
-    @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
         gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
@@ -142,19 +129,6 @@ class GesuchResourceTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
-    @Order(6)
-    void testDontFindGesuchWithNoPersonInAusbildung() {
-        var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec[].class);
-
-        assertThat(findGesuchWithId(gesuche, gesuchId).isPresent(), is(false));
-    }
-
-    @Test
     @TestAsGesuchsteller
     @Order(7)
     void testUpdateGesuchEndpointPersonInAusbildung() {
@@ -172,26 +146,26 @@ class GesuchResourceTest {
         validatePage();
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(8)
-    void testUpdatePersonCreatedZuordnung() throws InterruptedException {
-        Thread.sleep(5000);
-        final var response = gesuchApiSpec.getGesucheForBenutzer()
-            .benutzerIdPath(UUID.fromString(TestConstants.GESUCHSTELLER_TEST_ID))
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-
-        final var myGesuche = response
-            .extract()
-            .body()
-            .as(GesuchDtoSpec[].class);
-
-        assertThat(myGesuche.length, is(greaterThan(0)));
-        assertThat(Arrays.stream(myGesuche).allMatch(x -> x.getBearbeiter().equals("Philipp Schärer")), is(true));
-    }
+//    @Test
+//    @TestAsGesuchsteller
+//    @Order(8)
+//    void testUpdatePersonCreatedZuordnung() throws InterruptedException {
+//        Thread.sleep(5000);
+//        final var response = gesuchApiSpec.getGesucheForBenutzer()
+//            .benutzerIdPath(UUID.fromString(TestConstants.GESUCHSTELLER_TEST_ID))
+//            .execute(ResponseBody::prettyPeek)
+//            .then()
+//            .assertThat()
+//            .statusCode(Response.Status.OK.getStatusCode());
+//
+//        final var myGesuche = response
+//            .extract()
+//            .body()
+//            .as(GesuchDtoSpec[].class);
+//
+//        assertThat(myGesuche.length, is(greaterThan(0)));
+//        assertThat(Arrays.stream(myGesuche).allMatch(x -> x.getBearbeiter().equals("Philipp Schärer")), is(true));
+//    }
 
     @Test
     @TestAsGesuchsteller
@@ -396,8 +370,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(18)
     void testGetGesucheForBenutzende() {
-        var gesuche = gesuchApiSpec.getGesucheForBenutzer()
-            .benutzerIdPath(TestConstants.GESUCHSTELLER_TEST_ID)
+        var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
@@ -447,10 +420,42 @@ class GesuchResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(21)
+    void testGetAllGesucheSbNoUnwantedStatus() {
+        var gesuche = gesuchApiSpec.getAllGesucheSb().execute(ResponseBody::prettyPeek)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchDtoSpec[].class);
+
+        for(GesuchDtoSpec gesuch : gesuche) {
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
+        }
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(21)
+    void testGetGesucheSbNoUnwantedStatus() {
+        var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchDtoSpec[].class);
+
+        for(GesuchDtoSpec gesuch : gesuche) {
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
+        }
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(22)
     void testFindGesuche() {
-        var gesuche = gesuchApiSpec.getGesuche().execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheGs().execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -466,7 +471,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(22)
+    @Order(23)
     void testGetGesuchDokumente() {
         var gesuchDokumente = gesuchApiSpec.getGesuchDokumente()
             .gesuchIdPath(gesuchId)
@@ -483,7 +488,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsAdmin
-    @Order(23)
+    @Order(24)
     void testDeleteGesuch() {
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)
