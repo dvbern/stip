@@ -8,10 +8,12 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -23,7 +25,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     private final EntityManager entityManager;
 
-    public Stream<Gesuch> findAllForGs(final UUID gesuchstellerId) {
+    public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
 
@@ -33,17 +35,30 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
-    public Stream<Gesuch> findAllForSb(final UUID sachbearbeiterId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+    public Stream<Gesuch> findForSb(final UUID sachbearbeiterId) {
+        final var query = findAllForSbPrepareQuery();
         final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
 
-        final var zuordnungQuery = queryFactory
-            .selectFrom(gesuch)
+        query
             .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
             .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
 
-        return zuordnungQuery.stream();
+        return query.stream();
+    }
+
+    public Stream<Gesuch> findAllForSb() {
+        return findAllForSbPrepareQuery().stream();
+    }
+
+    private JPAQuery<Gesuch> findAllForSbPrepareQuery() {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var gesuch = QGesuch.gesuch;
+
+		return queryFactory
+                .selectFrom(gesuch)
+                .where(gesuch.gesuchStatus.notIn(Gesuchstatus.IN_BEARBEITUNG_GS))
+                .where(gesuch.gesuchStatus.notIn(Gesuchstatus.KOMPLETT_EINGEREICHT));
     }
 
     public Stream<Gesuch> findAllForFall(UUID fallId) {
