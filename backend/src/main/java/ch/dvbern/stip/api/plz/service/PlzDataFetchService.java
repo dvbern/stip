@@ -26,7 +26,6 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
-import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -54,41 +53,43 @@ public class PlzDataFetchService {
     public void fetchData() throws IOException, CsvException {
         final GeoCollectionItem geoCollection = geoCollectionService.get();
 
-        if (geoCollection != null) {
-            final JsonNode geoCollectionAssetJSON = geoCollection
-                .getFeatures()
-                .get(0)
-                .getAssets();
-
-            if (isNewDataAvailable(geoCollectionAssetJSON)) {
-                final JsonNode uriNode = geoCollectionAssetJSON
-                    .findValue(geoCollectionFeatureKey)
-                    .findValue("href");
-                if (uriNode != null) {
-                    loadNewData(URI.create(uriNode.asText()));
-                }
-            }
-            reportScheduledTaskExecution(geoCollectionAssetJSON);
+        if (geoCollection == null) {
+            return;
         }
+
+        final JsonNode geoCollectionAssetJSON = geoCollection
+            .getFeatures()
+            .get(0)
+            .getAssets();
+
+        if (isNewDataAvailable(geoCollectionAssetJSON)) {
+            final JsonNode uriNode = geoCollectionAssetJSON
+                .findValue(geoCollectionFeatureKey)
+                .findValue("href");
+            if (uriNode != null) {
+                loadNewData(URI.create(uriNode.asText()));
+            }
+        }
+        reportScheduledTaskExecution(geoCollectionAssetJSON);
     }
 
     @Transactional
-    public void reportScheduledTaskExecution(JsonNode payload) {
-        Scheduledtask scheduledtask = new Scheduledtask();
+    public void reportScheduledTaskExecution(final JsonNode payload) {
+        final var scheduledtask = new Scheduledtask();
         scheduledtask.setType(ScheduledtaskType.PLZ_DATA_FETCH.name());
-        scheduledtask.setTimestamp(LocalDateTime.now());
+        scheduledtask.setLastExecution(LocalDateTime.now());
         scheduledtask.setPayload(payload);
         scheduledtaskRepository.persistAndFlush(scheduledtask);
     }
 
     @Transactional
-    public boolean isNewDataAvailable(JsonNode currentGeoCollectionAssetJSON) {
-        final Optional<Scheduledtask> lastScheduledTaskOptional = scheduledtaskRepository
-            .findLastWithType(ScheduledtaskType.PLZ_DATA_FETCH.name());
+    public boolean isNewDataAvailable(final JsonNode currentGeoCollectionAssetJSON) {
+        final Optional<Scheduledtask> latestScheduledTask = scheduledtaskRepository
+            .findLatestWithType(ScheduledtaskType.PLZ_DATA_FETCH.name());
 
         boolean newDataAvailable = true;
-        if (lastScheduledTaskOptional.isPresent()) {
-            final String lastHash = lastScheduledTaskOptional
+        if (latestScheduledTask.isPresent()) {
+            final String lastHash = latestScheduledTask
                 .get()
                 .getPayload()
                 .findValue(geoCollectionHashKey)
@@ -104,22 +105,21 @@ public class PlzDataFetchService {
         return newDataAvailable;
     }
 
-    private void loadNewData(URI uri) throws IOException, CsvException {
+    private void loadNewData(final URI uri) throws IOException, CsvException {
         final String csvFileData = loadCsvFileData(uri);
-        CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
+        final Set<List<String>> plzHashSet = new HashSet<>();
+        try (final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
             .withSkipLines(1)
             .withCSVParser(new CSVParserBuilder()
                 .withSeparator(';')
                 .build()
-            ).build();
+            ).build()) {
+            csvReader.readAll().forEach(plzLine ->
+                plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[5]))
+            );
+        }
 
-        Set<List<String>> plzHashSet = new HashSet<>();
-        csvReader.readAll().forEach(plzLine ->
-            plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[5]))
-        );
-        Log.warn("hslen: "+ plzHashSet.size());
-
-        List<Plz> plzList = new ArrayList<>(plzHashSet.size());
+        final List<Plz> plzList = new ArrayList<>(plzHashSet.size());
         plzHashSet.forEach(
             plzLineElement -> plzList.add(
                 new Plz()
@@ -132,34 +132,38 @@ public class PlzDataFetchService {
         storePlzData(plzList);
     }
 
-    private String loadCsvFileData(URI uri) throws IOException {
-        GeoCollectionDowloadService geoCollectionDowloadService = RestClientBuilder.newBuilder()
+    private String loadCsvFileData(final URI uri) throws IOException {
+        final var geoCollectionDowloadService = RestClientBuilder.newBuilder()
             .baseUri(uri)
             .build(GeoCollectionDowloadService.class);
         final byte[] file = geoCollectionDowloadService.getGeoCollectionDowload();
 
-        ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(file));
-        ZipEntry ze = zin.getNextEntry();
-        String csvFileData = "";
-        if (ze != null) {
-            if (ze.getName().endsWith(".csv")) {
-                final int fileLen = (int) ze.getSize();
-                final byte[] bytes = new byte[fileLen];
+        try(
+            final ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(file));
+        ) {
+            final ZipEntry ze = zin.getNextEntry();
+            String csvFileData = "";
+            if (ze != null) {
+                if (ze.getName().endsWith(".csv")) {
+                    final int fileLen = (int) ze.getSize();
+                    final byte[] bytes = new byte[fileLen];
 
-                int bytesRead = 0;
-                while (bytesRead < fileLen) {
-                    bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
+                    int bytesRead = 0;
+                    while (bytesRead < fileLen) {
+                        bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
+                    }
+
+                    csvFileData = new String(bytes, StandardCharsets.UTF_8);
+                    return csvFileData;
                 }
-
-                csvFileData = new String(bytes, StandardCharsets.UTF_8);
             }
         }
-        zin.close();
-        return csvFileData;
+
+        return "";
     }
 
     @Transactional
-    public void storePlzData(List<Plz> plzList) {
+    public void storePlzData(final List<Plz> plzList) {
         plzRepository.deleteAll();
         plzRepository.persist(plzList.stream());
         plzRepository.flush();

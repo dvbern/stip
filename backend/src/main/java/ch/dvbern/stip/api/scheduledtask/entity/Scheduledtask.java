@@ -1,21 +1,19 @@
 package ch.dvbern.stip.api.scheduledtask.entity;
 
+import java.time.LocalDateTime;
+
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.envers.Audited;
 import org.hibernate.type.SqlTypes;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -34,8 +32,8 @@ public class Scheduledtask extends AbstractEntity {
     private String type;
 
     @NotNull
-    @Column(name = "timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_execution", nullable = false)
+    private LocalDateTime lastExecution;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "payload", columnDefinition = "json")
