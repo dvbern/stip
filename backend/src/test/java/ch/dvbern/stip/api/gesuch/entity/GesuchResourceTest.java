@@ -422,15 +422,15 @@ class GesuchResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(20)
-    void testUpdateToRemoveSuperfluousDocuments() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung;
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2);
-        // Ignore any potential server errors
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek);
+    void testRemoveSuperfluousDocuments() {
+        // getGesuchDokumente also removes superfluous documents from the Gesuch
+        // This is needed so the follow check if only necessary documents are saved works
+        gesuchApiSpec.getGesuchDokumente()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
