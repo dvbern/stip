@@ -17,9 +17,9 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -30,6 +30,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
@@ -108,16 +109,13 @@ public class GesuchDokumentService {
         deleteAllDokumentForGesuchInRepository(gesuchId);
     }
 
-    public Uni<Void> deleteDokumentsFromS3Blocking(final List<String> objectIds) {
-        var future = s3.deleteObjects(
+    public CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(final List<String> objectIds) {
+        return s3.deleteObjects(
             buildDeleteObjectsRequest(
                 configService.getBucketName(),
                 objectIds
             )
         );
-        future.join();
-
-        return Uni.createFrom().voidItem();
     }
 
     private DeleteObjectsRequest buildDeleteObjectsRequest(final String bucketName, final List<String> objectIds) {
@@ -132,13 +130,12 @@ public class GesuchDokumentService {
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
         Uni.createFrom()
-            .item(objectIds)
-            .emitOn(Infrastructure.getDefaultWorkerPool())
-            .subscribe()
-            .with(this::deleteDokumentsFromS3Blocking, Throwable::printStackTrace);
+            .item(deleteDokumentsFromS3Blocking(objectIds))
+            .await()
+            .indefinitely();
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
