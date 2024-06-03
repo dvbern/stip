@@ -33,10 +33,20 @@ export const OPTION_GESUCHSPERIODEN: AdminOption = {
   iconSymbolName: 'format_indent_increase',
 };
 
+export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
+  type: 'PARENT',
+  route: 'benutzerverwaltung',
+  translationKey: 'sachbearbeitung-app.admin.option.benutzerverwaltung',
+  titleTranslationKey:
+    'sachbearbeitung-app.admin.benutzerverwaltung.route.overview',
+  iconSymbolName: 'people',
+};
+
 export const AdminOptions = [
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
   OPTION_GESUCHSPERIODEN,
+  OPTION_BENUTZERVERWALTUNG,
 ];
 
 export type ChildAdminOption = {
@@ -62,4 +72,13 @@ export const CHILD_OPTION_GESUCHSPERIODE = (
   route: 'gesuchsperiode',
   titleTranslationKey,
   parentRoute: OPTION_GESUCHSPERIODEN.route,
+});
+
+export const CHILD_OPTION_BENUTZER_ERSTELLEN = (
+  titleTranslationKey: string,
+): ChildAdminOption => ({
+  type: 'CHILD',
+  route: 'erstellen',
+  titleTranslationKey,
+  parentRoute: OPTION_BENUTZERVERWALTUNG.route,
 });

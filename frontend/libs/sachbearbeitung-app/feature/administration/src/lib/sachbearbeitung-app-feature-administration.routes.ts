@@ -37,6 +37,16 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
       ).then((m) => m.sachbearbeitungAppFeatureGesuchsperiodeRoutes),
   },
   {
+    path: 'benutzerverwaltung',
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-benutzerverwaltung'
+      ).then(
+        (m) =>
+          m.sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'prefix',
     redirectTo: OPTION_AUSBILDUNGSSTAETTE.route,
