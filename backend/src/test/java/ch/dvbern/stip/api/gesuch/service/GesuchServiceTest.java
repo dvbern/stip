@@ -57,7 +57,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -821,12 +821,12 @@ class GesuchServiceTest {
         gesuchTranche.setGesuch(gesuch);
         gesuchFormular.setTranche(gesuchTranche);
         var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors(), is(empty()));
+        assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));
 
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
         reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         var violationCount = reportDto.getValidationErrors().size();
-        assertThat(reportDto.getValidationErrors(), is(not(empty())));
+        assertThat(reportDto.getValidationErrors(), Matchers.is(not(empty())));
 
         gesuchFormular.setFamiliensituation(
             new Familiensituation()
@@ -834,7 +834,7 @@ class GesuchServiceTest {
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
         reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors().size(), is(greaterThan(violationCount)));
+        assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

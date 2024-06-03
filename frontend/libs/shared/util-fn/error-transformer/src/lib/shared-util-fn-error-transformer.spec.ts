@@ -34,6 +34,7 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
       error: {
         validationErrors,
         validationWarnings: [],
+        hasDocuments: null,
       },
       message: 'Bad Request',
       status: 400,
@@ -42,6 +43,7 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
       type: 'validationError',
       validationErrors,
       validationWarnings: [],
+      hasDocuments: null,
       message: 'Es darf nur ein Gesuch pro Gesuchsteller eingereicht werden',
       messageKey: 'shared.genericError.validation',
       status: error.status,
@@ -88,6 +90,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       error: {
         validationErrors: validationErrorsCollection[0],
         validationWarnings: [],
+        hasDocuments: null,
       },
       status: 400,
     },
@@ -95,6 +98,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
       error: {
         validationErrors: validationErrorsCollection[1],
         validationWarnings: [],
+        hasDocuments: null,
       },
       status: 400,
     },
@@ -109,6 +113,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
         type: 'validationError',
         validationErrors: validationErrorsCollection[0],
         validationWarnings: [],
+        hasDocuments: null,
         message: 'error validation 1',
         messageKey: 'shared.genericError.validation',
         status: 400,
@@ -117,6 +122,7 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
         type: 'validationError',
         validationErrors: validationErrorsCollection[1],
         validationWarnings: [],
+        hasDocuments: null,
         message: 'error validation 3',
         messageKey: 'shared.genericError.validation',
         status: 400,

@@ -3,6 +3,7 @@ import { SharedModelGesuchFormularProps } from '@dv/shared/model/gesuch';
 export type StepValidation = {
   errors?: SharedModelGesuchFormularProps[];
   warnings?: SharedModelGesuchFormularProps[];
+  hasDocuments: boolean | null;
 };
 
 export type StepState = 'VALID' | 'INVALID' | 'WARNING';

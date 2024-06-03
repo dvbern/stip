@@ -2224,6 +2224,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ValidationWarning'
+        hasDocuments:
+          description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
+          type: boolean
     ValidationMessage:
       description: ''
       required:

@@ -250,7 +250,9 @@ public class GesuchService {
         );
         violations.addAll(validator.validate(gesuchFormular));
 
-        final var violationDtos = ValidationsExceptionMapper.toDto(violations);
+        final var validationReportDto = ValidationsExceptionMapper.toDto(violations);
+        final var documents = gesuchFormular.getTranche().getGesuch().getGesuchDokuments();
+        validationReportDto.hasDocuments(documents != null && !documents.isEmpty());
 
         try {
             validateNoOtherGesuchEingereichtWithSameSvNumber(gesuchFormular, gesuchId);
@@ -258,10 +260,10 @@ public class GesuchService {
             CustomValidationsExceptionMapper
                 .toDto(exception)
                 .getValidationErrors()
-                .forEach(violationDtos::addValidationErrorsItem);
+                .forEach(validationReportDto::addValidationErrorsItem);
         }
 
-        return violationDtos;
+        return validationReportDto;
     }
 
     @Transactional

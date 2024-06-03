@@ -22,6 +22,7 @@ export interface State {
   validations: {
     errors: ValidationError[];
     warnings?: ValidationWarning[];
+    hasDocuments: boolean | null;
   } | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
@@ -180,6 +181,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
             ? {
                 errors: error.validationErrors,
                 warnings: error.validationWarnings,
+                hasDocuments: error.hasDocuments,
               }
             : null,
         loading: false,

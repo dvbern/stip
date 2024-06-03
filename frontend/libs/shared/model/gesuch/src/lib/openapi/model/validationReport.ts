@@ -24,5 +24,9 @@ export interface ValidationReport {
      * 
      */
     validationWarnings: Array<ValidationWarning>;
+    /**
+     * Whether or not the Gesuch validated has one or more GesuchDokument attached
+     */
+    hasDocuments?: boolean;
 }
 

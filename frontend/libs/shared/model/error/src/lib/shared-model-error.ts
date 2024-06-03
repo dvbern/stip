@@ -56,11 +56,13 @@ const ErrorTypes = {
     error: z.object({
       validationErrors: z.array(ValidationError),
       validationWarnings: z.array(ValidationWarning),
+      hasDocuments: z.boolean().nullable(),
     }),
   }),
   unknownHttpError: UnknownHttpError,
   unknownError: z.unknown(),
 };
+
 type ErrorTypes = {
   [K in keyof typeof ErrorTypes]: Extends<
     z.infer<(typeof ErrorTypes)[K]>,
@@ -75,12 +77,13 @@ export type SharedModelErrorTypes = keyof typeof ErrorTypes;
 export const SharedModelError = z.intersection(
   z.union([
     ErrorTypes.validationError.transform(
-      ({ error: { validationErrors, validationWarnings } }) =>
+      ({ error: { validationErrors, validationWarnings, hasDocuments } }) =>
         createError('validationError', {
           message: validationErrors[0]?.message,
           messageKey: 'shared.genericError.validation',
           validationErrors,
           validationWarnings,
+          hasDocuments,
         }),
     ),
     ErrorTypes.unknownHttpError.transform(({ error, ...http }) => {
