@@ -27,7 +27,6 @@ public class PlzDataFetchScheduledTask {
                     plzDataFetchService.fetchData();
                 } catch (IOException | CsvException e) {
                     LOG.error(e.toString(), e);
-                    throw new RuntimeException(e);
                 }
             });
         } catch (Exception e) {
