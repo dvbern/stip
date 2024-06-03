@@ -25,7 +25,7 @@ export const initial = (): Initial => ({
  * store.values().map(filter(isInitial))
  */
 export const isInitial = (
-  response: RemoteData<unknown>,
+  response: RemoteData<unknown> | CachedRemoteData<unknown>,
 ): response is Initial => {
   return response.type === 'initial';
 };
@@ -149,7 +149,7 @@ export const success = <T>(data: T): Success<T> => ({
  * store.values().map(filter(isSuccess))
  */
 export const isSuccess = <T>(
-  response: RemoteData<T>,
+  response: RemoteData<T> | CachedRemoteData<T>,
 ): response is Success<T> => {
   return response.type === 'success';
 };

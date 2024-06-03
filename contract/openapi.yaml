@@ -1285,6 +1285,25 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBildungsarten
       summary: Gets all Bildgunsarten
+  /plz:
+    get:
+      tags:
+        - Plz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/plz'
+          description: Returns all plzs
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getPlz
+      summary: Gets all PLZs
 components:
   schemas:
     Anrede:
@@ -2826,6 +2845,23 @@ components:
         digitaleKommunikation:
           description: ''
           type: boolean
+    plz:
+      description: "PLZ und ort für Type ahead funktionalitaet"
+      type: object
+      required:
+        - plz
+        - ort
+        - kantonskuerzel
+      properties:
+        plz:
+          description: ''
+          type: string
+        ort:
+          description: ''
+          type: string
+        kantonskuerzel:
+          description: ''
+          type: string
   responses:
     Unauthorized:
       content:
