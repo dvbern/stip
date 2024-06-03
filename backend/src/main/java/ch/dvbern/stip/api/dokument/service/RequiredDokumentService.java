@@ -16,20 +16,61 @@ import lombok.RequiredArgsConstructor;
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentProducer> requiredDocumentProducers;
 
-    public List<DokumentTyp> getRequiredDokumenteForGesuch(final GesuchFormular formular) {
-        final var existingDokumentTypes = new HashSet<>(
-            formular
-                .getTranche()
-                .getGesuch()
-                .getGesuchDokuments()
-                .stream()
-                .map(GesuchDokument::getDokumentTyp)
-                .toList()
+    private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
+        return formular
+            .getTranche()
+            .getGesuch()
+            .getGesuchDokuments();
+    }
+
+    private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
+        return getExistingDokumentsForGesuch(formular)
+            .stream()
+            .map(GesuchDokument::getDokumentTyp)
+            .toList();
+    }
+
+    private List<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
+        return requiredDocumentProducers
+            .stream()
+            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
+            .flatMap(
+                dokumentTypPair -> dokumentTypPair.getRight().stream()
+            ).toList();
+    }
+
+    public List<DokumentTyp> getRequiredDokumentsForGesuch(final GesuchFormular formular) {
+        final var existingDokumentTypesHashSet = new HashSet<>(
+            getExistingDokumentTypesForGesuch(formular)
         );
 
-        return requiredDocumentProducers.stream()
-            .map(x -> x.getRequiredDocuments(formular))
-            .flatMap(x -> x.getRight().stream().filter(y -> !existingDokumentTypes.contains(y)))
-            .toList();
+        final var requiredDokumentTypes = getRequiredDokumentTypesForGesuch(formular);
+
+        return requiredDokumentTypes
+            .stream()
+            .filter(
+                requiredDokumentType -> !existingDokumentTypesHashSet.contains(requiredDokumentType)
+            ).toList();
+    }
+
+    public List<GesuchDokument> getSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
+        final var existingDokumentTypes = getExistingDokumentTypesForGesuch(formular);
+
+        final var requiredDokumentTypesHashSet = new HashSet<>(
+            getRequiredDokumentTypesForGesuch(formular)
+        );
+        
+        final var superfluousDokumentTypes = existingDokumentTypes
+            .stream()
+            .filter(
+                existingDokumentType -> !requiredDokumentTypesHashSet.contains(existingDokumentType)
+            ).toList();
+        final var superfluousDokumentTypesHashSet = new HashSet<>(superfluousDokumentTypes);
+
+        return getExistingDokumentsForGesuch(formular)
+            .stream()
+            .filter(
+                existingDokument -> superfluousDokumentTypesHashSet.contains(existingDokument.getDokumentTyp())
+            ).toList();
     }
 }

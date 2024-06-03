@@ -12,7 +12,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setRenten(TestUtil.getRandomInt());
             model.setEoLeistungen(TestUtil.getRandomInt());
             model.setErgaenzungsleistungen(TestUtil.getRandomInt());
-            model.setBeitraege(TestUtil.getRandomInt());
+            model.setBeitraege(Math.min(TestUtil.getRandomInt(), 1));
             model.setAusbildungskostenSekundarstufeZwei(TestUtil.getRandomInt());
             model.setAusbildungskostenTertiaerstufe(TestUtil.getRandomInt());
             model.setFahrkosten(TestUtil.getRandomInt());

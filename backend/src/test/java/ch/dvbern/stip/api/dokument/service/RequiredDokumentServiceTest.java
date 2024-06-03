@@ -23,9 +23,9 @@ import static org.hamcrest.core.Is.is;
 
 class RequiredDokumentServiceTest {
     @Test
-    void getRequiredDokumenteForGesuchTest() {
+    void getRequiredDokumentsForGesuchTest() {
         final var service = new RequiredDokumentService(new MockInstance(List.of(new MockDocumentProducer())));
-        final var requiredDocuments = service.getRequiredDokumenteForGesuch(initFormular(List.of()));
+        final var requiredDocuments = service.getRequiredDokumentsForGesuch(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(1));
         assertThat(requiredDocuments.get(0), is(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
@@ -34,7 +34,7 @@ class RequiredDokumentServiceTest {
     @Test
     void getEmptyListTest() {
         final var service = new RequiredDokumentService(new MockInstance(List.of(new MockEmptyDocumentProducer())));
-        final var requiredDocuments = service.getRequiredDokumenteForGesuch(initFormular(List.of()));
+        final var requiredDocuments = service.getRequiredDokumentsForGesuch(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(0));
     }
@@ -43,7 +43,7 @@ class RequiredDokumentServiceTest {
     void noExistingTest() {
         final var service = new RequiredDokumentService(new MockInstance(List.of(new MockDocumentProducer())));
         final var requiredDocuments = service
-            .getRequiredDokumenteForGesuch(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
+            .getRequiredDokumentsForGesuch(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
 
         assertThat(requiredDocuments.size(), is(0));
     }

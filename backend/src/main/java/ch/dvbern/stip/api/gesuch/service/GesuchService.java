@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,8 +41,10 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -81,9 +84,11 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentService gesuchDokumentService;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
+    private final ConfigService configService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -102,7 +107,11 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new);
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
-        final var updatePia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
+        final var newFormular = trancheToUpdate.getGesuchFormular();
+        removeSuperfluousDokumentsForGesuch(newFormular);
+
+        final var updatePia = gesuchUpdateDto
+            .getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung();
         if (updatePia != null) {
@@ -110,7 +119,7 @@ public class GesuchService {
         }
     }
 
-    private void updateGesuchTranche(GesuchTrancheUpdateDto trancheUpdate, GesuchTranche trancheToUpdate) {
+    private void updateGesuchTranche(final GesuchTrancheUpdateDto trancheUpdate, final GesuchTranche trancheToUpdate) {
         gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
@@ -266,6 +275,32 @@ public class GesuchService {
         return validationReportDto;
     }
 
+    private void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
+        List<String> dokumentObjectIds = new ArrayList<>();
+
+        requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).forEach(
+            gesuchDokument -> gesuchDokument.getDokumente().forEach(
+                dokument -> dokumentObjectIds.add(
+                    gesuchDokumentService.deleteDokument(dokument.getId())
+                )
+            )
+        );
+
+        if (!dokumentObjectIds.isEmpty()) {
+            gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
+    }
+
+    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular();
+
+        removeSuperfluousDokumentsForGesuch(formular);
+        return getGesuchDokumenteForGesuch(gesuchId);
+    }
+
     @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
         return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
@@ -276,7 +311,8 @@ public class GesuchService {
         final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
-        return requiredDokumentService.getRequiredDokumenteForGesuch(formular);
+
+        return requiredDokumentService.getRequiredDokumentsForGesuch(formular);
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {

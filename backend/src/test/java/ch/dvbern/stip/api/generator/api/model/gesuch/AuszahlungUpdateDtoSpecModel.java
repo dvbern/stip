@@ -13,7 +13,7 @@ public final class AuszahlungUpdateDtoSpecModel {
             model.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
             model.setVorname(faker.name().firstName());
             model.setNachname(faker.name().lastName());
-            model.setKontoinhaber(TestUtil.getRandomElementFromArray(KontoinhaberDtoSpec.values()));
+            model.setKontoinhaber(KontoinhaberDtoSpec.SOZIALDIENST_INSTITUTION);
         });
 
     public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAuszahlung =
