@@ -19,7 +19,7 @@ import org.hibernate.type.SqlTypes;
 @Table(
     name = "scheduledtask",
     indexes = {
-        @Index(name = "IX_scheduledtask_timestamp", columnList = "timestamp"),
+        @Index(name = "IX_scheduledtask_last_execution", columnList = "last_execution"),
         @Index(name = "IX_scheduledtask_type", columnList = "type")
     }
 )

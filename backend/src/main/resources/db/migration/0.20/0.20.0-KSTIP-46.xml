@@ -107,8 +107,8 @@
         </createIndex>
     </changeSet>
     <changeSet author="jafa (generated)" id="1717056769611-9">
-        <createIndex indexName="IX_scheduledtask_timestamp" tableName="scheduledtask">
-            <column name="timestamp"/>
+        <createIndex indexName="IX_scheduledtask_last_execution" tableName="scheduledtask">
+            <column name="last_execution"/>
         </createIndex>
     </changeSet>
     <changeSet author="jafa (generated)" id="1717056769611-10">
