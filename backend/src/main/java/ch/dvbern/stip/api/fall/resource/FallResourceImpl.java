@@ -30,7 +30,7 @@ public class FallResourceImpl implements FallResource {
     private final FallService fallService;
 
     @Override
-    public Response createFallForGS() {
+    public Response createFallForGs() {
         return Response.ok(fallService.createFallForGs()).build();
     }
 
