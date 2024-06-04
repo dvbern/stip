@@ -45,6 +45,11 @@ public interface GesuchResource {
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/all/sb")
+    @Produces({ "application/json", "text/plain" })
+    Response getAllGesucheSb();
+
+    @GET
     @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response getGesuch(@PathParam("gesuchId") UUID gesuchId);
@@ -55,23 +60,19 @@ public interface GesuchResource {
     Response getGesuchDokumente(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Produces({ "application/json", "text/plain" })
-    Response getGesuche();
-
-    @GET
-    @Path("/benutzer/{benutzerId}")
-    @Produces({ "application/json", "text/plain" })
-    Response getGesucheForBenutzer(@PathParam("benutzerId") UUID benutzerId);
-
-    @GET
     @Path("/fall/{fallId}")
     @Produces({ "application/json", "text/plain" })
     Response getGesucheForFall(@PathParam("fallId") UUID fallId);
 
     @GET
-    @Path("/benutzer/me")
+    @Path("/benutzer/me/gs")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheForMe();
+    Response getGesucheGs();
+
+    @GET
+    @Path("/benutzer/me/sb")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesucheSb();
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.fall.repo;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -36,22 +37,23 @@ public class FallRepository implements BaseRepository<Fall> {
 
     private final EntityManager entityManager;
 
-    public Stream<Fall> findAllForBenutzer(UUID benutzerId) {
+    public Stream<Fall> findFaelleForSb(UUID sachbearbeiterId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var fall = QFall.fall;
         final var zuordnung = QZuordnung.zuordnung;
 
         final var query = queryFactory
-            .select(fall)
-            .from(fall)
-            .where(fall.gesuchsteller.id.eq(benutzerId)
-                .or(
-                    JPAExpressions.select(zuordnung.sachbearbeiter.id)
+                .select(fall)
+                .from(fall)
+                .where(JPAExpressions.select(zuordnung.sachbearbeiter.id)
                         .from(zuordnung)
-                        .where(zuordnung.sachbearbeiter.id.eq(benutzerId))
-                        .contains(benutzerId)
-                )
-            );
+                        .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId))
+                        .contains(sachbearbeiterId));
+
         return query.stream();
+    }
+
+    public Optional<Fall> findFallForGsOptional(UUID gesuchstellerId) {
+        return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
     }
 }

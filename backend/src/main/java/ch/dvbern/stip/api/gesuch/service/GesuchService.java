@@ -22,24 +22,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -128,18 +123,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findAllWithPersonInAusbildung() {
-        return gesuchRepository.findAllWithFormular()
-            .filter(gesuch ->
-                getCurrentGesuchTrancheDto(gesuch)
-                    .getGesuchFormular()
-                    .getPersonInAusbildung() != null
-            )
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
-    }
-
-    @Transactional
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
@@ -160,39 +143,21 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
-    public List<GesuchDto> findAllForCurrentBenutzer() {
-        return findAllForBenutzer(benutzerService.getOrCreateCurrentBenutzer().getId());
+    @Transactional
+    public List<GesuchDto> findAllGesucheSb() {
+        return gesuchRepository.findAllForSb().map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional
-    public List<GesuchDto> findAllForBenutzer(final UUID benutzerId) {
-        final var benutzer = benutzerService.getBenutzer(benutzerId);
-        if (benutzer.isEmpty()) {
-            throw new NotFoundException();
-        }
-
-        final var rollen = benutzer.get()
-            .getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-
-        final Function<Stream<Gesuch>, Map<UUID, Gesuch>> toMap =
-            stream -> stream.collect(Collectors.toMap(AbstractEntity::getId, gesuch -> gesuch));
-
-        final var gesuche = new HashMap<UUID, Gesuch>();
-        if (rollen.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            gesuche.putAll(toMap.apply(gesuchRepository.findAllForGs(benutzerId)));
-        }
-        if (rollen.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
-            gesuche.putAll(toMap.apply(gesuchRepository.findAllForSb(benutzerId)));
-        }
-
-        return gesuche.values().stream().map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findGesucheSb() {
+        final var benutzer = benutzerService.getOrCreateCurrentBenutzer();
+        return gesuchRepository.findForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
-    public List<GesuchDto> findAll() {
-        return gesuchRepository.findAll().stream().map(this::mapWithTrancheToWorkWith).toList();
+    @Transactional
+    public List<GesuchDto> findGesucheGs() {
+        final var benutzer = benutzerService.getOrCreateCurrentBenutzer();
+        return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional

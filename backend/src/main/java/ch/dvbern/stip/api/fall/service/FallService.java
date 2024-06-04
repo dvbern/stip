@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.fall.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.FallDto;
@@ -18,25 +16,27 @@ import lombok.RequiredArgsConstructor;
 public class FallService {
 
     private final FallMapper fallMapper;
+
     private final FallRepository fallRepository;
 
-    private final BenutzerRepository benutzerRepository;
+    private final BenutzerService benutzerService;
 
     @Transactional
-    public FallDto createFall(UUID benutzerId) {
-        var benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(NotFoundException::new);
-        var fall = new Fall();
+    public FallDto createFallForGs() {
+        final var benutzer = benutzerService.getOrCreateCurrentBenutzer();
+        final var fall = new Fall();
         fall.setGesuchsteller(benutzer);
         fallRepository.persistAndFlush(fall);
         return fallMapper.toDto(fall);
     }
 
-    public Optional<FallDto> getFall(UUID id) {
-        var optionalFall = fallRepository.findByIdOptional(id);
-        return optionalFall.map(fallMapper::toDto);
+    public List<FallDto> findFaelleForSb() {
+        final var sachbearbeiterId = benutzerService.getOrCreateCurrentBenutzer().getId();
+        return fallRepository.findFaelleForSb(sachbearbeiterId).map(fallMapper::toDto).toList();
     }
 
-    public List<FallDto> findFaelleForBenutzer(UUID benutzerId) {
-        return fallRepository.findAllForBenutzer(benutzerId).map(fallMapper::toDto).toList();
+    public FallDto findFallForGs() {
+        final var gesuchstellerId = benutzerService.getOrCreateCurrentBenutzer().getId();
+        return fallMapper.toDto(fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow(NotFoundException::new));
     }
 }

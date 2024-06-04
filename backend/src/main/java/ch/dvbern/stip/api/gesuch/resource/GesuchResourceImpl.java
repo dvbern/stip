@@ -73,27 +73,27 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesuche() {
-        return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
-    }
+	@Override
+	public Response getAllGesucheSb() {
+		return Response.ok(gesuchService.findAllGesucheSb()).build();
+	}
 
     @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesucheForBenutzer(UUID benutzerId) {
-        return Response.ok(gesuchService.findAllForBenutzer(benutzerId)).build();
-    }
+	@Override
+	public Response getGesucheSb() {
+		return Response.ok(gesuchService.findGesucheSb()).build();
+	}
+
+    @RolesAllowed(GESUCH_READ)
+	@Override
+	public Response getGesucheGs() {
+		return Response.ok(gesuchService.findGesucheGs()).build();
+	}
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesucheForFall(UUID fallId) {
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesucheForMe() {
-        return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
     }
 
     @RolesAllowed(GESUCH_READ)
