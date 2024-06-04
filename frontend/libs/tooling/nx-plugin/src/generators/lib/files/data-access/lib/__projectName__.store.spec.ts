@@ -21,6 +21,6 @@ describe('<%= classify(name) %>Store', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.<%= name %>()).toEqual({ data: null, loading: false, error: null });
+    expect(store.<%= camelize(name) %>()).toEqual({ data: null, loading: false, error: null });
   });
 });

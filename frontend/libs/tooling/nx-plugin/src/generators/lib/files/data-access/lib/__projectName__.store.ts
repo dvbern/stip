@@ -17,12 +17,12 @@ import {
 
 type <%= classify(name) %>State = {
   cached<%= classify(name) %>: CachedRemoteData<unknown>;
-  <%= name %>: RemoteData<unknown>;
+  <%= camelize(name) %>: RemoteData<unknown>;
 };
 
 const initialState: <%= classify(name) %>State = {
   cached<%= classify(name) %>: initial(),
-  <%= name %>: initial(),
+  <%= camelize(name) %>: initial(),
 };
 
 @Injectable()
@@ -30,14 +30,14 @@ export class <%= classify(name) %>Store extends signalStore(
   withState(initialState),
   withDevtools('<%= classify(name) %>Store'),
 ) {
-  private <%= name %>Service = inject(<%= classify(name) %>Service);
+  private <%= camelize(name) %>Service = inject(<%= classify(name) %>Service);
 
   cached<%= classify(name) %>ListViewSig = computed(() => {
     return fromCachedDataSig(this.cached<%= classify(name) %>);
   });
 
-  <%= name %>ViewSig = computed(() => {
-    return this.<%= name %>.data();
+  <%= camelize(name) %>ViewSig = computed(() => {
+    return this.<%= camelize(name) %>.data();
   });
 
   loadCached<%= classify(name) %>$ = rxMethod<void>(
@@ -50,7 +50,7 @@ export class <%= classify(name) %>Store extends signalStore(
         }));
       }),
       switchMap(() =>
-        this.<%= name %>Service.get<%= classify(name) %>$().pipe(
+        this.<%= camelize(name) %>Service.get<%= classify(name) %>$().pipe(
           handleApiResponse((cached<%= classify(name) %>) =>
             patchState(this, { cached<%= classify(name) %> }),
           ),
@@ -63,19 +63,19 @@ export class <%= classify(name) %>Store extends signalStore(
     pipe(
       tap(() => {
         patchState(this, () => ({
-          <%= name %>: pending(),
+          <%= camelize(name) %>: pending(),
         }));
       }),
       switchMap(() =>
-        this.<%= name %>Service.get<%= classify(name) %>$().pipe(
-          handleApiResponse((<%= name %>) => patchState(this, { <%= name %> })),
+        this.<%= camelize(name) %>Service.get<%= classify(name) %>$().pipe(
+          handleApiResponse((<%= camelize(name) %>) => patchState(this, { <%= camelize(name) %> })),
         ),
       ),
     ),
   );
 
   save<%= classify(name) %>$ = rxMethod<{
-    <%= name %>Id: string;
+    <%= camelize(name) %>Id: string;
     values: unknown;
   }>(
     pipe(
@@ -86,17 +86,17 @@ export class <%= classify(name) %>Store extends signalStore(
           ),
         }));
       }),
-      switchMap(({ <%= name %>Id, values }) =>
-        this.<%= name %>Service.update<%= classify(name) %>$({
-          <%= name %>Id,
+      switchMap(({ <%= camelize(name) %>Id, values }) =>
+        this.<%= camelize(name) %>Service.update<%= classify(name) %>$({
+          <%= camelize(name) %>Id,
           payload: values,
         }).pipe(
           handleApiResponse(
-            (<%= name %>) => {
-              patchState(this, { <%= name %> });
+            (<%= camelize(name) %>) => {
+              patchState(this, { <%= camelize(name) %> });
             },
             {
-              onSuccess: (<%= name %>) => {
+              onSuccess: (<%= camelize(name) %>) => {
                 // Do something after save, like showing a notification
               },
             },
