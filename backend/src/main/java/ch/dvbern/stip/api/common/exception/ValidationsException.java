@@ -18,9 +18,7 @@ public class ValidationsException extends RuntimeException {
     @Override
     public String toString() {
         final var sb = new StringBuilder();
-        this.violations.forEach(x -> {
-            sb.append(x.getMessage());
-        });
+        this.violations.forEach(x -> sb.append(x.getMessage()));
 
         return sb.toString();
     }
