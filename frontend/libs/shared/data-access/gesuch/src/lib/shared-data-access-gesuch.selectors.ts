@@ -51,14 +51,15 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
         validations: {
-          errors: transformValidationMessage(
+          errors: transformValidationMessagesToFormKeys(
             state.validations?.errors,
             currentForm,
           ),
-          warnings: transformValidationMessage(
+          warnings: transformValidationMessagesToFormKeys(
             state.validations?.warnings,
             currentForm,
           ),
+          hasDocuments: state.validations?.hasDocuments ?? null,
         },
         specialValidationErrors: state.validations?.errors
           .filter(isSpecialValidationError)
@@ -68,28 +69,40 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   },
 );
 
-/**
- * Returns true if the gesuchFormular has the given property
- */
-export const isFormularProp =
-  (gesuchFormular?: SharedModelGesuchFormular | null) =>
-  (prop?: string): prop is SharedModelGesuchFormularProps => {
-    if (!prop || !gesuchFormular) return false;
-    return Object.keys(gesuchFormular).includes(prop);
-  };
-
-const transformValidationMessage = (
+const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
   currentForm?: SharedModelGesuchFormular | null,
 ) => {
+  const formKeys: SharedModelGesuchFormularProps[] = [
+    ...(Object.keys(currentForm ?? {}) as SharedModelGesuchFormularProps[]),
+    'dokuments',
+  ];
+
   return messages
     ?.filter(isDefined)
     .filter(
-      (error) =>
-        isFormularProp(currentForm)(error.propertyPath) ||
-        isSpecialValidationError(error),
+      (m) =>
+        isGesuchFormularProp(formKeys)(m.propertyPath) ||
+        isSpecialValidationError(m),
     )
-    .map((error) => error.propertyPath)
+    .map((m) => {
+      if (m.messageTemplate?.includes('documents.required')) {
+        return [{ ...m, propertyPath: 'dokuments' }, { ...m }];
+      }
+      return m;
+    })
+    .flat()
+    .map((m) => m.propertyPath)
     .filter(isDefined)
-    .filter(isFormularProp(currentForm));
+    .filter(isGesuchFormularProp(formKeys));
 };
+
+/**
+ * Returns true if the gesuchFormular has the given property
+ */
+export const isGesuchFormularProp =
+  (formKeys: string[]) =>
+  (prop?: string): prop is SharedModelGesuchFormularProps => {
+    if (!prop) return false;
+    return formKeys.includes(prop);
+  };

@@ -13,8 +13,10 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -24,33 +26,33 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
     private final AusbildungsstaetteService ausbildungsstaetteService;
 
     @Override
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_GESUCHSTELLER })
+    @RolesAllowed(AUSBILDUNG_READ)
     public Response getAusbildungsstaette(UUID ausbildungsstaetteId) {
         return Response.ok(ausbildungsstaetteService.findById(ausbildungsstaetteId)).build();
     }
 
     @Override
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_GESUCHSTELLER })
+    @RolesAllowed(AUSBILDUNG_READ)
     public Response getAusbildungsstaetten() {
         return Response.ok(ausbildungsstaetteService.getAusbildungsstaetten()).build();
     }
 
     @Override
-    @RolesAllowed(ROLE_SACHBEARBEITER)
+    @RolesAllowed(AUSBILDUNG_CREATE)
     public Response createAusbildungsstaette(AusbildungsstaetteCreateDto ausbildungsstaette) {
         AusbildungsstaetteDto created = ausbildungsstaetteService.createAusbildungsstaette(ausbildungsstaette);
         return Response.ok(created).build();
     }
 
     @Override
-    @RolesAllowed(ROLE_SACHBEARBEITER)
+    @RolesAllowed(AUSBILDUNG_UPDATE)
     public Response updateAusbildungsstaette(UUID ausbildungsstaetteId, AusbildungsstaetteUpdateDto ausbildungsstaette) {
         AusbildungsstaetteDto updated = ausbildungsstaetteService.updateAusbildungsstaette(ausbildungsstaetteId, ausbildungsstaette);
         return Response.ok(updated).build();
     }
 
     @Override
-    @RolesAllowed(ROLE_SACHBEARBEITER)
+    @RolesAllowed(AUSBILDUNG_DELETE)
     public Response deleteAusbildungsstaette(UUID ausbildungsstaetteId) {
         ausbildungsstaetteService.deleteAusbildungsstaette(ausbildungsstaetteId);
         return Response.noContent().build();

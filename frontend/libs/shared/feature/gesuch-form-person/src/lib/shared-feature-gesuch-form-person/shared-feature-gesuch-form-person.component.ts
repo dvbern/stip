@@ -8,6 +8,7 @@ import {
   effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -301,7 +302,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     this.form.controls.zivilstand.valueChanges,
   );
   private plzChangedSig = toSignal(
-    this.form.controls.adresse.controls.plz.valueChanges,
+    this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
 
   constructor() {
@@ -309,7 +310,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
         invalidFormularProps: { specialValidationErrors },
-      } = this.validationViewSig();
+      } = untracked(this.validationViewSig);
       if (
         specialValidationErrors?.some(
           (e) => e.field === 'sozialversicherungsnummer',
@@ -380,6 +381,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             vermoegenVorjahr: person.vermoegenVorjahr?.toString(),
             ...wohnsitzAnteileString(person),
           });
+          SharedUiFormAddressComponent.patchForm(
+            this.form.controls.adresse,
+            personForForm.adresse,
+          );
         } else {
           this.form.reset();
         }

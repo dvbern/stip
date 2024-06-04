@@ -157,9 +157,31 @@ export const isStepValid = (
     [KINDER.route]: 'kinds',
     [AUSZAHLUNG.route]: 'auszahlung',
     [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+    [DOKUMENTE.route]: 'dokuments',
   };
+
   const field = stepFieldMap[step.route];
+
+  if (field === 'dokuments') {
+    return toDocumentStepState(invalidProps);
+  }
+
   return formular?.[field] ? toStepState(field, invalidProps) : undefined;
+};
+
+const toDocumentStepState = (
+  invalidProps?: StepValidation,
+): StepState | undefined => {
+  if (invalidProps?.errors?.includes('dokuments')) {
+    return 'INVALID';
+  }
+  if (invalidProps?.warnings?.includes('dokuments')) {
+    return 'WARNING';
+  }
+  if (invalidProps?.hasDocuments === true) {
+    return 'VALID';
+  }
+  return undefined;
 };
 
 const toStepState = (

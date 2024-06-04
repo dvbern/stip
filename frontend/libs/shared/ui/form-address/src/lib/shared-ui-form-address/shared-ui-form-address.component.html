@@ -19,23 +19,42 @@
     </mat-error>
   </mat-form-field>
 
-  <!-- PLZ -->
-  <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-lg-2 pe-2">
-    <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
-    <input matInput type="text" formControlName="plz" data-testid="form-address-plz" />
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.requiredShort' | translate }}
-    </mat-error>
-  </mat-form-field>
+  <ng-container
+    formGroupName="plzOrt"
+    dvPlzOrtAutocomplete
+    [autocompleteSig]="plzAutocomplete"
+    [plzFormSig]="group.controls.plzOrt"
+    (plzLookupValuesSig)="plzValues = $event"
+  >
+    <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-lg-2 pe-2">
+      <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+      <input
+        matInput
+        [matAutocomplete]="plzAutocomplete"
+        type="text"
+        formControlName="plz"
+        data-testid="form-address-plz"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.requiredShort' | translate }}
+      </mat-error>
+      <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+        @for (lookup of plzValues; track lookup.plz) {
+          <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+            {{ lookup.plz }} {{ lookup.ort }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <!-- Ort -->
-  <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-lg-4 ps-0">
-    <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
-    <input matInput type="text" formControlName="ort" data-testid="form-address-ort" />
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-  </mat-form-field>
+    <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-lg-4 ps-0">
+      <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
+      <input matInput type="text" formControlName="ort" data-testid="form-address-ort" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
 
   <!-- c/o -->
   <mat-form-field dvSharedUiFormField class="col-12 col-md-6">

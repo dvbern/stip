@@ -4,7 +4,7 @@ import { Gesuch, SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import {
-  isFormularProp,
+  isGesuchFormularProp,
   selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
@@ -14,7 +14,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
-      validations: { errors: [] },
+      validations: { errors: [], hasDocuments: null },
       gesuchFormular: null,
       cache: {
         gesuchId: null,
@@ -73,14 +73,16 @@ describe('selectSharedDataAccessGesuchsView', () => {
   });
 
   it.each([
-    [null, 'personInAusbildung', false],
+    [{}, 'personInAusbildung', false],
     [{}, 'partner', false],
     [{ kinds: [] }, 'kinds', true],
     [{ kinds: [] }, 'invalid-property', false],
   ] as [SharedModelGesuchFormular, string, boolean][])(
     'should check if a given property is a formular prop: %s[%s] -> %s',
     (gesuchFormular, prop, expected) => {
-      expect(isFormularProp(gesuchFormular)(prop)).toEqual(expected);
+      expect(isGesuchFormularProp(Object.keys(gesuchFormular))(prop)).toEqual(
+        expected,
+      );
     },
   );
 
@@ -94,6 +96,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
           { message: '', messageTemplate: '', propertyPath: 'kinds' },
           { message: '', messageTemplate: '', propertyPath: 'invalid' },
         ],
+        hasDocuments: null,
       },
       gesuchFormular: {
         personInAusbildung: {} as any,
@@ -111,6 +114,8 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const result = selectSharedDataAccessGesuchValidationView.projector(state);
     expect(result.invalidFormularProps.validations).toEqual({
       errors: ['partner', 'kinds'],
+      validationWarnings: undefined,
+      hasDocuments: null,
     });
   });
 });

@@ -19,6 +19,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 export class SharedUiFormSaveComponent {
   @Input() labelKey = 'shared.form.save';
   @Input() loading = false;
+  @Input() disabled = false;
 
   @HostBinding('class') class = 'd-flex gap-3 flex-row align-items-start';
 }

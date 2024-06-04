@@ -11,6 +11,7 @@ export type LibType =
   | 'event'
   | 'ui'
   | 'util'
+  | 'util-data-access'
   | 'util-fn'
   | 'model';
 

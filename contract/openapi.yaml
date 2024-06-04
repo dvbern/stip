@@ -884,6 +884,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
     parameters:
       - name: gesuchId
         schema:
@@ -1285,6 +1286,25 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBildungsarten
       summary: Gets all Bildgunsarten
+  /plz:
+    get:
+      tags:
+        - Plz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/plz'
+          description: Returns all plzs
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getPlz
+      summary: Gets all PLZs
 components:
   schemas:
     Anrede:
@@ -2224,6 +2244,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ValidationWarning'
+        hasDocuments:
+          description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
+          type: boolean
     ValidationMessage:
       description: ''
       required:
@@ -2482,6 +2505,8 @@ components:
         - aufschaltterminStart
         - gueltigkeitStatus
         - gesuchsjahr
+        - ausbKosten_SekII
+        - ausbKosten_Tertiaer
       type: object
       properties:
         id:
@@ -2506,6 +2531,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchsjahr:
           $ref: '#/components/schemas/Gesuchsjahr'
+        ausbKosten_SekII:
+          description: ''
+          type: integer
+        ausbKosten_Tertiaer:
+          description: ''
+          type: integer
     GesuchsperiodeCreate:
       type: object
       allOf:
@@ -2823,6 +2854,23 @@ components:
         digitaleKommunikation:
           description: ''
           type: boolean
+    plz:
+      description: "PLZ und ort für Type ahead funktionalitaet"
+      type: object
+      required:
+        - plz
+        - ort
+        - kantonskuerzel
+      properties:
+        plz:
+          description: ''
+          type: string
+        ort:
+          description: ''
+          type: string
+        kantonskuerzel:
+          description: ''
+          type: string
   responses:
     Unauthorized:
       content:

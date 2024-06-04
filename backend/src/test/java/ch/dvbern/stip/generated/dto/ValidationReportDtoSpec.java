@@ -33,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS,
-  ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_WARNINGS
+  ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_WARNINGS,
+  ValidationReportDtoSpec.JSON_PROPERTY_HAS_DOCUMENTS
 })
 @JsonTypeName("ValidationReport")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +44,9 @@ public class ValidationReportDtoSpec {
 
   public static final String JSON_PROPERTY_VALIDATION_WARNINGS = "validationWarnings";
   private List<ValidationWarningDtoSpec> validationWarnings;
+
+  public static final String JSON_PROPERTY_HAS_DOCUMENTS = "hasDocuments";
+  private Boolean hasDocuments;
 
   public ValidationReportDtoSpec() {
   }
@@ -114,6 +118,32 @@ public class ValidationReportDtoSpec {
     this.validationWarnings = validationWarnings;
   }
 
+
+  public ValidationReportDtoSpec hasDocuments(Boolean hasDocuments) {
+    
+    this.hasDocuments = hasDocuments;
+    return this;
+  }
+
+   /**
+   * Whether or not the Gesuch validated has one or more GesuchDokument attached
+   * @return hasDocuments
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HAS_DOCUMENTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getHasDocuments() {
+    return hasDocuments;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HAS_DOCUMENTS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHasDocuments(Boolean hasDocuments) {
+    this.hasDocuments = hasDocuments;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -124,12 +154,13 @@ public class ValidationReportDtoSpec {
     }
     ValidationReportDtoSpec validationReport = (ValidationReportDtoSpec) o;
     return Objects.equals(this.validationErrors, validationReport.validationErrors) &&
-        Objects.equals(this.validationWarnings, validationReport.validationWarnings);
+        Objects.equals(this.validationWarnings, validationReport.validationWarnings) &&
+        Objects.equals(this.hasDocuments, validationReport.hasDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validationErrors, validationWarnings);
+    return Objects.hash(validationErrors, validationWarnings, hasDocuments);
   }
 
   @Override
@@ -138,6 +169,7 @@ public class ValidationReportDtoSpec {
     sb.append("class ValidationReportDtoSpec {\n");
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("    validationWarnings: ").append(toIndentedString(validationWarnings)).append("\n");
+    sb.append("    hasDocuments: ").append(toIndentedString(hasDocuments)).append("\n");
     sb.append("}");
     return sb.toString();
   }

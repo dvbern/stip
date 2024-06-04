@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.benutzer.resource;
 
+import java.util.Arrays;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -129,7 +132,7 @@ class BenutzerResourceTest {
 
     @Test
     @Order(5)
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     void createSachbearbeiterZuordnungStammdaten() {
         final var updateDto = SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpec;
         api.createOrUpdateSachbearbeiterStammdaten()
@@ -144,19 +147,23 @@ class BenutzerResourceTest {
             .extract()
             .body()
             .as(BenutzerDtoSpec[].class);
-        MatcherAssert.assertThat(sachbearbeiterListe.length, is(1));
-        MatcherAssert.assertThat(sachbearbeiterListe[0].getSachbearbeiterZuordnungStammdaten(), notNullValue());
+        MatcherAssert.assertThat(sachbearbeiterListe.length, is(greaterThan(0)));
+        MatcherAssert.assertThat(
+            Arrays.stream(sachbearbeiterListe).allMatch(x -> x.getSachbearbeiterZuordnungStammdaten() != null),
+            is(true)
+        );
     }
 
     @Test
     @Order(6)
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     void createSachbearbeiterZuordnungStammdatenList() throws InterruptedException {
         // This is bad, but currently the only way to avoid a 500 response
         // As the server may still be (background) processing the request from the
         // Previous test.
         Thread.sleep(5000);
-        final var updateDtos = SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenListDtoSpecs(2);
+        final var updateDtos =
+            SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenListDtoSpecs(2);
         updateDtos.get(0).setSachbearbeiter(me.getId());
         updateDtos.get(1).setSachbearbeiter(sachbearbeiterUUID);
 
@@ -172,8 +179,11 @@ class BenutzerResourceTest {
             .body()
             .as(BenutzerDtoSpec[].class);
 
-        MatcherAssert.assertThat(sachbearbeiterListe.length, is(1));
-        MatcherAssert.assertThat(sachbearbeiterListe[0].getSachbearbeiterZuordnungStammdaten(), notNullValue());
+        MatcherAssert.assertThat(sachbearbeiterListe.length, is(greaterThan(0)));
+        MatcherAssert.assertThat(
+            Arrays.stream(sachbearbeiterListe).allMatch(x -> x.getSachbearbeiterZuordnungStammdaten() != null),
+            is(true)
+        );
         final var myZuordnung = api.getSachbearbeiterStammdaten()
             .benutzerIdPath(me.getId())
             .execute(ResponseBody::prettyPeek)

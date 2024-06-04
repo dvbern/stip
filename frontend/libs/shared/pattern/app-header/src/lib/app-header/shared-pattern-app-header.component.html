@@ -56,13 +56,13 @@
             type="button"
             class="btn btn-nav shadow-none fw-normal d-flex align-items-center pe-1"
             data-testid="button-user-menu"
-            [matMenuTriggerFor]="menu"
+            [matMenuTriggerFor]="profileMenu"
           >
             <span>{{ benutzerNameSig() }}</span>
             <i class="material-symbols-rounded ms-2">expand_more</i>
           </button>
 
-          <mat-menu #menu="matMenu" xPosition="before">
+          <mat-menu #profileMenu="matMenu" xPosition="before">
             <button type="button" data-testid="button-profile" mat-menu-item>Profil</button>
             <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">Logout</button>
           </mat-menu>

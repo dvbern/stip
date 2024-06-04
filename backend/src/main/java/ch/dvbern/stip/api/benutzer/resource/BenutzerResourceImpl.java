@@ -11,10 +11,14 @@ import ch.dvbern.stip.generated.api.BenutzerResource;
 import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     private final TenantService tenantService;
 
     @Override
+    @RolesAllowed(STAMMDATEN_CREATE)
     public Response createOrUpdateSachbearbeiterStammdaten(
         UUID benutzerId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
@@ -35,6 +40,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
+    @RolesAllowed(STAMMDATEN_CREATE)
     public Response createOrUpdateSachbearbeiterStammdatenList(
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto
     ) {
@@ -55,6 +61,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
+    @RolesAllowed(STAMMDATEN_READ)
     public Response getSachbearbeiterStammdaten(UUID benutzerId) {
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto =
             benutzerService.findSachbearbeiterZuordnungStammdatenWithBenutzerId(benutzerId).orElseThrow(

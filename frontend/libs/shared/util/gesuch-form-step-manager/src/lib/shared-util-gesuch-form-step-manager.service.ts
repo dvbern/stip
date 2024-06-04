@@ -49,6 +49,11 @@ const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
   'sachbearbeitung-app': [...BaseSteps, RETURN_TO_COCKPIT],
 };
 
+const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
+  'sachbearbeitung-app': BaseSteps,
+  'gesuch-app': [...BaseSteps, ABSCHLUSS],
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -59,26 +64,24 @@ export class SharedUtilGesuchFormStepManagerService {
    *
    * Adds valid and disabled properties to the steps depending on the formular state
    */
-  getAllSteps(
+  getAllStepsWithStatus(
     gesuchFormular: SharedModelGesuchFormular | null,
     invalidProps?: StepValidation,
   ): GesuchFormStepView[] {
-    const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
-      'sachbearbeitung-app': BaseSteps,
-      'gesuch-app': [...BaseSteps, ABSCHLUSS],
-    };
-    return steps[this.compiletimeConfig.appType].map((step) => ({
-      ...step,
-      status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(step, gesuchFormular),
-    }));
+    return steps[this.compiletimeConfig.appType].map((step) => {
+      return {
+        ...step,
+        status: isStepValid(step, gesuchFormular, invalidProps),
+        disabled: isStepDisabled(step, gesuchFormular),
+      };
+    });
   }
 
   /**
    * Returns the total number of steps
    */
-  getTotalSteps(gesuchFormular: SharedModelGesuchFormular | null): number {
-    return this.getAllSteps(gesuchFormular).length;
+  getTotalSteps(): number {
+    return steps[this.compiletimeConfig.appType].length;
   }
 
   /**

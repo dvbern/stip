@@ -66,6 +66,9 @@ public class ApiClient {
     public GesuchsperiodeApiSpec gesuchsperiode() {
         return GesuchsperiodeApiSpec.gesuchsperiode(config.reqSpecSupplier);
     }
+    public PlzApiSpec plz() {
+        return PlzApiSpec.plz(config.reqSpecSupplier);
+    }
     public StammdatenApiSpec stammdaten() {
         return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);
     }

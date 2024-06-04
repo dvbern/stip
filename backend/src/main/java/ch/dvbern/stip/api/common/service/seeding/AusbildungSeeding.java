@@ -24,7 +24,8 @@ public class AusbildungSeeding extends Seeder {
     private final BildungsartRepository bildungsartRepository;
     private final ConfigService configService;
 
-    protected Bildungsart bildungsart;
+    protected Bildungsart bildungsartSekundarstufeZwei;
+    protected Bildungsart bildungsartTertiaer;
 
     @Override
     @Startup
@@ -37,7 +38,7 @@ public class AusbildungSeeding extends Seeder {
         if (ausbildungsstaetteRepository.count() == 0) {
             LOG.info("Seeding Uni and FH");
 
-            createBildungsart();
+            createBildungsarten();
             seedUni();
             seedFh();
         }
@@ -48,14 +49,20 @@ public class AusbildungSeeding extends Seeder {
         return configService.getSeedOnProfile();
     }
 
-    protected void createBildungsart() {
-        final var art = new Bildungsart()
-            .setBeschreibung("Universität")
+    protected void createBildungsarten() {
+        final var artSek = new Bildungsart()
+            .setBeschreibung("Gymnasium")
             .setBfs(-1)
+            .setBildungsstufe(Bildungsstufe.SEKUNDAR_2);
+        final var artTertiaer = new Bildungsart()
+            .setBeschreibung("Universität")
+            .setBfs(-2)
             .setBildungsstufe(Bildungsstufe.TERTIAER);
 
-        bildungsartRepository.persistAndFlush(art);
-        bildungsart = art;
+        bildungsartRepository.persistAndFlush(artSek);
+        bildungsartRepository.persistAndFlush(artTertiaer);
+        bildungsartSekundarstufeZwei = artSek;
+        bildungsartTertiaer = artTertiaer;
     }
 
     protected void seedUni() {
@@ -68,13 +75,13 @@ public class AusbildungSeeding extends Seeder {
         final var uniBeGang1 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-            .setBildungsart(bildungsart)
+            .setBildungsart(bildungsartTertiaer)
             .setAusbildungsstaette(uniBern);
 
         final var uniBeGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-            .setBildungsart(bildungsart)
+            .setBildungsart(bildungsartTertiaer)
             .setAusbildungsstaette(uniBern);
 
         ausbildungsgangRepository.persist(List.of(uniBeGang1, uniBeGang2));
@@ -90,15 +97,21 @@ public class AusbildungSeeding extends Seeder {
         final var bfhGang1 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-            .setBildungsart(bildungsart)
+            .setBildungsart(bildungsartTertiaer)
             .setAusbildungsstaette(bfh);
 
         final var bfhGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-            .setBildungsart(bildungsart)
+            .setBildungsart(bildungsartTertiaer)
             .setAusbildungsstaette(bfh);
 
-        ausbildungsgangRepository.persist(List.of(bfhGang1, bfhGang2));
+        final var bfhGang3 = new Ausbildungsgang()
+            .setBezeichnungDe("Gymnasium")
+            .setBezeichnungFr("Gymnasium")
+            .setBildungsart(bildungsartSekundarstufeZwei)
+            .setAusbildungsstaette(bfh);
+
+        ausbildungsgangRepository.persist(List.of(bfhGang1, bfhGang2, bfhGang3));
     }
 }

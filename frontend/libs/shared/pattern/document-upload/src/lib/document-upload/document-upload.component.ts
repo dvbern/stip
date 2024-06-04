@@ -13,7 +13,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { distinctUntilChanged, skip } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
@@ -64,8 +64,11 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
 
   constructor() {
     // Load the gesuch step validity after the state of uploaded documents changes
-    toObservable(this.store.hasUploadedEntriesSig)
-      .pipe(skip(1), distinctUntilChanged(), takeUntilDestroyed())
+    toObservable(this.store.documentChangedSig)
+      .pipe(
+        filter((x) => x.hasChanged),
+        takeUntilDestroyed(),
+      )
       .subscribe(() => {
         const initialDocuments = this.optionsSig().initialDocuments;
 

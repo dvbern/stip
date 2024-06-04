@@ -68,6 +68,7 @@ export * from './partner';
 export * from './partnerUpdate';
 export * from './personInAusbildung';
 export * from './personInAusbildungUpdate';
+export * from './plz';
 export * from './sachbearbeiterZuordnungStammdaten';
 export * from './sachbearbeiterZuordnungStammdatenList';
 export * from './sprache';

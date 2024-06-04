@@ -9,7 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -23,6 +23,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { combineLatest, map } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
@@ -50,15 +51,14 @@ import {
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
-  maskitoMaxNumber,
   maskitoNumber,
-  maskitoPositiveNumber,
 } from '@dv/shared/util/maskito-util';
 import {
   getDateDifference,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
@@ -122,11 +122,48 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
-  //TODO: KSTIP-619 replace harcoded values with stammdaten
-  maskitoTeritaer = maskitoMaxNumber(3000);
-  maskitoSekundaer = maskitoMaxNumber(2000);
+
+  istSekundarstufeGroesserAlsLimite$ = combineLatest([
+    this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
+    toObservable(this.viewSig),
+  ]).pipe(
+    map(([value, view]) => {
+      if (value == null || view.gesuch == null) {
+        return false;
+      }
+      return +value > view.gesuch.gesuchsperiode.ausbKosten_SekII;
+    }),
+  );
+
+  private sekundarstufeZweiChangedSig = toSignal(
+    this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
+  );
+  sekundarstufeLimitSig = computed(() => {
+    const view = this.viewSig();
+    return view.gesuch?.gesuchsperiode.ausbKosten_SekII;
+  });
+  istSekundarstufeGroesserAlsLimitSig = computed(() => {
+    const value = this.sekundarstufeZweiChangedSig();
+    const limit = this.sekundarstufeLimitSig();
+
+    return checkLimit(value, limit);
+  });
+
+  private teritaerstufeChangedSig = toSignal(
+    this.form.controls.ausbildungskostenTertiaerstufe.valueChanges,
+  );
+  tertiaerstufeLimitSig = computed(() => {
+    const view = this.viewSig();
+    return view.gesuch?.gesuchsperiode.ausbKosten_Tertiaer;
+  });
+  istTeritaerstufeGroesserAlsLimitSig = computed(() => {
+    const value = this.teritaerstufeChangedSig();
+    const limit = this.tertiaerstufeLimitSig();
+
+    return checkLimit(value, limit);
+  });
+
   maskitoNumber = maskitoNumber;
-  maskitoPositiveNumber = maskitoPositiveNumber;
   hiddenFieldsSetSig = signal(new Set());
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
@@ -514,3 +551,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   protected readonly PERSON = PERSON;
 }
+
+const checkLimit = (value?: string | null, limit?: number) => {
+  if (!isDefined(value) || !isDefined(limit)) {
+    return false;
+  }
+
+  return fromFormatedNumber(value) > limit;
+};

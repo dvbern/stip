@@ -92,6 +92,7 @@
                 "onlyDependOnLibsWithTags": [
                   "type:ui",
                   "type:util",
+                  "type:util-data-access",
                   "type:util-fn",
                   "type:model"
                 ],
@@ -100,6 +101,25 @@
               {
                 "sourceTag": "type:util",
                 "onlyDependOnLibsWithTags": [
+                  "type:util",
+                  "type:util-fn",
+                  "type:model"
+                ],
+                "bannedExternalImports": [
+                  "@ngrx/component-store",
+                  "@ngrx/effects",
+                  "@ngrx/entity",
+                  "@ngrx/eslint-plugin",
+                  "@ngrx/router-store",
+                  "@ngrx/signals",
+                  "@ngrx/store",
+                  "@ngrx/store-devtools"
+                ]
+              },
+              {
+                "sourceTag": "type:util-data-access",
+                "onlyDependOnLibsWithTags": [
+                  "type:data-access",
                   "type:util",
                   "type:util-fn",
                   "type:model"

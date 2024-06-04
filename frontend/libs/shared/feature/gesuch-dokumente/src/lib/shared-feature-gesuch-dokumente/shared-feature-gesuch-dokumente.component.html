@@ -11,27 +11,6 @@
             }}
           </caption>
 
-          <!-- status -->
-          <ng-container matColumnDef="status">
-            <th
-              class="status-cell"
-              [title]="'shared.dokumente.table.status' | translate"
-              mat-header-cell
-              *matHeaderCellDef
-            ></th>
-            <td class="status-cell" mat-cell *matCellDef="let dokument">
-              @if (dokument.id) {
-                <span class="badge-round bg-success">
-                  <i class="material-symbols-rounded fs-6">check</i>
-                </span>
-              } @else {
-                <span class="badge-round bg-warning">
-                  <i class="material-symbols-rounded fs-6">exclamation</i>
-                </span>
-              }
-            </td>
-          </ng-container>
-
           <!-- required document -->
           <ng-container matColumnDef="documentName">
             <th mat-header-cell *matHeaderCellDef>
@@ -51,6 +30,61 @@
               <a [routerLink]="['/gesuch', dokument.formStep.route, gesuchViewSig().gesuchId]">
                 {{ dokument.formStep.translationKey | translate }}
               </a>
+            </td>
+          </ng-container>
+
+          <!-- expander -->
+          <!-- TODO: Implement the following methods in 993 -->
+          <ng-container matColumnDef="expander">
+            <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
+            <td class="expander-cell" mat-cell *matCellDef="let dokument"></td>
+          </ng-container>
+
+          <!-- status -->
+          <ng-container matColumnDef="status">
+            <th
+              class="status-cell"
+              [title]="'shared.dokumente.table.status' | translate"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              {{ 'shared.dokumente.table.status' | translate }}
+            </th>
+            <td class="status-cell" mat-cell *matCellDef="let dokument">
+              <div class="d-flex gap-2">
+                @if (dokument.id) {
+                  @if (appType === 'sachbearbeitung-app') {
+                    <button
+                      (click)="acceptDocument(dokument)"
+                      type="button"
+                      class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+                    >
+                      <i class="material-symbols-rounded fs-4">check</i>
+                      <span>
+                        {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                      </span>
+                    </button>
+                    <button
+                      (click)="rejectDocument(dokument)"
+                      type="button"
+                      class="btn table-btn btn-danger d-flex align-items-center gap-1"
+                    >
+                      <i class="material-symbols-rounded fs-4">close</i>
+                      <span>
+                        {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                      </span>
+                    </button>
+                  } @else {
+                    <dv-shared-ui-badge type="info">{{
+                      'shared.dokumente.dokumentStatus.PENDING' | translate
+                    }}</dv-shared-ui-badge>
+                  }
+                } @else {
+                  <dv-shared-ui-badge type="warning">{{
+                    'shared.dokumente.dokumentStatus.MISSING' | translate
+                  }}</dv-shared-ui-badge>
+                }
+              </div>
             </td>
           </ng-container>
 
