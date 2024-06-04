@@ -22,6 +22,7 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Integer nettoerwerbseinkommen;
   private @Valid Integer fahrkosten;
   private @Valid Boolean verdienstRealisiert;
+  private @Valid Integer veranlagungsCode;
   private @Valid Integer alimente;
   private @Valid Integer zulagen;
   private @Valid Integer renten;
@@ -91,6 +92,26 @@ public class EinnahmenKostenDto  implements Serializable {
   @JsonProperty("verdienstRealisiert")
   public void setVerdienstRealisiert(Boolean verdienstRealisiert) {
     this.verdienstRealisiert = verdienstRealisiert;
+  }
+
+  /**
+   * 2-Stelliger Veranlagungscode (0-99)
+   **/
+  public EinnahmenKostenDto veranlagungsCode(Integer veranlagungsCode) {
+    this.veranlagungsCode = veranlagungsCode;
+    return this;
+  }
+
+  
+  @JsonProperty("veranlagungsCode")
+  @NotNull
+  public Integer getVeranlagungsCode() {
+    return veranlagungsCode;
+  }
+
+  @JsonProperty("veranlagungsCode")
+  public void setVeranlagungsCode(Integer veranlagungsCode) {
+    this.veranlagungsCode = veranlagungsCode;
   }
 
   /**
@@ -349,6 +370,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return Objects.equals(this.nettoerwerbseinkommen, einnahmenKosten.nettoerwerbseinkommen) &&
         Objects.equals(this.fahrkosten, einnahmenKosten.fahrkosten) &&
         Objects.equals(this.verdienstRealisiert, einnahmenKosten.verdienstRealisiert) &&
+        Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
         Objects.equals(this.alimente, einnahmenKosten.alimente) &&
         Objects.equals(this.zulagen, einnahmenKosten.zulagen) &&
         Objects.equals(this.renten, einnahmenKosten.renten) &&
@@ -366,7 +388,7 @@ public class EinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, veranlagungsCode, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
   }
 
   @Override
@@ -377,6 +399,7 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    nettoerwerbseinkommen: ").append(toIndentedString(nettoerwerbseinkommen)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
+    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
     sb.append("    zulagen: ").append(toIndentedString(zulagen)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");

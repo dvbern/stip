@@ -42,7 +42,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_VERDIENST_REALISIERT,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WILL_DARLEHEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
-  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE
 })
 @JsonTypeName("EinnahmenKostenUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -94,6 +95,9 @@ public class EinnahmenKostenUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
   private Integer betreuungskostenKinder;
+
+  public static final String JSON_PROPERTY_VERANLAGUNGS_CODE = "veranlagungsCode";
+  private Integer veranlagungsCode;
 
   public EinnahmenKostenUpdateDtoSpec() {
   }
@@ -513,6 +517,32 @@ public class EinnahmenKostenUpdateDtoSpec {
     this.betreuungskostenKinder = betreuungskostenKinder;
   }
 
+
+  public EinnahmenKostenUpdateDtoSpec veranlagungsCode(Integer veranlagungsCode) {
+    
+    this.veranlagungsCode = veranlagungsCode;
+    return this;
+  }
+
+   /**
+   * 2-Stelliger Veranlagungscode (0-99)
+   * @return veranlagungsCode
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getVeranlagungsCode() {
+    return veranlagungsCode;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVeranlagungsCode(Integer veranlagungsCode) {
+    this.veranlagungsCode = veranlagungsCode;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -537,12 +567,13 @@ public class EinnahmenKostenUpdateDtoSpec {
         Objects.equals(this.verdienstRealisiert, einnahmenKostenUpdate.verdienstRealisiert) &&
         Objects.equals(this.willDarlehen, einnahmenKostenUpdate.willDarlehen) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche) &&
-        Objects.equals(this.betreuungskostenKinder, einnahmenKostenUpdate.betreuungskostenKinder);
+        Objects.equals(this.betreuungskostenKinder, einnahmenKostenUpdate.betreuungskostenKinder) &&
+        Objects.equals(this.veranlagungsCode, einnahmenKostenUpdate.veranlagungsCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode);
   }
 
   @Override
@@ -565,6 +596,7 @@ public class EinnahmenKostenUpdateDtoSpec {
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
+    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

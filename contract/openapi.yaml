@@ -2328,6 +2328,7 @@ components:
         - nettoerwerbseinkommen
         - fahrkosten
         - verdienstRealisiert
+        - veranlagungsCode
       type: object
       properties:
         nettoerwerbseinkommen:
@@ -2370,6 +2371,9 @@ components:
           type: integer
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
+          type: integer
+        veranlagungsCode:
+          description: 2-Stelliger Veranlagungscode (0-99)
           type: integer
     EinnahmenKosten:
       type: object
