@@ -89,7 +89,7 @@ export class SharedPatternNgbDatepickerParserFormatter
   }
 
   parse(value: string): NgbDateStruct | null {
-    const [day, month, year] = value.split(/\.| |-|_|\//g);
+    const [day, month, year] = value.split(/[. \-_/]/g);
     if (day !== undefined && month !== undefined && year !== undefined) {
       return value ? { year: +year, month: +month, day: +day } : null;
     } else {

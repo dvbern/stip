@@ -55,5 +55,5 @@ export function findElternteil(
   elternTyp: ElternTyp,
   elterns: ElternUpdate[] | undefined,
 ): ElternUpdate | undefined {
-  return elterns?.find((eltern) => eltern.elternTyp === elternTyp) || undefined;
+  return elterns?.find((eltern) => eltern.elternTyp === elternTyp);
 }

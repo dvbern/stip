@@ -66,7 +66,11 @@ async function generateOpenApi(directory: string, apis: string[]) {
 
   const apisString = apis.join(':');
 
-  //const typesPath = '../../types';
+  /**
+   * Alternatively, use generated types?
+   * @example
+   * const typesPath = '../../types';
+   */
   const typeMap = [
     // [OpenApi-Name/Format, Typescript-Name, Import-Path]
     ['AnyType', 'object', undefined],
@@ -78,16 +82,21 @@ async function generateOpenApi(directory: string, apis: string[]) {
     // ['local-time', 'BackendLocalTime', typesPath],
     // ['local-time-hhmm', 'BackendLocalTimeHHMM', typesPath],
     // ['zoned-date-time', 'BackendZonedDateTime', typesPath],
-    //  ['email', 'BackendEmail', typesPath],
+    // ['email', 'BackendEmail', typesPath],
     // ['rest-includes', 'RestIncludes', typesPath],
     //['entity-id', 'EntityID', typesPath],
   ];
   const typeMappingsArg = typeMap.map((e) => `${e[0]}=${e[1]}`).join(',');
-  const importMappingsArg = typeMap
-    .filter((e) => !!e[2])
-    .map((e) => `${e[1]}=${e[2]}`)
-    .join(',');
 
+  /**
+   * In case we need to import some types from other files
+   * @example
+   * const importMappingsArg = typeMap
+   *   .filter((e) => !!e[2])
+   *   .map((e) => `${e[1]}=${e[2]}`)
+   *   .join(',');
+   * // and add ` --import-mappings ${importMappingsArg}` to the args
+   */
   const cmd =
     'npx openapi-generator-cli generate' +
     ` -i ${yaml}` +
@@ -110,7 +119,6 @@ async function generateOpenApi(directory: string, apis: string[]) {
     ' -p removeEnumValuePrefix=false' +
     ' -p useSingleRequestParameter=true' +
     ` --type-mappings ${typeMappingsArg}` +
-    // + ` --import-mappings ${importMappingsArg}`
     ' -o ' +
     directory;
 
@@ -125,7 +133,7 @@ async function generateOpenApi(directory: string, apis: string[]) {
 
   return new Promise<void>((resolve, reject) => {
     child.on('exit', (code) =>
-      code === 0 ? resolve() : reject('exit code: ' + code),
+      code === 0 ? resolve() : reject(new Error('exit code: ' + code)),
     );
     child.on('error', reject);
   });
