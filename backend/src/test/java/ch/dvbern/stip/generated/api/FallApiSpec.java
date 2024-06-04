@@ -56,14 +56,14 @@ public class FallApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                createFallForGS(),
+                createFallForGs(),
                 getFaelleForSb(),
                 getFallForGs()
         );
     }
 
-    public CreateFallForGSOper createFallForGS() {
-        return new CreateFallForGSOper(createReqSpec());
+    public CreateFallForGsOper createFallForGs() {
+        return new CreateFallForGsOper(createReqSpec());
     }
 
     public GetFaelleForSbOper getFaelleForSb() {
@@ -90,7 +90,7 @@ public class FallApiSpec {
      *
      * return FallDtoSpec
      */
-    public static class CreateFallForGSOper implements Oper {
+    public static class CreateFallForGsOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
         public static final String REQ_URI = "/fall/gs";
@@ -98,7 +98,7 @@ public class FallApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public CreateFallForGSOper(RequestSpecBuilder reqSpec) {
+        public CreateFallForGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -130,7 +130,7 @@ public class FallApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public CreateFallForGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public CreateFallForGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -140,7 +140,7 @@ public class FallApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public CreateFallForGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public CreateFallForGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

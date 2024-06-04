@@ -33,7 +33,7 @@ class FallResourceTest {
     @TestAsGesuchsteller
     @Order(1)
     void testCreateFallForGs() {
-        fallApiSpec.createFallForGS()
+        fallApiSpec.createFallForGs()
                 .execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()

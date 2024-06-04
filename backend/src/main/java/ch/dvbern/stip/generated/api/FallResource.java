@@ -22,7 +22,7 @@ public interface FallResource {
     @POST
     @Path("/gs")
     @Produces({ "application/json", "text/plain" })
-    Response createFallForGS();
+    Response createFallForGs();
 
     @GET
     @Path("/sb")
