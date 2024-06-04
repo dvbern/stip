@@ -1,9 +1,4 @@
-import {
-  APIRequestContext,
-  BrowserContext,
-  test as base,
-  expect,
-} from '@playwright/test';
+import { expect } from '@playwright/test';
 import { addMonths, format } from 'date-fns';
 
 import {
@@ -18,23 +13,19 @@ import {
   Partner,
   PersonInAusbildung,
 } from '@dv/shared/model/gesuch';
-import {
-  BEARER_COOKIE,
-  GS_STORAGE_STATE,
-  expectStepTitleToContainText,
-} from '@dv/shared/util-fn/e2e-util';
+import { expectStepTitleToContainText } from '@dv/shared/util-fn/e2e-util';
 
-import { AusbildungPO, AusbildungValues } from './po/ausbildung.po';
-import { AuszahlungPO } from './po/auszahlung.po';
-import { CockpitPO } from './po/cockpit.po';
-import { EinnahmenKostenPO } from './po/einnahmen-kosten.po';
-import { ElternPO } from './po/eltern.po';
-import { FamilyPO } from './po/familiy.po';
-import { GeschwisterPO } from './po/geschwister.po';
-import { KinderPO } from './po/kinder.po';
-import { LebenslaufPO } from './po/lebenslauf.po';
-import { PartnerPO } from './po/partner.po';
-import { PersonPO } from './po/person.po';
+import { AusbildungPO, AusbildungValues } from '../../po/ausbildung.po';
+import { AuszahlungPO } from '../../po/auszahlung.po';
+import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
+import { ElternPO } from '../../po/eltern.po';
+import { FamilyPO } from '../../po/familiy.po';
+import { GeschwisterPO } from '../../po/geschwister.po';
+import { KinderPO } from '../../po/kinder.po';
+import { LebenslaufPO } from '../../po/lebenslauf.po';
+import { PartnerPO } from '../../po/partner.po';
+import { PersonPO } from '../../po/person.po';
+import { initializeTest } from '../../utils';
 
 const adresse: Adresse = {
   land: 'CH',
@@ -189,61 +180,7 @@ const familienlsituation: Familiensituation = {
   elternVerheiratetZusammen: true,
 };
 
-// https://playwright.dev/docs/api-testing#sending-api-requests-from-ui-tests
-
-let apiContext: APIRequestContext;
-let gesuchsId: string;
-let browserContext: BrowserContext;
-
-const test = base.extend<{ cockpit: CockpitPO }>({
-  cockpit: async ({ page }, use) => {
-    const cockpit = new CockpitPO(page);
-    await cockpit.goToDashBoard();
-
-    // delete if existing gesuch
-    const fallresponse = await page.waitForResponse(
-      '**/api/v1/gesuch/benutzer/*',
-    );
-    const fallbody = await fallresponse.json();
-    gesuchsId = fallbody.length > 0 ? fallbody[0].id : undefined;
-    if (gesuchsId) {
-      await apiContext.delete(`/api/v1/gesuch/${gesuchsId}`);
-      await page.reload();
-    }
-
-    // extract gesuch new gesuch id
-    const requestPromise = page.waitForResponse('**/api/v1/gesuch/*');
-    await cockpit.getGesuchNew().click();
-    const response = await requestPromise;
-    const body = await response.json();
-    gesuchsId = body.id;
-
-    await use(cockpit);
-  },
-});
-
-test.beforeAll(async ({ playwright, baseURL, browser }) => {
-  browserContext = await browser.newContext({
-    storageState: GS_STORAGE_STATE,
-  });
-
-  const cookies = await browserContext.cookies();
-  const bearer = cookies.find((c) => c.name === BEARER_COOKIE);
-
-  apiContext = await playwright.request.newContext({
-    baseURL,
-    extraHTTPHeaders: {
-      Authorization: `Bearer ${bearer?.value}`,
-    },
-  });
-});
-
-test.afterAll(async () => {
-  await apiContext.delete(`/api/v1/gesuch/${gesuchsId}`);
-
-  await apiContext.dispose();
-  await browserContext.close();
-});
+const { test } = initializeTest();
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
