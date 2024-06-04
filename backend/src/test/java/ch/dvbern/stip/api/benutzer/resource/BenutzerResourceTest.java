@@ -7,7 +7,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.generator.api.model.benutzer.BenutzerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -78,34 +77,6 @@ class BenutzerResourceTest {
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
         assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(AHV_NUMMER_VALID);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(3)
-    void test_update_me() {
-
-        final var updateDto = BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpec;
-        updateDto.setBenutzereinstellungen(me.getBenutzereinstellungen());
-
-        api.updateCurrentBenutzer()
-            .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
-
-        final var updatedBenutzer = api.prepareCurrentBenutzer()
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .as(BenutzerDtoSpec.class);
-
-        assertThat(updatedBenutzer.getVorname()).isEqualTo(updateDto.getVorname());
-        assertThat(updatedBenutzer.getNachname()).isEqualTo(updateDto.getNachname());
-        assertThat(updatedBenutzer.getSozialversicherungsnummer()).isEqualTo(updateDto.getSozialversicherungsnummer());
     }
 
     @Test

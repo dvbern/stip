@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWork
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
-import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -67,11 +66,5 @@ public class BenutzerResourceImpl implements BenutzerResource {
             benutzerService.findSachbearbeiterZuordnungStammdatenWithBenutzerId(benutzerId).orElseThrow(
                 NotFoundException::new);
         return Response.ok(sachbearbeiterZuordnungStammdatenDto).build();
-    }
-
-    @Override
-    public Response updateCurrentBenutzer(BenutzerUpdateDto benutzerUpdateDto) {
-        benutzerService.updateCurrentBenutzer(benutzerUpdateDto);
-        return Response.accepted().build();
     }
 }

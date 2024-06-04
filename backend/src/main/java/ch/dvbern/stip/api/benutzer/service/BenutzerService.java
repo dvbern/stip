@@ -15,7 +15,6 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
-import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -112,12 +111,6 @@ public class BenutzerService {
                 return dto;
             })
             .toList();
-    }
-
-    @Transactional
-    public void updateCurrentBenutzer(BenutzerUpdateDto benutzerUpdateDto) {
-        final var benutzer = getCurrentBenutzer();
-        benutzerMapper.partialUpdate(benutzerUpdateDto, benutzer);
     }
 
     public Optional<SachbearbeiterZuordnungStammdatenDto> findSachbearbeiterZuordnungStammdatenWithBenutzerId(UUID id) {

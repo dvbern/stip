@@ -1001,26 +1001,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: prepareCurrentBenutzer
       summary: Get or create and update current benutzer
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BenutzerUpdate'
-        required: true
-      tags:
-        - Benutzer
-      responses:
-        '202':
-          description: Updated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateCurrentBenutzer
-      summary: Update the logged-in Benutzer
   '/ausbildungsgang/{ausbildungsgangId}':
     parameters:
       - name: ausbildungsgangId

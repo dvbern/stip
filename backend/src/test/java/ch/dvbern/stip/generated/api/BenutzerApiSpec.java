@@ -14,7 +14,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
-import ch.dvbern.stip.generated.dto.BenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDtoSpec;
 import java.util.UUID;
@@ -65,8 +64,7 @@ public class BenutzerApiSpec {
                 createOrUpdateSachbearbeiterStammdatenList(),
                 getSachbearbeitende(),
                 getSachbearbeiterStammdaten(),
-                prepareCurrentBenutzer(),
-                updateCurrentBenutzer()
+                prepareCurrentBenutzer()
         );
     }
 
@@ -88,10 +86,6 @@ public class BenutzerApiSpec {
 
     public PrepareCurrentBenutzerOper prepareCurrentBenutzer() {
         return new PrepareCurrentBenutzerOper(createReqSpec());
-    }
-
-    public UpdateCurrentBenutzerOper updateCurrentBenutzer() {
-        return new UpdateCurrentBenutzerOper(createReqSpec());
     }
 
     /**
@@ -429,67 +423,6 @@ public class BenutzerApiSpec {
          * @return operation
          */
         public PrepareCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Update the logged-in Benutzer
-     * 
-     *
-     * @see #body  (required)
-     */
-    public static class UpdateCurrentBenutzerOper implements Oper {
-
-        public static final Method REQ_METHOD = PUT;
-        public static final String REQ_URI = "/benutzer/prepare/me";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public UpdateCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * PUT /benutzer/prepare/me
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-         /**
-         * @param benutzerUpdateDtoSpec (BenutzerUpdateDtoSpec)  (required)
-         * @return operation
-         */
-        public UpdateCurrentBenutzerOper body(BenutzerUpdateDtoSpec benutzerUpdateDtoSpec) {
-            reqSpec.setBody(benutzerUpdateDtoSpec);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public UpdateCurrentBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public UpdateCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

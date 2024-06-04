@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BenutzerDto;
-import ch.dvbern.stip.generated.dto.BenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import java.util.UUID;
@@ -50,10 +49,4 @@ public interface BenutzerResource {
     @Path("/prepare/me")
     @Produces({ "application/json", "text/plain" })
     Response prepareCurrentBenutzer();
-
-    @PUT
-    @Path("/prepare/me")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    Response updateCurrentBenutzer(@Valid @NotNull BenutzerUpdateDto benutzerUpdateDto);
 }
