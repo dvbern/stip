@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
+import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
@@ -26,6 +27,7 @@ import {
   TableDocument,
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
@@ -83,6 +85,7 @@ function getFormStep(
     MatTableModule,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
+    SharedUiBadgeComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -90,8 +93,15 @@ function getFormStep(
 })
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
+  public appType = inject(SharedModelCompiletimeConfig).appType;
 
-  displayedColumns = ['status', 'documentName', 'formStep', 'actions'];
+  displayedColumns = [
+    'expander',
+    'documentName',
+    'formStep',
+    'status',
+    'actions',
+  ];
 
   dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -178,6 +188,16 @@ export class SharedFeatureGesuchDokumenteComponent {
         );
       });
     this.store.dispatch(SharedEventGesuchDokumente.init());
+  }
+
+  // TODO: Implement the following methods in 993
+  acceptDocument(document: TableDocument) {
+    alert(`Accept ${document.dokumentTyp} kommt in 993`);
+  }
+
+  // TODO: Implement the following methods in 993
+  rejectDocument(document: TableDocument) {
+    alert(`reject ${document.dokumentTyp} kommt in 993`);
   }
 
   handleContinue() {

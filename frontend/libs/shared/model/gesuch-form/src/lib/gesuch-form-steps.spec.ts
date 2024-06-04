@@ -88,14 +88,22 @@ describe('GesuchFormSteps', () => {
   it.each(validationCases)(
     'route %s should be valid if %s is set',
     (step, field) => {
-      expect(isStepValid(step, { [field]: {} }, { errors: [] })).toBe('VALID');
+      expect(
+        isStepValid(step, { [field]: {} }, { errors: [], hasDocuments: null }),
+      ).toBe('VALID');
     },
   );
 
   it.each(validationCases)(
     'route %s validity should be undefined if %s is not set',
     (step, field) => {
-      expect(isStepValid(step, { [field]: null }, {})).toBe(undefined);
+      expect(
+        isStepValid(
+          step,
+          { [field]: null },
+          { errors: [], hasDocuments: null },
+        ),
+      ).toBe(undefined);
     },
   );
 });

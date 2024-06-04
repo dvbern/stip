@@ -84,6 +84,11 @@ public class TestUtil {
         return (int) faker.number().randomNumber();
     }
 
+    public static int getRandomInt(final int lower, final int upper) {
+        final var faker = new Faker(new Locale("de-CH"), new RandomService());
+        return (int) faker.number().numberBetween(lower, upper);
+    }
+
     public static BigDecimal getRandomBigDecimal() {
         return getRandomBigDecimal(100, 10_000);
     }

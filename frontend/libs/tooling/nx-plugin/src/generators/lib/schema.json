@@ -38,6 +38,10 @@
             "label": "Util - Angular based util (service), eg validator, mapper, or logger"
           },
           {
+            "value": "util-data-access",
+            "label": "Util - Angular based util (service), which also has access to data-access for semi-smart UI components"
+          },
+          {
             "value": "util-fn",
             "label": "Util Function - TypeScript based util (function), eg data transformation or calculation"
           },

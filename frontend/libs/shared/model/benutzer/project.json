@@ -1,0 +1,9 @@
+{
+  "name": "shared-model-benutzer",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/model/benutzer/src",
+  "projectType": "library",
+  "tags": ["type:model", "scope:shared"],
+  "// targets": "to see all targets run: nx show project shared-model-benutzer --web",
+  "targets": {}
+}

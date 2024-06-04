@@ -162,23 +162,19 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/fall/{fallId}':
+  '/fall/sb':
     get:
       tags:
         - Fall
-      parameters:
-        - name: fallId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Fall'
-          description: OK
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fall'
+          description: Return der zugewiesenen Faelle für den SB
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -187,14 +183,46 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getFall
-      summary: Returniert der Fall mit der gegebene Id.
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      operationId: getFaelleForSb
+      summary: Get alle Faelle für den SB
+  '/fall/gs':
+    get:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+          description: Return des Falls des SB
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallForGs
+      summary: Get Fall für den GS
+    post:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+          description: Return des neu erstellten Falls für den GS
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createFallForGs
   /config/deployment:
     get:
       tags:
@@ -650,46 +678,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
-  '/fall/benutzer/{benutzerId}':
-    get:
-      tags:
-        - Fall
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Fall'
-          description: Return der Fall des Benutzende
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getFallForBenutzer
-      summary: Get alle Fälle für den gegebene Benutzende
-    post:
-      tags:
-        - Fall
-      responses:
-        '201':
-          description: New Fall created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createFall
-    parameters:
-      - name: benutzerId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/fall/{fallId}':
     get:
       tags:
@@ -878,6 +866,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
     parameters:
       - name: gesuchId
         schema:
@@ -1279,6 +1268,25 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBildungsarten
       summary: Gets all Bildgunsarten
+  /plz:
+    get:
+      tags:
+        - Plz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/plz'
+          description: Returns all plzs
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getPlz
+      summary: Gets all PLZs
 components:
   schemas:
     Anrede:
@@ -2218,6 +2226,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ValidationWarning'
+        hasDocuments:
+          description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
+          type: boolean
     ValidationMessage:
       description: ''
       required:
@@ -2476,6 +2487,8 @@ components:
         - aufschaltterminStart
         - gueltigkeitStatus
         - gesuchsjahr
+        - ausbKosten_SekII
+        - ausbKosten_Tertiaer
       type: object
       properties:
         id:
@@ -2500,6 +2513,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchsjahr:
           $ref: '#/components/schemas/Gesuchsjahr'
+        ausbKosten_SekII:
+          description: ''
+          type: integer
+        ausbKosten_Tertiaer:
+          description: ''
+          type: integer
     GesuchsperiodeCreate:
       type: object
       allOf:
@@ -2817,6 +2836,23 @@ components:
         digitaleKommunikation:
           description: ''
           type: boolean
+    plz:
+      description: "PLZ und ort für Type ahead funktionalitaet"
+      type: object
+      required:
+        - plz
+        - ort
+        - kantonskuerzel
+      properties:
+        plz:
+          description: ''
+          type: string
+        ort:
+          description: ''
+          type: string
+        kantonskuerzel:
+          description: ''
+          type: string
   responses:
     Unauthorized:
       content:

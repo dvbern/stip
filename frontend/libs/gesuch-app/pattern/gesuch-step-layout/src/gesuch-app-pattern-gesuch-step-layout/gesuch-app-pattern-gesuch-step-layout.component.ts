@@ -68,7 +68,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   stepsSig = computed(() => {
     const { cachedGesuchFormular, invalidFormularProps } =
       this.validationViewSig();
-    return this.stepManager.getAllSteps(
+    return this.stepManager.getAllStepsWithStatus(
       cachedGesuchFormular,
       invalidFormularProps.validations,
     );
@@ -77,11 +77,11 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   constructor() {
     getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
-      .subscribe((gesuchId) =>
+      .subscribe((gesuchId) => {
         this.store.dispatch(
           SharedDataAccessGesuchEvents.gesuchValidateSteps({ id: gesuchId }),
-        ),
-      );
+        );
+      });
   }
 
   handleLanguageChangeHeader(language: Language) {

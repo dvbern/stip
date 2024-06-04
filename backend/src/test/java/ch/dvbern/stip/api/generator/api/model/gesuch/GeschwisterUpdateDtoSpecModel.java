@@ -17,7 +17,7 @@ public final class GeschwisterUpdateDtoSpecModel {
             model.setNachname(faker.name().lastName());
             model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1990, 1, 1), LocalDate.of(2002, 1, 1)));
             model.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
-            model.setAusbildungssituation(TestUtil.getRandomElementFromArray(AusbildungssituationDtoSpec.values()));
+            model.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
             model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
             model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
         }, 1);

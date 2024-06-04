@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +17,7 @@ describe('SharedUiFormAddressComponent', () => {
         SharedUiFormAddressComponent,
         TranslateModule.forRoot(),
       ],
+      providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiFormAddressComponent);

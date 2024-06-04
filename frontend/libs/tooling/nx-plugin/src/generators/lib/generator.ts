@@ -23,6 +23,7 @@ import { patternTypeFactory } from './types/pattern';
 import { dataAccessTypeFactory } from './types/data-access';
 import { eventTypeFactory } from './types/event';
 import { uiTypeFactory } from './types/ui';
+import { utilDataAccessTypeFactory } from './types/util-data-access';
 import { utilTypeFactory } from './types/util';
 import { utilFnTypeFactory } from './types/util-fn';
 import { modelTypeFactory } from './types/model';
@@ -34,6 +35,7 @@ const LIB_TYPE_GENERATOR_MAP: LibTypeGeneratorMap = {
   event: eventTypeFactory,
   ui: uiTypeFactory,
   util: utilTypeFactory,
+  'util-data-access': utilDataAccessTypeFactory,
   'util-fn': utilFnTypeFactory,
   model: modelTypeFactory,
 };

@@ -11,7 +11,9 @@ export interface SharedModelGesuch extends Gesuch {
 export type SharedModelGesuchFormular = GesuchFormular;
 export type SharedModelGesuchFormularUpdate = GesuchFormularUpdate;
 
-export type SharedModelGesuchFormularProps = keyof SharedModelGesuchFormular;
+export type SharedModelGesuchFormularProps =
+  | keyof SharedModelGesuchFormular
+  | 'dokuments';
 
 // TODO extract to env or generate with OpenAPI?
 export const SHARED_MODEL_GESUCH_RESOURCE = `/gesuch`;

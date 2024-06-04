@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class ValidationReportDto  implements Serializable {
   private @Valid List<ValidationErrorDto> validationErrors = new ArrayList<>();
   private @Valid List<ValidationWarningDto> validationWarnings = new ArrayList<>();
+  private @Valid Boolean hasDocuments;
 
   /**
    * 
@@ -101,6 +102,25 @@ public class ValidationReportDto  implements Serializable {
 
     return this;
   }
+  /**
+   * Whether or not the Gesuch validated has one or more GesuchDokument attached
+   **/
+  public ValidationReportDto hasDocuments(Boolean hasDocuments) {
+    this.hasDocuments = hasDocuments;
+    return this;
+  }
+
+  
+  @JsonProperty("hasDocuments")
+  public Boolean getHasDocuments() {
+    return hasDocuments;
+  }
+
+  @JsonProperty("hasDocuments")
+  public void setHasDocuments(Boolean hasDocuments) {
+    this.hasDocuments = hasDocuments;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -112,12 +132,13 @@ public class ValidationReportDto  implements Serializable {
     }
     ValidationReportDto validationReport = (ValidationReportDto) o;
     return Objects.equals(this.validationErrors, validationReport.validationErrors) &&
-        Objects.equals(this.validationWarnings, validationReport.validationWarnings);
+        Objects.equals(this.validationWarnings, validationReport.validationWarnings) &&
+        Objects.equals(this.hasDocuments, validationReport.hasDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validationErrors, validationWarnings);
+    return Objects.hash(validationErrors, validationWarnings, hasDocuments);
   }
 
   @Override
@@ -127,6 +148,7 @@ public class ValidationReportDto  implements Serializable {
     
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("    validationWarnings: ").append(toIndentedString(validationWarnings)).append("\n");
+    sb.append("    hasDocuments: ").append(toIndentedString(hasDocuments)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -19,6 +20,7 @@ async function setup() {
       NoopAnimationsModule,
     ],
     providers: [
+      provideHttpClient(),
       provideMockStore({
         initialState: {
           language: {

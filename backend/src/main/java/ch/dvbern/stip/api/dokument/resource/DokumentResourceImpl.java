@@ -35,9 +35,6 @@ import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.core.async.AsyncRequestBody;
-import software.amazon.awssdk.core.async.AsyncResponseTransformer;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -49,7 +46,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 public class DokumentResourceImpl implements DokumentResource {
     private final GesuchDokumentService gesuchDokumentService;
     private final ConfigService configService;
-    private final S3AsyncClient s3;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
 
@@ -73,15 +69,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
         String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         return Uni.createFrom()
-            .completionStage(() ->
-                s3.putObject(
-                    gesuchDokumentService.buildPutRequest(
-                        fileUpload,
-                        configService.getBucketName(),
-                        objectId
-                    ),
-                    AsyncRequestBody.fromFile(fileUpload.uploadedFile())
-                ))
+            .completionStage(() -> gesuchDokumentService.getCreateDokumentFuture(objectId, fileUpload))
             .onItem()
             .invoke(() -> gesuchDokumentService.uploadDokument(
                 gesuchId,
@@ -115,13 +103,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
         final var dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         return RestMulti.fromUniResponse(
-            Uni.createFrom().completionStage(() -> s3.getObject(
-                gesuchDokumentService.buildGetRequest(
-                    configService.getBucketName(),
-                    dokumentDto.getObjectId()
-                ),
-                AsyncResponseTransformer.toPublisher()
-            )),
+            Uni.createFrom().completionStage(() -> gesuchDokumentService.getGetDokumentFuture(dokumentDto.getObjectId())),
             response -> Multi.createFrom()
                 .safePublisher(AdaptersToFlow.publisher(response))
                 .map(DokumentResourceImpl::toBuffer),
@@ -135,6 +117,7 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @RolesAllowed(GESUCH_READ)
+    @Override
     public Response getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
@@ -155,9 +138,16 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_DELETE)
     @Override
-    public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
-        gesuchDokumentService.deleteDokument(dokumentId);
-        return Response.noContent().build();
+    @Blocking
+    public Uni<Response> deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokumentId);
+
+        return Uni.createFrom().completionStage(() -> gesuchDokumentService.getDeleteDokumentFuture(dokumentObjectId))
+            .onItem()
+            .ignore()
+            .andSwitchTo(Uni.createFrom().item(Response.noContent().build()))
+            .onFailure()
+            .recoverWithItem(Response.serverError().build());
     }
 
     private static Buffer toBuffer(ByteBuffer bytebuffer) {

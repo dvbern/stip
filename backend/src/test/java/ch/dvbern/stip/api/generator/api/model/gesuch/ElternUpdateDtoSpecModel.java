@@ -22,9 +22,9 @@ public class ElternUpdateDtoSpecModel {
             model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");
             model.setIdentischerZivilrechtlicherWohnsitzPLZ("3000");
             model.setTelefonnummer(faker.phoneNumber().cellPhone());
-            model.setSozialhilfebeitraegeAusbezahlt(faker.bool().bool());
-            model.setAusweisbFluechtling(faker.bool().bool());
-            model.setErgaenzungsleistungAusbezahlt(faker.bool().bool());
+            model.setSozialhilfebeitraegeAusbezahlt(true);
+            model.setAusweisbFluechtling(false);
+            model.setErgaenzungsleistungAusbezahlt(true);
             model.setWohnkosten(100);
         }, amount);
     }

@@ -40,7 +40,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSJAHR
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER
 })
 @JsonTypeName("Gesuchsperiode")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -74,6 +76,12 @@ public class GesuchsperiodeDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCHSJAHR = "gesuchsjahr";
   private GesuchsjahrDtoSpec gesuchsjahr;
+
+  public static final String JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I = "ausbKosten_SekII";
+  private Integer ausbKostenSekII;
+
+  public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
+  private Integer ausbKostenTertiaer;
 
   public GesuchsperiodeDtoSpec() {
   }
@@ -337,6 +345,58 @@ public class GesuchsperiodeDtoSpec {
     this.gesuchsjahr = gesuchsjahr;
   }
 
+
+  public GesuchsperiodeDtoSpec ausbKostenSekII(Integer ausbKostenSekII) {
+    
+    this.ausbKostenSekII = ausbKostenSekII;
+    return this;
+  }
+
+   /**
+   * 
+   * @return ausbKostenSekII
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAusbKostenSekII() {
+    return ausbKostenSekII;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbKostenSekII(Integer ausbKostenSekII) {
+    this.ausbKostenSekII = ausbKostenSekII;
+  }
+
+
+  public GesuchsperiodeDtoSpec ausbKostenTertiaer(Integer ausbKostenTertiaer) {
+    
+    this.ausbKostenTertiaer = ausbKostenTertiaer;
+    return this;
+  }
+
+   /**
+   * 
+   * @return ausbKostenTertiaer
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAusbKostenTertiaer() {
+    return ausbKostenTertiaer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
+    this.ausbKostenTertiaer = ausbKostenTertiaer;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -355,12 +415,14 @@ public class GesuchsperiodeDtoSpec {
         Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
         Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert) &&
-        Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr);
+        Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
+        Objects.equals(this.ausbKostenSekII, gesuchsperiode.ausbKostenSekII) &&
+        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, gesuchsjahr);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer);
   }
 
   @Override
@@ -377,6 +439,8 @@ public class GesuchsperiodeDtoSpec {
     sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
+    sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
+    sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
     sb.append("}");
     return sb.toString();
   }

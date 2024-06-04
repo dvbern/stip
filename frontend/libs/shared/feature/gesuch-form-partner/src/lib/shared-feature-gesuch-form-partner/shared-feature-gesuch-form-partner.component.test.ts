@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
@@ -40,6 +41,7 @@ async function setup() {
         },
       }),
       provideMaterialDefaultOptions(),
+      provideHttpClient(),
     ],
   });
 }

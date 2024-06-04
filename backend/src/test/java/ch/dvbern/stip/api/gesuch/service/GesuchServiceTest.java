@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -37,13 +39,16 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
@@ -57,7 +62,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -83,6 +88,14 @@ class GesuchServiceTest {
     GesuchRepository gesuchRepository;
 
     static final String TENANT_ID = "bern";
+
+    @BeforeAll
+    void setup() {
+        final var requiredDokumentServiceMock = Mockito.mock(RequiredDokumentService.class);
+        Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
+        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuch(any())).thenReturn(List.of());
+        QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
+    }
 
     @Test
     @TestAsGesuchsteller
@@ -821,12 +834,12 @@ class GesuchServiceTest {
         gesuchTranche.setGesuch(gesuch);
         gesuchFormular.setTranche(gesuchTranche);
         var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors(), is(empty()));
+        assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));
 
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
         reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         var violationCount = reportDto.getValidationErrors().size();
-        assertThat(reportDto.getValidationErrors(), is(not(empty())));
+        assertThat(reportDto.getValidationErrors(), Matchers.is(not(empty())));
 
         gesuchFormular.setFamiliensituation(
             new Familiensituation()
@@ -834,7 +847,7 @@ class GesuchServiceTest {
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
         reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors().size(), is(greaterThan(violationCount)));
+        assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
