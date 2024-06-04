@@ -120,6 +120,9 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.person.vermoegenVorjahr.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_BETREUUNGSKOSTEN_KINDER_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.betreuungskostenKinder.required.message}";
+    public static final String VALIDATION_EINNAHMEN_KOSTEN_VERANLAGUNGSCODE_REQUIRED_MESSAGE = "jakarta.validation.constraints.einnahmen.kosten.veranlagungscode.required.message";
+    public static final String VALIDATION_EINNAHMEN_KOSTEN_VERANLAGUNGSCODE_INVALID_MESSAGE = "jakarta.validation.constraints.einnahmen.kosten.veranlagungscode.invalid.message";
+
     public static final String VALIDATION_DOCUMENTS_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.gesuchFormular.documents.required.message}";
     public static final String VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE =

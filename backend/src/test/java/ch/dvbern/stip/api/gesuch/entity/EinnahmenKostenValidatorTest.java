@@ -108,4 +108,19 @@ class EinnahmenKostenValidatorTest {
         gesuch.getEinnahmenKosten().setWohnkosten(1);
         assertThat(validator.isValid(gesuch, null)).isTrue();
     }
+
+    @Test
+    void veranlagungsCodeRequiredValidationTest(){
+        final var validator = new EinnahmeKostenVeranlagungsCodeRequiredConstraintValidator();
+        final var gesuch = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setVeranlagungscode(null));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+        gesuch.getEinnahmenKosten().setVeranlagungscode(0);
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.getEinnahmenKosten().setVeranlagungscode(99);
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.getEinnahmenKosten().setVeranlagungscode(100);
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+
+
+    }
 }
