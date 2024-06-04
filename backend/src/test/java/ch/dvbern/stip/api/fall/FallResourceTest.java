@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.fall;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -30,7 +30,7 @@ class FallResourceTest {
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsGesuchsteller2
     @Order(1)
     void testCreateFallForGs() {
         fallApiSpec.createFallForGs()
@@ -41,7 +41,7 @@ class FallResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsGesuchsteller2
     @Order(2)
     void testGetFallForGs() {
         var fall = fallApiSpec.getFallForGs()

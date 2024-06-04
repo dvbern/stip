@@ -16,11 +16,12 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -34,6 +35,7 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -54,20 +56,38 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Slf4j
 class GesuchResourceTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
+	private UUID fallId;
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
+    void createFall() {
+        var fall = fallApiSpec.createFallForGs()
+				.execute(ResponseBody::prettyPeek)
+				.then()
+				.assertThat()
+				.statusCode(Status.OK.getStatusCode())
+				.extract()
+                .body()
+                .as(FallDtoSpec.class);
+
+        fallId = fall.getId();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
     void testCreateEndpoint() {
         var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
+        gesuchDTO.setFallId(fallId);
         gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
         var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
             .then();
@@ -373,7 +393,7 @@ class GesuchResourceTest {
     @Order(19)
     void test_get_gesuch_for_fall() {
         var gesuche = gesuchApiSpec.getGesucheForFall()
-            .fallIdPath(TestConstants.FALL_TEST_ID)
+            .fallIdPath(fallId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
@@ -476,7 +496,7 @@ class GesuchResourceTest {
 
         var gesuchOpt = findGesuchWithId(gesuche, gesuchId);
         assertThat(gesuchOpt.isPresent(), is(true));
-        assertThat(gesuchOpt.get().getFall().getId(), is(UUID.fromString(TestConstants.FALL_TEST_ID)));
+        assertThat(gesuchOpt.get().getFall().getId(), is(fallId));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
         assertThat(gesuchOpt.get().getGesuchStatus().toString(), gesuchOpt.get().getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
