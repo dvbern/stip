@@ -11,7 +11,7 @@
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Centre de formation",
   "sachbearbeitung-app.admin.option.buchstabenZuteilung": "Attribution des lettres",
   "sachbearbeitung-app.admin.option.gesuchsperioden": "Périodes de demande",
-  "sachbearbeitung-app.admin.option.benuzterverwaltung": "Gestion des utilisateurs",
+  "sachbearbeitung-app.admin.option.benutzerverwaltung": "Gestion des utilisateurs",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Gestionnaire",
