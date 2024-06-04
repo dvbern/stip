@@ -21,6 +21,7 @@ import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -40,12 +41,22 @@ public class BenutzerService {
     private final SecurityIdentity identity;
 
     @Transactional
-    public BenutzerDto getCurrentBenutzer() {
-        return benutzerMapper.toDto(getOrCreateCurrentBenutzer());
+    public Benutzer getCurrentBenutzer() {
+        final var keycloakId = jsonWebToken.getSubject();
+
+        if (keycloakId == null) {
+            throw AppFailureMessage.missingSubject().create();
+        }
+
+        Benutzer benutzer = benutzerRepository
+                .findByKeycloakId(keycloakId)
+                .orElseThrow(() -> new NotFoundException("Benutzer not found"));
+
+        return benutzer;
     }
 
     @Transactional
-    public Benutzer getOrCreateCurrentBenutzer() {
+    public BenutzerDto getOrCreateAndUpdateCurrentBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
 
         if (keycloakId == null) {
@@ -58,7 +69,7 @@ public class BenutzerService {
         benutzer = updateBenutzerTypFromJWT(benutzer);
         benutzerRepository.persistAndFlush(benutzer);
 
-        return benutzer;
+        return benutzerMapper.toDto(benutzer);
     }
 
     @Transactional
@@ -80,15 +91,6 @@ public class BenutzerService {
 
         benutzerRepository.persistAndFlush(newBenutzer);
         return newBenutzer;
-    }
-
-    public Optional<Benutzer> getBenutzer(final UUID id) {
-        return benutzerRepository.findByIdOptional(id);
-    }
-
-    @Transactional
-    public List<BenutzerDto> getAllBenutzer() {
-        return benutzerRepository.findAll().stream().map(benutzerMapper::toDto).toList();
     }
 
     public List<BenutzerDto> getAllSachbearbeitendeMitZuordnungStammdaten() {
@@ -114,7 +116,7 @@ public class BenutzerService {
 
     @Transactional
     public void updateCurrentBenutzer(BenutzerUpdateDto benutzerUpdateDto) {
-        final var benutzer = getOrCreateCurrentBenutzer();
+        final var benutzer = getCurrentBenutzer();
         benutzerMapper.partialUpdate(benutzerUpdateDto, benutzer);
     }
 
@@ -149,6 +151,6 @@ public class BenutzerService {
     }
 
     public String getCurrentBenutzername() {
-        return getOrCreateCurrentBenutzer().getFullName();
+        return getCurrentBenutzer().getFullName();
     }
 }

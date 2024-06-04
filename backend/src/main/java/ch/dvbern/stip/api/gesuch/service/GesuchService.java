@@ -150,13 +150,13 @@ public class GesuchService {
 
     @Transactional
     public List<GesuchDto> findGesucheSb() {
-        final var benutzer = benutzerService.getOrCreateCurrentBenutzer();
+        final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
-        final var benutzer = benutzerService.getOrCreateCurrentBenutzer();
+        final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
@@ -349,7 +349,7 @@ public class GesuchService {
     }
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-        final var currentBenutzer = benutzerService.getOrCreateCurrentBenutzer();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
             throw new IllegalStateException(
                 "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()

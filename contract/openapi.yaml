@@ -980,7 +980,7 @@ paths:
       operationId: getCurrentTenant
       summary: Current Tenant
       description: '`Tenant` based on the current Request'
-  /benutzer/me:
+  /benutzer/prepare/me:
     get:
       tags:
         - Benutzer
@@ -999,8 +999,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getCurrentBenutzer
-      summary: Get the logged-in Benutzer
+      operationId: prepareCurrentBenutzer
+      summary: Get or create and update current benutzer
     put:
       requestBody:
         content:

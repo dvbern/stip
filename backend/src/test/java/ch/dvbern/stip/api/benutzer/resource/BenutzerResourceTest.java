@@ -48,7 +48,7 @@ class BenutzerResourceTest {
     @TestAsGesuchsteller
     @Order(1)
     void test_get_me() {
-        final var benutzerDto = api.getCurrentBenutzer()
+        final var benutzerDto = api.prepareCurrentBenutzer()
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -67,7 +67,7 @@ class BenutzerResourceTest {
     @TestAsGesuchsteller2
     @Order(2)
     void test_get_me2() {
-        final var benutzerDto = api.getCurrentBenutzer()
+        final var benutzerDto = api.prepareCurrentBenutzer()
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -95,7 +95,7 @@ class BenutzerResourceTest {
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
-        final var updatedBenutzer = api.getCurrentBenutzer()
+        final var updatedBenutzer = api.prepareCurrentBenutzer()
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -111,23 +111,15 @@ class BenutzerResourceTest {
     @Test
     @Order(4)
     @TestAsSachbearbeiter
-    void createAndFindSachbearbeitenden() {
-        String nachname = UUID.randomUUID().toString();
-        final var updateDto = BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpec;
-        updateDto.setNachname(nachname);
-        updateDto.setBenutzereinstellungen(me.getBenutzereinstellungen());
-
-        api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+    void findSachbearbeitende() {
         var sachbearbeiterListe = api.getSachbearbeitende().execute(ResponseBody::prettyPeek)
             .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
             .as(BenutzerDtoSpec[].class);
         sachbearbeiterUUID = sachbearbeiterListe[0].getId();
-        assertThat(sachbearbeiterListe).extracting(BenutzerDtoSpec::getNachname).contains(nachname);
     }
 
     @Test

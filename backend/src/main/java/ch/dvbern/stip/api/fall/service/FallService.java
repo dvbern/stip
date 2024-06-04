@@ -23,7 +23,7 @@ public class FallService {
 
     @Transactional
     public FallDto createFallForGs() {
-        final var benutzer = benutzerService.getOrCreateCurrentBenutzer();
+        final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = new Fall();
         fall.setGesuchsteller(benutzer);
         fallRepository.persistAndFlush(fall);
@@ -31,12 +31,12 @@ public class FallService {
     }
 
     public List<FallDto> findFaelleForSb() {
-        final var sachbearbeiterId = benutzerService.getOrCreateCurrentBenutzer().getId();
+        final var sachbearbeiterId = benutzerService.getCurrentBenutzer().getId();
         return fallRepository.findFaelleForSb(sachbearbeiterId).map(fallMapper::toDto).toList();
     }
 
     public FallDto findFallForGs() {
-        final var gesuchstellerId = benutzerService.getOrCreateCurrentBenutzer().getId();
+        final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
         return fallMapper.toDto(fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow(NotFoundException::new));
     }
 }

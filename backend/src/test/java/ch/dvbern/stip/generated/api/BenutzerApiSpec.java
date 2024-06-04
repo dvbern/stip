@@ -63,9 +63,9 @@ public class BenutzerApiSpec {
         return Arrays.asList(
                 createOrUpdateSachbearbeiterStammdaten(),
                 createOrUpdateSachbearbeiterStammdatenList(),
-                getCurrentBenutzer(),
                 getSachbearbeitende(),
                 getSachbearbeiterStammdaten(),
+                prepareCurrentBenutzer(),
                 updateCurrentBenutzer()
         );
     }
@@ -78,16 +78,16 @@ public class BenutzerApiSpec {
         return new CreateOrUpdateSachbearbeiterStammdatenListOper(createReqSpec());
     }
 
-    public GetCurrentBenutzerOper getCurrentBenutzer() {
-        return new GetCurrentBenutzerOper(createReqSpec());
-    }
-
     public GetSachbearbeitendeOper getSachbearbeitende() {
         return new GetSachbearbeitendeOper(createReqSpec());
     }
 
     public GetSachbearbeiterStammdatenOper getSachbearbeiterStammdaten() {
         return new GetSachbearbeiterStammdatenOper(createReqSpec());
+    }
+
+    public PrepareCurrentBenutzerOper prepareCurrentBenutzer() {
+        return new PrepareCurrentBenutzerOper(createReqSpec());
     }
 
     public UpdateCurrentBenutzerOper updateCurrentBenutzer() {
@@ -239,67 +239,6 @@ public class BenutzerApiSpec {
         }
     }
     /**
-     * Get the logged-in Benutzer
-     * 
-     *
-     * return BenutzerDtoSpec
-     */
-    public static class GetCurrentBenutzerOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/benutzer/me";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /benutzer/me
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /benutzer/me
-         * @param handler handler
-         * @return BenutzerDtoSpec
-         */
-        public BenutzerDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<BenutzerDtoSpec> type = new TypeRef<BenutzerDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetCurrentBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * 
      * 
      *
@@ -434,6 +373,67 @@ public class BenutzerApiSpec {
         }
     }
     /**
+     * Get or create and update current benutzer
+     * 
+     *
+     * return BenutzerDtoSpec
+     */
+    public static class PrepareCurrentBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/benutzer/prepare/me";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public PrepareCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /benutzer/prepare/me
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /benutzer/prepare/me
+         * @param handler handler
+         * @return BenutzerDtoSpec
+         */
+        public BenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BenutzerDtoSpec> type = new TypeRef<BenutzerDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public PrepareCurrentBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public PrepareCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Update the logged-in Benutzer
      * 
      *
@@ -442,7 +442,7 @@ public class BenutzerApiSpec {
     public static class UpdateCurrentBenutzerOper implements Oper {
 
         public static final Method REQ_METHOD = PUT;
-        public static final String REQ_URI = "/benutzer/me";
+        public static final String REQ_URI = "/benutzer/prepare/me";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -455,7 +455,7 @@ public class BenutzerApiSpec {
         }
 
         /**
-         * PUT /benutzer/me
+         * PUT /benutzer/prepare/me
          * @param handler handler
          * @param <T> type
          * @return type

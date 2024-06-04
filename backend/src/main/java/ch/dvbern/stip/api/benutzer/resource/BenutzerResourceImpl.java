@@ -50,8 +50,8 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
-    public Response getCurrentBenutzer() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
+    public Response prepareCurrentBenutzer() {
+        final var benutzer = benutzerService.getOrCreateAndUpdateCurrentBenutzer();
         return Response.ok(benutzer).build();
     }
 

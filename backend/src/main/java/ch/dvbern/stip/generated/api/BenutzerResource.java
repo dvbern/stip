@@ -37,11 +37,6 @@ public interface BenutzerResource {
     Response createOrUpdateSachbearbeiterStammdatenList(@Valid List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto);
 
     @GET
-    @Path("/me")
-    @Produces({ "application/json", "text/plain" })
-    Response getCurrentBenutzer();
-
-    @GET
     @Path("/stammdaten/sachbearbeiter")
     @Produces({ "application/json", "text/plain" })
     Response getSachbearbeitende();
@@ -51,8 +46,13 @@ public interface BenutzerResource {
     @Produces({ "application/json", "text/plain" })
     Response getSachbearbeiterStammdaten(@PathParam("benutzerId") UUID benutzerId);
 
+    @GET
+    @Path("/prepare/me")
+    @Produces({ "application/json", "text/plain" })
+    Response prepareCurrentBenutzer();
+
     @PUT
-    @Path("/me")
+    @Path("/prepare/me")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response updateCurrentBenutzer(@Valid @NotNull BenutzerUpdateDto benutzerUpdateDto);
