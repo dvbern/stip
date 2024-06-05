@@ -7,6 +7,8 @@ import {
   OnInit,
 } from '@angular/core';
 
+import { SharedModelState } from '@dv/shared/model/state-colors';
+
 @Component({
   selector: 'dv-shared-ui-badge',
   standalone: true,
@@ -16,7 +18,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiBadgeComponent implements OnInit {
-  @Input() type: 'success' | 'warning' | 'danger' | 'info' = 'warning';
+  @Input() type: SharedModelState = 'warning';
 
   @HostBinding('class') class = 'info';
 
