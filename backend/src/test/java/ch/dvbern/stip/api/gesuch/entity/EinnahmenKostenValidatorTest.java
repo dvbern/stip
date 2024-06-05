@@ -12,6 +12,8 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.util.TestUtil;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +30,10 @@ class EinnahmenKostenValidatorTest {
         kindSet.add(kind);
         gesuchFormular.setKinds(kindSet);
         return gesuchFormular;
+    }
+
+    private static boolean validateGesuchFormularProperty(Validator validator, GesuchFormular gesuch, String propertyName) {
+        return !validator.validate(gesuch).stream().map(validationError -> validationError.getPropertyPath().toString()).filter(x -> x.toLowerCase().contains(propertyName)).findFirst().isPresent();
     }
 
     @Test
@@ -111,15 +117,28 @@ class EinnahmenKostenValidatorTest {
 
     @Test
     void veranlagungsCodeRequiredValidationTest(){
-        final var validator = new EinnahmeKostenVeranlagungsCodeRequiredConstraintValidator();
-        final var gesuch = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setVeranlagungscode(null));
-        assertThat(validator.isValid(gesuch,null)).isFalse();
+        final var factory = Validation.buildDefaultValidatorFactory();
+        final var validator = factory.getValidator();
+        final String propertyName = "veranlagungscode";
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        boolean isValid = false;
+
+
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungscode(null));
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isFalse();
+
         gesuch.getEinnahmenKosten().setVeranlagungscode(0);
-        assertThat(validator.isValid(gesuch,null)).isTrue();
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isTrue();
+
         gesuch.getEinnahmenKosten().setVeranlagungscode(99);
-        assertThat(validator.isValid(gesuch,null)).isTrue();
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isTrue();
+
         gesuch.getEinnahmenKosten().setVeranlagungscode(100);
-        assertThat(validator.isValid(gesuch,null)).isFalse();
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isFalse();
 
 
     }

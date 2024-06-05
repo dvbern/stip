@@ -2375,6 +2375,9 @@ components:
         veranlagungsCode:
           description: 2-Stelliger Veranlagungscode (0-99)
           type: integer
+          minimum: 0
+          maximum: 99
+          default: 0
     EinnahmenKosten:
       type: object
       allOf:
