@@ -1,8 +1,11 @@
 import { HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { EMPTY, catchError, of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { EMPTY, Observable, catchError, of, throwError } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { SharedModelError } from '@dv/shared/model/error';
 import {
   HANDLE_NOT_FOUND,
   IGNORE_ERRORS,
@@ -12,7 +15,7 @@ import {
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 export interface DvGlobalHttpErrorInterceptorFnOptions {
-  /*
+  /**
    * Choose the type of global error handling you want for the application.
    * - globalOnly: the global interceptor catches all http errors and dispatches them to the global notification API. Local catchErrors will never be reached.
    * - globalAndLocal: the global interceptor catches http errors and dispatches them to the notification API first. After this, the local catchErrors will be executed.
@@ -20,6 +23,12 @@ export interface DvGlobalHttpErrorInterceptorFnOptions {
    */
   type: 'without' | 'globalOnly' | 'globalAndLocal';
 }
+
+const handledError = <T>(value?: Observable<T>) => ({
+  handled: true,
+  result: value,
+});
+const unhandledError = { handled: false, result: undefined };
 
 export function withDvGlobalHttpErrorInterceptorFn({
   type,
@@ -34,6 +43,47 @@ export function withDvGlobalHttpErrorInterceptorFn({
       next: HttpHandlerFn,
     ) {
       const store = inject(GlobalNotificationStore);
+      const oauth = inject(OAuthService);
+      const router = inject(Router);
+
+      const knownHandlers: ((error: SharedModelError) => {
+        handled: boolean;
+        result?: Observable<HttpResponse<unknown>>;
+      })[] = [
+        // This list is ordered by priority, the first handler that returns a result will prevent the others from being executed
+        // but the `handled` flag does not prevent the others from being executed, just informs that the error was handled in some way
+        function handleUnknownHttpError(error) {
+          if (error.type === 'unknownHttpError') {
+            if (error.status === 401 && !req.context.get(IGNORE_ERRORS)) {
+              oauth.initLoginFlow(router.url);
+              return handledError(EMPTY);
+            }
+            // Check for 403 FORBIDDEN
+            if (error.status === 403) {
+              store.handleForbiddenError(error);
+              return handledError();
+            }
+            // Check for 404 NOT FOUND if a handler is provided
+            const notFoundHandler = req.context.get(HANDLE_NOT_FOUND);
+            if (notFoundHandler && error.status === 404) {
+              notFoundHandler(error);
+              return handledError();
+            }
+          }
+          return unhandledError;
+        },
+
+        function handle404(error) {
+          if (
+            req.context.get(IGNORE_NOT_FOUND_ERRORS) &&
+            error.status === 404
+          ) {
+            return handledError(of(new HttpResponse({})));
+          }
+          return unhandledError;
+        },
+      ];
+
       return next(req).pipe(
         catchError((error) => {
           // ignore errors if the HTTP context is set to ignore errors
@@ -43,28 +93,18 @@ export function withDvGlobalHttpErrorInterceptorFn({
 
           const storableError = JSON.parse(JSON.stringify(error));
           const errorToDispatch = sharedUtilFnErrorTransformer(storableError);
-          if (
-            req.context.get(IGNORE_NOT_FOUND_ERRORS) &&
-            errorToDispatch.status === 404
-          ) {
-            return of(new HttpResponse({}));
-          }
-
           let hasBeenHandled = false;
-          if (errorToDispatch.type === 'unknownHttpError') {
-            // Check for 403 FORBIDDEN
-            if (errorToDispatch.status === 403) {
-              store.handleForbiddenError(errorToDispatch);
-              hasBeenHandled = true;
+
+          // Run all known handlers and stop if one returns a result
+          for (const handler of knownHandlers) {
+            const { handled, result } = handler(errorToDispatch);
+            if (result) {
+              return result;
             }
-            // Check for 404 NOT FOUND if a handler is provided
-            const notFoundHandler = req.context.get(HANDLE_NOT_FOUND);
-            if (notFoundHandler && errorToDispatch.status === 404) {
-              notFoundHandler(errorToDispatch);
-              hasBeenHandled = true;
-            }
+            hasBeenHandled = hasBeenHandled || handled;
           }
 
+          // Only dispatch the error if it has not been handled yet and the global errors are not disabled
           if (!hasBeenHandled && !req.context.get(NO_GLOBAL_ERRORS)) {
             // Show a generic error notification
             store.handleHttpRequestFailed([errorToDispatch]);
