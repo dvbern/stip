@@ -43,12 +43,14 @@ public class FallRepository implements BaseRepository<Fall> {
         final var zuordnung = QZuordnung.zuordnung;
 
         final var query = queryFactory
-                .select(fall)
-                .from(fall)
-                .where(JPAExpressions.select(zuordnung.sachbearbeiter.id)
-                        .from(zuordnung)
-                        .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId))
-                        .contains(sachbearbeiterId));
+            .select(fall)
+            .from(fall)
+            .where(JPAExpressions
+                .select(zuordnung.sachbearbeiter.id)
+                .from(zuordnung)
+                .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId))
+                .contains(sachbearbeiterId)
+            );
 
         return query.stream();
     }
