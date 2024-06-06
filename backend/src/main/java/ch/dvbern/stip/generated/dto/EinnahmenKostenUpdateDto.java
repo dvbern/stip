@@ -7,10 +7,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 
 
 @JsonTypeName("EinnahmenKostenUpdate")
@@ -22,7 +18,8 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid Integer nettoerwerbseinkommen;
   private @Valid Integer fahrkosten;
   private @Valid Boolean verdienstRealisiert;
-  private @Valid Integer veranlagungsCode;
+  private @Valid Integer veranlagungsCode = 0;
+  private @Valid Integer steuerjahr;
   private @Valid Integer alimente;
   private @Valid Integer zulagen;
   private @Valid Integer renten;
@@ -44,7 +41,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("nettoerwerbseinkommen")
   @NotNull
   public Integer getNettoerwerbseinkommen() {
@@ -63,7 +60,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fahrkosten")
   @NotNull
   public Integer getFahrkosten() {
@@ -82,7 +79,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("verdienstRealisiert")
   @NotNull
   public Boolean getVerdienstRealisiert() {
@@ -96,22 +93,46 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
 
   /**
    * 2-Stelliger Veranlagungscode (0-99)
+   * minimum: 0
+   * maximum: 99
    **/
   public EinnahmenKostenUpdateDto veranlagungsCode(Integer veranlagungsCode) {
     this.veranlagungsCode = veranlagungsCode;
     return this;
   }
 
-  
+
   @JsonProperty("veranlagungsCode")
   @NotNull
-  public Integer getVeranlagungsCode() {
+ @Min(0) @Max(99)  public Integer getVeranlagungsCode() {
     return veranlagungsCode;
   }
 
   @JsonProperty("veranlagungsCode")
   public void setVeranlagungsCode(Integer veranlagungsCode) {
     this.veranlagungsCode = veranlagungsCode;
+  }
+
+  /**
+   * Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+   * minimum: 0
+   * maximum: 99999
+   **/
+  public EinnahmenKostenUpdateDto steuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+    return this;
+  }
+
+
+  @JsonProperty("steuerjahr")
+  @NotNull
+ @Min(0) @Max(99999)  public Integer getSteuerjahr() {
+    return steuerjahr;
+  }
+
+  @JsonProperty("steuerjahr")
+  public void setSteuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
   }
 
   /**
@@ -122,7 +143,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("alimente")
   public Integer getAlimente() {
     return alimente;
@@ -141,7 +162,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("zulagen")
   public Integer getZulagen() {
     return zulagen;
@@ -160,7 +181,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("renten")
   public Integer getRenten() {
     return renten;
@@ -178,7 +199,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("eoLeistungen")
   public Integer getEoLeistungen() {
     return eoLeistungen;
@@ -196,7 +217,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ergaenzungsleistungen")
   public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
@@ -214,7 +235,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("beitraege")
   public Integer getBeitraege() {
     return beitraege;
@@ -233,7 +254,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungskostenSekundarstufeZwei")
   public Integer getAusbildungskostenSekundarstufeZwei() {
     return ausbildungskostenSekundarstufeZwei;
@@ -252,7 +273,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungskostenTertiaerstufe")
   public Integer getAusbildungskostenTertiaerstufe() {
     return ausbildungskostenTertiaerstufe;
@@ -270,7 +291,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("wohnkosten")
   public Integer getWohnkosten() {
     return wohnkosten;
@@ -289,7 +310,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("wgWohnend")
   public Boolean getWgWohnend() {
     return wgWohnend;
@@ -308,7 +329,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("willDarlehen")
   public Boolean getWillDarlehen() {
     return willDarlehen;
@@ -327,7 +348,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("auswaertigeMittagessenProWoche")
   public Integer getAuswaertigeMittagessenProWoche() {
     return auswaertigeMittagessenProWoche;
@@ -346,7 +367,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreuungskostenKinder")
   public Integer getBetreuungskostenKinder() {
     return betreuungskostenKinder;
@@ -371,6 +392,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
         Objects.equals(this.fahrkosten, einnahmenKostenUpdate.fahrkosten) &&
         Objects.equals(this.verdienstRealisiert, einnahmenKostenUpdate.verdienstRealisiert) &&
         Objects.equals(this.veranlagungsCode, einnahmenKostenUpdate.veranlagungsCode) &&
+        Objects.equals(this.steuerjahr, einnahmenKostenUpdate.steuerjahr) &&
         Objects.equals(this.alimente, einnahmenKostenUpdate.alimente) &&
         Objects.equals(this.zulagen, einnahmenKostenUpdate.zulagen) &&
         Objects.equals(this.renten, einnahmenKostenUpdate.renten) &&
@@ -388,18 +410,19 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, veranlagungsCode, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, veranlagungsCode, steuerjahr, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class EinnahmenKostenUpdateDto {\n");
-    
+
     sb.append("    nettoerwerbseinkommen: ").append(toIndentedString(nettoerwerbseinkommen)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
     sb.append("    zulagen: ").append(toIndentedString(zulagen)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");

@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.time.Year;
+
 
 @Audited
 @Entity
@@ -92,4 +94,10 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Min(0)
     @Max(99)
     private Integer veranlagungscode = 0;
+
+    @NotNull
+    @Column(name = "steuerjahr", nullable = false)
+    @Min(0)
+    @Max(9999)
+    private Integer steuerjahr = Year.now().getValue() -1;
 }

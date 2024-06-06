@@ -1,6 +1,8 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -139,7 +141,38 @@ class EinnahmenKostenValidatorTest {
         gesuch.getEinnahmenKosten().setVeranlagungscode(100);
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isFalse();
+    }
 
+    @Test
+    void steuerjahrRequiredValidationTest(){
+        final var factory = Validation.buildDefaultValidatorFactory();
+        final var validator = factory.getValidator();
+        final String propertyName = "steuerjahr";
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        boolean isValid = false;
 
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setSteuerjahr(null));
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isFalse();
+
+        gesuch.getEinnahmenKosten().setSteuerjahr(0);
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isTrue();
+    }
+
+    @Test
+    void steuerjahrIsCurrentorPastValidationTest(){
+        final var temporalValidator = new EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator();
+        assertThat(temporalValidator.isValid(0,null)).isTrue();
+        assertThat(temporalValidator.isValid(Year.now().getValue(),null)).isTrue();
+        assertThat(temporalValidator.isValid(Year.now().getValue() + 1,null)).isFalse();
+        assertThat(temporalValidator.isValid(Year.MIN_VALUE,null)).isTrue();
+        assertThat(temporalValidator.isValid(Year.MAX_VALUE,null)).isFalse();
+    }
+
+    @Test
+    void steuerjahrDefaultValueIsLastYearTest(){
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        assertThat(gesuch.getEinnahmenKosten().getSteuerjahr()).isEqualTo((Year.now().getValue() -1));
     }
 }

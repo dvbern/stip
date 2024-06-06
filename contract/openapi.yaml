@@ -2329,6 +2329,7 @@ components:
         - fahrkosten
         - verdienstRealisiert
         - veranlagungsCode
+        - steuerjahr
       type: object
       properties:
         nettoerwerbseinkommen:
@@ -2378,6 +2379,11 @@ components:
           minimum: 0
           maximum: 99
           default: 0
+        steuerjahr:
+          description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+          type: integer
+          minimum: 0
+          maximum: 99999
     EinnahmenKosten:
       type: object
       allOf:

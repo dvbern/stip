@@ -43,7 +43,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WILL_DARLEHEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR
 })
 @JsonTypeName("EinnahmenKosten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -97,7 +98,10 @@ public class EinnahmenKostenDtoSpec {
   private Integer betreuungskostenKinder;
 
   public static final String JSON_PROPERTY_VERANLAGUNGS_CODE = "veranlagungsCode";
-  private Integer veranlagungsCode;
+  private Integer veranlagungsCode = 0;
+
+  public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
+  private Integer steuerjahr;
 
   public EinnahmenKostenDtoSpec() {
   }
@@ -526,6 +530,8 @@ public class EinnahmenKostenDtoSpec {
 
    /**
    * 2-Stelliger Veranlagungscode (0-99)
+   * minimum: 0
+   * maximum: 99
    * @return veranlagungsCode
   **/
   @jakarta.annotation.Nonnull
@@ -541,6 +547,34 @@ public class EinnahmenKostenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setVeranlagungsCode(Integer veranlagungsCode) {
     this.veranlagungsCode = veranlagungsCode;
+  }
+
+
+  public EinnahmenKostenDtoSpec steuerjahr(Integer steuerjahr) {
+    
+    this.steuerjahr = steuerjahr;
+    return this;
+  }
+
+   /**
+   * Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+   * minimum: 0
+   * maximum: 99999
+   * @return steuerjahr
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STEUERJAHR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getSteuerjahr() {
+    return steuerjahr;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STEUERJAHR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setSteuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
   }
 
   @Override
@@ -568,12 +602,13 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.willDarlehen, einnahmenKosten.willDarlehen) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
-        Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode);
+        Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
+        Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr);
   }
 
   @Override
@@ -597,6 +632,7 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("}");
     return sb.toString();
   }
