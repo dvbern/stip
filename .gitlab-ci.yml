@@ -127,6 +127,13 @@ run-e2e:
 wait-for-review:
   extends: .install-argocd
   stage: review-e2e
+  variables:
+    ARGOCD_SERVER: "$REVIEW_ARGOCD_SERVER"
+    ARGOCD_AUTH_TOKEN: "$REVIEW_ARGOCD_TOKEN"
+  before_script:
+    - |
+      echo "Using ArgoCD Server at $ARGOCD_SERVER"
+      curl -ksSL -o /usr/local/bin/argocd https://$ARGOCD_SERVER/download/argocd-linux-amd64
   needs:
     - argocd:review-app:start
   script:
