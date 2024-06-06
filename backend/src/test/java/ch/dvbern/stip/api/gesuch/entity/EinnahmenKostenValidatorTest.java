@@ -175,4 +175,29 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
         assertThat(gesuch.getEinnahmenKosten().getSteuerjahr()).isEqualTo((Year.now().getValue() -1));
     }
+    @Test
+    void vermoegenValidationTest(){
+        final var factory = Validation.buildDefaultValidatorFactory();
+        final var validator = factory.getValidator();
+        final String propertyName = "vermoegen";
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        boolean isValid = false;
+
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isFalse();
+
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(-2));
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isFalse();
+
+        gesuch.getEinnahmenKosten().setVermoegen(0);
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isTrue();
+
+        gesuch.getEinnahmenKosten().setVermoegen(Integer.MAX_VALUE);
+        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        assertThat(isValid).isTrue();
+    }
+
 }

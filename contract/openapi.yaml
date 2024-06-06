@@ -2330,6 +2330,7 @@ components:
         - verdienstRealisiert
         - veranlagungsCode
         - steuerjahr
+        - vermoegen
       type: object
       properties:
         nettoerwerbseinkommen:
@@ -2384,6 +2385,11 @@ components:
           type: integer
           minimum: 0
           maximum: 99999
+        vermoegen:
+          description: Ganze Zahl, ohne Kommastellen
+          type: integer
+          minimum: 0
+          maximum: 2147483647
     EinnahmenKosten:
       type: object
       allOf:

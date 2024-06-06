@@ -23,6 +23,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setVeranlagungsCode(TestUtil.getRandomInt(0,99));
             model.setSteuerjahr(0);
+            model.setVermoegen(0);
         });
 
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecEinnahmenKosten =

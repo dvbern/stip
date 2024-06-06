@@ -100,4 +100,10 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Min(0)
     @Max(9999)
     private Integer steuerjahr = Year.now().getValue() -1;
+
+    @NotNull
+    @Column(name = "vermoegen", nullable = false)
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
+    private Integer vermoegen = 0;
 }

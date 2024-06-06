@@ -44,7 +44,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
-  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_STEUERJAHR
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_STEUERJAHR,
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_VERMOEGEN
 })
 @JsonTypeName("EinnahmenKostenUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -102,6 +103,9 @@ public class EinnahmenKostenUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
+
+  public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
+  private Integer vermoegen;
 
   public EinnahmenKostenUpdateDtoSpec() {
   }
@@ -577,6 +581,34 @@ public class EinnahmenKostenUpdateDtoSpec {
     this.steuerjahr = steuerjahr;
   }
 
+
+  public EinnahmenKostenUpdateDtoSpec vermoegen(Integer vermoegen) {
+    
+    this.vermoegen = vermoegen;
+    return this;
+  }
+
+   /**
+   * Ganze Zahl, ohne Kommastellen
+   * minimum: 0
+   * maximum: 2147483647
+   * @return vermoegen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getVermoegen() {
+    return vermoegen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVermoegen(Integer vermoegen) {
+    this.vermoegen = vermoegen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -603,12 +635,13 @@ public class EinnahmenKostenUpdateDtoSpec {
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKostenUpdate.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsCode, einnahmenKostenUpdate.veranlagungsCode) &&
-        Objects.equals(this.steuerjahr, einnahmenKostenUpdate.steuerjahr);
+        Objects.equals(this.steuerjahr, einnahmenKostenUpdate.steuerjahr) &&
+        Objects.equals(this.vermoegen, einnahmenKostenUpdate.vermoegen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen);
   }
 
   @Override
@@ -633,6 +666,7 @@ public class EinnahmenKostenUpdateDtoSpec {
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
+    sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("}");
     return sb.toString();
   }
