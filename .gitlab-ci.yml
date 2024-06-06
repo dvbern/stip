@@ -85,9 +85,9 @@ include:
   image:
     name: docker-registry.dvbern.ch/devops/docker/tools/k8s/main
     entrypoint: [ "" ]
-  # variables:
-  #   ARGOCD_SERVER: "$ARGOCD_SERVER"
-  #   ARGOCD_AUTH_TOKEN: "$ARGOCD_TOKEN"
+  variables:
+    ARGOCD_SERVER: "$ARGOCD_SERVER"
+    ARGOCD_AUTH_TOKEN: "$ARGOCD_TOKEN"
   before_script:
     - |
       echo "Using ArgoCD Server at $ARGOCD_SERVER"
@@ -127,19 +127,14 @@ run-e2e:
 wait-for-review:
   extends: .install-argocd
   stage: review-e2e
-  variables:
-    ARGOCD_SERVER: "$REVIEW_ARGOCD_SERVER"
-    ARGOCD_AUTH_TOKEN: "$REVIEW_ARGOCD_TOKEN"
-  before_script:
-    - |
-      echo "Using ArgoCD Server at $ARGOCD_SERVER"
-      curl -ksSL -o /usr/local/bin/argocd https://$ARGOCD_SERVER/download/argocd-linux-amd64
+  # variables:
+  #   ARGOCD_SERVER: "$REVIEW_ARGOCD_SERVER"
+  #   ARGOCD_AUTH_TOKEN: "$REVIEW_ARGOCD_TOKEN"
   needs:
     - argocd:review-app:start
   script:
     - argocd app wait stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID} --insecure
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
+  environment: review/$CI_COMMIT_REF_SLUG
 
 run-review-e2e:
   extends: run-e2e
