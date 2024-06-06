@@ -117,12 +117,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildungen.noOverlap}";
     public static final String VALIDATION_AUSBILDUNG_ENDDATE_AFTER_STARTDATE =
         "{jakarta.validation.constraints.ausbildung.endDate.after.message}";
-
     public static final String VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.person.vermoegenVorjahr.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_BETREUUNGSKOSTEN_KINDER_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.betreuungskostenKinder.required.message}";
-
     public static final String VALIDATION_DOCUMENTS_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.gesuchFormular.documents.required.message}";
     public static final String VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE =
