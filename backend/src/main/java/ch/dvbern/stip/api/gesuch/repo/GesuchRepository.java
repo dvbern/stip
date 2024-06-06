@@ -30,7 +30,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
 
-         final var query = queryFactory
+        final var query = queryFactory
             .selectFrom(gesuch)
             .where(gesuch.fall.gesuchsteller.id.eq(gesuchstellerId));
         return query.stream();
