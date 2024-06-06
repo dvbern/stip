@@ -35,7 +35,9 @@ class EinnahmenKostenValidatorTest {
     }
 
     private static boolean validateGesuchFormularProperty(Validator validator, GesuchFormular gesuch, String propertyName) {
-        return !validator.validate(gesuch).stream().map(validationError -> validationError.getPropertyPath().toString()).filter(x -> x.toLowerCase().contains(propertyName)).findFirst().isPresent();
+        return !validator.validate(gesuch).
+            stream().map(validationError -> validationError.getPropertyPath().toString())
+            .filter(x -> x.toLowerCase().contains(propertyName)).findFirst().isPresent();
     }
 
     @Test
