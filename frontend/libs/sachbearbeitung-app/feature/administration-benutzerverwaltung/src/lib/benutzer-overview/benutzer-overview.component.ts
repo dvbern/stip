@@ -18,7 +18,6 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
-  selector: 'lib-sachbearbeitung-app-feature-administration-benutzer-overview',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,12 +31,14 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
     SharedUiLoadingComponent,
   ],
   templateUrl: './benutzer-overview.component.html',
+  styleUrls: ['./benutzer-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BenutzerOverviewComponent {
   store = inject(BenutzerverwaltungStore);
 
-  displayedColumns = ['name', 'email', 'roles'];
+  displayedColumns = ['name', 'email', 'roles', 'actions'];
+  showFullListForBenutzer: Record<string, boolean> = {};
 
   sortSig = viewChild(MatSort);
   benutzerListDataSourceSig = computed(() => {
@@ -53,5 +54,9 @@ export class BenutzerOverviewComponent {
 
   constructor() {
     this.store.loadAllSbAppBenutzers$();
+  }
+
+  expandRolesForBenutzer(benutzerId: string) {
+    this.showFullListForBenutzer[benutzerId] = true;
   }
 }

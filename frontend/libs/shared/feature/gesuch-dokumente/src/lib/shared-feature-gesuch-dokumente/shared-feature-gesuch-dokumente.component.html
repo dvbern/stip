@@ -75,14 +75,16 @@
                       </span>
                     </button>
                   } @else {
-                    <dv-shared-ui-badge type="info">{{
-                      'shared.dokumente.dokumentStatus.PENDING' | translate
-                    }}</dv-shared-ui-badge>
+                    <dv-shared-ui-badge type="info" class="badge">
+                      <dv-shared-ui-severity-icon type="info"></dv-shared-ui-severity-icon>
+                      {{ 'shared.dokumente.dokumentStatus.PENDING' | translate }}
+                    </dv-shared-ui-badge>
                   }
                 } @else {
-                  <dv-shared-ui-badge type="warning">{{
-                    'shared.dokumente.dokumentStatus.MISSING' | translate
-                  }}</dv-shared-ui-badge>
+                  <dv-shared-ui-badge type="warning" class="badge">
+                    <dv-shared-ui-severity-icon type="warning"></dv-shared-ui-severity-icon>
+                    {{ 'shared.dokumente.dokumentStatus.MISSING' | translate }}
+                  </dv-shared-ui-badge>
                 }
               </div>
             </td>

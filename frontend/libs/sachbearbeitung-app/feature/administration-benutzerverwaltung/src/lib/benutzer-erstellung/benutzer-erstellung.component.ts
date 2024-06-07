@@ -26,8 +26,6 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 @Component({
-  selector:
-    'lib-sachbearbeitung-app-feature-administration-benutzer-erstellung',
   standalone: true,
   imports: [
     CommonModule,

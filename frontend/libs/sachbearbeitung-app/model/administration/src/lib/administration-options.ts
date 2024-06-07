@@ -82,12 +82,3 @@ export const CHILD_OPTION_BENUTZER_ERSTELLEN = (
   titleTranslationKey,
   parentRoute: OPTION_BENUTZERVERWALTUNG.route,
 });
-
-export const CHILD_OPTION_BENUTZER_OVERVIEW = (
-  titleTranslationKey: string,
-): ChildAdminOption => ({
-  type: 'CHILD',
-  route: 'overview',
-  titleTranslationKey,
-  parentRoute: OPTION_BENUTZERVERWALTUNG.route,
-});

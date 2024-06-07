@@ -1,9 +1,8 @@
 :host {
   display: block;
   border: 1px solid;
-  border-radius: var(--dv-border-radius);
-  padding: 0.4rem 0.5rem;
-  min-width: 8rem;
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
 
   &.success {
     border-color: var(--dv-success);
@@ -39,5 +38,9 @@
     i {
       color: var(--dv-info);
     }
+  }
+
+  &.without-border {
+    border: none;
   }
 }

@@ -26,9 +26,18 @@ export type SharedModelBenutzerApi = z.infer<typeof SharedModelBenutzerApi>;
 export const SharedModelBenutzerList = z.array(SharedModelBenutzerApi);
 export type SharedModelBenutzerList = z.infer<typeof SharedModelBenutzerList>;
 
+export type SharedModelBenutzerRole = {
+  name: UsableRole;
+  color: SharedModelState;
+};
+
 export type SharedModelBenutzer = SharedModelBenutzerApi & {
   name: string;
-  roles: { name: UsableRole; color: SharedModelState }[];
+  roles: {
+    extraAmount?: number;
+    compact: SharedModelBenutzerRole[];
+    full: SharedModelBenutzerRole[];
+  };
 };
 
 export const SharedModelUserAdminError = z.union([

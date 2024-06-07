@@ -19,6 +19,7 @@ import { SharedModelState } from '@dv/shared/model/state-colors';
 })
 export class SharedUiBadgeComponent implements OnInit {
   @Input() type: SharedModelState = 'warning';
+  @Input() @HostBinding('class.without-border') withoutBorder = false;
 
   @HostBinding('class') class = 'info';
 
