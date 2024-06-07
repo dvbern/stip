@@ -29,6 +29,7 @@ import { subYears } from 'date-fns';
 import { Observable } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import {
   DokumentTyp,
   ElternTyp,
@@ -36,6 +37,7 @@ import {
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   SharedModelGesuchFormular,
+  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import {
   SharedPatternDocumentUploadComponent,
@@ -103,6 +105,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private store = inject(Store);
+  private plzStore = inject(PlzOrtStore);
 
   @Input({ required: true }) elternteil!: Omit<
     Partial<ElternUpdate>,
@@ -212,7 +215,9 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     const plz = this.plzChangedSig();
     const elternTyp = this.elternteil.elternTyp;
 
-    if (!isFromBern(plz)) {
+    const kanton = this.plzStore.getKantonByPlz(plz);
+
+    if (!!plz && plz.length > 3 && kanton !== WohnsitzKanton.BE) {
       return DokumentTyp[`ELTERN_STEUERUNTERLAGEN_${elternTyp}`];
     }
 
@@ -331,6 +336,13 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         ),
       });
 
+      if (this.elternteil.adresse) {
+        SharedUiFormAddressComponent.patchForm(
+          this.form.controls.adresse,
+          this.elternteil.adresse,
+        );
+      }
+
       const svValidators = [
         sharedUtilValidatorAhv(
           `eltern${capitalized(this.elternteil.elternTyp)}`,
@@ -396,12 +408,4 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       this.languageSig(),
     );
   }
-}
-
-function isFromBern(plz?: string) {
-  if (!plz) {
-    return true;
-  }
-
-  return !!plz && plz.startsWith('3');
 }
