@@ -594,9 +594,9 @@ public class EinnahmenKostenDtoSpec {
    * maximum: 2147483647
    * @return vermoegen
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VERMOEGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getVermoegen() {
     return vermoegen;
@@ -604,7 +604,7 @@ public class EinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VERMOEGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
   }
