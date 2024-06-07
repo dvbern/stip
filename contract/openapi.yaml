@@ -2330,7 +2330,6 @@ components:
         - verdienstRealisiert
         - veranlagungsCode
         - steuerjahr
-        - vermoegen
       type: object
       properties:
         nettoerwerbseinkommen:
@@ -2874,7 +2873,7 @@ components:
           description: ''
           type: boolean
     plz:
-      description: "PLZ und ort für Type ahead funktionalitaet"
+      description: 'PLZ und ort für Type ahead funktionalitaet'
       type: object
       required:
         - plz
