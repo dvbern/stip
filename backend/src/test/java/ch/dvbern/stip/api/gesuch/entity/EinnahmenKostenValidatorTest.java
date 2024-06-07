@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashSet;
@@ -127,19 +126,19 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
         boolean isValid = false;
 
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungscode(null));
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungsCode(null));
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isFalse();
 
-        gesuch.getEinnahmenKosten().setVeranlagungscode(0);
+        gesuch.getEinnahmenKosten().setVeranlagungsCode(0);
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isTrue();
 
-        gesuch.getEinnahmenKosten().setVeranlagungscode(99);
+        gesuch.getEinnahmenKosten().setVeranlagungsCode(99);
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isTrue();
 
-        gesuch.getEinnahmenKosten().setVeranlagungscode(100);
+        gesuch.getEinnahmenKosten().setVeranlagungsCode(100);
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isFalse();
     }

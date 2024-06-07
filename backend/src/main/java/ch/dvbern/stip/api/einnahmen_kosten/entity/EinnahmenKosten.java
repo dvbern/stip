@@ -93,7 +93,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "veranlagungscode", nullable = false)
     @Min(0)
     @Max(99)
-    private Integer veranlagungscode = 0;
+    private Integer veranlagungsCode = 0;
 
     @NotNull
     @Column(name = "steuerjahr", nullable = false)
