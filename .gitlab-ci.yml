@@ -136,6 +136,8 @@ wait-for-review:
     - argocd app wait stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID} --insecure
   environment:
     name: review/$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
 
 run-review-e2e:
   extends: run-e2e
