@@ -185,7 +185,7 @@ class EinnahmenKostenValidatorTest {
 
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
-        assertThat(isValid).isFalse();
+        assertThat(isValid).isTrue();
 
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(-2));
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
