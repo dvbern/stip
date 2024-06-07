@@ -32,8 +32,8 @@ const adresse: Adresse = {
   coAdresse: '',
   strasse: 'Aarbergergasse',
   hausnummer: '5a',
-  plz: '3000',
-  ort: 'Bern',
+  plz: '3065',
+  ort: 'Bolligen',
 };
 
 const person: PersonInAusbildung = {
@@ -121,7 +121,7 @@ const partner: Partner = {
   adresse,
   vorname: 'Susanne',
   geburtsdatum: '16.12.1990',
-  sozialversicherungsnummer: '756.2222.2222.55',
+  sozialversicherungsnummer: '756.2222.2222.55', //is this one valid?
   nachname: 'Schmitt',
 };
 
@@ -191,7 +191,13 @@ test.describe('Neues gesuch erstellen', () => {
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
 
+    await personPO.fillPlzNotKtBern();
+
+    await expect(personPO.elems.vermoegenVorjahr).toBeVisible();
+
     await personPO.fillPersonForm(person);
+
+    await expect(personPO.elems.vermoegenVorjahr).toBeHidden();
 
     await personPO.elems.buttonSaveContinue.click();
 
