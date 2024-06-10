@@ -27,6 +27,9 @@ export class EinnahmenKostenPO {
     verdienstRealisiert: Locator;
     willDarlehen: Locator;
     betreuungskostenKinder: Locator;
+    steuerjahr: Locator;
+    vermoegen: Locator;
+    veranlagungsCode: Locator;
 
     incompleteWarning: () => Locator;
 
@@ -74,6 +77,11 @@ export class EinnahmenKostenPO {
       betreuungskostenKinder: page.getByTestId(
         'form-einnahmen-kosten-betreuungskostenKinder',
       ),
+      steuerjahr: page.getByTestId('form-einnahmen-kosten-steuerjahr'),
+      vermoegen: page.getByTestId('form-einnahmen-kosten-vermoegen'),
+      veranlagungsCode: page.getByTestId(
+        'form-einnahmen-kosten-veranlagungsCode',
+      ),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),
@@ -98,6 +106,14 @@ export class EinnahmenKostenPO {
     await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
 
     await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
+
+    await this.elems.vermoegen.fill(`${einnahmenKosten.vermoegen ?? 0}`);
+
+    await this.elems.veranlagungsCode.fill(
+      `${einnahmenKosten.veranlagungsCode}`,
+    );
+
+    await this.elems.steuerjahr.fill(`${einnahmenKosten.steuerjahr}`);
 
     await selectMatRadio(
       this.elems.wgWohnend,
