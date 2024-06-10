@@ -19,7 +19,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 @Mock
 @RequestScoped
 public class BenutzerServiceMock extends BenutzerService {
-    private final BenutzerMapper benutzerMapper;
     private final JsonWebToken jsonWebToken;
     private static final HashSet<String> SEEN_BENUTZERS = new HashSet<>();
 
@@ -34,7 +33,6 @@ public class BenutzerServiceMock extends BenutzerService {
             null
         );
 
-        benutzerMapper = null;
         jsonWebToken = null;
     }
 
@@ -56,7 +54,6 @@ public class BenutzerServiceMock extends BenutzerService {
             sachbearbeiterZuordnungStammdatenRepository,
             identity);
 
-        this.benutzerMapper = benutzerMapper;
         this.jsonWebToken = jsonWebToken;
     }
 
