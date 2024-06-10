@@ -433,22 +433,40 @@ const combineLoadAllActions$ = (actions$: Actions) => {
   );
 };
 
-type PartialOrFull<K extends keyof SharedModelGesuchFormular> =
+/**
+ * Get the given Formular property Data as View or Update Data
+ *
+ * * **View Type**: SharedModelGesuchFormular[K]
+ *   > represents the type that is being returned from the API (GET)
+ * * **Update Type**: GesuchFormularUpdate[K]
+ *   > the values that can be sent to the API for an update (PUT)
+ *
+ * The distinciton is necessary because the API returns more data than is necessary for an update
+ * for example the API returns the full Ausbildungsgang object, but for an update only the ID is necessary
+ */
+type ViewOrUpdateData<K extends keyof SharedModelGesuchFormular> =
   | GesuchFormularUpdate[K]
   | Partial<SharedModelGesuchFormular>[K];
-const isPartial = <T, R extends T>(
+
+/**
+ * Check if Type T represent the Edit type of R
+ */
+const isEditData = <T, R extends T>(
   value: T,
   keyExists: keyof R,
 ): value is R => {
   return typeof value === 'object' && value && keyExists in value;
 };
 
-const toAusbildung = (ausbildung: PartialOrFull<'ausbildung'>) => {
+/**
+ * Convert the given Ausbildung to an AusbildungUpdate if necessary
+ */
+const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
   if (!ausbildung) {
     return undefined;
   }
   if (
-    isPartial<PartialOrFull<'ausbildung'>, AusbildungUpdate>(
+    isEditData<ViewOrUpdateData<'ausbildung'>, AusbildungUpdate>(
       ausbildung,
       'ausbildungsgangId',
     )
