@@ -5,6 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { de, frCH } from 'date-fns/locale';
 import { startWith } from 'rxjs';
 
+import { parseDateForVariant } from '@dv/shared/util/validator-date';
+
 @Injectable()
 export class DvDateAdapter extends DateFnsAdapter {
   translate = inject(TranslateService);
@@ -20,6 +22,11 @@ export class DvDateAdapter extends DateFnsAdapter {
       .subscribe(({ lang }) => {
         this.setLocale(getLocaleFromLanguage(lang));
       });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  override parse(value: any, parseFormat: string | string[]): Date | null {
+    return parseDateForVariant(value, new Date(), 'date') ?? this.invalid();
   }
 }
 
