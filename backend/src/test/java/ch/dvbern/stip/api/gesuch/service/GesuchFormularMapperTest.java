@@ -18,8 +18,14 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
+import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenVermoegenRequiredConstraintValidator;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
@@ -305,6 +311,7 @@ class GesuchFormularMapperTest {
         );
     }
 
+
     @Test
     void calculateSteuernKantonGemeindeTest(){
         GesuchFormular gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0)).setPartner(new Partner().setJahreseinkommen(0));
@@ -329,5 +336,26 @@ class GesuchFormularMapperTest {
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null)).setPartner(new Partner().setJahreseinkommen(null));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+    }
+
+    @Test
+    void resetVermoegenIfYoungerThan18Test() {
+        var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
+        var gesuchTrancheDto = GesuchGenerator.initGesuchTranche();
+
+        //todo: gesuchformulardto with technisches jahr & geburtsdatum
+        /*
+       gesuch.setTranche(new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2024)))));
+    // genau 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 - 18,12,31)));
+    // fast 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2024 - 18,1,1)));
+    // unter 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 -5,12,31)));
+         */
+
+        gesuchUpdateDTO.setGesuchTrancheToWorkWith();
+        int x = 0;
+        //var gesuchUpdateDTO
     }
 }
