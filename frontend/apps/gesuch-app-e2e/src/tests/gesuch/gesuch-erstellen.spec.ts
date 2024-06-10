@@ -116,12 +116,11 @@ const einnahmenKosten: EinnahmenKosten = {
   betreuungskostenKinder: 100,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const partner: Partner = {
   adresse,
   vorname: 'Susanne',
   geburtsdatum: '16.12.1990',
-  sozialversicherungsnummer: '756.2222.2222.55', //is this one valid?
+  sozialversicherungsnummer: '756.2222.2222.55',
   nachname: 'Schmitt',
 };
 
