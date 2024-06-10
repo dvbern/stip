@@ -24,11 +24,7 @@ import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.BeforeMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(config = MappingConfig.class,
     uses =
@@ -48,7 +44,25 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
+    @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @Named("calculateSteuern")
+    public Integer calculateSteuern(final GesuchFormular gesuchFormular){
+        int totalEinkommen = 0;
+        if(gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen() != null){
+            totalEinkommen += gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen();
+        }
+        if(gesuchFormular.getPartner().getJahreseinkommen() != null){
+            totalEinkommen += gesuchFormular.getPartner().getJahreseinkommen();
+        }
+
+        if(totalEinkommen >= 20000){
+            return (int)(totalEinkommen * 0.1);
+        }
+
+        return 0;
+    }
 
     /**
      * partial update mapper for the Gesuchssteller

@@ -23,17 +23,12 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
+import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
-import ch.dvbern.stip.generated.dto.ElternUpdateDto;
-import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
-import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
-import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.*;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -308,5 +303,31 @@ class GesuchFormularMapperTest {
             new KindMapperImpl(),
             new EinnahmenKostenMapperImpl()
         );
+    }
+
+    @Test
+    void calculateSteuernKantonGemeindeTest(){
+        GesuchFormular gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0)).setPartner(new Partner().setJahreseinkommen(0));
+        GesuchFormularMapper mapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+
+        // total einkommen >= 20 000 : steuern = 10%
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000)).setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000 )*0.1)));
+
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000)).setPartner(new Partner().setJahreseinkommen(1));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int)((20000 + 1)*0.1)));
+        // sonst: steuern = 0
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(19999)).setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+
+        //handle null inputs
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null)).setPartner(new Partner().setJahreseinkommen(null));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
     }
 }
