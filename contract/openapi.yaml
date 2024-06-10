@@ -174,7 +174,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Fall'
-          description: Return der zugewiesenen Faelle für den SB
+          description: Get all Faelle which are assigned to the currently logged in Sachbearbeiter
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -195,7 +195,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Fall'
-          description: Return des Falls des SB
+          description: Get the current Fall for the currently logged in Gesuchsteller
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2837,7 +2837,7 @@ components:
           description: ''
           type: boolean
     plz:
-      description: "PLZ und ort für Type ahead funktionalitaet"
+      description: 'PLZ und ort für Type ahead funktionalitaet'
       type: object
       required:
         - plz
