@@ -88,6 +88,8 @@ export class PersonPO {
   async fillPlzNotKtBern() {
     await this.elems.adresse.elems.plz.fill('4144');
     await this.elems.adresse.elems.ort.fill('Arlesheim');
+    await this.elems.adresse.elems.landSelect.click();
+    await this.elems.page.getByTestId('CH').first().click();
   }
 
   async fillPersonForm(person: PersonInAusbildung) {

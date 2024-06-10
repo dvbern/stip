@@ -309,6 +309,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
+  private landChangedSig = toSignal(
+    this.form.controls.adresse.controls.land.valueChanges,
+  );
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -536,6 +539,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       () => {
         const niederlassungsstatus = this.niederlassungsstatusChangedSig();
         const plz = this.plzChangedSig();
+        const land = this.landChangedSig();
 
         const kanton = this.plzStore.getKantonByPlz(plz);
 
@@ -544,7 +548,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           formControl: this.form.controls.vermoegenVorjahr,
           visible:
             isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
-            (!!plz && plz.length > 3 && kanton !== WohnsitzKanton.BE),
+            land !== 'CH' ||
+            kanton !== WohnsitzKanton.BE,
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
         });

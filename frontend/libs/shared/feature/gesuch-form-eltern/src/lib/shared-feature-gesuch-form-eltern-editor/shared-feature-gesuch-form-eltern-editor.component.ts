@@ -194,6 +194,10 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     this.form.controls.ausweisbFluechtling.valueChanges,
   );
 
+  landChangedSig = toSignal(
+    this.form.controls.adresse.controls.land.valueChanges,
+  );
+
   wohnkostenChangedSig = toSignal(this.form.controls.wohnkosten.valueChanges);
 
   lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
@@ -213,11 +217,12 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
 
   steuerunterlagenDocumentSig = this.createUploadOptionsSig(() => {
     const plz = this.plzChangedSig();
+    const land = this.landChangedSig();
     const elternTyp = this.elternteil.elternTyp;
 
     const kanton = this.plzStore.getKantonByPlz(plz);
 
-    if (!!plz && plz.length > 3 && kanton !== WohnsitzKanton.BE) {
+    if (land !== 'CH' || kanton !== WohnsitzKanton.BE) {
       return DokumentTyp[`ELTERN_STEUERUNTERLAGEN_${elternTyp}`];
     }
 

@@ -54,9 +54,11 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
   });
 
   describe('form field states', () => {
-    it('should not display vermoegenVorjahr if no PLZ has been filled', async () => {
+    it('should display vermoegenVorjahr if no PLZ and no Land has been filled', async () => {
       c.detectChanges();
-      expect(c.queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
+      expect(
+        c.queryByTestId('form-person-vermoegenVorjahr'),
+      ).toBeInTheDocument();
     });
   });
 
