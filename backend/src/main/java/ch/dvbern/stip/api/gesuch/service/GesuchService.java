@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -145,13 +144,13 @@ public class GesuchService {
 
     @Transactional
     public List<GesuchDto> findAllGesucheSb() {
-        return gesuchRepository.findAllForSb().map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
+        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional
     public List<GesuchDto> findGesucheSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
+        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional

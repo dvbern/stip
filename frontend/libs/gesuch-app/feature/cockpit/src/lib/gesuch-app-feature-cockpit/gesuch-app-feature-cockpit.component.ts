@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,21 +9,20 @@ import {
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { filter, map, switchMap } from 'rxjs/operators';
 
 import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
-import { Fall, Gesuchsperiode } from '@dv/shared/model/gesuch';
+import { Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -41,6 +39,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
   ],
+  providers: [FallStore],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
   styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,27 +48,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
   private benutzerSig = this.store.selectSignal(selectCurrentBenutzer);
 
-  // TODO: Refactor once services and landing page exist
-  // -----
-  private http = inject(HttpClient);
-  fall$ = this.store.select(selectCurrentBenutzer).pipe(
-    filter(isDefined),
-    switchMap((benutzer) => {
-      const fallUrl = `/api/v1/fall/benutzer/${benutzer.id}`;
-      return this.http.get<Fall[]>(fallUrl).pipe(
-        switchMap((falls) =>
-          falls.length === 0
-            ? this.http.post(fallUrl, {}).pipe(
-                switchMap(() => this.http.get<Fall[]>(fallUrl)),
-                map((falls) => falls[0]),
-              )
-            : [falls[0]],
-        ),
-      );
-    }),
-  );
-  // -----
-
+  fallStore = inject(FallStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   // Do not initialize signals in computed directly, just usage
   benutzerNameSig = computed(() => {
@@ -78,6 +57,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.fallStore.loadCurrentFall$();
     this.store.dispatch(GesuchAppEventCockpit.init());
     this.store.dispatch(SharedDataAccessGesuchEvents.init());
     this.store.dispatch(sharedDataAccessGesuchsperiodeEvents.init());

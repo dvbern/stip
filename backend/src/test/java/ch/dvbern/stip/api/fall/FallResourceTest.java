@@ -34,10 +34,10 @@ class FallResourceTest {
     @Order(1)
     void testCreateFallForGs() {
         fallApiSpec.createFallForGs()
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode());
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
