@@ -2,7 +2,10 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -10,11 +13,17 @@ import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestUtil;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import org.joda.time.Days;
+import org.joda.time.Instant;
+import org.joda.time.Years;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -176,6 +185,59 @@ class EinnahmenKostenValidatorTest {
         assertThat(gesuch.getEinnahmenKosten().getSteuerjahr()).isEqualTo((Year.now().getValue() -1));
     }
     @Test
+    void vermoegenConstraintValidatorTest(){
+        final var validator = new EinnahmenKostenVermoegenRequiredConstraintValidator();
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        //setup
+        gesuch.setTranche(new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2024)))));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(1995,8,5)));
+
+        Integer technischersJahr = gesuch.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr();
+        LocalDate geburtsDatum = gesuch.getPersonInAusbildung().getGeburtsdatum();
+        Date geburtsDatumAsDate = Date.from(geburtsDatum.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        //technisches jahr -1, ende jahr | war gs damals bereits 18 jahre alt?
+        LocalDate referenceDate = LocalDate.of(technischersJahr-1,12,31);
+        Date referenceDateAsDate = Date.from(referenceDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long numberOfYearsBetween = calculateNumberOfYearsBetween(referenceDateAsDate, geburtsDatumAsDate);
+        assertThat(numberOfYearsBetween > 18);
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNotNull();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+
+        // genau 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 - 18,12,31)));
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNotNull();
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+
+        // fast 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 - 18,12,30)));
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNull();
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+
+        // unter 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 -5,12,31)));
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNull();
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+
+        //todo: validate: age gte 18 = vermoegen is not null
+        //todo: validate age lt = vermoegen is null
+
+
+    }
+    @Test
     void vermoegenValidationTest(){
         final var factory = Validation.buildDefaultValidatorFactory();
         final var validator = factory.getValidator();
@@ -183,6 +245,7 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
         boolean isValid = false;
 
+        // basic input validation checks
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isTrue();
@@ -198,6 +261,63 @@ class EinnahmenKostenValidatorTest {
         gesuch.getEinnahmenKosten().setVermoegen(Integer.MAX_VALUE);
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isTrue();
+
+        /*
+            validate input with the age of the GS
+         */
+        // setup
+        //todo: gesuchjar - 1 | gs lt 18 = null, sonst 0
+        gesuch.setTranche(new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2024)))));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(1995,8,5)));
+
+        Integer technischersJahr = gesuch.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr();
+        LocalDate geburtsDatum = gesuch.getPersonInAusbildung().getGeburtsdatum();
+        Date geburtsDatumAsDate = Date.from(geburtsDatum.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        //technisches jahr -1, ende jahr | war gs damals bereits 18 jahre alt?
+        LocalDate referenceDate = LocalDate.of(technischersJahr-1,12,31);
+        Date referenceDateAsDate = Date.from(referenceDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long numberOfYearsBetween = calculateNumberOfYearsBetween(referenceDateAsDate, geburtsDatumAsDate);
+        assertThat(numberOfYearsBetween > 18);
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNotNull();
+
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+
+        // genau 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 - 18,12,31)));
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNotNull();
+        assertThat(validateGesuchFormularProperty(validator,gesuch,propertyName)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        assertThat(validateGesuchFormularProperty(validator,gesuch,propertyName)).isFalse();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+
+        // fast 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 - 18,12,30)));
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNull();
+        assertThat(validateGesuchFormularProperty(validator,gesuch,propertyName)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validateGesuchFormularProperty(validator,gesuch,propertyName)).isFalse();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+
+        // unter 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 -5,12,31)));
+        assertThat(gesuch.getEinnahmenKosten().getVermoegen()).isNull();
+        assertThat(validateGesuchFormularProperty(validator,gesuch,propertyName)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validateGesuchFormularProperty(validator,gesuch,propertyName)).isFalse();
+
+        //todo: validate: age gte 18 = vermoegen is not null
+        //todo: validate age lt = vermoegen is null
+    }
+
+    //todo: change validator
+    private int calculateNumberOfYearsBetween(Date date1, Date date2) {
+        return Math.abs(Years.yearsBetween(Instant.ofEpochMilli(date1.getTime()),Instant.ofEpochMilli(date2.getTime())).getYears());
     }
 
 }

@@ -96,6 +96,10 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
+@EinnahmenKostenVermoegenRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+}, property = "einnahmenKosten")
 @LebenslaufAusbildungUeberschneidenConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     LebenslaufItemPageValidation.class
