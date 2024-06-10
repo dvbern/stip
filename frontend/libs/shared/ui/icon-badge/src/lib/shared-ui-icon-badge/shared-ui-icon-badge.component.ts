@@ -7,15 +7,16 @@ import {
 } from '@angular/core';
 
 import { SharedModelState } from '@dv/shared/model/state-colors';
+import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 
 @Component({
-  selector: 'dv-shared-ui-badge',
+  selector: 'dv-shared-ui-icon-badge',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './shared-ui-badge.component.html',
-  styleUrl: './shared-ui-badge.component.scss',
+  imports: [CommonModule, SharedUiBadgeComponent],
+  templateUrl: './shared-ui-icon-badge.component.html',
+  styleUrl: './shared-ui-icon-badge.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiBadgeComponent {
+export class SharedUiIconBadgeComponent {
   @Input() @HostBinding('class') type: SharedModelState = 'warning';
 }

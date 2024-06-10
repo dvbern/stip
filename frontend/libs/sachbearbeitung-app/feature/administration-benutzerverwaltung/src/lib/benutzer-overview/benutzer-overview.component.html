@@ -36,13 +36,13 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
               @if (!benutzer.roles.extraAmount || showFullListForBenutzer[benutzer.id]) {
                 @for (role of benutzer.roles.full; track role) {
-                  <dv-shared-ui-badge [type]="role.color" [withoutBorder]="true">
+                  <dv-shared-ui-badge [type]="role.color">
                     {{ 'shared.role.' + role.name | translate }}
                   </dv-shared-ui-badge>
                 }
               } @else {
                 @for (role of benutzer.roles.compact; track role) {
-                  <dv-shared-ui-badge [type]="role.color" [withoutBorder]="true">
+                  <dv-shared-ui-badge [type]="role.color">
                     {{ 'shared.role.' + role.name | translate }}
                   </dv-shared-ui-badge>
                 }

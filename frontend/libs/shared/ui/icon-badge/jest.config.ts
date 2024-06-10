@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-ui-severity-icon',
+  displayName: 'shared-ui-icon-badge',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/ui/severity-icon',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/icon-badge',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
