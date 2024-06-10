@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api;
 
+import java.util.HashSet;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
@@ -18,6 +20,8 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 @RequestScoped
 public class BenutzerServiceMock extends BenutzerService {
     private final BenutzerMapper benutzerMapper;
+    private final JsonWebToken jsonWebToken;
+    private static final HashSet<String> SEEN_BENUTZERS = new HashSet<>();
 
     public BenutzerServiceMock() {
         super(
@@ -31,6 +35,7 @@ public class BenutzerServiceMock extends BenutzerService {
         );
 
         benutzerMapper = null;
+        jsonWebToken = null;
     }
 
     @Inject
@@ -52,11 +57,18 @@ public class BenutzerServiceMock extends BenutzerService {
             identity);
 
         this.benutzerMapper = benutzerMapper;
+        this.jsonWebToken = jsonWebToken;
     }
 
     @Override
     @Transactional
     public Benutzer getCurrentBenutzer() {
-        return benutzerMapper.toEntity(super.getOrCreateAndUpdateCurrentBenutzer());
+        if (SEEN_BENUTZERS.contains(jsonWebToken.getSubject())) {
+            return super.getCurrentBenutzer();
+        } else {
+            SEEN_BENUTZERS.add(jsonWebToken.getSubject());
+            super.getOrCreateAndUpdateCurrentBenutzer();
+            return super.getCurrentBenutzer();
+        }
     }
 }
