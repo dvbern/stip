@@ -45,7 +45,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE
 })
 @JsonTypeName("EinnahmenKosten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -106,6 +107,9 @@ public class EinnahmenKostenDtoSpec {
 
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
+
+  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
+  private Integer steuernKantonGemeinde;
 
   public EinnahmenKostenDtoSpec() {
   }
@@ -609,6 +613,34 @@ public class EinnahmenKostenDtoSpec {
     this.vermoegen = vermoegen;
   }
 
+
+  public EinnahmenKostenDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
+    return this;
+  }
+
+   /**
+   * transient and calculated readonly field
+   * minimum: 0
+   * maximum: 2147483647
+   * @return steuernKantonGemeinde
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -636,12 +668,13 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
-        Objects.equals(this.vermoegen, einnahmenKosten.vermoegen);
+        Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
+        Objects.equals(this.steuernKantonGemeinde, einnahmenKosten.steuernKantonGemeinde);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -667,6 +700,7 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("}");
     return sb.toString();
   }
