@@ -7,5 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface BerechnungModelVersion {
-    int value();
+    int major();
+    int minor();
 }
