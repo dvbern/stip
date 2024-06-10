@@ -2,10 +2,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.concurrent.TimeUnit;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -21,10 +18,6 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestUtil;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import org.junit.jupiter.api.Test;
-import org.joda.time.Days;
-import org.joda.time.Instant;
-import org.joda.time.Years;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -187,7 +180,7 @@ class EinnahmenKostenValidatorTest {
     }
 
     @Test
-    void vermoegenNonNegativeValidationTest(){
+    void vermoegenNonNegativeValueValidationTest(){
         final var factory = Validation.buildDefaultValidatorFactory();
         final var validator = factory.getValidator();
         final String propertyName = "vermoegen";
@@ -203,7 +196,6 @@ class EinnahmenKostenValidatorTest {
 
         isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
         assertThat(isValid).isTrue();
-
     }
 
     @Test
@@ -237,5 +229,4 @@ class EinnahmenKostenValidatorTest {
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isFalse();
     }
-
 }

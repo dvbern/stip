@@ -15,12 +15,7 @@ public class EinnahmenKostenVermoegenRequiredConstraintValidator implements Cons
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         try{
-            if(GesuchFormularCalculationUtil.getVorjahrGesuchsjahrAsLocalDate(gesuchFormular) != null){
-
-            }
-            LocalDate vorjahrGesuchsjahrDatum = GesuchFormularCalculationUtil.getVorjahrGesuchsjahrAsLocalDate(gesuchFormular);
-            int numberOfYearsBetween = GesuchFormularCalculationUtil.calculateAgeAtLocalDate(gesuchFormular,vorjahrGesuchsjahrDatum);
-            if(numberOfYearsBetween >= 18){
+            if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
                 return gesuchFormular.getEinnahmenKosten().getVermoegen() != null;
             }
             else {
