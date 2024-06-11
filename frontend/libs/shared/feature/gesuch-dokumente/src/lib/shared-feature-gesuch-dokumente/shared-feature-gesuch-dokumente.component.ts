@@ -14,7 +14,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
-import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
@@ -28,12 +27,13 @@ import {
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
-import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import {
+  SharedUiIfGesuchstellerDirective,
+  SharedUiIfSachbearbeiterDirective,
+} from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
-
-import { SharedUiIfGesuchstellerDirective } from '../../../../../ui/if-app-type/src/lib/shared-ui-if-app-type/shared-ui-if-gesuchsteller.directive';
 
 function getFormStep(
   dokumentTyp: DokumentTyp | undefined,
@@ -98,7 +98,6 @@ function getFormStep(
 })
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
-  public appType = inject(SharedModelCompiletimeConfig).appType;
 
   displayedColumns = [
     'expander',

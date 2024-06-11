@@ -53,34 +53,31 @@
             <td class="status-cell" mat-cell *matCellDef="let dokument">
               <div class="d-flex gap-2">
                 @if (dokument.id) {
-                  @if (appType === 'sachbearbeitung-app') {
-                    <ng-container *dvIfSachbearbeiter>
-                      <button
-                        (click)="acceptDocument(dokument)"
-                        type="button"
-                        class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
-                      >
-                        <i class="material-symbols-rounded fs-4">check</i>
-                        <span>
-                          {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
-                        </span>
-                      </button>
-                      <button
-                        (click)="rejectDocument(dokument)"
-                        type="button"
-                        class="btn table-btn btn-danger d-flex align-items-center gap-1"
-                      >
-                        <i class="material-symbols-rounded fs-4">close</i>
-                        <span>
-                          {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
-                        </span>
-                      </button>
-                    </ng-container>
-                  } @else {
-                    <dv-shared-ui-badge *dvIfGesuchsteller type="info">{{
-                      'shared.dokumente.dokumentStatus.PENDING' | translate
-                    }}</dv-shared-ui-badge>
-                  }
+                  <ng-container *dvIfSachbearbeiter>
+                    <button
+                      (click)="acceptDocument(dokument)"
+                      type="button"
+                      class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+                    >
+                      <i class="material-symbols-rounded fs-4">check</i>
+                      <span>
+                        {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                      </span>
+                    </button>
+                    <button
+                      (click)="rejectDocument(dokument)"
+                      type="button"
+                      class="btn table-btn btn-danger d-flex align-items-center gap-1"
+                    >
+                      <i class="material-symbols-rounded fs-4">close</i>
+                      <span>
+                        {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                      </span>
+                    </button>
+                  </ng-container>
+                  <dv-shared-ui-badge *dvIfGesuchsteller type="info">{{
+                    'shared.dokumente.dokumentStatus.PENDING' | translate
+                  }}</dv-shared-ui-badge>
                 } @else {
                   <dv-shared-ui-badge type="warning">{{
                     'shared.dokumente.dokumentStatus.MISSING' | translate

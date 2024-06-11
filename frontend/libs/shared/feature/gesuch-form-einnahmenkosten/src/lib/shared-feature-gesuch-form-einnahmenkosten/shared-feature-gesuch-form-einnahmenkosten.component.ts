@@ -83,6 +83,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
+  styleUrl: './shared-feature-gesuch-form-einnahmenkosten.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {

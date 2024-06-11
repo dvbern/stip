@@ -42,9 +42,9 @@
           }
         </div>
       </div>
-      <div class="row g-4 mt-1">
-        <!-- ALIMENTE -->
-        @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
+        <div class="row g-4">
+          <!-- ALIMENTE -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.einnahmenkosten.alimente.label' | translate }}</mat-label>
@@ -67,9 +67,9 @@
               ></dv-shared-pattern-document-upload>
             }
           </div>
-        }
-      </div>
-      <div class="row g-4 mt-1">
+        </div>
+      }
+      <div class="row g-4">
         <!-- ZULAGEN -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -99,9 +99,9 @@
           }
         </div>
       </div>
-      <div class="row g-4 mt-1">
-        <!-- RENTEN -->
-        @if (!hiddenFieldsSetSig().has(form.controls.renten)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.renten)) {
+        <div class="row g-4">
+          <!-- RENTEN -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.einnahmenkosten.renten.label' | translate }}</mat-label>
@@ -125,9 +125,9 @@
               ></dv-shared-pattern-document-upload>
             }
           </div>
-        }
-      </div>
-      <div class="row g-4 mt-1">
+        </div>
+      }
+      <div class="row g-4">
         <!-- EO_LEISTUNGEN -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -153,7 +153,7 @@
           }
         </div>
       </div>
-      <div class="row g-4 mt-1">
+      <div class="row g-4">
         <!-- ERGAENZUNGSLEISTUNGEN -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -179,7 +179,7 @@
         </div>
       </div>
 
-      <div class="row g-4 mt-1">
+      <div class="row g-4">
         <!-- BEITRAEGE -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -245,7 +245,7 @@
         </div>
       }
       @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskostenTertiaerstufe)) {
-        <div class="row g-4 mt-1">
+        <div class="row g-4">
           <!-- AUSBILDUNGSKOSTEN_TERTIARY -->
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ 'shared.form.einnahmenkosten.ausbildungskostenTertiaerstufe.label' | translate }}</mat-label>
@@ -278,9 +278,9 @@
         </div>
       }
 
-      <div class="row g-4 mt-1">
-        <!-- BETREUUNGKOSTEN_KINDER -->
-        @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
+        <div class="row g-4">
+          <!-- BETREUUNGKOSTEN_KINDER -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.einnahmenkosten.betreuungskostenKinder.label' | translate }}</mat-label>
@@ -303,10 +303,10 @@
               ></dv-shared-pattern-document-upload>
             }
           </div>
-        }
-      </div>
+        </div>
+      }
 
-      <div class="row g-4 mt-1">
+      <div class="row g-4">
         <!-- FAHRKOSTEN -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -333,7 +333,7 @@
       </div>
 
       @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
-        <div class="row g-4 mt-1">
+        <div class="row g-4">
           <!-- WOHNKOSTEN -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -360,7 +360,7 @@
         </div>
       }
       @if (!hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche)) {
-        <div class="row g-4 mt-1">
+        <div class="row g-4">
           <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ 'shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label' | translate }}</mat-label>
@@ -382,7 +382,7 @@
         </div>
       }
       @if (!hiddenFieldsSetSig().has(form.controls.wgWohnend)) {
-        <div class="row g-4 mt-1">
+        <div class="row g-4">
           <!-- WG WOHNEND -->
           <mat-radio-group
             class="d-flex flex-column"
@@ -408,9 +408,9 @@
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.einnahmenkosten.steuerrelevanteDaten.title' | translate }}
       </h3>
-      <div class="row g-4">
-        <!-- VERMOEGEN -->
-        @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
+        <div class="row g-4">
+          <!-- VERMOEGEN -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.einnahmenkosten.vermoegen.label' | translate }}</mat-label>
@@ -433,11 +433,11 @@
               ></dv-shared-pattern-document-upload>
             } -->
           </div>
-        }
-      </div>
+        </div>
+      }
 
       <!-- STEUERJAHR -->
-      <div *dvIfSachbearbeiter class="row g-4 mt-1">
+      <div *dvIfSachbearbeiter class="row g-4">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
           <mat-label>{{ 'shared.form.einnahmenkosten.steuerjahr.label' | translate }}</mat-label>
           <input
@@ -457,7 +457,7 @@
       </div>
 
       <!-- VERANLAGUNGSCODE 0 - 99 -->
-      <div *dvIfSachbearbeiter class="row g-4 mt-1">
+      <div *dvIfSachbearbeiter class="row g-4">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
           <mat-label>{{ 'shared.form.einnahmenkosten.veranlagungsCode.label' | translate }}</mat-label>
           <input
@@ -480,9 +480,9 @@
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.einnahmenkosten.general.title' | translate }}
       </h3>
-      <div class="row g-4">
-        <!-- VERDIENST_REALISIERT -->
-        @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
+      @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
+        <div class="row g-4">
+          <!-- VERDIENST_REALISIERT -->
           <mat-radio-group
             class="col-12"
             formControlName="verdienstRealisiert"
@@ -510,11 +510,11 @@
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
           </mat-radio-group>
-        }
-      </div>
-      <div class="row g-4 mt-1">
-        <!-- WILL_DARLEHEN -->
-        @if (!hiddenFieldsSetSig().has(form.controls.willDarlehen)) {
+        </div>
+      }
+      @if (!hiddenFieldsSetSig().has(form.controls.willDarlehen)) {
+        <div class="row g-4">
+          <!-- WILL_DARLEHEN -->
           <div class="col-12 col-md-6 col-xl-6">
             <mat-radio-group
               class="d-flex flex-column"
@@ -535,8 +535,8 @@
               </mat-error>
             </mat-radio-group>
           </div>
-        }
-      </div>
+        </div>
+      }
 
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
