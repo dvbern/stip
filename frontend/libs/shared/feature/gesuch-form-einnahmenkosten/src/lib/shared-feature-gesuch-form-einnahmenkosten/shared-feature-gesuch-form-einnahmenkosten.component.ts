@@ -9,7 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -23,7 +23,6 @@ import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { combineLatest, map } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
@@ -43,6 +42,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -80,6 +80,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,7 +118,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
     vermoegen: [<string | undefined>undefined, [Validators.required]],
-    veranlagungsCode: [<string | null>null, [Validators.required]],
+    veranlagungsCode: [0, [Validators.required]],
     steuerjahr: [<string | null>null, [Validators.required]],
   });
 
@@ -125,18 +126,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
-
-  istSekundarstufeGroesserAlsLimite$ = combineLatest([
-    this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
-    toObservable(this.viewSig),
-  ]).pipe(
-    map(([value, view]) => {
-      if (value == null || view.gesuch == null) {
-        return false;
-      }
-      return +value > view.gesuch.gesuchsperiode.ausbKosten_SekII;
-    }),
-  );
 
   private sekundarstufeZweiChangedSig = toSignal(
     this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
@@ -443,7 +432,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             betreuungskostenKinder:
               einnahmenKosten.betreuungskostenKinder?.toString(),
             vermoegen: einnahmenKosten.vermoegen?.toString(),
-            veranlagungsCode: einnahmenKosten.veranlagungsCode.toString(),
+            veranlagungsCode: einnahmenKosten.veranlagungsCode,
             steuerjahr: einnahmenKosten.steuerjahr.toString(),
           });
         } else {
@@ -553,7 +542,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ),
           vermoegen: fromFormatedNumber(formValues.vermoegen),
           steuerjahr: fromFormatedNumber(formValues.steuerjahr),
-          veranlagungsCode: fromFormatedNumber(formValues.veranlagungsCode),
+          veranlagungsCode: formValues.veranlagungsCode,
         },
       },
     };

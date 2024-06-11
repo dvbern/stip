@@ -437,7 +437,7 @@
       </div>
 
       <!-- STEUERJAHR -->
-      <div class="row g-4">
+      <div *dvIfSachbearbeiter class="row g-4 mt-1">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
           <mat-label>{{ 'shared.form.einnahmenkosten.steuerjahr.label' | translate }}</mat-label>
           <input
@@ -457,15 +457,16 @@
       </div>
 
       <!-- VERANLAGUNGSCODE 0 - 99 -->
-      <div class="row g-4">
+      <div *dvIfSachbearbeiter class="row g-4 mt-1">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
           <mat-label>{{ 'shared.form.einnahmenkosten.veranlagungsCode.label' | translate }}</mat-label>
           <input
             formControlName="veranlagungsCode"
             data-testid="form-einnahmen-kosten-veranlagungsCode"
             matInput
-            type="text"
-            [maskito]="maskitoNumber"
+            type="number"
+            min="0"
+            max="99"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
