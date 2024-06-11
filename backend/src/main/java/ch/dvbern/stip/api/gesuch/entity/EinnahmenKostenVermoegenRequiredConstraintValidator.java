@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.joda.time.Instant;
@@ -14,13 +15,7 @@ public class EinnahmenKostenVermoegenRequiredConstraintValidator implements Cons
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         try{
-            Integer vorjahrGesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() -1 ;
-            LocalDate geburtsDatumGS = gesuchFormular.getPersonInAusbildung().getGeburtsdatum();
-            Date geburtsDatumGSAsDate = Date.from(geburtsDatumGS.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            LocalDate vorjahrGesuchsjahrDatum = LocalDate.of(vorjahrGesuchsjahr,12,31);
-            Date vorjahrGesuchsjahrDatumAsDate = Date.from(vorjahrGesuchsjahrDatum.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            long numberOfYearsBetween = calculateNumberOfYearsBetween(vorjahrGesuchsjahrDatumAsDate, geburtsDatumGSAsDate);
-            if(numberOfYearsBetween >= 18){
+            if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
                 return gesuchFormular.getEinnahmenKosten().getVermoegen() != null;
             }
             else {
@@ -30,9 +25,5 @@ public class EinnahmenKostenVermoegenRequiredConstraintValidator implements Cons
         catch(NullPointerException ex){
             return false;
         }
-    }
-
-    private int calculateNumberOfYearsBetween(Date date1, Date date2) {
-        return Math.abs(Years.yearsBetween(Instant.ofEpochMilli(date1.getTime()),Instant.ofEpochMilli(date2.getTime())).getYears());
     }
 }

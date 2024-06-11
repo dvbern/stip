@@ -16,6 +16,7 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -45,7 +46,13 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
+    @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "getVermoegenDefaultValue")
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @Named("getVermoegenDefaultValue")
+    public Integer getVermoegenDefaultValue(final GesuchFormular gesuchFormular) {
+        return GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)?0:null;
+    }
 
     @Named("calculateSteuern")
     public Integer calculateSteuern(final GesuchFormular gesuchFormular){

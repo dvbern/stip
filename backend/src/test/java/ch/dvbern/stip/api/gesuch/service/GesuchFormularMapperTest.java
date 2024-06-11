@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
-import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
@@ -15,11 +14,17 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapperImpl;
 import ch.dvbern.stip.api.eltern.service.ElternMapperImpl;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.service.FallMapperImpl;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapperImpl;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
@@ -31,6 +36,8 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.generated.dto.*;
 import org.junit.jupiter.api.Test;
 
+import static io.smallrye.common.constraint.Assert.assertFalse;
+import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -305,6 +312,7 @@ class GesuchFormularMapperTest {
         );
     }
 
+
     @Test
     void calculateSteuernKantonGemeindeTest(){
         GesuchFormular gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0)).setPartner(new Partner().setJahreseinkommen(0));
@@ -329,5 +337,74 @@ class GesuchFormularMapperTest {
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null)).setPartner(new Partner().setJahreseinkommen(null));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+    }
+
+
+    @Test
+    void setCorrectVermoegenValueGT18Test(){
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
+        tranche.setGesuchFormular(
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten()).setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setGeburtsdatum(geburtsDatum)).setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        GesuchFormularMapper gesuchFormularMapper = new GesuchFormularMapperImpl(
+            new PersonInAusbildungMapperImpl(),
+            new FamiliensituationMapperImpl(),
+            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            new LebenslaufItemMapperImpl(new DateMapperImpl()),
+            new PartnerMapperImpl(),
+            new AuszahlungMapperImpl(),
+            new GeschwisterMapperImpl(),
+            new ElternMapperImpl(),
+            new KindMapperImpl(),
+            new EinnahmenKostenMapperImpl()
+        );
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() >= 0);
+
+        // gesuch update
+       // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null );
+
+
+    }
+
+    @Test
+    void setCorrectVermoegenValueLT18Test(){
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(2);
+        tranche.setGesuchFormular(
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten()).setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setGeburtsdatum(geburtsDatum)).setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        GesuchFormularMapper gesuchFormularMapper = new GesuchFormularMapperImpl(
+            new PersonInAusbildungMapperImpl(),
+            new FamiliensituationMapperImpl(),
+            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            new LebenslaufItemMapperImpl(new DateMapperImpl()),
+            new PartnerMapperImpl(),
+            new AuszahlungMapperImpl(),
+            new GeschwisterMapperImpl(),
+            new ElternMapperImpl(),
+            new KindMapperImpl(),
+            new EinnahmenKostenMapperImpl()
+        );
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
+
+        // gesuch update
+        // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null );
+
     }
 }

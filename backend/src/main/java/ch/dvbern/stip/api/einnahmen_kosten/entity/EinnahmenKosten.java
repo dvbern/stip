@@ -105,5 +105,5 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "vermoegen", nullable = true)
     @Max(Integer.MAX_VALUE)
     @Min(0)
-    private Integer vermoegen;
+    private Integer vermoegen = null;
 }
