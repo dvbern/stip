@@ -116,6 +116,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       [Validators.required, sharedUtilValidatorRange(0, 5)],
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
+    vermoegen: [<string | undefined>undefined, [Validators.required]],
+    veranlagungsCode: [<string | null>null, [Validators.required]],
+    steuerjahr: [<string | null>null, [Validators.required]],
   });
 
   viewSig = this.store.selectSignal(
@@ -169,7 +172,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   formStateSig = computed(() => {
-    const { gesuchFormular, ausbildungsstaettes } = this.viewSig();
+    const { gesuchFormular, ausbildungsstaettes, gesuch } = this.viewSig();
 
     if (!gesuchFormular) {
       return {
@@ -217,6 +220,15 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const willTertiaerstufe =
       ausbildungsgang?.bildungsart.bildungsstufe === 'TERTIAER';
 
+    // return true if the person was 18 or older by the end of the year before the gesuchsjahr
+    const gesuchsjahr: number | undefined =
+      gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr;
+    const warErwachsenSteuerJahr =
+      !geburtsdatum || !gesuchsjahr
+        ? false
+        : (getDateDifference(geburtsdatum, new Date(gesuchsjahr - 1, 11, 31))
+            ?.years ?? 0) >= 18;
+
     return {
       hasData: true,
       hatElternteilVerloren,
@@ -224,6 +236,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       willSekundarstufeZwei,
       willTertiaerstufe,
       istErwachsen,
+      warErwachsenSteuerJahr,
     } as const;
   });
 
@@ -348,6 +361,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           willSekundarstufeZwei,
           willTertiaerstufe,
           istErwachsen,
+          warErwachsenSteuerJahr,
         } = this.formStateSig();
 
         const {
@@ -396,6 +410,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.controls.betreuungskostenKinder,
           !hatKinder,
         );
+        this.setDisabledStateAndHide(
+          this.form.controls.vermoegen,
+          !warErwachsenSteuerJahr,
+        );
       },
       { allowSignalWrites: true },
     );
@@ -424,6 +442,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             wohnkosten: einnahmenKosten.wohnkosten?.toString(),
             betreuungskostenKinder:
               einnahmenKosten.betreuungskostenKinder?.toString(),
+            vermoegen: einnahmenKosten.vermoegen?.toString(),
+            veranlagungsCode: einnahmenKosten.veranlagungsCode.toString(),
+            steuerjahr: einnahmenKosten.steuerjahr.toString(),
           });
         } else {
           this.form.reset();
@@ -497,6 +518,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'wgWohnend',
       'verdienstRealisiert',
       'auswaertigeMittagessenProWoche',
+      'steuerjahr',
+      'veranlagungsCode',
       ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
     ]);
     return {
@@ -528,6 +551,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           betreuungskostenKinder: fromFormatedNumber(
             formValues.betreuungskostenKinder,
           ),
+          vermoegen: fromFormatedNumber(formValues.vermoegen),
+          steuerjahr: fromFormatedNumber(formValues.steuerjahr),
+          veranlagungsCode: fromFormatedNumber(formValues.veranlagungsCode),
         },
       },
     };
