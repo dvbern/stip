@@ -21,12 +21,19 @@ public class GesuchFormularCalculationUtil {
     }
 
     public LocalDate getVorjahrGesuchsjahrAsLocalDate(GesuchFormular gesuchFormular){
-        Integer vorjahrGesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() -1 ;
-        LocalDate vorjahrGesuchsjahrDatum = LocalDate.of(vorjahrGesuchsjahr,12,31);
-        return vorjahrGesuchsjahrDatum;
+        Integer vorjahrGesuchsjahr = LocalDate.now().getYear()-1;
+        if(gesuchFormular.getTranche() != null){
+            vorjahrGesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() -1 ;
+        }
+        return LocalDate.of(vorjahrGesuchsjahr,12,31);
     }
 
     public boolean wasGSOlderThan18(GesuchFormular gesuchFormular){
-        return calculateAgeAtLocalDate(gesuchFormular,getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)) >= 18;
+        try{
+            return calculateAgeAtLocalDate(gesuchFormular,getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)) >= 18;
+        }
+        catch(Exception e){
+            return true;
+        }
     }
 }

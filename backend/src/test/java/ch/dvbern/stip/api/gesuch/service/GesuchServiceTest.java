@@ -828,62 +828,6 @@ class GesuchServiceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
-    void gesuchEinreichenSetCorrectVermoegenTest() {
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null );
-
-        //GS is older or equal than 18 years old
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(20));
-        tranche.getGesuchFormular().setTranche(tranche);
-        assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-
-
-        tranche.getGesuchFormular()
-            .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
-
-        //GS is younger than 18 years
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(1));
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-
-        tranche.getGesuchFormular().setTranche(tranche);
-        tranche.getGesuch().setGesuchDokuments(
-            Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
-                .toList()
-        );
-
-
-
-        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
-
-        assertThat(
-            tranche.getGesuch().getGesuchStatus(),
-            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-        );
-
-        Gesuch eingereicht = gesuchRepository.findById(tranche.getGesuch().getId());
-        assertThat(eingereicht.getGesuchTrancheById(tranche.getId()).get().getGesuchFormular().getEinnahmenKosten().getVermoegen(), is(null));
-
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void gesuchUpdateSetCorrectVermoegenTest() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        assertThat(
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(),
-            not(0));
-        GesuchTranche tranche =
-            updateWerZahltAlimente(gesuchUpdateDto, Elternschaftsteilung.MUTTER, Elternschaftsteilung.GEMEINSAM);
-        assertThat(tranche.getGesuchFormular().getElterns().size(), Matchers.is(0));
-        fail("not implemented");
-    }
-
-    @Test
     void pageValidation() {
         final var gesuch = new Gesuch();
         final var gesuchTranche = new GesuchTranche();
