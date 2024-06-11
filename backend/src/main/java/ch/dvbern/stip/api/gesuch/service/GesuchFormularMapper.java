@@ -46,12 +46,25 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
-    @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "getVermoegenDefaultValue")
+    @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "mapVermoegen")
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
 
-    @Named("getVermoegenDefaultValue")
-    public Integer getVermoegenDefaultValue(final GesuchFormular gesuchFormular) {
-        return GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)?0:null;
+    @Named("mapVermoegen")
+    public Integer mapVermoegen(final GesuchFormular gesuchFormular) {
+        if(gesuchFormular.getEinnahmenKosten() == null){
+            return null;
+        }
+        Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
+        if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
+            if(vermoegen == null){
+                return 0;
+            }
+            else{
+                return vermoegen;
+            }
+        }else{
+            return null;
+        }
     }
 
     @Named("calculateSteuern")
