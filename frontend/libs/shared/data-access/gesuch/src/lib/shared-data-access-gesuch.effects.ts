@@ -17,7 +17,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
@@ -54,20 +53,14 @@ import { selectRouteId } from './shared-data-access-gesuch.selectors';
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
 
 export const loadOwnGesuchs = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
+  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return actions$.pipe(
       ofType(
         SharedDataAccessGesuchEvents.init,
         SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       ),
-      switchMap(() => store.select(selectCurrentBenutzer)),
-      filter(isDefined),
-      concatMap((benutzer) =>
-        gesuchService.getGesucheForBenutzer$({ benutzerId: benutzer.id }).pipe(
+      concatMap(() =>
+        gesuchService.getGesucheGs$().pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -91,8 +84,8 @@ export const loadAllGesuchs = createEffect(
       filter(isDefined),
       switchMap(({ filter }) => {
         const getCall = filter?.showAll
-          ? gesuchService.getGesuche$()
-          : gesuchService.getGesucheForMe$();
+          ? gesuchService.getAllGesucheSb$()
+          : gesuchService.getGesucheSb$();
 
         return getCall.pipe(
           map((gesuchs) =>
