@@ -50,10 +50,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     @Named("calculateSteuern")
     public Integer calculateSteuern(final GesuchFormular gesuchFormular){
         int totalEinkommen = 0;
-        if(gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen() != null){
+        if(gesuchFormular.getEinnahmenKosten() != null && gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen() != null){
             totalEinkommen += gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen();
         }
-        if(gesuchFormular.getPartner().getJahreseinkommen() != null){
+        if(gesuchFormular.getPartner() != null && gesuchFormular.getPartner().getJahreseinkommen() != null){
             totalEinkommen += gesuchFormular.getPartner().getJahreseinkommen();
         }
 
