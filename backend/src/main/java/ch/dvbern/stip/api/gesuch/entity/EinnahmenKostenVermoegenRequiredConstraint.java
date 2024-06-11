@@ -5,15 +5,14 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_WOHNKOSTEN_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_VERMOEGEN_INVALID_VALUE_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-//@Constraint(validatedBy = EinnahmenKostenWohnkostenRequiredConstraintValidator.class)
 @Constraint(validatedBy = EinnahmenKostenVermoegenRequiredConstraintValidator.class)
 @Documented
 public @interface EinnahmenKostenVermoegenRequiredConstraint {
-    String message() default VALIDATION_EINNAHMEN_KOSTEN_WOHNKOSTEN_REQUIRED_MESSAGE;
+    String message() default VALIDATION_EINNAHMEN_KOSTEN_VERMOEGEN_INVALID_VALUE_MESSAGE;
 
     Class<?>[] groups() default {};
 
