@@ -124,7 +124,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
 
     @Test
     void requiresIfVermoegen(){
-        formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(1000));
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERMOEGEN);
 
     }
