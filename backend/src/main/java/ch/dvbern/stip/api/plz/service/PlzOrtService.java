@@ -1,7 +1,6 @@
-package ch.dvbern.stip.api.common.service;
+package ch.dvbern.stip.api.plz.service;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.generated.dto.PlzDto;
 import jakarta.enterprise.context.ApplicationScoped;
 

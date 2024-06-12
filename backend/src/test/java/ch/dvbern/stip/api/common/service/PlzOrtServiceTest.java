@@ -1,12 +1,13 @@
 package ch.dvbern.stip.api.common.service;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 @QuarkusTest
 class PlzOrtServiceTest {
     @Inject

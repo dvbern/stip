@@ -1,7 +1,5 @@
 package ch.dvbern.stip.api.plz.service;
 
-import ch.dvbern.stip.api.common.service.PlzOrtService;
-import ch.dvbern.stip.generated.dto.PlzDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;

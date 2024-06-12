@@ -77,7 +77,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
         final var validator = new VermoegenVorjahrRequiredConstraintValidator();
 
         final var pia = new PersonInAusbildung()
-            .setAdresse(new Adresse().setPlz("3000"))
+            .setAdresse(new Adresse().setPlz("3011"))
             .setVermoegenVorjahr(1);
 
         assertThat(validator.isValid(pia, null), is(false));

@@ -11,7 +11,7 @@ public final class AdresseSpecModel {
             model.setCoAdresse(faker.address().secondaryAddress());
             model.setStrasse(faker.address().streetName());
             model.setHausnummer(faker.address().streetAddressNumber());
-            model.setPlz("3000");
+            model.setPlz("3011");
             model.setOrt(faker.address().cityName());
         });
 }
