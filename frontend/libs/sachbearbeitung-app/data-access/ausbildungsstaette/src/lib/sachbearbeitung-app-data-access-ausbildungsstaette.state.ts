@@ -424,7 +424,6 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 tapResponse({
                   next: (gang: Ausbildungsgang) => {
                     patchState(store, (state) => {
-                      console.log('GANG', gang);
                       const data = state.tableData.data.map((s) => {
                         if (s.id === staette.id) {
                           const ausbildungsgaenge = s.ausbildungsgaenge?.map(
