@@ -10,19 +10,26 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.plz.repo.PlzRepository;
+import ch.dvbern.stip.api.plz.service.PlzMapperImpl;
+import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+@QuarkusTest
 class PersonInAusbildungRequiredDocumentsProducerTest {
     private PersonInAusbildungRequiredDocumentsProducer producer;
 
     private GesuchFormular formular;
+    @Inject
+    PlzOrtService plzOrtService;
 
     @BeforeEach
     void setup() {
-        producer = new PersonInAusbildungRequiredDocumentsProducer(new PlzOrtService());
+        producer = new PersonInAusbildungRequiredDocumentsProducer(plzOrtService);
         formular = new GesuchFormular();
     }
 
@@ -133,7 +140,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                     .setSozialhilfebeitraege(false)
                     .setAdresse(
                         new Adresse()
-                            .setPlz("3000")
+                            .setPlz("3011")
                     )
             )
             .setElterns(new HashSet<>() {{
