@@ -133,6 +133,7 @@
       "@dv/shared/ui/version-text": ["libs/shared/ui/version-text/src/index.ts"],
       "@dv/shared/ui/wohnsitz-splitter": ["libs/shared/ui/wohnsitz-splitter/src/index.ts"],
       "@dv/shared/util-data-access/plz-ort-lookup": ["libs/shared/util-data-access/plz-ort-lookup/src/index.ts"],
+      "@dv/shared/util-data-access/store-util": ["libs/shared/util-data-access/store-util/src/index.ts"],
       "@dv/shared/util-fn/comp-test": ["libs/shared/util-fn/comp-test/src/index.ts"],
       "@dv/shared/util-fn/e2e-util": ["libs/shared/util-fn/e2e-util/src/index.ts"],
       "@dv/shared/util-fn/error-transformer": ["libs/shared/util-fn/error-transformer/src/index.ts"],

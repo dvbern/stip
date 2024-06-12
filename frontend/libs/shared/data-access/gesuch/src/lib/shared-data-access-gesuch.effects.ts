@@ -44,6 +44,7 @@ import {
   noGlobalErrorsIf,
   shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
+import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -53,12 +54,17 @@ import { selectRouteId } from './shared-data-access-gesuch.selectors';
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
 
 export const loadOwnGesuchs = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    storeUtil = inject(StoreUtilService),
+  ) => {
     return actions$.pipe(
       ofType(
         SharedDataAccessGesuchEvents.init,
         SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       ),
+      storeUtil.waitForBenutzerData$(),
       concatMap(() =>
         gesuchService.getGesucheGs$().pipe(
           map((gesuchs) =>
@@ -79,9 +85,14 @@ export const loadOwnGesuchs = createEffect(
 );
 
 export const loadAllGesuchs = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    storeUtil = inject(StoreUtilService),
+  ) => {
     return combineLoadAllActions$(actions$).pipe(
       filter(isDefined),
+      storeUtil.waitForBenutzerData$(),
       switchMap(({ filter }) => {
         const getCall = filter?.showAll
           ? gesuchService.getAllGesucheSb$()

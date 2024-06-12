@@ -10,6 +10,9 @@ import {
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 describe('sharedDataAccessGesuch Effects', () => {
+  const storeUtilMock: any = {
+    waitForBenutzerData$: jest.fn(() => (s: unknown) => s),
+  };
   let scheduler: TestScheduler;
 
   beforeEach(() => {
@@ -28,7 +31,11 @@ describe('sharedDataAccessGesuch Effects', () => {
         a: SharedDataAccessGesuchEvents.init(),
       });
 
-      const effectStream$ = loadOwnGesuchs(actionsMock$, gesuchServiceMock);
+      const effectStream$ = loadOwnGesuchs(
+        actionsMock$,
+        gesuchServiceMock,
+        storeUtilMock,
+      );
 
       expectObservable(effectStream$).toBe('160ms a', {
         a: SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
@@ -64,7 +71,11 @@ describe('sharedDataAccessGesuch Effects', () => {
         c: SharedDataAccessGesuchEvents.loadAllDebounced({}),
       });
 
-      const effectStream$ = loadAllGesuchs(actionsMock$, gesuchServiceMock);
+      const effectStream$ = loadAllGesuchs(
+        actionsMock$,
+        gesuchServiceMock,
+        storeUtilMock,
+      );
 
       /**
        * (A) Initial load

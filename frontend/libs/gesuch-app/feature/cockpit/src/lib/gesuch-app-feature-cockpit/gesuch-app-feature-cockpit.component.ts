@@ -12,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
-import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
@@ -46,7 +46,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 })
 export class GesuchAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
-  private benutzerSig = this.store.selectSignal(selectCurrentBenutzer);
+  private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);

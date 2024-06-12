@@ -12,6 +12,7 @@ import {
   handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
+import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 type FallState = {
   cachedCurrentFall: CachedRemoteData<Fall>;
@@ -26,6 +27,7 @@ export class FallStore extends signalStore(
   withState(initialState),
   withDevtools('FallStore'),
 ) {
+  private storeUtilService = inject(StoreUtilService);
   private fallService = inject(FallService);
 
   currentFallViewSig = computed(() => {
@@ -34,6 +36,7 @@ export class FallStore extends signalStore(
 
   loadCurrentFall$ = rxMethod<void>(
     pipe(
+      this.storeUtilService.waitForBenutzerData$(),
       tap(() => {
         patchState(this, (state) => ({
           cachedCurrentFall: cachedPending(state.cachedCurrentFall),

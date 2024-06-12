@@ -24,8 +24,8 @@ export const initial = (): Initial => ({
  * @example
  * store.values().map(filter(isInitial))
  */
-export const isInitial = (
-  response: RemoteData<unknown> | CachedRemoteData<unknown>,
+export const isInitial = <T>(
+  response: RemoteData<T> | CachedRemoteData<T>,
 ): response is Initial => {
   return response.type === 'initial';
 };
@@ -54,10 +54,20 @@ export const failure = (error: unknown): Failure => ({
  * @example
  * store.values().map(filter(isFailure))
  */
-export const isFailure = (
-  response: RemoteData<unknown>,
-): response is Failure => {
+export const isFailure = <T>(response: RemoteData<T>): response is Failure => {
   return response.type === 'failure';
+};
+
+/**
+ * Checks if the given remote data object is not in the pending state.
+ *
+ * @example
+ * store.values().map(filter(isNotPending))
+ */
+export const isNotPending = <T>(
+  response: RemoteData<T>,
+): response is Exclude<RemoteData<T>, Pending> => {
+  return response.type !== 'pending';
 };
 
 type Pending = {
