@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { catchError, filter, map, switchMap, tap, withLatestFrom } from 'rxjs';
+import { catchError, exhaustMap, filter, map, tap, withLatestFrom } from 'rxjs';
 
 import { BenutzerService } from '@dv/shared/model/gesuch';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -29,7 +29,7 @@ export const loadCurrentBenutzer = createEffect(
           SharedDataAccessBenutzerApiEvents.setCurrentBenutzerPending(),
         ),
       ),
-      switchMap(() =>
+      exhaustMap(() =>
         benutzerService.prepareCurrentBenutzer$().pipe(
           map((benutzer) =>
             SharedDataAccessBenutzerApiEvents.currentBenutzerLoadedSuccess({
