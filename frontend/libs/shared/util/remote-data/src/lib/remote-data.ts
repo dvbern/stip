@@ -24,8 +24,8 @@ export const initial = (): Initial => ({
  * @example
  * store.values().map(filter(isInitial))
  */
-export const isInitial = <T>(
-  response: RemoteData<T> | CachedRemoteData<T>,
+export const isInitial = (
+  response: RemoteData<unknown> | CachedRemoteData<unknown>,
 ): response is Initial => {
   return response.type === 'initial';
 };
@@ -54,7 +54,9 @@ export const failure = (error: unknown): Failure => ({
  * @example
  * store.values().map(filter(isFailure))
  */
-export const isFailure = <T>(response: RemoteData<T>): response is Failure => {
+export const isFailure = (
+  response: RemoteData<unknown>,
+): response is Failure => {
   return response.type === 'failure';
 };
 
