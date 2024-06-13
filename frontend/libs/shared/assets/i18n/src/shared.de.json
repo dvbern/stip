@@ -412,6 +412,11 @@
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
 
+  "shared.role.Admin": "Admin",
+  "shared.role.Jurist": "Jurist",
+  "shared.role.Sachbearbeiter": "Sachbearbeiter",
+  "shared.role.Gesuchsteller": "Gesuchsteller",
+
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",
   "shared.kanton.AR": "Appenzell Innerrhoden",

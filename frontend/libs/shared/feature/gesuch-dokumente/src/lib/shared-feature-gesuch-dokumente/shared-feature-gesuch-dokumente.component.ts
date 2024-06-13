@@ -27,7 +27,7 @@ import {
   TableDocument,
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
-import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
+import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
@@ -85,7 +85,7 @@ function getFormStep(
     MatTableModule,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
-    SharedUiBadgeComponent,
+    SharedUiIconBadgeComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',

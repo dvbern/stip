@@ -3,7 +3,7 @@
 } @else {
   @if (gesuchsperiodenDatasourceSig(); as gesuchsperiodeSource) {
     <h3 class="mt-5">{{ 'sachbearbeitung-app.admin.gesuchsperiode.title' | translate }}</h3>
-    <div class="mt-4 shadow rounded-4 overflow-hidden">
+    <div class="mt-4 shadow rounded-4">
       <table
         mat-table
         [dataSource]="gesuchsperiodeSource"

@@ -1,9 +1,14 @@
 import { Route } from '@angular/router';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import { CHILD_OPTION_BENUTZER_ERSTELLEN } from '@dv/sachbearbeitung-app/model/administration';
+import {
+  CHILD_OPTION_BENUTZER_ERSTELLEN,
+  OPTION_BENUTZERVERWALTUNG,
+} from '@dv/sachbearbeitung-app/model/administration';
+import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
-import { SachbearbeitungAppFeatureAdministrationBenutzerverwaltungComponent } from './sachbearbeitung-app-feature-administration-benutzerverwaltung/sachbearbeitung-app-feature-administration-benutzerverwaltung.component';
+import { BenutzerErstellungComponent } from './benutzer-erstellung/benutzer-erstellung.component';
+import { BenutzerOverviewComponent } from './benutzer-overview/benutzer-overview.component';
 
 export const sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes: Route[] =
   [
@@ -19,14 +24,19 @@ export const sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes: Ro
             ),
           },
           title: 'sachbearbeitung-app.admin.benutzerverwaltung.route.create',
-          path: 'erstellen',
-          component:
-            SachbearbeitungAppFeatureAdministrationBenutzerverwaltungComponent,
+          path: 'create',
+          component: BenutzerErstellungComponent,
         },
         {
+          data: { option: OPTION_BENUTZERVERWALTUNG },
+          path: 'edit/:id',
+          loadComponent: () => SharedUiCommingSoonComponent,
+        },
+        {
+          data: { option: OPTION_BENUTZERVERWALTUNG },
+          title: 'sachbearbeitung-app.admin.benutzerverwaltung.route.overview',
           path: '',
-          pathMatch: 'full',
-          redirectTo: 'erstellen',
+          component: BenutzerOverviewComponent,
         },
       ],
     },
