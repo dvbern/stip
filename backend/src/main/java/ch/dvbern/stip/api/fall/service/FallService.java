@@ -34,10 +34,6 @@ public class FallService {
 
     public FallDto findFallForGs() {
         final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
-        return fallMapper.toDto(
-            fallRepository
-                .findFallForGsOptional(gesuchstellerId)
-                .orElseThrow(NotFoundException::new)
-        );
+        return fallMapper.toDto(fallRepository.findFallForGsOptional(gesuchstellerId).orElse(null));
     }
 }
