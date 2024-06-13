@@ -6,6 +6,11 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
+import {
+  MatPaginator,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
@@ -16,6 +21,7 @@ import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
 @Component({
   standalone: true,
@@ -24,6 +30,7 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
     TranslateModule,
     MatTableModule,
     MatSortModule,
+    MatPaginatorModule,
     RouterLink,
     TypeSafeMatCellDefDirective,
     SharedUiBadgeComponent,
@@ -33,6 +40,9 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
   templateUrl: './benutzer-overview.component.html',
   styleUrls: ['./benutzer-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
+  ],
 })
 export class BenutzerOverviewComponent {
   store = inject(BenutzerverwaltungStore);
@@ -41,13 +51,18 @@ export class BenutzerOverviewComponent {
   showFullListForBenutzer: Record<string, boolean> = {};
 
   sortSig = viewChild(MatSort);
+  paginatorSig = viewChild(MatPaginator);
   benutzerListDataSourceSig = computed(() => {
     const benutzers = this.store.benutzers();
     const datasource = new MatTableDataSource(benutzers.data);
     const sort = this.sortSig();
+    const paginator = this.paginatorSig();
 
     if (sort) {
       datasource.sort = sort;
+    }
+    if (paginator) {
+      datasource.paginator = paginator;
     }
     return datasource;
   });
