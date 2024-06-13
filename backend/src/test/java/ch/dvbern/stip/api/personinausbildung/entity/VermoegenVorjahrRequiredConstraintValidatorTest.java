@@ -2,12 +2,17 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
+import ch.dvbern.stip.api.plz.service.PlzOrtService;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
+@QuarkusTest
 class VermoegenVorjahrRequiredConstraintValidatorTest {
+    @Inject
+    PlzOrtService plzOrtService;
     @Test
     void statusBRequiredTest() {
         final var validator = new VermoegenVorjahrRequiredConstraintValidator();
