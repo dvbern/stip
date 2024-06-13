@@ -1,6 +1,8 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 
 @Builder
@@ -27,7 +29,7 @@ public class ElternteilV1 {
     int anzahlPersonenImHaushalt;
     int anzahlGeschwisterInAusbildung;
 
-    public static ElternteilV1 withDefaults() {
+    public static ElternteilV1Builder builderWithDefaults() {
         return new ElternteilV1Builder()
             .essenskostenPerson1(0)
             .essenskostenPerson2(0)
@@ -48,7 +50,11 @@ public class ElternteilV1 {
             .steuerbaresVermoegen(0)
             .selbststaendigErwerbend(false)
             .anzahlPersonenImHaushalt(0)
-            .anzahlGeschwisterInAusbildung(0)
+            .anzahlGeschwisterInAusbildung(0);
+    }
+
+    public static ElternteilV1 withDefaults() {
+        return builderWithDefaults()
             .build();
     }
 }

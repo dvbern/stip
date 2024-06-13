@@ -2,6 +2,7 @@ package ch.dvbern.stip.berechnung.service;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import io.quarkus.test.junit.QuarkusTest;
@@ -29,14 +30,14 @@ class BerechnungServiceTest {
             .setPreisProMahlzeit(7)
         );
 
-        final var request = berechnungService.getBerechnungRequest(1, 0, gesuch, UUID.randomUUID());
+        final var request = berechnungService.getBerechnungRequest(1, 0, gesuch, UUID.randomUUID(), ElternTyp.VATER);
         assertThat(request, is(not(nullValue())));
     }
 
     @Test
     void getNonExistentTest() {
         assertThrows(IllegalArgumentException.class, () -> {
-            berechnungService.getBerechnungRequest(-1, 0, null, UUID.randomUUID());
+            berechnungService.getBerechnungRequest(-1, 0, null, UUID.randomUUID(), ElternTyp.MUTTER);
         });
     }
 }

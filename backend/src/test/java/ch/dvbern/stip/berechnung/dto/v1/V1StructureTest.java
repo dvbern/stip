@@ -1,11 +1,16 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -50,7 +55,7 @@ class V1StructureTest {
                         "einzahlungSaeule2": 0,
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
-                        "anzahlPersonenImHaushalt": 0,
+                        "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
@@ -74,7 +79,7 @@ class V1StructureTest {
                         "einzahlungSaeule2": 0,
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
-                        "anzahlPersonenImHaushalt": 0,
+                        "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
@@ -116,10 +121,10 @@ class V1StructureTest {
 
     @Test
     void test() throws JsonProcessingException {
-        final var request = BerechnungRequestV1.createRequest(prepareGesuch(), trancheUuid);
+        final var request = BerechnungRequestV1.createRequest(prepareGesuch(), trancheUuid, ElternTyp.VATER);
         final var actual = new ObjectMapper().writeValueAsString(request);
         final var comparator = new JsonComparatorBuilder().build();
-        
+
         final var result = comparator.compare(EXPECTED, actual);
         assertTrue(result.isMatch(), result.getErrorMessage());
     }
@@ -156,6 +161,39 @@ class V1StructureTest {
                                 .setWohnkosten(6000)
                                 .setAusbildungskostenTertiaerstufe(450)
                                 .setFahrkosten(523)
+                        )
+                        .setFamiliensituation(
+                            new Familiensituation()
+                                .setElternVerheiratetZusammen(false)
+                                .setGerichtlicheAlimentenregelung(false)
+                                .setElternteilUnbekanntVerstorben(false)
+                                .setVaterWiederverheiratet(false)
+                                .setMutterWiederverheiratet(true)
+                        )
+                        .setGeschwisters(
+                            Set.of(
+                                (Geschwister) new Geschwister()
+                                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+                                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+                                    .setGeburtsdatum(LocalDate.now())
+                                    .setNachname("a")
+                                    .setVorname("a"),
+                                (Geschwister) new Geschwister()
+                                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                                    .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
+                                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
+                                    .setGeburtsdatum(LocalDate.now())
+                                    .setNachname("a")
+                                    .setVorname("a"),
+                                (Geschwister) new Geschwister()
+                                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                                    .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
+                                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
+                                    .setGeburtsdatum(LocalDate.now())
+                                    .setNachname("a")
+                                    .setVorname("a")
+                            )
                         )
                 ).setId(trancheUuid)
             )
