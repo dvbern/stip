@@ -94,6 +94,13 @@ export const ABSCHLUSS = {
   iconSymbolName: 'check_circle',
 };
 
+export const PROTOKOLL = {
+  route: 'protokoll',
+  translationKey: 'shared.protokoll.title',
+  currentStepNumber: 13,
+  iconSymbolName: 'reversed_clock',
+};
+
 export const gesuchFormSteps = {
   PERSON,
   AUSBILDUNG,
@@ -107,6 +114,7 @@ export const gesuchFormSteps = {
   EINNAHMEN_KOSTEN,
   DOKUMENTE,
   ABSCHLUSS,
+  PROTOKOLL,
 };
 
 export const isStepDisabled = (

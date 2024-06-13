@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { SharedFeatureGesuchFormProtokollComponent } from '@dv/shared/feature/gesuch-form-protokoll';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [

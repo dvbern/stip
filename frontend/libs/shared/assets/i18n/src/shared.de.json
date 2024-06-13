@@ -143,6 +143,13 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Bei Mutter",
   "shared.form.shared.wohnsitzanteil.vater": "Bei Vater",
 
+  "shared.form.shared.protokoll.title": "Protokoll",
+  "shared.form.shared.protokoll.table.caption":"Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
+  "shared.form.shared.protokoll.table.datum": "Datum",
+  "shared.form.shared.protokoll.table.status": "Status",
+  "shared.form.shared.protokoll.table.user": "User",
+  "shared.form.shared.protokoll.table.kommentar": "Kommentar",
+
   "shared.person.title": "Person in Ausbildung",
   "shared.form.person.section.additional-information": "Weitere Angaben",
   "shared.form.person.salutation.label": "Anrede",
@@ -411,6 +418,8 @@
   "shared.form.abschluss.dialog.text": "Nachträgliche Änderungen sind nicht mehr möglich.",
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
+
+  "shared.protokoll.title": "Protokoll",
 
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",

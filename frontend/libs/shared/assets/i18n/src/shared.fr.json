@@ -143,6 +143,13 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Chez la mère",
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
 
+  "shared.form.shared.protokoll.title": "Protocole",
+  "shared.form.shared.protokoll.table.caption":"Voici un aperçu de toutes les actions de cette demande.",
+  "shared.form.shared.protokoll.table.datum": "Date",
+  "shared.form.shared.protokoll.table.status": "Statut",
+  "shared.form.shared.protokoll.table.user": "User",
+  "shared.form.shared.protokoll.table.kommentar": "Commentaire",
+
   "shared.person.title": "Person in Education",
   "shared.form.person.section.additional-information": "Additional information",
   "shared.form.person.salutation.label": "Title",
@@ -411,6 +418,8 @@
   "shared.form.abschluss.dialog.text": "Les modifications ultérieures ne seront pas possibles.",
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
+
+  "shared.protokoll.title": "Protocole",
 
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",

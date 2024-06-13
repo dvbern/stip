@@ -12,6 +12,7 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
+  PROTOKOLL,
 } from '@dv/shared/model/gesuch-form';
 
 export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
@@ -134,6 +135,17 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-dokumente').then(
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
+      ),
+  },
+  {
+    path: PROTOKOLL.route,
+    resolve: {
+      step: () => PROTOKOLL,
+    },
+    title: 'shared.protokoll.title',
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-protokoll').then(
+        (m) => m.sharedFeatureGesuchFormProtokollRoutes,
       ),
   },
 ];
