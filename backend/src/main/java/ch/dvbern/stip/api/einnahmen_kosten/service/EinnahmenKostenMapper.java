@@ -4,6 +4,8 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -12,6 +14,12 @@ public abstract class EinnahmenKostenMapper {
     public abstract EinnahmenKosten toEntity(EinnahmenKostenDto einnahmenKostenDto);
 
     public abstract EinnahmenKostenDto toDto(EinnahmenKosten einnahmenKosten);
+
+    @AfterMapping
+    public void afterMapping(EinnahmenKostenUpdateDto einnahmenKostenDto, @MappingTarget EinnahmenKosten einnahmenKosten){
+        einnahmenKosten.setVeranlagungsCode(0);
+        einnahmenKosten.setSteuerjahr(0);
+    }
 
     public abstract EinnahmenKosten partialUpdate(
         EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
