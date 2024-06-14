@@ -18,7 +18,6 @@ public abstract class EinnahmenKostenMapper {
     @AfterMapping
     public void afterMapping(EinnahmenKostenUpdateDto einnahmenKostenDto, @MappingTarget EinnahmenKosten einnahmenKosten){
         einnahmenKosten.setVeranlagungsCode(0);
-        einnahmenKosten.setSteuerjahr(0);
     }
 
     public abstract EinnahmenKosten partialUpdate(
