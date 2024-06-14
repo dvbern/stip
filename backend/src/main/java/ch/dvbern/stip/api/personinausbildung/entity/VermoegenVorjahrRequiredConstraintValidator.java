@@ -14,9 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class VermoegenVorjahrRequiredConstraintValidator
     implements ConstraintValidator<VermoegenVorjahrRequiredConstraint, PersonInAusbildung> {
-    // For now, PLZ like 3xxx are in Bern
-    // Replace once we have address data from the canton
-    //private static final Pattern IS_BERN = Pattern.compile("3\\d{3}$");
     @Inject
     PlzOrtService plzOrtService;
 
