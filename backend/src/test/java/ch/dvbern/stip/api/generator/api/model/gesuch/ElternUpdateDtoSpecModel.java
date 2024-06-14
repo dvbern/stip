@@ -20,7 +20,7 @@ public class ElternUpdateDtoSpecModel {
             model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1, 1)));
             model.setIdentischerZivilrechtlicherWohnsitz(false);
             model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");
-            model.setIdentischerZivilrechtlicherWohnsitzPLZ("3000");
+            model.setIdentischerZivilrechtlicherWohnsitzPLZ("3011");
             model.setTelefonnummer(faker.phoneNumber().cellPhone());
             model.setSozialhilfebeitraegeAusbezahlt(true);
             model.setAusweisbFluechtling(false);

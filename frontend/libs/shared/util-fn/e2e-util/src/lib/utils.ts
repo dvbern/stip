@@ -134,8 +134,12 @@ export const createTestContexts = async (options: {
     browser: browserContext,
     api: apiContext,
     dispose: async () => {
-      await apiContext.dispose();
-      await browserContext.close();
+      try {
+        await apiContext.dispose();
+        await browserContext.close();
+      } catch (e) {
+        console.warn('Failed to dispose e2e contexts', e);
+      }
     },
   };
 };

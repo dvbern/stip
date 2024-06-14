@@ -69,7 +69,6 @@ const toPlzLookupView = (plzLookups?: Plz[]) => {
       threshold: 0,
       includeScore: true,
       includeMatches: true,
-      minMatchCharLength: 2,
       shouldSort: true,
       sortFn: (a, b) => {
         return getComparisonValue(a) - getComparisonValue(b);

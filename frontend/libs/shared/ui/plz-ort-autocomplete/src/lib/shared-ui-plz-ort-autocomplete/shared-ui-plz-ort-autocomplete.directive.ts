@@ -37,15 +37,25 @@ export class SharedUiPlzOrtAutocompleteDirective implements OnInit {
   plzLookupValuesSig = output<Plz[]>();
 
   ngOnInit() {
+    // Subscribe to the optionSelected event of the autocomplete input and set the postal code and city values
     this.autocompleteSig()
       ?.optionSelected.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event) => this.setValues(event.option.value));
 
+    // Combine the postal code form control value changes with the postal code lookup data
     combineLatest([
-      this.plzFormSig().controls.plz.valueChanges,
+      this.plzFormSig().controls.plz.valueChanges.pipe(
+        map((value) => {
+          if (value && value.length > 1) {
+            return value;
+          }
+          return undefined;
+        }),
+      ),
       this.plzLookup$,
     ])
       .pipe(
+        // Map the postal code value to a list of matching postal codes
         map(([plz, plzLookup]) =>
           !plz
             ? []
@@ -56,10 +66,12 @@ export class SharedUiPlzOrtAutocompleteDirective implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((values) => {
+        // Emit the matching postal code values
         this.plzLookupValuesSig.emit(values);
       });
   }
 
+  // Set the postal code and city values based on the selected option
   private setValues(option: Plz) {
     this.plzFormSig().controls.plz.setValue(option.plz.toString());
     this.plzFormSig().controls.ort.setValue(option.ort);
