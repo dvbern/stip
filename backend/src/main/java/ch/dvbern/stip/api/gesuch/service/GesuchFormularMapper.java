@@ -45,7 +45,6 @@ import org.mapstruct.*;
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
-    //@Mapping(target = "einnahmenKosten", source = ".", qualifiedByName = "resetEinnahmeKostenIfNull")
     @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
     @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "mapVermoegen")
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
@@ -54,15 +53,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     public void afterMapping(GesuchFormular gesuchFormular, @MappingTarget GesuchFormularDto gesuchFormularDto){
         if(gesuchFormular.getEinnahmenKosten() == null){
             gesuchFormularDto.setEinnahmenKosten(null);
-        }
-    }
-
-
-    @Named("resetEinnahmeKostenIfNull")
-    public EinnahmenKostenDto resetEinnahmeKostenIfNull(GesuchFormular gesuchFormular) {
-        if (gesuchFormular.getEinnahmenKosten() == null) {return  null;}
-        else{
-            return new EinnahmenKostenDto();
         }
     }
 
