@@ -57,14 +57,18 @@ export interface EinnahmenKosten {
     /**
      * 2-Stelliger Veranlagungscode (0-99)
      */
-    veranlagungsCode: number;
+    veranlagungsCode?: number;
     /**
      * Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
      */
-    steuerjahr: number;
+    steuerjahr?: number;
     /**
      * Ganze Zahl, ohne Kommastellen
      */
     vermoegen?: number;
+    /**
+     * transient and calculated readonly field
+     */
+    steuernKantonGemeinde?: number;
 }
 

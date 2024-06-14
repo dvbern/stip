@@ -437,43 +437,64 @@
       }
 
       <!-- STEUERJAHR -->
-      <div *dvIfSachbearbeiter class="row g-4">
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-          <mat-label>{{ 'shared.form.einnahmenkosten.steuerjahr.label' | translate }}</mat-label>
+      @if (!hiddenFieldsSetSig().has(form.controls.steuerjahr)) {
+        <div class="row g-4">
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.steuerjahr.label' | translate }}</mat-label>
+            <input
+              formControlName="steuerjahr"
+              data-testid="form-einnahmen-kosten-steuerjahr"
+              matInput
+              type="number"
+              [maskito]="maskitoNumber"
+              min="1900"
+              max="2099"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'range'">
+              {{ 'shared.form.error.range' | translate: { min: 1900, max: 2099 } }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      }
+
+      <!-- VERANLAGUNGSCODE 0 - 99 -->
+      @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsCode)) {
+        <div class="row g-4">
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+            <mat-label>{{ 'shared.form.einnahmenkosten.veranlagungsCode.label' | translate }}</mat-label>
+            <input
+              formControlName="veranlagungsCode"
+              data-testid="form-einnahmen-kosten-veranlagungsCode"
+              matInput
+              type="number"
+              min="0"
+              max="99"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'range'">
+              {{ 'shared.form.error.range' | translate: { min: 0, max: 99 } }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      }
+
+      <!-- STEUERN KANTON / GEMEINDE -->
+      <div class="row g-4">
+        <mat-form-field class="col-12 col-md-6 col-xl-6">
+          <mat-label>{{ 'shared.form.einnahmenkosten.steuernKantonGemeinde.label' | translate }}</mat-label>
           <input
-            formControlName="steuerjahr"
-            data-testid="form-einnahmen-kosten-steuerjahr"
+            data-testid="form-einnahmen-kosten-steuern-kanton-gemeinde"
             matInput
             type="text"
             [maskito]="maskitoNumber"
+            disabled
+            [value]="steuernKantonGemeindeSig()"
           />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'range'">
-            {{ 'shared.form.error.range' | translate: { min: 1900, max: 2099 } }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!-- VERANLAGUNGSCODE 0 - 99 -->
-      <div *dvIfSachbearbeiter class="row g-4">
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-          <mat-label>{{ 'shared.form.einnahmenkosten.veranlagungsCode.label' | translate }}</mat-label>
-          <input
-            formControlName="veranlagungsCode"
-            data-testid="form-einnahmen-kosten-veranlagungsCode"
-            matInput
-            type="number"
-            min="0"
-            max="99"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'range'">
-            {{ 'shared.form.error.range' | translate: { min: 0, max: 99 } }}
-          </mat-error>
         </mat-form-field>
       </div>
 

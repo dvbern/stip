@@ -26,6 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
+import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
@@ -91,6 +92,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
+  private appType = inject(SharedModelCompiletimeConfig).appType;
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
@@ -120,7 +122,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     wgWohnend: [<boolean | null>null, [Validators.required]],
     vermoegen: [<string | undefined>undefined, [Validators.required]],
     veranlagungsCode: [0, [Validators.required]],
-    steuerjahr: [<string | null>null, [Validators.required]],
+    steuerjahr: [0, [Validators.required]],
   });
 
   viewSig = this.store.selectSignal(
@@ -233,6 +235,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   nettoerwerbseinkommenSig = toSignal(
     this.form.controls.nettoerwerbseinkommen.valueChanges,
   );
+
+  steuernKantonGemeindeSig = computed(() => {
+    return this.viewSig().einnahmenKosten?.steuernKantonGemeinde ?? 0;
+  });
 
   nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
     const nettoerwerbseinkommen = fromFormatedNumber(
@@ -404,6 +410,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.controls.vermoegen,
           !warErwachsenSteuerJahr,
         );
+        this.setDisabledStateAndHide(
+          this.form.controls.veranlagungsCode,
+          this.appType === 'gesuch-app',
+        );
+        this.setDisabledStateAndHide(
+          this.form.controls.steuerjahr,
+          this.appType === 'gesuch-app',
+        );
       },
       { allowSignalWrites: true },
     );
@@ -434,7 +448,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
               einnahmenKosten.betreuungskostenKinder?.toString(),
             vermoegen: einnahmenKosten.vermoegen?.toString(),
             veranlagungsCode: einnahmenKosten.veranlagungsCode,
-            steuerjahr: einnahmenKosten.steuerjahr.toString(),
+            steuerjahr: einnahmenKosten.veranlagungsCode,
           });
         } else {
           this.form.reset();
@@ -542,7 +556,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             formValues.betreuungskostenKinder,
           ),
           vermoegen: fromFormatedNumber(formValues.vermoegen),
-          steuerjahr: fromFormatedNumber(formValues.steuerjahr),
+          steuerjahr: formValues.steuerjahr,
           veranlagungsCode: formValues.veranlagungsCode,
         },
       },
