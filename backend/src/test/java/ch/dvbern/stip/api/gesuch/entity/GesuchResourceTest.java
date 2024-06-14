@@ -155,27 +155,6 @@ class GesuchResourceTest {
         validatePage();
     }
 
-//    @Test
-//    @TestAsGesuchsteller
-//    @Order(8)
-//    void testUpdatePersonCreatedZuordnung() throws InterruptedException {
-//        Thread.sleep(5000);
-//        final var response = gesuchApiSpec.getGesucheForBenutzer()
-//            .benutzerIdPath(UUID.fromString(TestConstants.GESUCHSTELLER_TEST_ID))
-//            .execute(ResponseBody::prettyPeek)
-//            .then()
-//            .assertThat()
-//            .statusCode(Response.Status.OK.getStatusCode());
-//
-//        final var myGesuche = response
-//            .extract()
-//            .body()
-//            .as(GesuchDtoSpec[].class);
-//
-//        assertThat(myGesuche.length, is(greaterThan(0)));
-//        assertThat(Arrays.stream(myGesuche).allMatch(x -> x.getBearbeiter().equals("Philipp Schärer")), is(true));
-//    }
-
     @Test
     @TestAsGesuchsteller
     @Order(8)
@@ -470,7 +449,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(21)
+    @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
                 .then()
@@ -486,7 +465,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(22)
+    @Order(23)
     void testFindGesuche() {
         var gesuche = gesuchApiSpec.getGesucheGs().execute(ResponseBody::prettyPeek)
             .then()
@@ -504,7 +483,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(23)
+    @Order(24)
     void testGetGesuchDokumente() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
@@ -561,7 +540,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsAdmin
-    @Order(24)
+    @Order(25)
     void testDeleteGesuch() {
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)
