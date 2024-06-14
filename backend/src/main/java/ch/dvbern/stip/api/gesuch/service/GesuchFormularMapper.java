@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -44,10 +45,26 @@ import org.mapstruct.*;
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
-
+    //@Mapping(target = "einnahmenKosten", source = ".", qualifiedByName = "resetEinnahmeKostenIfNull")
     @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
     @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "mapVermoegen")
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @AfterMapping
+    public void afterMapping(GesuchFormular gesuchFormular, @MappingTarget GesuchFormularDto gesuchFormularDto){
+        if(gesuchFormular.getEinnahmenKosten() == null){
+            gesuchFormularDto.setEinnahmenKosten(null);
+        }
+    }
+
+
+    @Named("resetEinnahmeKostenIfNull")
+    public EinnahmenKostenDto resetEinnahmeKostenIfNull(GesuchFormular gesuchFormular) {
+        if (gesuchFormular.getEinnahmenKosten() == null) {return  null;}
+        else{
+            return new EinnahmenKostenDto();
+        }
+    }
 
     @Named("mapVermoegen")
     public Integer mapVermoegen(final GesuchFormular gesuchFormular) {
@@ -69,6 +86,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @Named("calculateSteuern")
     public Integer calculateSteuern(final GesuchFormular gesuchFormular){
+
+        if(gesuchFormular.getEinnahmenKosten() == null){
+            return null;
+        }
         int totalEinkommen = 0;
         if(gesuchFormular.getEinnahmenKosten() != null && gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen() != null){
             totalEinkommen += gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen();

@@ -2328,8 +2328,6 @@ components:
         - nettoerwerbseinkommen
         - fahrkosten
         - verdienstRealisiert
-        - veranlagungsCode
-        - steuerjahr
       type: object
       properties:
         nettoerwerbseinkommen:

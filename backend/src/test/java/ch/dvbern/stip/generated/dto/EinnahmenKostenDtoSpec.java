@@ -542,9 +542,9 @@ public class EinnahmenKostenDtoSpec {
    * maximum: 99
    * @return veranlagungsCode
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getVeranlagungsCode() {
     return veranlagungsCode;
@@ -552,7 +552,7 @@ public class EinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVeranlagungsCode(Integer veranlagungsCode) {
     this.veranlagungsCode = veranlagungsCode;
   }
@@ -570,9 +570,9 @@ public class EinnahmenKostenDtoSpec {
    * maximum: 99999
    * @return steuerjahr
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_STEUERJAHR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getSteuerjahr() {
     return steuerjahr;
@@ -580,7 +580,7 @@ public class EinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STEUERJAHR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSteuerjahr(Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
   }
