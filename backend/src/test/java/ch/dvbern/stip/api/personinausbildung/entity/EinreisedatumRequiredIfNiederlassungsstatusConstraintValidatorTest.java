@@ -11,19 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 class EinreisedatumRequiredIfNiederlassungsstatusConstraintValidatorTest {
-    @Test
-    void foo() {
-        final var gesuch = new GesuchFormular()
-            .setPersonInAusbildung(
-                new PersonInAusbildung().setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
-            );
-
-        final var factory = Validation.buildDefaultValidatorFactory();
-        final var validator = factory.getValidator();
-
-        final var violations = validator.validate(gesuch);
-        return;
-    }
+    // Removed strange test named foo
 
     @Test
     void einreisedatumRequiredIfAufenthaltsbewilligung() {
