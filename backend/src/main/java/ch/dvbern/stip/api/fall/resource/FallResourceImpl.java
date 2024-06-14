@@ -19,9 +19,15 @@ package ch.dvbern.stip.api.fall.resource;
 
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_CREATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -29,16 +35,19 @@ public class FallResourceImpl implements FallResource {
 
     private final FallService fallService;
 
+    @RolesAllowed(FALL_CREATE)
     @Override
     public Response createFallForGs() {
         return Response.ok(fallService.createFallForGs()).build();
     }
 
+    @RolesAllowed({FALL_READ, ROLE_SACHBEARBEITER})
     @Override
     public Response getFaelleForSb() {
         return Response.ok(fallService.findFaelleForSb()).build();
     }
 
+    @RolesAllowed({FALL_READ, ROLE_GESUCHSTELLER})
     @Override
     public Response getFallForGs() {
         return Response.ok(fallService.findFallForGs()).build();
