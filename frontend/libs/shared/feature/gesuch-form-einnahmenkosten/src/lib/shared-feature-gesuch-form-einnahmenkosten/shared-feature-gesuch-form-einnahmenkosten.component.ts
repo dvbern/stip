@@ -94,7 +94,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
-  private appType = inject(SharedModelCompiletimeConfig).appType;
+  private config = inject(SharedModelCompiletimeConfig);
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
@@ -434,11 +434,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         );
         this.setDisabledStateAndHide(
           this.form.controls.veranlagungsCode,
-          this.appType === 'gesuch-app',
+          this.config.isGesuchApp,
         );
         this.setDisabledStateAndHide(
           this.form.controls.steuerjahr,
-          this.appType === 'gesuch-app',
+          this.config.isGesuchApp,
         );
       },
       { allowSignalWrites: true },
