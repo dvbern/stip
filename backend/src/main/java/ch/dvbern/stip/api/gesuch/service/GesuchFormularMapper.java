@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
@@ -22,11 +23,17 @@ import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import org.mapstruct.*;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
     uses =
@@ -63,15 +70,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
         Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
         if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
-            if(vermoegen == null){
-                return 0;
-            }
-            else{
-                return vermoegen;
-            }
-        }else{
-            return null;
+            return Objects.requireNonNullElse(vermoegen, 0);
         }
+        return null;
     }
 
     @Named("calculateSteuern")

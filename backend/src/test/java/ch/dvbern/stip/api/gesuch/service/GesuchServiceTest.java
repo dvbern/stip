@@ -29,12 +29,13 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -51,6 +52,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.EINGETRAGENE_PARTNERSCHAFT;
@@ -59,12 +61,12 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.KONKUBINAT;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
-import static com.ibm.icu.impl.Assert.fail;
-import static io.smallrye.common.constraint.Assert.assertTrue;
+import static ch.dvbern.stip.api.util.TestUtil.initGesuchCreateDto;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -824,6 +826,36 @@ class GesuchServiceTest {
         assertThat(
             tranche.getGesuch().getGesuchStatus(),
             Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void gesuchUpdateEinnahmenkostenDoNotSetSteuerdatenTest() {
+        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
+        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
+
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
+        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(5);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(1990);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+
+        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+        assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuerjahr(),
+            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
+        assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(),
+            Matchers.equalTo(0)
         );
     }
 

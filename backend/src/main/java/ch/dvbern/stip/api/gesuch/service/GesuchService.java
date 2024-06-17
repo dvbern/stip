@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -55,6 +56,7 @@ import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -96,6 +98,44 @@ public class GesuchService {
     }
 
     @Transactional
+    public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto, final GesuchTranche trancheToUpdate) {
+        final var benutzerRollenIdentifiers = benutzerService.getOrCreateCurrentBenutzer()
+            .getRollen()
+            .stream()
+            .map(Rolle::getKeycloakIdentifier)
+            .collect(Collectors.toSet());
+
+        if (benutzerRollenIdentifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
+            einnahmenKostenUpdateDto.setSteuerjahr(
+                Objects.requireNonNullElse(
+                    trancheToUpdate.getGesuchFormular().getEinnahmenKosten().getSteuerjahr(),
+                    trancheToUpdate.getGesuch()
+                        .getGesuchsperiode()
+                        .getGesuchsjahr()
+                        .getTechnischesJahr() - 1
+                )
+            );
+            einnahmenKostenUpdateDto.setVeranlagungsCode(
+                Objects.requireNonNullElse(
+                    trancheToUpdate.getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(),
+                    0
+                )
+            );
+        } else {
+            if (einnahmenKostenUpdateDto.getSteuerjahr() == null) {
+                einnahmenKostenUpdateDto.setSteuerjahr(
+                    trancheToUpdate.getGesuch()
+                        .getGesuchsperiode()
+                        .getGesuchsjahr()
+                        .getTechnischesJahr() - 1);
+            }
+            if (einnahmenKostenUpdateDto.getVeranlagungsCode() == null) {
+                einnahmenKostenUpdateDto.setVeranlagungsCode(0);
+            }
+        }
+    }
+
+    @Transactional
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
@@ -105,6 +145,15 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
+
+        setAndValidateEinnahmenkostenUpdateLegality(
+            gesuchUpdateDto
+                .getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getEinnahmenKosten(),
+            trancheToUpdate
+        );
+
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
