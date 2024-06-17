@@ -17,6 +17,8 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -72,28 +74,28 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchDokumente).build();
     }
 
-    @RolesAllowed(GESUCH_READ)
+    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
-    public Response getGesuche() {
-        return Response.ok(gesuchService.findAllWithPersonInAusbildung()).build();
+    public Response getAllGesucheSb() {
+        return Response.ok(gesuchService.findAllGesucheSb()).build();
     }
 
-    @RolesAllowed(GESUCH_READ)
+    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
-    public Response getGesucheForBenutzer(UUID benutzerId) {
-        return Response.ok(gesuchService.findAllForBenutzer(benutzerId)).build();
+    public Response getGesucheSb() {
+        return Response.ok(gesuchService.findGesucheSb()).build();
+    }
+
+    @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
+    @Override
+    public Response getGesucheGs() {
+        return Response.ok(gesuchService.findGesucheGs()).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesucheForFall(UUID fallId) {
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesucheForMe() {
-        return Response.ok(gesuchService.findAllForCurrentBenutzer()).build();
     }
 
     @RolesAllowed(GESUCH_READ)

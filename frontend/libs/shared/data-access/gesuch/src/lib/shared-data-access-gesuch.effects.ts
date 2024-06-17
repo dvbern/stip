@@ -17,7 +17,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
@@ -45,6 +44,7 @@ import {
   noGlobalErrorsIf,
   shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
+import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -56,18 +56,17 @@ export const LOAD_ALL_DEBOUNCE_TIME = 300;
 export const loadOwnGesuchs = createEffect(
   (
     actions$ = inject(Actions),
-    store = inject(Store),
     gesuchService = inject(GesuchService),
+    storeUtil = inject(StoreUtilService),
   ) => {
     return actions$.pipe(
       ofType(
         SharedDataAccessGesuchEvents.init,
         SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
       ),
-      switchMap(() => store.select(selectCurrentBenutzer)),
-      filter(isDefined),
-      concatMap((benutzer) =>
-        gesuchService.getGesucheForBenutzer$({ benutzerId: benutzer.id }).pipe(
+      storeUtil.waitForBenutzerData$(),
+      concatMap(() =>
+        gesuchService.getGesucheGs$().pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -86,13 +85,18 @@ export const loadOwnGesuchs = createEffect(
 );
 
 export const loadAllGesuchs = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    storeUtil = inject(StoreUtilService),
+  ) => {
     return combineLoadAllActions$(actions$).pipe(
       filter(isDefined),
+      storeUtil.waitForBenutzerData$(),
       switchMap(({ filter }) => {
         const getCall = filter?.showAll
-          ? gesuchService.getGesuche$()
-          : gesuchService.getGesucheForMe$();
+          ? gesuchService.getAllGesucheSb$()
+          : gesuchService.getGesucheSb$();
 
         return getCall.pipe(
           map((gesuchs) =>
@@ -433,22 +437,40 @@ const combineLoadAllActions$ = (actions$: Actions) => {
   );
 };
 
-type PartialOrFull<K extends keyof SharedModelGesuchFormular> =
+/**
+ * Get the given Formular property Data as View or Update Data
+ *
+ * * **View Type**: SharedModelGesuchFormular[K]
+ *   > represents the type that is being returned from the API (GET)
+ * * **Update Type**: GesuchFormularUpdate[K]
+ *   > the values that can be sent to the API for an update (PUT)
+ *
+ * The distinciton is necessary because the API returns more data than is necessary for an update
+ * for example the API returns the full Ausbildungsgang object, but for an update only the ID is necessary
+ */
+type ViewOrUpdateData<K extends keyof SharedModelGesuchFormular> =
   | GesuchFormularUpdate[K]
   | Partial<SharedModelGesuchFormular>[K];
-const isPartial = <T, R extends T>(
+
+/**
+ * Check if Type T represent the Edit type of R
+ */
+const isEditData = <T, R extends T>(
   value: T,
   keyExists: keyof R,
 ): value is R => {
   return typeof value === 'object' && value && keyExists in value;
 };
 
-const toAusbildung = (ausbildung: PartialOrFull<'ausbildung'>) => {
+/**
+ * Convert the given Ausbildung to an AusbildungUpdate if necessary
+ */
+const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
   if (!ausbildung) {
     return undefined;
   }
   if (
-    isPartial<PartialOrFull<'ausbildung'>, AusbildungUpdate>(
+    isEditData<ViewOrUpdateData<'ausbildung'>, AusbildungUpdate>(
       ausbildung,
       'ausbildungsgangId',
     )

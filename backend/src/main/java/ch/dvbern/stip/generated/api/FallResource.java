@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.FallDto;
-import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -21,17 +20,17 @@ import jakarta.validation.Valid;
 public interface FallResource {
 
     @POST
-    @Path("/benutzer/{benutzerId}")
-    @Produces({ "text/plain" })
-    Response createFall(@PathParam("benutzerId") UUID benutzerId);
+    @Path("/gs")
+    @Produces({ "application/json", "text/plain" })
+    Response createFallForGs();
 
     @GET
-    @Path("/{fallId}")
+    @Path("/sb")
     @Produces({ "application/json", "text/plain" })
-    Response getFall(@PathParam("fallId") UUID fallId);
+    Response getFaelleForSb();
 
     @GET
-    @Path("/benutzer/{benutzerId}")
+    @Path("/gs")
     @Produces({ "application/json", "text/plain" })
-    Response getFallForBenutzer(@PathParam("benutzerId") UUID benutzerId);
+    Response getFallForGs();
 }

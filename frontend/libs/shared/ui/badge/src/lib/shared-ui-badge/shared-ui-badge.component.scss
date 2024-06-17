@@ -1,43 +1,21 @@
 :host {
   display: block;
-  border: 1px solid;
-  border-radius: var(--dv-border-radius);
-  padding: 0.4rem 0.5rem;
-  min-width: 8rem;
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
 
   &.success {
-    border-color: var(--dv-success);
     background-color: var(--dv-success-bg-subtle);
-
-    i {
-      color: var(--dv-success);
-    }
   }
 
   &.warning {
-    border-color: var(--dv-warning);
     background-color: var(--dv-warning-bg-subtle);
-
-    i {
-      color: var(--dv-warning);
-    }
   }
 
   &.danger {
-    border-color: var(--dv-danger);
     background-color: var(--dv-danger-bg-subtle);
-
-    i {
-      color: var(--dv-danger);
-    }
   }
 
   &.info {
-    border-color: var(--dv-info);
     background-color: var(--dv-info-bg-subtle);
-
-    i {
-      color: var(--dv-info);
-    }
   }
 }

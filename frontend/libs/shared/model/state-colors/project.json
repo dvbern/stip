@@ -1,0 +1,9 @@
+{
+  "name": "shared-model-state-colors",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/model/state-colors/src",
+  "projectType": "library",
+  "tags": ["type:model", "scope:shared"],
+  "// targets": "to see all targets run: nx show project shared-model-state-colors --web",
+  "targets": {}
+}

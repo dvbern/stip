@@ -418,6 +418,11 @@
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
 
+  "shared.role.Admin": "Admin",
+  "shared.role.Jurist": "Juriste",
+  "shared.role.Sachbearbeiter": "Gestionnaire de dossier",
+  "shared.role.Gesuchsteller": "Requérant",
+
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",
   "shared.kanton.AR": "Appenzell Rh.-Int.",

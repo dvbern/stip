@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.repo;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -8,10 +9,12 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -23,27 +26,42 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     private final EntityManager entityManager;
 
-    public Stream<Gesuch> findAllForGs(final UUID gesuchstellerId) {
+    public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
 
-         final var query = queryFactory
+        final var query = queryFactory
             .selectFrom(gesuch)
             .where(gesuch.fall.gesuchsteller.id.eq(gesuchstellerId));
         return query.stream();
     }
 
-    public Stream<Gesuch> findAllForSb(final UUID sachbearbeiterId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+    public Stream<Gesuch> findZugewiesenFilteredForSb(final UUID sachbearbeiterId) {
+        final var query = findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.KOMPLETT_EINGEREICHT));
         final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
 
-        final var zuordnungQuery = queryFactory
-            .selectFrom(gesuch)
+        query
             .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
             .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
 
-        return zuordnungQuery.stream();
+        return query.stream();
+    }
+
+    public Stream<Gesuch> findAllFilteredForSb() {
+        return findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.KOMPLETT_EINGEREICHT)).stream();
+    }
+
+    private JPAQuery<Gesuch> findFilteredForSbPrepareQuery(List<Gesuchstatus> gesuchstatusList) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var gesuch = QGesuch.gesuch;
+        JPAQuery<Gesuch> query = queryFactory.selectFrom(gesuch);
+
+        for (final Gesuchstatus gesuchstatus : gesuchstatusList) {
+            query = query.where(gesuch.gesuchStatus.notIn(gesuchstatus));
+        }
+
+        return query;
     }
 
     public Stream<Gesuch> findAllForFall(UUID fallId) {

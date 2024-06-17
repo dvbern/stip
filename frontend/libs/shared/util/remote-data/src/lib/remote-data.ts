@@ -60,6 +60,18 @@ export const isFailure = (
   return response.type === 'failure';
 };
 
+/**
+ * Checks if the given remote data object is not in the pending state.
+ *
+ * @example
+ * store.values().map(filter(isNotPending))
+ */
+export const isNotPending = <T>(
+  response: RemoteData<T>,
+): response is Exclude<RemoteData<T>, Pending> => {
+  return response.type !== 'pending';
+};
+
 type Pending = {
   type: 'pending';
   data: undefined;

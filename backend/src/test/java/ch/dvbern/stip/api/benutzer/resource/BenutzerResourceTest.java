@@ -7,7 +7,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.generator.api.model.benutzer.BenutzerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -48,7 +47,7 @@ class BenutzerResourceTest {
     @TestAsGesuchsteller
     @Order(1)
     void test_get_me() {
-        final var benutzerDto = api.getCurrentBenutzer()
+        final var benutzerDto = api.prepareCurrentBenutzer()
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -67,7 +66,7 @@ class BenutzerResourceTest {
     @TestAsGesuchsteller2
     @Order(2)
     void test_get_me2() {
-        final var benutzerDto = api.getCurrentBenutzer()
+        final var benutzerDto = api.prepareCurrentBenutzer()
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -81,53 +80,17 @@ class BenutzerResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
-    @Order(3)
-    void test_update_me() {
-
-        final var updateDto = BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpec;
-        updateDto.setBenutzereinstellungen(me.getBenutzereinstellungen());
-
-        api.updateCurrentBenutzer()
-            .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
-
-        final var updatedBenutzer = api.getCurrentBenutzer()
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .as(BenutzerDtoSpec.class);
-
-        assertThat(updatedBenutzer.getVorname()).isEqualTo(updateDto.getVorname());
-        assertThat(updatedBenutzer.getNachname()).isEqualTo(updateDto.getNachname());
-        assertThat(updatedBenutzer.getSozialversicherungsnummer()).isEqualTo(updateDto.getSozialversicherungsnummer());
-    }
-
-    @Test
     @Order(4)
     @TestAsSachbearbeiter
-    void createAndFindSachbearbeitenden() {
-        String nachname = UUID.randomUUID().toString();
-        final var updateDto = BenutzerUpdateDtoSpecModel.benutzerUpdateDtoSpec;
-        updateDto.setNachname(nachname);
-        updateDto.setBenutzereinstellungen(me.getBenutzereinstellungen());
-
-        api.updateCurrentBenutzer().body(updateDto).execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+    void findSachbearbeitende() {
         var sachbearbeiterListe = api.getSachbearbeitende().execute(ResponseBody::prettyPeek)
             .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
             .as(BenutzerDtoSpec[].class);
         sachbearbeiterUUID = sachbearbeiterListe[0].getId();
-        assertThat(sachbearbeiterListe).extracting(BenutzerDtoSpec::getNachname).contains(nachname);
     }
 
     @Test

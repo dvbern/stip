@@ -17,17 +17,15 @@
 
 package ch.dvbern.stip.api.fall.resource;
 
-import java.util.UUID;
-
-import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
@@ -37,25 +35,21 @@ public class FallResourceImpl implements FallResource {
 
     private final FallService fallService;
 
-    @Override
     @RolesAllowed(FALL_CREATE)
-    public Response createFall(UUID benutzerId) {
-        var fall = fallService.createFall(benutzerId);
-        return CreatedResponseBuilder.of(fall.getId(), FallResource.class).build();
+    @Override
+    public Response createFallForGs() {
+        return Response.ok(fallService.createFallForGs()).build();
     }
 
+    @RolesAllowed({FALL_READ, ROLE_SACHBEARBEITER})
     @Override
-    @RolesAllowed(FALL_READ)
-    public Response getFall(UUID fallId) {
-        var fall = fallService
-            .getFall(fallId)
-            .orElseThrow(NotFoundException::new);
-        return Response.ok(fall).build();
+    public Response getFaelleForSb() {
+        return Response.ok(fallService.findFaelleForSb()).build();
     }
 
+    @RolesAllowed({FALL_READ, ROLE_GESUCHSTELLER})
     @Override
-    @RolesAllowed(FALL_READ)
-    public Response getFallForBenutzer(UUID benutzerId) {
-        return Response.ok(fallService.findFaelleForBenutzer(benutzerId)).build();
+    public Response getFallForGs() {
+        return Response.ok(fallService.findFallForGs()).build();
     }
 }

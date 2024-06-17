@@ -4,8 +4,9 @@ import {
   Component,
   HostBinding,
   Input,
-  OnInit,
 } from '@angular/core';
+
+import { SharedModelState } from '@dv/shared/model/state-colors';
 
 @Component({
   selector: 'dv-shared-ui-badge',
@@ -15,12 +16,6 @@ import {
   styleUrl: './shared-ui-badge.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiBadgeComponent implements OnInit {
-  @Input() type: 'success' | 'warning' | 'danger' | 'info' = 'warning';
-
-  @HostBinding('class') class = 'info';
-
-  ngOnInit() {
-    this.class = this.type;
-  }
+export class SharedUiBadgeComponent {
+  @Input() @HostBinding('class') type: SharedModelState = 'warning';
 }

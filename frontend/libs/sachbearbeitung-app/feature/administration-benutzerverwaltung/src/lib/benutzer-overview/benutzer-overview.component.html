@@ -1,0 +1,107 @@
+@if (store.benutzers() | rdIsPendingWithoutCache) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+} @else {
+  @if (benutzerListDataSourceSig(); as benutzerListSource) {
+    <div class="mt-4 shadow rounded-4">
+      <table mat-table [dataSource]="benutzerListSource" matSort class="dv-crud-table">
+        <caption class="cdk-visually-hidden">
+          {{
+            'sachbearbeitung-app.admin.benutzerverwaltung.overview.description' | translate
+          }}
+        </caption>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource" class="fw-bold">
+            {{ benutzer.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
+            {{ benutzer.email }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="roles">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.benutzerverwaltung.overview.roles' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource" class="py-2">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+              @if (!benutzer.roles.extraAmount || showFullListForBenutzer[benutzer.id]) {
+                @for (role of benutzer.roles.full; track role) {
+                  <dv-shared-ui-badge [type]="role.color">
+                    {{ 'shared.role.' + role.name | translate }}
+                  </dv-shared-ui-badge>
+                }
+              } @else {
+                @for (role of benutzer.roles.compact; track role) {
+                  <dv-shared-ui-badge [type]="role.color">
+                    {{ 'shared.role.' + role.name | translate }}
+                  </dv-shared-ui-badge>
+                }
+                <button
+                  type="button"
+                  class="btn btn-badge fw-normal fs-7"
+                  [attr.aria-label]="'shared.table.showMore' | translate"
+                  (click)="expandRolesForBenutzer(benutzer.id)"
+                >
+                  +{{ benutzer.roles.extraAmount }}
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
+              <i class="material-symbols-rounded fs-5 me-2">add</i>
+              {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate }}
+            </a>
+          </th>
+          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
+            <div class="d-flex justify-content-end gap-2">
+              <a
+                [routerLink]="['.', 'edit', benutzer.id]"
+                class="btn btn-link"
+                [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten' | translate"
+              >
+                <i class="material-symbols-rounded fs-5">edit</i>
+              </a>
+              <button
+                type="button"
+                class="btn btn-link"
+                [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen' | translate"
+                (click)="store.deleteBenutzer$(benutzer.id)"
+              >
+                <i class="material-symbols-rounded fs-5">delete</i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+        <tr mat-row *matRowDef="let benutzer; columns: displayedColumns"></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[10, 20, 50]"
+        pageSize="20"
+        [length]="benutzerListSource.data.length"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  }
+}

@@ -75,13 +75,13 @@
                       </span>
                     </button>
                   </ng-container>
-                  <dv-shared-ui-badge *dvIfGesuchsteller type="info">{{
-                    'shared.dokumente.dokumentStatus.PENDING' | translate
-                  }}</dv-shared-ui-badge>
+                  <dv-shared-ui-icon-badge *dvIfGesuchsteller type="info" class="status">
+                    {{ 'shared.dokumente.dokumentStatus.PENDING' | translate }}
+                  </dv-shared-ui-icon-badge>
                 } @else {
-                  <dv-shared-ui-badge type="warning">{{
-                    'shared.dokumente.dokumentStatus.MISSING' | translate
-                  }}</dv-shared-ui-badge>
+                  <dv-shared-ui-icon-badge type="warning" class="status">
+                    {{ 'shared.dokumente.dokumentStatus.MISSING' | translate }}
+                  </dv-shared-ui-icon-badge>
                 }
               </div>
             </td>
