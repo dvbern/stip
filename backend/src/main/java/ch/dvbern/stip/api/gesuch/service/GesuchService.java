@@ -99,7 +99,7 @@ public class GesuchService {
 
     @Transactional
     public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto, final GesuchTranche trancheToUpdate) {
-        final var benutzerRollenIdentifiers = benutzerService.getOrCreateCurrentBenutzer()
+        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
             .map(Rolle::getKeycloakIdentifier)
@@ -177,18 +177,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findAllWithPersonInAusbildung() {
-        return gesuchRepository.findAllWithFormular()
-            .filter(gesuch ->
-                getCurrentGesuchTrancheDto(gesuch)
-                    .getGesuchFormular()
-                    .getPersonInAusbildung() != null
-            )
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
-    }
-
-    @Transactional
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
@@ -209,39 +197,21 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
-    public List<GesuchDto> findAllForCurrentBenutzer() {
-        return findAllForBenutzer(benutzerService.getOrCreateCurrentBenutzer().getId());
+    @Transactional
+    public List<GesuchDto> findAllGesucheSb() {
+        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional
-    public List<GesuchDto> findAllForBenutzer(final UUID benutzerId) {
-        final var benutzer = benutzerService.getBenutzer(benutzerId);
-        if (benutzer.isEmpty()) {
-            throw new NotFoundException();
-        }
-
-        final var rollen = benutzer.get()
-            .getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-
-        final Function<Stream<Gesuch>, Map<UUID, Gesuch>> toMap =
-            stream -> stream.collect(Collectors.toMap(AbstractEntity::getId, gesuch -> gesuch));
-
-        final var gesuche = new HashMap<UUID, Gesuch>();
-        if (rollen.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            gesuche.putAll(toMap.apply(gesuchRepository.findAllForGs(benutzerId)));
-        }
-        if (rollen.contains(OidcConstants.ROLE_SACHBEARBEITER)) {
-            gesuche.putAll(toMap.apply(gesuchRepository.findAllForSb(benutzerId)));
-        }
-
-        return gesuche.values().stream().map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findGesucheSb() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
-    public List<GesuchDto> findAll() {
-        return gesuchRepository.findAll().stream().map(this::mapWithTrancheToWorkWith).toList();
+    @Transactional
+    public List<GesuchDto> findGesucheGs() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
     }
 
     @Transactional
@@ -433,7 +403,7 @@ public class GesuchService {
     }
 
     private void preventUpdateVonGesuchIfReadOnly(Gesuch gesuch) {
-        final var currentBenutzer = benutzerService.getOrCreateCurrentBenutzer();
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
             throw new IllegalStateException(
                 "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()

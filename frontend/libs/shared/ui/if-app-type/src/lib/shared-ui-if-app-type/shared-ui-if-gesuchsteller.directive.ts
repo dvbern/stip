@@ -14,10 +14,10 @@ import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 export class SharedUiIfGesuchstellerDirective {
   viewContainerRef = inject(ViewContainerRef);
   templateRef = inject(TemplateRef);
-  appType = inject(SharedModelCompiletimeConfig).appType;
+  config = inject(SharedModelCompiletimeConfig);
 
   constructor() {
-    if (this.appType === 'gesuch-app') {
+    if (this.config.isGesuchApp) {
       this.viewContainerRef.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainerRef.clear();

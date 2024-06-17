@@ -92,7 +92,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
-  private appType = inject(SharedModelCompiletimeConfig).appType;
+  private config = inject(SharedModelCompiletimeConfig);
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
@@ -346,6 +346,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       : null;
   });
 
+  vermoegenSig = toSignal(this.form.controls.vermoegen.valueChanges);
+
+  vermoegenDocumentSig = this.createUploadOptionsSig(() => {
+    const vermoegen = fromFormatedNumber(this.vermoegenSig() ?? '0');
+
+    return vermoegen > 0 ? DokumentTyp.EK_VERMOEGEN : null;
+  });
+
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
@@ -412,11 +420,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         );
         this.setDisabledStateAndHide(
           this.form.controls.veranlagungsCode,
-          this.appType === 'gesuch-app',
+          this.config.isGesuchApp,
         );
         this.setDisabledStateAndHide(
           this.form.controls.steuerjahr,
-          this.appType === 'gesuch-app',
+          this.config.isGesuchApp,
         );
       },
       { allowSignalWrites: true },

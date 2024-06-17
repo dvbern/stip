@@ -27,6 +27,7 @@ import {
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
+import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import {
   SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
@@ -91,6 +92,7 @@ function getFormStep(
     SharedUiBadgeComponent,
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
+    SharedUiIconBadgeComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',

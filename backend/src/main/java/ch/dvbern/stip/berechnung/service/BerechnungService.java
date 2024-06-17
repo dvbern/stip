@@ -1,6 +1,8 @@
 package ch.dvbern.stip.berechnung.service;
 
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.berechnung.dto.BerechnungModelVersion;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequest;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
@@ -13,20 +15,24 @@ import lombok.RequiredArgsConstructor;
 public class BerechnungService {
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
 
-    public BerechnungRequest getBerechnungRequest(final int version, final Gesuch gesuch) {
-        final var builder = berechnungRequests.stream().filter(x -> {
-            final var annotation = x.getClass().getAnnotation(BerechnungModelVersion.class);
-            if (annotation != null && annotation.value() == version) {
-                return true;
-            }
-
-            return false;
+    public BerechnungRequest getBerechnungRequest(
+        final int majorVersion,
+        final int minorVersion,
+        final Gesuch gesuch,
+        final GesuchTranche gesuchTranche,
+        final ElternTyp elternTyp
+    ) {
+        final var builder = berechnungRequests.stream().filter(berechnungRequestBuilder -> {
+            final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(BerechnungModelVersion.class);
+            return (versionAnnotation != null) &&
+                (versionAnnotation.major() == majorVersion) &&
+                (versionAnnotation.minor() == minorVersion);
         }).findFirst();
 
         if (builder.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a builder for version " + version);
+            throw new IllegalArgumentException("Cannot find a builder for version " + majorVersion + '.' + minorVersion);
         }
 
-        return builder.get().buildRequest(gesuch);
+        return builder.get().buildRequest(gesuch, gesuchTranche, elternTyp);
     }
 }

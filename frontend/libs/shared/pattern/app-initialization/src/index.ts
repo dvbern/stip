@@ -1,25 +1,20 @@
-import { APP_INITIALIZER, NgZone } from '@angular/core';
+import { APP_INITIALIZER } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { first, switchMap, take, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 import { TenantService } from '@dv/shared/model/gesuch';
 import { shouldNotAuthorizeRequestIf } from '@dv/shared/util/http';
 
-function registerTokenReceivedHandler(
+function goBackToPreviousUrlIfAvailable(
   oauthService: OAuthService,
   router: Router,
 ): void {
-  oauthService.events.pipe(
-    first((e) => e.type === 'token_received'),
-    tap(() => {
-      if (oauthService.state) {
-        router.navigate([oauthService.state]);
-      }
-    }),
-    take(1),
-  );
+  const state = oauthService.state;
+  if (state) {
+    router.navigateByUrl(decodeURIComponent(state));
+  }
 }
 function initializeOidc(
   router: Router,
@@ -60,7 +55,7 @@ function initializeOidc(
                 });
               }
 
-              registerTokenReceivedHandler(oauthService, router);
+              goBackToPreviousUrlIfAvailable(oauthService, router);
               oauthService.setupAutomaticSilentRefresh();
 
               return nextStep.then(() => success);
@@ -75,7 +70,7 @@ export const provideSharedPatternAppInitialization = () => {
       provide: APP_INITIALIZER,
       useFactory: initializeOidc,
       multi: true,
-      deps: [NgZone, TenantService, OAuthService, SharedModelCompiletimeConfig],
+      deps: [Router, TenantService, OAuthService, SharedModelCompiletimeConfig],
     },
   ];
 };

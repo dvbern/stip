@@ -1,7 +1,9 @@
 package ch.dvbern.stip.berechnung.service;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.util.TestUtil;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -19,22 +21,28 @@ class BerechnungServiceTest {
 
     @Test
     void getV1Test() {
-        final var gesuch = new Gesuch().setGesuchsperiode(new Gesuchsperiode()
-            .setMaxSaeule3a(7000)
-            .setEinkommensfreibetrag(6000)
-            .setAnzahlWochenLehre(42)
-            .setAnzahlWochenSchule(37)
-            .setPreisProMahlzeit(7)
-        );
+        final var gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
 
-        final var request = berechnungService.getBerechnungRequest(1, gesuch);
+        final var request = berechnungService.getBerechnungRequest(
+            1,
+            0,
+            gesuch,
+            gesuch.getNewestGesuchTranche().orElseThrow(),
+            ElternTyp.VATER
+        );
         assertThat(request, is(not(nullValue())));
     }
 
     @Test
     void getNonExistentTest() {
         assertThrows(IllegalArgumentException.class, () -> {
-            berechnungService.getBerechnungRequest(-1, null);
+            berechnungService.getBerechnungRequest(
+                -1,
+                0,
+                null,
+                null,
+                ElternTyp.MUTTER
+            );
         });
     }
 }

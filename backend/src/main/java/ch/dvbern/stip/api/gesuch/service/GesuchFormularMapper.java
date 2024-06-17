@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
@@ -11,13 +10,13 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -30,9 +29,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
@@ -52,14 +49,18 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
-    @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
-    @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "mapVermoegen")
+
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
 
     @AfterMapping
-    public void afterMapping(GesuchFormular gesuchFormular, @MappingTarget GesuchFormularDto gesuchFormularDto){
-        if(gesuchFormular.getEinnahmenKosten() == null){
-            gesuchFormularDto.setEinnahmenKosten(null);
+    public void setCalculatedPropertiesOnDto(
+        GesuchFormular gesuchFormular,
+        @MappingTarget GesuchFormularDto gesuchFormularDto
+    ) {
+        if (gesuchFormularDto.getEinnahmenKosten() != null) {
+            final var ek = gesuchFormularDto.getEinnahmenKosten();
+            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
+            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
         }
     }
 
@@ -70,9 +71,15 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
         Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
         if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
-            return Objects.requireNonNullElse(vermoegen, 0);
+            if(vermoegen == null){
+                return 0;
+            }
+            else{
+                return vermoegen;
+            }
+        }else{
+            return null;
         }
-        return null;
     }
 
     @Named("calculateSteuern")

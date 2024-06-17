@@ -14,10 +14,10 @@ import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 export class SharedUiIfSachbearbeiterDirective {
   viewContainerRef = inject(ViewContainerRef);
   templateRef = inject(TemplateRef);
-  appType = inject(SharedModelCompiletimeConfig).appType;
+  config = inject(SharedModelCompiletimeConfig);
 
   constructor() {
-    if (this.appType === 'sachbearbeitung-app') {
+    if (this.config.isSachbearbeitungApp) {
       this.viewContainerRef.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainerRef.clear();

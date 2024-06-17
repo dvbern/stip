@@ -7,6 +7,7 @@ export const SharedDataAccessBenutzerApiEvents = createActionGroup({
   source: 'Benutzer API',
   events: {
     loadCurrentBenutzer: emptyProps(),
+    setCurrentBenutzerPending: emptyProps(),
     currentBenutzerLoadedSuccess: props<{ benutzer: Benutzer }>(),
     currentBenutzerLoadedFailure: props<{ error: SharedModelError }>(),
   },

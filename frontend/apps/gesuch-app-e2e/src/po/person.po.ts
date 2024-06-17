@@ -30,6 +30,8 @@ export class PersonPO {
     korrespondenzSpracheRadio: Locator;
     niederlassungsstatusSelect: Locator;
     infoNiederlassungsstatus: Locator;
+    vermoegenVorjahr: Locator;
+    einreisedatum: Locator;
 
     loading: Locator;
 
@@ -60,6 +62,8 @@ export class PersonPO {
       heimatort: page.getByTestId('form-person-heimatort'),
       vorumundschaftCheckbox: page.getByTestId('form-person-vorumundschaft'),
       zivilstandSelect: page.getByTestId('form-person-zivilstand'),
+      einreisedatum: page.getByTestId('form-person-einreisedatum'),
+      vermoegenVorjahr: page.getByTestId('form-person-vermoegenVorjahr'),
       wohnsitzSelect: page.getByTestId('form-person-wohnsitz'),
       sozialhilfeBeitraegeRadio: page.getByTestId(
         'form-person-sozialhilfeBeitraege',
@@ -79,6 +83,13 @@ export class PersonPO {
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),
     };
+  }
+
+  async fillPlzNotKtBern() {
+    await this.elems.adresse.elems.plz.fill('4144');
+    await this.elems.adresse.elems.ort.fill('Arlesheim');
+    await this.elems.adresse.elems.landSelect.click();
+    await this.elems.page.getByTestId('CH').first().click();
   }
 
   async fillPersonForm(person: PersonInAusbildung) {

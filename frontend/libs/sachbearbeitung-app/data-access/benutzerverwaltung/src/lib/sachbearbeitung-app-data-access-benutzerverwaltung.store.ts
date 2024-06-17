@@ -10,6 +10,7 @@ import {
   catchError,
   exhaustMap,
   filter,
+  forkJoin,
   map,
   pipe,
   switchMap,
@@ -19,10 +20,17 @@ import {
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
+  SACHBEARBEITER_APP_ROLES,
   SharedModelBenutzer,
+  SharedModelBenutzerApi,
+  SharedModelBenutzerList,
+  SharedModelBenutzerRole,
+  SharedModelRole,
   SharedModelRoleList,
   SharedModelUserAdminError,
+  UsableRole,
 } from '@dv/shared/model/benutzer';
+import { SharedModelState } from '@dv/shared/model/state-colors';
 import { noGlobalErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
@@ -36,17 +44,17 @@ import {
   success,
 } from '@dv/shared/util/remote-data';
 
-const USABLE_ROLES = ['Sachbearbeiter', 'Admin'];
-
 type HttpResponseWithLocation = HttpResponse<unknown> & {
   headers: { get: (header: 'Location') => string };
 };
 type BenutzerverwaltungState = {
+  benutzers: CachedRemoteData<SharedModelBenutzer[]>;
   availableRoles: CachedRemoteData<SharedModelRoleList>;
-  userCreated: RemoteData<SharedModelBenutzer>;
+  userCreated: RemoteData<SharedModelBenutzerApi>;
 };
 
 const initialState: BenutzerverwaltungState = {
+  benutzers: initial(),
   availableRoles: initial(),
   userCreated: initial(),
 };
@@ -82,6 +90,40 @@ export class BenutzerverwaltungStore extends signalStore(
   usearCreatedViewSig = computed(() => {
     return fromCachedDataSig(this.userCreated);
   });
+
+  loadAllSbAppBenutzers$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          benutzers: cachedPending(state.benutzers),
+        }));
+      }),
+      switchMap(() =>
+        // Load all users for each role that we currently use in the SB app
+        // sadly Keycloak does not support loading all users and their roles in one request
+        // so we load the user list for every known role and merge them afterwards
+        forkJoin(
+          SACHBEARBEITER_APP_ROLES.map((role) =>
+            this.loadBenutzersWithRole$(role),
+          ),
+        ),
+      ),
+      map((benutzersByRole) =>
+        createBenutzerListFromRoleLookup(benutzersByRole),
+      ),
+      handleApiResponse((benutzers) => patchState(this, { benutzers })),
+    ),
+  );
+
+  deleteBenutzer$ = rxMethod<string>(
+    tap(() =>
+      this.globalNotificationStore.createNotification({
+        type: 'WARNING',
+        messageKey:
+          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+      }),
+    ),
+  );
 
   loadAvailableRoles$ = rxMethod<void>(
     pipe(
@@ -155,6 +197,19 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
+  private loadBenutzersWithRole$(role: UsableRole) {
+    return this.http
+      .get<SharedModelBenutzerList>(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles/${role}/users`,
+      )
+      .pipe(
+        map((benutzers) => ({
+          benutzers: SharedModelBenutzerList.parse(benutzers),
+          role,
+        })),
+      );
+  }
+
   private createUser$(vorname: string, name: string, email: string) {
     return this.http
       .post(
@@ -176,17 +231,17 @@ export class BenutzerverwaltungStore extends signalStore(
 
   private loadUser$(response: HttpResponseWithLocation) {
     return this.http
-      .get<SharedModelBenutzer>(response.headers.get('Location'), {
+      .get<SharedModelBenutzerApi>(response.headers.get('Location'), {
         context: noGlobalErrorsIf(true),
       })
       .pipe(
-        map((user) => SharedModelBenutzer.parse(user)),
+        map((user) => SharedModelBenutzerApi.parse(user)),
         this.interceptError('laden'),
       );
   }
 
   private asignRoles(
-    user: { id: string },
+    user: SharedModelBenutzerApi,
     roles: { id: string; name: string }[],
   ) {
     return this.http
@@ -203,7 +258,7 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private notifyUser$(user: { id: string }) {
+  private notifyUser$(user: SharedModelBenutzerApi) {
     return this.http
       .put(
         `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/execute-actions-email?redirect_uri=http://localhost:4201&client_id=stip-gesuch-app`,
@@ -223,7 +278,10 @@ export class BenutzerverwaltungStore extends signalStore(
     return <T>(source: Observable<T>) => {
       return source.pipe(
         catchError((error) => {
-          const parsedErrorType = toKnownUserError(error, fallbackErrorType);
+          const parsedErrorType = toKnownUserErrorType(
+            error,
+            fallbackErrorType,
+          );
           this.globalNotificationStore.createNotification({
             type: 'ERROR',
             messageKey: `sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.${parsedErrorType}`,
@@ -235,17 +293,77 @@ export class BenutzerverwaltungStore extends signalStore(
   }
 }
 
-const hasLocationHeader = (
+export const hasLocationHeader = (
   response: HttpResponse<unknown>,
 ): response is HttpResponseWithLocation => {
   return response.headers.has('Location');
 };
 
-const byUsableRoles = (role: SharedModelRoleList[number]) => {
-  return USABLE_ROLES.includes(role.name);
+export const byUsableRoles = (role: SharedModelRole) => {
+  return SACHBEARBEITER_APP_ROLES.some((r) => r === role.name);
 };
 
-const toKnownUserError = (error: unknown, fallbackType: string) => {
+export const toKnownUserErrorType = (error: unknown, fallbackType: string) => {
   const parsed = SharedModelUserAdminError.parse(error);
   return parsed.type ?? fallbackType;
+};
+
+export const roleToStateColor = (role: UsableRole): SharedModelState => {
+  switch (role) {
+    case 'Sachbearbeiter':
+      return 'info';
+    case 'Admin':
+      return 'success';
+    case 'Jurist':
+      return 'warning';
+    default:
+      return 'danger';
+  }
+};
+
+/**
+ * Joins the user lists from different roles into one list and adds the roles as a property to the Benutzer object.
+ */
+export const createBenutzerListFromRoleLookup = (
+  benutzersByRole: {
+    benutzers: SharedModelBenutzerApi[];
+    role: 'Sachbearbeiter' | 'Admin' | 'Jurist';
+  }[],
+): SharedModelBenutzer[] => {
+  return Object.values(
+    benutzersByRole.reduce<
+      Record<
+        string,
+        SharedModelBenutzerApi & {
+          name: string;
+          roles: SharedModelBenutzerRole[];
+        }
+      >
+    >(
+      (allById, { role, benutzers }) =>
+        benutzers.reduce(
+          (all, benutzer) => ({
+            ...all,
+            [benutzer.id]: {
+              ...benutzer,
+              name: `${benutzer.firstName} ${benutzer.lastName}`,
+              roles: [
+                ...(all[benutzer.id]?.roles ?? []),
+                { name: role, color: roleToStateColor(role) },
+              ],
+            },
+          }),
+          allById,
+        ),
+      {},
+    ),
+  ).map((benutzer) => ({
+    ...benutzer,
+    roles: {
+      extraAmount:
+        benutzer.roles.length > 2 ? benutzer.roles.length - 2 : undefined,
+      compact: benutzer.roles.slice(0, 2),
+      full: benutzer.roles,
+    },
+  }));
 };

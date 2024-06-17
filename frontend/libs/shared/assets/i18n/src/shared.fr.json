@@ -404,6 +404,7 @@
   "shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER": "Justificatif des frais de garde des propres enfants (sans frais de repas)",
   "shared.form.einnahmenkosten.file.LOHNABRECHNUNG": "Copie du décompte de salaire actuel",
   "shared.form.einnahmenkosten.file.VERDIENST": "Si des subsides de formation ont été perçus l’année précédente : Copie de tous les décomptes de salaire mensuels indiquant les revenus touchés durant l’année de formation précédente, c’est-à-dire si la formation débute en août : justificatifs de salaire d’août à juillet de l’année de formation précédente, et si la formation débute en septembre : justificatifs de salaire de septembre à août de l’année de formation précédente (= en règle générale, 12 justificatifs)",
+  "shared.form.einnahmenkosten.file.VERMOEGEN": "Copie de l’attestation de fortune actuelle (extraits des comptes bancaires et/ou postaux présentant le solde au 31 décembre)",
 
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Désignation(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Désignation(FR)",
@@ -416,6 +417,11 @@
   "shared.form.abschluss.dialog.text": "Les modifications ultérieures ne seront pas possibles.",
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
+
+  "shared.role.Admin": "Admin",
+  "shared.role.Jurist": "Juriste",
+  "shared.role.Sachbearbeiter": "Gestionnaire de dossier",
+  "shared.role.Gesuchsteller": "Requérant",
 
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",

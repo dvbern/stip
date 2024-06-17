@@ -33,6 +33,7 @@ import { switchMap } from 'rxjs/operators';
 
 import { selectSharedDataAccessGesuchValidationView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
@@ -44,6 +45,7 @@ import {
   PATTERN_EMAIL,
   Sprache,
   Wohnsitz,
+  WohnsitzKanton,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
@@ -133,6 +135,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private countriesService = inject(SharedUtilCountriesService);
+  private plzStore = inject(PlzOrtStore);
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
   readonly Zivilstand = Zivilstand;
@@ -200,9 +203,11 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
     const plz = this.plzChangedSig();
-    return plz &&
-      +plz <= 4000 &&
-      +plz >= 3000 &&
+
+    const kanton = this.plzStore.getKantonByPlz(plz);
+
+    return kanton &&
+      kanton === WohnsitzKanton.BE &&
       eltern?.some((e) => e.adresse.land !== 'CH')
       ? DokumentTyp.PERSON_AUSWEIS
       : null;
@@ -304,6 +309,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
+  private landChangedSig = toSignal(
+    this.form.controls.adresse.controls.land.valueChanges,
+  );
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -325,6 +333,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       }
     };
 
+    // visibility and disabled state for wohnsitzAnteilMutter and wohnsitzAnteilVater
     effect(
       () => {
         updateWohnsitzControlsState(
@@ -349,6 +358,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
+
     // patch form value
     effect(
       () => {
@@ -391,6 +401,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
+
+    // visibility and disabled state for identischerZivilrechtlicherWohnsitz
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
@@ -418,6 +430,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
     const nationalitaetChangedSig = toSignal(
       this.form.controls.nationalitaet.valueChanges,
     );
@@ -496,6 +509,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    // einreisedatum visibility and disabled state
     const niederlassungsstatusChangedSig = toSignal(
       this.form.controls.niederlassungsstatus.valueChanges,
     );
@@ -520,17 +534,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    // vermoegenVorjahr visibility and disabled state
     effect(
       () => {
         const niederlassungsstatus = this.niederlassungsstatusChangedSig();
         const plz = this.plzChangedSig();
+        const land = this.landChangedSig();
+
+        const kanton = this.plzStore.getKantonByPlz(plz);
 
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.vermoegenVorjahr,
           visible:
             isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
-            (!!plz && !isFromBern(plz)),
+            land !== 'CH' ||
+            kanton !== WohnsitzKanton.BE,
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
         });
@@ -538,6 +557,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    // einresiedatum warning
     const einreisedatumChangedSig = toSignal(
       this.form.controls.einreisedatum.valueChanges,
     );
@@ -557,6 +577,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    // dislable form if readonly
     effect(
       () => {
         const { readonly } = this.viewSig();
@@ -672,8 +693,4 @@ export function isFluechtlingOrHasAusweisB(
       Niederlassungsstatus.FLUECHTLING,
     ].includes(niederlassungsstatus)
   );
-}
-
-export function isFromBern(plz?: string) {
-  return !!plz && +plz < 4000 && +plz >= 3000;
 }
