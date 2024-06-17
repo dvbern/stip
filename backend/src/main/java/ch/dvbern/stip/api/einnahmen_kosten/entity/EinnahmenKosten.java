@@ -13,8 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.time.Year;
-
 
 @Audited
 @Entity
@@ -105,5 +103,5 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "vermoegen", nullable = true)
     @Max(Integer.MAX_VALUE)
     @Min(0)
-    private Integer vermoegen = null;
+    private Integer vermoegen;
 }

@@ -10,23 +10,27 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import org.mapstruct.*;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
     uses =
@@ -45,54 +49,19 @@ import org.mapstruct.*;
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
-    @Mapping(target="einnahmenKosten.steuernKantonGemeinde",source=".",qualifiedByName="calculateSteuern")
-    @Mapping(target="einnahmenKosten.vermoegen", source=".",qualifiedByName = "mapVermoegen")
+
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
 
     @AfterMapping
-    public void afterMapping(GesuchFormular gesuchFormular, @MappingTarget GesuchFormularDto gesuchFormularDto){
-        if(gesuchFormular.getEinnahmenKosten() == null){
-            gesuchFormularDto.setEinnahmenKosten(null);
+    public void setCalculatedPropertiesOnDto(
+        GesuchFormular gesuchFormular,
+        @MappingTarget GesuchFormularDto gesuchFormularDto
+    ) {
+        if (gesuchFormularDto.getEinnahmenKosten() != null) {
+            final var ek = gesuchFormularDto.getEinnahmenKosten();
+            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
+            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
         }
-    }
-
-    @Named("mapVermoegen")
-    public Integer mapVermoegen(final GesuchFormular gesuchFormular) {
-        if(gesuchFormular.getEinnahmenKosten() == null){
-            return null;
-        }
-        Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
-        if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
-            if(vermoegen == null){
-                return 0;
-            }
-            else{
-                return vermoegen;
-            }
-        }else{
-            return null;
-        }
-    }
-
-    @Named("calculateSteuern")
-    public Integer calculateSteuern(final GesuchFormular gesuchFormular){
-
-        if(gesuchFormular.getEinnahmenKosten() == null){
-            return null;
-        }
-        int totalEinkommen = 0;
-        if(gesuchFormular.getEinnahmenKosten() != null && gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen() != null){
-            totalEinkommen += gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen();
-        }
-        if(gesuchFormular.getPartner() != null && gesuchFormular.getPartner().getJahreseinkommen() != null){
-            totalEinkommen += gesuchFormular.getPartner().getJahreseinkommen();
-        }
-
-        if(totalEinkommen >= 20000){
-            return (int)(totalEinkommen * 0.1);
-        }
-
-        return 0;
     }
 
     /**
