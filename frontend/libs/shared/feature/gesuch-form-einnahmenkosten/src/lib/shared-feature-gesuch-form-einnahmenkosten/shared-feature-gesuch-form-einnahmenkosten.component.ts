@@ -346,6 +346,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       : null;
   });
 
+  vermoegenSig = toSignal(this.form.controls.vermoegen.valueChanges);
+
+  vermoegenDocumentSig = this.createUploadOptionsSig(() => {
+    const vermoegen = fromFormatedNumber(this.vermoegenSig() ?? '0');
+
+    return vermoegen > 0 ? DokumentTyp.EK_VERMOEGEN : null;
+  });
+
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
