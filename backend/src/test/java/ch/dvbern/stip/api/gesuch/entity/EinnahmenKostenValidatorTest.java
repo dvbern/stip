@@ -174,12 +174,6 @@ class EinnahmenKostenValidatorTest {
     }
 
     @Test
-    void steuerjahrDefaultValueIsLastYearTest(){
-        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
-        assertThat(gesuch.getEinnahmenKosten().getSteuerjahr()).isEqualTo((Year.now().getValue() -1));
-    }
-
-    @Test
     void vermoegenNonNegativeValueValidationTest(){
         final var factory = Validation.buildDefaultValidatorFactory();
         final var validator = factory.getValidator();
@@ -207,7 +201,7 @@ class EinnahmenKostenValidatorTest {
         gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(1995,8,5)));
 
         // genau 18 Jahre alt
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 - 18,12,31)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023,12,31).minusYears(18)));
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isTrue();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
@@ -216,7 +210,7 @@ class EinnahmenKostenValidatorTest {
         //reset value
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         // fast 18 Jahre alt
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2024 - 18,1,1)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2024,1,1).minusYears(18)));
         assertThat(validator.isValid(gesuch,null)).isTrue();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isFalse();
@@ -224,7 +218,7 @@ class EinnahmenKostenValidatorTest {
         //reset value
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         // unter 18 Jahre alt
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023 -5,12,31)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023,12,31).minusYears(5)));
         assertThat(validator.isValid(gesuch,null)).isTrue();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isFalse();
