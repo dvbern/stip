@@ -5,13 +5,11 @@ import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
-@JsonTypeName("antragssteller")
 public class AntragsstellerV1 {
       boolean tertiaerstufe;
       int einkommen;
@@ -76,33 +74,6 @@ public class AntragsstellerV1 {
       }
 
       public static AntragsstellerV1 withDefaults() {
-          return new AntragsstellerV1Builder()
-              .tertiaerstufe(false)
-              .einkommen(0)
-              .einkommenPartner(0)
-              .vermoegen(0)
-              .alimente(0)
-              .rente(0)
-              .kinderAusbildungszulagen(0)
-              .ergaenzungsleistungen(0)
-              .leistungenEO(0)
-              .gemeindeInstitutionen(0)
-              .alter(0)
-              .grundbedarf(0)
-              .wohnkosten(0)
-              .medizinischeGrundversorgung(0)
-              .ausbildungskosten(0)
-              .steuern(0)
-              .steuernKonkubinatspartner(0)
-              .fahrkosten(0)
-              .fahrkostenPartner(0)
-              .verpflegung(0)
-              .verpflegungPartner(0)
-              .fremdbetreuung(0)
-              .anteilFamilienbudget(0)
-              .lehre(false)
-              .eigenerHaushalt(false)
-              .abgeschlosseneErstausbildung(false)
-              .build();
+          return new AntragsstellerV1Builder().build();
       }
 }

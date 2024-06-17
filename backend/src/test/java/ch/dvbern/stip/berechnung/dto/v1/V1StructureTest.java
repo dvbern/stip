@@ -1,23 +1,11 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import ch.dvbern.stip.api.partner.entity.Partner;
-import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.util.TestUtil;
 import com.savoirtech.json.JsonComparatorBuilder;
+import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,7 +71,7 @@ class V1StructureTest {
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
-                "InputPersoenlichesbudget_V1": {
+                "InputPersoenlichesBudget_V1": {
                     "antragssteller": {
                         "tertiaerstufe": false,
                         "einkommen": 12916,
@@ -121,82 +109,16 @@ class V1StructureTest {
 
     @Test
     void test() throws JsonProcessingException {
-        final var request = BerechnungRequestV1.createRequest(prepareGesuch(), trancheUuid, ElternTyp.VATER);
+        final var gesuch = TestUtil.getGesuchForBerechnung(trancheUuid);
+        final var request = BerechnungRequestV1.createRequest(
+            gesuch,
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
+            ElternTyp.VATER
+        );
         final var actual = new ObjectMapper().writeValueAsString(request);
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(EXPECTED, actual);
         assertTrue(result.isMatch(), result.getErrorMessage());
-    }
-
-    private Gesuch prepareGesuch() {
-        return new Gesuch().setGesuchsperiode(
-            new Gesuchsperiode()
-                .setMaxSaeule3a(7000)
-                .setEinkommensfreibetrag(6000)
-                .setAnzahlWochenLehre(42)
-                .setAnzahlWochenSchule(37)
-                .setPreisProMahlzeit(7)
-        ).setGesuchTranchen(
-            List.of(
-                (GesuchTranche) new GesuchTranche()
-                    .setGesuchFormular(
-                    new GesuchFormular()
-                        .setPersonInAusbildung(
-                            (PersonInAusbildung) new PersonInAusbildung()
-                                .setVermoegenVorjahr(0)
-                                .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
-                                .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
-                        )
-                        .setPartner(
-                            new Partner()
-                                .setJahreseinkommen(0)
-                                .setFahrkosten(0)
-                                .setVerpflegungskosten(0)
-                        )
-                        .setEinnahmenKosten(
-                            new EinnahmenKosten()
-                                .setNettoerwerbseinkommen(12916)
-                                .setErgaenzungsleistungen(1200)
-                                .setWohnkosten(6000)
-                                .setAusbildungskostenTertiaerstufe(450)
-                                .setFahrkosten(523)
-                        )
-                        .setFamiliensituation(
-                            new Familiensituation()
-                                .setElternVerheiratetZusammen(false)
-                                .setGerichtlicheAlimentenregelung(false)
-                                .setElternteilUnbekanntVerstorben(false)
-                                .setVaterWiederverheiratet(false)
-                                .setMutterWiederverheiratet(true)
-                        )
-                        .setGeschwisters(
-                            Set.of(
-                                (Geschwister) new Geschwister()
-                                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
-                                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
-                                    .setGeburtsdatum(LocalDate.now())
-                                    .setNachname("a")
-                                    .setVorname("a"),
-                                (Geschwister) new Geschwister()
-                                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                                    .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
-                                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
-                                    .setGeburtsdatum(LocalDate.now())
-                                    .setNachname("a")
-                                    .setVorname("a"),
-                                (Geschwister) new Geschwister()
-                                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                                    .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
-                                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
-                                    .setGeburtsdatum(LocalDate.now())
-                                    .setNachname("a")
-                                    .setVorname("a")
-                            )
-                        )
-                ).setId(trancheUuid)
-            )
-        );
     }
 }
