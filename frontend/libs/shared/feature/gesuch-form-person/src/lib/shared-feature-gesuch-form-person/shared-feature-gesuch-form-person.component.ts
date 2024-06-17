@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   OnInit,
+  WritableSignal,
   computed,
   effect,
   inject,
@@ -19,6 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -61,6 +63,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
+import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -125,6 +128,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiInfoDialogComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -158,7 +162,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set<FormControl>());
-  isSozialversicherungsnummerInfoShown = false;
+  // isSozialversicherungsnummerInfoShown = false;
+  ahvDialogOpen = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
   maskitoNumber = maskitoNumber;
@@ -592,6 +597,21 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(SharedEventGesuchFormPerson.init());
     this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
+  }
+
+  toggleAhvDialog() {
+    this.ahvDialogOpen = !this.ahvDialogOpen;
+
+    if (this.ahvDialogOpen) {
+      this.dialog.open(SharedUiInfoDialogComponent, {
+        data: {
+          title: 'gesuchFormPerson.ahvDialog.title',
+          message: 'gesuchFormPerson.ahvDialog.message',
+        },
+      });
+    } else {
+      this.dialog.closeAll();
+    }
   }
 
   handleSave() {

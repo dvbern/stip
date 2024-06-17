@@ -40,14 +40,14 @@
             type="button"
             class="dv-button-icon dv-button-icon-md text-info mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-            [class.active]="isSozialversicherungsnummerInfoShown"
-            (click)="isSozialversicherungsnummerInfoShown = !isSozialversicherungsnummerInfoShown"
+            [class.active]="ahvDialogOpen"
+            (click)="toggleAhvDialog()"
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
         </div>
-        <div class="d-none d-md-block col-md-6 col-xl-8">
-          <dv-shared-ui-info-overlay
+        <div #ahvInfoAnchor class="d-none d-md-block col-md-6 col-xl-8">
+          <!-- <dv-shared-ui-info-overlay
             [isOpen]="isSozialversicherungsnummerInfoShown"
             (closeOverlay)="isSozialversicherungsnummerInfoShown = false"
           >
@@ -58,7 +58,7 @@
             <p class="content">
               {{ 'shared.form.shared.social-insurance-number.info' | translate }}
             </p>
-          </dv-shared-ui-info-overlay>
+          </dv-shared-ui-info-overlay> -->
         </div>
       </div>
       <h3 class="pt-5 mb-4">
