@@ -53,9 +53,11 @@ import {
 import {
   fromFormatedNumber,
   maskitoNumber,
+  toFormatedNumber,
 } from '@dv/shared/util/maskito-util';
 import {
   getDateDifference,
+  getLastDayOfYear,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
@@ -218,7 +220,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const warErwachsenSteuerJahr =
       !geburtsdatum || !gesuchsjahr
         ? false
-        : (getDateDifference(geburtsdatum, new Date(gesuchsjahr - 1, 11, 31))
+        : (getDateDifference(geburtsdatum, getLastDayOfYear(gesuchsjahr - 1))
             ?.years ?? 0) >= 18;
 
     return {
@@ -237,7 +239,19 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   );
 
   steuernKantonGemeindeSig = computed(() => {
-    return this.viewSig().einnahmenKosten?.steuernKantonGemeinde ?? 0;
+    const einkommen = fromFormatedNumber(
+      this.nettoerwerbseinkommenSig() ?? '0',
+    );
+    const einkommenPartner =
+      this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
+
+    const gesamtEinkommen = einkommen + einkommenPartner;
+
+    if (gesamtEinkommen >= 20_000) {
+      return toFormatedNumber(gesamtEinkommen * 0.1);
+    }
+
+    return 0;
   });
 
   nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
@@ -456,7 +470,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
               einnahmenKosten.betreuungskostenKinder?.toString(),
             vermoegen: einnahmenKosten.vermoegen?.toString(),
             veranlagungsCode: einnahmenKosten.veranlagungsCode,
-            steuerjahr: einnahmenKosten.veranlagungsCode,
+            steuerjahr: einnahmenKosten.steuerjahr,
           });
         } else {
           this.form.reset();
