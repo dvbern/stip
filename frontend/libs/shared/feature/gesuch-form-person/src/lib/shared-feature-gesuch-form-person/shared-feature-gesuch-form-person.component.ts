@@ -4,7 +4,7 @@ import {
   Component,
   ElementRef,
   OnInit,
-  WritableSignal,
+  ViewChild,
   computed,
   effect,
   inject,
@@ -20,7 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -155,6 +155,56 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
+  @ViewChild('ahvInfoAnchor', { static: false }) ahvInfoAnchor:
+    | ElementRef<HTMLDivElement>
+    | undefined = undefined;
+
+  ahvDialogOpen = false;
+
+  toggleAhvDialog() {
+    this.ahvDialogOpen = !this.ahvDialogOpen;
+
+    if (this.ahvDialogOpen) {
+      const width = window.innerWidth;
+      let dialogConfig: MatDialogConfig = {
+        data: {
+          title: 'gesuchFormPerson.ahvDialog.title',
+          message: 'gesuchFormPerson.ahvDialog.message',
+        },
+      };
+
+      // if width is larger than 1200px constrain the dialog to the anchor
+      if (width >= 1200) {
+        const anchor = this.ahvInfoAnchor?.nativeElement;
+        const anchorRect = anchor?.getBoundingClientRect();
+        const top = anchorRect?.top || 0;
+        const left = anchorRect?.left || 0;
+
+        dialogConfig = {
+          ...dialogConfig,
+          position: {
+            top: `${top}px`,
+            left: `${left}px`,
+          },
+          width: `${anchor?.offsetWidth}px`,
+          height: 'auto',
+          hasBackdrop: false,
+        };
+      }
+
+      const dialogRef = this.dialog.open(
+        SharedUiInfoDialogComponent,
+        dialogConfig,
+      );
+
+      dialogRef?.afterClosed().subscribe(() => {
+        this.ahvDialogOpen = false;
+      });
+    } else {
+      this.dialog.closeAll();
+    }
+  }
+
   updateValidity$ = new Subject<unknown>();
   laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
@@ -162,8 +212,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set<FormControl>());
-  // isSozialversicherungsnummerInfoShown = false;
-  ahvDialogOpen = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
   maskitoNumber = maskitoNumber;
@@ -597,21 +645,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(SharedEventGesuchFormPerson.init());
     this.store.dispatch(SharedDataAccessStammdatenApiEvents.init());
-  }
-
-  toggleAhvDialog() {
-    this.ahvDialogOpen = !this.ahvDialogOpen;
-
-    if (this.ahvDialogOpen) {
-      this.dialog.open(SharedUiInfoDialogComponent, {
-        data: {
-          title: 'gesuchFormPerson.ahvDialog.title',
-          message: 'gesuchFormPerson.ahvDialog.message',
-        },
-      });
-    } else {
-      this.dialog.closeAll();
-    }
   }
 
   handleSave() {
