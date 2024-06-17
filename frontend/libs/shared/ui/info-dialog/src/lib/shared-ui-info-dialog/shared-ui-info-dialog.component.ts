@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+
+export interface InfoDialogData {
+  title: string;
+  message: string;
+}
 
 @Component({
   selector: 'dv-shared-ui-info-dialog',
@@ -10,4 +16,11 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './shared-ui-info-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiInfoDialogComponent {}
+export class SharedUiInfoDialogComponent {
+  dialogData = inject<InfoDialogData>(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef);
+
+  close() {
+    this.dialogRef.close();
+  }
+}

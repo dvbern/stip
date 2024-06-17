@@ -38,29 +38,21 @@
           </mat-form-field>
           <button
             type="button"
+            #ahvInfoTrigger
             class="dv-button-icon dv-button-icon-md text-info mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-            [class.active]="ahvDialogOpen"
-            (click)="toggleAhvDialog()"
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
         </div>
         <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-        <div #ahvInfoAnchor class="d-none d-md-block col-md-6 col-xl-4">
-          <!-- <dv-shared-ui-info-overlay
-            [isOpen]="isSozialversicherungsnummerInfoShown"
-            (closeOverlay)="isSozialversicherungsnummerInfoShown = false"
-          >
-            <h1 class="title h5 mb-4 d-flex">
-              <span class="text-info material-symbols-rounded me-2"> info </span>
-              {{ 'shared.form.shared.social-insurance-number.infoTitle' | translate }}
-            </h1>
-            <p class="content">
-              {{ 'shared.form.shared.social-insurance-number.info' | translate }}
-            </p>
-          </dv-shared-ui-info-overlay> -->
-        </div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitle]="'shared.form.shared.social-insurance-number.infoTitle'"
+          [dialogMessage]="'shared.form.shared.social-insurance-number.info'"
+          [trigger]="ahvInfoTrigger"
+          class="d-none d-md-block col-md-6 col-xl-4"
+        ></div>
       </div>
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.shared.section.personal-details' | translate }}
@@ -303,9 +295,8 @@
             <button
               type="button"
               class="dv-button-icon dv-button-icon-md text-info mt-2"
+              #niederLassungInfoTrigger
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-              [class.active]="isNiederlassungsstatusInfoShown"
-              (click)="isNiederlassungsstatusInfoShown = !isNiederlassungsstatusInfoShown"
             >
               <span class="material-symbols-rounded"> info </span>
             </button>
@@ -315,6 +306,14 @@
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
+
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitle]="'shared.form.person.niederlassungsstatus.infoTitle'"
+            [dialogMessage]="'shared.form.person.niederlassungsstatus.info'"
+            [trigger]="niederLassungInfoTrigger"
+            class="d-none d-md-block col-md-6 col-xl-4"
+          ></div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
@@ -364,21 +363,6 @@
           }
         </div>
       }
-
-      <div class="d-none d-md-block col-12 col-md-6 col-xl-8">
-        <dv-shared-ui-info-overlay
-          [isOpen]="isNiederlassungsstatusInfoShown"
-          (closeOverlay)="isNiederlassungsstatusInfoShown = false"
-          data-testid="info-person-niederlassungsstatus"
-          [overlayPanelClass]="'mt-4'"
-        >
-          <h1 class="title h5 mb-4 d-flex">
-            <span class="text-info material-symbols-rounded me-2"> info </span>
-            {{ 'shared.form.person.niederlassungsstatus.infoTitle' | translate }}
-          </h1>
-          <p class="content" [innerHTML]="'shared.form.person.niederlassungsstatus.info' | translate"></p>
-        </dv-shared-ui-info-overlay>
-      </div>
 
       <div class="row g-4 mt-1">
         <!-- Wohnsitz -->
