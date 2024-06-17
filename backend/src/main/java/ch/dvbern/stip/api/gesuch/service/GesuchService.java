@@ -99,6 +99,7 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
+
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
