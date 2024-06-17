@@ -8,9 +8,14 @@ export class SharedModelCompiletimeConfig {
   readonly authClientId: `stip-${AppType}`;
   readonly appType: AppType;
 
+  isSachbearbeitungApp: boolean;
+  isGesuchApp: boolean;
+
   constructor(config: CompiletimeConfig) {
     this.authClientId = config.authClientId;
     this.appType = config.appType;
+    this.isSachbearbeitungApp = this.appType === 'sachbearbeitung-app';
+    this.isGesuchApp = this.appType === 'gesuch-app';
   }
 }
 
