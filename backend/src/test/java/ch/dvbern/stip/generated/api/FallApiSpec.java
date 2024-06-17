@@ -14,7 +14,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,22 +56,22 @@ public class FallApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                createFall(),
-                getFall(),
-                getFallForBenutzer()
+                createFallForGs(),
+                getFaelleForSb(),
+                getFallForGs()
         );
     }
 
-    public CreateFallOper createFall() {
-        return new CreateFallOper(createReqSpec());
+    public CreateFallForGsOper createFallForGs() {
+        return new CreateFallForGsOper(createReqSpec());
     }
 
-    public GetFallOper getFall() {
-        return new GetFallOper(createReqSpec());
+    public GetFaelleForSbOper getFaelleForSb() {
+        return new GetFaelleForSbOper(createReqSpec());
     }
 
-    public GetFallForBenutzerOper getFallForBenutzer() {
-        return new GetFallForBenutzerOper(createReqSpec());
+    public GetFallForGsOper getFallForGs() {
+        return new GetFallForGsOper(createReqSpec());
     }
 
     /**
@@ -89,87 +88,24 @@ public class FallApiSpec {
      * 
      * 
      *
-     * @see #benutzerIdPath  (required)
+     * return FallDtoSpec
      */
-    public static class CreateFallOper implements Oper {
+    public static class CreateFallForGsOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/fall/benutzer/{benutzerId}";
+        public static final String REQ_URI = "/fall/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public CreateFallOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /fall/benutzer/{benutzerId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String BENUTZER_ID_PATH = "benutzerId";
-
-        /**
-         * @param benutzerId (UUID)  (required)
-         * @return operation
-         */
-        public CreateFallOper benutzerIdPath(Object benutzerId) {
-            reqSpec.addPathParam(BENUTZER_ID_PATH, benutzerId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public CreateFallOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public CreateFallOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Returniert der Fall mit der gegebene Id.
-     * 
-     *
-     * @see #fallIdPath  (required)
-     * return FallDtoSpec
-     */
-    public static class GetFallOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/fall/{fallId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetFallOper(RequestSpecBuilder reqSpec) {
+        public CreateFallForGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /fall/{fallId}
+         * POST /fall/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -180,7 +116,7 @@ public class FallApiSpec {
         }
 
         /**
-         * GET /fall/{fallId}
+         * POST /fall/gs
          * @param handler handler
          * @return FallDtoSpec
          */
@@ -189,23 +125,12 @@ public class FallApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String FALL_ID_PATH = "fallId";
-
-        /**
-         * @param fallId (UUID)  (required)
-         * @return operation
-         */
-        public GetFallOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
-            return this;
-        }
-
         /**
          * Customize request specification
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetFallOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public CreateFallForGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -215,34 +140,33 @@ public class FallApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetFallOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public CreateFallForGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
     }
     /**
-     * Get alle Fälle für den gegebene Benutzende
+     * Get alle Faelle für den SB
      * 
      *
-     * @see #benutzerIdPath  (required)
-     * return FallDtoSpec
+     * return List&lt;FallDtoSpec&gt;
      */
-    public static class GetFallForBenutzerOper implements Oper {
+    public static class GetFaelleForSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/fall/benutzer/{benutzerId}";
+        public static final String REQ_URI = "/fall/sb";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetFallForBenutzerOper(RequestSpecBuilder reqSpec) {
+        public GetFaelleForSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /fall/benutzer/{benutzerId}
+         * GET /fall/sb
          * @param handler handler
          * @param <T> type
          * @return type
@@ -253,24 +177,13 @@ public class FallApiSpec {
         }
 
         /**
-         * GET /fall/benutzer/{benutzerId}
+         * GET /fall/sb
          * @param handler handler
-         * @return FallDtoSpec
+         * @return List&lt;FallDtoSpec&gt;
          */
-        public FallDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<FallDtoSpec> type = new TypeRef<FallDtoSpec>(){};
+        public List<FallDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<FallDtoSpec>> type = new TypeRef<List<FallDtoSpec>>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String BENUTZER_ID_PATH = "benutzerId";
-
-        /**
-         * @param benutzerId (UUID)  (required)
-         * @return operation
-         */
-        public GetFallForBenutzerOper benutzerIdPath(Object benutzerId) {
-            reqSpec.addPathParam(BENUTZER_ID_PATH, benutzerId);
-            return this;
         }
 
         /**
@@ -278,7 +191,7 @@ public class FallApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetFallForBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetFaelleForSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -288,7 +201,68 @@ public class FallApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetFallForBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetFaelleForSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Get Fall für den GS
+     * 
+     *
+     * return FallDtoSpec
+     */
+    public static class GetFallForGsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/fall/gs";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetFallForGsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /fall/gs
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /fall/gs
+         * @param handler handler
+         * @return FallDtoSpec
+         */
+        public FallDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FallDtoSpec> type = new TypeRef<FallDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetFallForGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetFallForGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

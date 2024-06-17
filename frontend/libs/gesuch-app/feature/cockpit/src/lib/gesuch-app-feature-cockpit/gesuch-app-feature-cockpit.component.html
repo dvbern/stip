@@ -19,7 +19,7 @@
         }
 
         <!-- period 1-2 -->
-        @if (fall$ | async; as fall) {
+        @if (fallStore.currentFallViewSig(); as fall) {
           <div>
             @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
               <div

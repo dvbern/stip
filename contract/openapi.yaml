@@ -14,27 +14,6 @@ servers:
         description: ''
 paths:
   /gesuch:
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: |
-            Returns all Gesuche
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuche
-      summary: Returns all Gesuche
     post:
       requestBody:
         content:
@@ -55,6 +34,69 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
+  /gesuch/all/sb:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllGesucheSb
+      summary: Returns gesuche filtered by status
+  /gesuch/benutzer/me/sb:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by status and sb
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheSb
+      summary: Returns gesuche filtered by status and sb
+  /gesuch/benutzer/me/gs:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by gs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesucheGs
+      summary: Returns gesuche filtered by gs
   '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:
@@ -120,23 +162,19 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/fall/{fallId}':
+  '/fall/sb':
     get:
       tags:
         - Fall
-      parameters:
-        - name: fallId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Fall'
-          description: OK
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fall'
+          description: Get all Faelle which are assigned to the currently logged in Sachbearbeiter
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -145,14 +183,44 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getFall
-      summary: Returniert der Fall mit der gegebene Id.
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      operationId: getFaelleForSb
+      summary: Get alle Faelle für den SB
+  '/fall/gs':
+    get:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+          description: Get the current Fall for the currently logged in Gesuchsteller
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallForGs
+      summary: Get Fall für den GS
+    post:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+          description: Return des neu erstellten Falls für den GS
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createFallForGs
   /config/deployment:
     get:
       tags:
@@ -608,94 +676,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
-  '/gesuch/benutzer/me':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die mit mir zusammenhängen
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForMe
-      summary: Get all Gesuche for me
-  '/gesuch/benutzer/{benutzerId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Gesuchstellende
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForBenutzer
-      summary: Get all Gesuch for Benutzende
-    parameters:
-      - name: benutzerId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-  '/fall/benutzer/{benutzerId}':
-    get:
-      tags:
-        - Fall
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Fall'
-          description: Return der Fall des Benutzende
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getFallForBenutzer
-      summary: Get alle Fälle für den gegebene Benutzende
-    post:
-      tags:
-        - Fall
-      responses:
-        '201':
-          description: New Fall created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: createFall
-    parameters:
-      - name: benutzerId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/fall/{fallId}':
     get:
       tags:
@@ -998,7 +978,7 @@ paths:
       operationId: getCurrentTenant
       summary: Current Tenant
       description: '`Tenant` based on the current Request'
-  /benutzer/me:
+  /benutzer/prepare/me:
     get:
       tags:
         - Benutzer
@@ -1017,28 +997,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getCurrentBenutzer
-      summary: Get the logged-in Benutzer
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BenutzerUpdate'
-        required: true
-      tags:
-        - Benutzer
-      responses:
-        '202':
-          description: Updated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateCurrentBenutzer
-      summary: Update the logged-in Benutzer
+      operationId: prepareCurrentBenutzer
+      summary: Get or create and update current benutzer
   '/ausbildungsgang/{ausbildungsgangId}':
     parameters:
       - name: ausbildungsgangId
@@ -2855,7 +2815,7 @@ components:
           description: ''
           type: boolean
     plz:
-      description: "PLZ und ort für Type ahead funktionalitaet"
+      description: 'PLZ und ort für Type ahead funktionalitaet'
       type: object
       required:
         - plz

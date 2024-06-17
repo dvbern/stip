@@ -1,20 +1,24 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
-import { SharedModelError } from '@dv/shared/model/error';
 import { Benutzer } from '@dv/shared/model/gesuch';
+import {
+  RemoteData,
+  failure,
+  initial,
+  pending,
+  success,
+} from '@dv/shared/util/remote-data';
 
 import { SharedDataAccessBenutzerApiEvents } from './shared-data-access-benutzer.events';
 
 export interface State {
-  currentBenutzer: Benutzer | null;
-  loading: boolean;
-  error: SharedModelError | undefined;
+  currentBenutzerRd: RemoteData<Benutzer>;
+  lastFetchTs: number | null;
 }
 
 const initialState: State = {
-  currentBenutzer: null,
-  loading: false,
-  error: undefined,
+  currentBenutzerRd: initial(),
+  lastFetchTs: null,
 };
 
 export const sharedDataAccessBenutzersFeature = createFeature({
@@ -23,12 +27,10 @@ export const sharedDataAccessBenutzersFeature = createFeature({
     initialState,
 
     on(
-      SharedDataAccessBenutzerApiEvents.loadCurrentBenutzer,
+      SharedDataAccessBenutzerApiEvents.setCurrentBenutzerPending,
       (state): State => ({
         ...state,
-        currentBenutzer: null,
-        loading: true,
-        error: undefined,
+        currentBenutzerRd: pending(),
       }),
     ),
 
@@ -36,9 +38,8 @@ export const sharedDataAccessBenutzersFeature = createFeature({
       SharedDataAccessBenutzerApiEvents.currentBenutzerLoadedSuccess,
       (state, { benutzer }): State => ({
         ...state,
-        currentBenutzer: benutzer,
-        loading: false,
-        error: undefined,
+        currentBenutzerRd: success(benutzer),
+        lastFetchTs: new Date().getTime(),
       }),
     ),
     on(
@@ -46,9 +47,8 @@ export const sharedDataAccessBenutzersFeature = createFeature({
       // add other failure events here (if handled the same way)
       (state, { error }): State => ({
         ...state,
-        currentBenutzer: null,
-        loading: false,
-        error,
+        currentBenutzerRd: failure(error),
+        lastFetchTs: null,
       }),
     ),
   ),
@@ -58,7 +58,6 @@ export const {
   name, // feature name
   reducer,
   selectBenutzersState,
-  selectCurrentBenutzer,
-  selectLoading,
-  selectError,
+  selectCurrentBenutzerRd,
+  selectLastFetchTs,
 } = sharedDataAccessBenutzersFeature;

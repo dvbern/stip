@@ -14,7 +14,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
-import ch.dvbern.stip.generated.dto.BenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDtoSpec;
 import java.util.UUID;
@@ -63,10 +62,9 @@ public class BenutzerApiSpec {
         return Arrays.asList(
                 createOrUpdateSachbearbeiterStammdaten(),
                 createOrUpdateSachbearbeiterStammdatenList(),
-                getCurrentBenutzer(),
                 getSachbearbeitende(),
                 getSachbearbeiterStammdaten(),
-                updateCurrentBenutzer()
+                prepareCurrentBenutzer()
         );
     }
 
@@ -78,10 +76,6 @@ public class BenutzerApiSpec {
         return new CreateOrUpdateSachbearbeiterStammdatenListOper(createReqSpec());
     }
 
-    public GetCurrentBenutzerOper getCurrentBenutzer() {
-        return new GetCurrentBenutzerOper(createReqSpec());
-    }
-
     public GetSachbearbeitendeOper getSachbearbeitende() {
         return new GetSachbearbeitendeOper(createReqSpec());
     }
@@ -90,8 +84,8 @@ public class BenutzerApiSpec {
         return new GetSachbearbeiterStammdatenOper(createReqSpec());
     }
 
-    public UpdateCurrentBenutzerOper updateCurrentBenutzer() {
-        return new UpdateCurrentBenutzerOper(createReqSpec());
+    public PrepareCurrentBenutzerOper prepareCurrentBenutzer() {
+        return new PrepareCurrentBenutzerOper(createReqSpec());
     }
 
     /**
@@ -239,67 +233,6 @@ public class BenutzerApiSpec {
         }
     }
     /**
-     * Get the logged-in Benutzer
-     * 
-     *
-     * return BenutzerDtoSpec
-     */
-    public static class GetCurrentBenutzerOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/benutzer/me";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /benutzer/me
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /benutzer/me
-         * @param handler handler
-         * @return BenutzerDtoSpec
-         */
-        public BenutzerDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<BenutzerDtoSpec> type = new TypeRef<BenutzerDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetCurrentBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * 
      * 
      *
@@ -434,28 +367,27 @@ public class BenutzerApiSpec {
         }
     }
     /**
-     * Update the logged-in Benutzer
+     * Get or create and update current benutzer
      * 
      *
-     * @see #body  (required)
+     * return BenutzerDtoSpec
      */
-    public static class UpdateCurrentBenutzerOper implements Oper {
+    public static class PrepareCurrentBenutzerOper implements Oper {
 
-        public static final Method REQ_METHOD = PUT;
-        public static final String REQ_URI = "/benutzer/me";
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/benutzer/prepare/me";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public UpdateCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
+        public PrepareCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * PUT /benutzer/me
+         * GET /benutzer/prepare/me
          * @param handler handler
          * @param <T> type
          * @return type
@@ -465,13 +397,14 @@ public class BenutzerApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-         /**
-         * @param benutzerUpdateDtoSpec (BenutzerUpdateDtoSpec)  (required)
-         * @return operation
+        /**
+         * GET /benutzer/prepare/me
+         * @param handler handler
+         * @return BenutzerDtoSpec
          */
-        public UpdateCurrentBenutzerOper body(BenutzerUpdateDtoSpec benutzerUpdateDtoSpec) {
-            reqSpec.setBody(benutzerUpdateDtoSpec);
-            return this;
+        public BenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BenutzerDtoSpec> type = new TypeRef<BenutzerDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         /**
@@ -479,7 +412,7 @@ public class BenutzerApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public UpdateCurrentBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public PrepareCurrentBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -489,7 +422,7 @@ public class BenutzerApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public UpdateCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public PrepareCurrentBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

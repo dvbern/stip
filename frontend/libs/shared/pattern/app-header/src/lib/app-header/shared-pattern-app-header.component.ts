@@ -22,7 +22,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import { selectCurrentBenutzer } from '@dv/shared/data-access/benutzer';
+import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
@@ -63,7 +63,7 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
   private offCanvasService = inject(NgbOffcanvas);
   private store = inject(Store);
   private cd = inject(ChangeDetectorRef);
-  private benutzerSig = this.store.selectSignal(selectCurrentBenutzer);
+  private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   languageSig = this.store.selectSignal(selectLanguage);
   benutzerNameSig = computed(() => {
