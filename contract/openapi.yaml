@@ -1359,6 +1359,7 @@ components:
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
+        - EK_VERMOEGEN
       type: string
     ElternAbwesenheitsGrund:
       enum:
