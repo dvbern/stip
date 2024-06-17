@@ -371,6 +371,43 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
+        var gesuch =
+            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+                .body()
+                .as(GesuchDtoSpec.class);
+
+        //nettoerwerbseinkommen
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getNettoerwerbseinkommen(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getNettoerwerbseinkommen()));
+        //alimente
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAlimente(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAlimente()));
+        //zulagen
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getZulagen(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getZulagen()));
+        //renten
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getRenten(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getRenten()));
+        //eoleistungen
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getEoLeistungen(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getEoLeistungen()));
+        //ergaenzungsleistungen
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getErgaenzungsleistungen(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getErgaenzungsleistungen()));
+        //beitraege
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getBeitraege(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getBeitraege()));
+        //ausbildungskostenSekkundarstufeZwei
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei()));
+        //ausbiludngTertiaerstufe
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAusbildungskostenTertiaerstufe(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAusbildungskostenTertiaerstufe()));
+        //fahrkosten
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getFahrkosten(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getFahrkosten()));
+        //wohnkosten
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten()));
+        //wgWohnend
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWgWohnend(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWgWohnend()));
+        //verdientsRealisiert
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVerdienstRealisiert(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVerdienstRealisiert()));
+        //willDarlehen
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWillDarlehen(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWillDarlehen()));
+        //auswaertigeMittagessenPRoWoche
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getAuswaertigeMittagessenProWoche()));
+        //betreuungskosten kinder
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getBetreuungskostenKinder(), is(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getBetreuungskostenKinder()));
 
         validatePage();
     }
