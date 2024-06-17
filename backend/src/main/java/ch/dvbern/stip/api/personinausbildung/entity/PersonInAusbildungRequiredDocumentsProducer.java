@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ch.dvbern.stip.api.common.service.PlzOrtService;
+import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;

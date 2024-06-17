@@ -32,8 +32,8 @@ const adresse: Adresse = {
   coAdresse: '',
   strasse: 'Aarbergergasse',
   hausnummer: '5a',
-  plz: '3000',
-  ort: 'Bern',
+  plz: '3065',
+  ort: 'Bolligen',
 };
 
 const person: PersonInAusbildung = {
@@ -116,7 +116,6 @@ const einnahmenKosten: EinnahmenKosten = {
   betreuungskostenKinder: 100,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const partner: Partner = {
   adresse,
   vorname: 'Susanne',
@@ -191,7 +190,13 @@ test.describe('Neues gesuch erstellen', () => {
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
 
+    await personPO.fillPlzNotKtBern();
+
+    await expect(personPO.elems.vermoegenVorjahr).toBeVisible();
+
     await personPO.fillPersonForm(person);
+
+    await expect(personPO.elems.vermoegenVorjahr).toBeHidden();
 
     await personPO.elems.buttonSaveContinue.click();
 

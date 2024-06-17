@@ -37,7 +37,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setSozialhilfebeitraege(true);
             model.setVormundschaft(false);
             model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");
-            model.setIdentischerZivilrechtlicherWohnsitzPLZ("3000");
+            model.setIdentischerZivilrechtlicherWohnsitzPLZ("3011");
             model.setKorrespondenzSprache(TestUtil.getRandomElementFromArray(SpracheDtoSpec.values()));
         });
 

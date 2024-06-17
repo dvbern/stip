@@ -36,6 +36,13 @@ export class PlzOrtStore extends signalStore(
     };
   });
 
+  getKantonByPlz(plz: string | undefined) {
+    if (!plz) return '';
+    if (plz.length < 4) return '';
+
+    return this.plz().data?.find((p) => p.plz === plz)?.kantonskuerzel ?? '';
+  }
+
   loadAllPlz$ = rxMethod<void>(
     pipe(
       tap(() => {
