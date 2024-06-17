@@ -1,12 +1,12 @@
 package ch.dvbern.stip.api.plz.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
 import ch.dvbern.stip.generated.dto.PlzDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -21,6 +21,7 @@ public class PlzService {
 
     @Transactional
     public List<PlzDto> getAllPlzByKantonsKuerzel(String kantonsKuerzel) {
+
         return plzRepository.findAll().stream().filter(plz -> plz.getKantonskuerzel().equalsIgnoreCase(kantonsKuerzel)).map(plzMapper::toDto).toList();
     }
 }
