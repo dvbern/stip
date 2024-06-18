@@ -1,9 +1,15 @@
 package ch.dvbern.stip.api.communication.mail.service;
 
+import java.io.File;
+import java.util.List;
+
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MailTemplate.MailTemplateInstance;
 import io.quarkus.mailer.Mailer;
@@ -14,9 +20,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.util.List;
-
 @ApplicationScoped
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +28,8 @@ public class MailService {
     private final Mailer mailer;
     private final TL tl;
     private final ReactiveMailer reactiveMailer;
+    private final ConfigService configService;
+    private final TenantService tenantService;
 
     public void sendGesuchEingereichtEmail(
         String name,
@@ -35,6 +40,16 @@ public class MailService {
         Templates.getGesuchEingereicht(name, vorname, language)
             .to(receiver)
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.gesuch.eingereicht"))
+            .send().subscribe().asCompletionStage();
+    }
+
+    public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
+        String redirectURI = configService.getWelcomeMailURI(tenantService.getCurrentTenant().getIdentifier(),
+            welcomeMailDto.getRedirectUrl());
+
+        Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), redirectURI)
+            .to(welcomeMailDto.getEmail())
+            .subject("Benuzter Erstellt/Utilisateur Créé")
             .send().subscribe().asCompletionStage();
     }
 
@@ -87,6 +102,8 @@ public class MailService {
 
         private Templates() {
         }
+
+        public static native MailTemplateInstance benutzerWelcome(String name, String vorname, String link);
 
         private static native MailTemplateInstance gesuchEingereichtDe(String name, String vorname);
 
