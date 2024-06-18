@@ -202,19 +202,19 @@ public class GesuchService {
 
     @Transactional
     public List<GesuchDto> findAllGesucheSb() {
-        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
+        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
+        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).collect(Collectors.toList());
+        return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional
@@ -413,6 +413,4 @@ public class GesuchService {
             );
         }
     }
-
-    //todo: add method for defaults
 }
