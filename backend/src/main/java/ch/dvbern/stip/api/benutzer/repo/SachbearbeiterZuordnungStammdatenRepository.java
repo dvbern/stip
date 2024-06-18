@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class SachbearbeiterZuordnungStammdatenRepository implements BaseRepository<SachbearbeiterZuordnungStammdaten> {
-
     private final EntityManager entityManager;
 
     public Optional<SachbearbeiterZuordnungStammdaten> findByBenutzerId(UUID benutzerId) {
