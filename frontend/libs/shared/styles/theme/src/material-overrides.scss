@@ -280,7 +280,7 @@ $dv-all-colors: (
 .info-dialog-columnar {
   .mat-mdc-dialog-container {
     .mdc-dialog__surface {
-      box-shadow: none;
+      --mdc-dialog-container-elevation: none;
     }
   }
 }

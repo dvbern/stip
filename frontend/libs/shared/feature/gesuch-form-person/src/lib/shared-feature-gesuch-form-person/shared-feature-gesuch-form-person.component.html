@@ -38,7 +38,7 @@
           </mat-form-field>
           <button
             type="button"
-            #ahvInfoTrigger
+            (click)="ahvInfoDialog.toggle()"
             class="dv-button-icon dv-button-icon-md text-info mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
           >
@@ -48,9 +48,9 @@
         <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
         <div
           dvSharedUiInfoDialog
-          [dialogTitle]="'shared.form.shared.social-insurance-number.infoTitle'"
-          [dialogMessage]="'shared.form.shared.social-insurance-number.info'"
-          [trigger]="ahvInfoTrigger"
+          [dialogTitleKey]="'shared.form.shared.social-insurance-number.infoTitle'"
+          [dialogMessageKey]="'shared.form.shared.social-insurance-number.info'"
+          #ahvInfoDialog="dvSharedUiInfoDialog"
           class="d-none d-md-block col-md-6 col-xl-4"
         ></div>
       </div>
@@ -295,7 +295,7 @@
             <button
               type="button"
               class="dv-button-icon dv-button-icon-md text-info mt-2"
-              #niederLassungInfoTrigger
+              (click)="niederLassungInfoDialog.toggle()"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
             >
               <span class="material-symbols-rounded"> info </span>
@@ -309,9 +309,9 @@
 
           <div
             dvSharedUiInfoDialog
-            [dialogTitle]="'shared.form.person.niederlassungsstatus.infoTitle'"
-            [dialogMessage]="'shared.form.person.niederlassungsstatus.info'"
-            [trigger]="niederLassungInfoTrigger"
+            [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
+            [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
+            #niederLassungInfoDialog="dvSharedUiInfoDialog"
             class="d-none d-md-block col-md-6 col-xl-4"
           ></div>
         }

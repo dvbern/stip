@@ -4,7 +4,6 @@ import {
   Directive,
   Input,
   OnDestroy,
-  OnInit,
   ViewContainerRef,
   inject,
 } from '@angular/core';
@@ -16,6 +15,8 @@ import {
 } from '@angular/material/dialog';
 import { Subscription, fromEvent, throttleTime } from 'rxjs';
 
+import { DVBreakpoints } from '@dv/shared/model/ui-constants';
+
 import {
   InfoDialogData,
   SharedUiInfoDialogComponent,
@@ -24,54 +25,49 @@ import {
 @Directive({
   selector: '[dvSharedUiInfoDialog]',
   standalone: true,
+  exportAs: 'dvSharedUiInfoDialog',
 })
-export class SharedUiInfoDialogDirective implements OnInit, OnDestroy {
+export class SharedUiInfoDialogDirective implements OnDestroy {
   containerRef = inject(ViewContainerRef);
   dialog = inject(MatDialog);
   scrollStrategyOptions = inject(ScrollStrategyOptions);
   destroyRef = inject(DestroyRef);
 
-  @Input({ required: true }) dialogTitle = '';
-  @Input({ required: true }) dialogMessage = '';
-  @Input() trigger: HTMLButtonElement | undefined = undefined;
+  @Input({ required: true }) dialogTitleKey = '';
+  @Input({ required: true }) dialogMessageKey = '';
 
   dialogRef: MatDialogRef<SharedUiInfoDialogComponent> | undefined;
 
   scrollSub: Subscription | undefined;
 
-  ngOnInit() {
-    if (this.trigger) {
-      this.trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const openInfoDialog = this.dialog.getDialogById('info-dialog');
+  toggle() {
+    const openInfoDialog = this.dialog.getDialogById('info-dialog');
 
-        if (openInfoDialog && openInfoDialog === this.dialogRef) {
-          this.scrollSub?.unsubscribe();
-          openInfoDialog.close();
-          this.dialogRef = undefined;
-        } else if (openInfoDialog) {
-          openInfoDialog
-            .afterClosed()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => {
-              this.openDialog();
-            });
-          this.scrollSub?.unsubscribe();
-          openInfoDialog.close();
-        } else {
+    if (openInfoDialog && openInfoDialog === this.dialogRef) {
+      this.scrollSub?.unsubscribe();
+      openInfoDialog.close();
+      this.dialogRef = undefined;
+    } else if (openInfoDialog) {
+      openInfoDialog
+        .afterClosed()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
           this.openDialog();
-        }
-      });
+        });
+      this.scrollSub?.unsubscribe();
+      openInfoDialog.close();
+    } else {
+      this.openDialog();
     }
   }
 
   openDialog() {
-    const isColumnar = window.innerWidth >= 1200;
+    const isColumnar = window.innerWidth >= DVBreakpoints.LG;
 
     let dialogConfig: MatDialogConfig<InfoDialogData> = {
       data: {
-        title: this.dialogTitle,
-        message: this.dialogMessage,
+        titleKey: this.dialogTitleKey,
+        messageKey: this.dialogMessageKey,
       },
       id: 'info-dialog',
     };
@@ -87,7 +83,7 @@ export class SharedUiInfoDialogDirective implements OnInit, OnDestroy {
           top: `${anchorRect.top}px`,
           left: `${anchorRect.left}px`,
         },
-        width: `${anchor?.offsetWidth}px`,
+        width: `${anchor.offsetWidth}px`,
         height: 'auto',
         hasBackdrop: false,
         panelClass: 'info-dialog-columnar',
@@ -114,11 +110,19 @@ export class SharedUiInfoDialogDirective implements OnInit, OnDestroy {
   }
 
   updateDialogPosition() {
+    const header = document.querySelector('header');
+
     this.scrollSub = fromEvent(window, 'scroll')
       .pipe(takeUntilDestroyed(this.destroyRef), throttleTime(10))
       .subscribe(() => {
-        const anchorRect =
-          this.containerRef.element.nativeElement.getBoundingClientRect();
+        const anchorElement = this.containerRef.element.nativeElement;
+        const anchorRect = anchorElement.getBoundingClientRect();
+
+        // Check if the dialog's position is less than or equal to the header's height
+        if (anchorRect && anchorRect.top <= (header?.offsetHeight ?? 0)) {
+          this.dialogRef?.close();
+          this.dialogRef = undefined;
+        }
 
         // update the positon so that the dialog stays next to the anchor
         this.dialogRef?.updatePosition({

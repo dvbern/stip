@@ -19,7 +19,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -137,6 +136,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private countriesService = inject(SharedUtilCountriesService);
   private plzStore = inject(PlzOrtStore);
+
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
   readonly Zivilstand = Zivilstand;
@@ -144,6 +144,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly zivilstandValues = Object.values(Zivilstand);
   readonly wohnsitzValues = Object.values(Wohnsitz);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
+
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
   validationViewSig = this.store.selectSignal(

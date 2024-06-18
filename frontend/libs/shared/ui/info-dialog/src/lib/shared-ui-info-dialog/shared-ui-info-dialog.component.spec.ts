@@ -12,8 +12,8 @@ import {
 } from './shared-ui-info-dialog.component';
 
 const dialogData: InfoDialogData = {
-  title: 'title',
-  message: 'message',
+  titleKey: 'title',
+  messageKey: 'message',
 };
 
 class MatDialogRefMock {

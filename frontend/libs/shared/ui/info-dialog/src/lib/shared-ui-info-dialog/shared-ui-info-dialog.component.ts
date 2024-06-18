@@ -4,8 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface InfoDialogData {
-  title: string;
-  message: string;
+  titleKey: string;
+  messageKey: string;
 }
 
 @Component({

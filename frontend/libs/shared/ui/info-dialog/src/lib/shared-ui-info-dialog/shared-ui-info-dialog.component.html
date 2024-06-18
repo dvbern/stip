@@ -9,9 +9,9 @@
   </button>
   <h1 class="title h5 mb-4 d-flex">
     <span class="text-info material-symbols-rounded me-2">info</span>
-    {{ dialogData.title | translate }}
+    {{ dialogData.titleKey | translate }}
   </h1>
-  <p class="content" [innerHTML]="dialogData.message | translate"></p>
+  <p class="content" [innerHTML]="dialogData.messageKey | translate"></p>
   <button (click)="close()" type="button" class="btn btn-outline-primary align-self-center mt-auto">
     {{ 'shared.form-field.close-info-message' | translate }}
   </button>
