@@ -34,7 +34,7 @@ import static org.junit.Assert.assertNull;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GesuchResourceTest4 {
+class GesuchResource_EinnahmenKostenDefaultValuesTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
@@ -42,9 +42,8 @@ class GesuchResourceTest4 {
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
 
-    private UUID piaAdresseId;
-    private UUID partnerAdresseId;
-
+    private UUID adresseId;
+    private AdresseDtoSpec piaAdresse;
     @Test
     @TestAsGesuchsteller
     @Order(1)
@@ -79,15 +78,13 @@ class GesuchResourceTest4 {
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
-    void testUpdateGesuchEinnahmenKostenSteuern(){
-        //total income is under 20 000
+    @Order(5)
+    void testUpdateGesuchEinnahmenKostenWithDefaultValues2() {//steuerjahr, veranlagungscode überprüfen
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner());
-
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setNettoerwerbseinkommen(10);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2028);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().setId(adresseId);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
@@ -99,12 +96,54 @@ class GesuchResourceTest4 {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
-
-        piaAdresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId();
-        partnerAdresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().getId();
-
+        assertNotNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten());
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(), is(0));
+        adresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId();
+        piaAdresse = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse();
     }
 
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
+    void testUpdateGesuchEinnahmeKostenVermoegen(){
+        LocalDate ageUnder18 = LocalDate.now().minusYears(5);
+        LocalDate ageAbove18 = LocalDate.now().minusYears(20);
+        //under age 18
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setAdresse(piaAdresse);
+        //gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().setId(adresseId);
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(ageUnder18);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
+        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertNotNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten());
+        assertNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVermoegen());
+
+        //above age 18
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getGeburtsdatum().minusYears(18));
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(ageAbove18);
+
+        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertNotNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVermoegen());
+    }
 
 }

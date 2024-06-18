@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GesuchResourceTest7 {
+class GesuchResourceEinnahmenKostenSteuernUpdateTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
@@ -75,11 +75,18 @@ class GesuchResourceTest7 {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
-    void testUpdateGesuchEinnahmenKostenSteuerjahrNonNullValue(){
+    @Order(7)
+    void testUpdateGesuchEinnahmenKostenSteuern(){
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2020);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner());
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setNettoerwerbseinkommen(20001);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
+
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        //total income is above 20 000
 
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -90,20 +97,9 @@ class GesuchResourceTest7 {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        Integer vorjahrGesuchsjahr = gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1;
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuerjahr(), is(vorjahrGesuchsjahr));
+        Integer value = (int) (20001 * 0.1);
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(), is(value));
     }
 
-    private void dummyReset(){
-        var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
-        var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
-            .then();
-        response.assertThat()
-            .statusCode(Status.CREATED.getStatusCode());
-
-        gesuchId = TestUtil.extractIdFromResponse(response);
-    }
 
 }
