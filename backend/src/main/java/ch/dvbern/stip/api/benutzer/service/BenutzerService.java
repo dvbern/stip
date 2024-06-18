@@ -50,8 +50,8 @@ public class BenutzerService {
         }
 
         return benutzerRepository
-                .findByKeycloakId(keycloakId)
-                .orElseThrow(() -> new NotFoundException("Benutzer not found"));
+            .findByKeycloakId(keycloakId)
+            .orElseThrow(() -> new NotFoundException("Benutzer not found"));
     }
 
     @Transactional
