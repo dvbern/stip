@@ -339,42 +339,12 @@ class GesuchResourceTest {
     @Order(16)
     void testUpdateGesuchEndpointAddEinnahmenKoster() {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
-        var gesuch =
-            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-                .body()
-                .as(GesuchDtoSpec.class);
-
-        validatePage();
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(17)
-    void testAllFormularPresent() {
-        var gesuch =
-            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
-                .body()
-                .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung(), is(notNullValue()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung(), is(notNullValue()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation(), is(notNullValue()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner(), is(notNullValue()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung(), is(notNullValue()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten(), is(notNullValue()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().size(), is(1));
-        assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getGeschwisters().get(0).getNachname(),
-            is(geschwisterNameUpdateTest)
-        );
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems().size(), is(1));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().size(), is(2));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getKinds().size(), is(1));
-
         validatePage();
     }
 

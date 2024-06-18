@@ -41,10 +41,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
     private UUID piaAdresseId;
     private UUID partnerAdresseId;
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(1)
-    void testCreateEndpoint() {
+    void createGesuch() {
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
         gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
@@ -57,10 +54,8 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
         gesuchId = TestUtil.extractIdFromResponse(response);
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(2)
-    void gesuchTrancheCreated() {
+
+    void createTranche() {
         gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
@@ -77,6 +72,8 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
     @TestAsGesuchsteller
     @Order(7)
     void testUpdateGesuchEinnahmenKostenSteuern(){
+        createGesuch();
+        createTranche();
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner());

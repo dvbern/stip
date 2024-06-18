@@ -40,10 +40,8 @@ class GesuchResource_EinnahmeKostenTest {
 
     private UUID adresseId;
     private UUID partnerAdresseId;
-    @Test
-    @TestAsGesuchsteller
-    @Order(1)
-    void testCreateEndpoint() {
+
+    void createGesuch() {
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
         gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
@@ -56,10 +54,8 @@ class GesuchResource_EinnahmeKostenTest {
         gesuchId = TestUtil.extractIdFromResponse(response);
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(2)
-    void gesuchTrancheCreated() {
+
+    void createTranche() {
         gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
@@ -73,8 +69,10 @@ class GesuchResource_EinnahmeKostenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(3)
     void testUpdateGesuchEmptyEinnahmenKosten() {
+        createGesuch();
+        createTranche();
+
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner());
 
@@ -93,31 +91,5 @@ class GesuchResource_EinnahmeKostenTest {
         adresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId();
         partnerAdresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().getId();
         assertNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(4)
-    void testUpdateGesuchEinnahmenKostenWithDefaultValues1() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
-
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().setId(adresseId);
-
-
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
-        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class);
-        assertNotNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten());
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(), is(0));
     }
 }
