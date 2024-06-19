@@ -13,11 +13,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Data
 @Builder
 @Jacksonized
+@Value
 @JsonIgnoreProperties
 public class BerechnungRequestV1 implements BerechnungRequest {
     @JsonProperty("Stammdaten_V1")

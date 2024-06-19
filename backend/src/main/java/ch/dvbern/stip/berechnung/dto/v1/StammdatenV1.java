@@ -3,10 +3,12 @@ package ch.dvbern.stip.berechnung.dto.v1;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Data
 @Builder
+@Value
 @Jacksonized
 public class StammdatenV1 {
     int maxSaeule3a;

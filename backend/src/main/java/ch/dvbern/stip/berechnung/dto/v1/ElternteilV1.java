@@ -2,10 +2,12 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Data
 @Builder
+@Value
 @Jacksonized
 public class ElternteilV1 {
     int essenskostenPerson1;

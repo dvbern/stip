@@ -69,13 +69,15 @@ class BerechnungServiceTest {
         "2, 14192",
         "3, 0",
         "4, 17986",
-        "5, 39751",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "5, 39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "6, 27179",
         "7, 6669",
-        "8, 266"  ,    // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "8, 266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "9, 23527"
     })
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
+        // Load Fall resources/berechnung/fall_{fall}.json, deserialize to a BerechnungRequestV1
+        // and calculate Stipendien for it
         final var result = berechnungService.calculateStipendien(BerechnungUtil.getRequest(fall));
         assertThat(result.getStipendien(), is(expectedStipendien));
     }

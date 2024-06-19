@@ -2,6 +2,7 @@ package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
 
+import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -53,7 +54,10 @@ public class BerechnungService {
 
         final var result = dmnService.evaluateModel(models, BerechnungRequestContextUtil.toContext(request));
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
-        // TODO KSTIP-1051: This could throw null, check before
+        if (stipendien == null) {
+            throw new AppErrorException("Result of Stipendienberechnung was null!");
+        }
+
         return new BerechnungResult(stipendien.intValue(), result.getDecisionResults());
     }
 }
