@@ -195,6 +195,7 @@ class GesuchResourceTest {
     void testUpdateGesuchEndpointPartner() {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(5000);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -341,6 +342,7 @@ class GesuchResourceTest {
         updateGesuch();
 
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
         final var personInAusbildung =
             GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith()
                 .getGesuchFormular()
@@ -559,6 +561,8 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        AdresseSpecModel.adresseDtoSpec.setId(null);
     }
 
     private void updateGesuch() {

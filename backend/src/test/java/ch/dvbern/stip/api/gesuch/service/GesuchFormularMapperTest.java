@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import ch.dvbern.stip.api.adresse.service.AdresseMapperImpl;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
@@ -305,7 +304,7 @@ class GesuchFormularMapperTest {
 
     GesuchFormularMapper createMapper() {
         return new GesuchFormularMapperImpl(
-            new PersonInAusbildungMapperImpl(new AdresseMapperImpl()),
+            new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
             new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
             new LebenslaufItemMapperImpl(new DateMapperImpl()),
