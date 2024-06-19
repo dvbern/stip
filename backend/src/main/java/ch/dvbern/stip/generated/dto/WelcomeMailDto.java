@@ -1,12 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -19,7 +22,7 @@ public class WelcomeMailDto  implements Serializable {
   private @Valid String name;
   private @Valid String vorname;
   private @Valid String email;
-  private @Valid String redirectUrl;
+  private @Valid String redirectUri;
 
   /**
    **/
@@ -28,7 +31,7 @@ public class WelcomeMailDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("name")
   @NotNull
   public String getName() {
@@ -47,7 +50,7 @@ public class WelcomeMailDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -66,7 +69,7 @@ public class WelcomeMailDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("email")
   @NotNull
   public String getEmail() {
@@ -80,20 +83,21 @@ public class WelcomeMailDto  implements Serializable {
 
   /**
    **/
-  public WelcomeMailDto redirectUrl(String redirectUrl) {
-    this.redirectUrl = redirectUrl;
+  public WelcomeMailDto redirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
     return this;
   }
 
-
-  @JsonProperty("redirectUrl")
-  public String getRedirectUrl() {
-    return redirectUrl;
+  
+  @JsonProperty("redirectUri")
+  @NotNull
+  public String getRedirectUri() {
+    return redirectUri;
   }
 
-  @JsonProperty("redirectUrl")
-  public void setRedirectUrl(String redirectUrl) {
-    this.redirectUrl = redirectUrl;
+  @JsonProperty("redirectUri")
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
   }
 
 
@@ -109,23 +113,23 @@ public class WelcomeMailDto  implements Serializable {
     return Objects.equals(this.name, welcomeMail.name) &&
         Objects.equals(this.vorname, welcomeMail.vorname) &&
         Objects.equals(this.email, welcomeMail.email) &&
-        Objects.equals(this.redirectUrl, welcomeMail.redirectUrl);
+        Objects.equals(this.redirectUri, welcomeMail.redirectUri);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, vorname, email, redirectUrl);
+    return Objects.hash(name, vorname, email, redirectUri);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class WelcomeMailDto {\n");
-
+    
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    redirectUrl: ").append(toIndentedString(redirectUrl)).append("\n");
+    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }

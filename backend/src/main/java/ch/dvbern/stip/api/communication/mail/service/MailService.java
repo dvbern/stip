@@ -46,7 +46,7 @@ public class MailService {
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
         String redirectURI = configService.getWelcomeMailURI(
             tenantService.getCurrentTenant().getIdentifier(),
-            welcomeMailDto.getRedirectUrl()
+            welcomeMailDto.getRedirectUri()
         );
 
         Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), redirectURI)

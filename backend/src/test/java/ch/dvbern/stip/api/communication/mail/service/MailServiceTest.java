@@ -157,7 +157,7 @@ class MailServiceTest {
             .name("WelcomeEmailTestName")
             .vorname("WelcomeEmailTestVorname")
             .email(TEST_EMAIL)
-            .redirectUrl("https://testreditrecturl.test");
+            .redirectUri("https://testreditrecturl.test");
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
@@ -166,6 +166,6 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
-        assertThat(actual.getHtml()).contains(welcomeMailDto.getRedirectUrl());
+        assertThat(actual.getHtml()).contains(welcomeMailDto.getRedirectUri());
     }
 }
