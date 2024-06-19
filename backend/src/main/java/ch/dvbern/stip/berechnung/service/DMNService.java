@@ -19,7 +19,6 @@ public class DMNService {
     private static final String DMN_BASE_DIR = "dmn";
     private static final String DMN_EXTENSION = ".dmn";
 
-
     public DMNResult evaluateModel(final List<Resource> models, final Map<String, Object> context) {
         final var runtime = DMNRuntimeBuilder
             .fromDefaults()
@@ -35,9 +34,10 @@ public class DMNService {
     }
 
     public List<Resource> loadModelsForTenantAndVersion(final String tenantId, final String version) {
+        // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
         final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
         final var modelsDirectory = new File(
-            Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath.toString())).getFile()
+            Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath)).getFile()
         );
 
         if (modelsDirectory.isDirectory()) {
