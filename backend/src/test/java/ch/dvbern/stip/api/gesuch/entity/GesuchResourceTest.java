@@ -63,7 +63,7 @@ class GesuchResourceTest {
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
-	private UUID fallId;
+    private UUID fallId;
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
 
@@ -72,13 +72,13 @@ class GesuchResourceTest {
     @Order(1)
     void createFall() {
         var fall = fallApiSpec.createFallForGs()
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Status.OK.getStatusCode())
-				.extract()
-                .body()
-                .as(FallDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDtoSpec.class);
 
         fallId = fall.getId();
     }
@@ -338,8 +338,20 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(16)
     void testUpdateGesuchEndpointAddEinnahmenKoster() {
+        updateGesuch();
+
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung());
+        final var personInAusbildung =
+            GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getPersonInAusbildung();
+        personInAusbildung.getAdresse().setId(
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId()
+        );
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .setPersonInAusbildung(personInAusbildung);
+
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -432,12 +444,12 @@ class GesuchResourceTest {
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getAllGesucheSb().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
 
-        for(GesuchDtoSpec gesuch : gesuche) {
+        for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
         }
@@ -448,12 +460,12 @@ class GesuchResourceTest {
     @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
 
-        for(GesuchDtoSpec gesuch : gesuche) {
+        for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
         }
@@ -473,7 +485,10 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.isPresent(), is(true));
         assertThat(gesuchOpt.get().getFall().getId(), is(fallId));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
-        assertThat(gesuchOpt.get().getGesuchStatus().toString(), gesuchOpt.get().getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(
+            gesuchOpt.get().getGesuchStatus().toString(),
+            gesuchOpt.get().getGesuchStatus(),
+            is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
 
@@ -544,6 +559,14 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    private void updateGesuch() {
+        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
     }
 
     private void validatePage() {
