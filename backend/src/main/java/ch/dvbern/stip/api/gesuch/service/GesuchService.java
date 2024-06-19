@@ -150,13 +150,17 @@ public class GesuchService {
     @Transactional
     public List<GesuchDto> findGesucheSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).toList();
+        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).toList();
+        return gesuchRepository.findForGs(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
     }
 
     @Transactional
