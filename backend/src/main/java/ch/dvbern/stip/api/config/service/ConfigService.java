@@ -82,8 +82,9 @@ public class ConfigService {
     }
 
     public String getWelcomeMailURI(String tenant, String redirectURI) {
-        return welcomeEmailKcUrl + welcomeEmailKcPath.replace("\"TENANT\"", tenant)
-            + welcomeEmailKcQueryParameter.replace("\"REDIRECT_URI\"", redirectURI)
+        return welcomeEmailKcUrl
+            + welcomeEmailKcPath.replace("<TENANT>", tenant)
+            + welcomeEmailKcQueryParameter.replace("<REDIRECT_URI>", redirectURI)
             + welcomeEmailKcScope;
     }
 }

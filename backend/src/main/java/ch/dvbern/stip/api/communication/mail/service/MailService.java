@@ -44,12 +44,14 @@ public class MailService {
     }
 
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
-        String redirectURI = configService.getWelcomeMailURI(tenantService.getCurrentTenant().getIdentifier(),
-            welcomeMailDto.getRedirectUrl());
+        String redirectURI = configService.getWelcomeMailURI(
+            tenantService.getCurrentTenant().getIdentifier(),
+            welcomeMailDto.getRedirectUrl()
+        );
 
         Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), redirectURI)
             .to(welcomeMailDto.getEmail())
-            .subject("Benuzter Erstellt/Utilisateur Créé")
+            .subject("Benuzter Erstellt/ Utilisateur Créé")
             .send().subscribe().asCompletionStage();
     }
 

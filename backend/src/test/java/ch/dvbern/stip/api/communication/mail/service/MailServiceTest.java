@@ -134,7 +134,9 @@ class MailServiceTest {
         MailMessage actual = sent.get(0);
         actual.getSubject();
         assertThat(actual.getSubject()).isNotBlank();
-        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle().forAppLanguage(AppLanguages.DE).translate("stip.gesuch.eingereicht"));
+        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle()
+            .forAppLanguage(AppLanguages.DE)
+            .translate("stip.gesuch.eingereicht"));
         assertThat(actual.getHtml()).contains(TEST_EMAIL_DE_STRING);
 
         mailService.sendGesuchEingereichtEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
@@ -143,17 +145,19 @@ class MailServiceTest {
         actual = sent.get(1);
         actual.getSubject();
         assertThat(actual.getSubject()).isNotBlank();
-        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle().forAppLanguage(AppLanguages.FR).translate("stip.gesuch.eingereicht"));
+        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle()
+            .forAppLanguage(AppLanguages.FR)
+            .translate("stip.gesuch.eingereicht"));
         assertThat(actual.getHtml()).doesNotContain(TEST_EMAIL_DE_STRING);
     }
 
     @Test
     void sendWelcomeEmail() {
         WelcomeMailDto welcomeMailDto = new WelcomeMailDto()
-                .name("WelcomeEmailTestName")
-                .vorname("WelcomeEmailTestVorname")
-                .email(TEST_EMAIL)
-                .redirectUrl("https://testreditrecturl.test");
+            .name("WelcomeEmailTestName")
+            .vorname("WelcomeEmailTestVorname")
+            .email(TEST_EMAIL)
+            .redirectUrl("https://testreditrecturl.test");
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
