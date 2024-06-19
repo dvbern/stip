@@ -17,7 +17,6 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -31,7 +30,6 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MappingConfig.class,
@@ -64,45 +62,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
             ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
         }
-    }
-
-    @Named("mapVermoegen")
-    public Integer mapVermoegen(final GesuchFormular gesuchFormular) {
-        if(gesuchFormular.getEinnahmenKosten() == null){
-            return null;
-        }
-        Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
-        if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
-            if(vermoegen == null){
-                return 0;
-            }
-            else{
-                return vermoegen;
-            }
-        }else{
-            return null;
-        }
-    }
-
-    @Named("calculateSteuern")
-    public Integer calculateSteuern(final GesuchFormular gesuchFormular){
-
-        if(gesuchFormular.getEinnahmenKosten() == null){
-            return null;
-        }
-        int totalEinkommen = 0;
-        if(gesuchFormular.getEinnahmenKosten() != null && gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen() != null){
-            totalEinkommen += gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen();
-        }
-        if(gesuchFormular.getPartner() != null && gesuchFormular.getPartner().getJahreseinkommen() != null){
-            totalEinkommen += gesuchFormular.getPartner().getJahreseinkommen();
-        }
-
-        if(totalEinkommen >= 20000){
-            return (int)(totalEinkommen * 0.1);
-        }
-
-        return 0;
     }
 
     /**
