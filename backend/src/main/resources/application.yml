@@ -145,6 +145,11 @@ quarkus:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
+    welcome-mail:
+      kc-url: 'http://dummy.keycloak'
+      kc-path: '/realms/bern/protocol/openid-connect/auth'
+      kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
+      kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
 '%prod':
   quarkus:
     s3:
