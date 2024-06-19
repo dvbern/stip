@@ -23,7 +23,7 @@ class V1StructureTest {
                     "anzahlWochenSchule": 37,
                     "preisProMahlzeit": 7
                 },
-                "InputFamilienBudget_1_V1": {
+                "InputFamilienbudget_1_V1": {
                     "elternteil": {
                         "essenskostenPerson1": 0,
                         "essenskostenPerson2": 0,
@@ -47,7 +47,7 @@ class V1StructureTest {
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
-                "InputFamilienBudget_2_V1": {
+                "InputFamilienbudget_2_V1": {
                     "elternteil": {
                         "essenskostenPerson1": 0,
                         "essenskostenPerson2": 0,
@@ -71,7 +71,7 @@ class V1StructureTest {
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
-                "InputPersoenlichesBudget_V1": {
+                "InputPersoenlichesbudget_V1_V1": {
                     "antragssteller": {
                         "tertiaerstufe": false,
                         "einkommen": 12916,

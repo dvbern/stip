@@ -7,34 +7,51 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Builder;
+import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
-@Value
+@Data
+@Builder
+@Jacksonized
+@JsonIgnoreProperties
 public class BerechnungRequestV1 implements BerechnungRequest {
     @JsonProperty("Stammdaten_V1")
     StammdatenV1 stammdaten;
 
-    @JsonProperty("InputFamilienBudget_1_V1")
-    InputFamilienBudgetV1 inputFamilienBudget1;
+    @JsonProperty("InputFamilienbudget_1_V1")
+    InputFamilienbudgetV1 inputFamilienbudget1;
 
-    @JsonProperty("InputFamilienBudget_2_V1")
-    InputFamilienBudgetV1 inputFamilienBudget2;
+    @JsonProperty("InputFamilienbudget_2_V1")
+    InputFamilienbudgetV1 inputFamilienbudget2;
 
     @AllArgsConstructor
-    public static class InputFamilienBudgetV1 {
+    @Builder
+    @Jacksonized
+    public static class InputFamilienbudgetV1 {
         @JsonProperty("elternteil")
         ElternteilV1 elternteil;
     }
 
-    @JsonProperty("InputPersoenlichesBudget_V1")
-    InputPersoenlichesBudgetV1 inputPersoenlichesBudgetV1;
+    @JsonProperty("InputPersoenlichesbudget_V1")
+    InputPersoenlichesbudgetV1 inputPersoenlichesBudget;
 
     @AllArgsConstructor
-    public static class InputPersoenlichesBudgetV1 {
+    @Builder
+    @Jacksonized
+    public static class InputPersoenlichesbudgetV1 {
         @JsonProperty("antragssteller")
         AntragsstellerV1 antragssteller;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getVersion() {
+        return "v1.0";
     }
 
     private static int elternImHaushaltIfWiederverheiratet(final boolean isElternteilWiederverheiratet) {
@@ -48,7 +65,7 @@ public class BerechnungRequestV1 implements BerechnungRequest {
     ) {
         final var elternteil1Builder = ElternteilV1.builderWithDefaults();
         final var elternteil2Builder = ElternteilV1.builderWithDefaults();
-        
+
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var antragssteller = AntragsstellerV1.fromGesuchFormular(gesuchFormular);
 
@@ -120,9 +137,9 @@ public class BerechnungRequestV1 implements BerechnungRequest {
 
         return new BerechnungRequestV1(
             StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode()),
-            new InputFamilienBudgetV1(elternteil1Builder.build()),
-            new InputFamilienBudgetV1(elternteil2Builder.build()),
-            new InputPersoenlichesBudgetV1(antragssteller)
+            new InputFamilienbudgetV1(elternteil1Builder.build()),
+            new InputFamilienbudgetV1(elternteil2Builder.build()),
+            new InputPersoenlichesbudgetV1(antragssteller)
         );
     }
 }
