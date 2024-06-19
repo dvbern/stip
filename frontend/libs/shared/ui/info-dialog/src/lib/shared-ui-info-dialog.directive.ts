@@ -62,7 +62,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
   }
 
   openDialog() {
-    const isColumnar = window.innerWidth >= DVBreakpoints.LG;
+    const isColumnar = window.innerWidth >= DVBreakpoints.XL;
 
     let dialogConfig: MatDialogConfig<InfoDialogData> = {
       data: {
