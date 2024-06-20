@@ -2831,6 +2831,38 @@ components:
         kantonskuerzel:
           description: ''
           type: string
+    SteuerdatenUpdate:
+      title: Root Type for Steuerdaten
+      description: ''
+      type: object
+      properties:
+        id:
+          type: string
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenTab'
+    Steuerdaten:
+      title: Root Type for Steuerdaten
+      description: ''
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SteuerdatenUpdate'
+    SteuerdatenTab:
+      title: One tab for Steuerdaten
+      description: ''
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SteuerdatenTabUpdate'
+    SteuerdatenTabUpdate:
+      title: One tab for Steuerdaten
+      description: ''
+      type: object
+      properties:
+        id:
+          type: string
+        tbd:
+          type: string
   responses:
     Unauthorized:
       content:
