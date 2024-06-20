@@ -72,6 +72,7 @@
       "@dv/shared/feature/gesuch-form-education": ["libs/shared/feature/gesuch-form-education/src/index.ts"],
       "@dv/shared/feature/gesuch-form-einnahmenkosten": ["libs/shared/feature/gesuch-form-einnahmenkosten/src/index.ts"],
       "@dv/shared/feature/gesuch-form-eltern": ["libs/shared/feature/gesuch-form-eltern/src/index.ts"],
+      "@dv/shared/feature/gesuch-form-eltern-steuerdaten": ["libs/shared/feature/gesuch-form-eltern-steuerdaten/src/index.ts"],
       "@dv/shared/feature/gesuch-form-familiensituation": ["libs/shared/feature/gesuch-form-familiensituation/src/index.ts"],
       "@dv/shared/feature/gesuch-form-geschwister": ["libs/shared/feature/gesuch-form-geschwister/src/index.ts"],
       "@dv/shared/feature/gesuch-form-kinder": ["libs/shared/feature/gesuch-form-kinder/src/index.ts"],

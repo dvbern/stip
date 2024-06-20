@@ -1,6 +1,7 @@
 import {
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  SteuerdatenTab,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 
@@ -10,88 +11,92 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
-export const PERSON: SharedModelGesuchFormStep = {
+export const PERSON = {
   route: 'person',
   translationKey: 'shared.person.title',
-  currentStepNumber: 1,
   iconSymbolName: 'person',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const AUSBILDUNG = {
   route: 'education',
   translationKey: 'shared.education.title',
-  currentStepNumber: 2,
   iconSymbolName: 'school',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const LEBENSLAUF = {
   route: 'lebenslauf',
   translationKey: 'shared.lebenslauf.title',
-  currentStepNumber: 3,
   iconSymbolName: 'news',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const FAMILIENSITUATION = {
   route: 'familiensituation',
   translationKey: 'shared.familiensituation.title',
-  currentStepNumber: 4,
   iconSymbolName: 'family_restroom',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const ELTERN = {
   route: 'eltern',
   translationKey: 'shared.eltern.title',
-  currentStepNumber: 5,
   iconSymbolName: 'escalator_warning',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const GESCHWISTER = {
   route: 'geschwister',
   translationKey: 'shared.geschwister.title',
-  currentStepNumber: 6,
   iconSymbolName: 'group',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const PARTNER = {
   route: 'partner',
   translationKey: 'shared.partner.title',
-  currentStepNumber: 7,
   iconSymbolName: 'favorite',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const KINDER = {
   route: 'kinder',
   translationKey: 'shared.kinder.title',
-  currentStepNumber: 8,
   iconSymbolName: 'emoji_people',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const AUSZAHLUNG = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
-  currentStepNumber: 9,
   iconSymbolName: 'payments',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const EINNAHMEN_KOSTEN = {
   route: 'einnahmenkosten',
   translationKey: 'shared.einnahmenkosten.title',
-  currentStepNumber: 10,
   iconSymbolName: 'call_missed_outgoing',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const DOKUMENTE = {
   route: 'dokumente',
   translationKey: 'shared.dokumente.title',
-  currentStepNumber: 11,
   iconSymbolName: 'description',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const ABSCHLUSS = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
-  currentStepNumber: 12,
   iconSymbolName: 'check_circle',
+} satisfies SharedModelGesuchFormStep;
+
+// TODO use correct steuernTab type
+const steuerTypeIconMap: Record<string, string> = {
+  family: 'people',
+  mutter: 'woman',
+  vater: 'man',
+};
+export const createElternSteuerStep = (
+  steuernTab: SteuerdatenTab,
+): SharedModelGesuchFormStep => {
+  return {
+    route: `eltern-steuer-${steuernTab.type}`,
+    translationKey: 'shared.eltern-steuer.title',
+    iconSymbolName: steuerTypeIconMap[steuernTab.type],
+  };
 };
 
 export const gesuchFormSteps = {

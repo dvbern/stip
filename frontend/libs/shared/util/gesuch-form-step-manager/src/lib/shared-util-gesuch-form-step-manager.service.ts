@@ -26,7 +26,6 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
   route: '/',
   translationKey: '',
-  currentStepNumber: Number.MAX_SAFE_INTEGER,
   iconSymbolName: '',
 };
 
@@ -88,11 +87,9 @@ export class SharedUtilGesuchFormStepManagerService {
    * Returns the next step depending on the origin step
    */
   getNext(origin?: SharedModelGesuchFormStep): SharedModelGesuchFormStep {
-    const steps = [...StepFlow[this.compiletimeConfig.appType]].sort(
-      (s1, s2) => s1.currentStepNumber - s2.currentStepNumber,
-    );
+    const steps = StepFlow[this.compiletimeConfig.appType];
     const currentIndex = steps.findIndex(
-      (step) => step.currentStepNumber === origin?.currentStepNumber,
+      (step) => step.route === origin?.route,
     );
     if (currentIndex === -1 || !isDefined(steps[currentIndex + 1])) {
       throw new Error('Step not defined');
