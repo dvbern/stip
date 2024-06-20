@@ -2868,12 +2868,15 @@ components:
           $ref: '#/components/schemas/Ausgaben'
     Ausgaben:
       title: Feld Ausgaben in SteuerdatenTab
+      description: ''
       type: object
-      $ref: '#/components/schemas/AusgabenUpdate'
+      allOf:
+        - $ref: '#/components/schemas/AusgabenUpdate'
     Einnahmen:
       title: Feld Einnahmen in SteuerdatenTab
       type: object
-      $ref: '#/components/schemas/EinnahmenUpdate'
+      allOf:
+        - $ref: '#/components/schemas/EinnahmenUpdate'
     EinnahmenUpdate:
       title: Feld Einnahmen in SteuerdatenTab
       type: object
@@ -2886,23 +2889,23 @@ components:
         - vermoegen
       properties:
         id:
-          type: string
+          $ref: '#/components/schemas/UUID'
         totalEinkuenfte:
-          type: int
+          type: integer
         eingenmietwert:
-          type: int
+          type: integer
         isArbeitsverhaeltnisSelbstaendig:
           type: boolean
         saeule3a:
-          type: int
+          type: integer
         saeule2:
-          type: int
+          type: integer
         kinderalimente:
-          type: int
+          type: integer
         ergaenzungsleistungen:
-          type: int
+          type: integer
         vermoegen:
-          type: int
+          type: integer
     AusgabenUpdate:
       title: Feld Ausgaben in SteuerdatenTab
       type: object
@@ -2915,23 +2918,23 @@ components:
         - veranlagungscode
       properties:
         id:
-          type: string
+          $ref: '#/components/schemas/UUID'
         steuernStaat:
-          type: int
+          type: integer
         steuernBund:
-          type: int
+          type: integer
         fahrkosten:
-           type: int
+           type: integer
         fahrkostenPartner:
-          type: int
+          type: integer
         verpflegung:
-          type: int
+          type: integer
         verpflegungPartner:
-          type: int
+          type: integer
         steuerjahr:
-          type: int
+          type: integer
         veranlagungscode:
-          type: int
+          type: integer
   responses:
     Unauthorized:
       content:
