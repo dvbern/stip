@@ -20,7 +20,6 @@ public class PlzService {
         return plzRepository.findAll().stream().map(plzMapper::toDto).toList();
     }
 
-//    @Transactional
     public boolean isInBern(final String postleitzahl) {
         if (postleitzahl == null) {
             return false;
@@ -28,12 +27,11 @@ public class PlzService {
         return plzRepository.isPlzInKanton(postleitzahl, "be");
     }
 
-//    @Transactional
     public boolean isInBern(final Adresse adresse) {
         if (adresse == null) {
             return false;
         }
-        // Replace with actual logic once an external service has been implemented
+
         final var plz = adresse.getPlz();
         return isInBern(plz);
     }

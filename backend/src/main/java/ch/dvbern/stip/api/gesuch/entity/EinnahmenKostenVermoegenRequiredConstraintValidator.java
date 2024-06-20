@@ -10,7 +10,7 @@ public class EinnahmenKostenVermoegenRequiredConstraintValidator implements Cons
         if (gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
-        if(GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)){
+        if (GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)) {
             return gesuchFormular.getEinnahmenKosten().getVermoegen() != null;
         }
         return gesuchFormular.getEinnahmenKosten().getVermoegen() == null;

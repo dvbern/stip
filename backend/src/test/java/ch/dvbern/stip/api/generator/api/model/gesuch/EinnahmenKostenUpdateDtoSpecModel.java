@@ -21,7 +21,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setWillDarlehen(false);
             model.setAuswaertigeMittagessenProWoche(faker.number().randomDigit());
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
-            model.setVeranlagungsCode(TestUtil.getRandomInt(0,99));
+            model.setVeranlagungsCode(TestUtil.getRandomInt(0, 99));
             model.setSteuerjahr(0);
         });
 

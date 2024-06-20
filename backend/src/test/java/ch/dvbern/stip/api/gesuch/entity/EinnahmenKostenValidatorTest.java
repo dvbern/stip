@@ -130,19 +130,19 @@ class EinnahmenKostenValidatorTest {
         boolean isValid = false;
 
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungsCode(null));
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isFalse();
 
         gesuch.getEinnahmenKosten().setVeranlagungsCode(0);
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
 
         gesuch.getEinnahmenKosten().setVeranlagungsCode(99);
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
 
         gesuch.getEinnahmenKosten().setVeranlagungsCode(100);
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isFalse();
     }
 
@@ -155,22 +155,22 @@ class EinnahmenKostenValidatorTest {
         boolean isValid = false;
 
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setSteuerjahr(null));
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isFalse();
 
         gesuch.getEinnahmenKosten().setSteuerjahr(0);
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
     }
 
     @Test
     void steuerjahrIsCurrentorPastValidationTest(){
         final var temporalValidator = new EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator();
-        assertThat(temporalValidator.isValid(0,null)).isTrue();
-        assertThat(temporalValidator.isValid(Year.now().getValue(),null)).isTrue();
-        assertThat(temporalValidator.isValid(Year.now().getValue() + 1,null)).isFalse();
-        assertThat(temporalValidator.isValid(Year.MIN_VALUE,null)).isTrue();
-        assertThat(temporalValidator.isValid(Year.MAX_VALUE,null)).isFalse();
+        assertThat(temporalValidator.isValid(0, null)).isTrue();
+        assertThat(temporalValidator.isValid(Year.now().getValue(), null)).isTrue();
+        assertThat(temporalValidator.isValid(Year.now().getValue() + 1, null)).isFalse();
+        assertThat(temporalValidator.isValid(Year.MIN_VALUE, null)).isTrue();
+        assertThat(temporalValidator.isValid(Year.MAX_VALUE, null)).isFalse();
     }
 
     @Test
@@ -184,11 +184,11 @@ class EinnahmenKostenValidatorTest {
         //test negative value
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(-1));
 
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isFalse();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
 
-        isValid = validateGesuchFormularProperty(validator,gesuch,propertyName);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
     }
 
@@ -198,10 +198,10 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
         //setup
         gesuch.setTranche(new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2024)))));
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(1995,8,5)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(1995, 8, 5)));
 
         // genau 18 Jahre alt
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023,12,31).minusYears(18)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023, 12, 31).minusYears(18)));
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isTrue();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
@@ -210,7 +210,7 @@ class EinnahmenKostenValidatorTest {
         //reset value
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         // fast 18 Jahre alt
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2024,1,1).minusYears(18)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2024, 1, 1).minusYears(18)));
         assertThat(validator.isValid(gesuch,null)).isTrue();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isFalse();
@@ -218,7 +218,7 @@ class EinnahmenKostenValidatorTest {
         //reset value
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         // unter 18 Jahre alt
-        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023,12,31).minusYears(5)));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023, 12, 31).minusYears(5)));
         assertThat(validator.isValid(gesuch,null)).isTrue();
         gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuch,null)).isFalse();
