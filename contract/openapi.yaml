@@ -2033,6 +2033,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Eltern'
+        steuerdaten:
+          description: ''
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/Steuerdaten'
         geschwisters:
           description: ''
           type: array
