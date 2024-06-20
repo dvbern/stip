@@ -6,9 +6,13 @@ import java.time.temporal.ChronoUnit;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
 @Builder
+@Jacksonized
 @Value
 public class AntragsstellerV1 {
       boolean tertiaerstufe;
