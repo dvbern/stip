@@ -24,13 +24,16 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const config = {
-      deploymentConfig: undefined,
-      loading: false,
-      error: undefined,
-    };
+
     const result = selectSharedDataAccessGesuchsView.projector(
-      config,
+      {
+        deploymentConfig: undefined,
+        compileTimeConfig: undefined,
+        loading: false,
+        error: undefined,
+        isGesuchApp: true,
+        isSachbearbeitungApp: false,
+      },
       state.lastUpdate,
       state.loading,
       state.gesuch,

@@ -31,6 +31,7 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
             gesuchFormular,
           },
           language: { language: 'de' },
+          configs: {},
         },
       }),
       provideMaterialDefaultOptions(),

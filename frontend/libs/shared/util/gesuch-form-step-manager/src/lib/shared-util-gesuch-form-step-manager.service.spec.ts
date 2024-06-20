@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 
 import { SharedUtilGesuchFormStepManagerService } from './shared-util-gesuch-form-step-manager.service';
 
@@ -11,9 +11,9 @@ describe('SharedUtilGesuchFormStepManagerService', () => {
     TestBed.configureTestingModule({
       providers: [
         {
-          provide: SharedModelCompiletimeConfig,
+          provide: SharedModelCompileTimeConfig,
           useFactory: () =>
-            new SharedModelCompiletimeConfig({
+            new SharedModelCompileTimeConfig({
               appType: 'gesuch-app',
               authClientId: 'stip-gesuch-app',
             }),

@@ -1,17 +1,17 @@
 export type AppType = `${'gesuch' | 'sachbearbeitung'}-app`;
-export type CompiletimeConfig = Pick<
-  SharedModelCompiletimeConfig,
+export type CompileTimeConfig = Pick<
+  SharedModelCompileTimeConfig,
   'appType' | 'authClientId'
 >;
 
-export class SharedModelCompiletimeConfig {
+export class SharedModelCompileTimeConfig {
   readonly authClientId: `stip-${AppType}`;
   readonly appType: AppType;
 
   isSachbearbeitungApp: boolean;
   isGesuchApp: boolean;
 
-  constructor(config: CompiletimeConfig) {
+  constructor(config: CompileTimeConfig) {
     this.authClientId = config.authClientId;
     this.appType = config.appType;
     this.isSachbearbeitungApp = this.appType === 'sachbearbeitung-app';

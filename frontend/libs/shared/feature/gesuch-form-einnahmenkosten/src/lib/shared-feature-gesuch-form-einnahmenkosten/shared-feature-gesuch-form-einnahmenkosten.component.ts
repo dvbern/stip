@@ -26,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
-import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
@@ -94,7 +94,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
-  private config = inject(SharedModelCompiletimeConfig);
+  private config = inject(SharedModelCompileTimeConfig);
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],

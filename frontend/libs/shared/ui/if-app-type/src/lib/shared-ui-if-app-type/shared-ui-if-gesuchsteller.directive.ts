@@ -5,7 +5,7 @@ import {
   inject,
 } from '@angular/core';
 
-import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 
 @Directive({
   selector: '[dvIfGesuchsteller]',
@@ -14,7 +14,7 @@ import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 export class SharedUiIfGesuchstellerDirective {
   viewContainerRef = inject(ViewContainerRef);
   templateRef = inject(TemplateRef);
-  config = inject(SharedModelCompiletimeConfig);
+  config = inject(SharedModelCompileTimeConfig);
 
   constructor() {
     if (this.config.isGesuchApp) {
