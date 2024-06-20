@@ -146,4 +146,11 @@ public class BenutzerService {
     public String getCurrentBenutzername() {
         return getCurrentBenutzer().getFullName();
     }
+
+    @Transactional
+    public void deleteBenutzer(UUID benutzerId) {
+        Benutzer benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(() -> new NotFoundException("Benutzer not found"));
+        benutzer.getRollen().clear();
+        benutzerRepository.delete(benutzer);
+    }
 }
