@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.tenancy.service;
 
+import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,6 +14,11 @@ public class MockTenantService extends TenantService {
 
     @Override
     public TenantInfoDto getCurrentTenant() {
-        return new TenantInfoDto().identifier("bern");
+        return new TenantInfoDto()
+            .identifier("bern")
+            .clientAuth(
+                new TenantAuthConfigDto()
+                    .authServerUrl(keycloakFrontendUrl)
+            );
     }
 }
