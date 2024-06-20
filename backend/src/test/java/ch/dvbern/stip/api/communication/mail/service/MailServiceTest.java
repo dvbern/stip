@@ -34,7 +34,7 @@ class MailServiceTest {
 
     private static final String TEST_EMAIL_DE_STRING = "Gesuch wurde übermittelt";
 
-    private static final String TEST_EMAIL = "luca.fondo@dvbern.ch";
+    private static final String TEST_EMAIL = "jean@bat.ch";
 
     @Inject
     MockMailbox mailbox;
