@@ -5,7 +5,6 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import org.mapstruct.AfterMapping;
-import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -17,7 +16,9 @@ public abstract class EinnahmenKostenMapper {
 
     @AfterMapping
     public void afterMapping(EinnahmenKostenUpdateDto einnahmenKostenDto, @MappingTarget EinnahmenKosten einnahmenKosten){
-        einnahmenKosten.setVeranlagungsCode(0);
+        if (einnahmenKosten.getVeranlagungsCode() == null) {
+            einnahmenKosten.setVeranlagungsCode(0);
+        }
     }
 
     public abstract EinnahmenKosten partialUpdate(

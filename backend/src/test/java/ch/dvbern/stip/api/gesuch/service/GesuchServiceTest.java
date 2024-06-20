@@ -793,6 +793,7 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
