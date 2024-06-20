@@ -17,7 +17,7 @@ public class PartnerUpdateDtoSpecModel {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec);
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
             model.setAusbildungMitEinkommenOderErwerbstaetig(true);
-            model.setFahrkosten(TestUtil.getRandomInt());
+            model.setFahrkosten(2500);
             model.setJahreseinkommen(TestUtil.getRandomInt());
             model.setVerpflegungskosten(TestUtil.getRandomInt());
         });
