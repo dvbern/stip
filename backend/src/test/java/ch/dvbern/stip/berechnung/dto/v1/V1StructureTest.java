@@ -5,6 +5,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import com.savoirtech.json.JsonComparatorBuilder;
+import io.quarkus.logging.Log;
 import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,7 +24,7 @@ class V1StructureTest {
                     "anzahlWochenSchule": 37,
                     "preisProMahlzeit": 7
                 },
-                "InputFamilienBudget_1_V1": {
+                "InputFamilienbudget_1_V1": {
                     "elternteil": {
                         "essenskostenPerson1": 0,
                         "essenskostenPerson2": 0,
@@ -47,7 +48,7 @@ class V1StructureTest {
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
-                "InputFamilienBudget_2_V1": {
+                "InputFamilienbudget_2_V1": {
                     "elternteil": {
                         "essenskostenPerson1": 0,
                         "essenskostenPerson2": 0,
@@ -71,7 +72,7 @@ class V1StructureTest {
                         "anzahlGeschwisterInAusbildung": 0
                     }
                 },
-                "InputPersoenlichesBudget_V1": {
+                "InputPersoenlichesbudget_V1": {
                     "antragssteller": {
                         "tertiaerstufe": false,
                         "einkommen": 12916,
@@ -119,6 +120,7 @@ class V1StructureTest {
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(EXPECTED, actual);
+        Log.info("actual: " + actual);
         assertTrue(result.isMatch(), result.getErrorMessage());
     }
 }
