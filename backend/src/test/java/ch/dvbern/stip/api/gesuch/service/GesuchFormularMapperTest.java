@@ -368,8 +368,6 @@ class GesuchFormularMapperTest {
         assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() >= 0);
 
-        // gesuch update
-        // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
@@ -394,8 +392,6 @@ class GesuchFormularMapperTest {
         assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() == vermoegen);
 
-        // gesuch update
-        // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
@@ -417,8 +413,6 @@ class GesuchFormularMapperTest {
         GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
 
-        // gesuch update
-        // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
@@ -441,9 +435,7 @@ class GesuchFormularMapperTest {
         assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
         GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-
-        // gesuch update
-        // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 }

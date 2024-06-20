@@ -64,7 +64,7 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         if (greaterThanZero(ek.getErgaenzungsleistungen())) {
             requiredDocs.add(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
         }
-        if(greaterThanZero(ek.getVermoegen())){
+        if (greaterThanZero(ek.getVermoegen())) {
             requiredDocs.add(DokumentTyp.EK_VERMOEGEN);
         }
 
