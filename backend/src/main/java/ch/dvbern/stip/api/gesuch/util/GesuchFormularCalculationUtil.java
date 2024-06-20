@@ -29,11 +29,9 @@ public class GesuchFormularCalculationUtil {
     }
 
     public boolean wasGSOlderThan18(final GesuchFormular gesuchFormular) {
-        try{
-            return calculateAgeAtLocalDate(gesuchFormular,getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)) >= 18;
-        }
-        catch(Exception e) {
+        if (gesuchFormular.getPersonInAusbildung() == null) {
             return true;
         }
+        return calculateAgeAtLocalDate(gesuchFormular, getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)) >= 18;
     }
 }
