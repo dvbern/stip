@@ -2834,6 +2834,7 @@ components:
     SteuerdatenUpdate:
       title: Root Type for Steuerdaten
       description: ''
+      required: []
       type: object
       properties:
         id:
@@ -2861,8 +2862,76 @@ components:
       properties:
         id:
           type: string
-        tbd:
+        Einnahmen:
+          $ref: '#/components/schemas/Einnahmen'
+        Ausgaben:
+          $ref: '#/components/schemas/Ausgaben'
+    Ausgaben:
+      title: Feld Ausgaben in SteuerdatenTab
+      type: object
+      $ref: '#/components/schemas/AusgabenUpdate'
+    Einnahmen:
+      title: Feld Einnahmen in SteuerdatenTab
+      type: object
+      $ref: '#/components/schemas/EinnahmenUpdate'
+    EinnahmenUpdate:
+      title: Feld Einnahmen in SteuerdatenTab
+      type: object
+      required:
+        - totalEinkuenfte
+        - eigenmietwert
+        - isArbeitsverhaeltnisSelbstaendig
+        - kinderalimente
+        - ergaenzungsleistungen
+        - vermoegen
+      properties:
+        id:
           type: string
+        totalEinkuenfte:
+          type: int
+        eingenmietwert:
+          type: int
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
+        saeule3a:
+          type: int
+        saeule2:
+          type: int
+        kinderalimente:
+          type: int
+        ergaenzungsleistungen:
+          type: int
+        vermoegen:
+          type: int
+    AusgabenUpdate:
+      title: Feld Ausgaben in SteuerdatenTab
+      type: object
+      required:
+        - steuernStaat
+        - steuernBund
+        - fahrkosten
+        - verpflegung
+        - steuerjahr
+        - veranlagungscode
+      properties:
+        id:
+          type: string
+        steuernStaat:
+          type: int
+        steuernBund:
+          type: int
+        fahrkosten:
+           type: int
+        fahrkostenPartner:
+          type: int
+        verpflegung:
+          type: int
+        verpflegungPartner:
+          type: int
+        steuerjahr:
+          type: int
+        veranlagungscode:
+          type: int
   responses:
     Unauthorized:
       content:
