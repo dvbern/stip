@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
@@ -215,13 +214,17 @@ public class GesuchService {
     @Transactional
     public List<GesuchDto> findGesucheSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId()).map(this::mapWithTrancheToWorkWith).toList();
+        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findForGs(benutzer.getId()).map(this::mapWithTrancheToWorkWith).toList();
+        return gesuchRepository.findForGs(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
     }
 
     @Transactional

@@ -49,11 +49,9 @@ public class BenutzerService {
             throw AppFailureMessage.missingSubject().create();
         }
 
-        Benutzer benutzer = benutzerRepository
-                .findByKeycloakId(keycloakId)
-                .orElseThrow(() -> new NotFoundException("Benutzer not found"));
-
-        return benutzer;
+        return benutzerRepository
+            .findByKeycloakId(keycloakId)
+            .orElseThrow(() -> new NotFoundException("Benutzer not found"));
     }
 
     @Transactional
