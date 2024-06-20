@@ -134,7 +134,6 @@
       "@dv/shared/ui/translated-property-pipe": ["libs/shared/ui/translated-property-pipe/src/index.ts"],
       "@dv/shared/ui/version-text": ["libs/shared/ui/version-text/src/index.ts"],
       "@dv/shared/ui/wohnsitz-splitter": ["libs/shared/ui/wohnsitz-splitter/src/index.ts"],
-      "@dv/shared/util-data-access/debug-util": ["libs/shared/util-data-access/debug-util/src/index.ts"],
       "@dv/shared/util-data-access/plz-ort-lookup": ["libs/shared/util-data-access/plz-ort-lookup/src/index.ts"],
       "@dv/shared/util-data-access/store-util": ["libs/shared/util-data-access/store-util/src/index.ts"],
       "@dv/shared/util-fn/comp-test": ["libs/shared/util-fn/comp-test/src/index.ts"],

@@ -4,7 +4,6 @@ import {
   provideHttpClient,
 } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { SharedModelBenutzerApi, UsableRole } from '@dv/shared/model/benutzer';
@@ -28,13 +27,6 @@ describe('BenutzerverwaltungStore', () => {
         BenutzerverwaltungStore,
         provideHttpClient(),
         provideOAuthClient(),
-        provideMockStore({
-          initialState: {
-            configs: {
-              deploymentConfig: undefined,
-            },
-          },
-        }),
       ],
     });
     store = TestBed.inject(BenutzerverwaltungStore);

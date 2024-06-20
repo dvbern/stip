@@ -47,7 +47,6 @@ import {
   pending,
   success,
 } from '@dv/shared/util/remote-data';
-import { SharedUtilDataAccessDebugUtilService } from '@dv/shared/util-data-access/debug-util';
 
 type HttpResponseWithLocation = HttpResponse<unknown> & {
   headers: { get: (header: 'Location') => string };
@@ -73,9 +72,6 @@ export class BenutzerverwaltungStore extends signalStore(
   private document = inject(DOCUMENT);
   private authService = inject(OAuthService);
   private mailService = inject(MailService);
-  private logger = inject(SharedUtilDataAccessDebugUtilService).logAtLevel(
-    'uat',
-  );
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   private _oauthParams?: { url: string; realm: string };
@@ -125,7 +121,7 @@ export class BenutzerverwaltungStore extends signalStore(
         onFailure: (error) => {
           const parsedError = SharedModelError.parse(error);
           if (parsedError.type === 'zodError') {
-            this.logger.error(parsedError.message, parsedError.errors);
+            console.error(parsedError.message, parsedError.errors);
           }
           this.globalNotificationStore.handleHttpRequestFailed([parsedError]);
         },
