@@ -1,6 +1,8 @@
 package ch.dvbern.stip.api.common.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import org.mapstruct.Mapper;
@@ -30,5 +32,15 @@ public class DateMapperImpl {
     public LocalDate monthYearToEndOfMonth(String monthYear) {
         LocalDate date = monthYearToBeginOfMonth(monthYear);
         return date.plusMonths(1).minusDays(1);
+    }
+
+    @DateTimeToIso
+    public String dateTimeToIso(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    @IsoToDateTime
+    public LocalDateTime isoToDateTime(String iso) {
+        return LocalDateTime.parse(iso, DateTimeFormatter.ISO_DATE_TIME);
     }
 }

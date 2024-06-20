@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -27,6 +28,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -62,7 +64,7 @@ class GesuchResourceTest {
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
-	private UUID fallId;
+    private UUID fallId;
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
 
@@ -71,13 +73,13 @@ class GesuchResourceTest {
     @Order(1)
     void createFall() {
         var fall = fallApiSpec.createFallForGs()
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Status.OK.getStatusCode())
-				.extract()
-                .body()
-                .as(FallDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDtoSpec.class);
 
         fallId = fall.getId();
     }
@@ -436,12 +438,12 @@ class GesuchResourceTest {
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getAllGesucheSb().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
 
-        for(GesuchDtoSpec gesuch : gesuche) {
+        for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
         }
@@ -452,12 +454,12 @@ class GesuchResourceTest {
     @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
 
-        for(GesuchDtoSpec gesuch : gesuche) {
+        for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
         }
@@ -477,7 +479,10 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.isPresent(), is(true));
         assertThat(gesuchOpt.get().getFall().getId(), is(fallId));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
-        assertThat(gesuchOpt.get().getGesuchStatus().toString(), gesuchOpt.get().getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(
+            gesuchOpt.get().getGesuchStatus().toString(),
+            gesuchOpt.get().getGesuchStatus(),
+            is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
 
@@ -534,6 +539,40 @@ class GesuchResourceTest {
         // Checks if all dokument types returned from the API are in the list of expected types
         assertThat(
             set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
+            is(true)
+        );
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(24)
+    void testGetStatusprotokoll() {
+        final var statusprotokoll = gesuchApiSpec.getStatusProtokoll()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(StatusprotokollEntryDtoSpec[].class);
+
+        assertThat(
+            Arrays.toString(statusprotokoll),
+            statusprotokoll.length,
+            is(2)
+        );
+
+        final var expectedOldStatus = Set.of(
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
+            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+        );
+
+        assertThat(
+            expectedOldStatus.containsAll(Arrays.stream(statusprotokoll)
+                .map(StatusprotokollEntryDtoSpec::getStatus)
+                .toList()
+            ),
             is(true)
         );
     }
