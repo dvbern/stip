@@ -157,7 +157,7 @@ class MailServiceTest {
             .name("WelcomeEmailTestName")
             .vorname("WelcomeEmailTestVorname")
             .email(TEST_EMAIL)
-            .redirectUri("https://testreditrecturl.test");
+            .redirectUri("localhost:4200");
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
