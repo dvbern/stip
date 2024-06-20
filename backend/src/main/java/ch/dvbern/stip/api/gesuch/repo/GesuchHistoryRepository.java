@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.repo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,25 +17,18 @@ public class GesuchHistoryRepository {
 
     public List<Gesuch> getStatusHistory(final UUID gesuchId) {
         final var reader = AuditReaderFactory.get(entityManager);
+        @SuppressWarnings("unchecked")
+        // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
         final List<Gesuch> revisions = reader
             .createQuery()
             .forRevisionsOfEntity(Gesuch.class, true, true)
             .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
             .getResultList()
             .stream()
-            .filter(Gesuch.class::isInstance)
             .map(Gesuch.class::cast)
             .toList();
 
-        Gesuch oldStatus = null;
-        final var changes = new ArrayList<Gesuch>();
-        for (final var revision : revisions) {
-            if (oldStatus == null || oldStatus.getGesuchStatus() != revision.getGesuchStatus()) {
-                changes.add(revision);
-                oldStatus = revision;
-            }
-        }
-
-        return changes;
+        return revisions;
     }
 }

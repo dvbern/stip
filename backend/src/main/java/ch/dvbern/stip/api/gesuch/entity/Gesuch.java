@@ -60,6 +60,7 @@ public class Gesuch extends AbstractMandantEntity {
     @NotNull
     @Column(name = "gesuch_status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "gesuch_status_mod")
     private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     @NotNull
