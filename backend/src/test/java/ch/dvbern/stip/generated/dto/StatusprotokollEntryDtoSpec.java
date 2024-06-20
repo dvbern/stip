@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class StatusprotokollEntryDtoSpec {
   public static final String JSON_PROPERTY_STICHDATUM = "stichdatum";
-  private String stichdatum;
+  private java.time.LocalDateTime stichdatum;
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private GesuchstatusDtoSpec status;
@@ -43,7 +43,7 @@ public class StatusprotokollEntryDtoSpec {
   public StatusprotokollEntryDtoSpec() {
   }
 
-  public StatusprotokollEntryDtoSpec stichdatum(String stichdatum) {
+  public StatusprotokollEntryDtoSpec stichdatum(java.time.LocalDateTime stichdatum) {
     
     this.stichdatum = stichdatum;
     return this;
@@ -57,14 +57,14 @@ public class StatusprotokollEntryDtoSpec {
   @JsonProperty(JSON_PROPERTY_STICHDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getStichdatum() {
+  public java.time.LocalDateTime getStichdatum() {
     return stichdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_STICHDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStichdatum(String stichdatum) {
+  public void setStichdatum(java.time.LocalDateTime stichdatum) {
     this.stichdatum = stichdatum;
   }
 

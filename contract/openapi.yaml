@@ -2867,6 +2867,7 @@ components:
         stichdatum:
           description: 'Datum vom wechsel zu status'
           type: string
+          format: date-time
         status:
           description: 'Status welcher am stichtag erreicht wurde'
           $ref: '#/components/schemas/Gesuchstatus'

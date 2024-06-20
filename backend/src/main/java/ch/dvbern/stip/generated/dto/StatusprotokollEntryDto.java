@@ -21,25 +21,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class StatusprotokollEntryDto  implements Serializable {
-  private @Valid String stichdatum;
+  private @Valid java.time.LocalDateTime stichdatum;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus status;
 
   /**
    * Datum vom wechsel zu status
    **/
-  public StatusprotokollEntryDto stichdatum(String stichdatum) {
+  public StatusprotokollEntryDto stichdatum(java.time.LocalDateTime stichdatum) {
     this.stichdatum = stichdatum;
     return this;
   }
 
   
   @JsonProperty("stichdatum")
-  public String getStichdatum() {
+  public java.time.LocalDateTime getStichdatum() {
     return stichdatum;
   }
 
   @JsonProperty("stichdatum")
-  public void setStichdatum(String stichdatum) {
+  public void setStichdatum(java.time.LocalDateTime stichdatum) {
     this.stichdatum = stichdatum;
   }
 
