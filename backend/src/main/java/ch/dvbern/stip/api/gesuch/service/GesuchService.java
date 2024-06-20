@@ -103,7 +103,8 @@ public class GesuchService {
             .map(Rolle::getKeycloakIdentifier)
             .collect(Collectors.toSet());
 
-        Integer steuerjahrToSet = trancheToUpdate.getGesuch()
+        Integer steuerjahrToSet = trancheToUpdate
+            .getGesuch()
             .getGesuchsperiode()
             .getGesuchsjahr()
             .getTechnischesJahr() - 1;
