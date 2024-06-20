@@ -98,7 +98,7 @@ export const PROTOKOLL = {
   route: 'protokoll',
   translationKey: 'shared.protokoll.title',
   currentStepNumber: 13,
-  iconSymbolName: 'reversed_clock',
+  iconSymbolName: 'history',
 };
 
 export const gesuchFormSteps = {

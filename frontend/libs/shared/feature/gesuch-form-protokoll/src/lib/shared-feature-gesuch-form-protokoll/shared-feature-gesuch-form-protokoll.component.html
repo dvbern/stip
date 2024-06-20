@@ -1,37 +1,34 @@
 <div>
-  <h3 class="mt-5">{{ 'shared.form.shared.protokoll.title' | translate }}</h3>
   <!-- Table -->
   <div class="row g-4">
-    <table>
-      <!--    <table mat-table class="child-table" [dataSource]="staette.ausbildungsgaenge ?? []">-->
-      <caption class="cdk-visually-hidden">
-        {{
-          'shared.form.shared.protokoll.table.caption' | translate
-        }}
-      </caption>
-
+    <caption>
+      {{
+        'shared.form.shared.protokoll.table.caption' | translate
+      }}
+    </caption>
+    <table mat-table class="child-table" [dataSource]="statusprotokoll" matSort>
       <!-- Datum -->
-      <ng-container matColumnDef="datum">
-        <th mat-header-cell *matHeaderCellDef>
+      <ng-container matColumnDef="datum" r>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'shared.form.shared.protokoll.table.datum' | translate }}
         </th>
-        <!--        <td mat-cell *dvMatCellDef="let protokoll; dataSource: dataSource. ?? []"></td>-->
+        <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokoll">{{ protokoll.datum }}</td>
       </ng-container>
 
       <!-- Status -->
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'shared.form.shared.protokoll.table.status' | translate }}
         </th>
-        <!--        <td mat-cell *dvMatCellDef="let protokoll; dataSource: staette.ausbildungsgaenge ?? []"></td>-->
+        <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokoll"></td>
       </ng-container>
 
       <!-- User -->
       <ng-container matColumnDef="user">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'shared.form.shared.protokoll.table.user' | translate }}
         </th>
-        <!--        <td mat-cell *dvMatCellDef="let protokoll; dataSource: staette.ausbildungsgaenge ?? []"></td>-->
+        <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokoll"></td>
       </ng-container>
 
       <!-- Kommentar -->
@@ -39,8 +36,9 @@
         <th mat-header-cell *matHeaderCellDef>
           {{ 'shared.form.shared.protokoll.table.kommentar' | translate }}
         </th>
-        <!--        <td mat-cell *dvMatCellDef="let protokoll; dataSource: staette.ausbildungsgaenge ?? []"></td>-->
+        <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokoll"></td>
       </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
