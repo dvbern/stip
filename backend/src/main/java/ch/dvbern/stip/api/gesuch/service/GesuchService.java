@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -67,6 +68,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
@@ -101,16 +103,15 @@ public class GesuchService {
             .map(Rolle::getKeycloakIdentifier)
             .collect(Collectors.toSet());
 
-        if (benutzerRollenIdentifiers.contains(OidcConstants.ROLE_GESUCHSTELLER)) {
-            final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+        Integer steuerjahrToSet = trancheToUpdate.getGesuch()
+            .getGesuchsperiode()
+            .getGesuchsjahr()
+            .getTechnischesJahr() - 1;
 
-            Integer steuerjahrToSet = trancheToUpdate.getGesuch()
-                .getGesuchsperiode()
-                .getGesuchsjahr()
-                .getTechnischesJahr() - 1;
+        Integer veranlagungsCodeToSet = 0;
+        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
 
-            Integer veranlagungsCodeToSet = 0;
-
+        if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
             if (einnahmenKosten != null) {
                 steuerjahrToSet = Objects.requireNonNullElse(
                     einnahmenKosten.getSteuerjahr(),
@@ -121,20 +122,26 @@ public class GesuchService {
                     veranlagungsCodeToSet
                 );
             }
-            einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
-            einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
         } else {
             if (einnahmenKostenUpdateDto.getSteuerjahr() == null) {
-                einnahmenKostenUpdateDto.setSteuerjahr(
-                    trancheToUpdate.getGesuch()
-                        .getGesuchsperiode()
-                        .getGesuchsjahr()
-                        .getTechnischesJahr() - 1);
+                steuerjahrToSet = Objects.requireNonNullElse(
+                    einnahmenKosten.getSteuerjahr(),
+                    steuerjahrToSet
+                );
+            } else {
+                steuerjahrToSet = einnahmenKostenUpdateDto.getSteuerjahr();
             }
             if (einnahmenKostenUpdateDto.getVeranlagungsCode() == null) {
-                einnahmenKostenUpdateDto.setVeranlagungsCode(0);
+                veranlagungsCodeToSet = Objects.requireNonNullElse(
+                    einnahmenKosten.getVeranlagungsCode(),
+                    veranlagungsCodeToSet
+                );
+            } else {
+                veranlagungsCodeToSet = einnahmenKostenUpdateDto.getVeranlagungsCode();
             }
         }
+        einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
+        einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
     }
 
     @Transactional
