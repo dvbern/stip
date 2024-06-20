@@ -29,16 +29,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
-import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.ElternPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.FamiliensituationPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.GeschwisterPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.*;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -185,7 +176,8 @@ public class GesuchFormular extends AbstractMandantEntity {
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
     private @Valid GesuchTranche tranche;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
-    private Set<Steuerdaten> steuerdatens = new LinkedHashSet<>();
+    @HasPageValidation(SteuerdatenPageValidation.class)
+    private @Valid Set<Steuerdaten> steuerdatenTabs = new LinkedHashSet<>();
 }
