@@ -98,18 +98,12 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
       InfoDialogData
     >(SharedUiInfoDialogComponent, dialogConfig);
 
-    if (isColumnar) {
-      this.updateDialogPosition();
-      this.dialogRef
-        .afterClosed()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => {
-          this.scrollSub?.unsubscribe();
-        });
+    if (isColumnar && (!this.scrollSub || this.scrollSub.closed)) {
+      this.initPositionUpdates();
     }
   }
 
-  updateDialogPosition() {
+  private initPositionUpdates() {
     const header = document.querySelector('header');
 
     this.scrollSub = fromEvent(window, 'scroll')
@@ -129,6 +123,13 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
           top: `${anchorRect.top}px`,
           left: `${anchorRect.left}px`,
         });
+      });
+
+    this.dialogRef
+      ?.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.scrollSub?.unsubscribe();
       });
   }
 
