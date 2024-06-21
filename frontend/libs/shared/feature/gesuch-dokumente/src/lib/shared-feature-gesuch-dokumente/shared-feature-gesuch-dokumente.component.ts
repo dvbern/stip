@@ -42,6 +42,7 @@ function getFormStep(
   const unknownStep: SharedModelGesuchFormStep = {
     route: 'unknown',
     translationKey: 'unknown',
+    titleTranslationKey: 'unknown',
     currentStepNumber: 0,
     iconSymbolName: 'unknown',
   };

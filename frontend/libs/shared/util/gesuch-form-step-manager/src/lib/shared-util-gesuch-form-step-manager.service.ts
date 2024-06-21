@@ -26,6 +26,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
   route: '/',
   translationKey: '',
+  titleTranslationKey: '',
   currentStepNumber: Number.MAX_SAFE_INTEGER,
   iconSymbolName: '',
 };
