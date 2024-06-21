@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -43,7 +44,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
             GeschwisterMapper.class,
             ElternMapper.class,
             KindMapper.class,
-            EinnahmenKostenMapper.class
+            EinnahmenKostenMapper.class,
+            SteuerdatenMapper.class
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);

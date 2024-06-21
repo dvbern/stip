@@ -25,6 +25,7 @@ import ch.dvbern.stip.generated.dto.KindDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -49,7 +50,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_GESCHWISTERS,
   GesuchFormularDtoSpec.JSON_PROPERTY_LEBENSLAUF_ITEMS,
   GesuchFormularDtoSpec.JSON_PROPERTY_KINDS,
-  GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN
+  GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
+  GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN
 })
 @JsonTypeName("GesuchFormular")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -83,6 +85,9 @@ public class GesuchFormularDtoSpec {
 
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN = "einnahmenKosten";
   private EinnahmenKostenDtoSpec einnahmenKosten;
+
+  public static final String JSON_PROPERTY_STEUERDATEN = "steuerdaten";
+  private List<SteuerdatenDtoSpec> steuerdaten;
 
   public GesuchFormularDtoSpec() {
   }
@@ -378,6 +383,40 @@ public class GesuchFormularDtoSpec {
     this.einnahmenKosten = einnahmenKosten;
   }
 
+
+  public GesuchFormularDtoSpec steuerdaten(List<SteuerdatenDtoSpec> steuerdaten) {
+    
+    this.steuerdaten = steuerdaten;
+    return this;
+  }
+
+  public GesuchFormularDtoSpec addSteuerdatenItem(SteuerdatenDtoSpec steuerdatenItem) {
+    if (this.steuerdaten == null) {
+      this.steuerdaten = new ArrayList<>();
+    }
+    this.steuerdaten.add(steuerdatenItem);
+    return this;
+  }
+
+   /**
+   * Get steuerdaten
+   * @return steuerdaten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<SteuerdatenDtoSpec> getSteuerdaten() {
+    return steuerdaten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSteuerdaten(List<SteuerdatenDtoSpec> steuerdaten) {
+    this.steuerdaten = steuerdaten;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -396,12 +435,13 @@ public class GesuchFormularDtoSpec {
         Objects.equals(this.geschwisters, gesuchFormular.geschwisters) &&
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
-        Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten);
+        Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
+        Objects.equals(this.steuerdaten, gesuchFormular.steuerdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten);
   }
 
   @Override
@@ -418,6 +458,7 @@ public class GesuchFormularDtoSpec {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
     sb.append("}");
     return sb.toString();
   }
