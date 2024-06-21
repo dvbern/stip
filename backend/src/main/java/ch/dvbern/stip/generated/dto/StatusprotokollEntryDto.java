@@ -21,26 +21,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class StatusprotokollEntryDto  implements Serializable {
-  private @Valid java.time.LocalDateTime stichdatum;
+  private @Valid java.time.LocalDateTime timestamp;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus status;
 
   /**
    * Datum vom wechsel zu status
    **/
-  public StatusprotokollEntryDto stichdatum(java.time.LocalDateTime stichdatum) {
-    this.stichdatum = stichdatum;
+  public StatusprotokollEntryDto timestamp(java.time.LocalDateTime timestamp) {
+    this.timestamp = timestamp;
     return this;
   }
 
   
-  @JsonProperty("stichdatum")
-  public java.time.LocalDateTime getStichdatum() {
-    return stichdatum;
+  @JsonProperty("timestamp")
+  public java.time.LocalDateTime getTimestamp() {
+    return timestamp;
   }
 
-  @JsonProperty("stichdatum")
-  public void setStichdatum(java.time.LocalDateTime stichdatum) {
-    this.stichdatum = stichdatum;
+  @JsonProperty("timestamp")
+  public void setTimestamp(java.time.LocalDateTime timestamp) {
+    this.timestamp = timestamp;
   }
 
   /**
@@ -71,13 +71,13 @@ public class StatusprotokollEntryDto  implements Serializable {
       return false;
     }
     StatusprotokollEntryDto statusprotokollEntry = (StatusprotokollEntryDto) o;
-    return Objects.equals(this.stichdatum, statusprotokollEntry.stichdatum) &&
+    return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
         Objects.equals(this.status, statusprotokollEntry.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(stichdatum, status);
+    return Objects.hash(timestamp, status);
   }
 
   @Override
@@ -85,7 +85,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class StatusprotokollEntryDto {\n");
     
-    sb.append("    stichdatum: ").append(toIndentedString(stichdatum)).append("\n");
+    sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();

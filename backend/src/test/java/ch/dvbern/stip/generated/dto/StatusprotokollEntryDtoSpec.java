@@ -28,14 +28,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Eintrag von dem Statusprotokoll
  */
 @JsonPropertyOrder({
-  StatusprotokollEntryDtoSpec.JSON_PROPERTY_STICHDATUM,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_TIMESTAMP,
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS
 })
 @JsonTypeName("StatusprotokollEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class StatusprotokollEntryDtoSpec {
-  public static final String JSON_PROPERTY_STICHDATUM = "stichdatum";
-  private java.time.LocalDateTime stichdatum;
+  public static final String JSON_PROPERTY_TIMESTAMP = "timestamp";
+  private java.time.LocalDateTime timestamp;
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private GesuchstatusDtoSpec status;
@@ -43,29 +43,29 @@ public class StatusprotokollEntryDtoSpec {
   public StatusprotokollEntryDtoSpec() {
   }
 
-  public StatusprotokollEntryDtoSpec stichdatum(java.time.LocalDateTime stichdatum) {
+  public StatusprotokollEntryDtoSpec timestamp(java.time.LocalDateTime timestamp) {
     
-    this.stichdatum = stichdatum;
+    this.timestamp = timestamp;
     return this;
   }
 
    /**
    * Datum vom wechsel zu status
-   * @return stichdatum
+   * @return timestamp
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STICHDATUM)
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public java.time.LocalDateTime getStichdatum() {
-    return stichdatum;
+  public java.time.LocalDateTime getTimestamp() {
+    return timestamp;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STICHDATUM)
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStichdatum(java.time.LocalDateTime stichdatum) {
-    this.stichdatum = stichdatum;
+  public void setTimestamp(java.time.LocalDateTime timestamp) {
+    this.timestamp = timestamp;
   }
 
 
@@ -103,20 +103,20 @@ public class StatusprotokollEntryDtoSpec {
       return false;
     }
     StatusprotokollEntryDtoSpec statusprotokollEntry = (StatusprotokollEntryDtoSpec) o;
-    return Objects.equals(this.stichdatum, statusprotokollEntry.stichdatum) &&
+    return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
         Objects.equals(this.status, statusprotokollEntry.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(stichdatum, status);
+    return Objects.hash(timestamp, status);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class StatusprotokollEntryDtoSpec {\n");
-    sb.append("    stichdatum: ").append(toIndentedString(stichdatum)).append("\n");
+    sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();

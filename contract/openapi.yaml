@@ -2864,7 +2864,7 @@ components:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
       properties:
-        stichdatum:
+        timestamp:
           description: 'Datum vom wechsel zu status'
           type: string
           format: date-time
