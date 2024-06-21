@@ -2188,6 +2188,10 @@ components:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenUpdate'
     FileUpload:
       format: binary
       type: string

@@ -27,6 +27,8 @@ import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -306,7 +308,7 @@ class GesuchFormularMapperTest {
             new GeschwisterMapperImpl(),
             new ElternMapperImpl(),
             new KindMapperImpl(),
-            new EinnahmenKostenMapperImpl()
+            new EinnahmenKostenMapperImpl()//, new SteuerdatenMapperImpl()
         );
     }
 }
