@@ -28,14 +28,13 @@ import {
   exportAs: 'dvSharedUiInfoDialog',
 })
 export class SharedUiInfoDialogDirective implements OnDestroy {
+  @Input({ required: true }) dialogTitleKey = '';
+  @Input({ required: true }) dialogMessageKey = '';
+
   containerRef = inject(ViewContainerRef);
   dialog = inject(MatDialog);
   scrollStrategyOptions = inject(ScrollStrategyOptions);
   destroyRef = inject(DestroyRef);
-
-  @Input({ required: true }) dialogTitleKey = '';
-  @Input({ required: true }) dialogMessageKey = '';
-
   dialogRef: MatDialogRef<SharedUiInfoDialogComponent> | undefined;
 
   scrollSub: Subscription | undefined;
@@ -73,9 +72,8 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     };
 
     if (isColumnar) {
-      const anchor = this.containerRef.element.nativeElement;
-      const anchorRect =
-        this.containerRef.element.nativeElement.getBoundingClientRect();
+      const anchor: HTMLElement = this.containerRef.element.nativeElement;
+      const anchorRect = anchor.getBoundingClientRect();
 
       dialogConfig = {
         ...dialogConfig,
@@ -109,11 +107,15 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     this.scrollSub = fromEvent(window, 'scroll')
       .pipe(takeUntilDestroyed(this.destroyRef), throttleTime(10))
       .subscribe(() => {
-        const anchorElement = this.containerRef.element.nativeElement;
-        const anchorRect = anchorElement.getBoundingClientRect();
+        const anchor: HTMLElement = this.containerRef.element.nativeElement;
+        const anchorRect = anchor.getBoundingClientRect();
 
         // Check if the dialog's position is less than or equal to the header's height
-        if (anchorRect && anchorRect.top <= (header?.offsetHeight ?? 0)) {
+        if (
+          anchorRect &&
+          anchorRect.top <=
+            (header?.offsetHeight ?? 0) + (header?.offsetTop ?? 0)
+        ) {
           this.dialogRef?.close();
           this.dialogRef = undefined;
         }

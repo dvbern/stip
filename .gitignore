@@ -99,5 +99,3 @@ hs_err_pid*.log
 
 ## playwright
 **/*storage-state.json
-
-swbranch.sh
