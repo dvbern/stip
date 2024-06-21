@@ -1,6 +1,8 @@
 package ch.dvbern.stip.api.steuerdaten.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.envers.Audited;
@@ -10,12 +12,71 @@ import org.hibernate.envers.Audited;
 @Table(name = "steuerdaten")
 public class Steuerdaten extends AbstractEntity {
     @NotNull
-    @JoinColumn(name="einnahmen_id", foreignKey = @ForeignKey(name = "FK_steuerdaten_einnahmen_id"))
-    @OneToOne
-    private Einnahmen einnahmen;
+    @Column(name = "steuerdaten_typ", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SteuerdatenTyp steuerdatenTyp;
 
     @NotNull
-    @JoinColumn(name="ausgaben_id", foreignKey = @ForeignKey(name = "FK_steuerdaten_ausgaben_id"))
-    @OneToOne
-    private Ausgaben ausgaben;
+    @Column(name = "total_einkuenfte", nullable = false)
+    private Integer totalEinkuenfte;
+
+    @NotNull
+    @Column(name = "eigenmietwert", nullable = false)
+    private Integer eigenmietwert;
+
+    @NotNull
+    @Column(name = "isArbeitsverhaeltnisSelbstaendig", nullable = false)
+    private Boolean isArbeitsverhaeltnisSelbstaendig;
+
+    @Nullable
+    @Column(name = "saeule3a")
+    private Integer saeule3a;
+
+    @Nullable
+    @Column(name = "saeule2")
+    private Integer saeule2;
+
+    @NotNull
+    @Column(name = "kinderalimente", nullable = false)
+    private Integer kinderalimente;
+
+    @NotNull
+    @Column(name = "ergaenzungsleistungen", nullable = false)
+    private Integer ergaenzungsleistungen;
+
+    @NotNull
+    @Column(name = "vermoegen", nullable = false)
+    private Integer vermoegen;
+
+    @NotNull
+    @Column(name = "steuernStaat", nullable = false)
+    private Integer steuernStaat;
+
+    @NotNull
+    @Column(name = "steuernBund", nullable = false)
+    private Integer steuernBund;
+
+    @NotNull
+    @Column(name = "fahrkosten", nullable = false)
+    private Integer fahrkosten;
+
+    @NotNull
+    @Column(name = "fahrkostenPartner", nullable = false)
+    private Integer fahrkostenPartner;
+
+    @NotNull
+    @Column(name = "verpflegung", nullable = false)
+    private Integer verpflegung;
+
+    @NotNull
+    @Column(name = "verpflegungPartner", nullable = false)
+    private Integer verpflegungPartner;
+
+    @NotNull
+    @Column(name = "steuerjahr", nullable = false)
+    private Integer steuerjahr;
+
+    @NotNull
+    @Column(name = "veranlagungscode", nullable = false)
+    private Integer veranlagungscode;
 }

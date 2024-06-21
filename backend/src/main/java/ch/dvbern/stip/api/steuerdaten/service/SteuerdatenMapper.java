@@ -6,10 +6,7 @@ import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = {
-    EinnahmenMapper.class,
-    AusgabenMapper.class
-})
+@Mapper(config = MappingConfig.class)
 public interface SteuerdatenMapper {
     Steuerdaten toEntity(SteuerdatenDto steuerdatenDto);
 
