@@ -1382,6 +1382,12 @@ components:
         - AUFGELOESTE_PARTNERSCHAFT
         - VERWITWET
       type: string
+    SteuerdatenTyp:
+      enum:
+        - FAMILIE
+        - VATER
+        - MUTTER
+      type: string
     Adresse:
       required:
         - land
@@ -2838,45 +2844,42 @@ components:
     SteuerdatenUpdate:
       title: Root Type for Steuerdaten
       description: ''
-      required: []
-      type: object
-      properties:
-        id:
-          type: string
-        einnahmen:
-          $ref: '#/components/schemas/Einnahmen'
-        ausgaben:
-          $ref: '#/components/schemas/Ausgaben'
-    Steuerdaten:
-      title: Root Type for Steuerdaten
-      description: ''
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SteuerdatenUpdate'
-    Ausgaben:
-      title: Feld Ausgaben in SteuerdatenTab
-      description: ''
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/AusgabenUpdate'
-    Einnahmen:
-      title: Feld Einnahmen in SteuerdatenTab
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/EinnahmenUpdate'
-    EinnahmenUpdate:
-      title: Feld Einnahmen in SteuerdatenTab
-      type: object
       required:
+        - steuernStaat
+        - steuernBund
+        - fahrkosten
+        - verpflegung
+        - steuerjahr
+        - veranlagungscode
         - totalEinkuenfte
         - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
         - kinderalimente
         - ergaenzungsleistungen
         - vermoegen
+      type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        typ:
+          type:
+            ref: '#/components/schemas/SteuerdatenTyp'
+        steuernStaat:
+          type: integer
+        steuernBund:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        steuerjahr:
+          type: integer
+        veranlagungscode:
+          type: integer
         totalEinkuenfte:
           type: integer
         eingenmietwert:
@@ -2893,35 +2896,12 @@ components:
           type: integer
         vermoegen:
           type: integer
-    AusgabenUpdate:
-      title: Feld Ausgaben in SteuerdatenTab
+    Steuerdaten:
+      title: Root Type for Steuerdaten
+      description: ''
       type: object
-      required:
-        - steuernStaat
-        - steuernBund
-        - fahrkosten
-        - verpflegung
-        - steuerjahr
-        - veranlagungscode
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        steuernStaat:
-          type: integer
-        steuernBund:
-          type: integer
-        fahrkosten:
-           type: integer
-        fahrkostenPartner:
-          type: integer
-        verpflegung:
-          type: integer
-        verpflegungPartner:
-          type: integer
-        steuerjahr:
-          type: integer
-        veranlagungscode:
-          type: integer
+      allOf:
+        - $ref: '#/components/schemas/SteuerdatenUpdate'
   responses:
     Unauthorized:
       content:
