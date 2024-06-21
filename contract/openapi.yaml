@@ -2862,8 +2862,7 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         typ:
-          type:
-            ref: '#/components/schemas/SteuerdatenTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         steuernStaat:
           type: integer
         steuernBund:
