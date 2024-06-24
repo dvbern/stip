@@ -127,7 +127,12 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 99)],
     ],
-    steuerjahr: [<number | null>null, [Validators.required]],
+    steuerjahr: [
+      <number | null>null,
+      [
+        /** @see // add max year to steuerjahr */
+      ],
+    ],
   });
 
   viewSig = this.store.selectSignal(
@@ -467,9 +472,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         return;
       }
 
-      this.form.controls.steuerjahr.addValidators(
+      this.form.controls.steuerjahr.setValidators([
+        Validators.required,
         sharedUtilValidatorRange(1900, steuerjahr),
-      );
+      ]);
 
       this.form.controls.steuerjahr.updateValueAndValidity();
     });
