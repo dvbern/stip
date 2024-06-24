@@ -69,6 +69,15 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   },
 );
 
+export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
+  sharedDataAccessGesuchsFeature.selectGesuchsState,
+  (state) => {
+    return {
+      steuerdaten: state.gesuchFormular?.steuerdaten,
+    };
+  },
+);
+
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
   currentForm?: SharedModelGesuchFormular | null,

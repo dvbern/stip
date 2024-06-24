@@ -12,6 +12,7 @@
 import { ElternUpdate } from './elternUpdate';
 import { EinnahmenKostenUpdate } from './einnahmenKostenUpdate';
 import { KindUpdate } from './kindUpdate';
+import { SteuerdatenUpdate } from './steuerdatenUpdate';
 import { FamiliensituationUpdate } from './familiensituationUpdate';
 import { AusbildungUpdate } from './ausbildungUpdate';
 import { AuszahlungUpdate } from './auszahlungUpdate';
@@ -43,5 +44,6 @@ export interface GesuchFormularUpdate {
      */
     kinds?: Array<KindUpdate>;
     einnahmenKosten?: EinnahmenKostenUpdate;
+    steuerdaten?: Array<SteuerdatenUpdate>;
 }
 

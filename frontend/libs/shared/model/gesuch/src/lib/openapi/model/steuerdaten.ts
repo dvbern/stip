@@ -9,13 +9,31 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SteuerdatenTab } from './steuerdatenTab';
+import { SteuerdatenTyp } from './steuerdatenTyp';
 
 /**
  * 
  */
 export interface Steuerdaten { 
     id?: string;
-    tabs?: Array<SteuerdatenTab>;
+    typ: SteuerdatenTyp;
+    steuernStaat: number;
+    steuernBund: number;
+    fahrkosten: number;
+    fahrkostenPartner?: number;
+    verpflegung: number;
+    verpflegungPartner?: number;
+    steuerjahr: number;
+    veranlagungscode: number;
+    totalEinkuenfte: number;
+    eingenmietwert?: number;
+    isArbeitsverhaeltnisSelbstaendig: boolean;
+    saeule3a?: number;
+    saeule2?: number;
+    kinderalimente: number;
+    ergaenzungsleistungen: number;
+    vermoegen: number;
 }
+
+
 

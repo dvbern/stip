@@ -14,6 +14,12 @@ export interface SharedModelGesuchFormStep {
   iconSymbolName: string;
 }
 
+export type SharedModelGesuchFormStepProgress = {
+  step?: number;
+  total: number;
+  percentage?: number;
+};
+
 export interface GesuchFormStepView extends SharedModelGesuchFormStep {
   status?: StepState;
   disabled: boolean;

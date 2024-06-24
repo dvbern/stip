@@ -1,7 +1,8 @@
 import {
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
-  SteuerdatenTab,
+  Steuerdaten,
+  SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 
@@ -83,19 +84,25 @@ export const ABSCHLUSS = {
   iconSymbolName: 'check_circle',
 } satisfies SharedModelGesuchFormStep;
 
+export const RETURN_TO_HOME: SharedModelGesuchFormStep = {
+  route: '/',
+  translationKey: '',
+  iconSymbolName: '',
+} satisfies SharedModelGesuchFormStep;
+
 // TODO use correct steuernTab type
-const steuerTypeIconMap: Record<string, string> = {
-  family: 'people',
-  mutter: 'woman',
-  vater: 'man',
+const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
+  FAMILIE: 'people',
+  MUTTER: 'woman',
+  VATER: 'man',
 };
 export const createElternSteuerStep = (
-  steuernTab: SteuerdatenTab,
+  steuerdaten: Steuerdaten,
 ): SharedModelGesuchFormStep => {
   return {
-    route: `eltern-steuer-${steuernTab.type}`,
+    route: `eltern-steuer-${steuerdaten.typ}`,
     translationKey: 'shared.eltern-steuer.title',
-    iconSymbolName: steuerTypeIconMap[steuernTab.type],
+    iconSymbolName: steuerTypeIconMap[steuerdaten.typ],
   };
 };
 

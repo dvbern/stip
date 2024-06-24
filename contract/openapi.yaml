@@ -2849,6 +2849,7 @@ components:
       title: Root Type for Steuerdaten
       description: ''
       required:
+        - typ
         - steuernStaat
         - steuernBund
         - fahrkosten

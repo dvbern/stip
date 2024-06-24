@@ -10,6 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { GesuchFormStepsStore } from '@dv/shared/data-access/gesuch-form-steps';
 import { TranslateModule } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
@@ -59,6 +60,10 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
 
+  gesuchFormStepStore = inject(GesuchFormStepsStore);
+  currentStepProgressSig = computed(() => {
+    return this.gesuchFormStepStore.getStepProgressSig(this.step)();
+  });
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);

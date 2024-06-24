@@ -16,18 +16,13 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
+  RETURN_TO_HOME,
   SharedModelGesuchFormStep,
   StepValidation,
   isStepDisabled,
   isStepValid,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
-
-const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
-  route: '/',
-  translationKey: '',
-  iconSymbolName: '',
-};
 
 const BaseSteps = [
   PERSON,
@@ -44,8 +39,8 @@ const BaseSteps = [
 ];
 
 const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
-  'gesuch-app': [...BaseSteps, ABSCHLUSS, RETURN_TO_COCKPIT],
-  'sachbearbeitung-app': [...BaseSteps, RETURN_TO_COCKPIT],
+  'gesuch-app': [...BaseSteps, ABSCHLUSS, RETURN_TO_HOME],
+  'sachbearbeitung-app': [...BaseSteps, RETURN_TO_HOME],
 };
 
 const steps: Record<AppType, SharedModelGesuchFormStep[]> = {

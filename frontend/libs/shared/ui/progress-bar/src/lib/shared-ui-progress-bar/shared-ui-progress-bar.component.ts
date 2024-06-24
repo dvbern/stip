@@ -3,8 +3,9 @@ import {
   Component,
   HostBinding,
   Input,
-  OnChanges,
 } from '@angular/core';
+
+import { SharedModelGesuchFormStepProgress } from '@dv/shared/model/gesuch-form';
 
 @Component({
   selector: 'dv-shared-ui-progress-bar',
@@ -14,13 +15,8 @@ import {
   styleUrls: ['./shared-ui-progress-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiProgressBarComponent implements OnChanges {
-  @Input() current = 0;
-  @Input() total = 0;
+export class SharedUiProgressBarComponent {
+  @Input({ required: true }) current?: SharedModelGesuchFormStepProgress;
 
-  @HostBinding('style.--progress') progress = 0;
-
-  ngOnChanges() {
-    this.progress = (this.current / this.total) * 100;
-  }
+  @HostBinding('style.--progress') progress = this.current?.percentage;
 }

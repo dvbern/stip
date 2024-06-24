@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { GesuchFormStepsStore } from '@dv/shared/data-access/gesuch-form-steps';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
@@ -22,6 +23,7 @@ export const appRoutes: Route[] = [
   {
     path: 'gesuch',
     canActivate: [hasBenutzer],
+    providers: [{ provide: GesuchFormStepsStore }],
     loadComponent: () =>
       import('@dv/gesuch-app/feature/gesuch-form').then(
         (m) => m.GesuchAppFeatureGesuchFormComponent,

@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { GesuchFormStepsStore } from '@dv/shared/data-access/gesuch-form-steps';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
@@ -38,7 +39,6 @@ function getFormStep(
   const unknownStep: SharedModelGesuchFormStep = {
     route: 'unknown',
     translationKey: 'unknown',
-    currentStepNumber: 0,
     iconSymbolName: 'unknown',
   };
 
@@ -93,6 +93,7 @@ function getFormStep(
 })
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
+  private gesuchFormStepsStore = inject(GesuchFormStepsStore);
   public appType = inject(SharedModelCompiletimeConfig).appType;
 
   displayedColumns = [
@@ -165,13 +166,13 @@ export class SharedFeatureGesuchDokumenteComponent {
     );
 
     return new MatTableDataSource<TableDocument>(
-      [...uploadedDocuments, ...missingDocuments].sort((a, b) => {
-        if (a.formStep.currentStepNumber === b.formStep.currentStepNumber) {
-          return a.dokumentTyp.localeCompare(b.dokumentTyp);
-        }
-
-        return a.formStep.currentStepNumber - b.formStep.currentStepNumber;
-      }),
+      [...uploadedDocuments, ...missingDocuments].sort((a, b) =>
+        this.gesuchFormStepsStore.compareStepsByFlow(
+          a.formStep,
+          b.formStep,
+          () => a.dokumentTyp.localeCompare(b.dokumentTyp),
+        ),
+      ),
     );
   });
 

@@ -9,16 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Ausgaben } from './ausgaben';
-import { Einnahmen } from './einnahmen';
 
-/**
- * 
- */
-export interface SteuerdatenTab { 
-    id: string;
-    type: string;
-    Einnahmen: Einnahmen;
-    Ausgaben: Ausgaben;
-}
+export type SteuerdatenTyp = 'FAMILIE' | 'VATER' | 'MUTTER';
+
+export const SteuerdatenTyp = {
+    FAMILIE: 'FAMILIE' as SteuerdatenTyp,
+    VATER: 'VATER' as SteuerdatenTyp,
+    MUTTER: 'MUTTER' as SteuerdatenTyp
+};
 

@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Steuerdaten } from './steuerdaten';
 import { Eltern } from './eltern';
 import { PersonInAusbildung } from './personInAusbildung';
 import { Ausbildung } from './ausbildung';
 import { Geschwister } from './geschwister';
-import { GesuchFormularSteuerdaten } from './gesuchFormularSteuerdaten';
 import { EinnahmenKosten } from './einnahmenKosten';
 import { Kind } from './kind';
 import { Familiensituation } from './familiensituation';
@@ -31,7 +31,6 @@ export interface GesuchFormular {
      * 
      */
     elterns?: Array<Eltern>;
-    steuerdaten?: GesuchFormularSteuerdaten;
     /**
      * 
      */
@@ -45,5 +44,6 @@ export interface GesuchFormular {
      */
     kinds?: Array<Kind>;
     einnahmenKosten?: EinnahmenKosten;
+    steuerdaten?: Array<Steuerdaten>;
 }
 
