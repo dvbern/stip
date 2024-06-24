@@ -165,12 +165,24 @@ class EinnahmenKostenValidatorTest {
 
     @Test
     void steuerjahrIsCurrentorPastValidationTest(){
+        GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
+
         final var temporalValidator = new EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator();
-        assertThat(temporalValidator.isValid(0, null)).isTrue();
-        assertThat(temporalValidator.isValid(Year.now().getValue(), null)).isTrue();
-        assertThat(temporalValidator.isValid(Year.now().getValue() + 1, null)).isFalse();
-        assertThat(temporalValidator.isValid(Year.MIN_VALUE, null)).isTrue();
-        assertThat(temporalValidator.isValid(Year.MAX_VALUE, null)).isFalse();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(0);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.now().getValue());
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.now().getValue() + 1);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.MIN_VALUE);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.MAX_VALUE);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
     }
 
     @Test
