@@ -179,5 +179,5 @@ public class GesuchFormular extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
-    private @Valid Set<Steuerdaten> steuerdatenTabs = new LinkedHashSet<>();
+    private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
 }
