@@ -125,18 +125,22 @@ public class GesuchService {
             }
         } else {
             if (einnahmenKostenUpdateDto.getSteuerjahr() == null) {
-                steuerjahrToSet = Objects.requireNonNullElse(
-                    einnahmenKosten.getSteuerjahr(),
-                    steuerjahrToSet
-                );
+                if (einnahmenKosten != null) {
+                    steuerjahrToSet = Objects.requireNonNullElse(
+                        einnahmenKosten.getSteuerjahr(),
+                        steuerjahrToSet
+                    );
+                }
             } else {
                 steuerjahrToSet = einnahmenKostenUpdateDto.getSteuerjahr();
             }
             if (einnahmenKostenUpdateDto.getVeranlagungsCode() == null) {
-                veranlagungsCodeToSet = Objects.requireNonNullElse(
-                    einnahmenKosten.getVeranlagungsCode(),
-                    veranlagungsCodeToSet
-                );
+                if (einnahmenKosten != null) {
+                    veranlagungsCodeToSet = Objects.requireNonNullElse(
+                        einnahmenKosten.getVeranlagungsCode(),
+                        veranlagungsCodeToSet
+                    );
+                }
             } else {
                 veranlagungsCodeToSet = einnahmenKostenUpdateDto.getVeranlagungsCode();
             }
