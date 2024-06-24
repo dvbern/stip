@@ -308,7 +308,7 @@ class GesuchFormularMapperTest {
             new GeschwisterMapperImpl(),
             new ElternMapperImpl(),
             new KindMapperImpl(),
-            new EinnahmenKostenMapperImpl()//, new SteuerdatenMapperImpl()
+            new EinnahmenKostenMapperImpl(), new SteuerdatenMapperImpl()
         );
     }
 }
