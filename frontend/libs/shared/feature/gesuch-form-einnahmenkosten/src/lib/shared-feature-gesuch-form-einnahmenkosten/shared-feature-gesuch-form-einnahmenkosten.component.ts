@@ -124,11 +124,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     wgWohnend: [<boolean | null>null, [Validators.required]],
     vermoegen: [<string | undefined>undefined, [Validators.required]],
     veranlagungsCode: [
-      0,
+      <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 99)],
     ],
     steuerjahr: [
-      0,
+      <number | null>null,
       [Validators.required, sharedUtilValidatorRange(1900, 2099)],
     ],
   });
