@@ -14,7 +14,7 @@ public class GesuchHistoryService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final StatusprotokollMapper statusprotokollMapper;
 
-    public List<StatusprotokollEntryDto> getStatusprotokollForGesuch(final UUID gesuchId) {
+    public List<StatusprotokollEntryDto> getStatusprotokoll(final UUID gesuchId) {
         final var revisions = gesuchHistoryRepository.getStatusHistory(gesuchId);
         return revisions.stream().map(statusprotokollMapper::toDto).toList();
     }
