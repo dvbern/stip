@@ -146,19 +146,6 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_AUSWEIS);
     }
 
-    @Test
-    void requiresIfVermoegenVorjahr() {
-        formular.setPersonInAusbildung(
-            new PersonInAusbildung()
-                .setSozialhilfebeitraege(false)
-                .setVermoegenVorjahr(1)
-        );
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
-            DokumentTyp.PERSON_VERMOEGENSNACHWEIS_VORJAHR
-        );
-    }
-
     private PersonInAusbildung createWithNiederlassungsstatus(Niederlassungsstatus status) {
         return new PersonInAusbildung()
             .setSozialhilfebeitraege(false).setNiederlassungsstatus(status);

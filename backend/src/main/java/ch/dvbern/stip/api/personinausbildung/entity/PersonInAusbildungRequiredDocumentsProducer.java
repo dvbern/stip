@@ -63,10 +63,6 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
             requiredDocs.add(DokumentTyp.PERSON_AUSWEIS);
         }
 
-        if (pia.getVermoegenVorjahr() != null) {
-            requiredDocs.add(DokumentTyp.PERSON_VERMOEGENSNACHWEIS_VORJAHR);
-        }
-
         return ImmutablePair.of("personInAusbildung", requiredDocs);
     }
 
