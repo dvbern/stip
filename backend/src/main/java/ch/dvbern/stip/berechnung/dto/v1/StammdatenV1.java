@@ -1,13 +1,15 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
 @Builder
 @Value
-@JsonTypeName("Stammdaten_V1")
+@Jacksonized
 public class StammdatenV1 {
     int maxSaeule3a;
     int einkommensfreibetrag;
@@ -16,7 +18,6 @@ public class StammdatenV1 {
     int preisProMahlzeit;
 
     public static StammdatenV1 fromGesuchsperiode(final Gesuchsperiode gesuchsperiode) {
-        // TODO KSTIP-542: Remove hardcoded values and actually map them from somewhere
         return new StammdatenV1Builder()
             .maxSaeule3a(gesuchsperiode.getMaxSaeule3a())
             .einkommensfreibetrag(gesuchsperiode.getEinkommensfreibetrag())
