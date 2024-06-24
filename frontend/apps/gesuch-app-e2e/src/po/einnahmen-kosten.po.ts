@@ -109,12 +109,6 @@ export class EinnahmenKostenPO {
 
     await this.elems.vermoegen.fill(`${einnahmenKosten.vermoegen ?? 0}`);
 
-    await this.elems.veranlagungsCode.fill(
-      `${einnahmenKosten.veranlagungsCode}`,
-    );
-
-    await this.elems.steuerjahr.fill(`${einnahmenKosten.steuerjahr}`);
-
     await selectMatRadio(
       this.elems.wgWohnend,
       einnahmenKosten.wgWohnend ?? false,

@@ -445,15 +445,15 @@
               formControlName="steuerjahr"
               data-testid="form-einnahmen-kosten-steuerjahr"
               matInput
-              type="number"
               min="1900"
-              max="2099"
+              [max]="this.steuerjahrPeriodeSig()"
+              type="number"
             />
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
             <mat-error *dvSharedUiFormMessageError="'range'">
-              {{ 'shared.form.error.range' | translate: { min: 1900, max: 2099 } }}
+              {{ 'shared.form.error.range' | translate: { min: 1900, max: this.steuerjahrPeriodeSig() } }}
             </mat-error>
           </mat-form-field>
         </div>
