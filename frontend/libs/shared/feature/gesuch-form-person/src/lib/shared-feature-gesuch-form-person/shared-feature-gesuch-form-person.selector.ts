@@ -1,12 +1,12 @@
 import { createSelector } from '@ngrx/store';
 
-import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
+import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 
 export const selectSharedFeatureGesuchFormPersonView = createSelector(
   selectSharedDataAccessGesuchsView,
-  selectSharedDataAccessBenutzersView,
+  selectSharedDataAccessBenutzer,
   selectSharedDataAccessStammdatensView,
   (gesuchsView, benutzerView, stammdatenView) => ({
     loading: gesuchsView.loading || stammdatenView.loading,
@@ -16,8 +16,7 @@ export const selectSharedFeatureGesuchFormPersonView = createSelector(
     gesuchFormular: gesuchsView.gesuchFormular,
     benutzerEinstellungen: {
       digitaleKommunikation:
-        benutzerView.currentBenutzer?.benutzereinstellungen
-          ?.digitaleKommunikation,
+        benutzerView?.benutzereinstellungen?.digitaleKommunikation,
     },
     laender: stammdatenView.laender,
     readonly: gesuchsView.readonly,

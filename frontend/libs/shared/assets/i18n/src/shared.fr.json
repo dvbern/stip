@@ -421,6 +421,11 @@
 
   "shared.protokoll.title": "Protocole",
 
+  "shared.role.Admin": "Admin",
+  "shared.role.Jurist": "Juriste",
+  "shared.role.Sachbearbeiter": "Gestionnaire de dossier",
+  "shared.role.Gesuchsteller": "Requérant",
+
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",
   "shared.kanton.AR": "Appenzell Rh.-Int.",

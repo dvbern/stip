@@ -79,6 +79,7 @@
                   "type:data-access",
                   "type:event",
                   "type:util",
+                  "type:util-data-access",
                   "type:util-fn",
                   "type:model"
                 ]
@@ -131,7 +132,6 @@
                   "@ngrx/eslint-plugin",
                   "@ngrx/router-store",
                   "@ngrx/signals",
-                  "@ngrx/store",
                   "@ngrx/store-devtools"
                 ]
               },

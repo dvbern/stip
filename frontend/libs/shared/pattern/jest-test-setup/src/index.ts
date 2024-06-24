@@ -8,6 +8,8 @@ import {
   CompiletimeConfig,
   SharedModelCompiletimeConfig,
 } from '@dv/shared/model/config';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 export function provideSharedPatternJestTestSetup(
   compileTimeConfig: CompiletimeConfig = {
@@ -25,6 +27,12 @@ export function provideSharedPatternJestTestSetup(
     {
       provide: SharedModelCompiletimeConfig,
       useFactory: () => new SharedModelCompiletimeConfig(compileTimeConfig),
+    },
+    {
+      provide: StoreUtilService,
+      useValue: <{ [K in keyof StoreUtilService]: StoreUtilService[K] }>{
+        waitForBenutzerData$: jest.fn(() => (s: unknown) => s) as unknown,
+      },
     },
   ];
 }

@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { RenderResult, render, within } from '@testing-library/angular';
-import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
@@ -55,27 +54,11 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
   });
 
   describe('form field states', () => {
-    it('should not display vermoegenVorjahr if no PLZ has been filled', async () => {
+    it('should display vermoegenVorjahr if no PLZ and no Land has been filled', async () => {
       c.detectChanges();
-      expect(c.queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
-    });
-
-    it('should not display vermoegenVorjahr if PLZ != Bern has been filled', async () => {
-      await userEvent.type(c.getByTestId('form-address-plz'), '2000');
-
-      c.detectChanges();
-
       expect(
         c.queryByTestId('form-person-vermoegenVorjahr'),
       ).toBeInTheDocument();
-    });
-
-    it('should display vermoegenVorjahr if PLZ = Bern has been filled', async () => {
-      await userEvent.type(c.getByTestId('form-address-plz'), '3000');
-
-      c.detectChanges();
-
-      expect(c.queryByTestId('form-person-vermoegenVorjahr')).toBeNull();
     });
   });
 

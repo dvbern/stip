@@ -1,5 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { Store } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
 import { OAuthService, provideOAuthClient } from 'angular-oauth2-oidc';
 import { TestScheduler } from 'rxjs/testing';
 
@@ -9,24 +11,36 @@ import { loadCurrentBenutzer } from './shared-data-access-benutzer.effects';
 import { SharedDataAccessBenutzerApiEvents } from './shared-data-access-benutzer.events';
 
 describe('SharedDataAccessBenutzer Effects', () => {
+  let store: Store;
   let scheduler: TestScheduler;
   let testBed: TestBed;
   let oauthService: OAuthService;
 
   beforeEach(() => {
     testBed = TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideOAuthClient()],
+      providers: [
+        provideHttpClient(),
+        provideOAuthClient(),
+        provideMockStore({
+          initialState: {
+            benutzers: {
+              lastFetchTs: null,
+            },
+          },
+        }),
+      ],
     });
     scheduler = new TestScheduler((actual, expected) =>
       expect(actual).toEqual(expected),
     );
     oauthService = testBed.inject(OAuthService);
+    store = testBed.inject(Store);
   });
 
   it('loads Benutzer effect - success', () => {
     scheduler.run(({ expectObservable, hot, cold }) => {
       const benutzerServiceMock = {
-        getCurrentBenutzer$: () => cold('150ms a', { a: {} }),
+        prepareCurrentBenutzer$: () => cold('150ms a', { a: {} }),
       } as unknown as BenutzerService;
 
       jest.spyOn(oauthService, 'hasValidIdToken').mockReturnValue(true);
@@ -35,7 +49,7 @@ describe('SharedDataAccessBenutzer Effects', () => {
       });
 
       const effectStream$ = testBed.runInInjectionContext(() =>
-        loadCurrentBenutzer(eventsMock$, benutzerServiceMock),
+        loadCurrentBenutzer(store, eventsMock$, benutzerServiceMock),
       );
 
       expectObservable(effectStream$).toBe('160ms a', {

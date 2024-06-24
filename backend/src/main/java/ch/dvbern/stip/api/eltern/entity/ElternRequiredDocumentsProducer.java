@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ch.dvbern.stip.api.common.service.PlzOrtService;
+import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,19 +1,24 @@
 package ch.dvbern.stip.api.eltern.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.common.service.PlzOrtService;
+import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+@QuarkusTest
 class ElternRequiredDocumentsProducerTest {
     private ElternRequiredDocumentsProducer producer;
 
+    @Inject
+    PlzOrtService plzOrtService;
+
     @BeforeEach
     void setup() {
-        producer = new ElternRequiredDocumentsProducer(new PlzOrtService());
+        producer = new ElternRequiredDocumentsProducer(plzOrtService);
     }
 
     @Test
@@ -101,6 +106,6 @@ class ElternRequiredDocumentsProducerTest {
     }
 
     private Eltern setBernAdresse(final Eltern eltern) {
-        return eltern.setAdresse(new Adresse().setPlz("3000"));
+        return eltern.setAdresse(new Adresse().setPlz("3011"));
     }
 }

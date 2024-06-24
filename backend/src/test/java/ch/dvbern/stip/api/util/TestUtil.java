@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -15,6 +16,16 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.partner.entity.Partner;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -121,5 +132,76 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
+    public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
+        return new Gesuch().setGesuchsperiode(
+            new Gesuchsperiode()
+                .setMaxSaeule3a(7000)
+                .setEinkommensfreibetrag(6000)
+                .setAnzahlWochenLehre(42)
+                .setAnzahlWochenSchule(37)
+                .setPreisProMahlzeit(7)
+        ).setGesuchTranchen(
+            List.of(
+                (GesuchTranche) new GesuchTranche()
+                    .setGesuchFormular(
+                        new GesuchFormular()
+                            .setPersonInAusbildung(
+                                (PersonInAusbildung) new PersonInAusbildung()
+                                    .setVermoegenVorjahr(0)
+                                    .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
+                                    .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
+                            )
+                            .setPartner(
+                                new Partner()
+                                    .setJahreseinkommen(0)
+                                    .setFahrkosten(0)
+                                    .setVerpflegungskosten(0)
+                            )
+                            .setEinnahmenKosten(
+                                new EinnahmenKosten()
+                                    .setNettoerwerbseinkommen(12916)
+                                    .setErgaenzungsleistungen(1200)
+                                    .setWohnkosten(6000)
+                                    .setAusbildungskostenTertiaerstufe(450)
+                                    .setFahrkosten(523)
+                            )
+                            .setFamiliensituation(
+                                new Familiensituation()
+                                    .setElternVerheiratetZusammen(false)
+                                    .setGerichtlicheAlimentenregelung(false)
+                                    .setElternteilUnbekanntVerstorben(false)
+                                    .setVaterWiederverheiratet(false)
+                                    .setMutterWiederverheiratet(true)
+                            )
+                            .setGeschwisters(
+                                Set.of(
+                                    (Geschwister) new Geschwister()
+                                        .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                                        .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+                                        .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+                                        .setGeburtsdatum(LocalDate.now())
+                                        .setNachname("a")
+                                        .setVorname("a"),
+                                    (Geschwister) new Geschwister()
+                                        .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                                        .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
+                                        .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
+                                        .setGeburtsdatum(LocalDate.now())
+                                        .setNachname("a")
+                                        .setVorname("a"),
+                                    (Geschwister) new Geschwister()
+                                        .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                                        .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
+                                        .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
+                                        .setGeburtsdatum(LocalDate.now())
+                                        .setNachname("a")
+                                        .setVorname("a")
+                                )
+                            )
+                    ).setId(trancheUuid)
+            )
+        );
     }
 }

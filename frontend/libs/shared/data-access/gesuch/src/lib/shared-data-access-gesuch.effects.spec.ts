@@ -1,4 +1,3 @@
-import { Store } from '@ngrx/store';
 import { TestScheduler } from 'rxjs/testing';
 
 import { GesuchService, SharedModelGesuch } from '@dv/shared/model/gesuch';
@@ -11,6 +10,9 @@ import {
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 describe('sharedDataAccessGesuch Effects', () => {
+  const storeUtilMock: any = {
+    waitForBenutzerData$: jest.fn(() => (s: unknown) => s),
+  };
   let scheduler: TestScheduler;
 
   beforeEach(() => {
@@ -22,11 +24,8 @@ describe('sharedDataAccessGesuch Effects', () => {
   it('loads Gesuch effect - success', () => {
     scheduler.run(({ expectObservable, hot, cold }) => {
       const gesuchServiceMock = mockGesuchService({
-        getGesucheForBenutzer$: () => cold('150ms a', { a: [] }),
+        getGesucheGs$: () => cold('150ms a', { a: [] }),
       });
-      const gesuchStoreMock = {
-        select: () => cold('a', { a: '1234' }),
-      } as unknown as Store;
 
       const actionsMock$ = hot('10ms a', {
         a: SharedDataAccessGesuchEvents.init(),
@@ -34,8 +33,8 @@ describe('sharedDataAccessGesuch Effects', () => {
 
       const effectStream$ = loadOwnGesuchs(
         actionsMock$,
-        gesuchStoreMock,
         gesuchServiceMock,
+        storeUtilMock,
       );
 
       expectObservable(effectStream$).toBe('160ms a', {
@@ -52,8 +51,8 @@ describe('sharedDataAccessGesuch Effects', () => {
       const gesuch2 = { id: '2' } as SharedModelGesuch;
 
       const gesuchServiceMock = mockGesuchService({
-        getGesucheForMe$: () => cold('a', { a: [gesuch1] }),
-        getGesuche$: () => cold('a', { a: [gesuch1, gesuch2] }),
+        getAllGesucheSb$: () => cold('a', { a: [gesuch1, gesuch2] }),
+        getGesucheSb$: () => cold('a', { a: [gesuch1] }),
       });
 
       const debounced = `${LOAD_ALL_DEBOUNCE_TIME}ms`;
@@ -72,7 +71,11 @@ describe('sharedDataAccessGesuch Effects', () => {
         c: SharedDataAccessGesuchEvents.loadAllDebounced({}),
       });
 
-      const effectStream$ = loadAllGesuchs(actionsMock$, gesuchServiceMock);
+      const effectStream$ = loadAllGesuchs(
+        actionsMock$,
+        gesuchServiceMock,
+        storeUtilMock,
+      );
 
       /**
        * (A) Initial load
