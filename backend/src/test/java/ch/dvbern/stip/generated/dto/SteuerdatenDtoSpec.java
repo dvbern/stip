@@ -118,9 +118,9 @@ public class SteuerdatenDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -128,7 +128,7 @@ public class SteuerdatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -144,9 +144,9 @@ public class SteuerdatenDtoSpec {
    * Get typ
    * @return typ
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SteuerdatenTypDtoSpec getTyp() {
     return typ;
@@ -154,7 +154,7 @@ public class SteuerdatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTyp(SteuerdatenTypDtoSpec typ) {
     this.typ = typ;
   }

@@ -2849,7 +2849,7 @@ components:
       title: Root Type for Steuerdaten
       description: ''
       required:
-        - typ
+        - id
         - steuernStaat
         - steuernBund
         - fahrkosten
@@ -2862,6 +2862,7 @@ components:
         - kinderalimente
         - ergaenzungsleistungen
         - vermoegen
+        - typ
       type: object
       properties:
         id:
