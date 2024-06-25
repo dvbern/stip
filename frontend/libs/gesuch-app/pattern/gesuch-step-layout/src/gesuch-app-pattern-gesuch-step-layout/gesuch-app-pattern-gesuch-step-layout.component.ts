@@ -10,7 +10,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { GesuchFormStepsStore } from '@dv/shared/data-access/gesuch-form-steps';
 import { TranslateModule } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
@@ -20,6 +19,7 @@ import {
   selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { GesuchFormStepsStore } from '@dv/shared/data-access/gesuch-form-steps';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
