@@ -30,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_TIMESTAMP,
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS,
-  StatusprotokollEntryDtoSpec.JSON_PROPERTY_BENUTZER
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_BENUTZER,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
 @JsonTypeName("StatusprotokollEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +44,9 @@ public class StatusprotokollEntryDtoSpec {
 
   public static final String JSON_PROPERTY_BENUTZER = "benutzer";
   private String benutzer;
+
+  public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  private String kommentar;
 
   public StatusprotokollEntryDtoSpec() {
   }
@@ -124,6 +128,32 @@ public class StatusprotokollEntryDtoSpec {
     this.benutzer = benutzer;
   }
 
+
+  public StatusprotokollEntryDtoSpec kommentar(String kommentar) {
+    
+    this.kommentar = kommentar;
+    return this;
+  }
+
+   /**
+   * Kommentar vom SB über die Statusänderung
+   * @return kommentar
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getKommentar() {
+    return kommentar;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKommentar(String kommentar) {
+    this.kommentar = kommentar;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +165,13 @@ public class StatusprotokollEntryDtoSpec {
     StatusprotokollEntryDtoSpec statusprotokollEntry = (StatusprotokollEntryDtoSpec) o;
     return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
         Objects.equals(this.status, statusprotokollEntry.status) &&
-        Objects.equals(this.benutzer, statusprotokollEntry.benutzer);
+        Objects.equals(this.benutzer, statusprotokollEntry.benutzer) &&
+        Objects.equals(this.kommentar, statusprotokollEntry.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, status, benutzer);
+    return Objects.hash(timestamp, status, benutzer, kommentar);
   }
 
   @Override
@@ -150,6 +181,7 @@ public class StatusprotokollEntryDtoSpec {
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
+    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();
   }

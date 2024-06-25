@@ -2874,6 +2874,9 @@ components:
         benutzer:
           description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
           type: string
+        kommentar:
+          description: 'Kommentar vom SB über die Statusänderung'
+          type: string
   responses:
     Unauthorized:
       content:
