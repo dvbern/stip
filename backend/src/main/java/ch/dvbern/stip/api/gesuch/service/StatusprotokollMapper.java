@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 public interface StatusprotokollMapper {
     @Mapping(target = "timestamp", source = "timestampMutiert")
     @Mapping(target = "status", source = "gesuchStatus")
+    @Mapping(target = "benutzer", source = "userMutiert")
     StatusprotokollEntryDto toDto(Gesuch gesuch);
 }

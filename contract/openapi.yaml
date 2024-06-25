@@ -2865,12 +2865,15 @@ components:
       type: object
       properties:
         timestamp:
-          description: 'Datum vom wechsel zu status'
+          description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
           type: string
           format: date-time
         status:
           description: 'Status welcher am stichtag erreicht wurde'
           $ref: '#/components/schemas/Gesuchstatus'
+        benutzer:
+          description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
+          type: string
   responses:
     Unauthorized:
       content:
