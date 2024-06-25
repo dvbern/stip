@@ -1,0 +1,18 @@
+<section class="d-flex flex-column position-relative p-4 rounded">
+  <button
+    type="button"
+    (click)="close()"
+    class="dv-button-icon dv-button-icon-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="title h5 mb-4 d-flex">
+    <span class="text-info material-symbols-rounded me-2">info</span>
+    {{ dialogData.titleKey | translate }}
+  </h1>
+  <p class="content" [innerHTML]="dialogData.messageKey | translate"></p>
+  <button (click)="close()" type="button" class="btn btn-outline-primary align-self-center mt-auto">
+    {{ 'shared.form-field.close-info-message' | translate }}
+  </button>
+</section>

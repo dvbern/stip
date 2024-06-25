@@ -61,7 +61,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
-import { SharedUiInfoOverlayComponent } from '@dv/shared/ui/info-overlay';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -113,7 +113,6 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     MatCheckboxModule,
     MatSelectModule,
     MatRadioModule,
-    SharedUiInfoOverlayComponent,
     NgbInputDatepicker,
     NgbAlert,
     SharedUiFormFieldDirective,
@@ -125,6 +124,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,6 +136,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private countriesService = inject(SharedUtilCountriesService);
   private plzStore = inject(PlzOrtStore);
+
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
   readonly Zivilstand = Zivilstand;
@@ -143,6 +144,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly zivilstandValues = Object.values(Zivilstand);
   readonly wohnsitzValues = Object.values(Wohnsitz);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
+
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
   validationViewSig = this.store.selectSignal(
@@ -158,8 +160,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   appSettings = inject(AppSettings);
   hiddenFieldsSetSig = signal(new Set<FormControl>());
-  isSozialversicherungsnummerInfoShown = false;
-  isNiederlassungsstatusInfoShown = false;
+
   nationalitaetCH = 'CH';
   maskitoNumber = maskitoNumber;
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
