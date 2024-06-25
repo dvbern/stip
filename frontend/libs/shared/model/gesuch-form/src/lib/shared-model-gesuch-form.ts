@@ -21,6 +21,7 @@ export type SharedModelGesuchFormStepProgress = {
 };
 
 export interface GesuchFormStepView extends SharedModelGesuchFormStep {
+  nextStep?: SharedModelGesuchFormStep;
   status?: StepState;
   disabled: boolean;
 }

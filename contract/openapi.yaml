@@ -1757,7 +1757,6 @@ components:
         - id
         - aenderungsdatum
         - gesuchTrancheToWorkWith
-        - gesuchTrancheToWorkWith
       type: object
       properties:
         fall:

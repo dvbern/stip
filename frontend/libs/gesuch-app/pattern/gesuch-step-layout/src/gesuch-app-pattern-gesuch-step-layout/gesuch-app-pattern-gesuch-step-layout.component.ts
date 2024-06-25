@@ -64,7 +64,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   currentStepProgressSig = computed(() => {
     return this.gesuchFormStepStore.getStepProgressSig(this.step)();
   });
-  stepManager = inject(SharedUtilGesuchFormStepManagerService);
+  gesuchFormStepsStore = inject(GesuchFormStepsStore);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   validationViewSig = this.store.selectSignal(
@@ -73,10 +73,15 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   stepsSig = computed(() => {
     const { cachedGesuchFormular, invalidFormularProps } =
       this.validationViewSig();
-    return this.stepManager.getAllStepsWithStatus(
+    const validatedSteps = this.gesuchFormStepsStore.getValidatedStepsSig(
       cachedGesuchFormular,
       invalidFormularProps.validations,
-    );
+    )();
+    return validatedSteps;
+  });
+  currentStepSig = computed(() => {
+    const steps = this.stepsSig();
+    return steps.find((step) => step.route === this.step?.route);
   });
 
   constructor() {

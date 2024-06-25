@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchSteuerdatenView } from '@dv/shared/data-access/gesuch';
 import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
@@ -14,6 +15,7 @@ import {
   ELTERN,
   FAMILIENSITUATION,
   GESCHWISTER,
+  GesuchFormStepView,
   KINDER,
   LEBENSLAUF,
   PARTNER,
@@ -21,7 +23,10 @@ import {
   RETURN_TO_HOME,
   SharedModelGesuchFormStep,
   SharedModelGesuchFormStepProgress,
+  StepValidation,
   createElternSteuerStep,
+  isStepDisabled,
+  isStepValid,
 } from '@dv/shared/model/gesuch-form';
 
 type GesuchFormStepsState = {
@@ -97,6 +102,21 @@ export class GesuchFormStepsStore extends signalStore(
         total: allSteps.length,
         percentage: ((stepIndex + 1) / allSteps.length) * 100,
       };
+    });
+  }
+
+  getValidatedStepsSig(
+    gesuchFormular: SharedModelGesuchFormular | null,
+    invalidProps?: StepValidation,
+  ): Signal<GesuchFormStepView[]> {
+    return computed(() => {
+      const steps = this.stepsSig()[this.compiletimeConfig.appType];
+      return steps.map((step, index) => ({
+        ...step,
+        nextStep: steps[index + 1],
+        status: isStepValid(step, gesuchFormular, invalidProps),
+        disabled: isStepDisabled(step, gesuchFormular),
+      }));
     });
   }
 
