@@ -2060,6 +2060,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Steuerdaten'
+        steuerdatenTabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenTyp'
     PersonInAusbildungUpdate:
       required:
         - adresse
