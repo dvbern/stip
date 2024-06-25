@@ -62,7 +62,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -743,12 +742,12 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     void validateEinreichenInvalid() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.GESUCH_EINGEREICHT);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
             new Gesuch()
-                .setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT)
+                .setGesuchStatus(Gesuchstatus.GESUCH_EINGEREICHT)
                 .setId(UUID.randomUUID())
         ));
 

@@ -71,13 +71,13 @@ class GesuchResourceTest {
     @Order(1)
     void createFall() {
         var fall = fallApiSpec.createFallForGs()
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Status.OK.getStatusCode())
-				.extract()
-                .body()
-                .as(FallDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDtoSpec.class);
 
         fallId = fall.getId();
     }
@@ -443,7 +443,7 @@ class GesuchResourceTest {
 
         for(GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.GESUCH_EINGEREICHT));
         }
     }
 
@@ -459,7 +459,7 @@ class GesuchResourceTest {
 
         for(GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.GESUCH_EINGEREICHT));
         }
     }
 
@@ -542,6 +542,7 @@ class GesuchResourceTest {
     @TestAsAdmin
     @Order(25)
     void testDeleteGesuch() {
+        // TODO KSTIP-1162: Test as SB? Or can SBs not delete Gesuche?
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)

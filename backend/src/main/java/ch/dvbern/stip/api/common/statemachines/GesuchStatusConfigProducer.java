@@ -26,67 +26,65 @@ public class GesuchStatusConfigProducer {
     @Produces
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         config.configure(Gesuchstatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchStatusChangeEvent.EINREICHEN, Gesuchstatus.KOMPLETT_EINGEREICHT);
+            .permit(GesuchStatusChangeEvent.GESUCH_EINGEREICHT, Gesuchstatus.GESUCH_EINGEREICHT);
 
-        config.configure(Gesuchstatus.KOMPLETT_EINGEREICHT)
-            .permit(GesuchStatusChangeEvent.FEHLERHAFT_EINGEREICHT, Gesuchstatus.FEHLERHAFT)
+        config.configure(Gesuchstatus.GESUCH_EINGEREICHT)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG, Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
+            .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
+            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
+
+        // TODO KSTIP-1162: Is this OK?
+        config.configure(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
+            .permit(GesuchStatusChangeEvent.GESUCH_EINGEREICHT, Gesuchstatus.GESUCH_EINGEREICHT);
+
+        config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
+            .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
-        config.configure(Gesuchstatus.FEHLERHAFT)
-            .permit(GesuchStatusChangeEvent.NEGATIVER_ENTSCHEID, Gesuchstatus.NEGATIVER_ENTSCHEID)
-            .permit(GesuchStatusChangeEvent.IN_REVIEW, Gesuchstatus.IN_REVIEW)
+        config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
+            .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
+        // TODO KSTIP-1162: Manuelle Status Recksetzung
+        // TODO KSTIP-1162: Gesuch akzeptiere zwischenstand? Nein? Da Businesslogik entscheidet welchen event fired wird
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG, Gesuchstatus.IN_BEARBEITUNG_SB);
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .permit(GesuchStatusChangeEvent.GESUCH_ABGELEHNT, Gesuchstatus.GESUCH_ABGELEHNT);
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
-            .permit(GesuchStatusChangeEvent.IN_REVIEW, Gesuchstatus.IN_REVIEW)
-            .permit(GesuchStatusChangeEvent.ABKLAERUNG_MIT_GS, Gesuchstatus.ABKLAERUNG_MIT_GS)
-            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE);
-
-        config.configure(Gesuchstatus.IN_REVIEW)
-            .permit(GesuchStatusChangeEvent.ABKLAERUNG_MIT_GS, Gesuchstatus.ABKLAERUNG_MIT_GS)
-            .permit(GesuchStatusChangeEvent.NEGATIVER_ENTSCHEID, Gesuchstatus.NEGATIVER_ENTSCHEID)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
-
-        config.configure(Gesuchstatus.ABKLAERUNG_MIT_GS)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.ZURUECKGEZOGEN, Gesuchstatus.ZURUECKGEZOGEN);
-
-        config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NACHFRIST, Gesuchstatus.FEHLENDE_DOKUMENTE_NACHFRIST)
-            .permit(GesuchStatusChangeEvent.ZURUECKGEZOGEN, Gesuchstatus.ZURUECKGEZOGEN);
-
-        config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE_NACHFRIST)
-            .permit(GesuchStatusChangeEvent.ZURUECKGEZOGEN, Gesuchstatus.ZURUECKGEZOGEN)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
-
-        config.configure(Gesuchstatus.IN_FREIGABE)
-            .permit(GesuchStatusChangeEvent.ZURUECKGEWIESEN, Gesuchstatus.ZURUECKGEWIESEN)
-            .permit(
-                GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT
-            );
-
-        config.configure(Gesuchstatus.ZURUECKGEWIESEN)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG, Gesuchstatus.IN_BEARBEITUNG_SB);
-
-        config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
+            .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT);
 
+        config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
+            .permit(GesuchStatusChangeEvent.DOKUMENTE_NACHGELIEFERT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.KEINE_DOKUMENTE_NACHGELIEFERT, Gesuchstatus.IN_BEARBEITUNG_GS);
+
+        config.configure(Gesuchstatus.JOUR_FIX)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
+
         config.configure(Gesuchstatus.VERFUEGT)
-            .permit(GesuchStatusChangeEvent.NEGATIVER_ENTSCHEID, Gesuchstatus.NEGATIVER_ENTSCHEID)
-            .permit(GesuchStatusChangeEvent.STIPENDIUM_AKZEPTIERT, Gesuchstatus.STIPENDIUM_AKZEPTIERT);
+            .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
+            .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
 
-        config.configure(Gesuchstatus.STIPENDIUM_AKZEPTIERT)
-            .permit(GesuchStatusChangeEvent.STIPENDIUM_AUSBEZAHLT, Gesuchstatus.STIPENDIUM_AUSBEZAHLT);
+        config.configure(Gesuchstatus.IN_FREIGABE)
+            .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
-        config.configure(Gesuchstatus.STIPENDIUM_AUSBEZAHLT);
-        config.configure(Gesuchstatus.NEGATIVER_ENTSCHEID);
-        config.configure(Gesuchstatus.ZURUECKGEZOGEN);
+        config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
+
+        config.configure(Gesuchstatus.VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET);
+
+        config.configure(Gesuchstatus.VERSENDET)
+            .permit(GesuchStatusChangeEvent.KEIN_STIPENDIEN_ANSPRUCH, Gesuchstatus.KEIN_STIPENDIEN_ANSPRUCH);
 
         for (final var status : Gesuchstatus.values()) {
             var state = config.getRepresentation(status);
