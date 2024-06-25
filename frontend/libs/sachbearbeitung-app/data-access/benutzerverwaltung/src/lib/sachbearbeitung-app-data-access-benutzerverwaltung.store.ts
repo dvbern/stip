@@ -168,7 +168,7 @@ export class BenutzerverwaltungStore extends signalStore(
     vorname: string;
     email: string;
     roles: SharedModelRoleList;
-    onAfterSave?: () => void;
+    onAfterSave?: (wasSuccessfull: boolean) => void;
   }>(
     pipe(
       tap(() => {
@@ -189,14 +189,8 @@ export class BenutzerverwaltungStore extends signalStore(
                   patchState(this, { userCreated: success(user) });
                 },
                 {
-                  onSuccess: (notifyUserWasSuccessfull) => {
-                    onAfterSave?.();
-                    if (notifyUserWasSuccessfull) {
-                      this.globalNotificationStore.createSuccessNotification({
-                        messageKey:
-                          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
-                      });
-                    }
+                  onSuccess: (wasSuccessfull) => {
+                    onAfterSave?.(wasSuccessfull);
                   },
                 },
               ),
