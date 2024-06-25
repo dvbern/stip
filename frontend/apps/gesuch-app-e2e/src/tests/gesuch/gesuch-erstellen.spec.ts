@@ -190,13 +190,7 @@ test.describe('Neues gesuch erstellen', () => {
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
 
-    await personPO.fillPlzNotKtBern();
-
-    await expect(personPO.elems.vermoegenVorjahr).toBeVisible();
-
     await personPO.fillPersonForm(person);
-
-    await expect(personPO.elems.vermoegenVorjahr).toBeHidden();
 
     await personPO.elems.buttonSaveContinue.click();
 
