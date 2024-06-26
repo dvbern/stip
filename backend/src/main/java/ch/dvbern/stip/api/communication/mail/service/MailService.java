@@ -35,8 +35,9 @@ public class MailService {
         String name,
         String vorname,
         String receiver,
-        AppLanguages language){
-        Templates.getStandardNotification(name,vorname,language)
+        AppLanguages language
+    ) {
+        Templates.getStandardNotification(name, vorname, language)
             .to(receiver)
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send().subscribe().asCompletionStage();
@@ -122,6 +123,7 @@ public class MailService {
                 case DE -> standardNotificationDe(name, vorname);
             };
         }
+
         private static native MailTemplateInstance standardNotificationDe(String name, String vorname);
 
         private static native MailTemplateInstance standardNotificationFr(String name, String vorname);
