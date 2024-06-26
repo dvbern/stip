@@ -33,21 +33,23 @@ public class SteuerdatenTabBerechnungsService {
     }
 
     private boolean isGerichtlicheAlimentenregelung(final Familiensituation familiensituation) {
-        return familiensituation.getGerichtlicheAlimentenregelung();
+        return Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung());
     }
 
     private boolean isElternteilUnbekanntVerstorben(final Familiensituation familiensituation) {
-        return familiensituation.getElternteilUnbekanntVerstorben();
+        return Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben());
     }
 
     private List<SteuerdatenTyp> getAlimentenregelungTabs(final Familiensituation familiensituation) {
         if (familiensituation.getWerZahltAlimente() == VATER) {
             return List.of(SteuerdatenTyp.VATER);
-        } else if (familiensituation.getWerZahltAlimente() == MUTTER) {
-            return List.of(SteuerdatenTyp.MUTTER);
-        } else {
-            return List.of();
         }
+
+        if (familiensituation.getWerZahltAlimente() == MUTTER) {
+            return List.of(SteuerdatenTyp.MUTTER);
+        }
+
+        return List.of();
     }
 
     private List<SteuerdatenTyp> getElternteilUnbekanntVerstorbenTabs(final Familiensituation familiensituation) {
