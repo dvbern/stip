@@ -1,5 +1,5 @@
 package ch.dvbern.stip.berechnung.dto;
 
-public interface BerechnungRequest {
+public interface DmnRequest {
     String getVersion();
 }

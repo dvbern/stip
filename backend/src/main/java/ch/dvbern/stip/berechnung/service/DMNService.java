@@ -49,4 +49,25 @@ public class DMNService {
 
         throw new AppErrorException("DMN model(s) not available");
     }
+
+    public List<Resource> loadModelsForTenantAndVersionByName(final String tenantId, final String version, final String modelName) {
+        // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
+        final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
+        final var modelsDirectory = new File(
+            Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath)).getFile()
+        );
+
+        if (modelsDirectory.isDirectory()) {
+            final var models = modelsDirectory.listFiles(
+                path -> path.getName().toLowerCase().endsWith(DMN_EXTENSION) &&
+                        path.getName().contains(modelName)
+            );
+
+            if (models != null && models.length > 0) {
+                return Arrays.stream(models).map(ResourceFactory::newFileResource).toList();
+            }
+        }
+
+        throw new AppErrorException("DMN model(s) not available");
+    }
 }
