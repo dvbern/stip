@@ -25,7 +25,7 @@ public class Steuerdaten extends AbstractEntity {
     private Integer eigenmietwert;
 
     @NotNull
-    @Column(name = "isArbeitsverhaeltnisSelbstaendig", nullable = false)
+    @Column(name = "is_arbeitsverhaeltnis_selbstaendig", nullable = false)
     private Boolean isArbeitsverhaeltnisSelbstaendig;
 
     @Nullable

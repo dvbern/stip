@@ -131,4 +131,22 @@
     <changeSet author="anna-lea.fuhrer (generated)" id="1719242252525-8">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="steuerdaten_aud" constraintName="FK8txi34hyochygjvt3pm7iipmr" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1719401204212-1">
+    <addColumn tableName="steuerdaten">
+      <column name="is_arbeitsverhaeltnis_selbstaendig" type="boolean">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1719401204212-2">
+    <addColumn tableName="steuerdaten_aud">
+      <column name="is_arbeitsverhaeltnis_selbstaendig" type="boolean"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1719401204212-3">
+    <dropColumn columnName="isarbeitsverhaeltnisselbstaendig" tableName="steuerdaten"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1719401204212-4">
+    <dropColumn columnName="isarbeitsverhaeltnisselbstaendig" tableName="steuerdaten_aud"/>
+  </changeSet>
 </databaseChangeLog>

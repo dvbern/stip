@@ -1,15 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
 import jakarta.validation.Valid;
 
-
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonTypeName("GesuchFormular")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
