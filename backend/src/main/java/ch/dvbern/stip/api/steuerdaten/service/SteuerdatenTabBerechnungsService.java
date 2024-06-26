@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -13,62 +12,59 @@ import static ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung.VAT
 
 @RequestScoped
 public class SteuerdatenTabBerechnungsService {
-
-    public List<SteuerdatenTyp> calculateTabs(Familiensituation familiensituation) {
-        List<SteuerdatenTyp> tabs = new ArrayList<>();
-
+    public List<SteuerdatenTyp> calculateTabs(final Familiensituation familiensituation) {
         if (isElternVerheiratetZusammen(familiensituation)) {
-            tabs.add(SteuerdatenTyp.FAMILIE);
-            return tabs;
+            return List.of(SteuerdatenTyp.FAMILIE);
         }
 
         if (isGerichtlicheAlimentenregelung(familiensituation)) {
-            return addAlimentenRegelungTab(tabs, familiensituation);
+            return getAlimentenregelungTabs(familiensituation);
         }
 
         if (isElternteilUnbekanntVerstorben(familiensituation)) {
-            return addUnbekanntVerstorbenTab(tabs, familiensituation);
+            return getElternteilUnbekanntVerstorbenTabs(familiensituation);
         }
 
-        tabs.addAll(List.of(SteuerdatenTyp.MUTTER, SteuerdatenTyp.VATER));
-        return tabs;
+        return List.of(SteuerdatenTyp.MUTTER, SteuerdatenTyp.VATER);
     }
 
-    private boolean isElternVerheiratetZusammen(Familiensituation familiensituation) {
+    private boolean isElternVerheiratetZusammen(final Familiensituation familiensituation) {
         return familiensituation.getElternVerheiratetZusammen();
     }
 
-    private boolean isGerichtlicheAlimentenregelung(Familiensituation familiensituation) {
+    private boolean isGerichtlicheAlimentenregelung(final Familiensituation familiensituation) {
         return familiensituation.getGerichtlicheAlimentenregelung();
     }
 
-    private boolean isElternteilUnbekanntVerstorben(Familiensituation familiensituation) {
+    private boolean isElternteilUnbekanntVerstorben(final Familiensituation familiensituation) {
         return familiensituation.getElternteilUnbekanntVerstorben();
     }
 
-    private List<SteuerdatenTyp> addAlimentenRegelungTab(List<SteuerdatenTyp> tabs, Familiensituation familiensituation) {
+    private List<SteuerdatenTyp> getAlimentenregelungTabs(final Familiensituation familiensituation) {
         if (familiensituation.getWerZahltAlimente() == VATER) {
-            tabs.add(SteuerdatenTyp.VATER);
+            return List.of(SteuerdatenTyp.VATER);
         } else if (familiensituation.getWerZahltAlimente() == MUTTER) {
-            tabs.add(SteuerdatenTyp.MUTTER);
+            return List.of(SteuerdatenTyp.MUTTER);
         } else {
-            return new ArrayList<>();
+            return List.of();
         }
-        return tabs;
     }
 
-    private List<SteuerdatenTyp> addUnbekanntVerstorbenTab(List<SteuerdatenTyp> tabs, Familiensituation familiensituation) {
+    private List<SteuerdatenTyp> getElternteilUnbekanntVerstorbenTabs(final Familiensituation familiensituation) {
         if (isParentUnbekanntVerstorben(familiensituation.getMutterUnbekanntVerstorben()) &&
             isParentUnbekanntVerstorben(familiensituation.getVaterUnbekanntVerstorben())) {
-            return new ArrayList<>();
+            return List.of();
         }
 
         if (isParentUnbekanntVerstorben(familiensituation.getMutterUnbekanntVerstorben())) {
-            tabs.add(SteuerdatenTyp.VATER);
-        } else if (isParentUnbekanntVerstorben(familiensituation.getVaterUnbekanntVerstorben())) {
-            tabs.add(SteuerdatenTyp.MUTTER);
+            return List.of(SteuerdatenTyp.VATER);
         }
-        return tabs;
+
+        if (isParentUnbekanntVerstorben(familiensituation.getVaterUnbekanntVerstorben())) {
+            return List.of(SteuerdatenTyp.MUTTER);
+        }
+
+        return List.of();
     }
 
     private boolean isParentUnbekanntVerstorben(ElternAbwesenheitsGrund parentStatus) {
