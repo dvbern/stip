@@ -1,10 +1,150 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
-import io.quarkus.test.junit.QuarkusTest;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-@QuarkusTest
-@RequiredArgsConstructor
-public class SteuerdatenTabBerechnungsServiceTest {
-    //TODO
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+class SteuerdatenTabBerechnungsServiceTest {
+    SteuerdatenTabBerechnungsService service;
+
+    @BeforeEach
+    void setup() {
+        service = new SteuerdatenTabBerechnungsService();
+    }
+
+    @Test
+    void elternVerheiratetTest() {
+        final var famsit = new Familiensituation()
+            .setElternVerheiratetZusammen(true);
+
+        final var calculated = service.calculateTabs(famsit);
+        assertCountAndTypes(calculated, 1, SteuerdatenTyp.FAMILIE);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "VATER,VATER,1",
+        "MUTTER,MUTTER,1",
+        ",,0"
+    })
+    void gerichtlicheAlimentenregelungTest(
+        final Elternschaftsteilung elternschaftsteilung,
+        final SteuerdatenTyp expectedSteuerdatenTyp,
+        final int expectedCount
+    ) {
+        final var famsit = new Familiensituation()
+            .setElternVerheiratetZusammen(false)
+            .setGerichtlicheAlimentenregelung(true)
+            .setWerZahltAlimente(elternschaftsteilung);
+
+        final var calculated = service.calculateTabs(famsit);
+        assertCountAndTypes(calculated, expectedCount, expectedSteuerdatenTyp);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(ElternteilUnbekanntVerstorbenTestArgumentsProvider.class)
+    void elternteilUnbekanntVerstorbenTest(
+        final ElternAbwesenheitsGrund mutterUnbekanntVerstorben,
+        final ElternAbwesenheitsGrund vaterUnbekanntVerstorben,
+        final SteuerdatenTyp[] expectedSteuerdatenTyp,
+        final int expectedCount
+    ) {
+        final var famsit = new Familiensituation()
+            .setElternVerheiratetZusammen(false)
+            .setGerichtlicheAlimentenregelung(false)
+            .setElternteilUnbekanntVerstorben(true)
+            .setMutterUnbekanntVerstorben(mutterUnbekanntVerstorben)
+            .setVaterUnbekanntVerstorben(vaterUnbekanntVerstorben);
+
+        final var calculated = service.calculateTabs(famsit);
+        assertCountAndTypes(calculated, expectedCount, expectedSteuerdatenTyp);
+    }
+
+    @Test
+    void bothElternteileTest() {
+        final var famsit = new Familiensituation()
+            .setElternVerheiratetZusammen(false)
+            .setGerichtlicheAlimentenregelung(false)
+            .setElternteilUnbekanntVerstorben(false);
+
+        final var calculated = service.calculateTabs(famsit);
+        assertCountAndTypes(calculated, 2, SteuerdatenTyp.MUTTER, SteuerdatenTyp.VATER);
+    }
+
+    private static class ElternteilUnbekanntVerstorbenTestArgumentsProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            // Format:
+            //  MutterUnbekanntGrund,
+            //  VaterUnbekanntGrund,
+            //  SteuerdatenTyp[],
+            //  ExpectedCount
+            return Stream.of(
+                Arguments.of(
+                    ElternAbwesenheitsGrund.VERSTORBEN,
+                    ElternAbwesenheitsGrund.VERSTORBEN,
+                    new SteuerdatenTyp[0],
+                    0
+                ),
+                Arguments.of(
+                    ElternAbwesenheitsGrund.VERSTORBEN,
+                    null,
+                    new SteuerdatenTyp[] { SteuerdatenTyp.VATER },
+                    1
+                ),
+                Arguments.of(
+                    null,
+                    ElternAbwesenheitsGrund.VERSTORBEN,
+                    new SteuerdatenTyp[] { SteuerdatenTyp.MUTTER },
+                    1
+                ),
+                // TODO KSTIP-932: ?
+                Arguments.of(
+                    null,
+                    null,
+                    new SteuerdatenTyp[0],
+                    0
+                )
+            );
+        }
+    }
+
+    private void assertCountAndTypes(
+        final List<SteuerdatenTyp> list,
+        final int count,
+        final SteuerdatenTyp... steuerdatenTyps
+    ) {
+        final var potentialMessage = String.format(
+            "\nExpected:\t%s\nGot:\t\t%s",
+            Arrays.toString(list.toArray()),
+            Arrays.toString(steuerdatenTyps)
+        );
+
+        assertThat(potentialMessage, list.size(), is(count));
+        assertThat(
+            potentialMessage,
+            list.containsAll(Arrays
+                .stream(steuerdatenTyps)
+                .filter(Objects::nonNull)
+                .toList()
+            )
+        );
+    }
 }
