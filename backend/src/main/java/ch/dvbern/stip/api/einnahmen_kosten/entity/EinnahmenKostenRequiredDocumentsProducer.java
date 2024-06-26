@@ -1,10 +1,11 @@
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
