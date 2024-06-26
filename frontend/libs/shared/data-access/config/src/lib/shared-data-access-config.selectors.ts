@@ -4,5 +4,10 @@ import { sharedDataAccessConfigsFeature } from './shared-data-access-config.feat
 
 export const selectSharedDataAccessConfigsView = createSelector(
   sharedDataAccessConfigsFeature.selectConfigsState,
-  (state) => ({ ...state }),
+  (state) => ({
+    ...state,
+    isSachbearbeitungApp:
+      state.compileTimeConfig?.appType === 'sachbearbeitung-app',
+    isGesuchApp: state.compileTimeConfig?.appType === 'gesuch-app',
+  }),
 );

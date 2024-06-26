@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenRequiredDocumentsProducer;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -120,5 +121,12 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ALIMENTE);
+    }
+
+    @Test
+    void requiresIfVermoegen(){
+        formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(1000));
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERMOEGEN);
+
     }
 }

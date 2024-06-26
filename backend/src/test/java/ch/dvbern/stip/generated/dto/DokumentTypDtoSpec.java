@@ -102,7 +102,9 @@ public enum DokumentTypDtoSpec {
   
   EK_LOHNABRECHNUNG("EK_LOHNABRECHNUNG"),
   
-  EK_VERDIENST("EK_VERDIENST");
+  EK_VERDIENST("EK_VERDIENST"),
+  
+  EK_VERMOEGEN("EK_VERMOEGEN");
 
   private String value;
 

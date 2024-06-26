@@ -1,11 +1,10 @@
-package ch.dvbern.stip.api.einnahmen_kosten.entity;
+package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -63,6 +62,9 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
 
         if (greaterThanZero(ek.getErgaenzungsleistungen())) {
             requiredDocs.add(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
+        }
+        if (greaterThanZero(ek.getVermoegen())) {
+            requiredDocs.add(DokumentTyp.EK_VERMOEGEN);
         }
 
         return ImmutablePair.of("einnahmenKosten", requiredDocs);

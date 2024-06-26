@@ -1,14 +1,11 @@
 package ch.dvbern.stip.api.plz.service;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class PlzServiceTest {
     @Inject PlzService plzService;
@@ -24,16 +21,15 @@ class PlzServiceTest {
 
         final String exInBern="2830";//Vellerat(JU),since1996
 
-        List<String> plzsInBE = plzService.getAllPlzByKantonsKuerzel("be").stream().map(plzDto -> plzDto.getPlz()).collect(Collectors.toUnmodifiableList());
-        assertNotNull(plzsInBE);
-        assertThat(plzsInBE.contains(plzInBern1)).isTrue();
-        assertThat(plzsInBE.contains(plzInBern2)).isTrue();
+        assertThat(plzService.isInBern(new Adresse().setPlz(plzInBern1))).isTrue();
+        assertThat(plzService.isInBern(new Adresse().setPlz(plzInBern2))).isTrue();
+        assertThat(plzService.isInBern(new Adresse().setPlz(exInBern))).isFalse();
+        assertThat(plzService.isInBern(new Adresse().setPlz(plzNotInBern))).isFalse();
 
-        assertThat(plzsInBE.contains(plzOutsideSwitzerland)).isFalse();
-        assertThat(plzsInBE.contains(plzNotInBern)).isFalse();
-        assertThat(plzsInBE.contains(exInBern)).isFalse();
-        assertThat(plzsInBE.contains(invalidPlz)).isFalse();
-        assertThat(plzsInBE.contains("")).isFalse();
+        assertThat(plzService.isInBern(new Adresse().setPlz(plzOutsideSwitzerland))).isFalse();
+        assertThat(plzService.isInBern(new Adresse().setPlz(invalidPlz))).isFalse();
+        assertThat(plzService.isInBern(new Adresse().setPlz(""))).isFalse();
+        assertThat(plzService.isInBern(new Adresse().setPlz(null))).isFalse();
+
     }
-
 }

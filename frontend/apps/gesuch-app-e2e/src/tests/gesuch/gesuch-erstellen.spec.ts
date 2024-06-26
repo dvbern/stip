@@ -114,6 +114,9 @@ const einnahmenKosten: EinnahmenKosten = {
   wgWohnend: false,
   auswaertigeMittagessenProWoche: 5,
   betreuungskostenKinder: 100,
+  veranlagungsCode: 20,
+  steuerjahr: 2020,
+  vermoegen: 0,
 };
 
 const partner: Partner = {

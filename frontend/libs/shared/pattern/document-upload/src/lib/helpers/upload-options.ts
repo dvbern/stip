@@ -70,6 +70,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER',
   EK_LOHNABRECHNUNG: 'shared.form.einnahmenkosten.file.LOHNABRECHNUNG',
   EK_VERDIENST: 'shared.form.einnahmenkosten.file.VERDIENST',
+  EK_VERMOEGEN: 'shared.form.einnahmenkosten.file.VERMOEGEN',
 };
 
 /**

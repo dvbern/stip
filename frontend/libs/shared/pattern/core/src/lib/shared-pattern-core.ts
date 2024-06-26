@@ -52,8 +52,8 @@ import {
   sharedDataAccessStammdatensFeature,
 } from '@dv/shared/data-access/stammdaten';
 import {
-  CompiletimeConfig,
-  SharedModelCompiletimeConfig,
+  CompileTimeConfig,
+  SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
 import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
@@ -76,7 +76,7 @@ export const metaReducers = [];
 
 export function provideSharedPatternCore(
   appRoutes: Route[],
-  compileTimeConfig: CompiletimeConfig,
+  compileTimeConfig: CompileTimeConfig,
 ): ApplicationConfig['providers'] {
   return [
     // providers
@@ -158,8 +158,8 @@ export function provideSharedPatternCore(
       }),
     ]),
     {
-      provide: SharedModelCompiletimeConfig,
-      useFactory: () => new SharedModelCompiletimeConfig(compileTimeConfig),
+      provide: SharedModelCompileTimeConfig,
+      useFactory: () => new SharedModelCompileTimeConfig(compileTimeConfig),
     },
 
     // init (has to be last, order matters)
@@ -170,7 +170,9 @@ export function provideSharedPatternCore(
         const store = inject(Store);
         // rework to ngrxOnEffectsInit once available for functional effects
         // https://twitter.com/MarkoStDev/status/1661094873116581901
-        store.dispatch(SharedDataAccessConfigEvents.appInit());
+        store.dispatch(
+          SharedDataAccessConfigEvents.appInit({ compileTimeConfig }),
+        );
         store.dispatch(SharedDataAccessLanguageEvents.appInit());
       },
     },

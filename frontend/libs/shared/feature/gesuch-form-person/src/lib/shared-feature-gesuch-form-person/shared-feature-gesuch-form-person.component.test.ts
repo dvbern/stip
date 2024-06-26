@@ -35,6 +35,7 @@ async function setup() {
               gesuchFormular: null,
             },
           },
+          configs: {},
         },
       }),
       provideSharedAppSettings('gesuch-app'),
