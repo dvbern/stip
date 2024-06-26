@@ -115,7 +115,6 @@ class SteuerdatenTabBerechnungsServiceTest {
                     new SteuerdatenTyp[] { SteuerdatenTyp.MUTTER },
                     1
                 ),
-                // TODO KSTIP-932: ?
                 Arguments.of(
                     null,
                     null,
