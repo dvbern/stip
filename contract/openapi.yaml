@@ -2890,7 +2890,7 @@ components:
           type: integer
         totalEinkuenfte:
           type: integer
-        eingenmietwert:
+        eigenmietwert:
           type: integer
         isArbeitsverhaeltnisSelbstaendig:
           type: boolean
