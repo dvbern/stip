@@ -36,6 +36,10 @@ class MailServiceTest {
 
     private static final String TEST_EMAIL = "jean@bat.ch";
 
+    private static final String TEST_STANDARD_EMAIL_DE_STRING = "neue Nachricht";
+    private static final String TEST_STANDARD_EMAIL_FR_STRING = "nouveax message";
+
+
     @Inject
     MockMailbox mailbox;
 
@@ -179,10 +183,10 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.DE)
-            .translate("stip.gesuch.eingereicht"));
-        assertThat(actual.getHtml()).contains(TEST_EMAIL_DE_STRING);
+            .translate("stip.standard.notification"));
+        assertThat(actual.getHtml()).contains(TEST_STANDARD_EMAIL_DE_STRING);
 
-        mailService.sendGesuchEingereichtEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
+        mailService.sendStandardNotificationEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
         sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(2, sent.size());
         actual = sent.get(1);
@@ -190,7 +194,7 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.FR)
-            .translate("stip.gesuch.eingereicht"));
-        assertThat(actual.getHtml()).doesNotContain(TEST_EMAIL_DE_STRING);
+            .translate("stip.standard.notification"));
+        assertThat(actual.getHtml()).doesNotContain(TEST_STANDARD_EMAIL_FR_STRING);
     }
 }

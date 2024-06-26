@@ -36,13 +36,9 @@ public class MailService {
         String vorname,
         String receiver,
         AppLanguages language){
-        String subject = "Neue Nachricht";
-        if(language == AppLanguages.FR){
-            subject = "Nouveau message";
-        }
         Templates.getStandardNotification(name,vorname,language)
             .to(receiver)
-            .subject(subject)
+            .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send().subscribe().asCompletionStage();
     }
 
@@ -122,13 +118,13 @@ public class MailService {
 
         public static MailTemplateInstance getStandardNotification(String name, String vorname, AppLanguages language) {
             return switch (language) {
-                case FR -> getStandardNotificationFr(name, vorname);
-                case DE -> getStandardNotificationDe(name, vorname);
+                case FR -> standardNotificationFr(name, vorname);
+                case DE -> standardNotificationDe(name, vorname);
             };
         }
-        private static native MailTemplateInstance getStandardNotificationDe(String name, String vorname);
+        private static native MailTemplateInstance standardNotificationDe(String name, String vorname);
 
-        private static native MailTemplateInstance getStandardNotificationFr(String name, String vorname);
+        private static native MailTemplateInstance standardNotificationFr(String name, String vorname);
 
         public static native MailTemplateInstance benutzerWelcome(String name, String vorname, String link);
 
