@@ -20,7 +20,7 @@ public interface SteuerdatenMapper {
 
     Steuerdaten partialUpdate(SteuerdatenUpdateDto steuerdatenDto, @MappingTarget Steuerdaten steuerdaten);
 
-    default Set<Steuerdaten> map(List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, @MappingTarget Set<Steuerdaten> steuerdatenSet) {
+    default Set<Steuerdaten> map(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, final @MappingTarget Set<Steuerdaten> steuerdatenSet) {
         if (steuerdatenUpdateDtos.isEmpty()) {
             steuerdatenSet.clear();
         }
@@ -33,7 +33,6 @@ public interface SteuerdatenMapper {
             }
         }
         for (SteuerdatenUpdateDto steuerdatenUpdateDto : steuerdatenUpdateDtos) {
-            if (steuerdatenUpdateDto.getId() != null) {
                 Steuerdaten found = steuerdatenSet.stream()
                     .filter(steuerdaten -> steuerdaten.getId().equals(steuerdatenUpdateDto.getId()))
                     .findFirst()
@@ -42,9 +41,6 @@ public interface SteuerdatenMapper {
                     );
                 steuerdatenSet.remove(found);
                 steuerdatenSet.add(partialUpdate(steuerdatenUpdateDto, found));
-            } else {
-                steuerdatenSet.add(partialUpdate(steuerdatenUpdateDto, new Steuerdaten()));
-            }
         }
         return steuerdatenSet;
     }
