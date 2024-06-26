@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *
  **/
@@ -27,13 +28,13 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid Integer steuerjahr;
   private @Valid Integer veranlagungscode;
   private @Valid Integer totalEinkuenfte;
+  private @Valid Integer eigenmietwert;
   private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
   private @Valid Integer kinderalimente;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer vermoegen;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
-  private @Valid Integer eingenmietwert;
   private @Valid Integer saeule3a;
   private @Valid Integer saeule2;
 
@@ -210,6 +211,25 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
+  public SteuerdatenDto eigenmietwert(Integer eigenmietwert) {
+    this.eigenmietwert = eigenmietwert;
+    return this;
+  }
+
+
+  @JsonProperty("eigenmietwert")
+  @NotNull
+  public Integer getEigenmietwert() {
+    return eigenmietwert;
+  }
+
+  @JsonProperty("eigenmietwert")
+  public void setEigenmietwert(Integer eigenmietwert) {
+    this.eigenmietwert = eigenmietwert;
+  }
+
+  /**
+   **/
   public SteuerdatenDto isArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
     this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
     return this;
@@ -322,24 +342,6 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenDto eingenmietwert(Integer eingenmietwert) {
-    this.eingenmietwert = eingenmietwert;
-    return this;
-  }
-
-
-  @JsonProperty("eingenmietwert")
-  public Integer getEingenmietwert() {
-    return eingenmietwert;
-  }
-
-  @JsonProperty("eingenmietwert")
-  public void setEingenmietwert(Integer eingenmietwert) {
-    this.eingenmietwert = eingenmietwert;
-  }
-
-  /**
-   **/
   public SteuerdatenDto saeule3a(Integer saeule3a) {
     this.saeule3a = saeule3a;
     return this;
@@ -393,20 +395,20 @@ public class SteuerdatenDto  implements Serializable {
         Objects.equals(this.steuerjahr, steuerdaten.steuerjahr) &&
         Objects.equals(this.veranlagungscode, steuerdaten.veranlagungscode) &&
         Objects.equals(this.totalEinkuenfte, steuerdaten.totalEinkuenfte) &&
+        Objects.equals(this.eigenmietwert, steuerdaten.eigenmietwert) &&
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.kinderalimente, steuerdaten.kinderalimente) &&
         Objects.equals(this.ergaenzungsleistungen, steuerdaten.ergaenzungsleistungen) &&
         Objects.equals(this.vermoegen, steuerdaten.vermoegen) &&
         Objects.equals(this.fahrkostenPartner, steuerdaten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, steuerdaten.verpflegungPartner) &&
-        Objects.equals(this.eingenmietwert, steuerdaten.eingenmietwert) &&
         Objects.equals(this.saeule3a, steuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, steuerdaten.saeule2);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typ, steuernStaat, steuernBund, fahrkosten, verpflegung, steuerjahr, veranlagungscode, totalEinkuenfte, isArbeitsverhaeltnisSelbstaendig, kinderalimente, ergaenzungsleistungen, vermoegen, fahrkostenPartner, verpflegungPartner, eingenmietwert, saeule3a, saeule2);
+    return Objects.hash(id, typ, steuernStaat, steuernBund, fahrkosten, verpflegung, steuerjahr, veranlagungscode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, ergaenzungsleistungen, vermoegen, fahrkostenPartner, verpflegungPartner, saeule3a, saeule2);
   }
 
   @Override
@@ -423,13 +425,13 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
+    sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
-    sb.append("    eingenmietwert: ").append(toIndentedString(eingenmietwert)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("}");

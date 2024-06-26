@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERJAHR,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERANLAGUNGSCODE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_TOTAL_EINKUENFTE,
-  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_EINGENMIETWERT,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_EIGENMIETWERT,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_SAEULE3A,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_SAEULE2,
@@ -84,8 +84,8 @@ public class SteuerdatenUpdateDtoSpec {
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
   private Integer totalEinkuenfte;
 
-  public static final String JSON_PROPERTY_EINGENMIETWERT = "eingenmietwert";
-  private Integer eingenmietwert;
+  public static final String JSON_PROPERTY_EIGENMIETWERT = "eigenmietwert";
+  private Integer eigenmietwert;
 
   public static final String JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG = "isArbeitsverhaeltnisSelbstaendig";
   private Boolean isArbeitsverhaeltnisSelbstaendig;
@@ -394,29 +394,29 @@ public class SteuerdatenUpdateDtoSpec {
   }
 
 
-  public SteuerdatenUpdateDtoSpec eingenmietwert(Integer eingenmietwert) {
+  public SteuerdatenUpdateDtoSpec eigenmietwert(Integer eigenmietwert) {
     
-    this.eingenmietwert = eingenmietwert;
+    this.eigenmietwert = eigenmietwert;
     return this;
   }
 
    /**
-   * Get eingenmietwert
-   * @return eingenmietwert
+   * Get eigenmietwert
+   * @return eigenmietwert
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getEingenmietwert() {
-    return eingenmietwert;
+  public Integer getEigenmietwert() {
+    return eigenmietwert;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEingenmietwert(Integer eingenmietwert) {
-    this.eingenmietwert = eingenmietwert;
+  @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEigenmietwert(Integer eigenmietwert) {
+    this.eigenmietwert = eigenmietwert;
   }
 
 
@@ -595,7 +595,7 @@ public class SteuerdatenUpdateDtoSpec {
         Objects.equals(this.steuerjahr, steuerdatenUpdate.steuerjahr) &&
         Objects.equals(this.veranlagungscode, steuerdatenUpdate.veranlagungscode) &&
         Objects.equals(this.totalEinkuenfte, steuerdatenUpdate.totalEinkuenfte) &&
-        Objects.equals(this.eingenmietwert, steuerdatenUpdate.eingenmietwert) &&
+        Objects.equals(this.eigenmietwert, steuerdatenUpdate.eigenmietwert) &&
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdatenUpdate.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.saeule3a, steuerdatenUpdate.saeule3a) &&
         Objects.equals(this.saeule2, steuerdatenUpdate.saeule2) &&
@@ -606,7 +606,7 @@ public class SteuerdatenUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typ, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungscode, totalEinkuenfte, eingenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
+    return Objects.hash(id, typ, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungscode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
   }
 
   @Override
@@ -624,7 +624,7 @@ public class SteuerdatenUpdateDtoSpec {
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
-    sb.append("    eingenmietwert: ").append(toIndentedString(eingenmietwert)).append("\n");
+    sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
