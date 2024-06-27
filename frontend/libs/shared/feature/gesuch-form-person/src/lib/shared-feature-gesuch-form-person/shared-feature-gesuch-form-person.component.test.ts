@@ -55,10 +55,10 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
   });
 
   describe('form field states', () => {
-    it('should display vermoegenVorjahr if no PLZ and no Land has been filled', async () => {
+    it('should display sozialversicherungsnummer input', async () => {
       c.detectChanges();
       expect(
-        c.queryByTestId('form-person-vermoegenVorjahr'),
+        c.queryByTestId('form-person-sozialversicherungsnummer'),
       ).toBeInTheDocument();
     });
   });
@@ -75,7 +75,6 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       'form-person-geburtsdatum',
       'form-person-heimatort',
       // 'form-person-einreisedatum',
-      // 'form-person-vermoegenVorjahr',
       'form-address-plz',
       'form-address-ort',
       'form-address-strasse',
@@ -99,7 +98,6 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
     ];
 
     const radioGroups = [
-      // 'form-person-vermoegenVorjahr',
       'form-person-sozialhilfeBeitraege',
       'form-person-korrespondenzSprache',
     ];

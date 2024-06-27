@@ -77,10 +77,6 @@ import {
   convertTempFormToRealValues,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
-import {
-  fromFormatedNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
@@ -162,7 +158,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   hiddenFieldsSetSig = signal(new Set<FormControl>());
 
   nationalitaetCH = 'CH';
-  maskitoNumber = maskitoNumber;
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
     const niederlassungsstatusMap = {
@@ -213,11 +208,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       ? DokumentTyp.PERSON_AUSWEIS
       : null;
   });
-  vermoegensnachweisVorjahrDocumentOptionsSig = this.createUploadOptionsSig(
-    () => {
-      return DokumentTyp.PERSON_VERMOEGENSNACHWEIS_VORJAHR;
-    },
-  );
 
   form = this.formBuilder.group({
     sozialversicherungsnummer: ['', []],
@@ -276,7 +266,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       validators: Validators.required,
     }),
     ...addWohnsitzControls(this.formBuilder),
-    vermoegenVorjahr: [<string | undefined>undefined, [Validators.required]],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
@@ -309,9 +298,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
-  );
-  private landChangedSig = toSignal(
-    this.form.controls.adresse.controls.land.valueChanges,
   );
 
   constructor() {
@@ -389,7 +375,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           };
           this.form.patchValue({
             ...personForForm,
-            vermoegenVorjahr: person.vermoegenVorjahr?.toString(),
             ...wohnsitzAnteileString(person),
           });
           SharedUiFormAddressComponent.patchForm(
@@ -535,29 +520,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
-    // vermoegenVorjahr visibility and disabled state
-    effect(
-      () => {
-        const niederlassungsstatus = this.niederlassungsstatusChangedSig();
-        const plz = this.plzChangedSig();
-        const land = this.landChangedSig();
-
-        const kanton = this.plzStore.getKantonByPlz(plz);
-
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.vermoegenVorjahr,
-          visible:
-            isFluechtlingOrHasAusweisB(niederlassungsstatus) ||
-            land !== 'CH' ||
-            kanton !== WohnsitzKanton.BE,
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
-
     // einresiedatum warning
     const einreisedatumChangedSig = toSignal(
       this.form.controls.einreisedatum.valueChanges,
@@ -676,7 +638,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             this.languageSig(),
             new Date(),
           ),
-          vermoegenVorjahr: fromFormatedNumber(values.vermoegenVorjahr),
           ...wohnsitzAnteileNumber(values),
         },
       },

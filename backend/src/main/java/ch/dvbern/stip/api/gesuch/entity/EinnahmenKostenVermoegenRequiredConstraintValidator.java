@@ -4,7 +4,8 @@ import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class EinnahmenKostenVermoegenRequiredConstraintValidator implements ConstraintValidator<EinnahmenKostenVermoegenRequiredConstraint, GesuchFormular> {
+public class EinnahmenKostenVermoegenRequiredConstraintValidator
+    implements ConstraintValidator<EinnahmenKostenVermoegenRequiredConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         if (gesuchFormular.getEinnahmenKosten() == null) {

@@ -1284,7 +1284,6 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
-        - PERSON_VERMOEGENSNACHWEIS_VORJAHR
         - PERSON_SOZIALHILFEBUDGET
         - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         - PERSON_AUSWEIS
@@ -2105,9 +2104,6 @@ components:
         wohnsitzAnteilVater:
           description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
-        vermoegenVorjahr:
-          description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-          type: integer
         sozialhilfebeitraege:
           type: boolean
         vormundschaft:
