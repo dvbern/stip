@@ -15,7 +15,10 @@ public class EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator
             return true;
         }
 
-        if (gesuchFormular.getTranche().getGesuch() == null) {
+        // This is fine, the @NotNull constraints on the properties will trigger
+        if (gesuchFormular.getTranche() == null ||
+            gesuchFormular.getTranche().getGesuch() == null
+        ) {
             return true;
         }
 
