@@ -43,6 +43,7 @@ async function setup(type: SharedModelLebenslauf['type']) {
           language: { language: 'de' },
           gesuchs: { gesuchFormular: {} },
           ausbildungsstaettes: { ausbildungsstaettes: [] },
+          configs: {},
         },
       }),
     ],

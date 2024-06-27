@@ -3,13 +3,13 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import io.quarkus.test.junit.QuarkusTest;
@@ -22,11 +22,11 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
 
     private GesuchFormular formular;
     @Inject
-    PlzOrtService plzOrtService;
+    PlzService plzService;
 
     @BeforeEach
     void setup() {
-        producer = new PersonInAusbildungRequiredDocumentsProducer(plzOrtService);
+        producer = new PersonInAusbildungRequiredDocumentsProducer(plzService);
         formular = new GesuchFormular();
     }
 

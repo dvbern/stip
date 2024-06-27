@@ -54,5 +54,21 @@ export interface EinnahmenKostenUpdate {
      * Betreuungskosten eigener Kinder
      */
     betreuungskostenKinder?: number;
+    /**
+     * 2-Stelliger Veranlagungscode (0-99)
+     */
+    veranlagungsCode?: number;
+    /**
+     * Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+     */
+    steuerjahr?: number;
+    /**
+     * Ganze Zahl, ohne Kommastellen
+     */
+    vermoegen?: number;
+    /**
+     * transient and calculated readonly field
+     */
+    steuernKantonGemeinde?: number;
 }
 

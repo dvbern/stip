@@ -1319,6 +1319,7 @@ components:
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
+        - EK_VERMOEGEN
       type: string
     ElternAbwesenheitsGrund:
       enum:
@@ -2331,6 +2332,27 @@ components:
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
           type: integer
+        veranlagungsCode:
+          description: 2-Stelliger Veranlagungscode (0-99)
+          type: integer
+          minimum: 0
+          maximum: 99
+          default: 0
+        steuerjahr:
+          description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+          type: integer
+          minimum: 0
+          maximum: 99999
+        vermoegen:
+          description: Ganze Zahl, ohne Kommastellen
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+        steuernKantonGemeinde:
+          description: transient and calculated readonly field
+          type: integer
+          minimum: 0
+          maximum: 2147483647
     EinnahmenKosten:
       type: object
       allOf:

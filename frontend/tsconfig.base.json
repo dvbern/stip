@@ -120,6 +120,7 @@
       "@dv/shared/ui/header-suffix": ["libs/shared/ui/header-suffix/src/index.ts"],
       "@dv/shared/ui/icon-badge": ["libs/shared/ui/icon-badge/src/index.ts"],
       "@dv/shared/ui/icon-chip": ["libs/shared/ui/icon-chip/src/index.ts"],
+      "@dv/shared/ui/if-app-type": ["libs/shared/ui/if-app-type/src/index.ts"],
       "@dv/shared/ui/info-dialog": ["libs/shared/ui/info-dialog/src/index.ts"],
       "@dv/shared/ui/language-selector": ["libs/shared/ui/language-selector/src/index.ts"],
       "@dv/shared/ui/loading": ["libs/shared/ui/loading/src/index.ts"],

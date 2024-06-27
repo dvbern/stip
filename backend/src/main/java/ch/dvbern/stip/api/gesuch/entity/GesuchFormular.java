@@ -55,6 +55,7 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.Default;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -92,7 +93,15 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
+@EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(groups = {
+    Default.class,
+    EinnahmenKostenPageValidation.class
+}, property = "einnahmenKosten")
 @AusbildungskostenStufeRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+}, property = "einnahmenKosten")
+@EinnahmenKostenVermoegenRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")

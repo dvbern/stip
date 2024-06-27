@@ -28,6 +28,7 @@
       "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.color": "#f85c05",
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive"
   }
 }

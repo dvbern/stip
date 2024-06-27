@@ -1,12 +1,13 @@
 package ch.dvbern.stip.api.plz.service;
 
+import java.util.List;
+
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
 import ch.dvbern.stip.generated.dto.PlzDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -19,8 +20,19 @@ public class PlzService {
         return plzRepository.findAll().stream().map(plzMapper::toDto).toList();
     }
 
-    @Transactional
-    public List<PlzDto> getAllPlzByKantonsKuerzel(String kantonsKuerzel) {
-        return plzRepository.findAll().stream().filter(plz -> plz.getKantonskuerzel().equalsIgnoreCase(kantonsKuerzel)).map(plzMapper::toDto).toList();
+    public boolean isInBern(final String postleitzahl) {
+        if (postleitzahl == null) {
+            return false;
+        }
+        return plzRepository.isPlzInKanton(postleitzahl, "be");
+    }
+
+    public boolean isInBern(final Adresse adresse) {
+        if (adresse == null) {
+            return false;
+        }
+
+        final var plz = adresse.getPlz();
+        return isInBern(plz);
     }
 }

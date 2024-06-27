@@ -2,28 +2,34 @@ package ch.dvbern.stip.api.personinausbildung.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
-import ch.dvbern.stip.api.plz.service.PlzOrtService;
+import ch.dvbern.stip.api.plz.service.PlzService;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @QuarkusTest
-@AllArgsConstructor
+@RequiredArgsConstructor
 class VermoegenVorjahrRequiredConstraintValidatorTest {
     @Inject
-    PlzOrtService plzOrtService;
+    PlzService plzService;
 
     @Inject
     EntityManager entityManager;
 
+    private VermoegenVorjahrRequiredConstraintValidator prepareValidator() {
+        final var validator = new VermoegenVorjahrRequiredConstraintValidator();
+        validator.plzService = plzService;
+        return validator;
+    }
+
     @Test
     void statusBRequiredTest() {
-        final var validator = new VermoegenVorjahrRequiredConstraintValidator(plzOrtService, entityManager);
+        final var validator = prepareValidator();
 
         final var pia = new PersonInAusbildung()
             .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
@@ -37,7 +43,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
     @Test
     void fluechtlingBRequiredTest() {
-        final var validator = new VermoegenVorjahrRequiredConstraintValidator(plzOrtService, entityManager);
+        final var validator = prepareValidator();
 
         final var pia = new PersonInAusbildung()
             .setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING)
@@ -51,7 +57,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
     @Test
     void statusCNotRequiredTest() {
-        final var validator = new VermoegenVorjahrRequiredConstraintValidator(plzOrtService, entityManager);
+        final var validator = prepareValidator();
 
         final var pia = new PersonInAusbildung()
             .setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C)
@@ -62,7 +68,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
     @Test
     void schweizerNotRequiredTest() {
-        final var validator = new VermoegenVorjahrRequiredConstraintValidator(plzOrtService, entityManager);
+        final var validator = prepareValidator();
 
         final var pia = new PersonInAusbildung()
             .setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C)
@@ -73,7 +79,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
     @Test
     void wohntOutsideOfBernRequiredTest() {
-        final var validator = new VermoegenVorjahrRequiredConstraintValidator(plzOrtService, entityManager);
+        final var validator = prepareValidator();
 
         final var pia = new PersonInAusbildung()
             .setAdresse(new Adresse().setPlz("7000"))
@@ -87,7 +93,7 @@ class VermoegenVorjahrRequiredConstraintValidatorTest {
 
     @Test
     void wohntInBernNotRequiredTest() {
-        final var validator = new VermoegenVorjahrRequiredConstraintValidator(plzOrtService, entityManager);
+        final var validator = prepareValidator();
 
         final var pia = new PersonInAusbildung()
             .setAdresse(new Adresse().setPlz("3011"))
