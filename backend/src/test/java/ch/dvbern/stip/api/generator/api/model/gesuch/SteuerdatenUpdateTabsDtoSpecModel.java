@@ -11,7 +11,7 @@ import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 public class SteuerdatenUpdateTabsDtoSpecModel {
     public static SteuerdatenUpdateDtoSpec steuerdatenDtoSpec(final SteuerdatenTypDtoSpec steuerdatenTypDtoSpec) {
         return TestUtil.createUpdateDtoSpec(SteuerdatenUpdateDtoSpec::new, (model, faker) -> {
-            model.setTyp(steuerdatenTypDtoSpec);
+            model.setSteuerdatenTyp(steuerdatenTypDtoSpec);
             model.setTotalEinkuenfte(TestUtil.getRandomInt(1, 10000));
             model.setEigenmietwert(TestUtil.getRandomInt(1, 10000));
             model.setIsArbeitsverhaeltnisSelbstaendig(false);
@@ -25,6 +25,9 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setFahrkosten(TestUtil.getRandomInt(1, 10000));
             model.setFahrkostenPartner(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegung(TestUtil.getRandomInt(1, 10000));
+            model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
+            model.setVeranlagungscode(0);
+            model.setSteuerjahr(2023);
         });
     }
 

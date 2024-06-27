@@ -29,6 +29,7 @@ import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -167,6 +168,10 @@ class GesuchResourceTest {
             .getGesuchFormular()
             .getPersonInAusbildung()
             .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setZivilstand(ZivilstandDtoSpec.LEDIG);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -189,21 +194,22 @@ class GesuchResourceTest {
         validatePage();
     }
 
-//    @Test
-//    @TestAsGesuchsteller
-//    @Order(9)
-//    void testUpdateGesuchEndpointPartner() {
-//        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner;
-//        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-//        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(5000);
-////        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().setId();
-//        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
-//            .then()
-//            .assertThat()
-//            .statusCode(Response.Status.ACCEPTED.getStatusCode());
-//
-//        validatePage();
-//    }
+    //    @Test
+    //    @TestAsGesuchsteller
+    //    @Order(9)
+    //    void testUpdateGesuchEndpointPartner() {
+    //        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner;
+    //        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+    //        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(5000);
+    ////        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().setId();
+    //        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute
+    //        (ResponseBody::prettyPeek)
+    //            .then()
+    //            .assertThat()
+    //            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+    //
+    //        validatePage();
+    //    }
 
     @Test
     @TestAsGesuchsteller
@@ -344,7 +350,11 @@ class GesuchResourceTest {
 
         final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSteuerdatenTabs;
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+        gesuchApiSpec
+            .updateGesuch()
+            .gesuchIdPath(gesuchId)
+            .body(gesuchUpdateDTO)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
@@ -525,8 +535,10 @@ class GesuchResourceTest {
             DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
             DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
-//            DokumentTypDtoSpec.PARTNER_AUSBILDUNG_LOHNABRECHNUNG, //Temporarily disabled due to fundamentally broken tests
-            DokumentTypDtoSpec.PARTNER_BELEG_OV_ABONNEMENT,
+            //            DokumentTypDtoSpec.PARTNER_AUSBILDUNG_LOHNABRECHNUNG, //Temporarily disabled due to
+            //            fundamentally broken tests
+            //            DokumentTypDtoSpec.PARTNER_BELEG_OV_ABONNEMENT,
+            DokumentTypDtoSpec.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION,
             DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
             DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
             DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
@@ -548,14 +560,15 @@ class GesuchResourceTest {
             .body()
             .as(GesuchDokumentDtoSpec[].class);
 
+        final var message = String.format(
+            "Expected: \n%s\nbut was: \n%s",
+            Arrays.toString(expectedDokumentTypes),
+            Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
+        );
         assertThat(
-            // Print a nice list of expected vs actual dokument types returned
-            String.format(
-                "Expected: \n%s\nbut was: \n%s",
-                Arrays.toString(expectedDokumentTypes),
-                Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
-            ),
-            expectedDokumentTypes.length, is(gesuchDokumente.length)
+            message,
+            expectedDokumentTypes.length,
+            is(gesuchDokumente.length)
         );
 
         final var set = EnumSet.noneOf(DokumentTypDtoSpec.class);
@@ -563,6 +576,7 @@ class GesuchResourceTest {
 
         // Checks if all dokument types returned from the API are in the list of expected types
         assertThat(
+            message,
             set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
             is(true)
         );
