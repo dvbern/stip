@@ -15,6 +15,10 @@ public class EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator
             return true;
         }
 
+        if (gesuchFormular.getTranche().getGesuch() == null) {
+            return true;
+        }
+
         final var gesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr();
         return gesuchFormular.getEinnahmenKosten().getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
     }
