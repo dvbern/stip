@@ -277,3 +277,9 @@ $dv-all-colors: (
 .mat-mdc-form-field-hint.mat-caution {
   color: mat.get-color-from-palette($gesuch-app-caution, 500);
 }
+
+.info-dialog-columnar {
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-elevation: none;
+  }
+}
