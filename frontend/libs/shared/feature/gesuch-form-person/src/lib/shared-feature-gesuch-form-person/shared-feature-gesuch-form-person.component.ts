@@ -77,7 +77,6 @@ import {
   convertTempFormToRealValues,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
@@ -158,7 +157,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   isSozialversicherungsnummerInfoShown = false;
   isNiederlassungsstatusInfoShown = false;
   nationalitaetCH = 'CH';
-  maskitoNumber = maskitoNumber;
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
     const niederlassungsstatusMap = {
@@ -299,9 +297,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
   private plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
-  );
-  private landChangedSig = toSignal(
-    this.form.controls.adresse.controls.land.valueChanges,
   );
 
   constructor() {
