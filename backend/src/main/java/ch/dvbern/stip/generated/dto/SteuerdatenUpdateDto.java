@@ -8,9 +8,12 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- *
+ * 
  **/
 
 @JsonTypeName("SteuerdatenUpdate")
@@ -20,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SteuerdatenUpdateDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid SteuerdatenTypDto typ;
+  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp typ;
   private @Valid Integer steuernStaat;
   private @Valid Integer steuernBund;
   private @Valid Integer fahrkosten;
@@ -45,7 +48,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -59,20 +62,20 @@ public class SteuerdatenUpdateDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenUpdateDto typ(SteuerdatenTypDto typ) {
+  public SteuerdatenUpdateDto typ(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp typ) {
     this.typ = typ;
     return this;
   }
 
-
+  
   @JsonProperty("typ")
   @NotNull
-  public SteuerdatenTypDto getTyp() {
+  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(SteuerdatenTypDto typ) {
+  public void setTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp typ) {
     this.typ = typ;
   }
 
@@ -83,7 +86,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuernStaat")
   @NotNull
   public Integer getSteuernStaat() {
@@ -102,7 +105,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuernBund")
   @NotNull
   public Integer getSteuernBund() {
@@ -121,7 +124,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fahrkosten")
   @NotNull
   public Integer getFahrkosten() {
@@ -140,7 +143,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("verpflegung")
   @NotNull
   public Integer getVerpflegung() {
@@ -159,7 +162,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuerjahr")
   @NotNull
   public Integer getSteuerjahr() {
@@ -178,7 +181,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("veranlagungscode")
   @NotNull
   public Integer getVeranlagungscode() {
@@ -197,7 +200,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("totalEinkuenfte")
   @NotNull
   public Integer getTotalEinkuenfte() {
@@ -216,7 +219,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("eigenmietwert")
   @NotNull
   public Integer getEigenmietwert() {
@@ -235,7 +238,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
   @NotNull
   public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
@@ -254,7 +257,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kinderalimente")
   @NotNull
   public Integer getKinderalimente() {
@@ -273,7 +276,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ergaenzungsleistungen")
   @NotNull
   public Integer getErgaenzungsleistungen() {
@@ -292,7 +295,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vermoegen")
   @NotNull
   public Integer getVermoegen() {
@@ -311,7 +314,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fahrkostenPartner")
   public Integer getFahrkostenPartner() {
     return fahrkostenPartner;
@@ -329,7 +332,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("verpflegungPartner")
   public Integer getVerpflegungPartner() {
     return verpflegungPartner;
@@ -347,7 +350,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("saeule3a")
   public Integer getSaeule3a() {
     return saeule3a;
@@ -365,7 +368,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("saeule2")
   public Integer getSaeule2() {
     return saeule2;
@@ -415,7 +418,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SteuerdatenUpdateDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");

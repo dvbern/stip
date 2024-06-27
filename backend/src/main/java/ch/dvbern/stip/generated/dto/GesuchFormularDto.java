@@ -1,13 +1,31 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AusbildungDto;
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
+import ch.dvbern.stip.generated.dto.ElternDto;
+import ch.dvbern.stip.generated.dto.FamiliensituationDto;
+import ch.dvbern.stip.generated.dto.GeschwisterDto;
+import ch.dvbern.stip.generated.dto.KindDto;
+import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
+import ch.dvbern.stip.generated.dto.PartnerDto;
+import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchFormular")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,7 +44,7 @@ public class GesuchFormularDto  implements Serializable {
   private @Valid List<KindDto> kinds;
   private @Valid EinnahmenKostenDto einnahmenKosten;
   private @Valid List<SteuerdatenDto> steuerdaten;
-  private @Valid List<SteuerdatenTypDto> steuerdatenTabs;
+  private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
 
   /**
    **/
@@ -35,7 +53,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildung")
   public AusbildungDto getAusbildung() {
     return ausbildung;
@@ -53,7 +71,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personInAusbildung")
   public PersonInAusbildungDto getPersonInAusbildung() {
     return personInAusbildung;
@@ -71,7 +89,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("familiensituation")
   public FamiliensituationDto getFamiliensituation() {
     return familiensituation;
@@ -89,7 +107,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("partner")
   public PartnerDto getPartner() {
     return partner;
@@ -107,7 +125,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("auszahlung")
   public AuszahlungDto getAuszahlung() {
     return auszahlung;
@@ -119,14 +137,14 @@ public class GesuchFormularDto  implements Serializable {
   }
 
   /**
-   *
+   * 
    **/
   public GesuchFormularDto elterns(List<ElternDto> elterns) {
     this.elterns = elterns;
     return this;
   }
 
-
+  
   @JsonProperty("elterns")
   public List<ElternDto> getElterns() {
     return elterns;
@@ -154,14 +172,14 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
   /**
-   *
+   * 
    **/
   public GesuchFormularDto geschwisters(List<GeschwisterDto> geschwisters) {
     this.geschwisters = geschwisters;
     return this;
   }
 
-
+  
   @JsonProperty("geschwisters")
   public List<GeschwisterDto> getGeschwisters() {
     return geschwisters;
@@ -189,14 +207,14 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
   /**
-   *
+   * 
    **/
   public GesuchFormularDto lebenslaufItems(List<LebenslaufItemDto> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
     return this;
   }
 
-
+  
   @JsonProperty("lebenslaufItems")
   public List<LebenslaufItemDto> getLebenslaufItems() {
     return lebenslaufItems;
@@ -224,14 +242,14 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
   /**
-   *
+   * 
    **/
   public GesuchFormularDto kinds(List<KindDto> kinds) {
     this.kinds = kinds;
     return this;
   }
 
-
+  
   @JsonProperty("kinds")
   public List<KindDto> getKinds() {
     return kinds;
@@ -265,7 +283,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einnahmenKosten")
   public EinnahmenKostenDto getEinnahmenKosten() {
     return einnahmenKosten;
@@ -283,7 +301,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuerdaten")
   public List<SteuerdatenDto> getSteuerdaten() {
     return steuerdaten;
@@ -312,23 +330,23 @@ public class GesuchFormularDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularDto steuerdatenTabs(List<SteuerdatenTypDto> steuerdatenTabs) {
+  public GesuchFormularDto steuerdatenTabs(List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs) {
     this.steuerdatenTabs = steuerdatenTabs;
     return this;
   }
 
-
+  
   @JsonProperty("steuerdatenTabs")
-  public List<SteuerdatenTypDto> getSteuerdatenTabs() {
+  public List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> getSteuerdatenTabs() {
     return steuerdatenTabs;
   }
 
   @JsonProperty("steuerdatenTabs")
-  public void setSteuerdatenTabs(List<SteuerdatenTypDto> steuerdatenTabs) {
+  public void setSteuerdatenTabs(List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs) {
     this.steuerdatenTabs = steuerdatenTabs;
   }
 
-  public GesuchFormularDto addSteuerdatenTabsItem(SteuerdatenTypDto steuerdatenTabsItem) {
+  public GesuchFormularDto addSteuerdatenTabsItem(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTabsItem) {
     if (this.steuerdatenTabs == null) {
       this.steuerdatenTabs = new ArrayList<>();
     }
@@ -337,7 +355,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-  public GesuchFormularDto removeSteuerdatenTabsItem(SteuerdatenTypDto steuerdatenTabsItem) {
+  public GesuchFormularDto removeSteuerdatenTabsItem(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTabsItem) {
     if (steuerdatenTabsItem != null && this.steuerdatenTabs != null) {
       this.steuerdatenTabs.remove(steuerdatenTabsItem);
     }
@@ -377,7 +395,7 @@ public class GesuchFormularDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchFormularDto {\n");
-
+    
     sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");

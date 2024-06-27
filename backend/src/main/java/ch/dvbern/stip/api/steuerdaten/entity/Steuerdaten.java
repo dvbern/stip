@@ -3,13 +3,21 @@ package ch.dvbern.stip.api.steuerdaten.entity;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
 @Table(name = "steuerdaten")
+@Getter
+@Setter
 public class Steuerdaten extends AbstractEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)

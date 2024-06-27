@@ -22,9 +22,12 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import jakarta.inject.Inject;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -48,9 +51,24 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
             SteuerdatenMapper.class
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
+    @Inject
+    SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @AfterMapping
+    protected void calculateSteuerdatenTabs(
+        final GesuchFormular entity,
+        final @MappingTarget GesuchFormularDto dto
+    ) {
+        if (entity.getFamiliensituation() == null) {
+            return;
+        }
+
+        dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
+    }
 
     /**
      * partial update mapper for the Gesuchssteller

@@ -62,7 +62,7 @@ class GesuchResourceTest {
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
-	private UUID fallId;
+    private UUID fallId;
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
 
@@ -71,13 +71,13 @@ class GesuchResourceTest {
     @Order(1)
     void createFall() {
         var fall = fallApiSpec.createFallForGs()
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Status.OK.getStatusCode())
-				.extract()
-                .body()
-                .as(FallDtoSpec.class);
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDtoSpec.class);
 
         fallId = fall.getId();
     }
@@ -278,7 +278,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(15)
     void testUpdateGesuchAddForeignEltern() {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns;
         final var elternteile = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns();
@@ -292,6 +292,20 @@ class GesuchResourceTest {
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(elternteile);
 
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+
+        validatePage();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(16)
+    void testUpdateGesuchEndpointAddSteuerdatenTabs() {
+        final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSteuerdatenTabs;
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -436,12 +450,12 @@ class GesuchResourceTest {
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getAllGesucheSb().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
 
-        for(GesuchDtoSpec gesuch : gesuche) {
+        for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
         }
@@ -452,12 +466,12 @@ class GesuchResourceTest {
     @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec[].class);
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
 
-        for(GesuchDtoSpec gesuch : gesuche) {
+        for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
         }
@@ -477,7 +491,10 @@ class GesuchResourceTest {
         assertThat(gesuchOpt.isPresent(), is(true));
         assertThat(gesuchOpt.get().getFall().getId(), is(fallId));
         assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
-        assertThat(gesuchOpt.get().getGesuchStatus().toString(), gesuchOpt.get().getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(
+            gesuchOpt.get().getGesuchStatus().toString(),
+            gesuchOpt.get().getGesuchStatus(),
+            is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
 

@@ -116,6 +116,10 @@ import org.hibernate.envers.Audited;
 @DocumentsRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class
 })
+@SteuerdatenTabsRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    SteuerdatenPageValidation.class
+}, property = "steuerdatenTabs")
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity
