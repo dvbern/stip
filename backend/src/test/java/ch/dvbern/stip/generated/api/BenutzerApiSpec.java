@@ -271,7 +271,7 @@ public class BenutzerApiSpec {
         public static final String BENUTZER_ID_PATH = "benutzerId";
 
         /**
-         * @param benutzerId (UUID)  (required)
+         * @param benutzerId (String)  (required)
          * @return operation
          */
         public DeleteBenutzerOper benutzerIdPath(Object benutzerId) {

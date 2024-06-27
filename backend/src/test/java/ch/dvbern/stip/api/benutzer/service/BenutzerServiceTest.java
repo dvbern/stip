@@ -29,6 +29,7 @@ class BenutzerServiceTest {
     private final BenutzerService benutzerService;
     private final BenutzerRepository benutzerRepository;
     private UUID benutzerToDeleteId;
+    private String benutzerToDeleteKeycloakId;
 
     @Test
     @TestAsDeleteUser
@@ -38,6 +39,7 @@ class BenutzerServiceTest {
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByIdOptional(benutzerToDeleteId);
         assertThat(optionalBenutzer).isPresent();
         Benutzer benutzer = optionalBenutzer.get();
+        benutzerToDeleteKeycloakId = benutzer.getKeycloakId();
         assertThat(benutzerToDeleteId).isEqualTo(benutzer.getId());
     }
 
@@ -45,7 +47,7 @@ class BenutzerServiceTest {
     @TestAsAdmin
     @Order(2)
     void testDeleteBenutzer() {
-        benutzerService.deleteBenutzer(benutzerToDeleteId);
+        benutzerService.deleteBenutzer(benutzerToDeleteKeycloakId);
         assertThat(benutzerRepository.findByIdOptional(benutzerToDeleteId)).isNotPresent();
     }
 }

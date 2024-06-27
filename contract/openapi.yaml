@@ -982,7 +982,7 @@ paths:
     parameters:
       - name: benutzerId
         schema:
-          $ref: '#/components/schemas/UUID'
+          type: string
         in: path
         required: true
     delete:

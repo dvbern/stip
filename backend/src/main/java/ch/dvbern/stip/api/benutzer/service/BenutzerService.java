@@ -148,8 +148,8 @@ public class BenutzerService {
     }
 
     @Transactional
-    public void deleteBenutzer(UUID benutzerId) {
-        Benutzer benutzer = benutzerRepository.requireById(benutzerId);
+    public void deleteBenutzer(String benutzerId) {
+        Benutzer benutzer = benutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
         benutzer.getRollen().clear();
         benutzerRepository.delete(benutzer);
     }

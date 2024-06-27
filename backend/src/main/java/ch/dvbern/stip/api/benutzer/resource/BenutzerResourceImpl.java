@@ -49,7 +49,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
-    public Response deleteBenutzer(UUID benutzerId) {
+    public Response deleteBenutzer(String benutzerId) {
         benutzerService.deleteBenutzer(benutzerId);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
         return Response.noContent().build();

@@ -1,12 +1,19 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
 import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -31,7 +38,7 @@ public interface BenutzerResource {
     @DELETE
     @Path("/{benutzerId}")
     @Produces({ "application/json", "text/plain" })
-    Response deleteBenutzer(@PathParam("benutzerId") UUID benutzerId);
+    Response deleteBenutzer(@PathParam("benutzerId") String benutzerId);
 
     @GET
     @Path("/stammdaten/sachbearbeiter")
