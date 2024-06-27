@@ -20,7 +20,7 @@ kstip:
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
     hashkey: 'checksum:multihash'
   welcome-mail:
-    kc-url: '${STIP_OIDC_AUTH_SERVER}'
+    kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
     kc-path: '${STIP_WELCOME_MAIL_PATH}'
     kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
     kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
