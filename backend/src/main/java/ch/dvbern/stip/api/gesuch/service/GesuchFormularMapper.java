@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -68,6 +69,18 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
 
         dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
+    }
+
+    @AfterMapping
+    public void setCalculatedPropertiesOnDto(
+        GesuchFormular gesuchFormular,
+        @MappingTarget GesuchFormularDto gesuchFormularDto
+    ) {
+        if (gesuchFormularDto.getEinnahmenKosten() != null) {
+            final var ek = gesuchFormularDto.getEinnahmenKosten();
+            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
+            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
+        }
     }
 
     /**

@@ -121,4 +121,11 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ALIMENTE);
     }
+
+    @Test
+    void requiresIfVermoegen(){
+        formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(1000));
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERMOEGEN);
+
+    }
 }

@@ -1,0 +1,87 @@
+{
+  "Stammdaten_V1": {
+    "maxSaeule3a": 7000,
+    "einkommensfreibetrag": 6000,
+    "anzahlWochenLehre": 47,
+    "anzahlWochenSchule": 38,
+    "preisProMahlzeit": 7
+  },
+  "InputFamilienbudget_1_V1": {
+    "elternteil": {
+      "essenskostenPerson1": 5000,
+      "essenskostenPerson2": 0,
+      "grundbedarf": 17940,
+      "fahrkostenPerson1": 3200,
+      "fahrkostenPerson2": 0,
+      "integrationszulage": 7200,
+      "steuernBund": 3500,
+      "steuernStaat": 6500,
+      "medizinischeGrundversorgung": 10000,
+      "effektiveWohnkosten": 7800,
+      "totalEinkuenfte": 105000,
+      "ergaenzungsleistungen": 0,
+      "eigenmietwert": 14000,
+      "alimente": 0,
+      "einzahlungSaeule3a": 0,
+      "einzahlungSaeule2": 0,
+      "steuerbaresVermoegen": 52000,
+      "selbststaendigErwerbend": false,
+      "anzahlPersonenImHaushalt": 2,
+      "anzahlGeschwisterInAusbildung": 3
+    }
+  },
+  "InputFamilienbudget_2_V1": {
+    "elternteil": {
+      "essenskostenPerson1": 0,
+      "essenskostenPerson2": 0,
+      "grundbedarf": 21816,
+      "fahrkostenPerson1": 600,
+      "fahrkostenPerson2": 0,
+      "integrationszulage": 7200,
+      "steuernBund": 0,
+      "steuernStaat": 0,
+      "medizinischeGrundversorgung": 15400,
+      "effektiveWohnkosten": 12000,
+      "totalEinkuenfte": 9200,
+      "ergaenzungsleistungen": 0,
+      "eigenmietwert": 0,
+      "alimente": 0,
+      "einzahlungSaeule3a": 0,
+      "einzahlungSaeule2": 0,
+      "steuerbaresVermoegen": 150,
+      "selbststaendigErwerbend": false,
+      "anzahlPersonenImHaushalt": 3,
+      "anzahlGeschwisterInAusbildung": 3
+    }
+  },
+  "InputPersoenlichesbudget_V1": {
+    "antragssteller": {
+      "tertiaerstufe": false,
+      "einkommen": 100,
+      "einkommenPartner": 0,
+      "vermoegen": 1700,
+      "alimente": 0,
+      "rente": 0,
+      "kinderAusbildungszulagen": 0,
+      "ergaenzungsleistungen": 0,
+      "leistungenEO": 0,
+      "gemeindeInstitutionen": 0,
+      "alter": 29,
+      "grundbedarf": 0,
+      "wohnkosten": 0,
+      "medizinischeGrundversorgung": 0,
+      "ausbildungskosten": 3000,
+      "steuern": 0,
+      "steuernKonkubinatspartner": 0,
+      "fahrkosten": 570,
+      "fahrkostenPartner": 0,
+      "verpflegung": 3,
+      "verpflegungPartner": 0,
+      "fremdbetreuung": 0,
+      "anteilFamilienbudget": 0,
+      "lehre": false,
+      "eigenerHaushalt": false,
+      "abgeschlosseneErstausbildung": true
+    }
+  }
+}

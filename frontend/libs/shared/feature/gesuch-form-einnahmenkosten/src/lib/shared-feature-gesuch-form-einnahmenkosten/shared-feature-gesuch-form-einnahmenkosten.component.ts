@@ -9,7 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -23,10 +23,10 @@ import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { combineLatest, map } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
@@ -43,6 +43,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -52,9 +53,11 @@ import {
 import {
   fromFormatedNumber,
   maskitoNumber,
+  toFormatedNumber,
 } from '@dv/shared/util/maskito-util';
 import {
   getDateDifference,
+  getLastDayOfYear,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
@@ -80,8 +83,10 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
+  styleUrl: './shared-feature-gesuch-form-einnahmenkosten.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
@@ -89,6 +94,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
+  private config = inject(SharedModelCompileTimeConfig);
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
@@ -116,24 +122,23 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       [Validators.required, sharedUtilValidatorRange(0, 5)],
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
+    vermoegen: [<string | undefined>undefined, [Validators.required]],
+    veranlagungsCode: [
+      <number | null>null,
+      [Validators.required, sharedUtilValidatorRange(0, 99)],
+    ],
+    steuerjahr: [
+      <number | null>null,
+      [
+        /** @see // add max year to steuerjahr */
+      ],
+    ],
   });
 
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
   languageSig = this.store.selectSignal(selectLanguage);
-
-  istSekundarstufeGroesserAlsLimite$ = combineLatest([
-    this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
-    toObservable(this.viewSig),
-  ]).pipe(
-    map(([value, view]) => {
-      if (value == null || view.gesuch == null) {
-        return false;
-      }
-      return +value > view.gesuch.gesuchsperiode.ausbKosten_SekII;
-    }),
-  );
 
   private sekundarstufeZweiChangedSig = toSignal(
     this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
@@ -168,8 +173,20 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
+  steuerjahrPeriodeSig = computed(() => {
+    const { gesuch } = this.viewSig();
+
+    const technischesJahr = gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr;
+
+    if (!technischesJahr) {
+      return 0;
+    }
+
+    return technischesJahr - 1;
+  });
+
   formStateSig = computed(() => {
-    const { gesuchFormular, ausbildungsstaettes } = this.viewSig();
+    const { gesuchFormular, ausbildungsstaettes, gesuch } = this.viewSig();
 
     if (!gesuchFormular) {
       return {
@@ -217,6 +234,15 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const willTertiaerstufe =
       ausbildungsgang?.bildungsart.bildungsstufe === 'TERTIAER';
 
+    // return true if the person was 18 or older by the end of the year before the gesuchsjahr
+    const gesuchsjahr: number | undefined =
+      gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr;
+    const warErwachsenSteuerJahr =
+      !geburtsdatum || !gesuchsjahr
+        ? false
+        : (getDateDifference(geburtsdatum, getLastDayOfYear(gesuchsjahr - 1))
+            ?.years ?? 0) >= 18;
+
     return {
       hasData: true,
       hatElternteilVerloren,
@@ -224,12 +250,29 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       willSekundarstufeZwei,
       willTertiaerstufe,
       istErwachsen,
+      warErwachsenSteuerJahr,
     } as const;
   });
 
   nettoerwerbseinkommenSig = toSignal(
     this.form.controls.nettoerwerbseinkommen.valueChanges,
   );
+
+  steuernKantonGemeindeSig = computed(() => {
+    const einkommen = fromFormatedNumber(
+      this.nettoerwerbseinkommenSig() ?? '0',
+    );
+    const einkommenPartner =
+      this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
+
+    const gesamtEinkommen = einkommen + einkommenPartner;
+
+    if (gesamtEinkommen >= 20_000) {
+      return toFormatedNumber(gesamtEinkommen * 0.1);
+    }
+
+    return 0;
+  });
 
   nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
     const nettoerwerbseinkommen = fromFormatedNumber(
@@ -337,6 +380,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       : null;
   });
 
+  vermoegenSig = toSignal(this.form.controls.vermoegen.valueChanges);
+
+  vermoegenDocumentSig = this.createUploadOptionsSig(() => {
+    const vermoegen = fromFormatedNumber(this.vermoegenSig() ?? '0');
+
+    return vermoegen > 0 ? DokumentTyp.EK_VERMOEGEN : null;
+  });
+
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
@@ -348,6 +399,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           willSekundarstufeZwei,
           willTertiaerstufe,
           istErwachsen,
+          warErwachsenSteuerJahr,
         } = this.formStateSig();
 
         const {
@@ -396,9 +448,37 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           this.form.controls.betreuungskostenKinder,
           !hatKinder,
         );
+        this.setDisabledStateAndHide(
+          this.form.controls.vermoegen,
+          !warErwachsenSteuerJahr,
+        );
+        this.setDisabledStateAndHide(
+          this.form.controls.veranlagungsCode,
+          this.config.isGesuchApp,
+        );
+        this.setDisabledStateAndHide(
+          this.form.controls.steuerjahr,
+          this.config.isGesuchApp,
+        );
       },
       { allowSignalWrites: true },
     );
+
+    // add max year to steuerjahr
+    effect(() => {
+      const steuerjahr = this.steuerjahrPeriodeSig();
+
+      if (!steuerjahr) {
+        return;
+      }
+
+      this.form.controls.steuerjahr.setValidators([
+        Validators.required,
+        sharedUtilValidatorRange(1900, steuerjahr),
+      ]);
+
+      this.form.controls.steuerjahr.updateValueAndValidity();
+    });
 
     // fill form
     effect(
@@ -424,6 +504,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             wohnkosten: einnahmenKosten.wohnkosten?.toString(),
             betreuungskostenKinder:
               einnahmenKosten.betreuungskostenKinder?.toString(),
+            vermoegen: einnahmenKosten.vermoegen?.toString(),
+            veranlagungsCode: einnahmenKosten.veranlagungsCode,
+            steuerjahr: einnahmenKosten.steuerjahr,
           });
         } else {
           this.form.reset();
@@ -497,6 +580,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'wgWohnend',
       'verdienstRealisiert',
       'auswaertigeMittagessenProWoche',
+      'steuerjahr',
+      'veranlagungsCode',
       ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
     ]);
     return {
@@ -528,6 +613,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           betreuungskostenKinder: fromFormatedNumber(
             formValues.betreuungskostenKinder,
           ),
+          vermoegen: fromFormatedNumber(formValues.vermoegen),
+          steuerjahr: formValues.steuerjahr,
+          veranlagungsCode: formValues.veranlagungsCode,
         },
       },
     };

@@ -49,6 +49,7 @@ async function setup() {
             gesuchFormular: {},
           },
           language: { language: 'de' },
+          configs: {},
         },
       }),
       provideMaterialDefaultOptions(),

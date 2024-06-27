@@ -17,6 +17,7 @@ import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
@@ -71,6 +72,7 @@ public final class GesuchGenerator {
             .setFall(new Fall())
             .setGesuchsperiode(
                 new Gesuchsperiode()
+                    .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))
                     .setGesuchsperiodeStart(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
                     .setGesuchsperiodeStopp(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
             );

@@ -35,6 +35,7 @@ async function setup() {
               gesuchFormular: null,
             },
           },
+          configs: {},
         },
       }),
       provideSharedAppSettings('gesuch-app'),
@@ -110,7 +111,9 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
         allowTypes: '',
         gesuch: null,
         gesuchFormular: {
-          personInAusbildung: {} as PersonInAusbildung,
+          personInAusbildung: {
+            adresse: {},
+          } as PersonInAusbildung,
         } as GesuchFormular,
         benutzerEinstellungen: {
           digitaleKommunikation: undefined,

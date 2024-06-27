@@ -107,6 +107,13 @@ export function printDateAsMonthYear(date: Date) {
   return printDate(date, 'de', 'monthYear');
 }
 
+/**
+ * Returns the last day of the year before the given year.
+ */
+export function getLastDayOfYear(jahr: number): Date {
+  return new Date(jahr, 11, 31);
+}
+
 export function getDateDifference(
   date: Date | string,
   refDate: Date,
