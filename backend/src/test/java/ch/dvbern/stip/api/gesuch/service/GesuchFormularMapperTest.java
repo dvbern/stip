@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
-import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
@@ -27,7 +26,6 @@ import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
@@ -308,7 +306,8 @@ class GesuchFormularMapperTest {
             new GeschwisterMapperImpl(),
             new ElternMapperImpl(),
             new KindMapperImpl(),
-            new EinnahmenKostenMapperImpl(), new SteuerdatenMapperImpl()
+            new EinnahmenKostenMapperImpl(),
+            new SteuerdatenMapperImpl()
         );
     }
 }
