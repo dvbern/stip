@@ -149,7 +149,7 @@ public class BenutzerService {
 
     @Transactional
     public void deleteBenutzer(UUID benutzerId) {
-        Benutzer benutzer = benutzerRepository.findByIdOptional(benutzerId).orElseThrow(() -> new NotFoundException("Benutzer not found"));
+        Benutzer benutzer = benutzerRepository.requireById(benutzerId);
         benutzer.getRollen().clear();
         benutzerRepository.delete(benutzer);
     }
