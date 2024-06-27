@@ -21,7 +21,7 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.GESUCH_EINGEREICHT;
+        return transition.getDestination() == Gesuchstatus.EINGEREICHT;
     }
 
     @Override

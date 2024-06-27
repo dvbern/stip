@@ -26,33 +26,27 @@ public class GesuchStatusConfigProducer {
     @Produces
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         config.configure(Gesuchstatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchStatusChangeEvent.GESUCH_EINGEREICHT, Gesuchstatus.GESUCH_EINGEREICHT);
+            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT);
 
-        config.configure(Gesuchstatus.GESUCH_EINGEREICHT)
+        config.configure(Gesuchstatus.EINGEREICHT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG, Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
             .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
 
-        // TODO KSTIP-1162: Is this OK?
         config.configure(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
-            .permit(GesuchStatusChangeEvent.GESUCH_EINGEREICHT, Gesuchstatus.GESUCH_EINGEREICHT);
+            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
-        // TODO KSTIP-1162: Manuelle Status Recksetzung
-        // TODO KSTIP-1162: Gesuch akzeptiere zwischenstand? Nein? Da Businesslogik entscheidet welchen event fired wird
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.GESUCH_ABGELEHNT, Gesuchstatus.GESUCH_ABGELEHNT);
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB);
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
@@ -60,13 +54,11 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT);
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchStatusChangeEvent.DOKUMENTE_NACHGELIEFERT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.KEINE_DOKUMENTE_NACHGELIEFERT, Gesuchstatus.IN_BEARBEITUNG_GS);
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.JOUR_FIX)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
@@ -83,8 +75,7 @@ public class GesuchStatusConfigProducer {
         config.configure(Gesuchstatus.VERSANDBEREIT)
             .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET);
 
-        config.configure(Gesuchstatus.VERSENDET)
-            .permit(GesuchStatusChangeEvent.KEIN_STIPENDIEN_ANSPRUCH, Gesuchstatus.KEIN_STIPENDIEN_ANSPRUCH);
+        config.configure(Gesuchstatus.VERSENDET);
 
         for (final var status : Gesuchstatus.values()) {
             var state = config.getRepresentation(status);

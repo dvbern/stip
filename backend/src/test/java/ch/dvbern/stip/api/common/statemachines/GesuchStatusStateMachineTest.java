@@ -38,7 +38,7 @@ class GesuchStatusStateMachineTest {
             config
         );
 
-        final var trigger = GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.GESUCH_EINGEREICHT);
+        final var trigger = GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT);
 
         assertThrows(AppErrorException.class, () -> sm.fire(trigger, null));
     }
@@ -61,7 +61,7 @@ class GesuchStatusStateMachineTest {
                     .setGesuchStatusAenderungDatum(LocalDateTime.now()),
             config
         );
-        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.GESUCH_EINGEREICHT), gesuch);
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch);
 
         assertThat(
                 "The state machine did not find a handler to call",
@@ -92,7 +92,7 @@ class GesuchStatusStateMachineTest {
                 .setGesuchStatusAenderungDatum(LocalDateTime.now()),
             config
         );
-        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.GESUCH_EINGEREICHT), gesuch);
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch);
 
         assertThat(
             "The state machine did not find a handler to call",

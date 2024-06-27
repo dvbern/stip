@@ -18,7 +18,7 @@ public class GesuchValidatorService {
     private static final Map<Gesuchstatus, Class<?>> statusToValidationGroup = new EnumMap<>(Gesuchstatus.class);
 
     static {
-        statusToValidationGroup.put(Gesuchstatus.GESUCH_EINGEREICHT, GesuchEinreichenValidationGroup.class);
+        statusToValidationGroup.put(Gesuchstatus.EINGEREICHT, GesuchEinreichenValidationGroup.class);
     }
 
     private final Validator validator;
