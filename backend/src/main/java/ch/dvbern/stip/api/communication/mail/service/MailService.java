@@ -31,6 +31,18 @@ public class MailService {
     private final ConfigService configService;
     private final TenantService tenantService;
 
+    public void sendStandardNotificationEmail(
+        String name,
+        String vorname,
+        String receiver,
+        AppLanguages language
+    ) {
+        Templates.getStandardNotification(name, vorname, language)
+            .to(receiver)
+            .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
+            .send().subscribe().asCompletionStage();
+    }
+
     public void sendGesuchEingereichtEmail(
         String name,
         String vorname,
@@ -104,6 +116,17 @@ public class MailService {
 
         private Templates() {
         }
+
+        public static MailTemplateInstance getStandardNotification(String name, String vorname, AppLanguages language) {
+            return switch (language) {
+                case FR -> standardNotificationFr(name, vorname);
+                case DE -> standardNotificationDe(name, vorname);
+            };
+        }
+
+        private static native MailTemplateInstance standardNotificationDe(String name, String vorname);
+
+        private static native MailTemplateInstance standardNotificationFr(String name, String vorname);
 
         public static native MailTemplateInstance benutzerWelcome(String name, String vorname, String link);
 
