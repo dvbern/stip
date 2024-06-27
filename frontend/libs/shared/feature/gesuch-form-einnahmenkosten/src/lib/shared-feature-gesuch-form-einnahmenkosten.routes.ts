@@ -22,7 +22,7 @@ export const gesuchAppFeatureGesuchFormEinnahmenkostenRoutes: Route[] = [
     children: [
       routeWithUnsavedChangesGuard({
         path: ':id',
-        title: 'shared.education.title',
+        title: 'shared.einnahmenkosten.title',
         component: SharedFeatureGesuchFormEinnahmenkostenComponent,
       }),
       // add more routes here (siblings)

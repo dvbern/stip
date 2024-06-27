@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentProducer {
-    private final PlzOrtService plzOrtService;
+    private final PlzService plzService;
 
     private final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap = Map.of(
         Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B, DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B,
@@ -59,12 +59,8 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
             requiredDocs.add(DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG);
         }
 
-        if (plzOrtService.isInBern(pia.getAdresse()) && parentsLiveAbroad(formular)) {
+        if (plzService.isInBern(pia.getAdresse()) && parentsLiveAbroad(formular)) {
             requiredDocs.add(DokumentTyp.PERSON_AUSWEIS);
-        }
-
-        if (pia.getVermoegenVorjahr() != null) {
-            requiredDocs.add(DokumentTyp.PERSON_VERMOEGENSNACHWEIS_VORJAHR);
         }
 
         return ImmutablePair.of("personInAusbildung", requiredDocs);

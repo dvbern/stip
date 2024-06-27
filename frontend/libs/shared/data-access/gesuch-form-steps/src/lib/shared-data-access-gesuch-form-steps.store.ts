@@ -4,7 +4,7 @@ import { signalStore, withState } from '@ngrx/signals';
 import { Store } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchSteuerdatenView } from '@dv/shared/data-access/gesuch';
-import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -54,7 +54,7 @@ export class GesuchFormStepsStore extends signalStore(
   withState(initialState),
   withDevtools('GesuchFormStepsStore'),
 ) {
-  private compiletimeConfig = inject(SharedModelCompiletimeConfig);
+  private compileTimeConfig = inject(SharedModelCompileTimeConfig);
   private steuerdatenViewSig = inject(Store).selectSignal(
     selectSharedDataAccessGesuchSteuerdatenView,
   );
@@ -88,7 +88,7 @@ export class GesuchFormStepsStore extends signalStore(
     step?: SharedModelGesuchFormStep,
   ): Signal<SharedModelGesuchFormStepProgress> {
     return computed(() => {
-      const allSteps = this.stepsSig()[this.compiletimeConfig.appType];
+      const allSteps = this.stepsSig()[this.compileTimeConfig.appType];
       if (!step) {
         return {
           step: undefined,
@@ -110,7 +110,7 @@ export class GesuchFormStepsStore extends signalStore(
     invalidProps?: StepValidation,
   ): Signal<GesuchFormStepView[]> {
     return computed(() => {
-      const steps = this.stepsSig()[this.compiletimeConfig.appType];
+      const steps = this.stepsSig()[this.compileTimeConfig.appType];
       return steps.map((step, index) => ({
         ...step,
         nextStep: steps[index + 1],
@@ -128,7 +128,7 @@ export class GesuchFormStepsStore extends signalStore(
       b: SharedModelGesuchFormStep,
     ) => number,
   ) {
-    const steps = this.stepFlowSig()[this.compiletimeConfig.appType];
+    const steps = this.stepFlowSig()[this.compileTimeConfig.appType];
     const aIndex = steps.findIndex((step) => step.route === a.route);
     const bIndex = steps.findIndex((step) => step.route === b.route);
     if (aIndex === -1 || bIndex === -1) {

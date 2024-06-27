@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SteuerdatenDtoSpec.JSON_PROPERTY_ID,
-  SteuerdatenDtoSpec.JSON_PROPERTY_TYP,
+  SteuerdatenDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
   SteuerdatenDtoSpec.JSON_PROPERTY_STEUERN_STAAT,
   SteuerdatenDtoSpec.JSON_PROPERTY_STEUERN_BUND,
   SteuerdatenDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
@@ -54,8 +54,8 @@ public class SteuerdatenDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
-  public static final String JSON_PROPERTY_TYP = "typ";
-  private SteuerdatenTypDtoSpec typ;
+  public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
+  private SteuerdatenTypDtoSpec steuerdatenTyp;
 
   public static final String JSON_PROPERTY_STEUERN_STAAT = "steuernStaat";
   private Integer steuernStaat;
@@ -118,9 +118,9 @@ public class SteuerdatenDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
     return id;
@@ -128,35 +128,35 @@ public class SteuerdatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setId(UUID id) {
     this.id = id;
   }
 
 
-  public SteuerdatenDtoSpec typ(SteuerdatenTypDtoSpec typ) {
+  public SteuerdatenDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
     
-    this.typ = typ;
+    this.steuerdatenTyp = steuerdatenTyp;
     return this;
   }
 
    /**
-   * Get typ
-   * @return typ
+   * Get steuerdatenTyp
+   * @return steuerdatenTyp
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(JSON_PROPERTY_STEUERDATEN_TYP)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public SteuerdatenTypDtoSpec getTyp() {
-    return typ;
+  public SteuerdatenTypDtoSpec getSteuerdatenTyp() {
+    return steuerdatenTyp;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(JSON_PROPERTY_STEUERDATEN_TYP)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(SteuerdatenTypDtoSpec typ) {
-    this.typ = typ;
+  public void setSteuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
+    this.steuerdatenTyp = steuerdatenTyp;
   }
 
 
@@ -585,7 +585,7 @@ public class SteuerdatenDtoSpec {
     }
     SteuerdatenDtoSpec steuerdaten = (SteuerdatenDtoSpec) o;
     return Objects.equals(this.id, steuerdaten.id) &&
-        Objects.equals(this.typ, steuerdaten.typ) &&
+        Objects.equals(this.steuerdatenTyp, steuerdaten.steuerdatenTyp) &&
         Objects.equals(this.steuernStaat, steuerdaten.steuernStaat) &&
         Objects.equals(this.steuernBund, steuerdaten.steuernBund) &&
         Objects.equals(this.fahrkosten, steuerdaten.fahrkosten) &&
@@ -606,7 +606,7 @@ public class SteuerdatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typ, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungscode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
+    return Objects.hash(id, steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungscode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
   }
 
   @Override
@@ -614,7 +614,7 @@ public class SteuerdatenDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class SteuerdatenDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
+    sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");

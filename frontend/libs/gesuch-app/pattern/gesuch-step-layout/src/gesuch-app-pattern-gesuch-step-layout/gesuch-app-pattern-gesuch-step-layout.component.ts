@@ -31,7 +31,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
-import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({

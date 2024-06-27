@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.KindUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
@@ -87,6 +88,13 @@ public class GesuchTestSpecGenerator {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
             model.getGesuchTrancheToWorkWith().setGesuchFormular(ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns);
+        });
+
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSteuerdatenTabs =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecEinnahmenKosten =

@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -22,9 +23,12 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import jakarta.inject.Inject;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -48,9 +52,36 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
             SteuerdatenMapper.class
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
+    @Inject
+    SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @AfterMapping
+    protected void calculateSteuerdatenTabs(
+        final GesuchFormular entity,
+        final @MappingTarget GesuchFormularDto dto
+    ) {
+        if (entity.getFamiliensituation() == null) {
+            return;
+        }
+
+        dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
+    }
+
+    @AfterMapping
+    public void setCalculatedPropertiesOnDto(
+        GesuchFormular gesuchFormular,
+        @MappingTarget GesuchFormularDto gesuchFormularDto
+    ) {
+        if (gesuchFormularDto.getEinnahmenKosten() != null) {
+            final var ek = gesuchFormularDto.getEinnahmenKosten();
+            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
+            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
+        }
+    }
 
     /**
      * partial update mapper for the Gesuchssteller

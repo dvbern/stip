@@ -38,6 +38,7 @@ async function setup() {
           stammdatens: {
             laender: [],
           },
+          configs: {},
         },
       }),
       provideMaterialDefaultOptions(),

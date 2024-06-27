@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,4 +86,22 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Nullable
     @Column(name = "betreuungskosten_kinder")
     private Integer betreuungskostenKinder;
+
+    @NotNull
+    @Column(name = "veranlagungscode", nullable = false)
+    @Min(0)
+    @Max(99)
+    private Integer veranlagungsCode = 0;
+
+    @NotNull
+    @Column(name = "steuerjahr", nullable = false)
+    @Min(0)
+    @Max(9999)
+    private Integer steuerjahr;
+
+    @Nullable
+    @Column(name = "vermoegen")
+    @Max(Integer.MAX_VALUE)
+    @Min(0)
+    private Integer vermoegen;
 }

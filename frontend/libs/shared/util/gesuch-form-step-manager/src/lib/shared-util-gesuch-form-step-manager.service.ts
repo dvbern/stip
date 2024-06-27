@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
-import { AppType, SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -52,7 +52,7 @@ const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
   providedIn: 'root',
 })
 export class SharedUtilGesuchFormStepManagerService {
-  private compiletimeConfig = inject(SharedModelCompiletimeConfig);
+  private compiletimeConfig = inject(SharedModelCompileTimeConfig);
   /**
    * Returns all steps for the current app type
    *

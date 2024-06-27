@@ -29,15 +29,35 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.gesuch.validation.*;
+import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.ElternPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.FamiliensituationPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.GeschwisterPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.Default;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -75,7 +95,15 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
+@EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(groups = {
+    Default.class,
+    EinnahmenKostenPageValidation.class
+}, property = "einnahmenKosten")
 @AusbildungskostenStufeRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    EinnahmenKostenPageValidation.class
+}, property = "einnahmenKosten")
+@EinnahmenKostenVermoegenRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
@@ -97,6 +125,10 @@ import org.hibernate.envers.Audited;
 @DocumentsRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class
 })
+@SteuerdatenTabsRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    SteuerdatenPageValidation.class
+}, property = "steuerdatenTabs")
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity

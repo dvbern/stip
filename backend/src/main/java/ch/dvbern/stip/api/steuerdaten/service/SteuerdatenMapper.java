@@ -1,5 +1,9 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
@@ -7,10 +11,6 @@ import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 @Mapper(config = MappingConfig.class)
 public interface SteuerdatenMapper {
@@ -33,6 +33,7 @@ public interface SteuerdatenMapper {
             }
         }
         for (SteuerdatenUpdateDto steuerdatenUpdateDto : steuerdatenUpdateDtos) {
+            if (steuerdatenUpdateDto.getId() != null) {
                 Steuerdaten found = steuerdatenSet.stream()
                     .filter(steuerdaten -> steuerdaten.getId().equals(steuerdatenUpdateDto.getId()))
                     .findFirst()
@@ -41,6 +42,9 @@ public interface SteuerdatenMapper {
                     );
                 steuerdatenSet.remove(found);
                 steuerdatenSet.add(partialUpdate(steuerdatenUpdateDto, found));
+            } else {
+                steuerdatenSet.add(partialUpdate(steuerdatenUpdateDto, new Steuerdaten()));
+            }
         }
         return steuerdatenSet;
     }
