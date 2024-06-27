@@ -144,8 +144,8 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     },
     title: 'shared.protokoll.title',
     loadChildren: () =>
-      import('@dv/shared/feature/gesuch-form-protokoll').then(
-        (m) => m.sharedFeatureGesuchFormProtokollRoutes,
-      ),
+      import(
+        '@dv/sachbearbeitung-app/feature/gesuch-form-statusprotokoll'
+      ).then((m) => m.sachbearbeitungAppFeatureGesuchFormStatusprotokollRoutes),
   },
 ];
