@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RequiredArgsConstructor
-public class BenutzerServiceTest {
+class BenutzerServiceTest {
 
     private final BenutzerService benutzerService;
     private final BenutzerRepository benutzerRepository;
@@ -33,7 +33,7 @@ public class BenutzerServiceTest {
     @Test
     @TestAsDeleteUser
     @Order(1)
-    public void testCreateBenutzer() {
+    void testCreateBenutzer() {
         benutzerToDeleteId = benutzerService.getOrCreateAndUpdateCurrentBenutzer().getId();
         Optional<Benutzer> optionalBenutzer = benutzerRepository.findByIdOptional(benutzerToDeleteId);
         assertThat(optionalBenutzer).isPresent();
@@ -44,8 +44,8 @@ public class BenutzerServiceTest {
     @Test
     @TestAsAdmin
     @Order(2)
-    public void testDeleteBenutzer() {
+    void testDeleteBenutzer() {
         benutzerService.deleteBenutzer(benutzerToDeleteId);
-        assertThat(benutzerRepository.findByIdOptional(benutzerToDeleteId).isPresent()).isFalse();
+        assertThat(benutzerRepository.findByIdOptional(benutzerToDeleteId)).isNotPresent();
     }
 }
