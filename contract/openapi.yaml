@@ -13,6 +13,26 @@ servers:
         default: '8080'
         description: ''
 paths:
+  /mail/welcome:
+    post:
+      tags:
+        - Mail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WelcomeMail'
+      responses:
+        '200':
+          description: Mail was successfully sent
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: sendWelcomeEmail
+      summary: Sends an e-mail for a newly created user
   /gesuch:
     post:
       requestBody:
@@ -1267,6 +1287,22 @@ paths:
       summary: Gets all PLZs
 components:
   schemas:
+    WelcomeMail:
+      type: object
+      required:
+        - name
+        - vorname
+        - email
+        - redirectUri
+      properties:
+        name:
+          type: string
+        vorname:
+          type: string
+        email:
+          type: string
+        redirectUri:
+          type: string
     Anrede:
       enum:
         - HERR
@@ -1284,7 +1320,6 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
-        - PERSON_VERMOEGENSNACHWEIS_VORJAHR
         - PERSON_SOZIALHILFEBUDGET
         - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         - PERSON_AUSWEIS
@@ -2119,9 +2154,6 @@ components:
         wohnsitzAnteilVater:
           description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
-        vermoegenVorjahr:
-          description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-          type: integer
         sozialhilfebeitraege:
           type: boolean
         vormundschaft:
@@ -2981,3 +3013,4 @@ tags:
     description: ''
   - name: Ausbildungsgang
     description: ''
+  - name: Mail

@@ -45,11 +45,13 @@ export const UnknownHttpError = z.object({
   statusText: z.string(),
   url: z.string().nullable(),
 });
-
 export type UnknownHttpError = Extends<
   z.infer<typeof UnknownHttpError>,
   HttpErrorResponse
 >;
+
+export const ParseError = z.instanceof(z.ZodError);
+export type ParseError = z.infer<typeof ParseError>;
 
 const ErrorTypes = {
   validationError: z.object({
@@ -60,6 +62,7 @@ const ErrorTypes = {
     }),
   }),
   unknownHttpError: UnknownHttpError,
+  zodError: ParseError,
   unknownError: z.unknown(),
 };
 
@@ -93,6 +96,13 @@ export const SharedModelError = z.intersection(
         error,
       });
     }),
+    ErrorTypes.zodError.transform((error) =>
+      createError('zodError', {
+        message: `Zod Parse Error:\n${JSON.stringify(error.format(), null, 2)}`,
+        messageKey: 'shared.genericError.validation',
+        errors: error.issues,
+      }),
+    ),
     ErrorTypes.unknownError.transform((error) =>
       createError('unknownError', {
         messageKey: 'shared.genericError.general',

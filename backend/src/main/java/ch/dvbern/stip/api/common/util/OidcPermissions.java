@@ -21,6 +21,8 @@ public final class OidcPermissions {
     public static final String STAMMDATEN_READ = "STAMMDATEN_READ";
     public static final String STAMMDATEN_UPDATE = "STAMMDATEN_UPDATE";
 
+    public static final String SEND_EMAIL = "SEND_EMAIL";
+
     private OidcPermissions() {
 
     }

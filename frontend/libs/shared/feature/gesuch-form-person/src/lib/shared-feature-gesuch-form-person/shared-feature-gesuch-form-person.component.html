@@ -413,30 +413,6 @@
         </div>
       }
 
-      @if (!hiddenFieldsSetSig().has(form.controls.vermoegenVorjahr)) {
-        <div class="row g-4 mt-1">
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-            <!-- VERMOEGEN VORJAHR -->
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.vermoegenVorjahr.label' | translate }}</mat-label>
-              <input
-                type="text"
-                matInput
-                [maskito]="maskitoNumber"
-                formControlName="vermoegenVorjahr"
-                data-testid="form-person-vermoegenVorjahr"
-              />
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-            @if (vermoegensnachweisVorjahrDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-      }
-
       <div class="row g-4 mt-1">
         <!-- Sozialhilfebeitraege -->
 
