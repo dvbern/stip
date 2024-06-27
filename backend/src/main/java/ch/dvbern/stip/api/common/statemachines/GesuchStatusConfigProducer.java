@@ -35,15 +35,18 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
 
         config.configure(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
-            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT);
+            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
         config.configure(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_SB, Gesuchstatus.IN_BEARBEITUNG_SB);
@@ -51,7 +54,9 @@ public class GesuchStatusConfigProducer {
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
-            .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT);
+            .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
+            .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
+            .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS);
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
@@ -61,7 +66,6 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.VERFUEGT)
-            .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
             .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
 
@@ -75,7 +79,9 @@ public class GesuchStatusConfigProducer {
         config.configure(Gesuchstatus.VERSANDBEREIT)
             .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET);
 
-        config.configure(Gesuchstatus.VERSENDET);
+        config.configure(Gesuchstatus.VERSENDET)
+            .permit(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
+            .permit(GesuchStatusChangeEvent.STIPENDIENANSPRUCH, Gesuchstatus.STIPENDIENANSPRUCH);
 
         for (final var status : Gesuchstatus.values()) {
             var state = config.getRepresentation(status);
