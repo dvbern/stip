@@ -13,6 +13,26 @@ servers:
         default: '8080'
         description: ''
 paths:
+  /mail/welcome:
+    post:
+      tags:
+        - Mail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WelcomeMail'
+      responses:
+        '200':
+          description: Mail was successfully sent
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: sendWelcomeEmail
+      summary: Sends an e-mail for a newly created user
   /gesuch:
     post:
       requestBody:
@@ -1267,6 +1287,22 @@ paths:
       summary: Gets all PLZs
 components:
   schemas:
+    WelcomeMail:
+      type: object
+      required:
+        - name
+        - vorname
+        - email
+        - redirectUri
+      properties:
+        name:
+          type: string
+        vorname:
+          type: string
+        email:
+          type: string
+        redirectUri:
+          type: string
     Anrede:
       enum:
         - HERR
@@ -2898,3 +2934,4 @@ tags:
     description: ''
   - name: Ausbildungsgang
     description: ''
+  - name: Mail

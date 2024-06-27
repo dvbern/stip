@@ -54,4 +54,12 @@ export const MASK_MM_YYYY: MaskitoOptions = {
   mask: [/\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/],
 };
 
-export const PATTERN_EMAIL = '^[a-z0-9]+[a-z0-9._-]*@[a-z0-9.-]+\\.[a-z]{2,4}$';
+/**
+ * The pattern is very long and has ", ', `, \ and other special characters, so it is base64 encoded to avoid escaping issues
+ * and window.atob is used instead of atob to avoid using the node.js types
+ *
+ * @see https://stackoverflow.com/a/201378
+ */
+export const PATTERN_EMAIL = window.atob(
+  'Xig/OlthLXowLTkhIyQlJicqKy89P15fYHt8fX4tXSsoPzpcLlthLXowLTkhIyQlJicqKy89P15fYHt8fX4tXSspKnwiKD86W1x4MDEtXHgwOFx4MGJceDBjXHgwZS1ceDFmXHgyMVx4MjMtXHg1Ylx4NWQtXHg3Zl18XFxbXHgwMS1ceDA5XHgwYlx4MGNceDBlLVx4N2ZdKSoiKUAoPzooPzpbYS16MC05XSg/OlthLXowLTktXSpbYS16MC05XSk/XC4pK1thLXowLTldKD86W2EtejAtOS1dKlthLXowLTldKT98XFsoPzooPzooMig1WzAtNV18WzAtNF1bMC05XSl8MVswLTldWzAtOV18WzEtOV0/WzAtOV0pKVwuKXszfSg/OigyKDVbMC01XXxbMC00XVswLTldKXwxWzAtOV1bMC05XXxbMS05XT9bMC05XSl8W2EtejAtOS1dKlthLXowLTldOig/OltceDAxLVx4MDhceDBiXHgwY1x4MGUtXHgxZlx4MjEtXHg1YVx4NTMtXHg3Zl18XFxbXHgwMS1ceDA5XHgwYlx4MGNceDBlLVx4N2ZdKSspXF0pJA==',
+);
