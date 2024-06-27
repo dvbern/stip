@@ -821,7 +821,7 @@ class GesuchServiceTest {
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
 
         tranche.getGesuchFormular().setTranche(tranche);
-        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2024);
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
         tranche.getGesuch().setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
                 .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))

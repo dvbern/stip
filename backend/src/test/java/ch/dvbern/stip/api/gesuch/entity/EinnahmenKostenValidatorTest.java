@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -21,6 +22,7 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
 class EinnahmenKostenValidatorTest {
 
@@ -165,15 +167,15 @@ class EinnahmenKostenValidatorTest {
 
     @Test
     void steuerjahrIsCurrentorPastValidationTest(){
-        GesuchFormular gesuchFormular = new GesuchFormular();
+        GesuchTranche tranche = GesuchGenerator.initGesuchTranche();
+        tranche.setGesuchFormular(new GesuchFormular());
+        GesuchFormular gesuchFormular = tranche.getGesuchFormular();
+        gesuchFormular.setTranche(tranche);
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
 
         final var temporalValidator = new EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator();
-        gesuchFormular.getEinnahmenKosten().setSteuerjahr(0);
-        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
-
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.now().getValue());
-        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
 
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.now().getValue() + 1);
         assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
@@ -183,6 +185,16 @@ class EinnahmenKostenValidatorTest {
 
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.MAX_VALUE);
         assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr());
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() + 1);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() -1);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(0);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
     }
 
     @Test

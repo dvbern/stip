@@ -52,6 +52,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -103,11 +104,11 @@ public class GesuchService {
             .map(Rolle::getKeycloakIdentifier)
             .collect(Collectors.toSet());
 
-        Integer steuerjahrToSet = trancheToUpdate
+        final var gesuchsjahr = trancheToUpdate
             .getGesuch()
             .getGesuchsperiode()
-            .getGesuchsjahr()
-            .getTechnischesJahr() - 1;
+            .getGesuchsjahr();
+        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
         Integer veranlagungsCodeToSet = 0;
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
