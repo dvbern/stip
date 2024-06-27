@@ -26,27 +26,31 @@ public class PersonenImHaushaltService {
     private final DMNService dmnService;
     private final TenantService tenantService;
 
-    public DmnRequest getPersonenImHaushaltRequest (
+    public DmnRequest getPersonenImHaushaltRequest(
         final int majorVersion,
         final int minorVersion,
         final GesuchFormular gesuchFormular,
         final ElternTyp elternToPrioritize
     ) {
         final var builder = personenImHaushaltRequestBuilders.stream().filter(personenImHaushaltRequestBuilder -> {
-            final var versionAnnotation = personenImHaushaltRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
+            final var versionAnnotation =
+                personenImHaushaltRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
             return (versionAnnotation != null) &&
                 (versionAnnotation.major() == majorVersion) &&
                 (versionAnnotation.minor() == minorVersion);
         }).findFirst();
 
         if (builder.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a builder for version " + majorVersion + '.' + minorVersion);
+            throw new IllegalArgumentException("Cannot find a builder for version "
+                + majorVersion
+                + '.'
+                + minorVersion);
         }
 
         return builder.get().buildRequest(gesuchFormular, elternToPrioritize);
     }
 
-    public PersonenImHaushaltResult calculatePersonenImHaushalt (final DmnRequest request) {
+    public PersonenImHaushaltResult calculatePersonenImHaushalt(final DmnRequest request) {
         final var models = dmnService.loadModelsForTenantAndVersionByName(
             tenantService.getCurrentTenant().getIdentifier(),
             request.getVersion(),
@@ -54,8 +58,11 @@ public class PersonenImHaushaltService {
         );
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
-        final var personenImHaushaltOutput = (HashMap<String, BigDecimal>) result.getDecisionResultByName(PERSONEN_IM_HAUSHALT_DECISION_NAME).getResult();
-        final var personenImHaushaltOutput2 = result.getDecisionResultByName(PERSONEN_IM_HAUSHALT_DECISION_NAME).getResult();
+
+        @SuppressWarnings("unchecked") // It's fine
+        final var personenImHaushaltOutput = (HashMap<String, BigDecimal>) result
+            .getDecisionResultByName(PERSONEN_IM_HAUSHALT_DECISION_NAME)
+            .getResult();
         if (personenImHaushaltOutput == null) {
             throw new AppErrorException("Result of PersonenImHaushalt decision was null");
         }

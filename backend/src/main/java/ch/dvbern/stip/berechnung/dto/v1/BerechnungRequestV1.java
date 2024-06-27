@@ -55,15 +55,11 @@ public class BerechnungRequestV1 implements DmnRequest {
         return "v1.0";
     }
 
-    private static int elternImHaushaltIfWiederverheiratet(final boolean isElternteilWiederverheiratet) {
-        return isElternteilWiederverheiratet ? 2 : 1;
-    }
-
     public static BerechnungRequestV1 createRequest(
         final Gesuch gesuch,
         final GesuchTranche gesuchTranche,
         final ElternTyp elternTyp,
-        PersonenImHaushaltService personenImHaushaltService
+        final PersonenImHaushaltService personenImHaushaltService
     ) {
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
