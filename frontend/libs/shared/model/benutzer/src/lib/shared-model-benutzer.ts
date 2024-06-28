@@ -8,6 +8,7 @@ export const SACHBEARBEITER_APP_ROLES = [
   'Jurist',
 ] as const;
 export type UsableRole = (typeof SACHBEARBEITER_APP_ROLES)[number];
+
 export const SharedModelRoleList = z.array(
   z.object({ id: z.string(), name: z.string() }),
 );
@@ -25,6 +26,10 @@ export type SharedModelBenutzerApi = z.infer<typeof SharedModelBenutzerApi>;
 
 export const SharedModelBenutzerList = z.array(SharedModelBenutzerApi);
 export type SharedModelBenutzerList = z.infer<typeof SharedModelBenutzerList>;
+
+export type SharedModelBenutzerWithRoles = SharedModelBenutzerApi & {
+  roles: SharedModelRoleList;
+};
 
 export type SharedModelBenutzerRole = {
   name: UsableRole;
@@ -62,8 +67,8 @@ export type SharedModelUserAdminError = z.infer<
 >;
 
 export const SharedModelRoleRepresentation = z.object({
-  id: z.string().optional(),
-  name: z.string().optional(),
+  id: z.string(),
+  name: z.string(),
   description: z.string().optional(),
   scopeParamRequired: z.boolean().optional(),
   composite: z.boolean().optional(),
@@ -89,7 +94,7 @@ export const SharedModelModelMappingsRepresentation = z.object({
   clientMappings: z
     .map(z.string(), SharedModelClientMappingsRepresentation)
     .optional(),
-  roleMappings: z.array(SharedModelRoleRepresentation).optional(),
+  realmMappings: z.array(SharedModelRoleRepresentation).optional(),
 });
 export type SharedModelModelMappingsRepresentation = z.infer<
   typeof SharedModelModelMappingsRepresentation

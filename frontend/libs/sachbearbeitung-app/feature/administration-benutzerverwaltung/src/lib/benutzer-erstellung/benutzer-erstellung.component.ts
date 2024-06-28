@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   effect,
   inject,
   input,
@@ -18,13 +19,20 @@ import { MatListModule } from '@angular/material/list';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import { SharedModelRoleList } from '@dv/shared/model/benutzer';
+import {
+  SharedModelRole,
+  SharedModelRoleList,
+} from '@dv/shared/model/benutzer';
 import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import {
+  SharedUiRdIsPendingPipe,
+  SharedUiRdIsPendingWithoutCachePipe,
+} from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 @Component({
@@ -39,12 +47,14 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     SharedUiFormReadonlyDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,
+    SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
   ],
   templateUrl: './benutzer-erstellung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BenutzerErstellungComponent {
+export class BenutzerErstellungComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);
   idSig = input.required<string | undefined>({ alias: 'id' });
 
@@ -65,7 +75,7 @@ export class BenutzerErstellungComponent {
         const id = this.idSig();
 
         if (id) {
-          this.store.loadSbAppBenutzer$(id);
+          this.store.loadBenutzer$(id);
         }
       },
       { allowSignalWrites: true },
@@ -79,11 +89,41 @@ export class BenutzerErstellungComponent {
             name: benutzer.lastName,
             vorname: benutzer.firstName,
             email: benutzer.email,
+            roles: benutzer.roles,
           });
         }
       },
       { allowSignalWrites: true },
     );
+  }
+
+  handleSubmit() {
+    if (this.idSig()) {
+      this.update();
+    } else {
+      this.save();
+    }
+  }
+
+  update() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    return;
+
+    // const values = convertTempFormToRealValues(this.form, [
+    //   'email',
+    //   'name',
+    //   'vorname',
+    // ]);
+    // this.store.updateBenutzer$({
+    //   ...values,
+    //   id: this.idSig(),
+    //   onAfterSave: () => {
+    //     this.isReadonly.set(true);
+    //   },
+    // });
   }
 
   save() {
@@ -101,5 +141,13 @@ export class BenutzerErstellungComponent {
         this.isReadonly.set(true);
       },
     });
+  }
+
+  compareListFn(a: SharedModelRole, b: SharedModelRole) {
+    return a.id === b.id;
+  }
+
+  ngOnDestroy() {
+    this.store.resetBenutzer();
   }
 }

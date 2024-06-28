@@ -26,6 +26,7 @@ import {
   SharedModelBenutzerApi,
   SharedModelBenutzerList,
   SharedModelBenutzerRole,
+  SharedModelBenutzerWithRoles,
   SharedModelModelMappingsRepresentation,
   SharedModelRole,
   SharedModelRoleList,
@@ -51,7 +52,7 @@ type HttpResponseWithLocation = HttpResponse<unknown> & {
 };
 type BenutzerverwaltungState = {
   benutzers: CachedRemoteData<SharedModelBenutzer[]>;
-  benutzer: CachedRemoteData<SharedModelBenutzerApi>;
+  benutzer: RemoteData<SharedModelBenutzerWithRoles>;
   availableRoles: CachedRemoteData<SharedModelRoleList>;
   userCreated: RemoteData<SharedModelBenutzerApi>;
 };
@@ -119,11 +120,11 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
-  loadSbAppBenutzer$ = rxMethod<string>(
+  loadBenutzer$ = rxMethod<string>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          benutzer: cachedPending(state.benutzer),
+        patchState(this, () => ({
+          benutzer: pending(),
         }));
       }),
       switchMap((id) =>
@@ -133,16 +134,27 @@ export class BenutzerverwaltungStore extends signalStore(
           )
           .pipe(
             withLatestFrom(this.getUserRoleMappings$(id)),
-            map(([benutzer, roles]) => {
-              console.log(benutzer, roles);
+            map(([users, rm]) => {
+              const benutzer = SharedModelBenutzerApi.parse(users);
+              const userRoles =
+                SharedModelModelMappingsRepresentation.parse(
+                  rm,
+                ).realmMappings?.filter(byUsableRoles);
 
-              return SharedModelBenutzerApi.parse(benutzer);
+              return {
+                ...benutzer,
+                roles: userRoles ?? [],
+              };
             }),
             handleApiResponse((benutzer) => patchState(this, { benutzer })),
           ),
       ),
     ),
   );
+
+  resetBenutzer() {
+    patchState(this, { benutzer: initial() });
+  }
 
   deleteBenutzer$ = rxMethod<string>(
     tap(() =>
