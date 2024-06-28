@@ -24,20 +24,19 @@ public class SteuerdatenTabsRequiredConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext context) {
-        if (gesuchFormular.getFamiliensituation() == null || gesuchFormular.getSteuerdaten().isEmpty()) {
+        if (gesuchFormular.getFamiliensituation() == null) {
             return true;
         }
 
         final var requiredTabs = new HashSet<>(
             steuerdatenTabBerechnungsService.calculateTabs(gesuchFormular.getFamiliensituation())
         );
+        final var actualTabs = gesuchFormular.getSteuerdaten()
+            .stream()
+            .map(Steuerdaten::getSteuerdatenTyp)
+            .collect(Collectors.toSet());
 
-        if (!requiredTabs.containsAll(gesuchFormular.getSteuerdaten()
-                .stream()
-                .map(Steuerdaten::getSteuerdatenTyp)
-                .collect(Collectors.toSet())
-            )
-        ) {
+        if (!requiredTabs.containsAll(actualTabs) || requiredTabs.size() != actualTabs.size()) {
             return GesuchValidatorUtil.addProperty(context, property);
         }
 
