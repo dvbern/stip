@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  ViewChild,
   computed,
   inject,
   input,
@@ -60,6 +59,5 @@ export class SachbearbeitungAppFeatureGesuchFormStatusprotokollComponent
     });
   }
 
-  @ViewChild(MatSort) sort2: MatSort | undefined;
   sortSig = viewChild(MatSort);
 }
