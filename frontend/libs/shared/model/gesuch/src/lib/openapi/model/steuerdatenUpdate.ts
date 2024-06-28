@@ -15,8 +15,8 @@ import { SteuerdatenTyp } from './steuerdatenTyp';
  * 
  */
 export interface SteuerdatenUpdate { 
-    id: string;
-    typ: SteuerdatenTyp;
+    id?: string;
+    steuerdatenTyp: SteuerdatenTyp;
     steuernStaat: number;
     steuernBund: number;
     fahrkosten: number;
@@ -26,7 +26,7 @@ export interface SteuerdatenUpdate {
     steuerjahr: number;
     veranlagungscode: number;
     totalEinkuenfte: number;
-    eingenmietwert?: number;
+    eigenmietwert: number;
     isArbeitsverhaeltnisSelbstaendig: boolean;
     saeule3a?: number;
     saeule2?: number;

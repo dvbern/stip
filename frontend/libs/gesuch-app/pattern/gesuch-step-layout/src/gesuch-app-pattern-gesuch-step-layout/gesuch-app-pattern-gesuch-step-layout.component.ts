@@ -16,10 +16,10 @@ import { filter } from 'rxjs';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import {
   SharedDataAccessGesuchEvents,
+  selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
-import { GesuchFormStepsStore } from '@dv/shared/data-access/gesuch-form-steps';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
@@ -31,6 +31,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
@@ -59,24 +60,27 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
 
-  gesuchFormStepStore = inject(GesuchFormStepsStore);
-  currentStepProgressSig = computed(() => {
-    return this.gesuchFormStepStore.getStepProgressSig(this.step)();
-  });
-  gesuchFormStepsStore = inject(GesuchFormStepsStore);
+  stepManager = inject(SharedUtilGesuchFormStepManagerService);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   validationViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchValidationView,
   );
   stepsSig = computed(() => {
     const { cachedGesuchFormular, invalidFormularProps } =
       this.validationViewSig();
-    const validatedSteps = this.gesuchFormStepsStore.getValidatedStepsSig(
+    const steps = this.stepsViewSig().steps;
+    const validatedSteps = this.stepManager.getValidatedSteps(
+      steps,
       cachedGesuchFormular,
       invalidFormularProps.validations,
-    )();
+    );
     return validatedSteps;
+  });
+  currentStepProgressSig = computed(() => {
+    const stepsFlow = this.stepsViewSig().stepsFlow;
+    return this.stepManager.getStepProgress(stepsFlow, this.step);
   });
   currentStepSig = computed(() => {
     const steps = this.stepsSig();

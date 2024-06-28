@@ -1,7 +1,6 @@
 import {
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
-  Steuerdaten,
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
@@ -103,21 +102,34 @@ export const RETURN_TO_HOME: SharedModelGesuchFormStep = {
   iconSymbolName: '',
 } satisfies SharedModelGesuchFormStep;
 
-// TODO use correct steuernTab type
+// Dynamic steps
+export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
   FAMILIE: 'people',
   MUTTER: 'woman',
   VATER: 'man',
 };
-export const createElternSteuerStep = (
-  steuerdaten: Steuerdaten,
-): SharedModelGesuchFormStep => {
+const createElternSteuerStep = (
+  steuerdatenTyp: SteuerdatenTyp,
+): SharedModelGesuchFormStep & { type: SteuerdatenTyp } => {
   return {
-    route: `eltern-steuer-${steuerdaten.typ}`,
-    translationKey: 'shared.eltern-steuer.title',
-    titleTranslationKey: 'shared.eltern-steuer.page.title',
-    iconSymbolName: steuerTypeIconMap[steuerdaten.typ],
+    type: steuerdatenTyp,
+    route: `eltern-steuerdaten/${steuerdatenTyp}`,
+    translationKey: `shared.eltern-steuer.title.${steuerdatenTyp}`,
+    titleTranslationKey: `shared.eltern-steuer.title.${steuerdatenTyp}`,
+    iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
   };
+};
+export const ELTERN_STEUER_FAMILIE = createElternSteuerStep('FAMILIE');
+export const ELTERN_STEUER_MUTTER = createElternSteuerStep('MUTTER');
+export const ELTERN_STEUER_VATER = createElternSteuerStep('VATER');
+export const ELTERN_STEUER_STEPS: Record<
+  SteuerdatenTyp,
+  SharedModelGesuchFormStep
+> = {
+  FAMILIE: ELTERN_STEUER_FAMILIE,
+  MUTTER: ELTERN_STEUER_MUTTER,
+  VATER: ELTERN_STEUER_VATER,
 };
 
 export const gesuchFormSteps = {
@@ -134,6 +146,11 @@ export const gesuchFormSteps = {
   DOKUMENTE,
   ABSCHLUSS,
 };
+
+export const findStepIndex = (
+  step: SharedModelGesuchFormStep,
+  steps: SharedModelGesuchFormStep[],
+) => steps.findIndex((s) => s.route === step.route);
 
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
@@ -171,13 +188,20 @@ export const isStepValid = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
   invalidProps?: StepValidation,
-) => {
+): StepState | undefined => {
   const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
     [PERSON.route]: 'personInAusbildung',
     [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
     [FAMILIENSITUATION.route]: 'familiensituation',
     [ELTERN.route]: 'elterns',
+    ...formular?.steuerdaten?.reduce(
+      (steps, { steuerdatenTyp }) => ({
+        ...steps,
+        [ELTERN_STEUER_STEPS[steuerdatenTyp].route]: 'steuerdatenTabs',
+      }),
+      {} as Record<string, SharedModelGesuchFormularProps>,
+    ),
     [GESCHWISTER.route]: 'geschwisters',
     [PARTNER.route]: 'partner',
     [KINDER.route]: 'kinds',
@@ -187,6 +211,16 @@ export const isStepValid = (
   };
 
   const field = stepFieldMap[step.route];
+
+  if (field === 'steuerdatenTabs') {
+    const [type] =
+      Object.entries(ELTERN_STEUER_STEPS).find(
+        ([, s]) => s.route === step.route,
+      ) ?? [];
+    return formular?.steuerdaten?.find((s) => s.steuerdatenTyp === type)
+      ? 'VALID'
+      : undefined;
+  }
 
   if (field === 'dokuments') {
     return toDocumentStepState(invalidProps);

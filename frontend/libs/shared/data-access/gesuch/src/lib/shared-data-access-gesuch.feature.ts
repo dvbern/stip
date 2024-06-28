@@ -4,6 +4,7 @@ import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abs
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
+import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
@@ -13,8 +14,16 @@ import { SharedModelError, ValidationWarning } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
+  SteuerdatenTyp,
   ValidationError,
 } from '@dv/shared/model/gesuch';
+import {
+  CachedRemoteData,
+  cachedPending,
+  failure,
+  initial,
+  success,
+} from '@dv/shared/util/remote-data';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
@@ -31,6 +40,7 @@ export interface State {
     gesuchId: string | null;
     gesuchFormular: SharedModelGesuchFormular | null;
   };
+  steuerdatenTabs: CachedRemoteData<SteuerdatenTyp[]>;
   lastUpdate: string | null;
   loading: boolean;
   error: SharedModelError | undefined;
@@ -45,6 +55,7 @@ const initialState: State = {
     gesuchId: null,
     gesuchFormular: null,
   },
+  steuerdatenTabs: initial(),
   lastUpdate: null,
   loading: false,
   error: undefined,
@@ -75,6 +86,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedEventGesuchFormEducation.init,
       SharedEventGesuchFormFamiliensituation.init,
       SharedEventGesuchFormEltern.init,
+      SharedEventGesuchFormElternSteuerdaten.init,
       SharedEventGesuchFormGeschwister.init,
       SharedEventGesuchFormKinder.init,
       SharedEventGesuchFormLebenslauf.init,
@@ -84,6 +96,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
         ...state,
         gesuch: null,
         gesuchFormular: null,
+        steuerdatenTabs: cachedPending(state.steuerdatenTabs),
         loading: true,
       }),
     ),
@@ -107,6 +120,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         loading: true,
+        steuerdatenTabs: cachedPending(state.steuerdatenTabs),
       }),
     ),
 
@@ -142,6 +156,10 @@ export const sharedDataAccessGesuchsFeature = createFeature({
           ...state,
           gesuch,
           gesuchFormular: gesuchFormular,
+          steuerdatenTabs: success(
+            gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.steuerdatenTabs ??
+              [],
+          ),
           cache: {
             gesuchId: gesuch.id ?? state.cache.gesuchId,
             gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
@@ -200,6 +218,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state, { error }): State => ({
         ...state,
         loading: false,
+        steuerdatenTabs: failure(error),
         error,
       }),
     ),

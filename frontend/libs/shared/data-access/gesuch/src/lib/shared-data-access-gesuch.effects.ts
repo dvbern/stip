@@ -15,6 +15,7 @@ import {
   skip,
   switchMap,
   tap,
+  withLatestFrom,
 } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
@@ -24,6 +25,7 @@ import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-au
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
+import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
@@ -49,7 +51,10 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
-import { selectRouteId } from './shared-data-access-gesuch.selectors';
+import {
+  selectRouteId,
+  selectSharedDataAccessGesuchStepsView,
+} from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
 
@@ -130,6 +135,7 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormPerson.init,
         SharedEventGesuchFormEducation.init,
         SharedEventGesuchFormEltern.init,
+        SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
         SharedEventGesuchFormAuszahlung.init,
         SharedEventGesuchFormGeschwister.init,
@@ -218,6 +224,7 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormPartner.nextStepTriggered,
         SharedEventGesuchFormPerson.saveTriggered,
         SharedEventGesuchFormEducation.saveTriggered,
+        SharedEventGesuchFormElternSteuerdaten.saveTriggered,
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormAuszahlung.saveTriggered,
         SharedEventGesuchFormEinnahmenkosten.saveTriggered,
@@ -341,6 +348,7 @@ export const redirectToGesuchForm = createEffect(
 
 export const redirectToGesuchFormNextStep = createEffect(
   (
+    store = inject(Store),
     actions$ = inject(Actions),
     router = inject(Router),
     stepManager = inject(SharedUtilGesuchFormStepManagerService),
@@ -360,9 +368,13 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,
         SharedEventGesuchDokumente.nextTriggered,
       ),
-      tap(({ id, origin }) => {
-        const target = stepManager.getNext(origin);
-        router.navigate(['gesuch', target.route, id]);
+      withLatestFrom(store.select(selectSharedDataAccessGesuchStepsView)),
+      tap(([{ id, origin }, { stepsFlow: stepFlowSig }]) => {
+        router.navigate([
+          'gesuch',
+          ...stepManager.getNextStepOf(stepFlowSig, origin).route.split('/'),
+          id,
+        ]);
       }),
     );
   },
@@ -396,11 +408,24 @@ export const sharedDataAccessGesuchEffects = {
   refreshGesuchFormStep,
 };
 
+const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [
+  keyof SharedModelGesuchFormular,
+];
+/**
+ * Formular fields that are only used while viewing data but should be removed on update
+ */
+type ViewOnlyFields = (typeof viewOnlyFields)[number];
+
 const prepareFormularData = (
   id: string,
   gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
 ): GesuchUpdate => {
   const { ausbildung, ...formular } = gesuchFormular;
+  viewOnlyFields.forEach((field) => {
+    if (field in formular) {
+      delete formular[field];
+    }
+  });
   return {
     gesuchTrancheToWorkWith: {
       id,
@@ -448,9 +473,9 @@ const combineLoadAllActions$ = (actions$: Actions) => {
  * The distinciton is necessary because the API returns more data than is necessary for an update
  * for example the API returns the full Ausbildungsgang object, but for an update only the ID is necessary
  */
-type ViewOrUpdateData<K extends keyof SharedModelGesuchFormular> =
-  | GesuchFormularUpdate[K]
-  | Partial<SharedModelGesuchFormular>[K];
+type ViewOrUpdateData<
+  K extends Exclude<keyof SharedModelGesuchFormular, ViewOnlyFields>,
+> = GesuchFormularUpdate[K] | Partial<SharedModelGesuchFormular>[K];
 
 /**
  * Check if Type T represent the Edit type of R

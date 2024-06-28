@@ -13,6 +13,7 @@ import { Steuerdaten } from './steuerdaten';
 import { Eltern } from './eltern';
 import { PersonInAusbildung } from './personInAusbildung';
 import { Ausbildung } from './ausbildung';
+import { SteuerdatenTyp } from './steuerdatenTyp';
 import { Geschwister } from './geschwister';
 import { EinnahmenKosten } from './einnahmenKosten';
 import { Kind } from './kind';
@@ -45,5 +46,6 @@ export interface GesuchFormular {
     kinds?: Array<Kind>;
     einnahmenKosten?: EinnahmenKosten;
     steuerdaten?: Array<Steuerdaten>;
+    steuerdatenTabs?: Array<SteuerdatenTyp>;
 }
 

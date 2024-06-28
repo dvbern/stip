@@ -11,7 +11,10 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import {
+  selectSharedDataAccessGesuchStepsView,
+  selectSharedDataAccessGesuchsView,
+} from '@dv/shared/data-access/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
@@ -49,8 +52,20 @@ export class SachbearbeitungAppPatternAdministrationLayoutComponent {
 
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private store = inject(Store);
-  stepsSig = computed(() =>
-    this.stepManager.getAllStepsWithStatus(this.viewSig().gesuchFormular),
-  );
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  stepsSig = computed(() =>
+    this.stepManager.getValidatedSteps(
+      this.stepsViewSig().steps,
+      this.viewSig().gesuchFormular,
+    ),
+  );
+  currentStepProgressSig = computed(() => {
+    const stepsFlow = this.stepsViewSig().stepsFlow;
+    return this.stepManager.getStepProgress(stepsFlow, this.step);
+  });
+  currentStepSig = computed(() => {
+    const steps = this.stepsSig();
+    return steps.find((step) => step.route === this.step?.route);
+  });
 }

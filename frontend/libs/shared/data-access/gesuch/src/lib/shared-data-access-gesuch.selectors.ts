@@ -2,6 +2,7 @@ import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
   Gesuchstatus,
   SharedModelGesuch,
@@ -10,13 +11,41 @@ import {
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
+  ABSCHLUSS,
+  AUSBILDUNG,
+  AUSZAHLUNG,
+  DOKUMENTE,
+  EINNAHMEN_KOSTEN,
+  ELTERN,
+  ELTERN_STEUER_STEPS,
+  FAMILIENSITUATION,
+  GESCHWISTER,
+  KINDER,
+  LEBENSLAUF,
+  PARTNER,
+  PERSON,
+  RETURN_TO_HOME,
   SPECIAL_VALIDATION_ERRORS,
+  SharedModelGesuchFormStep,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
+const baseSteps = [
+  PERSON,
+  AUSBILDUNG,
+  LEBENSLAUF,
+  FAMILIENSITUATION,
+  ELTERN,
+  GESCHWISTER,
+  PARTNER,
+  KINDER,
+  AUSZAHLUNG,
+  EINNAHMEN_KOSTEN,
+  DOKUMENTE,
+];
 const { selectRouteParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
@@ -73,13 +102,32 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   },
 );
 
-export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
+export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
-  (state) => {
+  selectSharedDataAccessConfigsView,
+  (state, config) => {
+    const sharedSteps = state.steuerdatenTabs.data
+      ? appendSteps(baseSteps, [
+          {
+            after: ELTERN,
+            steps: state.steuerdatenTabs.data?.map(
+              (typ) => ELTERN_STEUER_STEPS[typ],
+            ),
+          },
+        ])
+      : baseSteps;
+
+    const steps = getStepsByAppType(sharedSteps, config?.compileTimeConfig);
     return {
-      steuerdaten: state.gesuchFormular?.steuerdaten,
+      steps,
+      stepsFlow: [...steps, RETURN_TO_HOME],
     };
   },
+);
+
+export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
+  sharedDataAccessGesuchsFeature.selectGesuchsState,
+  (state) => state.steuerdatenTabs,
 );
 
 const setReadOnly = (
@@ -137,3 +185,45 @@ export const isGesuchFormularProp =
     if (!prop) return false;
     return formKeys.includes(prop);
   };
+
+type AdditionalSteps = {
+  after: SharedModelGesuchFormStep;
+  steps: SharedModelGesuchFormStep[];
+};
+/**
+ * Append additional steps after the given step
+ */
+const appendSteps = (
+  steps: SharedModelGesuchFormStep[],
+  additionalSteps: AdditionalSteps[],
+) => {
+  const afterMap = additionalSteps.reduce(
+    (acc, { after, steps }) => {
+      if (steps.length > 0) {
+        acc[after.route] = steps;
+      }
+      return acc;
+    },
+    {} as Record<string, SharedModelGesuchFormStep[]>,
+  );
+  return steps.reduce((acc, step) => {
+    if (afterMap[step.route]) {
+      return [...acc, step, ...afterMap[step.route]];
+    }
+    return [...acc, step];
+  }, [] as SharedModelGesuchFormStep[]);
+};
+
+function getStepsByAppType(
+  sharedSteps: SharedModelGesuchFormStep[],
+  compileTimeConfig?: CompileTimeConfig,
+) {
+  switch (compileTimeConfig?.appType) {
+    case 'gesuch-app':
+      return [...sharedSteps, ABSCHLUSS];
+    case 'sachbearbeitung-app':
+      return sharedSteps;
+    default:
+      return [];
+  }
+}
