@@ -1,7 +1,7 @@
 <!-- Table -->
 <div class="row g-4 mt-2">
   <p>
-    {{ 'shared.form.shared.protokoll.text' | translate }}
+    {{ 'sachbearbeitung-app.gesuch-form.protokoll.text' | translate }}
   </p>
 </div>
 <div class="shadow rounded-4 overflow-hidden mt-2">
@@ -14,7 +14,7 @@
     <!-- Datum -->
     <ng-container matColumnDef="datum">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'shared.form.shared.protokoll.table.datum' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.datum' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
         {{ protokoll.timestamp | date: 'dd.MM.YYYY' }}
@@ -24,7 +24,7 @@
     <!-- Status -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'shared.form.shared.protokoll.table.status' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.status' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
         {{ 'sachbearbeitung-app.cockpit.status.' + protokoll.status | translate }}
@@ -34,7 +34,7 @@
     <!-- User -->
     <ng-container matColumnDef="user">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'shared.form.shared.protokoll.table.user' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.user' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
         {{ protokoll.benutzer }}
@@ -44,7 +44,7 @@
     <!-- Kommentar -->
     <ng-container matColumnDef="kommentar">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'shared.form.shared.protokoll.table.kommentar' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.kommentar' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="w-100">
         {{ protokoll.kommentar }}

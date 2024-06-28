@@ -180,6 +180,12 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Il doit y avoir une année de formation publiée liée.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "L'année de formation liée n'est pas encore publiée.",
 
+  "sachbearbeitung-app.gesuch-form.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Date",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Statut",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Commentaire",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
