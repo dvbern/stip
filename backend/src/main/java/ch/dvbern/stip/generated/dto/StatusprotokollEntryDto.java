@@ -23,9 +23,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class StatusprotokollEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestamp;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus status;
+  private @Valid String benutzer;
+  private @Valid String kommentar;
 
   /**
-   * Datum vom wechsel zu status
+   * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
    **/
   public StatusprotokollEntryDto timestamp(java.time.LocalDateTime timestamp) {
     this.timestamp = timestamp;
@@ -61,6 +63,44 @@ public class StatusprotokollEntryDto  implements Serializable {
     this.status = status;
   }
 
+  /**
+   * Der Benutzer welcher den Statuswechsel ausgelöst hat
+   **/
+  public StatusprotokollEntryDto benutzer(String benutzer) {
+    this.benutzer = benutzer;
+    return this;
+  }
+
+  
+  @JsonProperty("benutzer")
+  public String getBenutzer() {
+    return benutzer;
+  }
+
+  @JsonProperty("benutzer")
+  public void setBenutzer(String benutzer) {
+    this.benutzer = benutzer;
+  }
+
+  /**
+   * Kommentar vom SB über die Statusänderung
+   **/
+  public StatusprotokollEntryDto kommentar(String kommentar) {
+    this.kommentar = kommentar;
+    return this;
+  }
+
+  
+  @JsonProperty("kommentar")
+  public String getKommentar() {
+    return kommentar;
+  }
+
+  @JsonProperty("kommentar")
+  public void setKommentar(String kommentar) {
+    this.kommentar = kommentar;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -72,12 +112,14 @@ public class StatusprotokollEntryDto  implements Serializable {
     }
     StatusprotokollEntryDto statusprotokollEntry = (StatusprotokollEntryDto) o;
     return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
-        Objects.equals(this.status, statusprotokollEntry.status);
+        Objects.equals(this.status, statusprotokollEntry.status) &&
+        Objects.equals(this.benutzer, statusprotokollEntry.benutzer) &&
+        Objects.equals(this.kommentar, statusprotokollEntry.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, status);
+    return Objects.hash(timestamp, status, benutzer, kommentar);
   }
 
   @Override
@@ -87,6 +129,8 @@ public class StatusprotokollEntryDto  implements Serializable {
     
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
+    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();
   }

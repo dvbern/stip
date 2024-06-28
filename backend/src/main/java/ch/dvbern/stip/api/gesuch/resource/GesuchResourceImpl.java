@@ -110,7 +110,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getStatusProtokoll(UUID gesuchId) {
-        final var statusprotokoll = gesuchHistoryService.getStatusprotokollForGesuch(gesuchId);
+        final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
         return Response.ok(statusprotokoll).build();
     }
 

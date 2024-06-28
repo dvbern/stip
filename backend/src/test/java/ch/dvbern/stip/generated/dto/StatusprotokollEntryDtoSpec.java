@@ -29,7 +29,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_TIMESTAMP,
-  StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_BENUTZER,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
 @JsonTypeName("StatusprotokollEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -39,6 +41,12 @@ public class StatusprotokollEntryDtoSpec {
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private GesuchstatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_BENUTZER = "benutzer";
+  private String benutzer;
+
+  public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  private String kommentar;
 
   public StatusprotokollEntryDtoSpec() {
   }
@@ -50,7 +58,7 @@ public class StatusprotokollEntryDtoSpec {
   }
 
    /**
-   * Datum vom wechsel zu status
+   * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
    * @return timestamp
   **/
   @jakarta.annotation.Nullable
@@ -94,6 +102,58 @@ public class StatusprotokollEntryDtoSpec {
     this.status = status;
   }
 
+
+  public StatusprotokollEntryDtoSpec benutzer(String benutzer) {
+    
+    this.benutzer = benutzer;
+    return this;
+  }
+
+   /**
+   * Der Benutzer welcher den Statuswechsel ausgelöst hat
+   * @return benutzer
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BENUTZER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getBenutzer() {
+    return benutzer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BENUTZER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBenutzer(String benutzer) {
+    this.benutzer = benutzer;
+  }
+
+
+  public StatusprotokollEntryDtoSpec kommentar(String kommentar) {
+    
+    this.kommentar = kommentar;
+    return this;
+  }
+
+   /**
+   * Kommentar vom SB über die Statusänderung
+   * @return kommentar
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getKommentar() {
+    return kommentar;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKommentar(String kommentar) {
+    this.kommentar = kommentar;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +164,14 @@ public class StatusprotokollEntryDtoSpec {
     }
     StatusprotokollEntryDtoSpec statusprotokollEntry = (StatusprotokollEntryDtoSpec) o;
     return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
-        Objects.equals(this.status, statusprotokollEntry.status);
+        Objects.equals(this.status, statusprotokollEntry.status) &&
+        Objects.equals(this.benutzer, statusprotokollEntry.benutzer) &&
+        Objects.equals(this.kommentar, statusprotokollEntry.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, status);
+    return Objects.hash(timestamp, status, benutzer, kommentar);
   }
 
   @Override
@@ -118,6 +180,8 @@ public class StatusprotokollEntryDtoSpec {
     sb.append("class StatusprotokollEntryDtoSpec {\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
+    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();
   }
