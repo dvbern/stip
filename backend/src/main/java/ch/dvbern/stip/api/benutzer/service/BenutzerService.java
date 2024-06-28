@@ -151,6 +151,10 @@ public class BenutzerService {
     public void deleteBenutzer(String benutzerId) {
         Benutzer benutzer = benutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
         benutzer.getRollen().clear();
+        Optional<SachbearbeiterZuordnungStammdaten> zuordnung = sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzer.getId());
+        if (zuordnung.isPresent()) {
+            sachbearbeiterZuordnungStammdatenRepository.delete(zuordnung.get());
+        }
         benutzerRepository.delete(benutzer);
     }
 }
