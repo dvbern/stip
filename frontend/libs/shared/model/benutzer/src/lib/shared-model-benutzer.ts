@@ -60,3 +60,37 @@ export const SharedModelUserAdminError = z.union([
 export type SharedModelUserAdminError = z.infer<
   typeof SharedModelUserAdminError
 >;
+
+export const SharedModelRoleRepresentation = z.object({
+  id: z.string().optional(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  scopeParamRequired: z.boolean().optional(),
+  composite: z.boolean().optional(),
+  composites: z.array(z.string()).optional(),
+  clientRole: z.boolean().optional(),
+  containerId: z.string().optional(),
+  attributes: z.array(z.string()).optional(),
+});
+export type SharedModelRoleRepresentation = z.infer<
+  typeof SharedModelRoleRepresentation
+>;
+
+export const SharedModelClientMappingsRepresentation = z.object({
+  id: z.string().optional(),
+  client: z.string().optional(),
+  mappings: z.array(SharedModelRoleRepresentation).optional(),
+});
+export type SharedModelClientMappingsRepresentation = z.infer<
+  typeof SharedModelClientMappingsRepresentation
+>;
+
+export const SharedModelModelMappingsRepresentation = z.object({
+  clientMappings: z
+    .map(z.string(), SharedModelClientMappingsRepresentation)
+    .optional(),
+  roleMappings: z.array(SharedModelRoleRepresentation).optional(),
+});
+export type SharedModelModelMappingsRepresentation = z.infer<
+  typeof SharedModelModelMappingsRepresentation
+>;

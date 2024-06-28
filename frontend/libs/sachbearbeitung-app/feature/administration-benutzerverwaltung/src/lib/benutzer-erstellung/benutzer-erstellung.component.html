@@ -48,7 +48,7 @@
   </h2>
   <div class="row g-4 mt-1">
     <mat-selection-list formControlName="roles" class="col-12 col-md-6 col-xl-4" [disableRipple]="true">
-      @for (role of benutzerverwaltungStore.availableRoles.data(); track role.id) {
+      @for (role of store.availableRoles.data(); track role.id) {
         <mat-list-option [value]="role" togglePosition="before">{{ role.name }}</mat-list-option>
       }
     </mat-selection-list>
@@ -57,7 +57,7 @@
     <dv-shared-ui-form-save
       class="mt-4"
       [disabled]="form.invalid"
-      [loading]="benutzerverwaltungStore.userCreated() | rdIsPending"
+      [loading]="store.userCreated() | rdIsPending"
     ></dv-shared-ui-form-save>
   }
 </form>

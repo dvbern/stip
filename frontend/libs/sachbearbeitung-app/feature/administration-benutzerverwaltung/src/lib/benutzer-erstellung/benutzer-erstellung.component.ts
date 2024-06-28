@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import {
@@ -44,8 +46,9 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 })
 export class BenutzerErstellungComponent {
   private formBuilder = inject(NonNullableFormBuilder);
+  idSig = input.required<string | undefined>({ alias: 'id' });
 
-  benutzerverwaltungStore = inject(BenutzerverwaltungStore);
+  store = inject(BenutzerverwaltungStore);
   form = this.formBuilder.group({
     name: [<string | null>null, [Validators.required]],
     vorname: [<string | null>null, [Validators.required]],
@@ -55,7 +58,32 @@ export class BenutzerErstellungComponent {
   isReadonly = signal(false);
 
   constructor() {
-    this.benutzerverwaltungStore.loadAvailableRoles$();
+    this.store.loadAvailableRoles$();
+
+    effect(
+      () => {
+        const id = this.idSig();
+
+        if (id) {
+          this.store.loadSbAppBenutzer$(id);
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(
+      () => {
+        const benutzer = this.store.benutzer().data;
+        if (benutzer) {
+          this.form.patchValue({
+            name: benutzer.lastName,
+            vorname: benutzer.firstName,
+            email: benutzer.email,
+          });
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   save() {
@@ -67,7 +95,7 @@ export class BenutzerErstellungComponent {
       'name',
       'vorname',
     ]);
-    this.benutzerverwaltungStore.registerUser$({
+    this.store.registerUser$({
       ...values,
       onAfterSave: () => {
         this.isReadonly.set(true);

@@ -5,7 +5,6 @@ import {
   CHILD_OPTION_BENUTZER_ERSTELLEN,
   OPTION_BENUTZERVERWALTUNG,
 } from '@dv/sachbearbeitung-app/model/administration';
-import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
 import { BenutzerErstellungComponent } from './benutzer-erstellung/benutzer-erstellung.component';
 import { BenutzerOverviewComponent } from './benutzer-overview/benutzer-overview.component';
@@ -30,7 +29,7 @@ export const sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes: Ro
         {
           data: { option: OPTION_BENUTZERVERWALTUNG },
           path: 'edit/:id',
-          loadComponent: () => SharedUiCommingSoonComponent,
+          component: BenutzerErstellungComponent,
         },
         {
           data: { option: OPTION_BENUTZERVERWALTUNG },

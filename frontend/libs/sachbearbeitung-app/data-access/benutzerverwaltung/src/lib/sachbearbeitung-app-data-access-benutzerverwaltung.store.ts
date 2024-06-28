@@ -16,6 +16,7 @@ import {
   switchMap,
   tap,
   throwIfEmpty,
+  withLatestFrom,
 } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
@@ -25,6 +26,7 @@ import {
   SharedModelBenutzerApi,
   SharedModelBenutzerList,
   SharedModelBenutzerRole,
+  SharedModelModelMappingsRepresentation,
   SharedModelRole,
   SharedModelRoleList,
   SharedModelUserAdminError,
@@ -49,12 +51,14 @@ type HttpResponseWithLocation = HttpResponse<unknown> & {
 };
 type BenutzerverwaltungState = {
   benutzers: CachedRemoteData<SharedModelBenutzer[]>;
+  benutzer: CachedRemoteData<SharedModelBenutzerApi>;
   availableRoles: CachedRemoteData<SharedModelRoleList>;
   userCreated: RemoteData<SharedModelBenutzerApi>;
 };
 
 const initialState: BenutzerverwaltungState = {
   benutzers: initial(),
+  benutzer: initial(),
   availableRoles: initial(),
   userCreated: initial(),
 };
@@ -115,6 +119,31 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
+  loadSbAppBenutzer$ = rxMethod<string>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          benutzer: cachedPending(state.benutzer),
+        }));
+      }),
+      switchMap((id) =>
+        this.http
+          .get<SharedModelBenutzerApi>(
+            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${id}`,
+          )
+          .pipe(
+            withLatestFrom(this.getUserRoleMappings$(id)),
+            map(([benutzer, roles]) => {
+              console.log(benutzer, roles);
+
+              return SharedModelBenutzerApi.parse(benutzer);
+            }),
+            handleApiResponse((benutzer) => patchState(this, { benutzer })),
+          ),
+      ),
+    ),
+  );
+
   deleteBenutzer$ = rxMethod<string>(
     tap(() =>
       this.globalNotificationStore.createNotification({
@@ -167,7 +196,7 @@ export class BenutzerverwaltungStore extends signalStore(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
           switchMap((response) => this.loadUser$(response)),
-          switchMap((user) => this.asignRoles(user, roles)),
+          switchMap((user) => this.assignRoles(user, roles)),
           switchMap((user) =>
             this.notifyUser$(user).pipe(
               handleApiResponse(
@@ -240,7 +269,18 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private asignRoles(
+  private getUserRoleMappings$(userId: string) {
+    return this.http
+      .get<SharedModelModelMappingsRepresentation>(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}/role-mappings`,
+        {
+          context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(this.interceptError('roleMapping'));
+  }
+
+  private assignRoles(
     user: SharedModelBenutzerApi,
     roles: { id: string; name: string }[],
   ) {
