@@ -83,6 +83,12 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.STIPENDIENANSPRUCH, Gesuchstatus.STIPENDIENANSPRUCH);
 
+        // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
+        config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
+        config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
+        config.configure(Gesuchstatus.STIPENDIENANSPRUCH);
+        config.configure(Gesuchstatus.GESUCH_ABGELEHNT);
+
         for (final var status : Gesuchstatus.values()) {
             var state = config.getRepresentation(status);
             if (state == null) {

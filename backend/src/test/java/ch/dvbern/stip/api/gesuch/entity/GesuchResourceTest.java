@@ -542,7 +542,6 @@ class GesuchResourceTest {
     @TestAsAdmin
     @Order(25)
     void testDeleteGesuch() {
-        // TODO KSTIP-1162: Test as SB? Or can SBs not delete Gesuche?
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
