@@ -13,7 +13,6 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
-  PROTOKOLL,
 } from '@dv/shared/model/gesuch-form';
 
 export const gesuchAppFeatureGesuchFormRoutes: Route[] = [

@@ -16,7 +16,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { fromBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
   selector: 'lib-sachbearbeitung-app-feature-gesuch-form-statusprotokoll',

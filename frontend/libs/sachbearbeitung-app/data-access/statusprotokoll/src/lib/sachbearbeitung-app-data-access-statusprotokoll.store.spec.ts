@@ -1,6 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
+import { initial } from '@dv/shared/util/remote-data';
+
 import { StatusprotokollStore } from './sachbearbeitung-app-data-access-statusprotokoll.store';
 
 describe('StatusprotokollStore', () => {
@@ -18,10 +20,6 @@ describe('StatusprotokollStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.statusprotokoll()).toEqual({
-      data: null,
-      loading: false,
-      error: null,
-    });
+    expect(store.cachedStatusprotokoll()).toEqual(initial());
   });
 });
