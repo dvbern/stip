@@ -9,14 +9,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_PERSONS_AHV_NUMBER_UNIQUENESS_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_STEUERDATEN_ENTITY_REQUIRED_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = SteuerdatenTabsRequiredConstraintValidator.class)
 @Documented
 public @interface SteuerdatenTabsRequiredConstraint {
-    String message() default VALIDATION_PERSONS_AHV_NUMBER_UNIQUENESS_MESSAGE;
+    String message() default VALIDATION_FAMILIENSITUATION_STEUERDATEN_ENTITY_REQUIRED_MESSAGE;
 
     Class<?>[] groups() default {};
 
