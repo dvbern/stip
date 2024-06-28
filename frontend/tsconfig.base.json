@@ -68,6 +68,7 @@
       "@dv/shared/event/gesuch-form-lebenslauf": ["libs/shared/event/gesuch-form-lebenslauf/src/index.ts"],
       "@dv/shared/event/gesuch-form-partner": ["libs/shared/event/gesuch-form-partner/src/index.ts"],
       "@dv/shared/event/gesuch-form-person": ["libs/shared/event/gesuch-form-person/src/index.ts"],
+      "@dv/shared/event/gesuch-form-protokoll": ["libs/shared/event/gesuch-form-protokoll/src/index.ts"],
       "@dv/shared/feature/download": ["libs/shared/feature/download/src/index.ts"],
       "@dv/shared/feature/gesuch-dokumente": ["libs/shared/feature/gesuch-dokumente/src/index.ts"],
       "@dv/shared/feature/gesuch-form-auszahlungen": ["libs/shared/feature/gesuch-form-auszahlungen/src/index.ts"],

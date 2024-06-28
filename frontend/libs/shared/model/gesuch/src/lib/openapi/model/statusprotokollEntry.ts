@@ -16,10 +16,18 @@ import { Gesuchstatus } from './gesuchstatus';
  */
 export interface StatusprotokollEntry { 
     /**
-     * Datum vom wechsel zu status
+     * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
      */
     timestamp?: string;
     status?: Gesuchstatus;
+    /**
+     * Der Benutzer welcher den Statuswechsel ausgelöst hat
+     */
+    benutzer?: string;
+    /**
+     * Kommentar vom SB über die Statusänderung
+     */
+    kommentar?: string;
 }
 
 

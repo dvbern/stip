@@ -12,9 +12,11 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
+import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
@@ -38,28 +40,21 @@ export class SachbearbeitungAppFeatureGesuchFormStatusprotokollComponent
 {
   displayedColumns = ['datum', 'status', 'user', 'kommentar'];
   statusprotokollStore = inject(StatusprotokollStore);
+  store = inject(Store);
 
-  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
+  gesuchIdSig = input.required<string>({ alias: 'id' });
 
   statusprotokollSig = computed(() => {
     const protokoll =
       this.statusprotokollStore.cachedStatusprotokollListViewSig();
-    const datasource = new MatTableDataSource(
-      protokoll?.map((p) => {
-        return {
-          datum: p.timestamp,
-          status: p.status,
-          user: 'tbd',
-          kommentar: 'tbd',
-        };
-      }) ?? [],
-    );
+    const datasource = new MatTableDataSource(protokoll);
     datasource.sort = this.sortSig() ?? null;
     return datasource;
   });
 
   ngOnInit() {
     const gesuchId = this.gesuchIdSig();
+    this.store.dispatch(SharedEventGesuchFormProtokoll.init());
     this.statusprotokollStore.loadCachedStatusprotokoll$({
       gesuchId,
     });

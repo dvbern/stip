@@ -200,5 +200,6 @@
   "sachbearbeitung-app.cockpit.status.KOMPLETT_EINGEREICHT": "Eingereicht",
   "sachbearbeitung-app.cockpit.status.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
 
-  "sachbearbeitung-app.gesuch-form.title": "Gesuch"
+  "sachbearbeitung-app.gesuch-form.title": "Gesuch",
+  "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch"
 }

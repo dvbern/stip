@@ -144,7 +144,7 @@
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
 
   "shared.form.shared.protokoll.title": "Protocole",
-  "shared.form.shared.protokoll.table.caption":"Voici un aperçu de toutes les actions de cette demande.",
+  "shared.form.shared.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
   "shared.form.shared.protokoll.table.datum": "Date",
   "shared.form.shared.protokoll.table.status": "Statut",
   "shared.form.shared.protokoll.table.user": "User",

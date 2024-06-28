@@ -12,7 +12,7 @@ export const sachbearbeitungAppFeatureGesuchFormStatusprotokollRoutes: Route[] =
       providers: [{ provide: StatusprotokollStore }],
       children: [
         {
-          path: ':gesuchId',
+          path: ':id',
           component:
             SachbearbeitungAppFeatureGesuchFormStatusprotokollComponent,
         },
