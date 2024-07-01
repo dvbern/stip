@@ -778,7 +778,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);;
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -795,6 +795,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
+        tranche.getGesuchFormular().setPartner(null);
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
@@ -823,6 +824,7 @@ class GesuchServiceTest {
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
+        tranche.getGesuchFormular().setPartner(null);
         tranche.getGesuch().setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
                 .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
