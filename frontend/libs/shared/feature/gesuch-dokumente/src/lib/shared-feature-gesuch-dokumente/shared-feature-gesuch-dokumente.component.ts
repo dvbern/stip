@@ -12,7 +12,10 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import {
+  selectSharedDataAccessGesuchStepsView,
+  selectSharedDataAccessGesuchsView,
+} from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
@@ -35,6 +38,7 @@ import {
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
+import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 
 function getFormStep(
   dokumentTyp: DokumentTyp | undefined,
@@ -43,7 +47,6 @@ function getFormStep(
     route: 'unknown',
     translationKey: 'unknown',
     titleTranslationKey: 'unknown',
-    currentStepNumber: 0,
     iconSymbolName: 'unknown',
   };
 
@@ -101,6 +104,7 @@ function getFormStep(
 })
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
+  private stepManager = inject(SharedUtilGesuchFormStepManagerService);
 
   displayedColumns = [
     'expander',
@@ -112,6 +116,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
   dokumenteDataSourceSig = computed(() => {
     const documents = this.dokumenteSig().dokumentes;
@@ -119,6 +124,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     const gesuchId = this.gesuchViewSig().gesuchId;
     const readonly = this.gesuchViewSig().readonly;
     const allowTypes = this.gesuchViewSig().allowTypes;
+    const stepsFlow = this.stepViewSig().stepsFlow;
 
     if (!gesuchId || !allowTypes) {
       return new MatTableDataSource<TableDocument>([]);
@@ -172,13 +178,14 @@ export class SharedFeatureGesuchDokumenteComponent {
     );
 
     return new MatTableDataSource<TableDocument>(
-      [...uploadedDocuments, ...missingDocuments].sort((a, b) => {
-        if (a.formStep.currentStepNumber === b.formStep.currentStepNumber) {
-          return a.dokumentTyp.localeCompare(b.dokumentTyp);
-        }
-
-        return a.formStep.currentStepNumber - b.formStep.currentStepNumber;
-      }),
+      [...uploadedDocuments, ...missingDocuments].sort((a, b) =>
+        this.stepManager.compareStepsByFlow(
+          stepsFlow,
+          a.formStep,
+          b.formStep,
+          () => a.dokumentTyp.localeCompare(b.dokumentTyp),
+        ),
+      ),
     );
   });
 

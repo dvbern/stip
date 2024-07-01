@@ -42,6 +42,12 @@ export class SharedPatternGesuchStepNavComponent {
   stepsViewSig = computed(() =>
     this.stepsSig()?.map((step) => ({
       ...step,
+      routes: [
+        '/',
+        'gesuch',
+        ...step.route.split('/'),
+        this.viewSig().cachedGesuchId,
+      ],
       isActive: this.route.isActive(`gesuch/${step.route}`, {
         paths: 'subset',
         queryParams: 'ignored',

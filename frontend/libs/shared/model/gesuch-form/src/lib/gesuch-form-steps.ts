@@ -1,6 +1,7 @@
 import {
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 
@@ -10,108 +11,132 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
-export const PERSON: SharedModelGesuchFormStep = {
+export const PERSON = {
   route: 'person',
   translationKey: 'shared.person.title',
   titleTranslationKey: 'shared.person.title',
-  currentStepNumber: 1,
   iconSymbolName: 'person',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const AUSBILDUNG: SharedModelGesuchFormStep = {
   route: 'education',
   translationKey: 'shared.education.title',
   titleTranslationKey: 'shared.education.title',
-  currentStepNumber: 2,
   iconSymbolName: 'school',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const LEBENSLAUF: SharedModelGesuchFormStep = {
   route: 'lebenslauf',
   translationKey: 'shared.lebenslauf.title',
   titleTranslationKey: 'shared.lebenslauf.title',
-  currentStepNumber: 3,
   iconSymbolName: 'news',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const FAMILIENSITUATION: SharedModelGesuchFormStep = {
   route: 'familiensituation',
   translationKey: 'shared.familiensituation.title',
   titleTranslationKey: 'shared.familiensituation.title',
-  currentStepNumber: 4,
   iconSymbolName: 'family_restroom',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const ELTERN: SharedModelGesuchFormStep = {
   route: 'eltern',
   translationKey: 'shared.eltern.title',
   titleTranslationKey: 'shared.eltern.title',
-  currentStepNumber: 5,
   iconSymbolName: 'escalator_warning',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const GESCHWISTER: SharedModelGesuchFormStep = {
   route: 'geschwister',
   translationKey: 'shared.geschwister.title',
   titleTranslationKey: 'shared.geschwister.title',
-  currentStepNumber: 6,
   iconSymbolName: 'group',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const PARTNER: SharedModelGesuchFormStep = {
   route: 'partner',
   translationKey: 'shared.partner.title',
   titleTranslationKey: 'shared.partner.page.title',
-  currentStepNumber: 7,
   iconSymbolName: 'favorite',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const KINDER: SharedModelGesuchFormStep = {
   route: 'kinder',
   translationKey: 'shared.kinder.title',
   titleTranslationKey: 'shared.kinder.title',
-  currentStepNumber: 8,
   iconSymbolName: 'emoji_people',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const AUSZAHLUNG: SharedModelGesuchFormStep = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
   titleTranslationKey: 'shared.auszahlung.title',
-  currentStepNumber: 9,
   iconSymbolName: 'payments',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const EINNAHMEN_KOSTEN: SharedModelGesuchFormStep = {
   route: 'einnahmenkosten',
   translationKey: 'shared.einnahmenkosten.title',
   titleTranslationKey: 'shared.einnahmenkosten.page.title',
-  currentStepNumber: 10,
   iconSymbolName: 'call_missed_outgoing',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const DOKUMENTE: SharedModelGesuchFormStep = {
   route: 'dokumente',
   translationKey: 'shared.dokumente.title',
   titleTranslationKey: 'shared.dokumente.title',
-  currentStepNumber: 11,
   iconSymbolName: 'description',
-};
+} satisfies SharedModelGesuchFormStep;
 
 export const ABSCHLUSS: SharedModelGesuchFormStep = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
   titleTranslationKey: 'shared.abschluss.title',
-  currentStepNumber: 12,
   iconSymbolName: 'check_circle',
-};
+} satisfies SharedModelGesuchFormStep;
+
+export const RETURN_TO_HOME: SharedModelGesuchFormStep = {
+  route: '/',
+  translationKey: '',
+  titleTranslationKey: '',
+  iconSymbolName: '',
+} satisfies SharedModelGesuchFormStep;
 
 export const PROTOKOLL: SharedModelGesuchFormStep = {
   route: 'protokoll',
   translationKey: 'shared.protokoll.title',
   titleTranslationKey: 'shared.protokoll.title',
-  currentStepNumber: 13,
   iconSymbolName: 'history',
+} satisfies SharedModelGesuchFormStep;
+
+// Dynamic steps
+export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
+const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
+  FAMILIE: 'people',
+  MUTTER: 'woman',
+  VATER: 'man',
+};
+const createElternSteuerStep = (
+  steuerdatenTyp: SteuerdatenTyp,
+): SharedModelGesuchFormStep & { type: SteuerdatenTyp } => {
+  return {
+    type: steuerdatenTyp,
+    route: `eltern-steuerdaten/${steuerdatenTyp}`,
+    translationKey: `shared.eltern-steuer.title.${steuerdatenTyp}`,
+    titleTranslationKey: `shared.eltern-steuer.title.${steuerdatenTyp}`,
+    iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
+  };
+};
+export const ELTERN_STEUER_FAMILIE = createElternSteuerStep('FAMILIE');
+export const ELTERN_STEUER_MUTTER = createElternSteuerStep('MUTTER');
+export const ELTERN_STEUER_VATER = createElternSteuerStep('VATER');
+export const ELTERN_STEUER_STEPS: Record<
+  SteuerdatenTyp,
+  SharedModelGesuchFormStep
+> = {
+  FAMILIE: ELTERN_STEUER_FAMILIE,
+  MUTTER: ELTERN_STEUER_MUTTER,
+  VATER: ELTERN_STEUER_VATER,
 };
 
 export const gesuchFormSteps = {
@@ -129,6 +154,11 @@ export const gesuchFormSteps = {
   ABSCHLUSS,
   PROTOKOLL,
 };
+
+export const findStepIndex = (
+  step: SharedModelGesuchFormStep,
+  steps: SharedModelGesuchFormStep[],
+) => steps.findIndex((s) => s.route === step.route);
 
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
@@ -166,13 +196,20 @@ export const isStepValid = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
   invalidProps?: StepValidation,
-) => {
+): StepState | undefined => {
   const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
     [PERSON.route]: 'personInAusbildung',
     [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
     [FAMILIENSITUATION.route]: 'familiensituation',
     [ELTERN.route]: 'elterns',
+    ...formular?.steuerdaten?.reduce(
+      (steps, { steuerdatenTyp }) => ({
+        ...steps,
+        [ELTERN_STEUER_STEPS[steuerdatenTyp].route]: 'steuerdatenTabs',
+      }),
+      {} as Record<string, SharedModelGesuchFormularProps>,
+    ),
     [GESCHWISTER.route]: 'geschwisters',
     [PARTNER.route]: 'partner',
     [KINDER.route]: 'kinds',
@@ -182,6 +219,16 @@ export const isStepValid = (
   };
 
   const field = stepFieldMap[step.route];
+
+  if (field === 'steuerdatenTabs') {
+    const [type] =
+      Object.entries(ELTERN_STEUER_STEPS).find(
+        ([, s]) => s.route === step.route,
+      ) ?? [];
+    return formular?.steuerdaten?.find((s) => s.steuerdatenTyp === type)
+      ? 'VALID'
+      : undefined;
+  }
 
   if (field === 'dokuments') {
     return toDocumentStepState(invalidProps);

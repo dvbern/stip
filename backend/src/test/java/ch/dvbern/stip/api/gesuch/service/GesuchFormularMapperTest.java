@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
@@ -31,6 +33,10 @@ import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -39,6 +45,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import org.junit.jupiter.api.Test;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
@@ -87,6 +94,7 @@ class GesuchFormularMapperTest {
         elterns.add(mutter);
 
         final var familiensituation = new FamiliensituationUpdateDto();
+        familiensituation.setElternVerheiratetZusammen(true);
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setElterns(elterns);
@@ -140,6 +148,7 @@ class GesuchFormularMapperTest {
     void resetEinnahmenKostenRemovesAlimenteTest() {
         // Arrange
         final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(false);
         updateFamsit.setGerichtlicheAlimentenregelung(true);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
@@ -302,21 +311,6 @@ class GesuchFormularMapperTest {
         assertThat(update.getPartner(), is(nullValue()));
     }
 
-    GesuchFormularMapper createMapper() {
-        return new GesuchFormularMapperImpl(
-            new PersonInAusbildungMapperImpl(),
-            new FamiliensituationMapperImpl(),
-            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
-            new LebenslaufItemMapperImpl(new DateMapperImpl()),
-            new PartnerMapperImpl(),
-            new AuszahlungMapperImpl(),
-            new GeschwisterMapperImpl(),
-            new ElternMapperImpl(),
-            new KindMapperImpl(),
-            new EinnahmenKostenMapperImpl()
-        );
-    }
-
     @Test
     void calculateSteuernKantonGemeindeTest() {
         GesuchFormular gesuchFormular =
@@ -435,7 +429,128 @@ class GesuchFormularMapperTest {
         assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
         GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-        
+
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void resetSteuerdatenDoesntClearTabTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(true);
+
+        final var updateTab = new SteuerdatenUpdateDto();
+        updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        // This needs to be this verbose as List.of creates an immutable list
+        // This also needs to be a mutable list since List.removeAll(...)
+        // will throw an exception even if no items are to be removed
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
+            add(updateTab);
+        }};
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setSteuerdaten(updateSteuerdaten);
+
+        final var mapper = createMapper();
+
+        // Act
+        final var targetFormular =
+            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+
+        // Assert
+        assertThat(targetFormular.getSteuerdaten().size(), is(1));
+        assertThat(
+            targetFormular.getSteuerdaten().stream().findFirst().get().getSteuerdatenTyp(),
+            is(SteuerdatenTyp.FAMILIE)
+        );
+    }
+
+    @Test
+    void resetSteuerdatenClearsFamilieTabTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(true);
+
+        final var updateTab = new SteuerdatenUpdateDto();
+        updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        // This needs to be this verbose as List.of creates an immutable list
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
+            add(updateTab);
+        }};
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setSteuerdaten(updateSteuerdaten);
+
+        final var mapper = createMapper();
+
+        // Init target
+        var targetFormular =
+            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+
+        // Rearrange
+        updateFamsit.setElternVerheiratetZusammen(false);
+        updateFamsit.setGerichtlicheAlimentenregelung(true);
+        updateFamsit.setWerZahltAlimente(Elternschaftsteilung.VATER);
+
+        // Act
+        targetFormular = mapper.partialUpdate(updateFormular, targetFormular);
+
+        // Assert
+        assertThat(targetFormular.getSteuerdaten().size(), is(0));
+    }
+
+    @Test
+    void resetSteuerdatenAfterUpdateClearsSaeuleValues() {
+        // Arrange
+        final var formular = new GesuchFormular()
+            .setSteuerdaten(Set.of(
+                new Steuerdaten()
+                    .setIsArbeitsverhaeltnisSelbstaendig(true)
+                    .setSaeule2(1000)
+                    .setSaeule3a(1000)
+            ));
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.resetSteuerdatenAfterUpdate(formular);
+
+        // Assert
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(1000));
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(1000));
+
+        // Rearrange
+        formular.getSteuerdaten().stream().findFirst().get().setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        // Act
+        mapper.resetSteuerdatenAfterUpdate(formular);
+
+        // Assert
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(nullValue()));
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(nullValue()));
+    }
+
+    GesuchFormularMapper createMapper() {
+        final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
+            new PersonInAusbildungMapperImpl(),
+            new FamiliensituationMapperImpl(),
+            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            new LebenslaufItemMapperImpl(new DateMapperImpl()),
+            new PartnerMapperImpl(),
+            new AuszahlungMapperImpl(),
+            new GeschwisterMapperImpl(),
+            new ElternMapperImpl(),
+            new KindMapperImpl(),
+            new EinnahmenKostenMapperImpl(),
+            new SteuerdatenMapperImpl()
+        );
+
+        // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
+        mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
+        mapper.familiensituationMapper = new FamiliensituationMapperImpl();
+
+        return mapper;
     }
 }

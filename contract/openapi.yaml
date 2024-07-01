@@ -992,9 +992,9 @@ paths:
           content:
             application/json:
               schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/StatusprotokollEntry'
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusprotokollEntry'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1472,6 +1472,12 @@ components:
         - AUFGELOESTE_PARTNERSCHAFT
         - VERWITWET
       type: string
+    SteuerdatenTyp:
+      enum:
+        - FAMILIE
+        - VATER
+        - MUTTER
+      type: string
     Adresse:
       required:
         - land
@@ -1841,7 +1847,6 @@ components:
         - id
         - aenderungsdatum
         - gesuchTrancheToWorkWith
-        - gesuchTrancheToWorkWith
       type: object
       properties:
         fall:
@@ -2140,6 +2145,14 @@ components:
             $ref: '#/components/schemas/Kind'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKosten'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/Steuerdaten'
+        steuerdatenTabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenTyp'
     PersonInAusbildungUpdate:
       required:
         - adresse
@@ -2265,6 +2278,10 @@ components:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenUpdate'
     FileUpload:
       format: binary
       type: string
@@ -2939,6 +2956,67 @@ components:
         kantonskuerzel:
           description: ''
           type: string
+    SteuerdatenUpdate:
+      title: Root Type for Steuerdaten
+      description: ''
+      required:
+        - steuernStaat
+        - steuernBund
+        - fahrkosten
+        - verpflegung
+        - steuerjahr
+        - veranlagungscode
+        - totalEinkuenfte
+        - eigenmietwert
+        - isArbeitsverhaeltnisSelbstaendig
+        - kinderalimente
+        - ergaenzungsleistungen
+        - vermoegen
+        - steuerdatenTyp
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        steuerdatenTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        steuernStaat:
+          type: integer
+        steuernBund:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        steuerjahr:
+          type: integer
+        veranlagungscode:
+          type: integer
+        totalEinkuenfte:
+          type: integer
+        eigenmietwert:
+          type: integer
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
+        saeule3a:
+          type: integer
+        saeule2:
+          type: integer
+        kinderalimente:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        vermoegen:
+          type: integer
+    Steuerdaten:
+      title: Root Type for Steuerdaten
+      description: ''
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SteuerdatenUpdate'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object

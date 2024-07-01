@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'gesuch-app-pattern-step-head-mobile',
+  displayName: 'shared-feature-gesuch-form-eltern-steuerdaten',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/gesuch-app/pattern/step-head-mobile',
+    '../../../../coverage/libs/shared/feature/gesuch-form-eltern-steuerdaten',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

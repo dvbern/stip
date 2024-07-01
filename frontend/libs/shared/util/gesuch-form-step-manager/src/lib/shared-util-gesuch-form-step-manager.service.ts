@@ -1,104 +1,95 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
-  ABSCHLUSS,
-  AUSBILDUNG,
-  AUSZAHLUNG,
-  DOKUMENTE,
-  EINNAHMEN_KOSTEN,
-  ELTERN,
-  FAMILIENSITUATION,
-  GESCHWISTER,
   GesuchFormStepView,
-  KINDER,
-  LEBENSLAUF,
-  PARTNER,
-  PERSON,
-  PROTOKOLL,
+  RETURN_TO_HOME,
   SharedModelGesuchFormStep,
+  SharedModelGesuchFormStepProgress,
   StepValidation,
+  findStepIndex,
   isStepDisabled,
   isStepValid,
 } from '@dv/shared/model/gesuch-form';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
-
-const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
-  route: '/',
-  translationKey: '',
-  titleTranslationKey: '',
-  currentStepNumber: Number.MAX_SAFE_INTEGER,
-  iconSymbolName: '',
-};
-
-const BaseSteps = [
-  PERSON,
-  AUSBILDUNG,
-  LEBENSLAUF,
-  FAMILIENSITUATION,
-  ELTERN,
-  GESCHWISTER,
-  PARTNER,
-  KINDER,
-  AUSZAHLUNG,
-  EINNAHMEN_KOSTEN,
-  DOKUMENTE,
-];
-
-const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
-  'gesuch-app': [...BaseSteps, ABSCHLUSS, RETURN_TO_COCKPIT],
-  'sachbearbeitung-app': [...BaseSteps, PROTOKOLL, RETURN_TO_COCKPIT],
-};
-
-const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
-  'gesuch-app': [...BaseSteps, ABSCHLUSS],
-  'sachbearbeitung-app': [...BaseSteps, PROTOKOLL],
-};
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedUtilGesuchFormStepManagerService {
-  private compiletimeConfig = inject(SharedModelCompileTimeConfig);
+  /**
+   * Returns the progress of the current step compared to the total steps
+   */
+  getStepProgress(
+    steps: SharedModelGesuchFormStep[],
+    step?: SharedModelGesuchFormStep,
+  ): SharedModelGesuchFormStepProgress {
+    if (!step) {
+      return {
+        step: undefined,
+        total: steps.length,
+        percentage: undefined,
+      };
+    }
+    const stepIndex = findStepIndex(step, steps);
+    return {
+      step: stepIndex + 1,
+      total: steps.length,
+      percentage: ((stepIndex + 1) / steps.length) * 100,
+    };
+  }
+
   /**
    * Returns all steps for the current app type
    *
    * Adds valid and disabled properties to the steps depending on the formular state
    */
-  getAllStepsWithStatus(
+  getValidatedSteps(
+    steps: SharedModelGesuchFormStep[],
     gesuchFormular: SharedModelGesuchFormular | null,
     invalidProps?: StepValidation,
   ): GesuchFormStepView[] {
-    return steps[this.compiletimeConfig.appType].map((step) => {
-      return {
-        ...step,
-        status: isStepValid(step, gesuchFormular, invalidProps),
-        disabled: isStepDisabled(step, gesuchFormular),
-      };
-    });
-  }
-
-  /**
-   * Returns the total number of steps
-   */
-  getTotalSteps(): number {
-    return steps[this.compiletimeConfig.appType].length;
+    return steps.map((step, index) => ({
+      ...step,
+      nextStep: steps[index + 1],
+      status: isStepValid(step, gesuchFormular, invalidProps),
+      disabled: isStepDisabled(step, gesuchFormular),
+    }));
   }
 
   /**
    * Returns the next step depending on the origin step
    */
-  getNext(origin?: SharedModelGesuchFormStep): SharedModelGesuchFormStep {
-    const steps = [...StepFlow[this.compiletimeConfig.appType]].sort(
-      (s1, s2) => s1.currentStepNumber - s2.currentStepNumber,
-    );
-    const currentIndex = steps.findIndex(
-      (step) => step.currentStepNumber === origin?.currentStepNumber,
-    );
-    if (currentIndex === -1 || !isDefined(steps[currentIndex + 1])) {
-      throw new Error('Step not defined');
+  getNextStepOf(
+    stepsFlow: SharedModelGesuchFormStep[],
+    step: SharedModelGesuchFormStep,
+  ): SharedModelGesuchFormStep {
+    const currentIndex = findStepIndex(step, stepsFlow);
+    if (currentIndex === -1 || !stepsFlow[currentIndex + 1]) {
+      return RETURN_TO_HOME;
     }
-    return steps[currentIndex + 1];
+    return stepsFlow[currentIndex + 1];
+  }
+
+  /**
+   * Compares two steps by their position in the flow
+   */
+  compareStepsByFlow(
+    stepsFlow: SharedModelGesuchFormStep[],
+    a: SharedModelGesuchFormStep,
+    b: SharedModelGesuchFormStep,
+    onEqual?: (
+      a: SharedModelGesuchFormStep,
+      b: SharedModelGesuchFormStep,
+    ) => number,
+  ) {
+    const aIndex = findStepIndex(a, stepsFlow);
+    const bIndex = findStepIndex(b, stepsFlow);
+    if (aIndex === -1 || bIndex === -1) {
+      return 1;
+    }
+    if (aIndex === bIndex) {
+      return onEqual?.(a, b) ?? 0;
+    }
+    return aIndex - bIndex;
   }
 }

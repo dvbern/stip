@@ -39,22 +39,19 @@
     <div class="d-none d-lg-block border-end bg-white">
       <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
     </div>
-    @if (step) {
+    @if (currentStepSig(); as step) {
       <div class="container mb-5 pt-lg-4 px-lg-4">
         <!-- step header (mobile) -->
         <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
-          <dv-shared-ui-progress-bar
-            [current]="step.currentStepNumber"
-            [total]="stepManager.getTotalSteps()"
-          ></dv-shared-ui-progress-bar>
+          <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
           <div class="text-end">
             <h5 class="step-title">
               {{ step.translationKey | translate }}
             </h5>
-            @if (stepManager.getNext(step).translationKey) {
+            @if (step.nextStep?.translationKey; as nextStepKey) {
               <p class="fst-italic mb-0">
                 {{ 'shared.form.next' | translate }}:
-                {{ stepManager.getNext(step).translationKey | translate }}
+                {{ nextStepKey | translate }}
               </p>
             }
           </div>

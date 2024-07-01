@@ -13,6 +13,7 @@ describe('SharedUiProgressBarComponent', () => {
 
     fixture = TestBed.createComponent(SharedUiProgressBarComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('currentSig', { total: 12 });
     fixture.detectChanges();
   });
 

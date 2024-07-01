@@ -39,10 +39,12 @@ import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -123,6 +125,10 @@ import org.hibernate.envers.Audited;
 @DocumentsRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class
 })
+@SteuerdatenTabsRequiredConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    SteuerdatenPageValidation.class
+}, property = "steuerdatenTabs")
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity
@@ -201,4 +207,9 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
     private @Valid GesuchTranche tranche;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @HasPageValidation(SteuerdatenPageValidation.class)
+    private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
 }

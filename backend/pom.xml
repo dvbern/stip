@@ -614,7 +614,8 @@
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
                     LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
-                    Bildungsstufe=ch.dvbern.stip.api.bildungsart.type.Bildungsstufe
+                    Bildungsstufe=ch.dvbern.stip.api.bildungsart.type.Bildungsstufe,
+                    SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

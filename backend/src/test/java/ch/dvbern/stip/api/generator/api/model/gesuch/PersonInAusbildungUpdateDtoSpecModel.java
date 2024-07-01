@@ -33,7 +33,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setTelefonnummer(faker.phoneNumber().cellPhone());
             model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1980, 1, 1), LocalDate.of(2000, 1, 1)));
             model.setHeimatort(faker.address().cityName());
-            model.setZivilstand(TestUtil.getRandomElementFromArray(ZivilstandDtoSpec.values()));
+            model.setZivilstand(ZivilstandDtoSpec.LEDIG);
             model.setSozialhilfebeitraege(true);
             model.setVormundschaft(false);
             model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");

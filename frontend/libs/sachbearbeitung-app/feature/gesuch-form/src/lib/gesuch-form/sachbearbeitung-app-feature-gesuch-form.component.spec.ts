@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { initial } from '@dv/shared/util/remote-data';
 
 import { SachbearbeitungAppFeatureGesuchFormComponent } from './sachbearbeitung-app-feature-gesuch-form.component';
 
@@ -21,6 +22,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
                 gesuchId: null,
                 gesuchFormular: null,
               },
+              steuerdatenTabs: initial(),
             },
             globalNotifications: { globalNotificationsById: {} },
             configs: {},

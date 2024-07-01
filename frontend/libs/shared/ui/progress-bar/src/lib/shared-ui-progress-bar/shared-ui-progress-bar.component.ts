@@ -1,26 +1,51 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
-  Input,
-  OnChanges,
+  ElementRef,
+  Injector,
+  OnInit,
+  Renderer2,
+  effect,
+  inject,
+  input,
+  runInInjectionContext,
 } from '@angular/core';
+
+import { SharedModelGesuchFormStepProgress } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-shared-ui-progress-bar',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './shared-ui-progress-bar.component.html',
   styleUrls: ['./shared-ui-progress-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiProgressBarComponent implements OnChanges {
-  @Input() current = 0;
-  @Input() total = 0;
+export class SharedUiProgressBarComponent implements OnInit {
+  private injector = inject(Injector);
+  private renderer = inject(Renderer2);
+  private elementRef = inject(ElementRef);
+  currentSig = input.required<SharedModelGesuchFormStepProgress>();
 
-  @HostBinding('style.--progress') progress = 0;
-
-  ngOnChanges() {
-    this.progress = (this.current / this.total) * 100;
+  ngOnInit() {
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        if (isDefined(this.currentSig().percentage)) {
+          this.renderer.setProperty(
+            this.elementRef.nativeElement,
+            'style',
+            `--progress: ${this.currentSig().percentage}`,
+          );
+        } else {
+          this.renderer.setProperty(
+            this.elementRef.nativeElement,
+            'style',
+            null,
+          );
+        }
+      });
+    });
   }
 }
