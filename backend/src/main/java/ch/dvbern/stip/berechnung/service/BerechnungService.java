@@ -23,7 +23,8 @@ import org.kie.api.io.Resource;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class BerechnungService {
-    private static final List<String> STIPENDIUM_MODEL_NAMES = List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
+    private static final List<String>
+        BERECHNUNG_MODEL_NAMES = List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
     private static final String STIPENDIUM_DECISION_NAME = "Stipendium";
 
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
@@ -53,7 +54,7 @@ public class BerechnungService {
 
     public BerechnungResult calculateStipendien(final DmnRequest request) {
         List<List<Resource>> modelsList = new ArrayList<>(3);
-        for (var modelName : STIPENDIUM_MODEL_NAMES) {
+        for (var modelName : BERECHNUNG_MODEL_NAMES) {
             modelsList.add(
                 dmnService.loadModelsForTenantAndVersionByName(
                     tenantService.getCurrentTenant().getIdentifier(),
