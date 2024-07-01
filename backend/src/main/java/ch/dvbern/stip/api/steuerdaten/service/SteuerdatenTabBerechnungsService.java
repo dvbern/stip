@@ -59,6 +59,8 @@ public class SteuerdatenTabBerechnungsService {
     }
 
     private boolean isParentUnbekanntVerstorben(final ElternAbwesenheitsGrund parentStatus) {
-        return parentStatus != ElternAbwesenheitsGrund.VERSTORBEN || parentStatus != ElternAbwesenheitsGrund.UNBEKANNT;
+        return parentStatus == null
+            || parentStatus == ElternAbwesenheitsGrund.VERSTORBEN
+            || parentStatus == ElternAbwesenheitsGrund.UNBEKANNT;
     }
 }

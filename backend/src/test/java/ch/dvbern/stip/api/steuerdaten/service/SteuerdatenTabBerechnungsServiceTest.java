@@ -105,12 +105,12 @@ class SteuerdatenTabBerechnungsServiceTest {
                 ),
                 Arguments.of(
                     ElternAbwesenheitsGrund.VERSTORBEN,
-                    null,
+                    ElternAbwesenheitsGrund.WEDER_NOCH,
                     new SteuerdatenTyp[] { SteuerdatenTyp.VATER },
                     1
                 ),
                 Arguments.of(
-                    null,
+                    ElternAbwesenheitsGrund.WEDER_NOCH,
                     ElternAbwesenheitsGrund.VERSTORBEN,
                     new SteuerdatenTyp[] { SteuerdatenTyp.MUTTER },
                     1
