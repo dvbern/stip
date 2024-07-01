@@ -13,90 +13,103 @@ import {
 export const PERSON: SharedModelGesuchFormStep = {
   route: 'person',
   translationKey: 'shared.person.title',
+  titleTranslationKey: 'shared.person.title',
   currentStepNumber: 1,
   iconSymbolName: 'person',
 };
 
-export const AUSBILDUNG = {
+export const AUSBILDUNG: SharedModelGesuchFormStep = {
   route: 'education',
   translationKey: 'shared.education.title',
+  titleTranslationKey: 'shared.education.title',
   currentStepNumber: 2,
   iconSymbolName: 'school',
 };
 
-export const LEBENSLAUF = {
+export const LEBENSLAUF: SharedModelGesuchFormStep = {
   route: 'lebenslauf',
   translationKey: 'shared.lebenslauf.title',
+  titleTranslationKey: 'shared.lebenslauf.title',
   currentStepNumber: 3,
   iconSymbolName: 'news',
 };
 
-export const FAMILIENSITUATION = {
+export const FAMILIENSITUATION: SharedModelGesuchFormStep = {
   route: 'familiensituation',
   translationKey: 'shared.familiensituation.title',
+  titleTranslationKey: 'shared.familiensituation.title',
   currentStepNumber: 4,
   iconSymbolName: 'family_restroom',
 };
 
-export const ELTERN = {
+export const ELTERN: SharedModelGesuchFormStep = {
   route: 'eltern',
   translationKey: 'shared.eltern.title',
+  titleTranslationKey: 'shared.eltern.title',
   currentStepNumber: 5,
   iconSymbolName: 'escalator_warning',
 };
 
-export const GESCHWISTER = {
+export const GESCHWISTER: SharedModelGesuchFormStep = {
   route: 'geschwister',
   translationKey: 'shared.geschwister.title',
+  titleTranslationKey: 'shared.geschwister.title',
   currentStepNumber: 6,
   iconSymbolName: 'group',
 };
 
-export const PARTNER = {
+export const PARTNER: SharedModelGesuchFormStep = {
   route: 'partner',
   translationKey: 'shared.partner.title',
+  titleTranslationKey: 'shared.partner.page.title',
   currentStepNumber: 7,
   iconSymbolName: 'favorite',
 };
 
-export const KINDER = {
+export const KINDER: SharedModelGesuchFormStep = {
   route: 'kinder',
   translationKey: 'shared.kinder.title',
+  titleTranslationKey: 'shared.kinder.title',
   currentStepNumber: 8,
   iconSymbolName: 'emoji_people',
 };
 
-export const AUSZAHLUNG = {
+export const AUSZAHLUNG: SharedModelGesuchFormStep = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
+  titleTranslationKey: 'shared.auszahlung.title',
   currentStepNumber: 9,
   iconSymbolName: 'payments',
 };
 
-export const EINNAHMEN_KOSTEN = {
+export const EINNAHMEN_KOSTEN: SharedModelGesuchFormStep = {
   route: 'einnahmenkosten',
   translationKey: 'shared.einnahmenkosten.title',
+  titleTranslationKey: 'shared.einnahmenkosten.page.title',
   currentStepNumber: 10,
   iconSymbolName: 'call_missed_outgoing',
 };
 
-export const DOKUMENTE = {
+export const DOKUMENTE: SharedModelGesuchFormStep = {
   route: 'dokumente',
   translationKey: 'shared.dokumente.title',
+  titleTranslationKey: 'shared.dokumente.title',
   currentStepNumber: 11,
   iconSymbolName: 'description',
 };
 
-export const ABSCHLUSS = {
+export const ABSCHLUSS: SharedModelGesuchFormStep = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
+  titleTranslationKey: 'shared.abschluss.title',
   currentStepNumber: 12,
   iconSymbolName: 'check_circle',
 };
 
-export const PROTOKOLL = {
+export const PROTOKOLL: SharedModelGesuchFormStep = {
   route: 'protokoll',
   translationKey: 'shared.protokoll.title',
+  titleTranslationKey: 'shared.protokoll.title',
   currentStepNumber: 13,
   iconSymbolName: 'history',
 };

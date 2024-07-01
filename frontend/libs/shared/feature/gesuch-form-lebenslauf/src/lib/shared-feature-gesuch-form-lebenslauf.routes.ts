@@ -22,7 +22,7 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
     children: [
       routeWithUnsavedChangesGuard({
         path: ':id',
-        title: 'shared.geschwister.title',
+        title: 'shared.lebenslauf.title',
         component: SharedFeatureGesuchFormLebenslaufComponent,
         runGuardsAndResolvers: 'always',
         data: {

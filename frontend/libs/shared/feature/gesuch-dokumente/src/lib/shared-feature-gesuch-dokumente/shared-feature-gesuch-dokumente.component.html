@@ -53,7 +53,7 @@
             <td class="status-cell" mat-cell *matCellDef="let dokument">
               <div class="d-flex gap-2">
                 @if (dokument.id) {
-                  @if (appType === 'sachbearbeitung-app') {
+                  <ng-container *dvIfSachbearbeiter>
                     <button
                       (click)="acceptDocument(dokument)"
                       type="button"
@@ -74,11 +74,10 @@
                         {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
                       </span>
                     </button>
-                  } @else {
-                    <dv-shared-ui-icon-badge type="info" class="status">
-                      {{ 'shared.dokumente.dokumentStatus.PENDING' | translate }}
-                    </dv-shared-ui-icon-badge>
-                  }
+                  </ng-container>
+                  <dv-shared-ui-icon-badge *dvIfGesuchsteller type="info" class="status">
+                    {{ 'shared.dokumente.dokumentStatus.PENDING' | translate }}
+                  </dv-shared-ui-icon-badge>
                 } @else {
                   <dv-shared-ui-icon-badge type="warning" class="status">
                     {{ 'shared.dokumente.dokumentStatus.MISSING' | translate }}

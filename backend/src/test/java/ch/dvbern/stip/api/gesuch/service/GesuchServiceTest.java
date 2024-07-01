@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -34,6 +35,8 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -50,6 +53,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.EINGETRAGENE_PARTNERSCHAFT;
@@ -58,11 +62,11 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.KONKUBINAT;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
+import static ch.dvbern.stip.api.util.TestUtil.initGesuchCreateDto;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -743,12 +747,12 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     void validateEinreichenInvalid() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
             new Gesuch()
-                .setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT)
+                .setGesuchStatus(Gesuchstatus.EINGEREICHT)
                 .setId(UUID.randomUUID())
         ));
 
@@ -763,6 +767,7 @@ class GesuchServiceTest {
     @Test
     @TestAsGesuchsteller
     void validateEinreichenValid() {
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(0);
         final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
         final var famsit = new FamiliensituationUpdateDto();
         famsit.setElternVerheiratetZusammen(false);
@@ -772,6 +777,7 @@ class GesuchServiceTest {
         famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -787,6 +793,7 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
@@ -798,6 +805,8 @@ class GesuchServiceTest {
             reportDto.getValidationErrors().size(),
             Matchers.is(0)
         );
+
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(null);
     }
 
     @Test
@@ -812,6 +821,7 @@ class GesuchServiceTest {
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
 
         tranche.getGesuchFormular().setTranche(tranche);
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
         tranche.getGesuch().setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
                 .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
@@ -823,6 +833,36 @@ class GesuchServiceTest {
         assertThat(
             tranche.getGesuch().getGesuchStatus(),
             Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void gesuchUpdateEinnahmenkostenDoNotSetSteuerdatenTest() {
+        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
+        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
+
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
+        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(5);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(1990);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+
+        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+        assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuerjahr(),
+            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
+        assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(),
+            Matchers.equalTo(0)
         );
     }
 

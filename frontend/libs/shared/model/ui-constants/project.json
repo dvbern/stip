@@ -1,0 +1,9 @@
+{
+  "name": "shared-model-ui-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/model/ui-constants/src",
+  "projectType": "library",
+  "tags": ["type:model", "scope:shared"],
+  "// targets": "to see all targets run: nx show project shared-model-ui-constants --web",
+  "targets": {}
+}

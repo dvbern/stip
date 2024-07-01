@@ -13,6 +13,8 @@ public final class TestConstants {
     public static final String GESUCHSTELLER_2_TEST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae3";
     public static final String GESUCHSTELLER_2_TEST_AHV_NUMMER = "756.9217.0769.85";
 
+    public static final String DELETE_USER_TEST_ID = "2432cf6c-15b3-4fdf-a660-c935f7011f00";
+
     public static final String JURIST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae4";
 
     public static final String FALL_TEST_ID = "4b99f69f-ec53-4ef7-bd1f-0e76e04abe7b";

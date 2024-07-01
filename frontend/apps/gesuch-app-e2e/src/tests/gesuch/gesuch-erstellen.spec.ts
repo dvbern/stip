@@ -114,6 +114,9 @@ const einnahmenKosten: EinnahmenKosten = {
   wgWohnend: false,
   auswaertigeMittagessenProWoche: 5,
   betreuungskostenKinder: 100,
+  veranlagungsCode: 20,
+  steuerjahr: 2020,
+  vermoegen: 0,
 };
 
 const partner: Partner = {
@@ -190,13 +193,7 @@ test.describe('Neues gesuch erstellen', () => {
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
 
-    await personPO.fillPlzNotKtBern();
-
-    await expect(personPO.elems.vermoegenVorjahr).toBeVisible();
-
     await personPO.fillPersonForm(person);
-
-    await expect(personPO.elems.vermoegenVorjahr).toBeHidden();
 
     await personPO.elems.buttonSaveContinue.click();
 

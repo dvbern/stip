@@ -41,7 +41,6 @@ public class PersonInAusbildungDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
-  private @Valid Integer vermoegenVorjahr;
   private @Valid Boolean vormundschaft;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
@@ -405,25 +404,6 @@ public class PersonInAusbildungDto  implements Serializable {
   }
 
   /**
-   * Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-   **/
-  public PersonInAusbildungDto vermoegenVorjahr(Integer vermoegenVorjahr) {
-    this.vermoegenVorjahr = vermoegenVorjahr;
-    return this;
-  }
-
-  
-  @JsonProperty("vermoegenVorjahr")
-  public Integer getVermoegenVorjahr() {
-    return vermoegenVorjahr;
-  }
-
-  @JsonProperty("vermoegenVorjahr")
-  public void setVermoegenVorjahr(Integer vermoegenVorjahr) {
-    this.vermoegenVorjahr = vermoegenVorjahr;
-  }
-
-  /**
    * Required nur wenn Land &#x3D; CH
    **/
   public PersonInAusbildungDto vormundschaft(Boolean vormundschaft) {
@@ -509,7 +489,6 @@ public class PersonInAusbildungDto  implements Serializable {
         Objects.equals(this.zivilstand, personInAusbildung.zivilstand) &&
         Objects.equals(this.wohnsitzAnteilMutter, personInAusbildung.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, personInAusbildung.wohnsitzAnteilVater) &&
-        Objects.equals(this.vermoegenVorjahr, personInAusbildung.vermoegenVorjahr) &&
         Objects.equals(this.vormundschaft, personInAusbildung.vormundschaft) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, personInAusbildung.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, personInAusbildung.identischerZivilrechtlicherWohnsitzPLZ);
@@ -517,7 +496,7 @@ public class PersonInAusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vermoegenVorjahr, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
   }
 
   @Override
@@ -544,7 +523,6 @@ public class PersonInAusbildungDto  implements Serializable {
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
-    sb.append("    vermoegenVorjahr: ").append(toIndentedString(vermoegenVorjahr)).append("\n");
     sb.append("    vormundschaft: ").append(toIndentedString(vormundschaft)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");

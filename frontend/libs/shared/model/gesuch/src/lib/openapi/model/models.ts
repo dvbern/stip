@@ -80,6 +80,7 @@ export * from './validationError';
 export * from './validationMessage';
 export * from './validationReport';
 export * from './validationWarning';
+export * from './welcomeMail';
 export * from './wohnsitz';
 export * from './wohnsitzKanton';
 export * from './zivilstand';

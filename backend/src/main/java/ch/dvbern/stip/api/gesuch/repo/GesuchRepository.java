@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchRepository implements BaseRepository<Gesuch> {
-
     private final EntityManager entityManager;
 
     public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
@@ -37,7 +36,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Stream<Gesuch> findZugewiesenFilteredForSb(final UUID sachbearbeiterId) {
-        final var query = findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.KOMPLETT_EINGEREICHT));
+        final var query = findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT));
         final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
 
@@ -49,7 +48,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Stream<Gesuch> findAllFilteredForSb() {
-        return findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.KOMPLETT_EINGEREICHT)).stream();
+        return findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT)).stream();
     }
 
     private JPAQuery<Gesuch> findFilteredForSbPrepareQuery(List<Gesuchstatus> gesuchstatusList) {

@@ -23,6 +23,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
               },
             },
             globalNotifications: { globalNotificationsById: {} },
+            configs: {},
           },
         }),
         provideSharedPatternJestTestSetup(),

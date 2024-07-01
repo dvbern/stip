@@ -103,7 +103,8 @@ $gesuch-app-theme: map.deep-merge(
   }
 }
 // Used for readonly mat-form-fields, see dvSharedUiFormReadonly
-form.readonly {
+form.readonly,
+form .readonly {
   .mat-mdc-form-field {
     --mdc-outlined-text-field-disabled-outline-color: transparent;
     --mdc-outlined-text-field-disabled-input-text-color: var(--dv-body-color);
@@ -275,4 +276,10 @@ $dv-all-colors: (
 }
 .mat-mdc-form-field-hint.mat-caution {
   color: mat.get-color-from-palette($gesuch-app-caution, 500);
+}
+
+.info-dialog-columnar {
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-elevation: none;
+  }
 }

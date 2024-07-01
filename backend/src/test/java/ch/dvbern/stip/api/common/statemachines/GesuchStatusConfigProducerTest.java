@@ -14,10 +14,10 @@ class GesuchStatusConfigProducerTest {
         final var config = new GesuchStatusConfigProducer(null).createStateMachineConfig();
 
         for (final var status : Gesuchstatus.values()) {
-            config.getRepresentation(status);
+            final var representation = config.getRepresentation(status);
             assertThat(
                 String.format("Gesuchstatus '%s' must be represented by the state machine", status),
-                status,
+                representation,
                 is(not(nullValue()))
             );
         }

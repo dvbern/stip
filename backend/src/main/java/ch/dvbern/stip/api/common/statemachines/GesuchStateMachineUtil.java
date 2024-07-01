@@ -11,7 +11,8 @@ public final class GesuchStateMachineUtil {
 
     public static void addExit(
         StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config,
-        Action1<Transition<Gesuchstatus, GesuchStatusChangeEvent>> action) {
+        Action1<Transition<Gesuchstatus, GesuchStatusChangeEvent>> action
+    ) {
         for (final var status : Gesuchstatus.values()) {
             config.getRepresentation(status).addExitAction(action);
         }
