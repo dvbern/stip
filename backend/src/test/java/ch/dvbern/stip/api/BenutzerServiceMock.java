@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerMapper;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenMapper;
+import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
@@ -30,6 +31,7 @@ public class BenutzerServiceMock extends BenutzerService {
             null,
             null,
             null,
+            null,
             null
         );
 
@@ -44,7 +46,9 @@ public class BenutzerServiceMock extends BenutzerService {
         BenutzerRepository benutzerRepository,
         RolleService rolleService,
         SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository,
-        SecurityIdentity identity) {
+        SecurityIdentity identity,
+        ZuordnungRepository zuordnungRepository
+    ) {
         super(
             jsonWebToken,
             benutzerMapper,
@@ -52,7 +56,9 @@ public class BenutzerServiceMock extends BenutzerService {
             benutzerRepository,
             rolleService,
             sachbearbeiterZuordnungStammdatenRepository,
-            identity);
+            identity,
+            zuordnungRepository
+        );
 
         this.jsonWebToken = jsonWebToken;
     }

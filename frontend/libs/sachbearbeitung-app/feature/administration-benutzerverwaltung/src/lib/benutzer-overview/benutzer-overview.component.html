@@ -2,7 +2,7 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (benutzerListDataSourceSig(); as benutzerListSource) {
-    <div class="mt-4 shadow rounded-4">
+    <div class="mt-4 shadow rounded-4" [class.opacity-50]="store.benutzers() | rdIsPending">
       <table mat-table [dataSource]="benutzerListSource" matSort class="dv-crud-table">
         <caption class="cdk-visually-hidden">
           {{
@@ -79,7 +79,7 @@
                 type="button"
                 class="btn btn-link"
                 [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen' | translate"
-                (click)="store.deleteBenutzer$(benutzer.id)"
+                (click)="deleteBenutzer(benutzer)"
               >
                 <i class="material-symbols-rounded fs-5">delete</i>
               </button>
@@ -102,6 +102,12 @@
         showFirstLastButtons
       >
       </mat-paginator>
+      @if (store.benutzers() | rdIsPending) {
+        <dv-shared-ui-loading
+          class="position-absolute top-50 start-50 translate-middle"
+          [type]="'compact'"
+        ></dv-shared-ui-loading>
+      }
     </div>
   }
 }

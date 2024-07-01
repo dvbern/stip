@@ -35,6 +35,11 @@ public interface BenutzerResource {
     @Produces({ "application/json", "text/plain" })
     Response createOrUpdateSachbearbeiterStammdatenList(@Valid List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto);
 
+    @DELETE
+    @Path("/{benutzerId}")
+    @Produces({ "application/json", "text/plain" })
+    Response deleteBenutzer(@PathParam("benutzerId") String benutzerId);
+
     @GET
     @Path("/stammdaten/sachbearbeiter")
     @Produces({ "application/json", "text/plain" })
