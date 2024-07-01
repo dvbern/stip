@@ -7,14 +7,14 @@ import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 
 @Singleton
+@RequiredArgsConstructor
 @DmnModelVersion(major = 1, minor = 0)
 public class BerechnungRequestV1Builder implements BerechnungRequestBuilder {
-    @Inject
-    PersonenImHaushaltService personenImHaushaltService;
+    private final PersonenImHaushaltService personenImHaushaltService;
 
     @Override
     public DmnRequest buildRequest(Gesuch gesuch, GesuchTranche gesuchTranche, ElternTyp elternTyp) {

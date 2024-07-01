@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTest
 @Slf4j
-public class PersonenImHaushaltServiceTest {
+class PersonenImHaushaltServiceTest {
     @Inject
     PersonenImHaushaltService personenImHaushaltService;
 

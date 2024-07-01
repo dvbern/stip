@@ -3,7 +3,6 @@ package ch.dvbern.stip.berechnung.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -65,7 +64,7 @@ public class BerechnungService {
         }
         final var models = modelsList.stream()
             .flatMap(List::stream)
-            .collect(Collectors.toList());
+            .toList();
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
