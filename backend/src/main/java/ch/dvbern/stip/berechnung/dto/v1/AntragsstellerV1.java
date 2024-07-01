@@ -6,9 +6,13 @@ import java.time.temporal.ChronoUnit;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
 @Builder
+@Jacksonized
 @Value
 public class AntragsstellerV1 {
       boolean tertiaerstufe;
@@ -47,7 +51,6 @@ public class AntragsstellerV1 {
               .tertiaerstufe(false)
               .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
               .einkommenPartner(partner.getJahreseinkommen() != null ? partner.getJahreseinkommen() : 0)
-              .vermoegen(personInAusbildung.getVermoegenVorjahr() != null ? personInAusbildung.getVermoegenVorjahr() : 0)
               .alimente(einnahmenKosten.getAlimente() != null ? einnahmenKosten.getAlimente() : 0)
               .rente(einnahmenKosten.getRenten() != null ? einnahmenKosten.getRenten() : 0)
               .kinderAusbildungszulagen(einnahmenKosten.getZulagen() != null ? einnahmenKosten.getZulagen() : 0)

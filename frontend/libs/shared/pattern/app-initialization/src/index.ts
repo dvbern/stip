@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { switchMap } from 'rxjs/operators';
 
-import { SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TenantService } from '@dv/shared/model/gesuch';
 import { shouldNotAuthorizeRequestIf } from '@dv/shared/util/http';
 
@@ -20,7 +20,7 @@ function initializeOidc(
   router: Router,
   tenantService: TenantService,
   oauthService: OAuthService,
-  compileTimeConfig: SharedModelCompiletimeConfig,
+  compileTimeConfig: SharedModelCompileTimeConfig,
 ) {
   return () =>
     tenantService
@@ -70,7 +70,7 @@ export const provideSharedPatternAppInitialization = () => {
       provide: APP_INITIALIZER,
       useFactory: initializeOidc,
       multi: true,
-      deps: [Router, TenantService, OAuthService, SharedModelCompiletimeConfig],
+      deps: [Router, TenantService, OAuthService, SharedModelCompileTimeConfig],
     },
   ];
 };

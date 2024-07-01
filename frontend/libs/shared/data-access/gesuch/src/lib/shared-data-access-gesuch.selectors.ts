@@ -4,6 +4,7 @@ import { createSelector } from '@ngrx/store';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
   Gesuchstatus,
+  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
   ValidationMessage,
@@ -32,8 +33,11 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       loading,
       gesuch,
       gesuchFormular,
-      readonly:
-        !!gesuch && gesuch.gesuchStatus !== Gesuchstatus.IN_BEARBEITUNG_GS,
+      readonly: setReadOnly(
+        gesuch,
+        config.isGesuchApp,
+        config.isSachbearbeitungApp,
+      ),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
@@ -68,6 +72,24 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
     };
   },
 );
+
+const setReadOnly = (
+  gesuch: SharedModelGesuch | null,
+  isGesuchApp: boolean,
+  isSachbearbeitungApp: boolean,
+) => {
+  if (!gesuch) return false;
+
+  if (isGesuchApp) {
+    return gesuch.gesuchStatus !== Gesuchstatus.IN_BEARBEITUNG_GS;
+  }
+
+  if (isSachbearbeitungApp) {
+    return gesuch.gesuchStatus === Gesuchstatus.IN_BEARBEITUNG_GS;
+  }
+
+  throw new Error('setReadOnly: Unknown gesuchStatus');
+};
 
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],

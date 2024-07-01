@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
-import { AppType, SharedModelCompiletimeConfig } from '@dv/shared/model/config';
+import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -26,6 +26,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 const RETURN_TO_COCKPIT: SharedModelGesuchFormStep = {
   route: '/',
   translationKey: '',
+  titleTranslationKey: '',
   currentStepNumber: Number.MAX_SAFE_INTEGER,
   iconSymbolName: '',
 };
@@ -58,7 +59,7 @@ const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
   providedIn: 'root',
 })
 export class SharedUtilGesuchFormStepManagerService {
-  private compiletimeConfig = inject(SharedModelCompiletimeConfig);
+  private compiletimeConfig = inject(SharedModelCompileTimeConfig);
   /**
    * Returns all steps for the current app type
    *

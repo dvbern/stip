@@ -38,28 +38,21 @@
           </mat-form-field>
           <button
             type="button"
+            (click)="ahvInfoDialog.toggle()"
             class="dv-button-icon dv-button-icon-md text-info mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-            [class.active]="isSozialversicherungsnummerInfoShown"
-            (click)="isSozialversicherungsnummerInfoShown = !isSozialversicherungsnummerInfoShown"
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
         </div>
-        <div class="d-none d-md-block col-md-6 col-xl-8">
-          <dv-shared-ui-info-overlay
-            [isOpen]="isSozialversicherungsnummerInfoShown"
-            (closeOverlay)="isSozialversicherungsnummerInfoShown = false"
-          >
-            <h1 class="title h5 mb-4 d-flex">
-              <span class="text-info material-symbols-rounded me-2"> info </span>
-              {{ 'shared.form.shared.social-insurance-number.infoTitle' | translate }}
-            </h1>
-            <p class="content">
-              {{ 'shared.form.shared.social-insurance-number.info' | translate }}
-            </p>
-          </dv-shared-ui-info-overlay>
-        </div>
+        <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.shared.social-insurance-number.infoTitle'"
+          [dialogMessageKey]="'shared.form.shared.social-insurance-number.info'"
+          #ahvInfoDialog="dvSharedUiInfoDialog"
+          class="d-none d-md-block col-md-6 col-xl-4"
+        ></div>
       </div>
       <h3 class="pt-5 mb-4">
         {{ 'shared.form.shared.section.personal-details' | translate }}
@@ -302,9 +295,8 @@
             <button
               type="button"
               class="dv-button-icon dv-button-icon-md text-info mt-2"
+              (click)="niederLassungInfoDialog.toggle()"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-              [class.active]="isNiederlassungsstatusInfoShown"
-              (click)="isNiederlassungsstatusInfoShown = !isNiederlassungsstatusInfoShown"
             >
               <span class="material-symbols-rounded"> info </span>
             </button>
@@ -314,6 +306,14 @@
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
+
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
+            [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
+            #niederLassungInfoDialog="dvSharedUiInfoDialog"
+            class="d-none d-md-block col-md-6 col-xl-4"
+          ></div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
@@ -364,21 +364,6 @@
         </div>
       }
 
-      <div class="d-none d-md-block col-12 col-md-6 col-xl-8">
-        <dv-shared-ui-info-overlay
-          [isOpen]="isNiederlassungsstatusInfoShown"
-          (closeOverlay)="isNiederlassungsstatusInfoShown = false"
-          data-testid="info-person-niederlassungsstatus"
-          [overlayPanelClass]="'mt-4'"
-        >
-          <h1 class="title h5 mb-4 d-flex">
-            <span class="text-info material-symbols-rounded me-2"> info </span>
-            {{ 'shared.form.person.niederlassungsstatus.infoTitle' | translate }}
-          </h1>
-          <p class="content" [innerHTML]="'shared.form.person.niederlassungsstatus.info' | translate"></p>
-        </dv-shared-ui-info-overlay>
-      </div>
-
       <div class="row g-4 mt-1">
         <!-- Wohnsitz -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
@@ -424,30 +409,6 @@
               [updateValidity]="updateValidity$ | async"
               [controls]="form.controls"
             ></dv-shared-ui-wohnsitz-splitter>
-          </div>
-        </div>
-      }
-
-      @if (!hiddenFieldsSetSig().has(form.controls.vermoegenVorjahr)) {
-        <div class="row g-4 mt-1">
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-            <!-- VERMOEGEN VORJAHR -->
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.vermoegenVorjahr.label' | translate }}</mat-label>
-              <input
-                type="text"
-                matInput
-                [maskito]="maskitoNumber"
-                formControlName="vermoegenVorjahr"
-                data-testid="form-person-vermoegenVorjahr"
-              />
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-            @if (vermoegensnachweisVorjahrDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
           </div>
         </div>
       }

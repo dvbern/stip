@@ -31,7 +31,8 @@ import io.quarkus.test.security.oidc.OidcSecurity;
         "STAMMDATEN_CREATE",
         "STAMMDATEN_DELETE",
         "STAMMDATEN_READ",
-        "STAMMDATEN_UPDATE"
+        "STAMMDATEN_UPDATE",
+        "SEND_EMAIL"
     }
 )
 @OidcSecurity(

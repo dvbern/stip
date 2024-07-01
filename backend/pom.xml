@@ -40,6 +40,7 @@
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
+    <kie.version>8.41.0.Final</kie.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -303,6 +304,21 @@
       <groupId>ch.dvbern.oss.commons-i18n-l10n</groupId>
       <artifactId>dvb-commons-i18n-l10n-api</artifactId>
       <version>0.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-api</artifactId>
+      <version>${kie.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-dmn-api</artifactId>
+      <version>${kie.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-dmn-core</artifactId>
+      <version>${kie.version}</version>
     </dependency>
   </dependencies>
   <build>

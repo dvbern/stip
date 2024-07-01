@@ -149,7 +149,6 @@ public class TestUtil {
                         new GesuchFormular()
                             .setPersonInAusbildung(
                                 (PersonInAusbildung) new PersonInAusbildung()
-                                    .setVermoegenVorjahr(0)
                                     .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
                                     .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
                             )

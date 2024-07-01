@@ -5,14 +5,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import {
-  CompiletimeConfig,
-  SharedModelCompiletimeConfig,
+  CompileTimeConfig,
+  SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 export function provideSharedPatternJestTestSetup(
-  compileTimeConfig: CompiletimeConfig = {
+  compileTimeConfig: CompileTimeConfig = {
     appType: 'gesuch-app',
     authClientId: 'stip-gesuch-app',
   },
@@ -25,8 +25,8 @@ export function provideSharedPatternJestTestSetup(
       NoopAnimationsModule,
     ]),
     {
-      provide: SharedModelCompiletimeConfig,
-      useFactory: () => new SharedModelCompiletimeConfig(compileTimeConfig),
+      provide: SharedModelCompileTimeConfig,
+      useFactory: () => new SharedModelCompileTimeConfig(compileTimeConfig),
     },
     {
       provide: StoreUtilService,

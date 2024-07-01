@@ -11,7 +11,14 @@ it('loads actors effect - success', (done) => {
   } as unknown as ConfigurationService;
 
   // example of test using real time and done (use TestScheduler instead)
-  const actionsMock$ = of(SharedDataAccessConfigEvents.appInit());
+  const actionsMock$ = of(
+    SharedDataAccessConfigEvents.appInit({
+      compileTimeConfig: {
+        appType: 'gesuch-app',
+        authClientId: 'stip-gesuch-app',
+      },
+    }),
+  );
 
   loadDeploymentConfig(actionsMock$, configurationServiceMock).subscribe(
     (action) => {

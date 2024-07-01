@@ -2,8 +2,8 @@ package ch.dvbern.stip.api.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
+import io.quarkus.logging.Log;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -32,6 +32,11 @@ public class TestDatabaseEnvironment implements QuarkusTestResourceLifecycleMana
         systemProps.put("quarkus.datasource.jdbc.url", postgres.getJdbcUrl());
         systemProps.put("quarkus.datasource.username", dbUser);
         systemProps.put("quarkus.datasource.password", dbPassword);
+        Log.info("TestDatabaseEnvironment start \n"
+            + " - url: '" + postgres.getJdbcUrl() + "'\n"
+            + " - user: '" + dbUser + "'\n"
+            + " - password: '" + dbPassword + "'"
+        );
 
         return systemProps;
     }
