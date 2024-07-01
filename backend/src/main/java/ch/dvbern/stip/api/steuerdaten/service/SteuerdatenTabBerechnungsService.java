@@ -55,10 +55,10 @@ public class SteuerdatenTabBerechnungsService {
             return List.of(SteuerdatenTyp.MUTTER);
         }
 
-        return List.of();
+        return List.of(SteuerdatenTyp.MUTTER, SteuerdatenTyp.VATER);
     }
 
-    private boolean isParentUnbekanntVerstorben(ElternAbwesenheitsGrund parentStatus) {
-        return parentStatus != null;
+    private boolean isParentUnbekanntVerstorben(final ElternAbwesenheitsGrund parentStatus) {
+        return parentStatus != ElternAbwesenheitsGrund.VERSTORBEN || parentStatus != ElternAbwesenheitsGrund.UNBEKANNT;
     }
 }
