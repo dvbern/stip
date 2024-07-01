@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -497,6 +499,37 @@ class GesuchFormularMapperTest {
 
         // Assert
         assertThat(targetFormular.getSteuerdaten().size(), is(0));
+    }
+
+    @Test
+    void resetSteuerdatenAfterUpdateClearsSaeuleValues() {
+        // Arrange
+        final var formular = new GesuchFormular()
+            .setSteuerdaten(Set.of(
+                new Steuerdaten()
+                    .setIsArbeitsverhaeltnisSelbstaendig(true)
+                    .setSaeule2(1000)
+                    .setSaeule3a(1000)
+            ));
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.resetSteuerdatenAfterUpdate(formular);
+
+        // Assert
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(1000));
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(1000));
+
+        // Rearrange
+        formular.getSteuerdaten().stream().findFirst().get().setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        // Act
+        mapper.resetSteuerdatenAfterUpdate(formular);
+
+        // Assert
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(nullValue()));
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(nullValue()));
     }
 
     GesuchFormularMapper createMapper() {

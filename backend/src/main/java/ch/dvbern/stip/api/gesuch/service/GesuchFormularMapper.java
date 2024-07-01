@@ -105,7 +105,14 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
-        resetSteuerdaten(newFormular, targetFormular);
+        resetSteuerdatenTabs(newFormular, targetFormular);
+    }
+
+    @AfterMapping
+    protected void resetDependentDataAfterUpdate(
+        final GesuchFormular newFormular
+    ) {
+        resetSteuerdatenAfterUpdate(newFormular);
     }
 
     void resetEinnahmenKosten(
@@ -253,7 +260,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         );
     }
 
-    void resetSteuerdaten(
+    void resetSteuerdatenTabs(
         final GesuchFormularUpdateDto newFormular,
         final GesuchFormular targetFormular
     ) {
@@ -284,6 +291,17 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     .toList()
             );
         }
+    }
+
+    void resetSteuerdatenAfterUpdate(
+        final GesuchFormular gesuchFormular
+    ) {
+        gesuchFormular.getSteuerdaten().forEach(steuerdaten -> {
+            if (!steuerdaten.getIsArbeitsverhaeltnisSelbstaendig()) {
+                steuerdaten.setSaeule2(null);
+                steuerdaten.setSaeule3a(null);
+            }
+        });
     }
 
     void removeElternOfTyp(final List<ElternUpdateDto> eltern, final ElternTyp typ) {
