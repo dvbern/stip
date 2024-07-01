@@ -52,7 +52,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
-  PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_VERMOEGEN_VORJAHR,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_VORMUNDSCHAFT,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
@@ -110,9 +109,6 @@ public class PersonInAusbildungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER = "wohnsitzAnteilVater";
   private BigDecimal wohnsitzAnteilVater;
-
-  public static final String JSON_PROPERTY_VERMOEGEN_VORJAHR = "vermoegenVorjahr";
-  private Integer vermoegenVorjahr;
 
   public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
   private Boolean sozialhilfebeitraege;
@@ -551,32 +547,6 @@ public class PersonInAusbildungUpdateDtoSpec {
   }
 
 
-  public PersonInAusbildungUpdateDtoSpec vermoegenVorjahr(Integer vermoegenVorjahr) {
-    
-    this.vermoegenVorjahr = vermoegenVorjahr;
-    return this;
-  }
-
-   /**
-   * Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-   * @return vermoegenVorjahr
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERMOEGEN_VORJAHR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getVermoegenVorjahr() {
-    return vermoegenVorjahr;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERMOEGEN_VORJAHR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVermoegenVorjahr(Integer vermoegenVorjahr) {
-    this.vermoegenVorjahr = vermoegenVorjahr;
-  }
-
-
   public PersonInAusbildungUpdateDtoSpec sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     
     this.sozialhilfebeitraege = sozialhilfebeitraege;
@@ -757,7 +727,6 @@ public class PersonInAusbildungUpdateDtoSpec {
         Objects.equals(this.wohnsitz, personInAusbildungUpdate.wohnsitz) &&
         Objects.equals(this.wohnsitzAnteilMutter, personInAusbildungUpdate.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, personInAusbildungUpdate.wohnsitzAnteilVater) &&
-        Objects.equals(this.vermoegenVorjahr, personInAusbildungUpdate.vermoegenVorjahr) &&
         Objects.equals(this.sozialhilfebeitraege, personInAusbildungUpdate.sozialhilfebeitraege) &&
         Objects.equals(this.vormundschaft, personInAusbildungUpdate.vormundschaft) &&
         Objects.equals(this.nachname, personInAusbildungUpdate.nachname) &&
@@ -768,7 +737,7 @@ public class PersonInAusbildungUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, vermoegenVorjahr, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
   }
 
   @Override
@@ -791,7 +760,6 @@ public class PersonInAusbildungUpdateDtoSpec {
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
-    sb.append("    vermoegenVorjahr: ").append(toIndentedString(vermoegenVorjahr)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    vormundschaft: ").append(toIndentedString(vormundschaft)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");

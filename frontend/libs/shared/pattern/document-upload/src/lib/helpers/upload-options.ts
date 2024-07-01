@@ -12,8 +12,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_NIEDERLASSUNGSSTATUS_C:
     'shared.form.person.file.NIEDERLASSUNGSBEWILLIGUNG_C',
   PERSON_NIEDERLASSUNGSSTATUS_COMPLETE: 'shared.form.person.file.FLUECHTLING',
-  PERSON_VERMOEGENSNACHWEIS_VORJAHR:
-    'shared.form.person.file.VERMOEGENSNACHWEIS_VORJAHR',
   PERSON_KESB_ERNENNUNG: 'shared.form.person.file.VORMUNDSCHAFT',
   PERSON_MIETVERTRAG: 'shared.form.person.file.EIGENER_HAUSHALT',
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
@@ -72,6 +70,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER',
   EK_LOHNABRECHNUNG: 'shared.form.einnahmenkosten.file.LOHNABRECHNUNG',
   EK_VERDIENST: 'shared.form.einnahmenkosten.file.VERDIENST',
+  EK_VERMOEGEN: 'shared.form.einnahmenkosten.file.VERMOEGEN',
 };
 
 /**

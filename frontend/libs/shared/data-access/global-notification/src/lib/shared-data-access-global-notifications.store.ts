@@ -14,7 +14,11 @@ type MessageOrKey =
   | Required<Pick<CreateNotification, 'message'>>
   | Required<Pick<CreateNotification, 'messageKey'>>;
 
-const CRITICAL_NOTIFICATIONS: NotificationType[] = ['ERROR', 'SEVERE'] as const;
+const CRITICAL_NOTIFICATIONS: NotificationType[] = ['ERROR', 'SEVERE'];
+const PERMANENT_NOTIFICATIONS: NotificationType[] = [
+  ...CRITICAL_NOTIFICATIONS,
+  'SUCCESS_PERMANENT',
+];
 
 export interface State {
   nextNotificationId: number;
@@ -42,9 +46,6 @@ export class GlobalNotificationStore extends signalStore(
     return patchState(this, (state) => ({
       nextNotificationId: state.nextNotificationId + 1,
       notifications: [
-        ...this.notifications().filter(
-          ({ type }) => type === 'ERROR' || type !== notification.type,
-        ),
         {
           id: state.nextNotificationId,
           ...notification,
@@ -59,6 +60,16 @@ export class GlobalNotificationStore extends signalStore(
   createSuccessNotification(notification: MessageOrKey) {
     return this.createNotification({
       type: 'SUCCESS',
+      ...notification,
+    });
+  }
+
+  /**
+   * Helper function to create a new permanent success notification.
+   */
+  createPermanentSuccessNotification(notification: MessageOrKey) {
+    return this.createNotification({
+      type: 'SUCCESS_PERMANENT',
       ...notification,
     });
   }
@@ -107,7 +118,7 @@ export class GlobalNotificationStore extends signalStore(
   /**
    * Clear all notifications that are not important.
    */
-  clearUnimportantNotificaitons() {
+  clearUnimportantNotifications() {
     const notifications = this.notifications().filter((notification) =>
       CRITICAL_NOTIFICATIONS.includes(notification.type),
     );
@@ -120,6 +131,7 @@ export class GlobalNotificationStore extends signalStore(
 
 const PRIORITY: NotificationType[] = [
   'SUCCESS',
+  'SUCCESS_PERMANENT',
   'INFO',
   'SEVERE',
   'ERROR',
@@ -149,7 +161,7 @@ const getMostImportantNotification = (
     return undefined;
   }
   return {
-    autohide: !CRITICAL_NOTIFICATIONS.includes(type),
+    autohide: !PERMANENT_NOTIFICATIONS.includes(type),
     type,
     list: groupedNotifications[type],
   };

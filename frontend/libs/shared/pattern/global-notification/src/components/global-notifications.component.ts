@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Event, NavigationEnd, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
@@ -20,6 +21,7 @@ const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
   INFO: 'mat-info',
   WARNING: 'mat-caution',
   SUCCESS: 'mat-success',
+  SUCCESS_PERMANENT: 'mat-success',
 };
 const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [
   'INFO',
@@ -38,6 +40,7 @@ const NOTIFICATION_TIME = 5000;
 export class GlobalNotificationsComponent {
   store = inject(GlobalNotificationStore);
 
+  private router = inject(Router);
   private snackbar = inject(MatSnackBar);
 
   @ViewChild('notificationTemplate')
@@ -75,7 +78,12 @@ export class GlobalNotificationsComponent {
         takeUntilDestroyed(),
       )
       .subscribe(() => {
-        this.store.clearUnimportantNotificaitons();
+        this.store.clearUnimportantNotifications();
+      });
+    this.router.events
+      .pipe(filter(byNavigationEnd), takeUntilDestroyed())
+      .subscribe(() => {
+        this.store.clearUnimportantNotifications();
       });
   }
 
@@ -83,3 +91,6 @@ export class GlobalNotificationsComponent {
     this.store.removeNotification(id);
   }
 }
+
+const byNavigationEnd = (event: Event): event is NavigationEnd =>
+  event instanceof NavigationEnd;

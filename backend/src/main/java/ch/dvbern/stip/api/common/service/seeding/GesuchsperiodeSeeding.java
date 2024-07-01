@@ -51,7 +51,7 @@ public class GesuchsperiodeSeeding extends Seeder{
             getPeriodeForSeeding(
                 newJahr,
                 LocalDate.of(2023, 8, 1),
-                LocalDate.of(2024, 6, 30)
+                LocalDate.of(2024, 7, 31)
             )
         );
 

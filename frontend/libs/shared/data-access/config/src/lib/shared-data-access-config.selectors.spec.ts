@@ -4,6 +4,9 @@ describe('selectSharedDataAccessConfigsView', () => {
   it('selects view', () => {
     const state = {
       deploymentConfig: undefined,
+      compileTimeConfig: undefined,
+      isGesuchApp: false,
+      isSachbearbeitungApp: false,
       loading: false,
       error: undefined,
     };

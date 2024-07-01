@@ -13,6 +13,26 @@ servers:
         default: '8080'
         description: ''
 paths:
+  /mail/welcome:
+    post:
+      tags:
+        - Mail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WelcomeMail'
+      responses:
+        '200':
+          description: Mail was successfully sent
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: sendWelcomeEmail
+      summary: Sends an e-mail for a newly created user
   /gesuch:
     post:
       requestBody:
@@ -1267,6 +1287,22 @@ paths:
       summary: Gets all PLZs
 components:
   schemas:
+    WelcomeMail:
+      type: object
+      required:
+        - name
+        - vorname
+        - email
+        - redirectUri
+      properties:
+        name:
+          type: string
+        vorname:
+          type: string
+        email:
+          type: string
+        redirectUri:
+          type: string
     Anrede:
       enum:
         - HERR
@@ -1284,7 +1320,6 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
-        - PERSON_VERMOEGENSNACHWEIS_VORJAHR
         - PERSON_SOZIALHILFEBUDGET
         - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         - PERSON_AUSWEIS
@@ -1319,6 +1354,7 @@ components:
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
+        - EK_VERMOEGEN
       type: string
     ElternAbwesenheitsGrund:
       enum:
@@ -2105,9 +2141,6 @@ components:
         wohnsitzAnteilVater:
           description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
-        vermoegenVorjahr:
-          description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-          type: integer
         sozialhilfebeitraege:
           type: boolean
         vormundschaft:
@@ -2332,6 +2365,27 @@ components:
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
           type: integer
+        veranlagungsCode:
+          description: 2-Stelliger Veranlagungscode (0-99)
+          type: integer
+          minimum: 0
+          maximum: 99
+          default: 0
+        steuerjahr:
+          description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+          type: integer
+          minimum: 0
+          maximum: 99999
+        vermoegen:
+          description: Ganze Zahl, ohne Kommastellen
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+        steuernKantonGemeinde:
+          description: transient and calculated readonly field
+          type: integer
+          minimum: 0
+          maximum: 2147483647
     EinnahmenKosten:
       type: object
       allOf:
@@ -2881,3 +2935,4 @@ tags:
     description: ''
   - name: Ausbildungsgang
     description: ''
+  - name: Mail

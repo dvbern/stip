@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.tenancy.service;
 
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 
 @ApplicationScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 public class TenantService {
 
     private final RoutingContext context;

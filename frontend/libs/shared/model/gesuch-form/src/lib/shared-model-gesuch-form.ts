@@ -11,6 +11,7 @@ export type StepState = 'VALID' | 'INVALID' | 'WARNING';
 export interface SharedModelGesuchFormStep {
   route: string;
   translationKey: string;
+  titleTranslationKey: string;
   currentStepNumber: number;
   iconSymbolName: string;
 }

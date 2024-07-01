@@ -35,6 +35,10 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Boolean willDarlehen;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer betreuungskostenKinder;
+  private @Valid Integer veranlagungsCode = 0;
+  private @Valid Integer steuerjahr;
+  private @Valid Integer vermoegen;
+  private @Valid Integer steuernKantonGemeinde;
 
   /**
    **/
@@ -336,6 +340,90 @@ public class EinnahmenKostenDto  implements Serializable {
     this.betreuungskostenKinder = betreuungskostenKinder;
   }
 
+  /**
+   * 2-Stelliger Veranlagungscode (0-99)
+   * minimum: 0
+   * maximum: 99
+   **/
+  public EinnahmenKostenDto veranlagungsCode(Integer veranlagungsCode) {
+    this.veranlagungsCode = veranlagungsCode;
+    return this;
+  }
+
+  
+  @JsonProperty("veranlagungsCode")
+ @Min(0) @Max(99)  public Integer getVeranlagungsCode() {
+    return veranlagungsCode;
+  }
+
+  @JsonProperty("veranlagungsCode")
+  public void setVeranlagungsCode(Integer veranlagungsCode) {
+    this.veranlagungsCode = veranlagungsCode;
+  }
+
+  /**
+   * Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+   * minimum: 0
+   * maximum: 99999
+   **/
+  public EinnahmenKostenDto steuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+    return this;
+  }
+
+  
+  @JsonProperty("steuerjahr")
+ @Min(0) @Max(99999)  public Integer getSteuerjahr() {
+    return steuerjahr;
+  }
+
+  @JsonProperty("steuerjahr")
+  public void setSteuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+  }
+
+  /**
+   * Ganze Zahl, ohne Kommastellen
+   * minimum: 0
+   * maximum: 2147483647
+   **/
+  public EinnahmenKostenDto vermoegen(Integer vermoegen) {
+    this.vermoegen = vermoegen;
+    return this;
+  }
+
+  
+  @JsonProperty("vermoegen")
+ @Min(0) @Max(2147483647)  public Integer getVermoegen() {
+    return vermoegen;
+  }
+
+  @JsonProperty("vermoegen")
+  public void setVermoegen(Integer vermoegen) {
+    this.vermoegen = vermoegen;
+  }
+
+  /**
+   * transient and calculated readonly field
+   * minimum: 0
+   * maximum: 2147483647
+   **/
+  public EinnahmenKostenDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
+    return this;
+  }
+
+  
+  @JsonProperty("steuernKantonGemeinde")
+ @Min(0) @Max(2147483647)  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
+  }
+
+  @JsonProperty("steuernKantonGemeinde")
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -361,12 +449,16 @@ public class EinnahmenKostenDto  implements Serializable {
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.willDarlehen, einnahmenKosten.willDarlehen) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
-        Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder);
+        Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
+        Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
+        Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
+        Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
+        Objects.equals(this.steuernKantonGemeinde, einnahmenKosten.steuernKantonGemeinde);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -390,6 +482,10 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
+    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
+    sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("}");
     return sb.toString();
   }

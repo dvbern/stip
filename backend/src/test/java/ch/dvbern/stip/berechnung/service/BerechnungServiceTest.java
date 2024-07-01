@@ -4,18 +4,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeAll;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -24,16 +19,9 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
+@RequiredArgsConstructor
 class BerechnungServiceTest {
-    @Inject
-    BerechnungService berechnungService;
-
-    @BeforeAll
-    static void mocks() {
-        final var mock = Mockito.mock(TenantService.class);
-        Mockito.when(mock.getCurrentTenant()).thenReturn(new TenantInfoDto().identifier("bern"));
-        QuarkusMock.installMockForType(mock, TenantService.class);
-    }
+    private final BerechnungService berechnungService;
 
     @Test
     void getV1Test() {

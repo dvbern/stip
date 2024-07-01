@@ -52,15 +52,27 @@ public final class TestRollen {
         };
 
         ADMIN_COMPOSITE = new String[] {
-            "Admin",
-            "GESUCHSPERIODE_DELETE",
             "GESUCHSPERIODE_UPDATE",
-            "GESUCHSPERIODE_CREATE",
-            "GESUCHSPERIODE_READ",
-            "STAMMDATEN_CREATE",
-            "STAMMDATEN_DELETE",
+            "AUSBILDUNG_UPDATE",
+            "AUSBILDUNG_CREATE",
+            "GESUCH_CREATE",
+            "FALL_CREATE",
+            "GESUCH_READ",
+            "SEND_EMAIL",
+            "AUSBILDUNG_READ",
+            "GESUCH_DELETE",
+            "FALL_DELETE",
             "STAMMDATEN_READ",
-            "STAMMDATEN_UPDATE"
+            "GESUCH_UPDATE",
+            "GESUCHSPERIODE_CREATE",
+            "FALL_UPDATE",
+            "GESUCHSPERIODE_READ",
+            "STAMMDATEN_DELETE",
+            "GESUCHSPERIODE_DELETE",
+            "STAMMDATEN_CREATE",
+            "AUSBILDUNG_DELETE",
+            "STAMMDATEN_UPDATE",
+            "FALL_READ"
         };
 
         GESUCHSTELLER_COMPOSITE = new String[] {

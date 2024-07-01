@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
@@ -12,6 +13,7 @@ import {
   filter,
   forkJoin,
   map,
+  of,
   pipe,
   switchMap,
   tap,
@@ -30,6 +32,8 @@ import {
   SharedModelUserAdminError,
   UsableRole,
 } from '@dv/shared/model/benutzer';
+import { SharedModelError } from '@dv/shared/model/error';
+import { MailService } from '@dv/shared/model/gesuch';
 import { SharedModelState } from '@dv/shared/model/state-colors';
 import { noGlobalErrorsIf } from '@dv/shared/util/http';
 import {
@@ -65,7 +69,9 @@ export class BenutzerverwaltungStore extends signalStore(
   withDevtools('BenutzerverwaltungStore'),
 ) {
   private http = inject(HttpClient);
+  private document = inject(DOCUMENT);
   private authService = inject(OAuthService);
+  private mailService = inject(MailService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   private _oauthParams?: { url: string; realm: string };
@@ -98,20 +104,28 @@ export class BenutzerverwaltungStore extends signalStore(
           benutzers: cachedPending(state.benutzers),
         }));
       }),
-      switchMap(() =>
+      exhaustMap(() =>
         // Load all users for each role that we currently use in the SB app
         // sadly Keycloak does not support loading all users and their roles in one request
         // so we load the user list for every known role and merge them afterwards
         forkJoin(
-          SACHBEARBEITER_APP_ROLES.map((role) =>
-            this.loadBenutzersWithRole$(role),
-          ),
+          SACHBEARBEITER_APP_ROLES.map((role) => {
+            return this.loadBenutzersWithRole$(role);
+          }),
         ),
       ),
       map((benutzersByRole) =>
         createBenutzerListFromRoleLookup(benutzersByRole),
       ),
-      handleApiResponse((benutzers) => patchState(this, { benutzers })),
+      handleApiResponse((benutzers) => patchState(this, { benutzers }), {
+        onFailure: (error) => {
+          const parsedError = SharedModelError.parse(error);
+          if (parsedError.type === 'zodError') {
+            console.error(parsedError.message, parsedError.errors);
+          }
+          this.globalNotificationStore.handleHttpRequestFailed([parsedError]);
+        },
+      }),
     ),
   );
 
@@ -154,7 +168,7 @@ export class BenutzerverwaltungStore extends signalStore(
     vorname: string;
     email: string;
     roles: SharedModelRoleList;
-    onAfterSave?: () => void;
+    onAfterSave?: (wasSuccessfull: boolean) => void;
   }>(
     pipe(
       tap(() => {
@@ -175,14 +189,8 @@ export class BenutzerverwaltungStore extends signalStore(
                   patchState(this, { userCreated: success(user) });
                 },
                 {
-                  onSuccess: (notifyUserWasSuccessfull) => {
-                    onAfterSave?.();
-                    if (notifyUserWasSuccessfull) {
-                      this.globalNotificationStore.createSuccessNotification({
-                        messageKey:
-                          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
-                      });
-                    }
+                  onSuccess: (wasSuccessfull) => {
+                    onAfterSave?.(wasSuccessfull);
                   },
                 },
               ),
@@ -220,6 +228,7 @@ export class BenutzerverwaltungStore extends signalStore(
           lastName: name,
           username: email,
           email,
+          emailVerified: true,
         },
         {
           observe: 'response',
@@ -259,14 +268,16 @@ export class BenutzerverwaltungStore extends signalStore(
   }
 
   private notifyUser$(user: SharedModelBenutzerApi) {
-    return this.http
-      .put(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/execute-actions-email?redirect_uri=http://localhost:4201&client_id=stip-gesuch-app`,
-        ['UPDATE_PASSWORD'],
-        {
-          context: noGlobalErrorsIf(true),
+    if (!user.email) return of(false);
+    return this.mailService
+      .sendWelcomeEmail$({
+        welcomeMail: {
+          vorname: user.firstName,
+          name: user.lastName,
+          email: user.email,
+          redirectUri: getCurrentUrl(this.document),
         },
-      )
+      })
       .pipe(
         this.interceptError('benachrichtigen'),
         map(() => true),
@@ -292,6 +303,10 @@ export class BenutzerverwaltungStore extends signalStore(
     };
   }
 }
+
+export const getCurrentUrl = (document: Document) => {
+  return document.location.origin;
+};
 
 export const hasLocationHeader = (
   response: HttpResponse<unknown>,

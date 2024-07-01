@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -24,6 +25,7 @@ import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -49,6 +51,18 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @AfterMapping
+    public void setCalculatedPropertiesOnDto(
+        GesuchFormular gesuchFormular,
+        @MappingTarget GesuchFormularDto gesuchFormularDto
+    ) {
+        if (gesuchFormularDto.getEinnahmenKosten() != null) {
+            final var ek = gesuchFormularDto.getEinnahmenKosten();
+            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
+            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
+        }
+    }
 
     /**
      * partial update mapper for the Gesuchssteller

@@ -19,13 +19,17 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -33,6 +37,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -47,7 +52,9 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -62,6 +69,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
@@ -89,6 +97,60 @@ public class GesuchService {
     }
 
     @Transactional
+    public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto, final GesuchTranche trancheToUpdate) {
+        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
+            .getRollen()
+            .stream()
+            .map(Rolle::getKeycloakIdentifier)
+            .collect(Collectors.toSet());
+
+        final var gesuchsjahr = trancheToUpdate
+            .getGesuch()
+            .getGesuchsperiode()
+            .getGesuchsjahr();
+        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+
+        Integer veranlagungsCodeToSet = 0;
+        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+
+        if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
+            if (einnahmenKosten != null) {
+                steuerjahrToSet = Objects.requireNonNullElse(
+                    einnahmenKosten.getSteuerjahr(),
+                    steuerjahrToSet
+                );
+                veranlagungsCodeToSet = Objects.requireNonNullElse(
+                    einnahmenKosten.getVeranlagungsCode(),
+                    veranlagungsCodeToSet
+                );
+            }
+        } else {
+            if (einnahmenKostenUpdateDto.getSteuerjahr() == null) {
+                if (einnahmenKosten != null) {
+                    steuerjahrToSet = Objects.requireNonNullElse(
+                        einnahmenKosten.getSteuerjahr(),
+                        steuerjahrToSet
+                    );
+                }
+            } else {
+                steuerjahrToSet = einnahmenKostenUpdateDto.getSteuerjahr();
+            }
+            if (einnahmenKostenUpdateDto.getVeranlagungsCode() == null) {
+                if (einnahmenKosten != null) {
+                    veranlagungsCodeToSet = Objects.requireNonNullElse(
+                        einnahmenKosten.getVeranlagungsCode(),
+                        veranlagungsCodeToSet
+                    );
+                }
+            } else {
+                veranlagungsCodeToSet = einnahmenKostenUpdateDto.getVeranlagungsCode();
+            }
+        }
+        einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
+        einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
+    }
+
+    @Transactional
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
@@ -99,6 +161,15 @@ public class GesuchService {
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
 
+        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
+            setAndValidateEinnahmenkostenUpdateLegality(
+                gesuchUpdateDto
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getEinnahmenKosten(),
+                trancheToUpdate
+            );
+        }
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();

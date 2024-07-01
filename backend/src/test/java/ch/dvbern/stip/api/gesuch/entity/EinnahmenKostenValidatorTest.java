@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -9,12 +10,19 @@ import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestUtil;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
 class EinnahmenKostenValidatorTest {
 
@@ -28,6 +36,12 @@ class EinnahmenKostenValidatorTest {
         kindSet.add(kind);
         gesuchFormular.setKinds(kindSet);
         return gesuchFormular;
+    }
+
+    private static boolean validateGesuchFormularProperty(Validator validator, GesuchFormular gesuch, String propertyName) {
+        return !validator.validate(gesuch).
+            stream().map(validationError -> validationError.getPropertyPath().toString())
+            .filter(x -> x.toLowerCase().contains(propertyName)).findFirst().isPresent();
     }
 
     @Test
@@ -107,5 +121,130 @@ class EinnahmenKostenValidatorTest {
 
         gesuch.getEinnahmenKosten().setWohnkosten(1);
         assertThat(validator.isValid(gesuch, null)).isTrue();
+    }
+
+    @Test
+    void veranlagungsCodeRequiredValidationTest(){
+        final var factory = Validation.buildDefaultValidatorFactory();
+        final var validator = factory.getValidator();
+        final String propertyName = "veranlagungscode";
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        boolean isValid = false;
+
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungsCode(null));
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isFalse();
+
+        gesuch.getEinnahmenKosten().setVeranlagungsCode(0);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isTrue();
+
+        gesuch.getEinnahmenKosten().setVeranlagungsCode(99);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isTrue();
+
+        gesuch.getEinnahmenKosten().setVeranlagungsCode(100);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isFalse();
+    }
+
+    @Test
+    void steuerjahrRequiredValidationTest(){
+        final var factory = Validation.buildDefaultValidatorFactory();
+        final var validator = factory.getValidator();
+        final String propertyName = "steuerjahr";
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        boolean isValid = false;
+
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setSteuerjahr(null));
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isFalse();
+
+        gesuch.getEinnahmenKosten().setSteuerjahr(0);
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isTrue();
+    }
+
+    @Test
+    void steuerjahrIsCurrentorPastValidationTest(){
+        GesuchTranche tranche = GesuchGenerator.initGesuchTranche();
+        tranche.setGesuchFormular(new GesuchFormular());
+        GesuchFormular gesuchFormular = tranche.getGesuchFormular();
+        gesuchFormular.setTranche(tranche);
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
+
+        final var temporalValidator = new EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.now().getValue());
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.now().getValue() + 1);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.MIN_VALUE);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(Year.MAX_VALUE);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr());
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() + 1);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isFalse();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() -1);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(0);
+        assertThat(temporalValidator.isValid(gesuchFormular, null)).isTrue();
+    }
+
+    @Test
+    void vermoegenNonNegativeValueValidationTest(){
+        final var factory = Validation.buildDefaultValidatorFactory();
+        final var validator = factory.getValidator();
+        final String propertyName = "vermoegen";
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        boolean isValid = false;
+
+        //test negative value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(-1));
+
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isFalse();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+
+        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        assertThat(isValid).isTrue();
+    }
+
+    @Test
+    void vermoegenConstraintValidatorTest(){
+        final var validator = new EinnahmenKostenVermoegenRequiredConstraintValidator();
+        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        //setup
+        gesuch.setTranche(new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2024)))));
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(1995, 8, 5)));
+
+        // genau 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023, 12, 31).minusYears(18)));
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        // fast 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2024, 1, 1).minusYears(18)));
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
+
+        //reset value
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        // unter 18 Jahre alt
+        gesuch.setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG).setGeburtsdatum(LocalDate.of(2023, 12, 31).minusYears(5)));
+        assertThat(validator.isValid(gesuch,null)).isTrue();
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuch,null)).isFalse();
     }
 }
