@@ -14,6 +14,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
@@ -40,6 +41,8 @@ public class BenutzerService {
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
+
+    private final ZuordnungRepository zuordnungRepository;
 
     @Transactional
     public Benutzer getCurrentBenutzer() {
@@ -148,13 +151,21 @@ public class BenutzerService {
     }
 
     @Transactional
-    public void deleteBenutzer(String benutzerId) {
-        Benutzer benutzer = benutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
+    public void deleteBenutzer(final String benutzerId) {
+        final var benutzer = benutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
         benutzer.getRollen().clear();
-        Optional<SachbearbeiterZuordnungStammdaten> zuordnung = sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzer.getId());
-        if (zuordnung.isPresent()) {
-            sachbearbeiterZuordnungStammdatenRepository.delete(zuordnung.get());
+        final var zuordnungen = zuordnungRepository.findByBenutzerId(benutzer.getId()).toList();
+        if (!zuordnungen.isEmpty()) {
+            zuordnungRepository.deleteByIds(zuordnungen
+                .stream()
+                .map(AbstractEntity::getId)
+                .toList()
+            );
         }
+
+        final var buchstabenZuordnung = sachbearbeiterZuordnungStammdatenRepository.findByBenutzerId(benutzer.getId());
+        buchstabenZuordnung.ifPresent(sachbearbeiterZuordnungStammdatenRepository::delete);
+
         benutzerRepository.delete(benutzer);
     }
 }
