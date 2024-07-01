@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import com.savoirtech.json.JsonComparatorBuilder;
-import io.quarkus.logging.Log;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -140,7 +139,6 @@ class V1StructureTest {
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(EXPECTED, actual);
-        Log.info("actual: " + actual);
         assertTrue(result.isMatch(), result.getErrorMessage());
     }
 }

@@ -1,6 +1,9 @@
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -15,10 +18,12 @@ import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
+import org.kie.api.io.Resource;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class BerechnungService {
+    private static final List<String> STIPENDIUM_MODEL_NAMES = List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
     private static final String STIPENDIUM_DECISION_NAME = "Stipendium";
 
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
@@ -47,10 +52,19 @@ public class BerechnungService {
     }
 
     public BerechnungResult calculateStipendien(final DmnRequest request) {
-        final var models = dmnService.loadModelsForTenantAndVersion(
-            tenantService.getCurrentTenant().getIdentifier(),
-            request.getVersion()
-        );
+        List<List<Resource>> modelsList = new ArrayList<>(3);
+        for (var modelName : STIPENDIUM_MODEL_NAMES) {
+            modelsList.add(
+                dmnService.loadModelsForTenantAndVersionByName(
+                    tenantService.getCurrentTenant().getIdentifier(),
+                    request.getVersion(),
+                    modelName
+                )
+            );
+        }
+        final var models = modelsList.stream()
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
