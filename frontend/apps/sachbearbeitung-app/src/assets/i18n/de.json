@@ -196,9 +196,6 @@
   "sachbearbeitung-app.cockpit.table.status": "Status",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Bearbeiter",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-  "sachbearbeitung-app.cockpit.status.IN_BEARBEITUNG_GS": "In Bearbeitung",
-  "sachbearbeitung-app.cockpit.status.KOMPLETT_EINGEREICHT": "Eingereicht",
-  "sachbearbeitung-app.cockpit.status.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
 
   "sachbearbeitung-app.gesuch-form.title": "Gesuch"
 }
