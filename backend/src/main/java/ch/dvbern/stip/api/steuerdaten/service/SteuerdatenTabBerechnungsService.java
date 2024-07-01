@@ -13,31 +13,20 @@ import static ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung.VAT
 @RequestScoped
 public class SteuerdatenTabBerechnungsService {
     public List<SteuerdatenTyp> calculateTabs(final Familiensituation familiensituation) {
-        if (isElternVerheiratetZusammen(familiensituation)) {
+        // We need boxed equality as we can only assume it isn't null if it's been saved to/ loaded from the DB
+        if (Boolean.TRUE.equals(familiensituation.getElternVerheiratetZusammen())) {
             return List.of(SteuerdatenTyp.FAMILIE);
         }
 
-        if (isGerichtlicheAlimentenregelung(familiensituation)) {
+        if (Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung())) {
             return getAlimentenregelungTabs(familiensituation);
         }
 
-        if (isElternteilUnbekanntVerstorben(familiensituation)) {
+        if (Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben())) {
             return getElternteilUnbekanntVerstorbenTabs(familiensituation);
         }
 
         return List.of(SteuerdatenTyp.MUTTER, SteuerdatenTyp.VATER);
-    }
-
-    private boolean isElternVerheiratetZusammen(final Familiensituation familiensituation) {
-        return familiensituation.getElternVerheiratetZusammen();
-    }
-
-    private boolean isGerichtlicheAlimentenregelung(final Familiensituation familiensituation) {
-        return Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung());
-    }
-
-    private boolean isElternteilUnbekanntVerstorben(final Familiensituation familiensituation) {
-        return Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben());
     }
 
     private List<SteuerdatenTyp> getAlimentenregelungTabs(final Familiensituation familiensituation) {
