@@ -95,6 +95,7 @@ class GesuchFormularMapperTest {
         elterns.add(mutter);
 
         final var familiensituation = new FamiliensituationUpdateDto();
+        familiensituation.setElternVerheiratetZusammen(true);
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setElterns(elterns);
@@ -148,6 +149,7 @@ class GesuchFormularMapperTest {
     void resetEinnahmenKostenRemovesAlimenteTest() {
         // Arrange
         final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(false);
         updateFamsit.setGerichtlicheAlimentenregelung(true);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
@@ -432,6 +434,7 @@ class GesuchFormularMapperTest {
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
+    // Move this test case into a QuarkusTest once/ if SteuerdatenTabBerechnungsService is a DMN service
     @Test
     void resetSteuerdatenClearsTabTest() {
         final var gesuchFormular = new GesuchFormular()
@@ -445,7 +448,6 @@ class GesuchFormularMapperTest {
             ));
 
         final var mapper = createMapper();
-        mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
 
         mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
         assertCountAndType(gesuchFormular, 1, List.of(SteuerdatenTyp.FAMILIE));
@@ -490,7 +492,7 @@ class GesuchFormularMapperTest {
     }
 
     GesuchFormularMapper createMapper() {
-        return new GesuchFormularMapperImpl(
+        final var mapper = new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
             new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
@@ -503,5 +505,10 @@ class GesuchFormularMapperTest {
             new EinnahmenKostenMapperImpl(),
             new SteuerdatenMapperImpl()
         );
+
+        // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
+        mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
+
+        return mapper;
     }
 }

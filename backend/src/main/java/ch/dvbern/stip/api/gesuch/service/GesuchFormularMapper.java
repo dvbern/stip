@@ -261,7 +261,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormular targetFormular
     ) {
         if (targetFormular.getFamiliensituation() == null) {
-            targetFormular.getSteuerdaten().clear();
+            if (targetFormular.getSteuerdaten() != null) {
+                targetFormular.getSteuerdaten().clear();
+            }
         } else {
             final var requiredTabs = new HashSet<>(
                 steuerdatenTabBerechnungsService.calculateTabs(targetFormular.getFamiliensituation())
