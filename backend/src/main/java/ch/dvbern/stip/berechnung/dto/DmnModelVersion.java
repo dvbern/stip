@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface BerechnungModelVersion {
+public @interface DmnModelVersion {
     int major();
     int minor();
 }

@@ -72,6 +72,7 @@ export * from './plz';
 export * from './sachbearbeiterZuordnungStammdaten';
 export * from './sachbearbeiterZuordnungStammdatenList';
 export * from './sprache';
+export * from './statusprotokollEntry';
 export * from './steuerdaten';
 export * from './steuerdatenTyp';
 export * from './steuerdatenUpdate';

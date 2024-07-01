@@ -18,6 +18,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -73,6 +74,7 @@ public class GesuchApiSpec {
                 getGesucheGs(),
                 getGesucheSb(),
                 getRequiredGesuchDokumentTyp(),
+                getStatusProtokoll(),
                 updateGesuch(),
                 validateGesuchPages()
         );
@@ -120,6 +122,10 @@ public class GesuchApiSpec {
 
     public GetRequiredGesuchDokumentTypOper getRequiredGesuchDokumentTyp() {
         return new GetRequiredGesuchDokumentTypOper(createReqSpec());
+    }
+
+    public GetStatusProtokollOper getStatusProtokoll() {
+        return new GetStatusProtokollOper(createReqSpec());
     }
 
     public UpdateGesuchOper updateGesuch() {
@@ -869,6 +875,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetRequiredGesuchDokumentTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Holt das Statusprotokoll für ein Gesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;StatusprotokollEntryDtoSpec&gt;
+     */
+    public static class GetStatusProtokollOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/statusprotokoll";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetStatusProtokollOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/statusprotokoll
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/statusprotokoll
+         * @param handler handler
+         * @return List&lt;StatusprotokollEntryDtoSpec&gt;
+         */
+        public List<StatusprotokollEntryDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<StatusprotokollEntryDtoSpec>> type = new TypeRef<List<StatusprotokollEntryDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetStatusProtokollOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetStatusProtokollOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetStatusProtokollOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

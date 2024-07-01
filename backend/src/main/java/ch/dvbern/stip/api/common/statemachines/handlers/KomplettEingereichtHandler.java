@@ -21,7 +21,7 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
-        return transition.getDestination() == Gesuchstatus.KOMPLETT_EINGEREICHT;
+        return transition.getDestination() == Gesuchstatus.EINGEREICHT;
     }
 
     @Override
@@ -33,6 +33,7 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
             pia.getEmail(),
             AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
         );
+
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 }

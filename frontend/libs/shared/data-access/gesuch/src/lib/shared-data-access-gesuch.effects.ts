@@ -32,6 +32,7 @@ import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
+import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import {
   AusbildungUpdate,
   GesuchFormularUpdate,
@@ -144,6 +145,7 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormEinnahmenkosten.init,
         SharedEventGesuchDokumente.init,
         SharedEventGesuchFormAbschluss.init,
+        SharedEventGesuchFormProtokoll.init,
       ),
       concatLatestFrom(() => store.select(selectRouteId)),
       switchMap(([, id]) => {

@@ -747,12 +747,12 @@ class GesuchServiceTest {
     @TestAsGesuchsteller
     void validateEinreichenInvalid() {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT);
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
             new Gesuch()
-                .setGesuchStatus(Gesuchstatus.KOMPLETT_EINGEREICHT)
+                .setGesuchStatus(Gesuchstatus.EINGEREICHT)
                 .setId(UUID.randomUUID())
         ));
 

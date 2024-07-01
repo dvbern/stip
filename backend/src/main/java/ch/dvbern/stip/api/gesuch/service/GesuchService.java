@@ -252,7 +252,7 @@ public class GesuchService {
 
         // No need to validate the entire Gesuch here, as it's done in the state machine
         validateAdditionalEinreichenCriteria(gesuch);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINREICHEN);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
@@ -372,7 +372,7 @@ public class GesuchService {
 
     private void validateGesuchEinreichen(Gesuch gesuch) {
         validateAdditionalEinreichenCriteria(gesuch);
-        validationService.validateGesuchForStatus(gesuch, Gesuchstatus.KOMPLETT_EINGEREICHT);
+        validationService.validateGesuchForStatus(gesuch, Gesuchstatus.EINGEREICHT);
     }
 
     private void validateAdditionalEinreichenCriteria(Gesuch gesuch) {

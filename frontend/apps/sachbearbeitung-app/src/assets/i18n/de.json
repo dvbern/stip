@@ -62,11 +62,14 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen": "Benutzer löschen",
   "sachbearbeitung-app.admin.benutzerverwaltung.sachbearbeiter.label": "Sachbearbeiter",
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "Löschen ist noch nicht implementiert",
   "sachbearbeitung-app.admin.benutzerverwaltung.overview.roles": "Rollen",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt": "Benutzer wurde erfolgreich erstellt",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "Benutzer wurde erfolgreich gelöscht",
+  "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Benutzer löschen",
+  "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Wollen Sie die Benutzer \"{{ name }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists": "Ein Benutzer mit dieser E-Mail Adresse existiert bereits.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.erstellen": "Benutzer konnte nicht erstellt werden, bitte versuchen Sie es erneut.",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.loeschen": "Benutzer konnte nicht gelöscht werden, bitte wenden Sie sich an den Support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.laden": "Bei der Benutzererstellung ist ein Fehler aufgetreten, bitte wenden Sie sich an den Support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.roleMapping": "Bei der Benutzer-Rollen Zuweisung ist ein Fehler aufgetreten, bitte wenden Sie sich an den Support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.benachrichtigen": "Es konnte keine Benachrichtigung an den Benutzer gesendet werden, entwerder ist die E-Mail Adresse ungültig oder es ist ein Fehler aufgetreten.<br><br>Bitte benachrichtigen Sie den Benutzer manuell.",
@@ -180,6 +183,13 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
 
+  "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
+  "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Datum",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Status",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
@@ -196,9 +206,6 @@
   "sachbearbeitung-app.cockpit.table.status": "Status",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Bearbeiter",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-  "sachbearbeitung-app.cockpit.status.IN_BEARBEITUNG_GS": "In Bearbeitung",
-  "sachbearbeitung-app.cockpit.status.KOMPLETT_EINGEREICHT": "Eingereicht",
-  "sachbearbeitung-app.cockpit.status.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
 
   "sachbearbeitung-app.gesuch-form.title": "Gesuch"
 }

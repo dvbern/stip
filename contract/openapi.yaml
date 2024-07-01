@@ -976,6 +976,35 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchId}/statusprotokoll':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '201':
+          description: Gesuch eingereicht
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusprotokollEntry'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getStatusProtokoll
+      summary: Holt das Statusprotokoll für ein Gesuch
   /tenant/current:
     get:
       tags:
@@ -998,6 +1027,30 @@ paths:
       operationId: getCurrentTenant
       summary: Current Tenant
       description: '`Tenant` based on the current Request'
+  /benutzer/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          type: string
+        in: path
+        required: true
+    delete:
+      tags:
+        - Benutzer
+      responses:
+        204:
+          description: Benutzer deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteBenutzer
+      summary: Deletes a benutzer with the given id
+
   /benutzer/prepare/me:
     get:
       tags:
@@ -1375,23 +1428,24 @@ components:
       type: string
     Gesuchstatus:
       enum:
-        - IN_BEARBEITUNG_GS
-        - KOMPLETT_EINGEREICHT
-        - BEREIT_FUER_BEARBEITUNG
-        - FEHLERHAFT
-        - IN_BEARBEITUNG_SB
-        - IN_REVIEW
-        - FEHLENDE_DOKUMENTE
-        - FEHLENDE_DOKUMENTE_NACHFRIST
-        - ZURUECKGEZOGEN
-        - ABKLAERUNG_MIT_GS
-        - IN_FREIGABE
-        - ZURUECKGEWIESEN
-        - WARTEN_AUF_UNTERSCHRIFTENBLATT
-        - NEGATIVER_ENTSCHEID
+        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
         - VERFUEGT
-        - STIPENDIUM_AKZEPTIERT
-        - STIPENDIUM_AUSBEZAHLT
+        - VERSANDBEREIT
+        - VERSENDET
+        - WARTEN_AUF_UNTERSCHRIFTENBLATT
+        - IN_BEARBEITUNG_SB
+        - IN_FREIGABE
+        - IN_BEARBEITUNG_GS
+        - ANSPRUCH_MANUELL_PRUEFEN
+        - BEREIT_FUER_BEARBEITUNG
+        - EINGEREICHT
+        - JOUR_FIX
+        - FEHLENDE_DOKUMENTE
+        - NICHT_ANSPRUCHSBERECHTIGT
+        - NICHT_BEITRAGSBERECHTIGT
+        - KEIN_STIPENDIENANSPRUCH
+        - STIPENDIENANSPRUCH
+        - GESUCH_ABGELEHNT
       type: string
     GueltigkeitStatus:
       enum:
@@ -2963,6 +3017,23 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/SteuerdatenUpdate'
+    StatusprotokollEntry:
+      description: 'Eintrag von dem Statusprotokoll'
+      type: object
+      properties:
+        timestamp:
+          description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
+          type: string
+          format: date-time
+        status:
+          description: 'Status welcher am stichtag erreicht wurde'
+          $ref: '#/components/schemas/Gesuchstatus'
+        benutzer:
+          description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
+          type: string
+        kommentar:
+          description: 'Kommentar vom SB über die Statusänderung'
+          type: string
   responses:
     Unauthorized:
       content:

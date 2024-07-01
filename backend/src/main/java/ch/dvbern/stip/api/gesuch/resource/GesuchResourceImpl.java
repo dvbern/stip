@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
@@ -31,6 +32,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchService gesuchService;
     private final GesuchDokumentService gesuchDokumentService;
     private final TenantService tenantService;
+    private final GesuchHistoryService gesuchHistoryService;
 
     @RolesAllowed(GESUCH_CREATE)
     @Override
@@ -103,6 +105,13 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response getRequiredGesuchDokumentTyp(UUID gesuchId) {
         final var requiredTypes = gesuchService.getRequiredDokumentTypes(gesuchId);
         return Response.ok(requiredTypes).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getStatusProtokoll(UUID gesuchId) {
+        final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
+        return Response.ok(statusprotokoll).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)

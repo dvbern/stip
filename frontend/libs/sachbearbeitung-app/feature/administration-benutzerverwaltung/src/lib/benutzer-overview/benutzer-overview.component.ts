@@ -6,6 +6,7 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   MatPaginator,
   MatPaginatorIntl,
@@ -17,9 +18,14 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
+import { SharedModelBenutzer } from '@dv/shared/model/benutzer';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
+import {
+  SharedUiRdIsPendingPipe,
+  SharedUiRdIsPendingWithoutCachePipe,
+} from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
@@ -34,6 +40,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     RouterLink,
     TypeSafeMatCellDefDirective,
     SharedUiBadgeComponent,
+    SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
   ],
@@ -45,6 +52,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
   ],
 })
 export class BenutzerOverviewComponent {
+  private dialog = inject(MatDialog);
   store = inject(BenutzerverwaltungStore);
 
   displayedColumns = ['name', 'email', 'roles', 'actions'];
@@ -73,5 +81,23 @@ export class BenutzerOverviewComponent {
 
   expandRolesForBenutzer(benutzerId: string) {
     this.showFullListForBenutzer[benutzerId] = true;
+  }
+
+  deleteBenutzer(benutzer: SharedModelBenutzer) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title:
+        'sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title',
+      message:
+        'sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text',
+      translationObject: benutzer,
+    })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.store.deleteBenutzer$({
+            benutzerId: benutzer.id,
+          });
+        }
+      });
   }
 }

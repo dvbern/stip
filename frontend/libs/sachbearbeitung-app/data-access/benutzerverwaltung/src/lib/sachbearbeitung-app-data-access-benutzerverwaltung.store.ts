@@ -33,9 +33,12 @@ import {
   UsableRole,
 } from '@dv/shared/model/benutzer';
 import { SharedModelError } from '@dv/shared/model/error';
-import { MailService } from '@dv/shared/model/gesuch';
+import { BenutzerService, MailService } from '@dv/shared/model/gesuch';
 import { SharedModelState } from '@dv/shared/model/state-colors';
-import { noGlobalErrorsIf } from '@dv/shared/util/http';
+import {
+  noGlobalErrorsIf,
+  shouldIgnoreNotFoundErrorsIf,
+} from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   RemoteData,
@@ -55,12 +58,14 @@ type BenutzerverwaltungState = {
   benutzers: CachedRemoteData<SharedModelBenutzer[]>;
   availableRoles: CachedRemoteData<SharedModelRoleList>;
   userCreated: RemoteData<SharedModelBenutzerApi>;
+  userDeleted: RemoteData<null>;
 };
 
 const initialState: BenutzerverwaltungState = {
   benutzers: initial(),
   availableRoles: initial(),
   userCreated: initial(),
+  userDeleted: initial(),
 };
 
 @Injectable()
@@ -71,6 +76,7 @@ export class BenutzerverwaltungStore extends signalStore(
   private http = inject(HttpClient);
   private document = inject(DOCUMENT);
   private authService = inject(OAuthService);
+  private benutzerService = inject(BenutzerService);
   private mailService = inject(MailService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
@@ -129,13 +135,35 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
-  deleteBenutzer$ = rxMethod<string>(
-    tap(() =>
-      this.globalNotificationStore.createNotification({
-        type: 'WARNING',
-        messageKey:
-          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+  deleteBenutzer$ = rxMethod<{ benutzerId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (s) => ({
+          userDeleted: pending(),
+          benutzers: cachedPending(s.benutzers),
+        }));
       }),
+      switchMap(({ benutzerId }) =>
+        this.deleteBenutzerFromBothApis$(benutzerId).pipe(
+          handleApiResponse(
+            () => {
+              patchState(this, { userDeleted: success(null) });
+            },
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+                });
+                this.loadAllSbAppBenutzers$();
+              },
+              onFailure: () => {
+                this.loadAllSbAppBenutzers$();
+              },
+            },
+          ),
+        ),
+      ),
     ),
   );
 
@@ -236,6 +264,24 @@ export class BenutzerverwaltungStore extends signalStore(
         },
       )
       .pipe(this.interceptError('erstellen'));
+  }
+
+  private deleteBenutzerFromBothApis$(benutzerId: string) {
+    return this.benutzerService
+      .deleteBenutzer$({ benutzerId }, undefined, undefined, {
+        context: noGlobalErrorsIf(true, shouldIgnoreNotFoundErrorsIf(true)),
+      })
+      .pipe(
+        switchMap(() =>
+          this.http.delete(
+            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${benutzerId}`,
+            {
+              context: noGlobalErrorsIf(true),
+            },
+          ),
+        ),
+        this.interceptError('loeschen'),
+      );
   }
 
   private loadUser$(response: HttpResponseWithLocation) {

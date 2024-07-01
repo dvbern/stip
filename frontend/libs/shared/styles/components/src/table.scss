@@ -58,8 +58,10 @@
     }
 
     .mat-mdc-header-cell {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-top: var(--dv-table-header-spacing, 10px);
+      padding-bottom: var(--dv-table-header-spacing, 10px);
+      padding-left: var(--dv-table-header-spacing-horizontal, 16px);
+      padding-right: var(--dv-table-header-spacing-horizontal, 16px);
     }
 
     .mat-column-filter {
@@ -156,6 +158,17 @@
 
   .filter-form-field {
     width: 100%;
+  }
+}
+.mat-mdc-table.dv-crud-table.large-spacing {
+  .mat-mdc-header-cell {
+    --dv-table-header-spacing: 30px;
+    --dv-table-header-spacing-horizontal: 30px;
+    font-size: 1rem;
+  }
+
+  .mat-mdc-cell {
+    padding: 16px 31px;
   }
 }
 

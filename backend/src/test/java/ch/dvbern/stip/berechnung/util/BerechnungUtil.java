@@ -5,14 +5,14 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import ch.dvbern.stip.berechnung.dto.BerechnungRequest;
+import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BerechnungUtil {
-    public BerechnungRequest getRequest(final int fall) {
+    public DmnRequest getRequest(final int fall) {
         try {
             final var resource = BerechnungUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));
             assert resource != null;

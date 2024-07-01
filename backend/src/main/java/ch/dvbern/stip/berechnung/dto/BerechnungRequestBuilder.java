@@ -5,5 +5,5 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 
 public interface BerechnungRequestBuilder {
-    BerechnungRequest buildRequest(final Gesuch gesuch, final GesuchTranche gesuchTranche, final ElternTyp elternTyp);
+    DmnRequest buildRequest(final Gesuch gesuch, final GesuchTranche gesuchTranche, final ElternTyp elternTyp);
 }
