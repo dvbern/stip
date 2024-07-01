@@ -25,48 +25,31 @@ import lombok.Getter;
 
 @Getter
 public enum Gesuchstatus {
-    IN_BEARBEITUNG_GS,
-    KOMPLETT_EINGEREICHT,
-    BEREIT_FUER_BEARBEITUNG,
-    FEHLERHAFT,
-    IN_BEARBEITUNG_SB,
-    IN_REVIEW,
-    FEHLENDE_DOKUMENTE,
-    FEHLENDE_DOKUMENTE_NACHFRIST,
-    ZURUECKGEZOGEN,
-    ABKLAERUNG_MIT_GS,
-    IN_FREIGABE,
-    ZURUECKGEWIESEN,
-    WARTEN_AUF_UNTERSCHRIFTENBLATT,
-    NEGATIVER_ENTSCHEID,
+    ABKLAERUNG_DURCH_RECHSTABTEILUNG,
     VERFUEGT,
-    STIPENDIUM_AKZEPTIERT,
-    STIPENDIUM_AUSBEZAHLT;
+    VERSANDBEREIT,
+    VERSENDET,
+    WARTEN_AUF_UNTERSCHRIFTENBLATT,
+    IN_BEARBEITUNG_SB,
+    IN_FREIGABE,
+    IN_BEARBEITUNG_GS,
+    ANSPRUCH_MANUELL_PRUEFEN,
+    BEREIT_FUER_BEARBEITUNG,
+    EINGEREICHT,
+    JOUR_FIX,
+    FEHLENDE_DOKUMENTE,
+    NICHT_ANSPRUCHSBERECHTIGT,
+    NICHT_BEITRAGSBERECHTIGT,
+    KEIN_STIPENDIENANSPRUCH,
+    STIPENDIENANSPRUCH,
+    GESUCH_ABGELEHNT;
 
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(EnumSet.of(
-        IN_BEARBEITUNG_GS,
-        KOMPLETT_EINGEREICHT,
-        ABKLAERUNG_MIT_GS,
-        FEHLENDE_DOKUMENTE,
-        FEHLENDE_DOKUMENTE_NACHFRIST
+        IN_BEARBEITUNG_GS
     ));
 
-    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(EnumSet.of(
-        BEREIT_FUER_BEARBEITUNG,
-        FEHLERHAFT,
-        IN_BEARBEITUNG_SB,
-        ZURUECKGEWIESEN,
-        IN_REVIEW,
-        IN_FREIGABE,
-        WARTEN_AUF_UNTERSCHRIFTENBLATT,
-        VERFUEGT,
-        STIPENDIUM_AKZEPTIERT,
-        STIPENDIUM_AUSBEZAHLT
-    ));
-
-    public static final Set<Gesuchstatus> ADMIN_CAN_EDIT = Collections.unmodifiableSet(
-        EnumSet.copyOf(SACHBEARBEITER_CAN_EDIT)
-    );
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
+        Collections.unmodifiableSet(EnumSet.allOf(Gesuchstatus.class));
 
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;

@@ -107,6 +107,9 @@
   "shared.gesuch.status.ENTWURF": "Brouillon",
   "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
   "shared.gesuch.status.ARCHIVIERT": "Archivé",
+  "shared.gesuch.status.contract.IN_BEARBEITUNG_GS": "En cours de traitement",
+  "shared.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
+  "shared.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",
 
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",

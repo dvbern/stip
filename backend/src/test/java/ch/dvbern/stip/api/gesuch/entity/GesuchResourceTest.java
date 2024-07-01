@@ -454,7 +454,7 @@ class GesuchResourceTest {
 
         for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.EINGEREICHT));
         }
     }
 
@@ -470,7 +470,7 @@ class GesuchResourceTest {
 
         for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.KOMPLETT_EINGEREICHT));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.EINGEREICHT));
         }
     }
 
