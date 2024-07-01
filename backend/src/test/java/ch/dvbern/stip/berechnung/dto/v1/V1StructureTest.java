@@ -3,18 +3,13 @@ package ch.dvbern.stip.berechnung.dto.v1;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import com.savoirtech.json.JsonComparatorBuilder;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,13 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class V1StructureTest {
     @Inject
     PersonenImHaushaltService personenImHaushaltService;
-
-    @BeforeAll
-    static void setUpAll() {
-        final var mock = Mockito.mock(TenantService.class);
-        Mockito.when(mock.getCurrentTenant()).thenReturn(new TenantInfoDto().identifier("bern"));
-        QuarkusMock.installMockForType(mock, TenantService.class);
-    }
 
     private static final String EXPECTED = """
         {

@@ -12,17 +12,12 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,13 +32,6 @@ class PersonenImHaushaltServiceTest {
     PersonenImHaushaltService personenImHaushaltService;
 
     GesuchFormular gesuchFormular;
-
-    @BeforeAll
-    static void setUpAll() {
-        final var mock = Mockito.mock(TenantService.class);
-        Mockito.when(mock.getCurrentTenant()).thenReturn(new TenantInfoDto().identifier("bern"));
-        QuarkusMock.installMockForType(mock, TenantService.class);
-    }
 
     @BeforeEach
     void setUpEach() {
