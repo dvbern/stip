@@ -40,8 +40,8 @@ class SteuerdatenTabBerechnungsServiceTest {
 
     @ParameterizedTest
     @CsvSource({
-        "VATER,VATER,1",
-        "MUTTER,MUTTER,1",
+        "VATER,MUTTER,1",
+        "MUTTER,VATER,1",
         ",,0"
     })
     void gerichtlicheAlimentenregelungTest(

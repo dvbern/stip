@@ -31,11 +31,11 @@ public class SteuerdatenTabBerechnungsService {
 
     private List<SteuerdatenTyp> getAlimentenregelungTabs(final Familiensituation familiensituation) {
         if (familiensituation.getWerZahltAlimente() == VATER) {
-            return List.of(SteuerdatenTyp.VATER);
+            return List.of(SteuerdatenTyp.MUTTER);
         }
 
         if (familiensituation.getWerZahltAlimente() == MUTTER) {
-            return List.of(SteuerdatenTyp.MUTTER);
+            return List.of(SteuerdatenTyp.VATER);
         }
 
         return List.of();
