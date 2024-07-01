@@ -1014,6 +1014,8 @@ class GesuchServiceTest {
             gesuchFormular.getLebenslaufItems().add(lebenslaufItemMapper.partialUpdate(item, new LebenslaufItem()));
         });
 
+        gesuchFormular.setFamiliensituation(new Familiensituation());
+
         return tranche.setGesuchFormular(gesuchFormular);
     }
 }

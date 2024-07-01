@@ -138,6 +138,7 @@ quarkus:
     name: 'stip-usercontent-test'
   keycloak:
     url: 'http://dummy.keycloak'
+    frontend-url: 'http://dummy.keycloak'
   kstip:
     allowed:
       mimetypes: 'text/plain,image/png'

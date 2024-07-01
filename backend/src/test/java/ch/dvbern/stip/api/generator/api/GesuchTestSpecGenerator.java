@@ -22,6 +22,7 @@ import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
@@ -141,6 +142,7 @@ public class GesuchTestSpecGenerator {
 
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec);
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs);
+            model.setSteuerdaten(SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecFull =

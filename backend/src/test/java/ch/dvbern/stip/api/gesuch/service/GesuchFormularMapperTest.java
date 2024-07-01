@@ -5,8 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
@@ -34,7 +32,6 @@ import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -46,12 +43,12 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import org.junit.jupiter.api.Test;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -434,65 +431,76 @@ class GesuchFormularMapperTest {
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
-    // Move this test case into a QuarkusTest once/ if SteuerdatenTabBerechnungsService is a DMN service
     @Test
-    void resetSteuerdatenClearsTabTest() {
-        final var gesuchFormular = new GesuchFormular()
-            .setFamiliensituation(
-                new Familiensituation()
-                    .setElternVerheiratetZusammen(true)
-            )
-            .setSteuerdaten(Set.of(
-                new Steuerdaten()
-                    .setSteuerdatenTyp(SteuerdatenTyp.FAMILIE)
-            ));
+    void resetSteuerdatenDoesntClearTabTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(true);
+
+        final var updateTab = new SteuerdatenUpdateDto();
+        updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        // This needs to be this verbose as List.of creates an immutable list
+        // This also needs to be a mutable list since List.removeAll(...)
+        // will throw an exception even if no items are to be removed
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
+            add(updateTab);
+        }};
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setSteuerdaten(updateSteuerdaten);
 
         final var mapper = createMapper();
 
-        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
-        assertCountAndType(gesuchFormular, 1, List.of(SteuerdatenTyp.FAMILIE));
+        // Act
+        final var targetFormular =
+            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
 
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternVerheiratetZusammen(false)
-                .setGerichtlicheAlimentenregelung(true)
-                .setWerZahltAlimente(Elternschaftsteilung.VATER)
+        // Assert
+        assertThat(targetFormular.getSteuerdaten().size(), is(1));
+        assertThat(
+            targetFormular.getSteuerdaten().stream().findFirst().get().getSteuerdatenTyp(),
+            is(SteuerdatenTyp.FAMILIE)
         );
-
-        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
-        assertCountAndType(gesuchFormular, 0, List.of());
-
-        gesuchFormular.setSteuerdaten(Set.of(
-            new Steuerdaten()
-                .setSteuerdatenTyp(SteuerdatenTyp.VATER)
-        ));
-
-        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
-        assertCountAndType(gesuchFormular, 1, List.of(SteuerdatenTyp.VATER));
-
-        gesuchFormular.setFamiliensituation(null);
-        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
-        assertThat(gesuchFormular.getSteuerdaten(), is(empty()));
     }
 
-    private void assertCountAndType(
-        final GesuchFormular gesuchFormular,
-        final int expectedCount,
-        final List<SteuerdatenTyp> expectedTypes
-    ) {
-        assertThat(gesuchFormular.getSteuerdaten().size() == expectedCount, is(true));
-        assertThat(
-            gesuchFormular.getSteuerdaten()
-                .stream()
-                .map(Steuerdaten::getSteuerdatenTyp)
-                .collect(Collectors.toSet())
-                .containsAll(expectedTypes),
-            is(true)
-        );
+    @Test
+    void resetSteuerdatenClearsFamilieTabTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(true);
+
+        final var updateTab = new SteuerdatenUpdateDto();
+        updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        // This needs to be this verbose as List.of creates an immutable list
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
+            add(updateTab);
+        }};
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setSteuerdaten(updateSteuerdaten);
+
+        final var mapper = createMapper();
+
+        // Init target
+        var targetFormular =
+            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+
+        // Rearrange
+        updateFamsit.setElternVerheiratetZusammen(false);
+        updateFamsit.setGerichtlicheAlimentenregelung(true);
+        updateFamsit.setWerZahltAlimente(Elternschaftsteilung.VATER);
+
+        // Act
+        targetFormular = mapper.partialUpdate(updateFormular, targetFormular);
+
+        // Assert
+        assertThat(targetFormular.getSteuerdaten().size(), is(0));
     }
 
     GesuchFormularMapper createMapper() {
-        final var mapper = new GesuchFormularMapperImpl(
+        final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
             new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
@@ -508,6 +516,7 @@ class GesuchFormularMapperTest {
 
         // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
         mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
+        mapper.familiensituationMapper = new FamiliensituationMapperImpl();
 
         return mapper;
     }

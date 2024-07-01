@@ -170,8 +170,7 @@ class GesuchResourceTest {
             .setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setZivilstand(ZivilstandDtoSpec.LEDIG);
+            .setPartner(null);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -364,7 +363,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(16)
+    @Order(17)
     void testUpdateGesuchEndpointAddEinnahmenKoster() {
         updateGesuch();
 
@@ -380,6 +379,13 @@ class GesuchResourceTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .setPersonInAusbildung(personInAusbildung);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .setPartner(null);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setZivilstand(ZivilstandDtoSpec.LEDIG);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)

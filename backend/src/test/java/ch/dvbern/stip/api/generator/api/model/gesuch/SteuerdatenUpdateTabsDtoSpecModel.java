@@ -43,6 +43,9 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
     public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten =
         TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE))
+            (model, faker) -> {
+                model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
+                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec);
+            }
         );
 }

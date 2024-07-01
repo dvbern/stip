@@ -1,60 +1,31 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
-import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
-import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
-import ch.dvbern.stip.generated.dto.*;
-import io.quarkus.test.InjectMock;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matchers;
-import org.jetbrains.annotations.Nullable;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mockito;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Stream;
-
-import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
-import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.*;
-import static ch.dvbern.stip.api.util.TestUtil.initGesuchCreateDto;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.is;
 
 @Slf4j
 @QuarkusTest
