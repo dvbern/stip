@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
@@ -31,7 +34,10 @@ import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -45,6 +51,7 @@ import org.junit.jupiter.api.Test;
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -303,22 +310,6 @@ class GesuchFormularMapperTest {
         assertThat(update.getPartner(), is(nullValue()));
     }
 
-    GesuchFormularMapper createMapper() {
-        return new GesuchFormularMapperImpl(
-            new PersonInAusbildungMapperImpl(),
-            new FamiliensituationMapperImpl(),
-            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
-            new LebenslaufItemMapperImpl(new DateMapperImpl()),
-            new PartnerMapperImpl(),
-            new AuszahlungMapperImpl(),
-            new GeschwisterMapperImpl(),
-            new ElternMapperImpl(),
-            new KindMapperImpl(),
-            new EinnahmenKostenMapperImpl(),
-            new SteuerdatenMapperImpl()
-        );
-    }
-
     @Test
     void calculateSteuernKantonGemeindeTest() {
         GesuchFormular gesuchFormular =
@@ -437,7 +428,80 @@ class GesuchFormularMapperTest {
         assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
         GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-        
+
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void resetSteuerdatenClearsTabTest() {
+        final var gesuchFormular = new GesuchFormular()
+            .setFamiliensituation(
+                new Familiensituation()
+                    .setElternVerheiratetZusammen(true)
+            )
+            .setSteuerdaten(Set.of(
+                new Steuerdaten()
+                    .setSteuerdatenTyp(SteuerdatenTyp.FAMILIE)
+            ));
+
+        final var mapper = createMapper();
+        mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
+
+        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
+        assertCountAndType(gesuchFormular, 1, List.of(SteuerdatenTyp.FAMILIE));
+
+        gesuchFormular.setFamiliensituation(
+            new Familiensituation()
+                .setElternVerheiratetZusammen(false)
+                .setGerichtlicheAlimentenregelung(true)
+                .setWerZahltAlimente(Elternschaftsteilung.VATER)
+        );
+
+        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
+        assertCountAndType(gesuchFormular, 0, List.of());
+
+        gesuchFormular.setSteuerdaten(Set.of(
+            new Steuerdaten()
+                .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+        ));
+
+        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
+        assertCountAndType(gesuchFormular, 1, List.of(SteuerdatenTyp.VATER));
+
+        gesuchFormular.setFamiliensituation(null);
+        mapper.resetSteuerdatenAfterUpdate(gesuchFormular);
+        assertThat(gesuchFormular.getSteuerdaten(), is(empty()));
+    }
+
+    private void assertCountAndType(
+        final GesuchFormular gesuchFormular,
+        final int expectedCount,
+        final List<SteuerdatenTyp> expectedTypes
+    ) {
+        assertThat(gesuchFormular.getSteuerdaten().size() == expectedCount, is(true));
+        assertThat(
+            gesuchFormular.getSteuerdaten()
+                .stream()
+                .map(Steuerdaten::getSteuerdatenTyp)
+                .collect(Collectors.toSet())
+                .containsAll(expectedTypes),
+            is(true)
+        );
+    }
+
+    GesuchFormularMapper createMapper() {
+        return new GesuchFormularMapperImpl(
+            new PersonInAusbildungMapperImpl(),
+            new FamiliensituationMapperImpl(),
+            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            new LebenslaufItemMapperImpl(new DateMapperImpl()),
+            new PartnerMapperImpl(),
+            new AuszahlungMapperImpl(),
+            new GeschwisterMapperImpl(),
+            new ElternMapperImpl(),
+            new KindMapperImpl(),
+            new EinnahmenKostenMapperImpl(),
+            new SteuerdatenMapperImpl()
+        );
     }
 }

@@ -36,7 +36,7 @@ public class SteuerdatenTabsRequiredConstraintValidator
             .map(Steuerdaten::getSteuerdatenTyp)
             .collect(Collectors.toSet());
 
-        if (!requiredTabs.containsAll(actualTabs) || requiredTabs.size() != actualTabs.size()) {
+        if (requiredTabs.size() != actualTabs.size() || !requiredTabs.containsAll(actualTabs)) {
             return GesuchValidatorUtil.addProperty(context, property);
         }
 

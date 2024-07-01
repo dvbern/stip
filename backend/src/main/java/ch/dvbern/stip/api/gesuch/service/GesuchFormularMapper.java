@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
@@ -103,6 +105,13 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetPartner(newFormular, targetFormular);
     }
 
+    @AfterMapping
+    protected void resetDependentDataAfterUpdate(
+        final @MappingTarget GesuchFormular targetFormular
+    ) {
+        resetSteuerdatenAfterUpdate(targetFormular);
+    }
+
     void resetEinnahmenKosten(
         final GesuchFormularUpdateDto newFormular,
         final GesuchFormular targetFormular
@@ -153,8 +162,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
                 if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
                     newFormular.getEinnahmenKosten() != null) {
-                        newFormular.getEinnahmenKosten().setWohnkosten(null);
-                        newFormular.getEinnahmenKosten().setWgWohnend(null);
+                    newFormular.getEinnahmenKosten().setWohnkosten(null);
+                    newFormular.getEinnahmenKosten().setWgWohnend(null);
                 }
             }
         );
@@ -246,6 +255,30 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 newFormular.setPartner(null);
             }
         );
+    }
+
+    void resetSteuerdatenAfterUpdate(
+        final GesuchFormular targetFormular
+    ) {
+        if (targetFormular.getFamiliensituation() == null) {
+            targetFormular.getSteuerdaten().clear();
+        } else {
+            final var requiredTabs = new HashSet<>(
+                steuerdatenTabBerechnungsService.calculateTabs(targetFormular.getFamiliensituation())
+            );
+
+            final var tabsToRemove = targetFormular.getSteuerdaten()
+                .stream()
+                .filter(steuerdatenTab -> !requiredTabs.contains(steuerdatenTab.getSteuerdatenTyp()))
+                .collect(Collectors.toSet());
+
+            final var tabsToSet = targetFormular.getSteuerdaten()
+                .stream()
+                .filter(tab -> !tabsToRemove.contains(tab))
+                .collect(Collectors.toSet());
+
+            targetFormular.setSteuerdaten(tabsToSet);
+        }
     }
 
     void removeElternOfTyp(final List<ElternUpdateDto> eltern, final ElternTyp typ) {
