@@ -106,6 +106,14 @@ export const ABSCHLUSS: SharedModelGesuchFormStep = {
   iconSymbolName: 'check_circle',
 };
 
+export const PROTOKOLL: SharedModelGesuchFormStep = {
+  route: 'protokoll',
+  translationKey: 'shared.protokoll.title',
+  titleTranslationKey: 'shared.protokoll.title',
+  currentStepNumber: 13,
+  iconSymbolName: 'history',
+};
+
 export const gesuchFormSteps = {
   PERSON,
   AUSBILDUNG,
@@ -119,6 +127,7 @@ export const gesuchFormSteps = {
   EINNAHMEN_KOSTEN,
   DOKUMENTE,
   ABSCHLUSS,
+  PROTOKOLL,
 };
 
 export const isStepDisabled = (

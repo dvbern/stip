@@ -183,6 +183,13 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
 
+  "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
+  "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Datum",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Status",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",

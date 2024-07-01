@@ -422,6 +422,8 @@
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
 
+  "shared.protokoll.title": "Protocole",
+
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Juriste",
   "shared.role.Sachbearbeiter": "Gestionnaire de dossier",

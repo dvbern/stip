@@ -50,6 +50,7 @@
           <div class="row overflow-auto position-relative">
             <div [class.opacity-50]="cockpitViewSig().gesucheLoading">
               <table
+                class="dv-crud-table"
                 [dvSharedUiFocusableList]="items"
                 [dataSource]="gesucheDataSourceSig()"
                 data-testid="cockpit-table"
@@ -107,7 +108,10 @@
                     {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
                   </th>
                   <td mat-cell *matCellDef="let gesuch">
-                    {{ gesuch.gesuchTrancheToWorkWith.gesuchFormular.personInAusbildung?.geburtsdatum }}
+                    {{
+                      gesuch.gesuchTrancheToWorkWith.gesuchFormular.personInAusbildung?.geburtsdatum
+                        | date: 'dd.MM.YYYY'
+                    }}
                   </td>
                 </ng-container>
 

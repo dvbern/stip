@@ -976,6 +976,35 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchId}/statusprotokoll':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '201':
+          description: Gesuch eingereicht
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/StatusprotokollEntry'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getStatusProtokoll
+      summary: Holt das Statusprotokoll für ein Gesuch
   /tenant/current:
     get:
       tags:
@@ -2909,6 +2938,23 @@ components:
           type: string
         kantonskuerzel:
           description: ''
+          type: string
+    StatusprotokollEntry:
+      description: 'Eintrag von dem Statusprotokoll'
+      type: object
+      properties:
+        timestamp:
+          description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
+          type: string
+          format: date-time
+        status:
+          description: 'Status welcher am stichtag erreicht wurde'
+          $ref: '#/components/schemas/Gesuchstatus'
+        benutzer:
+          description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
+          type: string
+        kommentar:
+          description: 'Kommentar vom SB über die Statusänderung'
           type: string
   responses:
     Unauthorized:

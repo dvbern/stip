@@ -16,6 +16,7 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
+  PROTOKOLL,
   SharedModelGesuchFormStep,
   StepValidation,
   isStepDisabled,
@@ -47,12 +48,12 @@ const BaseSteps = [
 
 const StepFlow: Record<AppType, SharedModelGesuchFormStep[]> = {
   'gesuch-app': [...BaseSteps, ABSCHLUSS, RETURN_TO_COCKPIT],
-  'sachbearbeitung-app': [...BaseSteps, RETURN_TO_COCKPIT],
+  'sachbearbeitung-app': [...BaseSteps, PROTOKOLL, RETURN_TO_COCKPIT],
 };
 
 const steps: Record<AppType, SharedModelGesuchFormStep[]> = {
-  'sachbearbeitung-app': BaseSteps,
   'gesuch-app': [...BaseSteps, ABSCHLUSS],
+  'sachbearbeitung-app': [...BaseSteps, PROTOKOLL],
 };
 
 @Injectable({

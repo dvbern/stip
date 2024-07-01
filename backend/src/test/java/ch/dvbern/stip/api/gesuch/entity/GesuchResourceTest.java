@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -27,6 +28,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -548,6 +550,40 @@ class GesuchResourceTest {
         // Checks if all dokument types returned from the API are in the list of expected types
         assertThat(
             set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
+            is(true)
+        );
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(24)
+    void testGetStatusprotokoll() {
+        final var statusprotokoll = gesuchApiSpec.getStatusProtokoll()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(StatusprotokollEntryDtoSpec[].class);
+
+        assertThat(
+            Arrays.toString(statusprotokoll),
+            statusprotokoll.length,
+            is(2)
+        );
+
+        final var expectedOldStatus = Set.of(
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
+            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+        );
+
+        assertThat(
+            expectedOldStatus.containsAll(Arrays.stream(statusprotokoll)
+                .map(StatusprotokollEntryDtoSpec::getStatus)
+                .toList()
+            ),
             is(true)
         );
     }

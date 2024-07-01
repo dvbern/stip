@@ -72,6 +72,7 @@ export * from './plz';
 export * from './sachbearbeiterZuordnungStammdaten';
 export * from './sachbearbeiterZuordnungStammdatenList';
 export * from './sprache';
+export * from './statusprotokollEntry';
 export * from './taetigkeitsart';
 export * from './tenantAuthConfig';
 export * from './tenantInfo';

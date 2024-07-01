@@ -422,6 +422,8 @@
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
 
+  "shared.protokoll.title": "Protokoll",
+
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Jurist",
   "shared.role.Sachbearbeiter": "Sachbearbeiter",

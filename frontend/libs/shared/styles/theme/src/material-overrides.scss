@@ -169,17 +169,17 @@ form .readonly {
 }
 .mat-mdc-table {
   .mat-mdc-header-cell {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: var(--dv-table-header-spacing, 20px);
+    padding-bottom: var(--dv-table-header-spacing, 20px);
   }
   .combined-header-row {
     .mat-mdc-header-cell {
       border-bottom: 0;
-      padding-top: 20px;
+      padding-top: var(--dv-table-header-spacing, 20px);
       padding-bottom: 0px;
     }
     .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
-      padding-bottom: 20px;
+      padding-bottom: var(--dv-table-header-spacing, 20px);
       padding-top: 0;
     }
   }
