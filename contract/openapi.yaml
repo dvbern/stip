@@ -1005,6 +1005,37 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getStatusProtokoll
       summary: Holt das Statusprotokoll für ein Gesuch
+  '/gesuch/{gesuchId}/berechnung':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Stipendien berechnet für Gesuch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungForGesuch
+      summary: Berechnet und holt die Berechnung für ein Gesuch
   /tenant/current:
     get:
       tags:
@@ -3033,6 +3064,16 @@ components:
           type: string
         kommentar:
           description: 'Kommentar vom SB über die Statusänderung'
+          type: string
+    Berechnungsresultat:
+      description: Resultat der Berechnung (eine Tranche)
+      type: object
+      properties:
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für diese Tranche'
+          type: integer
+        berechnungsdaten:
+          description: 'Resultat der Berechnung als JSON objekt, transparent'
           type: string
   responses:
     Unauthorized:
