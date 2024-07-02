@@ -214,6 +214,11 @@ public class GesuchService {
     }
 
     @Transactional
+    public List<GesuchDto> findAllGesucheIgnoreStatusSb(){
+        return gesuchRepository.findAllIgnoreStatusFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+    }
+
+    @Transactional
     public List<GesuchDto> findAllGesucheSb() {
         return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
     }
@@ -222,6 +227,14 @@ public class GesuchService {
     public List<GesuchDto> findGesucheSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
+    }
+
+    @Transactional
+    public List<GesuchDto> findGesucheIgnoreStatusSb(){
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        return gesuchRepository.findZugewiesenIgnoreStatusFilteredForSb(benutzer.getId())
             .map(this::mapWithTrancheToWorkWith)
             .toList();
     }

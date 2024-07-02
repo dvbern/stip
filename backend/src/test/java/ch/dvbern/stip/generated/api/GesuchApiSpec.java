@@ -67,11 +67,13 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
+                getAllGesucheIgnoreStatusSb(),
                 getAllGesucheSb(),
                 getGesuch(),
                 getGesuchDokumente(),
                 getGesucheForFall(),
                 getGesucheGs(),
+                getGesucheIgnoreStatusSb(),
                 getGesucheSb(),
                 getRequiredGesuchDokumentTyp(),
                 getStatusProtokoll(),
@@ -96,6 +98,10 @@ public class GesuchApiSpec {
         return new GesuchEinreichenValidierenOper(createReqSpec());
     }
 
+    public GetAllGesucheIgnoreStatusSbOper getAllGesucheIgnoreStatusSb() {
+        return new GetAllGesucheIgnoreStatusSbOper(createReqSpec());
+    }
+
     public GetAllGesucheSbOper getAllGesucheSb() {
         return new GetAllGesucheSbOper(createReqSpec());
     }
@@ -114,6 +120,10 @@ public class GesuchApiSpec {
 
     public GetGesucheGsOper getGesucheGs() {
         return new GetGesucheGsOper(createReqSpec());
+    }
+
+    public GetGesucheIgnoreStatusSbOper getGesucheIgnoreStatusSb() {
+        return new GetGesucheIgnoreStatusSbOper(createReqSpec());
     }
 
     public GetGesucheSbOper getGesucheSb() {
@@ -400,6 +410,67 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchEinreichenValidierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns gesuche of any status
+     * 
+     *
+     * return List&lt;GesuchDtoSpec&gt;
+     */
+    public static class GetAllGesucheIgnoreStatusSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/all/ignore_status/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllGesucheIgnoreStatusSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/all/ignore_status/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/all/ignore_status/sb
+         * @param handler handler
+         * @return List&lt;GesuchDtoSpec&gt;
+         */
+        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllGesucheIgnoreStatusSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllGesucheIgnoreStatusSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -741,6 +812,67 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetGesucheGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns gesuche filtered by sb of any status
+     * 
+     *
+     * return List&lt;GesuchDtoSpec&gt;
+     */
+    public static class GetGesucheIgnoreStatusSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/benutzer/me/ignore_status/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesucheIgnoreStatusSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/ignore_status/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/ignore_status/sb
+         * @param handler handler
+         * @return List&lt;GesuchDtoSpec&gt;
+         */
+        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesucheIgnoreStatusSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesucheIgnoreStatusSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

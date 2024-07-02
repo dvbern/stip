@@ -81,11 +81,22 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response getAllGesucheSb() {
         return Response.ok(gesuchService.findAllGesucheSb()).build();
     }
+    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
+    @Override
+    public Response getAllGesucheIgnoreStatusSb() {
+        return Response.ok(gesuchService.findGesucheIgnoreStatusSb()).build();
+    }
 
     @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesucheSb() {
         return Response.ok(gesuchService.findGesucheSb()).build();
+    }
+
+    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
+    @Override
+    public Response getGesucheIgnoreStatusSb() {
+        return Response.ok(gesuchService.findGesucheIgnoreStatusSb()).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
