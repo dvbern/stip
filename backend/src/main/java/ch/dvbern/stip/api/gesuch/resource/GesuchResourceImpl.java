@@ -79,13 +79,13 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
     public Response getAllGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
-        return null;
+        return Response.ok(gesuchService.findAllGesucheSb(getGesucheSBQueryTyp)).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
     public Response getGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
-        return null;
+        return Response.ok(gesuchService.findGesucheSb(getGesucheSBQueryTyp)).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })

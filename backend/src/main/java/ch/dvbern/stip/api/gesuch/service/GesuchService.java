@@ -54,14 +54,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -213,26 +206,34 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
-    @Transactional
-    public List<GesuchDto> findAllGesucheIgnoreStatusSb(){
+    private List<GesuchDto> findAllGesucheIgnoreStatusSb(){
         return gesuchRepository.findAllIgnoreStatusFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional
-    public List<GesuchDto> findAllGesucheSb() {
-        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findAllGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
+        if(getGesucheSBQueryTyp == GetGesucheSBQueryTypDto.ALLE_BEARBEITBAR){
+            return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+        } else{
+            return findAllGesucheIgnoreStatusSb();
+        }
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSb() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
+    public List<GesuchDto> findGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
+        if(getGesucheSBQueryTyp == GetGesucheSBQueryTypDto.ALLE_BEARBEITBAR_MEINE){
+            final var benutzer = benutzerService.getCurrentBenutzer();
+            return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
+                .map(this::mapWithTrancheToWorkWith)
+                .toList();
+        }
+        else{
+            return findGesucheIgnoreStatusSb();
+        }
+
     }
 
-    @Transactional
-    public List<GesuchDto> findGesucheIgnoreStatusSb(){
+    private List<GesuchDto> findGesucheIgnoreStatusSb(){
         final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findZugewiesenIgnoreStatusFilteredForSb(benutzer.getId())
             .map(this::mapWithTrancheToWorkWith)
