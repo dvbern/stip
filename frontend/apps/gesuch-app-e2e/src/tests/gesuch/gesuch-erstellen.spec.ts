@@ -226,7 +226,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await familiyPO.elems.buttonSaveContinue.click();
 
-    // Step 5: Eltern =============================================================
+    // Step 5.1: Eltern =============================================================
     await expectStepTitleToContainText('Eltern', page);
     const elternPO = new ElternPO(page);
     await expect(elternPO.elems.loading).toBeHidden();
@@ -235,6 +235,11 @@ test.describe('Neues gesuch erstellen', () => {
     await elternPO.addMutter(mutter);
 
     await elternPO.elems.buttonContinue.click();
+
+    // Step 5.2: Steuerdaten Eltern =================================================
+    await expectStepTitleToContainText('Steuerdaten für', page);
+    // Skipping for now as no .po for steuerdaten exists yet
+    await page.getByTestId('step-nav-geschwister').click();
 
     // Step 6: Geschwister  ========================================================
     await expectStepTitleToContainText('Geschwister', page);
