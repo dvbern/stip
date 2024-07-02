@@ -11,6 +11,7 @@ import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -61,7 +62,6 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response gesuchEinreichenValidieren(UUID gesuchId) {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
     }
-
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuch(UUID gesuchId) {
@@ -78,25 +78,14 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
-    public Response getAllGesucheSb() {
-        return Response.ok(gesuchService.findAllGesucheSb()).build();
-    }
-    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
-    @Override
-    public Response getAllGesucheIgnoreStatusSb() {
-        return Response.ok(gesuchService.findGesucheIgnoreStatusSb()).build();
+    public Response getAllGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
+        return null;
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
-    public Response getGesucheSb() {
-        return Response.ok(gesuchService.findGesucheSb()).build();
-    }
-
-    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
-    @Override
-    public Response getGesucheIgnoreStatusSb() {
-        return Response.ok(gesuchService.findGesucheIgnoreStatusSb()).build();
+    public Response getGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
+        return null;
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })

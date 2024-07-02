@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -36,14 +37,9 @@ public interface GesuchResource {
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/all/ignore_status/sb")
+    @Path("/all/sb/{getGesucheSBQueryTyp}")
     @Produces({ "application/json", "text/plain" })
-    Response getAllGesucheIgnoreStatusSb();
-
-    @GET
-    @Path("/all/sb")
-    @Produces({ "application/json", "text/plain" })
-    Response getAllGesucheSb();
+    Response getAllGesucheSb(@PathParam("getGesucheSBQueryTyp") GetGesucheSBQueryTypDto getGesucheSBQueryTyp);
 
     @GET
     @Path("/{gesuchId}")
@@ -66,14 +62,9 @@ public interface GesuchResource {
     Response getGesucheGs();
 
     @GET
-    @Path("/benutzer/me/ignore_status/sb")
+    @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheIgnoreStatusSb();
-
-    @GET
-    @Path("/benutzer/me/sb")
-    @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb();
+    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") GetGesucheSBQueryTypDto getGesucheSBQueryTyp);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")

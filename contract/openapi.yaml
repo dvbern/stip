@@ -54,10 +54,16 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  /gesuch/all/sb:
+  /gesuch/all/sb/{getGesucheSBQueryTyp}:
     get:
       tags:
         - Gesuch
+      parameters:
+        - name: getGesucheSBQueryTyp
+          schema:
+            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
+          in: path
+          required: true
       responses:
         '200':
           content:
@@ -75,31 +81,16 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllGesucheSb
       summary: Returns gesuche filtered by status
-  /gesuch/all/ignore_status/sb:
+  /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}:
     get:
       tags:
         - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Returns gesuche of any status
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllGesucheIgnoreStatusSb
-      summary: Returns gesuche of any status
-  /gesuch/benutzer/me/sb:
-    get:
-      tags:
-        - Gesuch
+      parameters:
+        - name: getGesucheSBQueryTyp
+          schema:
+            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
+          in: path
+          required: true
       responses:
         '200':
           content:
@@ -117,27 +108,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesucheSb
       summary: Returns gesuche filtered by status and sb
-  /gesuch/benutzer/me/ignore_status/sb:
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Returns gesuche filtered by sb of any status
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheIgnoreStatusSb
-      summary: Returns gesuche filtered by sb of any status
   /gesuch/benutzer/me/gs:
     get:
       tags:
@@ -1488,6 +1458,13 @@ components:
         - KEIN_STIPENDIENANSPRUCH
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
+      type: string
+    GetGesucheSBQueryTyp:
+      enum:
+        - ALLE_BEARBEITBAR
+        - ALLE_BEARBEITBAR_MEINE
+        - ALLE_MEINE
+        - ALLE
       type: string
     GueltigkeitStatus:
       enum:
