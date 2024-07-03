@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.common.statemachines.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.communication.mail.service.MailService;

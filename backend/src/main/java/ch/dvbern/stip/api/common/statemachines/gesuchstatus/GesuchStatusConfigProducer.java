@@ -1,9 +1,9 @@
-package ch.dvbern.stip.api.common.statemachines;
+package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
 
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.handlers.StateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;

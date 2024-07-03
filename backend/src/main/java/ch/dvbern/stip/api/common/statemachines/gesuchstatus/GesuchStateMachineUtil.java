@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.common.statemachines;
+package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
 
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;

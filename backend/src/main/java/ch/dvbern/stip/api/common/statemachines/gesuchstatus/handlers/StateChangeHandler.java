@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.common.statemachines.handlers;
+package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
