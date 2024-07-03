@@ -13,6 +13,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
@@ -47,6 +48,7 @@ public class GesuchDokumentService {
     private final GesuchRepository gesuchRepository;
     private final S3AsyncClient s3;
     private final ConfigService configService;
+    private final DokumentstatusService dokumentstatusService;
 
     @Transactional
     public DokumentDto uploadDokument(
@@ -102,6 +104,25 @@ public class GesuchDokumentService {
                 .stream()
                 .map(Dokument::getObjectId)
             ).toList();
+    }
+
+    @Transactional
+    public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final String comment) {
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        dokumentstatusService.triggerStatusChangeWithComment(
+            gesuchDokument,
+            DokumentstatusChangeEvent.ABGELEHNT,
+            comment
+        );
+    }
+
+    @Transactional
+    public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        dokumentstatusService.triggerStatusChange(
+            gesuchDokument,
+            DokumentstatusChangeEvent.AKZEPTIERT
+        );
     }
 
     public void deleteAllDokumentForGesuch(final UUID gesuchId) {
