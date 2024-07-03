@@ -37,25 +37,12 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Stream<Gesuch> findZugewiesenIgnoreStatusFilteredForSb(final UUID sachbearbeiterId) {
         final var query = prepareFindAllIgnoreStatusFilteredForSbQuery();
-        final var gesuch = QGesuch.gesuch;
-        final var zuordnung = QZuordnung.zuordnung;
-
-        query
-            .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
-            .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
-        return query.stream();
+        return prepareFilterForSBJoinQuery(query,sachbearbeiterId).stream();
     }
 
-        public Stream<Gesuch> findZugewiesenFilteredForSb(final UUID sachbearbeiterId) {
+    public Stream<Gesuch> findZugewiesenFilteredForSb(final UUID sachbearbeiterId) {
         final var query = findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT));
-        final var gesuch = QGesuch.gesuch;
-        final var zuordnung = QZuordnung.zuordnung;
-
-        query
-            .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
-            .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
-
-        return query.stream();
+            return prepareFilterForSBJoinQuery(query,sachbearbeiterId).stream();
     }
 
     public Stream<Gesuch> findAllFilteredForSb() {
@@ -64,6 +51,17 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Stream<Gesuch> findAllIgnoreStatusFilteredForSb(){
         return prepareFindAllIgnoreStatusFilteredForSbQuery().stream();
+    }
+
+    private JPAQuery<Gesuch> prepareFilterForSBJoinQuery(JPAQuery<Gesuch> initialQuery,UUID sachbearbeiterId){
+        final var gesuch = QGesuch.gesuch;
+        final var zuordnung = QZuordnung.zuordnung;
+
+        initialQuery
+            .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
+            .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
+
+        return initialQuery;
     }
 
     private JPAQuery<Gesuch> prepareFindAllIgnoreStatusFilteredForSbQuery(){
