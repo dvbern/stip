@@ -42,16 +42,18 @@ public class GesuchsperiodeSeeding extends Seeder{
             return;
         }
 
+        int currentYear = LocalDate.now().getYear();
+
         final var newPerioden = List.of(
             getPeriodeForSeeding(
                 newJahr,
-                LocalDate.of(2022, 8, 1),
-                LocalDate.of(2023, 7, 31)
+                LocalDate.of(currentYear -1, 8, 1),
+                LocalDate.of(currentYear, 7, 31)
             ),
             getPeriodeForSeeding(
                 newJahr,
-                LocalDate.of(2023, 8, 1),
-                LocalDate.of(2024, 7, 31)
+                LocalDate.of(currentYear, 8, 1),
+                LocalDate.of(currentYear + 1, 7, 31)
             )
         );
 
@@ -65,10 +67,13 @@ public class GesuchsperiodeSeeding extends Seeder{
     }
 
     Gesuchsjahr getJahrForSeeding() {
+        int currentYear = LocalDate.now().getYear();
+        String yearAsString = String.valueOf(currentYear);
+        String yearSuffix = yearAsString.substring(yearAsString.length() -2 , yearAsString.length());
         return new Gesuchsjahr()
-            .setBezeichnungDe("Gesuchsjahr 24")
-            .setBezeichnungFr("Année de la demande 24")
-            .setTechnischesJahr(2024)
+            .setBezeichnungDe("Gesuchsjahr "+yearSuffix)
+            .setBezeichnungFr("Année de la demande "+yearSuffix)
+            .setTechnischesJahr(currentYear)
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
     }
 
@@ -77,10 +82,12 @@ public class GesuchsperiodeSeeding extends Seeder{
         final LocalDate from,
         final LocalDate to
     ) {
+        String jahrAsString = String.valueOf(jahr);
+
         return new Gesuchsperiode()
-            .setBezeichnungDe("Frühling 2023")
-            .setBezeichnungFr("Printemps 2023")
-            .setFiskaljahr("2023")
+            .setBezeichnungDe("Frühling "+jahrAsString)
+            .setBezeichnungFr("Printemps "+jahrAsString)
+            .setFiskaljahr(jahrAsString)
             .setGesuchsjahr(jahr)
             .setGesuchsperiodeStart(from)
             .setGesuchsperiodeStopp(to)
