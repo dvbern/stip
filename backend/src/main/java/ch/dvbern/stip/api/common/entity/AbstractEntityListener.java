@@ -2,21 +2,18 @@ package ch.dvbern.stip.api.common.entity;
 
 import java.time.LocalDateTime;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @ApplicationScoped
 public class AbstractEntityListener {
     @Inject
     Instance<JsonWebToken> token;
-
-    @Inject
-    BenutzerService benutzerService;
 
     @PrePersist
     protected void prePersist(AbstractEntity entity) {
@@ -37,11 +34,8 @@ public class AbstractEntityListener {
 
     private String getBenutzername() {
         if (token != null && token.isResolvable()) {
-            if (token.get().getSubject() != null) {
-                return benutzerService.getCurrentBenutzernameFromJwt();
-            } else {
-                return "System";
-            }
+            final var jwt = token.get();
+            return jwt.getClaim(Claims.given_name) + " " + jwt.getClaim(Claims.family_name);
         } else {
             return "System";
         }
