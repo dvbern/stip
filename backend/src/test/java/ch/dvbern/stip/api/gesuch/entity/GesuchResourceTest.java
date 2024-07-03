@@ -480,7 +480,7 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getAllGesucheSb().execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()

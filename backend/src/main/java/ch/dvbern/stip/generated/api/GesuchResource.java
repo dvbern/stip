@@ -11,7 +11,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
-
 @Path("/gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchResource {
@@ -35,11 +34,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/einreichen/validieren")
     @Produces({ "application/json", "text/plain" })
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/all/sb/{getGesucheSBQueryTyp}")
-    @Produces({ "application/json", "text/plain" })
-    Response getAllGesucheSb(@PathParam("getGesucheSBQueryTyp") GetGesucheSBQueryTypDto getGesucheSBQueryTyp);
 
     @GET
     @Path("/{gesuchId}")

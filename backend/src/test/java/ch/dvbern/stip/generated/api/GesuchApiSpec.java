@@ -68,7 +68,6 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
-                getAllGesucheSb(),
                 getGesuch(),
                 getGesuchDokumente(),
                 getGesucheForFall(),
@@ -95,10 +94,6 @@ public class GesuchApiSpec {
 
     public GesuchEinreichenValidierenOper gesuchEinreichenValidieren() {
         return new GesuchEinreichenValidierenOper(createReqSpec());
-    }
-
-    public GetAllGesucheSbOper getAllGesucheSb() {
-        return new GetAllGesucheSbOper(createReqSpec());
     }
 
     public GetGesuchOper getGesuch() {
@@ -401,79 +396,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchEinreichenValidierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Returns gesuche filtered by status
-     * 
-     *
-     * @see #getGesucheSBQueryTypPath  (required)
-     * return List&lt;GesuchDtoSpec&gt;
-     */
-    public static class GetAllGesucheSbOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/all/sb/{getGesucheSBQueryTyp}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAllGesucheSbOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/all/sb/{getGesucheSBQueryTyp}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/all/sb/{getGesucheSBQueryTyp}
-         * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
-         */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GET_GESUCHE_S_B_QUERY_TYP_PATH = "getGesucheSBQueryTyp";
-
-        /**
-         * @param getGesucheSBQueryTyp (GetGesucheSBQueryTypDtoSpec)  (required)
-         * @return operation
-         */
-        public GetAllGesucheSbOper getGesucheSBQueryTypPath(Object getGesucheSBQueryTyp) {
-            reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYP_PATH, getGesucheSBQueryTyp);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAllGesucheSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAllGesucheSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

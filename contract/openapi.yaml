@@ -54,33 +54,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  /gesuch/all/sb/{getGesucheSBQueryTyp}:
-    get:
-      tags:
-        - Gesuch
-      parameters:
-        - name: getGesucheSBQueryTyp
-          schema:
-            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Returns gesuche filtered by status
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllGesucheSb
-      summary: Returns gesuche filtered by status
   /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}:
     get:
       tags:

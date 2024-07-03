@@ -206,38 +206,14 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
-    private List<GesuchDto> findAllGesucheIgnoreStatusSb(){
-        return gesuchRepository.findAllIgnoreStatusFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
-    }
-
     @Transactional
-    public List<GesuchDto> findAllGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
-        if(getGesucheSBQueryTyp == GetGesucheSBQueryTypDto.ALLE_BEARBEITBAR){
-            return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
-        } else{
-            return findAllGesucheIgnoreStatusSb();
-        }
-    }
-
-    @Transactional
-    public List<GesuchDto> findGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
-        if(getGesucheSBQueryTyp == GetGesucheSBQueryTypDto.ALLE_BEARBEITBAR_MEINE){
-            final var benutzer = benutzerService.getCurrentBenutzer();
-            return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
-                .map(this::mapWithTrancheToWorkWith)
-                .toList();
-        }
-        else{
-            return findGesucheIgnoreStatusSb();
-        }
-
-    }
-
-    private List<GesuchDto> findGesucheIgnoreStatusSb(){
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenIgnoreStatusFilteredForSb(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTypDto getGesucheSBQueryTyp){
+        return switch(getGesucheSBQueryTyp){
+            case ALLE_BEARBEITBAR_MEINE -> findGesucheFilteredForSb();
+            case ALLE_BEARBEITBAR -> gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+            case ALLE_MEINE -> gesuchRepository.findAllIgnoreStatusFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+            default -> findGesucheIgnoreStatusSb();
+        };
     }
 
     @Transactional
@@ -326,6 +302,20 @@ public class GesuchService {
         }
 
         return validationReportDto;
+    }
+
+    private List<GesuchDto> findGesucheFilteredForSb() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
+    }
+
+    private List<GesuchDto> findGesucheIgnoreStatusSb(){
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        return gesuchRepository.findZugewiesenIgnoreStatusFilteredForSb(benutzer.getId())
+            .map(this::mapWithTrancheToWorkWith)
+            .toList();
     }
 
     private void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
