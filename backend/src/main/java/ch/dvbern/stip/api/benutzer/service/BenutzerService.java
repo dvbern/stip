@@ -150,6 +150,10 @@ public class BenutzerService {
         return getCurrentBenutzer().getFullName();
     }
 
+    public String getCurrentBenutzernameFromJwt() {
+        return jsonWebToken.getClaim(Claims.given_name) + " " + jsonWebToken.getClaim(Claims.family_name);
+    }
+
     @Transactional
     public void deleteBenutzer(final String benutzerId) {
         final var benutzer = benutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
