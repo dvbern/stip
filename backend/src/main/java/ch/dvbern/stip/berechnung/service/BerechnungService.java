@@ -181,7 +181,6 @@ public class BerechnungService {
         };
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
-        LOG.info(listener.decisionNodeList.toString());
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
         if (stipendien == null) {
             throw new AppErrorException("Result of Stipendienberechnung was null!");
