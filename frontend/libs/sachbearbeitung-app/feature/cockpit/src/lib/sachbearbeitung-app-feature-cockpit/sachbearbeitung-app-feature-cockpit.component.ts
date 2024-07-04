@@ -11,6 +11,7 @@ import {
   effect,
   inject,
   input,
+  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -20,7 +21,7 @@ import {
   MatPaginatorModule,
 } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -97,13 +98,42 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   );
 
   gesucheDataSourceSig = computed(() => {
-    const gesuche = this.cockpitViewSig().gesuche;
+    const sort = this.sortSig();
+    console.log(sort);
+    const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
+      fall: gesuch.fall.fallNummer,
+      'sv-nummer':
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.sozialversicherungsnummer,
+      nachname:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.nachname,
+      vorname:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.vorname,
+      geburtsdatum:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.geburtsdatum,
+      ort: gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+        ?.adresse.ort,
+      status: gesuch.gesuchStatus,
+      bearbeiter: gesuch.bearbeiter,
+      letzteAktivitaet: gesuch.aenderungsdatum,
+    }));
 
-    const dataSource = new MatTableDataSource<SharedModelGesuch>(gesuche);
+    const dataSource = new MatTableDataSource(gesuche);
 
     dataSource.paginator = this.paginator;
+    if (sort) {
+      dataSource.sort = sort;
+      (window as any).__debugSort = sort;
+    }
+    //dataSource.sort = this.sortSig() ?? null;
+    console.log('sort', dataSource.sort);
+
     return dataSource;
   });
+  sortSig = viewChild(MatSort);
 
   constructor() {
     let isFirstChange = true;
