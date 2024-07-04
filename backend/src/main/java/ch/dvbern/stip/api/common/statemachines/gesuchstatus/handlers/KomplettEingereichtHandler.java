@@ -35,5 +35,7 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
         );
 
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        // TODO KSTIP-1217
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
     }
 }

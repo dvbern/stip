@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.gesuch.validation;
 
 public interface GesuchEinreichenValidationGroup {
 }

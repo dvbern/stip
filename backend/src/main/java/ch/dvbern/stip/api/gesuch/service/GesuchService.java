@@ -255,6 +255,12 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
+    @Transactional
+    public void gesuchFehlendeDokumente(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 

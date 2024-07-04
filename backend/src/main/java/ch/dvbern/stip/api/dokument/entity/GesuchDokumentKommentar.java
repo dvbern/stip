@@ -14,7 +14,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -30,9 +29,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
     indexes = {
         @Index(name = "IX_gesuch_dokument_kommentar_gesuch_id", columnList = "gesuch_id"),
         @Index(name = "IX_gesuch_dokument_kommentar_mandant", columnList = "mandant")
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(name = "UC_dokument_typ_gesuch_id", columnNames = { "gesuch_id", "dokument_typ" })
     }
 )
 @Getter

@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.FamiliensituationPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.GeschwisterPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;

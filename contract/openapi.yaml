@@ -182,6 +182,51 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchDokumentId}/akzeptieren':
+    parameters:
+      - name: gesuchDokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchDokumentAkzeptieren
+  '/gesuchDokument/{gesuchDokumentId}/ablehnen':
+    parameters:
+      - name: gesuchDokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchDokumentAblehnenRequest'
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchDokumentAblehnen
   '/fall/sb':
     get:
       tags:
@@ -976,6 +1021,29 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchId}/fehlendeDokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchFehlendeDokumente
+      summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -3033,6 +3101,12 @@ components:
           type: string
         kommentar:
           description: 'Kommentar vom SB über die Statusänderung'
+          type: string
+    GesuchDokumentAblehnenRequest:
+      description: 'Meta information um ein GesuchDokument abzulehnen'
+      type: object
+      properties:
+        kommentar:
           type: string
   responses:
     Unauthorized:

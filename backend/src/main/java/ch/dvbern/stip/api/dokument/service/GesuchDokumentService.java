@@ -13,10 +13,12 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -107,12 +109,12 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final String comment) {
+    public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             DokumentstatusChangeEvent.ABGELEHNT,
-            comment
+            dto.getKommentar()
         );
     }
 
@@ -163,6 +165,27 @@ public class GesuchDokumentService {
         dokumentRepository.delete(dokument);
         gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(dokument.getGesuchDokument().getId());
         return dokumentObjectId;
+    }
+
+    @Transactional
+    public void deleteAbgelehnteDokumenteForGesuch(final Gesuch gesuch) {
+        // Query for these instead of iterating "in memory" because gesuchDokumente are lazy loaded
+        // and this results in only loading the ones we need instead of all
+        final var gesuchDokumente = gesuchDokumentRepository
+            .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
+            .toList();
+
+        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
+        for (final var gesuchDokument : gesuchDokumente) {
+            for (final var dokument : gesuchDokument.getDokumente()) {
+                dokumenteToDeleteFromS3.add(dokument.getObjectId());
+                dokumentRepository.delete(dokument);
+            }
+
+            gesuchDokumentRepository.delete(gesuchDokument);
+        }
+
+        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
     public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(
