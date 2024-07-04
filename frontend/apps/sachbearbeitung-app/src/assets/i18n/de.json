@@ -55,6 +55,7 @@
 
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Benutzer",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Benutzer Erstellen",
+  "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Benutzer Bearbeiten",
   "sachbearbeitung-app.admin.benutzerverwaltung.name.label": "Name",
   "sachbearbeitung-app.admin.benutzerverwaltung.vorname.label": "Vorname",
   "sachbearbeitung-app.admin.benutzerverwaltung.email.label": "E-Mail",

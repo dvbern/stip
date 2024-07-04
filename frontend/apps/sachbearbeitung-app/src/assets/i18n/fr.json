@@ -55,6 +55,7 @@
 
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Utilisateurs",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Créer un utilisateur",
+  "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Modifier l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.name.label": "Nom",
   "sachbearbeitung-app.admin.benutzerverwaltung.vorname.label": "Prénom",
   "sachbearbeitung-app.admin.benutzerverwaltung.email.label": "E-Mail",

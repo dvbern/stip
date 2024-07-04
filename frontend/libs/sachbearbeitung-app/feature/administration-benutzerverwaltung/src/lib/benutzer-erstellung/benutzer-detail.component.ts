@@ -16,10 +16,10 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   SharedModelRole,
   SharedModelRoleList,
@@ -55,13 +55,14 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
   ],
-  templateUrl: './benutzer-erstellung.component.html',
+  templateUrl: './benutzer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BenutzerErstellungComponent implements OnDestroy {
+export class BenutzeDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);
-  private globalNotificationStore = inject(GlobalNotificationStore);
   idSig = input.required<string | undefined>({ alias: 'id' });
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   store = inject(BenutzerverwaltungStore);
   form = this.formBuilder.group({
@@ -146,15 +147,11 @@ export class BenutzerErstellungComponent implements OnDestroy {
     ]);
     this.store.registerUser$({
       ...values,
-      onAfterSave: (wasSuccessfull) => {
-        this.isReadonly.set(true);
-
-        if (wasSuccessfull) {
-          this.globalNotificationStore.createPermanentSuccessNotification({
-            messageKey:
-              'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
-          });
-        }
+      onAfterSave: (userId) => {
+        this.router.navigate(['..', 'edit', userId], {
+          relativeTo: this.route,
+          replaceUrl: true,
+        });
       },
     });
   }
