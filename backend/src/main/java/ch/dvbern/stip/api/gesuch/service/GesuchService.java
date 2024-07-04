@@ -54,7 +54,6 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -63,7 +62,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDto;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
 @RequestScoped
