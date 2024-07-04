@@ -1,1 +1,3 @@
-{{ current }} / {{ total }}
+@if (currentSig(); as current) {
+  {{ current?.step ?? '&nbsp;' }} / {{ current?.total }}
+}

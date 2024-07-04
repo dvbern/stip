@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import ch.dvbern.stip.api.plz.service.PlzOrtService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.plz.service.PlzService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class ElternRequiredDocumentsProducer {
-    private final PlzOrtService plzOrtService;
+    private final PlzService plzService;
 
     private static final Map<ElternTyp, DokumentTyp> STEUERUNTERLAGEN_MAP = Map.of(
         ElternTyp.MUTTER, DokumentTyp.ELTERN_STEUERUNTERLAGEN_MUTTER,
@@ -47,7 +47,7 @@ public class ElternRequiredDocumentsProducer {
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
 
-        if (!plzOrtService.isInBern(elternteil.getAdresse())) {
+        if (!plzService.isInBern(elternteil.getAdresse())) {
             requiredDocs.add(STEUERUNTERLAGEN_MAP.get(elternteil.getElternTyp()));
         }
 

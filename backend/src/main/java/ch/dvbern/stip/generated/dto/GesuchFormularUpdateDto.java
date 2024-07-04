@@ -10,6 +10,7 @@ import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
   private @Valid List<LebenslaufItemUpdateDto> lebenslaufItems;
   private @Valid List<KindUpdateDto> kinds;
   private @Valid EinnahmenKostenUpdateDto einnahmenKosten;
+  private @Valid List<SteuerdatenUpdateDto> steuerdaten;
 
   /**
    **/
@@ -291,6 +293,40 @@ public class GesuchFormularUpdateDto  implements Serializable {
     this.einnahmenKosten = einnahmenKosten;
   }
 
+  /**
+   **/
+  public GesuchFormularUpdateDto steuerdaten(List<SteuerdatenUpdateDto> steuerdaten) {
+    this.steuerdaten = steuerdaten;
+    return this;
+  }
+
+  
+  @JsonProperty("steuerdaten")
+  public List<SteuerdatenUpdateDto> getSteuerdaten() {
+    return steuerdaten;
+  }
+
+  @JsonProperty("steuerdaten")
+  public void setSteuerdaten(List<SteuerdatenUpdateDto> steuerdaten) {
+    this.steuerdaten = steuerdaten;
+  }
+
+  public GesuchFormularUpdateDto addSteuerdatenItem(SteuerdatenUpdateDto steuerdatenItem) {
+    if (this.steuerdaten == null) {
+      this.steuerdaten = new ArrayList<>();
+    }
+
+    this.steuerdaten.add(steuerdatenItem);
+    return this;
+  }
+
+  public GesuchFormularUpdateDto removeSteuerdatenItem(SteuerdatenUpdateDto steuerdatenItem) {
+    if (steuerdatenItem != null && this.steuerdaten != null) {
+      this.steuerdaten.remove(steuerdatenItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -310,12 +346,13 @@ public class GesuchFormularUpdateDto  implements Serializable {
         Objects.equals(this.geschwisters, gesuchFormularUpdate.geschwisters) &&
         Objects.equals(this.lebenslaufItems, gesuchFormularUpdate.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormularUpdate.kinds) &&
-        Objects.equals(this.einnahmenKosten, gesuchFormularUpdate.einnahmenKosten);
+        Objects.equals(this.einnahmenKosten, gesuchFormularUpdate.einnahmenKosten) &&
+        Objects.equals(this.steuerdaten, gesuchFormularUpdate.steuerdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten);
   }
 
   @Override
@@ -333,6 +370,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
     sb.append("}");
     return sb.toString();
   }

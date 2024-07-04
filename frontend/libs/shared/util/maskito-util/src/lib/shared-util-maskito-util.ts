@@ -50,3 +50,7 @@ export function fromFormatedNumber(
     ? +formatedNumber.replaceAll(NUMBER_THOUSAND_SEPARATOR, '')
     : formatedNumber;
 }
+
+export function toFormatedNumber(number: number): string {
+  return number.toLocaleString();
+}

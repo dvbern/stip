@@ -38,9 +38,18 @@
           <mat-label>
             {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
           </mat-label>
-          <input data-testid="form-benutzerverwaltung-email" formControlName="email" matInput type="text" />
+          <input
+            data-testid="form-benutzerverwaltung-email"
+            formControlName="email"
+            matInput
+            type="email"
+            (blur)="trimEmail()"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+          <mat-error *dvSharedUiFormMessageError="'pattern'">
+            {{ 'shared.form.error.email' | translate }}
           </mat-error>
         </mat-form-field>
       </div>

@@ -59,7 +59,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_VORNAME_NOTBLANK_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE;
@@ -83,8 +82,7 @@ class GesuchValidatorTest {
         String[] constraintMessages = { VALIDATION_NACHNAME_NOTBLANK_MESSAGE, VALIDATION_VORNAME_NOTBLANK_MESSAGE,
             VALIDATION_IZW_FIELD_REQUIRED_MESSAGE, VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE,
             VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE, VALIDATION_AHV_MESSAGE,
-            VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE,
-            VALIDATION_VERMOEGEN_VORJAHR_REQUIRED_MESSAGE };
+            VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE };
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setAdresse(new Adresse());
         // Beim Land CH muss der Heimatort nicht leer sein
@@ -360,6 +358,7 @@ class GesuchValidatorTest {
     @Test
     void testGesuchEinreichenValidationEltern() {
         Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
         familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
@@ -413,6 +412,7 @@ class GesuchValidatorTest {
     @Test
     void testGesuchEinreichenValidationEinnahmenKostenEltern() {
         Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
         familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);

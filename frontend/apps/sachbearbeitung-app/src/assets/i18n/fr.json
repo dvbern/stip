@@ -62,11 +62,14 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen": "Supprimer l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.sachbearbeiter.label": "Agent",
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",
-  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "Supprimer n'est pas encore implémenté",
   "sachbearbeitung-app.admin.benutzervervaltung.overview.roles": "Rôles",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt": "L'utilisateur a été créé avec succès.",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "L'utilisateur a été supprimé avec succès.",
+  "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Supprimer l'utilisateur",
+  "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Voulez-vous vraiment supprimer l'utilisateur \"{{ name }}\" ?",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists": "Un utilisateur avec cette adresse e-mail existe déjà.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.erstellen": "L'utilisateur n'a pas pu être créé, veuillez réessayer.",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.loeschen": "L'utilisateur n'a pas pu être supprimé, veuillez contacter le support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.laden": "Une erreur s'est produite lors de la création de l'utilisateur, veuillez contacter le support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.roleMapping": "Une erreur s'est produite lors de l'attribution des rôles de l'utilisateur, veuillez contacter le support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.benachrichtigen": "Impossible d'envoyer une notification à l'utilisateur, soit l'adresse e-mail est invalide, soit une erreur s'est produite.<br><br>Veuillez informer l'utilisateur manuellement.",
@@ -180,6 +183,12 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Il doit y avoir une année de formation publiée liée.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "L'année de formation liée n'est pas encore publiée.",
 
+  "sachbearbeitung-app.gesuch-form.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Date",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Statut",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
+  "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Commentaire",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
@@ -196,9 +205,7 @@
   "sachbearbeitung-app.cockpit.table.status": "État",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Agent",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Dernière activité",
-  "sachbearbeitung-app.cockpit.status.IN_BEARBEITUNG_GS": "En cours",
-  "sachbearbeitung-app.cockpit.status.KOMPLETT_EINGEREICHT": "Soumis à",
-  "sachbearbeitung-app.cockpit.status.BEREIT_FUER_BEARBEITUNG": "Prêt à être traité",
 
-  "sachbearbeitung-app.gesuch-form.title": "Demande"
+  "sachbearbeitung-app.gesuch-form.title": "Demande",
+  "sachbearbeitung-app.gesuch-form.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande"
 }

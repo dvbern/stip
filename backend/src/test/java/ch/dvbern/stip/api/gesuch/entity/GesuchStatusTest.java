@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -14,9 +16,12 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

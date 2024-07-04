@@ -1,5 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { ApplicationRef, ElementRef, Injectable, inject } from '@angular/core';
+import {
+  ApplicationRef,
+  ElementRef,
+  Injectable,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -111,7 +117,7 @@ export class SharedUtilFormService {
    * store.saveValues$(converter.toNumber());
    */
   createNumberConverter<
-    T extends { [k: string]: AbstractControl<string | null> },
+    T extends { [k: string]: AbstractControl<unknown> },
     K extends OnlyString<keyof T>,
   >(group: FormGroup<T>, numberFields: K[]) {
     return {
@@ -149,6 +155,86 @@ export class SharedUtilFormService {
     } else {
       control.enable(options);
     }
+  }
+
+  /**
+   * Generate a hiddenfield set manager that can be used to add or remove fields from a set
+   * which can be used to hide or show fields and also enable or disable them
+   *
+   * @example
+   * hiddenFields = this.formUtils.createHiddenFieldSet();
+   *
+   * ...
+   * constructor() {
+   *   effect(() => {
+   *     if (condition) {
+   *       this.hiddenFields.addField(this.form.controls.field);
+   *     } else {
+   *       this.hiddenFields.removeField(this.form.controls.field);
+   *     }
+   *     // or
+   *     this.hiddenFields.setFieldVisibility(this.form.controls.field, condition);
+   *   });
+   * }
+   *
+   * @example HTML
+   * ```html
+   * ⁣@if (!hiddenFields.valuesSig().has(form.controls.field)) {
+   *   <mat-form-field ...>
+   * }
+   * ```
+   */
+  createHiddenFieldSet() {
+    const hiddenFieldsSig = signal(new Set<FormControl>());
+    const methods = {
+      /**
+       * Add a field to the hidden field set, it also sets the field to disabled
+       */
+      addField: (
+        field: FormControl,
+        clearOnDisable?: boolean,
+        options?: { emitEvent: boolean },
+      ) => {
+        this.setDisabledState(field, true, clearOnDisable, options);
+        hiddenFieldsSig.update((fields) => {
+          fields.add(field);
+          return fields;
+        });
+      },
+      /**
+       * Remove a field from the hidden field set, it also sets the field to enabled
+       */
+      removeField: (
+        field: FormControl,
+        clearOnDisable?: boolean,
+        options?: { emitEvent: boolean },
+      ) => {
+        this.setDisabledState(field, false, clearOnDisable, options);
+        hiddenFieldsSig.update((fields) => {
+          fields.delete(field);
+          return fields;
+        });
+      },
+    };
+    return {
+      ...methods,
+      /**
+       * Set the visibility of the given field while also enabling/disabling it
+       */
+      setFieldVisibility: (
+        field: FormControl,
+        visible: boolean,
+        clearOnDisable?: boolean,
+        options?: { emitEvent: boolean },
+      ) => {
+        if (visible) {
+          methods.removeField(field, clearOnDisable, options);
+        } else {
+          methods.addField(field, clearOnDisable, options);
+        }
+      },
+      valuesSig: hiddenFieldsSig,
+    };
   }
 
   /**

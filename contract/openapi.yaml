@@ -13,6 +13,26 @@ servers:
         default: '8080'
         description: ''
 paths:
+  /mail/welcome:
+    post:
+      tags:
+        - Mail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WelcomeMail'
+      responses:
+        '200':
+          description: Mail was successfully sent
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: sendWelcomeEmail
+      summary: Sends an e-mail for a newly created user
   /gesuch:
     post:
       requestBody:
@@ -956,6 +976,35 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchId}/statusprotokoll':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '201':
+          description: Gesuch eingereicht
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusprotokollEntry'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getStatusProtokoll
+      summary: Holt das Statusprotokoll für ein Gesuch
   /tenant/current:
     get:
       tags:
@@ -978,6 +1027,30 @@ paths:
       operationId: getCurrentTenant
       summary: Current Tenant
       description: '`Tenant` based on the current Request'
+  /benutzer/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          type: string
+        in: path
+        required: true
+    delete:
+      tags:
+        - Benutzer
+      responses:
+        204:
+          description: Benutzer deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteBenutzer
+      summary: Deletes a benutzer with the given id
+
   /benutzer/prepare/me:
     get:
       tags:
@@ -1267,6 +1340,22 @@ paths:
       summary: Gets all PLZs
 components:
   schemas:
+    WelcomeMail:
+      type: object
+      required:
+        - name
+        - vorname
+        - email
+        - redirectUri
+      properties:
+        name:
+          type: string
+        vorname:
+          type: string
+        email:
+          type: string
+        redirectUri:
+          type: string
     Anrede:
       enum:
         - HERR
@@ -1284,7 +1373,6 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
         - PERSON_KESB_ERNENNUNG
         - PERSON_MIETVERTRAG
-        - PERSON_VERMOEGENSNACHWEIS_VORJAHR
         - PERSON_SOZIALHILFEBUDGET
         - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         - PERSON_AUSWEIS
@@ -1319,6 +1407,7 @@ components:
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
+        - EK_VERMOEGEN
       type: string
     ElternAbwesenheitsGrund:
       enum:
@@ -1339,23 +1428,24 @@ components:
       type: string
     Gesuchstatus:
       enum:
-        - IN_BEARBEITUNG_GS
-        - KOMPLETT_EINGEREICHT
-        - BEREIT_FUER_BEARBEITUNG
-        - FEHLERHAFT
-        - IN_BEARBEITUNG_SB
-        - IN_REVIEW
-        - FEHLENDE_DOKUMENTE
-        - FEHLENDE_DOKUMENTE_NACHFRIST
-        - ZURUECKGEZOGEN
-        - ABKLAERUNG_MIT_GS
-        - IN_FREIGABE
-        - ZURUECKGEWIESEN
-        - WARTEN_AUF_UNTERSCHRIFTENBLATT
-        - NEGATIVER_ENTSCHEID
+        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
         - VERFUEGT
-        - STIPENDIUM_AKZEPTIERT
-        - STIPENDIUM_AUSBEZAHLT
+        - VERSANDBEREIT
+        - VERSENDET
+        - WARTEN_AUF_UNTERSCHRIFTENBLATT
+        - IN_BEARBEITUNG_SB
+        - IN_FREIGABE
+        - IN_BEARBEITUNG_GS
+        - ANSPRUCH_MANUELL_PRUEFEN
+        - BEREIT_FUER_BEARBEITUNG
+        - EINGEREICHT
+        - JOUR_FIX
+        - FEHLENDE_DOKUMENTE
+        - NICHT_ANSPRUCHSBERECHTIGT
+        - NICHT_BEITRAGSBERECHTIGT
+        - KEIN_STIPENDIENANSPRUCH
+        - STIPENDIENANSPRUCH
+        - GESUCH_ABGELEHNT
       type: string
     GueltigkeitStatus:
       enum:
@@ -1381,6 +1471,12 @@ components:
         - GESCHIEDEN_GERICHTLICH
         - AUFGELOESTE_PARTNERSCHAFT
         - VERWITWET
+      type: string
+    SteuerdatenTyp:
+      enum:
+        - FAMILIE
+        - VATER
+        - MUTTER
       type: string
     Adresse:
       required:
@@ -1751,7 +1847,6 @@ components:
         - id
         - aenderungsdatum
         - gesuchTrancheToWorkWith
-        - gesuchTrancheToWorkWith
       type: object
       properties:
         fall:
@@ -2050,6 +2145,14 @@ components:
             $ref: '#/components/schemas/Kind'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKosten'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/Steuerdaten'
+        steuerdatenTabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenTyp'
     PersonInAusbildungUpdate:
       required:
         - adresse
@@ -2104,9 +2207,6 @@ components:
         wohnsitzAnteilVater:
           description: Required wenn Wohnsitz.MUTTER_VATER.
           type: number
-        vermoegenVorjahr:
-          description: Required nur wenn Person is not in Kanton Bern or Niederlassungsstatus IN (C,)
-          type: integer
         sozialhilfebeitraege:
           type: boolean
         vormundschaft:
@@ -2178,6 +2278,10 @@ components:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/SteuerdatenUpdate'
     FileUpload:
       format: binary
       type: string
@@ -2331,6 +2435,27 @@ components:
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
           type: integer
+        veranlagungsCode:
+          description: 2-Stelliger Veranlagungscode (0-99)
+          type: integer
+          minimum: 0
+          maximum: 99
+          default: 0
+        steuerjahr:
+          description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+          type: integer
+          minimum: 0
+          maximum: 99999
+        vermoegen:
+          description: Ganze Zahl, ohne Kommastellen
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+        steuernKantonGemeinde:
+          description: transient and calculated readonly field
+          type: integer
+          minimum: 0
+          maximum: 2147483647
     EinnahmenKosten:
       type: object
       allOf:
@@ -2831,6 +2956,84 @@ components:
         kantonskuerzel:
           description: ''
           type: string
+    SteuerdatenUpdate:
+      title: Root Type for Steuerdaten
+      description: ''
+      required:
+        - steuernStaat
+        - steuernBund
+        - fahrkosten
+        - verpflegung
+        - steuerjahr
+        - veranlagungscode
+        - totalEinkuenfte
+        - eigenmietwert
+        - isArbeitsverhaeltnisSelbstaendig
+        - kinderalimente
+        - ergaenzungsleistungen
+        - vermoegen
+        - steuerdatenTyp
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        steuerdatenTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        steuernStaat:
+          type: integer
+        steuernBund:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        steuerjahr:
+          type: integer
+        veranlagungscode:
+          type: integer
+        totalEinkuenfte:
+          type: integer
+        eigenmietwert:
+          type: integer
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
+        saeule3a:
+          type: integer
+        saeule2:
+          type: integer
+        kinderalimente:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        vermoegen:
+          type: integer
+    Steuerdaten:
+      title: Root Type for Steuerdaten
+      description: ''
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SteuerdatenUpdate'
+    StatusprotokollEntry:
+      description: 'Eintrag von dem Statusprotokoll'
+      type: object
+      properties:
+        timestamp:
+          description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
+          type: string
+          format: date-time
+        status:
+          description: 'Status welcher am stichtag erreicht wurde'
+          $ref: '#/components/schemas/Gesuchstatus'
+        benutzer:
+          description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
+          type: string
+        kommentar:
+          description: 'Kommentar vom SB über die Statusänderung'
+          type: string
   responses:
     Unauthorized:
       content:
@@ -2880,3 +3083,4 @@ tags:
     description: ''
   - name: Ausbildungsgang
     description: ''
+  - name: Mail

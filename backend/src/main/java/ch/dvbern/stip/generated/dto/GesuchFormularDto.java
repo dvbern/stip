@@ -10,6 +10,7 @@ import ch.dvbern.stip.generated.dto.KindDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
 import ch.dvbern.stip.generated.dto.PartnerDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,8 @@ public class GesuchFormularDto  implements Serializable {
   private @Valid List<LebenslaufItemDto> lebenslaufItems;
   private @Valid List<KindDto> kinds;
   private @Valid EinnahmenKostenDto einnahmenKosten;
+  private @Valid List<SteuerdatenDto> steuerdaten;
+  private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
 
   /**
    **/
@@ -291,6 +294,74 @@ public class GesuchFormularDto  implements Serializable {
     this.einnahmenKosten = einnahmenKosten;
   }
 
+  /**
+   **/
+  public GesuchFormularDto steuerdaten(List<SteuerdatenDto> steuerdaten) {
+    this.steuerdaten = steuerdaten;
+    return this;
+  }
+
+  
+  @JsonProperty("steuerdaten")
+  public List<SteuerdatenDto> getSteuerdaten() {
+    return steuerdaten;
+  }
+
+  @JsonProperty("steuerdaten")
+  public void setSteuerdaten(List<SteuerdatenDto> steuerdaten) {
+    this.steuerdaten = steuerdaten;
+  }
+
+  public GesuchFormularDto addSteuerdatenItem(SteuerdatenDto steuerdatenItem) {
+    if (this.steuerdaten == null) {
+      this.steuerdaten = new ArrayList<>();
+    }
+
+    this.steuerdaten.add(steuerdatenItem);
+    return this;
+  }
+
+  public GesuchFormularDto removeSteuerdatenItem(SteuerdatenDto steuerdatenItem) {
+    if (steuerdatenItem != null && this.steuerdaten != null) {
+      this.steuerdaten.remove(steuerdatenItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
+  public GesuchFormularDto steuerdatenTabs(List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs) {
+    this.steuerdatenTabs = steuerdatenTabs;
+    return this;
+  }
+
+  
+  @JsonProperty("steuerdatenTabs")
+  public List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> getSteuerdatenTabs() {
+    return steuerdatenTabs;
+  }
+
+  @JsonProperty("steuerdatenTabs")
+  public void setSteuerdatenTabs(List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs) {
+    this.steuerdatenTabs = steuerdatenTabs;
+  }
+
+  public GesuchFormularDto addSteuerdatenTabsItem(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTabsItem) {
+    if (this.steuerdatenTabs == null) {
+      this.steuerdatenTabs = new ArrayList<>();
+    }
+
+    this.steuerdatenTabs.add(steuerdatenTabsItem);
+    return this;
+  }
+
+  public GesuchFormularDto removeSteuerdatenTabsItem(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTabsItem) {
+    if (steuerdatenTabsItem != null && this.steuerdatenTabs != null) {
+      this.steuerdatenTabs.remove(steuerdatenTabsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -310,12 +381,14 @@ public class GesuchFormularDto  implements Serializable {
         Objects.equals(this.geschwisters, gesuchFormular.geschwisters) &&
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
-        Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten);
+        Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
+        Objects.equals(this.steuerdaten, gesuchFormular.steuerdaten) &&
+        Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten, steuerdatenTabs);
   }
 
   @Override
@@ -333,6 +406,8 @@ public class GesuchFormularDto  implements Serializable {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
+    sb.append("    steuerdatenTabs: ").append(toIndentedString(steuerdatenTabs)).append("\n");
     sb.append("}");
     return sb.toString();
   }

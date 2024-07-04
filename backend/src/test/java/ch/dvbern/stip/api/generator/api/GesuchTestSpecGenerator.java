@@ -15,12 +15,14 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.KindUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
@@ -89,6 +91,13 @@ public class GesuchTestSpecGenerator {
             model.getGesuchTrancheToWorkWith().setGesuchFormular(ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns);
         });
 
+    public static final GesuchUpdateDtoSpec gesuchUpdateDtoSteuerdatenTabs =
+        TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten);
+        });
+
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecEinnahmenKosten =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
@@ -133,6 +142,7 @@ public class GesuchTestSpecGenerator {
 
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec);
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs);
+            model.setSteuerdaten(SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecFull =

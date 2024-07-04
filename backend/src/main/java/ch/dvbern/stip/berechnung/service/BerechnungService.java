@@ -1,31 +1,36 @@
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.berechnung.dto.BerechnungModelVersion;
-import ch.dvbern.stip.berechnung.dto.BerechnungRequest;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
-import ch.dvbern.stip.berechnung.util.BerechnungRequestContextUtil;
+import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
+import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
+import org.kie.api.io.Resource;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class BerechnungService {
+    private static final List<String>
+        BERECHNUNG_MODEL_NAMES = List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
     private static final String STIPENDIUM_DECISION_NAME = "Stipendium";
 
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
     private final DMNService dmnService;
     private final TenantService tenantService;
 
-    public BerechnungRequest getBerechnungRequest(
+    public DmnRequest getBerechnungRequest(
         final int majorVersion,
         final int minorVersion,
         final Gesuch gesuch,
@@ -33,7 +38,7 @@ public class BerechnungService {
         final ElternTyp elternTyp
     ) {
         final var builder = berechnungRequests.stream().filter(berechnungRequestBuilder -> {
-            final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(BerechnungModelVersion.class);
+            final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
             return (versionAnnotation != null) &&
                 (versionAnnotation.major() == majorVersion) &&
                 (versionAnnotation.minor() == minorVersion);
@@ -46,13 +51,22 @@ public class BerechnungService {
         return builder.get().buildRequest(gesuch, gesuchTranche, elternTyp);
     }
 
-    public BerechnungResult calculateStipendien(final BerechnungRequest request) {
-        final var models = dmnService.loadModelsForTenantAndVersion(
-            tenantService.getCurrentTenant().getIdentifier(),
-            request.getVersion()
-        );
+    public BerechnungResult calculateStipendien(final DmnRequest request) {
+        List<List<Resource>> modelsList = new ArrayList<>(3);
+        for (var modelName : BERECHNUNG_MODEL_NAMES) {
+            modelsList.add(
+                dmnService.loadModelsForTenantAndVersionByName(
+                    tenantService.getCurrentTenant().getIdentifier(),
+                    request.getVersion(),
+                    modelName
+                )
+            );
+        }
+        final var models = modelsList.stream()
+            .flatMap(List::stream)
+            .toList();
 
-        final var result = dmnService.evaluateModel(models, BerechnungRequestContextUtil.toContext(request));
+        final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
         if (stipendien == null) {
             throw new AppErrorException("Result of Stipendienberechnung was null!");

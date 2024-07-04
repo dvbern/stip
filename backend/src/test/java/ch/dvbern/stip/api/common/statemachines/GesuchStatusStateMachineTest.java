@@ -31,14 +31,14 @@ class GesuchStatusStateMachineTest {
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         final var config = new GesuchStatusConfigProducer(new InstanceMock(new ArrayList<>())).createStateMachineConfig();
         final var sm = new StateMachine<>(
-                gesuch.getGesuchStatus(),
-                gesuch::getGesuchStatus,
-                s -> gesuch.setGesuchStatus(s)
-                        .setGesuchStatusAenderungDatum(LocalDateTime.now()),
-                config
+            gesuch.getGesuchStatus(),
+            gesuch::getGesuchStatus,
+            s -> gesuch.setGesuchStatus(s)
+                    .setGesuchStatusAenderungDatum(LocalDateTime.now()),
+            config
         );
 
-        final var trigger = GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINREICHEN);
+        final var trigger = GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT);
 
         assertThrows(AppErrorException.class, () -> sm.fire(trigger, null));
     }
@@ -55,13 +55,13 @@ class GesuchStatusStateMachineTest {
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         final var config = new GesuchStatusConfigProducer(instance).createStateMachineConfig();
         final var sm = new StateMachine<>(
-                gesuch.getGesuchStatus(),
-                gesuch::getGesuchStatus,
-                s -> gesuch.setGesuchStatus(s)
-                        .setGesuchStatusAenderungDatum(LocalDateTime.now()),
-                config
+            gesuch.getGesuchStatus(),
+            gesuch::getGesuchStatus,
+            s -> gesuch.setGesuchStatus(s)
+                    .setGesuchStatusAenderungDatum(LocalDateTime.now()),
+            config
         );
-        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINREICHEN), gesuch);
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch);
 
         assertThat(
                 "The state machine did not find a handler to call",
@@ -92,7 +92,7 @@ class GesuchStatusStateMachineTest {
                 .setGesuchStatusAenderungDatum(LocalDateTime.now()),
             config
         );
-        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINREICHEN), gesuch);
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch);
 
         assertThat(
             "The state machine did not find a handler to call",

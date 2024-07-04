@@ -12,6 +12,7 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
+  PROTOKOLL,
 } from '@dv/shared/model/gesuch-form';
 
 export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
@@ -20,7 +21,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => KINDER,
     },
-    title: 'shared.kinder.title',
+    title: KINDER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-kinder').then(
         (m) => m.gesuchAppFeatureGesuchFormKinderRoutes,
@@ -31,7 +32,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => LEBENSLAUF,
     },
-    title: 'shared.lebenslauf.title',
+    title: LEBENSLAUF.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-lebenslauf').then(
         (m) => m.gesuchAppFeatureGesuchFormLebenslaufRoutes,
@@ -42,7 +43,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => GESCHWISTER,
     },
-    title: 'shared.geschwister.title',
+    title: GESCHWISTER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-geschwister').then(
         (m) => m.gesuchAppFeatureGesuchFormGeschwisterRoutes,
@@ -53,7 +54,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => AUSZAHLUNG,
     },
-    title: 'shared.auszahlung.title',
+    title: AUSZAHLUNG.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-auszahlungen').then(
         (m) => m.gesuchAppFeatureGesuchFormAuszahlungenRoutes,
@@ -64,7 +65,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => FAMILIENSITUATION,
     },
-    title: 'shared.familiensituation.title',
+    title: FAMILIENSITUATION.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-familiensituation').then(
         (m) => m.gesuchAppFeatureGesuchFormFamiliensituationRoutes,
@@ -75,7 +76,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => PARTNER,
     },
-    title: 'shared.partner.title',
+    title: PARTNER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-partner').then(
         (m) => m.gesuchAppFeatureGesuchFormPartnerRoutes,
@@ -86,7 +87,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => ELTERN,
     },
-    title: 'shared.eltern.title',
+    title: ELTERN.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-eltern').then(
         (m) => m.gesuchAppFeatureGesuchFormElternRoutes,
@@ -97,7 +98,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => PERSON,
     },
-    title: 'shared.person.title',
+    title: PERSON.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-person').then(
         (m) => m.gesuchAppFeatureGesuchFormPersonRoutes,
@@ -108,7 +109,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => AUSBILDUNG,
     },
-    title: 'shared.education.title',
+    title: AUSBILDUNG.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-education').then(
         (m) => m.gesuchAppFeatureGesuchFormEducationRoutes,
@@ -119,7 +120,7 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => EINNAHMEN_KOSTEN,
     },
-    title: 'shared.einnahmenkosten.title',
+    title: EINNAHMEN_KOSTEN.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
@@ -130,10 +131,21 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => DOKUMENTE,
     },
-    title: 'shared.dokumente.title',
+    title: DOKUMENTE.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-dokumente').then(
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
       ),
+  },
+  {
+    path: PROTOKOLL.route,
+    resolve: {
+      step: () => PROTOKOLL,
+    },
+    title: 'shared.protokoll.title',
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/gesuch-form-statusprotokoll'
+      ).then((m) => m.sachbearbeitungAppFeatureGesuchFormStatusprotokollRoutes),
   },
 ];

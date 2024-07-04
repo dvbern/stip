@@ -19,11 +19,14 @@ import { MatListModule } from '@angular/material/list';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   SharedModelRole,
   SharedModelRoleList,
 } from '@dv/shared/model/benutzer';
+import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import {
+  SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
   SharedUiFormSaveComponent,
@@ -45,6 +48,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     MatListModule,
     TranslateModule,
     SharedUiFormReadonlyDirective,
+    SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,
     SharedUiLoadingComponent,
@@ -56,13 +60,17 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 })
 export class BenutzerErstellungComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);
+  private globalNotificationStore = inject(GlobalNotificationStore);
   idSig = input.required<string | undefined>({ alias: 'id' });
 
   store = inject(BenutzerverwaltungStore);
   form = this.formBuilder.group({
     name: [<string | null>null, [Validators.required]],
     vorname: [<string | null>null, [Validators.required]],
-    email: [<string | null>null, [Validators.required]],
+    email: [
+      <string | null>null,
+      [Validators.required, Validators.pattern(PATTERN_EMAIL)],
+    ],
     roles: [<SharedModelRoleList>[], [Validators.required]],
   });
   isReadonly = signal(false);
@@ -138,10 +146,22 @@ export class BenutzerErstellungComponent implements OnDestroy {
     ]);
     this.store.registerUser$({
       ...values,
-      onAfterSave: () => {
+      onAfterSave: (wasSuccessfull) => {
         this.isReadonly.set(true);
+
+        if (wasSuccessfull) {
+          this.globalNotificationStore.createPermanentSuccessNotification({
+            messageKey:
+              'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
+          });
+        }
       },
     });
+  }
+
+  trimEmail() {
+    const email = this.form.controls.email;
+    email.setValue(email.value?.trim() ?? null);
   }
 
   compareListFn(a: SharedModelRole, b: SharedModelRole) {

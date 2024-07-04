@@ -7,6 +7,7 @@ import {
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
+  ELTERN_STEUER_STEPS,
   FAMILIENSITUATION,
   GESCHWISTER,
   KINDER,
@@ -21,7 +22,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => KINDER,
     },
-    title: 'shared.kinder.title',
+    title: KINDER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-kinder').then(
         (m) => m.gesuchAppFeatureGesuchFormKinderRoutes,
@@ -32,7 +33,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => LEBENSLAUF,
     },
-    title: 'shared.lebenslauf.title',
+    title: LEBENSLAUF.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-lebenslauf').then(
         (m) => m.gesuchAppFeatureGesuchFormLebenslaufRoutes,
@@ -43,7 +44,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => GESCHWISTER,
     },
-    title: 'shared.geschwister.title',
+    title: GESCHWISTER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-geschwister').then(
         (m) => m.gesuchAppFeatureGesuchFormGeschwisterRoutes,
@@ -54,7 +55,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => AUSZAHLUNG,
     },
-    title: 'shared.auszahlung.title',
+    title: AUSZAHLUNG.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-auszahlungen').then(
         (m) => m.gesuchAppFeatureGesuchFormAuszahlungenRoutes,
@@ -65,7 +66,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => FAMILIENSITUATION,
     },
-    title: 'shared.familiensituation.title',
+    title: FAMILIENSITUATION.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-familiensituation').then(
         (m) => m.gesuchAppFeatureGesuchFormFamiliensituationRoutes,
@@ -76,7 +77,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => PARTNER,
     },
-    title: 'shared.partner.title',
+    title: PARTNER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-partner').then(
         (m) => m.gesuchAppFeatureGesuchFormPartnerRoutes,
@@ -87,18 +88,29 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => ELTERN,
     },
-    title: 'shared.eltern.title',
+    title: ELTERN.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-eltern').then(
         (m) => m.gesuchAppFeatureGesuchFormElternRoutes,
       ),
   },
+  ...Object.values(ELTERN_STEUER_STEPS).map((step) => ({
+    path: step.route,
+    resolve: {
+      step: () => step,
+    },
+    title: step.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-eltern-steuerdaten').then(
+        (m) => m.sharedFeatureGesuchFormElternSteuerdatenRoutes,
+      ),
+  })),
   {
     path: PERSON.route,
     resolve: {
       step: () => PERSON,
     },
-    title: 'shared.person.title',
+    title: PERSON.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-person').then(
         (m) => m.gesuchAppFeatureGesuchFormPersonRoutes,
@@ -109,7 +121,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => AUSBILDUNG,
     },
-    title: 'shared.education.title',
+    title: AUSBILDUNG.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-education').then(
         (m) => m.gesuchAppFeatureGesuchFormEducationRoutes,
@@ -120,7 +132,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => EINNAHMEN_KOSTEN,
     },
-    title: 'shared.einnahmenkosten.title',
+    title: EINNAHMEN_KOSTEN.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
@@ -131,7 +143,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => DOKUMENTE,
     },
-    title: 'shared.dokumente.title',
+    title: DOKUMENTE.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-dokumente').then(
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
@@ -142,6 +154,7 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => ABSCHLUSS,
     },
+    title: ABSCHLUSS.translationKey,
     loadChildren: () =>
       import('@dv/gesuch-app/feature/gesuch-form-abschluss').then(
         (m) => m.gesuchAppFeatureGesuchFormAbschlussRoutes,

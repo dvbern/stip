@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
-import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
@@ -18,24 +19,37 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
+import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import org.junit.jupiter.api.Test;
 
+import static io.smallrye.common.constraint.Assert.assertFalse;
+import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -80,6 +94,7 @@ class GesuchFormularMapperTest {
         elterns.add(mutter);
 
         final var familiensituation = new FamiliensituationUpdateDto();
+        familiensituation.setElternVerheiratetZusammen(true);
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setElterns(elterns);
@@ -133,6 +148,7 @@ class GesuchFormularMapperTest {
     void resetEinnahmenKostenRemovesAlimenteTest() {
         // Arrange
         final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(false);
         updateFamsit.setGerichtlicheAlimentenregelung(true);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
@@ -295,8 +311,229 @@ class GesuchFormularMapperTest {
         assertThat(update.getPartner(), is(nullValue()));
     }
 
+    @Test
+    void calculateSteuernKantonGemeindeTest() {
+        GesuchFormular gesuchFormular =
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0))
+                .setPartner(new Partner().setJahreseinkommen(0));
+        GesuchFormularMapper mapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+
+        // total einkommen >= 20 000 : steuern = 10%
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000))
+            .setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000) * 0.1)));
+
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000))
+            .setPartner(new Partner().setJahreseinkommen(1));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000 + 1) * 0.1)));
+        // sonst: steuern = 0
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(19999))
+            .setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+
+        //handle null inputs
+        gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null))
+            .setPartner(new Partner().setJahreseinkommen(null));
+        gesuchFormularDto = mapper.toDto(gesuchFormular);
+        assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
+    }
+
+    @Test
+    void setCorrectVermoegenValueGT18Test() {
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
+        tranche.setGesuchFormular(
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten())
+                .setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setGeburtsdatum(geburtsDatum))
+                .setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        GesuchFormularMapper gesuchFormularMapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() >= 0);
+
+        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void setCorrectVermoegenNonZeroValueGT18Test() {
+        final int vermoegen = 10000;
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
+        tranche.setGesuchFormular(
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten())
+                .setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setGeburtsdatum(geburtsDatum))
+                .setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        tranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(vermoegen);
+        GesuchFormularMapper gesuchFormularMapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() == vermoegen);
+
+        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void setCorrectVermoegenValueLT18Test() {
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(2);
+        tranche.setGesuchFormular(
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten())
+                .setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setGeburtsdatum(geburtsDatum))
+                .setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        GesuchFormularMapper gesuchFormularMapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
+
+        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void setCorrectVermoegenNonZeroValueLT18Test() {
+        final int vermoegen = 10000;
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
+        tranche.setGesuchFormular(
+            new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten())
+                .setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung().setGeburtsdatum(geburtsDatum))
+                .setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        tranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(vermoegen);
+        GesuchFormularMapper gesuchFormularMapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
+
+        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void resetSteuerdatenDoesntClearTabTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(true);
+
+        final var updateTab = new SteuerdatenUpdateDto();
+        updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        // This needs to be this verbose as List.of creates an immutable list
+        // This also needs to be a mutable list since List.removeAll(...)
+        // will throw an exception even if no items are to be removed
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
+            add(updateTab);
+        }};
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setSteuerdaten(updateSteuerdaten);
+
+        final var mapper = createMapper();
+
+        // Act
+        final var targetFormular =
+            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+
+        // Assert
+        assertThat(targetFormular.getSteuerdaten().size(), is(1));
+        assertThat(
+            targetFormular.getSteuerdaten().stream().findFirst().get().getSteuerdatenTyp(),
+            is(SteuerdatenTyp.FAMILIE)
+        );
+    }
+
+    @Test
+    void resetSteuerdatenClearsFamilieTabTest() {
+        // Arrange
+        final var updateFamsit = new FamiliensituationUpdateDto();
+        updateFamsit.setElternVerheiratetZusammen(true);
+
+        final var updateTab = new SteuerdatenUpdateDto();
+        updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        // This needs to be this verbose as List.of creates an immutable list
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
+            add(updateTab);
+        }};
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setFamiliensituation(updateFamsit);
+        updateFormular.setSteuerdaten(updateSteuerdaten);
+
+        final var mapper = createMapper();
+
+        // Init target
+        var targetFormular =
+            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+
+        // Rearrange
+        updateFamsit.setElternVerheiratetZusammen(false);
+        updateFamsit.setGerichtlicheAlimentenregelung(true);
+        updateFamsit.setWerZahltAlimente(Elternschaftsteilung.VATER);
+
+        // Act
+        targetFormular = mapper.partialUpdate(updateFormular, targetFormular);
+
+        // Assert
+        assertThat(targetFormular.getSteuerdaten().size(), is(0));
+    }
+
+    @Test
+    void resetSteuerdatenAfterUpdateClearsSaeuleValues() {
+        // Arrange
+        final var formular = new GesuchFormular()
+            .setSteuerdaten(Set.of(
+                new Steuerdaten()
+                    .setIsArbeitsverhaeltnisSelbstaendig(true)
+                    .setSaeule2(1000)
+                    .setSaeule3a(1000)
+            ));
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.resetSteuerdatenAfterUpdate(formular);
+
+        // Assert
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(1000));
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(1000));
+
+        // Rearrange
+        formular.getSteuerdaten().stream().findFirst().get().setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        // Act
+        mapper.resetSteuerdatenAfterUpdate(formular);
+
+        // Assert
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(nullValue()));
+        assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(nullValue()));
+    }
+
     GesuchFormularMapper createMapper() {
-        return new GesuchFormularMapperImpl(
+        final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
             new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
@@ -306,7 +543,14 @@ class GesuchFormularMapperTest {
             new GeschwisterMapperImpl(),
             new ElternMapperImpl(),
             new KindMapperImpl(),
-            new EinnahmenKostenMapperImpl()
+            new EinnahmenKostenMapperImpl(),
+            new SteuerdatenMapperImpl()
         );
+
+        // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
+        mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
+        mapper.familiensituationMapper = new FamiliensituationMapperImpl();
+
+        return mapper;
     }
 }

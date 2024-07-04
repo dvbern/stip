@@ -103,7 +103,8 @@ $gesuch-app-theme: map.deep-merge(
   }
 }
 // Used for readonly mat-form-fields, see dvSharedUiFormReadonly
-form.readonly {
+form.readonly,
+form .readonly {
   .mat-mdc-form-field {
     --mdc-outlined-text-field-disabled-outline-color: transparent;
     --mdc-outlined-text-field-disabled-input-text-color: var(--dv-body-color);
@@ -168,17 +169,17 @@ form.readonly {
 }
 .mat-mdc-table {
   .mat-mdc-header-cell {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: var(--dv-table-header-spacing, 20px);
+    padding-bottom: var(--dv-table-header-spacing, 20px);
   }
   .combined-header-row {
     .mat-mdc-header-cell {
       border-bottom: 0;
-      padding-top: 20px;
+      padding-top: var(--dv-table-header-spacing, 20px);
       padding-bottom: 0px;
     }
     .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
-      padding-bottom: 20px;
+      padding-bottom: var(--dv-table-header-spacing, 20px);
       padding-top: 0;
     }
   }

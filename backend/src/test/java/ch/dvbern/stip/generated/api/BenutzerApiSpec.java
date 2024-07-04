@@ -62,6 +62,7 @@ public class BenutzerApiSpec {
         return Arrays.asList(
                 createOrUpdateSachbearbeiterStammdaten(),
                 createOrUpdateSachbearbeiterStammdatenList(),
+                deleteBenutzer(),
                 getSachbearbeitende(),
                 getSachbearbeiterStammdaten(),
                 prepareCurrentBenutzer()
@@ -74,6 +75,10 @@ public class BenutzerApiSpec {
 
     public CreateOrUpdateSachbearbeiterStammdatenListOper createOrUpdateSachbearbeiterStammdatenList() {
         return new CreateOrUpdateSachbearbeiterStammdatenListOper(createReqSpec());
+    }
+
+    public DeleteBenutzerOper deleteBenutzer() {
+        return new DeleteBenutzerOper(createReqSpec());
     }
 
     public GetSachbearbeitendeOper getSachbearbeitende() {
@@ -228,6 +233,68 @@ public class BenutzerApiSpec {
          * @return operation
          */
         public CreateOrUpdateSachbearbeiterStammdatenListOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Deletes a benutzer with the given id
+     * 
+     *
+     * @see #benutzerIdPath  (required)
+     */
+    public static class DeleteBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/benutzer/{benutzerId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /benutzer/{benutzerId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String BENUTZER_ID_PATH = "benutzerId";
+
+        /**
+         * @param benutzerId (String)  (required)
+         * @return operation
+         */
+        public DeleteBenutzerOper benutzerIdPath(Object benutzerId) {
+            reqSpec.addPathParam(BENUTZER_ID_PATH, benutzerId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -1,10 +1,17 @@
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { Gesuch, SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
+import {
+  Gesuch,
+  SharedModelGesuchFormular,
+  SteuerdatenTyp,
+} from '@dv/shared/model/gesuch';
+import { ELTERN, ELTERN_STEUER_FAMILIE } from '@dv/shared/model/gesuch-form';
+import { initial, success } from '@dv/shared/util/remote-data';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import {
   isGesuchFormularProp,
+  selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
@@ -20,17 +27,21 @@ describe('selectSharedDataAccessGesuchsView', () => {
         gesuchId: null,
         gesuchFormular: null,
       },
+      steuerdatenTabs: initial(),
       lastUpdate: null,
       loading: false,
       error: undefined,
     };
-    const config = {
-      deploymentConfig: undefined,
-      loading: false,
-      error: undefined,
-    };
+
     const result = selectSharedDataAccessGesuchsView.projector(
-      config,
+      {
+        deploymentConfig: undefined,
+        compileTimeConfig: undefined,
+        loading: false,
+        error: undefined,
+        isGesuchApp: true,
+        isSachbearbeitungApp: false,
+      },
       state.lastUpdate,
       state.loading,
       state.gesuch,
@@ -103,6 +114,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
         partner: {} as any,
         kinds: [],
       },
+      steuerdatenTabs: initial(),
       cache: {
         gesuchId: null,
         gesuchFormular: null,
@@ -114,8 +126,46 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const result = selectSharedDataAccessGesuchValidationView.projector(state);
     expect(result.invalidFormularProps.validations).toEqual({
       errors: ['partner', 'kinds'],
-      validationWarnings: undefined,
+      warnings: undefined,
       hasDocuments: null,
     });
+  });
+
+  it('should append steuerdatenTab Familie to steps after Eltern', () => {
+    const state: State = {
+      gesuch: null,
+      gesuchs: [],
+      validations: {
+        errors: [],
+        hasDocuments: null,
+      },
+      gesuchFormular: null,
+      steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
+      cache: {
+        gesuchId: null,
+        gesuchFormular: null,
+      },
+      lastUpdate: null,
+      loading: false,
+      error: undefined,
+    };
+    const result = selectSharedDataAccessGesuchStepsView.projector(state, {
+      deploymentConfig: undefined,
+      compileTimeConfig: {
+        appType: 'gesuch-app',
+        authClientId: 'stip-gesuch-app',
+      },
+      loading: false,
+      error: undefined,
+      isGesuchApp: true,
+      isSachbearbeitungApp: false,
+    });
+    const elternIndex = result.steps.findIndex(
+      (step) => step.route === ELTERN.route,
+    );
+    const steuerdatenTabIndex = result.steps.findIndex(
+      (step) => step.route === ELTERN_STEUER_FAMILIE.route,
+    );
+    expect(elternIndex + 1).toEqual(steuerdatenTabIndex);
   });
 });

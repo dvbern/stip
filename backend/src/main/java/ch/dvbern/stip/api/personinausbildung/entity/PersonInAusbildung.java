@@ -57,7 +57,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @LandCHRequiredConstraint
 @NiederlassungsstatusRequiredConstraint
 @EinreisedatumRequiredIfNiederlassungsstatusConstraint
-@VermoegenVorjahrRequiredConstraint
 @Entity
 @Table(
     name = "person_in_ausbildung",
@@ -138,10 +137,6 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @NotNull
     @Column(name = "vormundschaft", nullable = false)
     private boolean vormundschaft = false;
-
-    @Nullable
-    @Column(name = "vermoegen_vorjahr")
-    private Integer vermoegenVorjahr;
 
     @NotNull
     @Enumerated(EnumType.STRING)

@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -78,6 +79,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/requiredDokumente")
     @Produces({ "application/json", "text/plain" })
     Response getRequiredGesuchDokumentTyp(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/statusprotokoll")
+    @Produces({ "application/json", "text/plain" })
+    Response getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}")

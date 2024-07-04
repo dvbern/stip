@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
@@ -10,6 +11,7 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -21,9 +23,13 @@ import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
+import jakarta.inject.Inject;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -43,12 +49,43 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
             GeschwisterMapper.class,
             ElternMapper.class,
             KindMapper.class,
-            EinnahmenKostenMapper.class
+            EinnahmenKostenMapper.class,
+            SteuerdatenMapper.class
         })
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
+    @Inject
+    SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+
+    @Inject
+    FamiliensituationMapper familiensituationMapper;
+
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
+
+    @AfterMapping
+    protected void calculateSteuerdatenTabs(
+        final GesuchFormular entity,
+        final @MappingTarget GesuchFormularDto dto
+    ) {
+        if (entity.getFamiliensituation() == null) {
+            return;
+        }
+
+        dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
+    }
+
+    @AfterMapping
+    public void setCalculatedPropertiesOnDto(
+        GesuchFormular gesuchFormular,
+        @MappingTarget GesuchFormularDto gesuchFormularDto
+    ) {
+        if (gesuchFormularDto.getEinnahmenKosten() != null) {
+            final var ek = gesuchFormularDto.getEinnahmenKosten();
+            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
+            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
+        }
+    }
 
     /**
      * partial update mapper for the Gesuchssteller
@@ -68,6 +105,14 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
+        resetSteuerdatenTabs(newFormular, targetFormular);
+    }
+
+    @AfterMapping
+    protected void resetDependentDataAfterUpdate(
+        final GesuchFormular newFormular
+    ) {
+        resetSteuerdatenAfterUpdate(newFormular);
     }
 
     void resetEinnahmenKosten(
@@ -120,8 +165,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
                 if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
                     newFormular.getEinnahmenKosten() != null) {
-                        newFormular.getEinnahmenKosten().setWohnkosten(null);
-                        newFormular.getEinnahmenKosten().setWgWohnend(null);
+                    newFormular.getEinnahmenKosten().setWohnkosten(null);
+                    newFormular.getEinnahmenKosten().setWgWohnend(null);
                 }
             }
         );
@@ -213,6 +258,50 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 newFormular.setPartner(null);
             }
         );
+    }
+
+    void resetSteuerdatenTabs(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular targetFormular
+    ) {
+        if (newFormular.getSteuerdaten() == null || newFormular.getSteuerdaten().isEmpty()) {
+            return;
+        }
+
+        if (newFormular.getFamiliensituation() == null) {
+            newFormular.getSteuerdaten().clear();
+        } else {
+            if (targetFormular.getFamiliensituation() == null) {
+                return;
+            }
+
+            final var targetFamsit = familiensituationMapper.partialUpdate(
+                newFormular.getFamiliensituation(),
+                targetFormular.getFamiliensituation()
+            );
+
+            final var requiredTabs = new HashSet<>(
+                steuerdatenTabBerechnungsService.calculateTabs(targetFamsit)
+            );
+
+            newFormular.getSteuerdaten().removeAll(
+                newFormular.getSteuerdaten()
+                    .stream()
+                    .filter(newTab -> !requiredTabs.contains(newTab.getSteuerdatenTyp()))
+                    .toList()
+            );
+        }
+    }
+
+    void resetSteuerdatenAfterUpdate(
+        final GesuchFormular gesuchFormular
+    ) {
+        gesuchFormular.getSteuerdaten().forEach(steuerdaten -> {
+            if (!steuerdaten.getIsArbeitsverhaeltnisSelbstaendig()) {
+                steuerdaten.setSaeule2(null);
+                steuerdaten.setSaeule3a(null);
+            }
+        });
     }
 
     void removeElternOfTyp(final List<ElternUpdateDto> eltern, final ElternTyp typ) {

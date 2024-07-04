@@ -52,7 +52,7 @@ public class GesuchStatusService {
             editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         }
         if (identifiers.contains(OidcConstants.ROLE_ADMIN)) {
-            editStates.addAll(Gesuchstatus.ADMIN_CAN_EDIT);
+            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         }
 
         return editStates.contains(gesuchstatus);

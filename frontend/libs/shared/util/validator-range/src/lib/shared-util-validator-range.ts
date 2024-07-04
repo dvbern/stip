@@ -5,12 +5,14 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { isDefined } from '@dv/shared/util-fn/type-guards';
+
 export function sharedUtilValidatorRange(
   min: number,
   max: number,
 ): ValidatorFn {
   return (control: AbstractControl<number | null>): ValidationErrors | null => {
-    if (!control?.value) {
+    if (!isDefined(control?.value)) {
       return null;
     }
     if (isNaN(control.value)) {

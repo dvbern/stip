@@ -49,6 +49,13 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
+    public Response deleteBenutzer(String benutzerId) {
+        benutzerService.deleteBenutzer(benutzerId);
+        worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
+        return Response.noContent().build();
+    }
+
+    @Override
     public Response prepareCurrentBenutzer() {
         final var benutzer = benutzerService.getOrCreateAndUpdateCurrentBenutzer();
         return Response.ok(benutzer).build();
