@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
@@ -68,6 +69,7 @@ public class GesuchApiSpec {
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
                 getAllGesucheSb(),
+                getBerechnungForGesuch(),
                 getGesuch(),
                 getGesuchDokumente(),
                 getGesucheForFall(),
@@ -98,6 +100,10 @@ public class GesuchApiSpec {
 
     public GetAllGesucheSbOper getAllGesucheSb() {
         return new GetAllGesucheSbOper(createReqSpec());
+    }
+
+    public GetBerechnungForGesuchOper getBerechnungForGesuch() {
+        return new GetBerechnungForGesuchOper(createReqSpec());
     }
 
     public GetGesuchOper getGesuch() {
@@ -461,6 +467,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetAllGesucheSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Berechnet und holt die Berechnung für ein Gesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;BerechnungsresultatDtoSpec&gt;
+     */
+    public static class GetBerechnungForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/berechnung";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetBerechnungForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/berechnung
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/berechnung
+         * @param handler handler
+         * @return List&lt;BerechnungsresultatDtoSpec&gt;
+         */
+        public List<BerechnungsresultatDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<BerechnungsresultatDtoSpec>> type = new TypeRef<List<BerechnungsresultatDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetBerechnungForGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -16,9 +16,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("Gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -93,7 +91,6 @@ public class GesuchDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchDto gesuchNummer(Integer gesuchNummer) {
     this.gesuchNummer = gesuchNummer;

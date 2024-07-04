@@ -26,7 +26,6 @@ public class PlzDto  implements Serializable {
   private @Valid String kantonskuerzel;
 
   /**
-   * 
    **/
   public PlzDto plz(String plz) {
     this.plz = plz;
@@ -46,7 +45,6 @@ public class PlzDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public PlzDto ort(String ort) {
     this.ort = ort;
@@ -66,7 +64,6 @@ public class PlzDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public PlzDto kantonskuerzel(String kantonskuerzel) {
     this.kantonskuerzel = kantonskuerzel;

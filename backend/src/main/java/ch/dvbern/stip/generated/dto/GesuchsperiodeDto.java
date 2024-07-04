@@ -190,7 +190,6 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeDto ausbKostenSekII(Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
@@ -210,7 +209,6 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeDto ausbKostenTertiaer(Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;

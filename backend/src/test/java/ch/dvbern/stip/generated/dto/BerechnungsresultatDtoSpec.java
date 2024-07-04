@@ -20,78 +20,77 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * BenutzereinstellungenUpdateDtoSpec
+ * Resultat der Berechnung (eine Tranche)
  */
 @JsonPropertyOrder({
-  BenutzereinstellungenUpdateDtoSpec.JSON_PROPERTY_ID,
-  BenutzereinstellungenUpdateDtoSpec.JSON_PROPERTY_DIGITALE_KOMMUNIKATION
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSDATEN
 })
-@JsonTypeName("BenutzereinstellungenUpdate")
+@JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class BenutzereinstellungenUpdateDtoSpec {
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
+public class BerechnungsresultatDtoSpec {
+  public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
+  private Integer berechnung;
 
-  public static final String JSON_PROPERTY_DIGITALE_KOMMUNIKATION = "digitaleKommunikation";
-  private Boolean digitaleKommunikation;
+  public static final String JSON_PROPERTY_BERECHNUNGSDATEN = "berechnungsdaten";
+  private Object berechnungsdaten;
 
-  public BenutzereinstellungenUpdateDtoSpec() {
+  public BerechnungsresultatDtoSpec() {
   }
 
-  public BenutzereinstellungenUpdateDtoSpec id(UUID id) {
+  public BerechnungsresultatDtoSpec berechnung(Integer berechnung) {
     
-    this.id = id;
+    this.berechnung = berechnung;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Berechneter Stpendiumsanspruch für diese Tranche
+   * @return berechnung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public UUID getId() {
-    return id;
+  public Integer getBerechnung() {
+    return berechnung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
-    this.id = id;
+  public void setBerechnung(Integer berechnung) {
+    this.berechnung = berechnung;
   }
 
 
-  public BenutzereinstellungenUpdateDtoSpec digitaleKommunikation(Boolean digitaleKommunikation) {
+  public BerechnungsresultatDtoSpec berechnungsdaten(Object berechnungsdaten) {
     
-    this.digitaleKommunikation = digitaleKommunikation;
+    this.berechnungsdaten = berechnungsdaten;
     return this;
   }
 
    /**
-   * Get digitaleKommunikation
-   * @return digitaleKommunikation
+   * Resultat der Berechnung als JSON objekt, transparent
+   * @return berechnungsdaten
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DIGITALE_KOMMUNIKATION)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNGSDATEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Boolean getDigitaleKommunikation() {
-    return digitaleKommunikation;
+  public Object getBerechnungsdaten() {
+    return berechnungsdaten;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DIGITALE_KOMMUNIKATION)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNGSDATEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDigitaleKommunikation(Boolean digitaleKommunikation) {
-    this.digitaleKommunikation = digitaleKommunikation;
+  public void setBerechnungsdaten(Object berechnungsdaten) {
+    this.berechnungsdaten = berechnungsdaten;
   }
 
   @Override
@@ -102,22 +101,22 @@ public class BenutzereinstellungenUpdateDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BenutzereinstellungenUpdateDtoSpec benutzereinstellungenUpdate = (BenutzereinstellungenUpdateDtoSpec) o;
-    return Objects.equals(this.id, benutzereinstellungenUpdate.id) &&
-        Objects.equals(this.digitaleKommunikation, benutzereinstellungenUpdate.digitaleKommunikation);
+    BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
+    return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+        Objects.equals(this.berechnungsdaten, berechnungsresultat.berechnungsdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, digitaleKommunikation);
+    return Objects.hash(berechnung, berechnungsdaten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BenutzereinstellungenUpdateDtoSpec {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    digitaleKommunikation: ").append(toIndentedString(digitaleKommunikation)).append("\n");
+    sb.append("class BerechnungsresultatDtoSpec {\n");
+    sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
+    sb.append("    berechnungsdaten: ").append(toIndentedString(berechnungsdaten)).append("\n");
     sb.append("}");
     return sb.toString();
   }

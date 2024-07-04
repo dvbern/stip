@@ -24,7 +24,6 @@ public class ValidationErrorDto  implements Serializable {
   private @Valid String propertyPath;
 
   /**
-   * 
    **/
   public ValidationErrorDto messageTemplate(String messageTemplate) {
     this.messageTemplate = messageTemplate;
@@ -44,7 +43,6 @@ public class ValidationErrorDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public ValidationErrorDto message(String message) {
     this.message = message;
@@ -64,7 +62,6 @@ public class ValidationErrorDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public ValidationErrorDto propertyPath(String propertyPath) {
     this.propertyPath = propertyPath;

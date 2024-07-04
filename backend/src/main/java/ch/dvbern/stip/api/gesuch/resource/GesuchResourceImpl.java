@@ -11,8 +11,10 @@ import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -125,5 +127,15 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response validateGesuchPages(UUID gesuchId) {
         return Response.ok(gesuchService.validatePages(gesuchId)).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getBerechnungForGesuch(UUID gesuchId) {
+        try {
+            return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
+        } catch (JsonProcessingException e) {
+            throw new InternalServerErrorException(e);
+        }
     }
 }

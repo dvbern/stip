@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * ValidationMessageDtoSpec
  */
 @JsonPropertyOrder({
   ValidationMessageDtoSpec.JSON_PROPERTY_PROPERTY_PATH,
@@ -53,7 +53,7 @@ public class ValidationMessageDtoSpec {
   }
 
    /**
-   * 
+   * Get propertyPath
    * @return propertyPath
   **/
   @jakarta.annotation.Nullable
@@ -79,7 +79,7 @@ public class ValidationMessageDtoSpec {
   }
 
    /**
-   * 
+   * Get messageTemplate
    * @return messageTemplate
   **/
   @jakarta.annotation.Nonnull
@@ -105,7 +105,7 @@ public class ValidationMessageDtoSpec {
   }
 
    /**
-   * 
+   * Get message
    * @return message
   **/
   @jakarta.annotation.Nonnull

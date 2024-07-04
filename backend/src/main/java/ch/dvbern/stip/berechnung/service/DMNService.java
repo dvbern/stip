@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNResult;
+import org.kie.dmn.api.core.event.DMNRuntimeEventListener;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
@@ -20,11 +21,19 @@ public class DMNService {
     private static final String DMN_EXTENSION = ".dmn";
 
     public DMNResult evaluateModel(final List<Resource> models, final Map<String, Object> context) {
+        return evaluateModel(models, context, null);
+    }
+
+    public DMNResult evaluateModel(final List<Resource> models, final Map<String, Object> context, DMNRuntimeEventListener listener) {
         final var runtime = DMNRuntimeBuilder
             .fromDefaults()
             .buildConfiguration()
             .fromResources(models)
             .getOrElseThrow(RuntimeException::new);
+
+        if (listener != null) {
+            runtime.addListener(listener);
+        }
 
         final var model = runtime.getModels().get(runtime.getModels().size() - 1);
         final var dynamicContext = new DynamicDMNContextBuilder(runtime.newContext(), model)

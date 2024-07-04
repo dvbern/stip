@@ -136,7 +136,6 @@ public class GesuchFormularUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchFormularUpdateDto elterns(List<ElternUpdateDto> elterns) {
     this.elterns = elterns;
@@ -171,7 +170,6 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
   /**
-   * 
    **/
   public GesuchFormularUpdateDto geschwisters(List<GeschwisterUpdateDto> geschwisters) {
     this.geschwisters = geschwisters;
@@ -206,7 +204,6 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
   /**
-   * 
    **/
   public GesuchFormularUpdateDto lebenslaufItems(List<LebenslaufItemUpdateDto> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
@@ -241,7 +238,6 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
   /**
-   * 
    **/
   public GesuchFormularUpdateDto kinds(List<KindUpdateDto> kinds) {
     this.kinds = kinds;
