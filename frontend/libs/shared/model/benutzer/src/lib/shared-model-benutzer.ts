@@ -17,7 +17,7 @@ export type SharedModelRole = SharedModelRoleList[number];
 
 export const SharedModelBenutzerApi = z.object({
   id: z.string(),
-  username: z.string(),
+  username: z.string().optional(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().optional(),
@@ -69,13 +69,13 @@ export type SharedModelUserAdminError = z.infer<
 export const SharedModelRoleRepresentation = z.object({
   id: z.string(),
   name: z.string(),
-  description: z.string().optional(),
-  scopeParamRequired: z.boolean().optional(),
-  composite: z.boolean().optional(),
-  composites: z.array(z.string()).optional(),
-  clientRole: z.boolean().optional(),
-  containerId: z.string().optional(),
-  attributes: z.array(z.string()).optional(),
+  // description: z.string().optional(),
+  // scopeParamRequired: z.boolean().optional(),
+  // composite: z.boolean().optional(),
+  // composites: z.array(z.string()).optional(),
+  // clientRole: z.boolean().optional(),
+  // containerId: z.string().optional(),
+  // attributes: z.array(z.string()).optional(),
 });
 export type SharedModelRoleRepresentation = z.infer<
   typeof SharedModelRoleRepresentation
@@ -92,7 +92,7 @@ export type SharedModelClientMappingsRepresentation = z.infer<
 
 export const SharedModelModelMappingsRepresentation = z.object({
   clientMappings: z
-    .map(z.string(), SharedModelClientMappingsRepresentation)
+    .record(z.string(), SharedModelClientMappingsRepresentation)
     .optional(),
   realmMappings: z.array(SharedModelRoleRepresentation).optional(),
 });

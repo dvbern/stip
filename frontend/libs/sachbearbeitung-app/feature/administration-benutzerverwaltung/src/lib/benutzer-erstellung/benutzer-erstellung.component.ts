@@ -75,7 +75,10 @@ export class BenutzerErstellungComponent implements OnDestroy {
         const id = this.idSig();
 
         if (id) {
-          this.store.loadBenutzer$(id);
+          this.store.loadBenutzerWithRoles$(id);
+
+          // disable email field
+          this.form.controls.email.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },
@@ -106,24 +109,22 @@ export class BenutzerErstellungComponent implements OnDestroy {
   }
 
   update() {
-    if (this.form.invalid) {
+    const id = this.idSig();
+
+    if (!id || this.form.invalid) {
       return;
     }
 
-    return;
-
-    // const values = convertTempFormToRealValues(this.form, [
-    //   'email',
-    //   'name',
-    //   'vorname',
-    // ]);
-    // this.store.updateBenutzer$({
-    //   ...values,
-    //   id: this.idSig(),
-    //   onAfterSave: () => {
-    //     this.isReadonly.set(true);
-    //   },
-    // });
+    const values = convertTempFormToRealValues(this.form, ['name', 'vorname']);
+    this.store.updateBenutzer$({
+      user: {
+        lastName: values.name,
+        firstName: values.vorname,
+        username: this.store.benutzer().data?.username,
+        id,
+      },
+      roles: values.roles,
+    });
   }
 
   save() {

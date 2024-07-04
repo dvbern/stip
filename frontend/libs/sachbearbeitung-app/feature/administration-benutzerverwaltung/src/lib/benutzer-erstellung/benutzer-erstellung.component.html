@@ -6,7 +6,7 @@
   (ngSubmit)="handleSubmit()"
   [dvSharedUiFormReadonly]="isReadonly()"
 >
-  @if (store.benutzer() | rdIsPending) {
+  @if ((store.benutzer() | rdIsPending) || (store.userCreated() | rdIsPending)) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <div class="row g-4">

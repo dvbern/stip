@@ -12,6 +12,7 @@ import {
   filter,
   forkJoin,
   map,
+  of,
   pipe,
   switchMap,
   tap,
@@ -120,7 +121,7 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
-  loadBenutzer$ = rxMethod<string>(
+  loadBenutzerWithRoles$ = rxMethod<string>(
     pipe(
       tap(() => {
         patchState(this, () => ({
@@ -147,6 +148,69 @@ export class BenutzerverwaltungStore extends signalStore(
               };
             }),
             handleApiResponse((benutzer) => patchState(this, { benutzer })),
+          ),
+      ),
+    ),
+  );
+
+  updateBenutzer$ = rxMethod<{
+    user: SharedModelBenutzerApi;
+    roles: SharedModelRoleList;
+  }>(
+    pipe(
+      map(({ user, roles }) => {
+        patchState(this, {
+          benutzer: pending(),
+        });
+
+        const rolesToRemove = this.benutzer().data?.roles?.filter(
+          (r) => !roles.some((role) => role.name === r.name),
+        );
+
+        return { user, roles, rolesToRemove };
+      }),
+      exhaustMap(({ user, roles, rolesToRemove }) =>
+        this.http
+          .put(
+            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}`,
+            user,
+            {
+              context: noGlobalErrorsIf(true),
+            },
+          )
+          .pipe(
+            switchMap(() => this.assignRoles$(user, roles)),
+            switchMap(() => {
+              if (!rolesToRemove || rolesToRemove.length === 0) {
+                return of(user);
+              }
+
+              return this.removeRoles$(user, rolesToRemove);
+            }),
+            switchMap(() =>
+              this.http
+                .get<SharedModelBenutzerApi>(
+                  `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}`,
+                )
+                .pipe(
+                  withLatestFrom(this.getUserRoleMappings$(user.id)),
+                  map(([users, rm]) => {
+                    const benutzer = SharedModelBenutzerApi.parse(users);
+                    const userRoles =
+                      SharedModelModelMappingsRepresentation.parse(
+                        rm,
+                      ).realmMappings?.filter(byUsableRoles);
+
+                    return {
+                      ...benutzer,
+                      roles: userRoles ?? [],
+                    };
+                  }),
+                  handleApiResponse((benutzer) =>
+                    patchState(this, { benutzer }),
+                  ),
+                ),
+            ),
           ),
       ),
     ),
@@ -208,7 +272,7 @@ export class BenutzerverwaltungStore extends signalStore(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
           switchMap((response) => this.loadUser$(response)),
-          switchMap((user) => this.assignRoles(user, roles)),
+          switchMap((user) => this.assignRoles$(user, roles)),
           switchMap((user) =>
             this.notifyUser$(user).pipe(
               handleApiResponse(
@@ -292,7 +356,7 @@ export class BenutzerverwaltungStore extends signalStore(
       .pipe(this.interceptError('roleMapping'));
   }
 
-  private assignRoles(
+  private assignRoles$(
     user: SharedModelBenutzerApi,
     roles: { id: string; name: string }[],
   ) {
@@ -302,6 +366,21 @@ export class BenutzerverwaltungStore extends signalStore(
         roles,
         {
           context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(
+        map(() => user),
+        this.interceptError('roleMapping'),
+      );
+  }
+
+  private removeRoles$(user: SharedModelBenutzerApi, roles: SharedModelRole[]) {
+    return this.http
+      .delete(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
+        {
+          context: noGlobalErrorsIf(true),
+          body: roles,
         },
       )
       .pipe(
