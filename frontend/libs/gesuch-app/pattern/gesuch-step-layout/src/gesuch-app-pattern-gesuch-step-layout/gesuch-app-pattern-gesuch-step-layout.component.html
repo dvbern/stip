@@ -45,20 +45,20 @@
     }
   </div>
 
-  <div class="header-mobile-addons">
+  <div dvHeaderMobileAddons>
     <a routerLink="/" class="dv-button-icon" [attr.aria-label]="'shared.home' | translate">
       <span class="material-symbols-rounded text-black">home</span>
     </a>
   </div>
 
-  <div class="mobile-nav-content">
+  <div dvMobileNav>
     <dv-shared-pattern-gesuch-step-nav
       [stepsSig]="stepsSig()"
       (navClicked)="navClicked.emit($event)"
     ></dv-shared-pattern-gesuch-step-nav>
   </div>
 
-  <div class="header-desktop-left d-flex gap-3 align-items-center">
+  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <a
       routerLink="/"
       class="btn btn-danger fw-normal px-2 d-flex align-items-center shadow-none"
@@ -69,5 +69,5 @@
     </a>
   </div>
 
-  <div class="header-desktop-right d-flex gap-4 align-items-center"></div>
+  <div dvHeaderDesktopRight class="d-flex gap-4 align-items-center"></div>
 </dv-gesuch-app-pattern-main-layout>
