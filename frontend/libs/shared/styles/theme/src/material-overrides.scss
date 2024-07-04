@@ -273,7 +273,11 @@ $dv-all-colors: (
       --mdc-linear-progress-track-color: #{$mild-color};
     }
   }
+  .header-menu-panel {
+    padding: 5px 12px;
+  }
 }
+
 .mat-mdc-form-field-hint.mat-caution {
   color: mat.get-color-from-palette($gesuch-app-caution, 500);
 }
@@ -282,4 +286,8 @@ $dv-all-colors: (
   .mat-mdc-dialog-container {
     --mdc-dialog-container-elevation: none;
   }
+}
+
+.btn.active:not(:hover) {
+  --mat-menu-item-label-text-color: white;
 }

@@ -1,36 +1,10 @@
-<dv-shared-pattern-app-header
-  [closeMenu]="navClicked | async"
-  [backLink]="{
-    path: '/',
-    text: 'sachbearbeitung-app.header.back' | translate
-  }"
->
-  <div class="header-desktop-left d-flex gap-3 align-items-center">
-    <div class="active btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
-      <i class="material-symbols-rounded text-white me-2">checklist</i>
-      <span>{{ 'sachbearbeitung-app.header.antragDetail' | translate }}</span>
-    </div>
-  </div>
-  <div class="header-desktop-left d-flex gap-3 align-items-center ms-5">
-    <a
-      routerLink="/"
-      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-step-nav-overview"
-    >
-      <i class="material-symbols-rounded text-white me-2">contract_edit</i>
-      <span>{{ 'sachbearbeitung-app.header.berechnung' | translate }}</span>
-    </a>
-  </div>
-
-  <div class="mobile-nav-content">
-    <dv-shared-pattern-gesuch-step-nav
-      [stepsSig]="stepsSig()"
-      (navClicked)="navClicked.emit()"
-    ></dv-shared-pattern-gesuch-step-nav>
-  </div>
-
-  <dv-shared-ui-search class="header-desktop-right col-auto align-self-center"></dv-shared-ui-search>
-</dv-shared-pattern-app-header>
+<dv-sachbearbeitung-app-pattern-gesuch-header [navClicked]="navClicked$ | async" [currentGesuch]="viewSig().gesuch">
+  <dv-shared-pattern-gesuch-step-nav
+    dvMobileNavContent
+    [stepsSig]="stepsSig()"
+    (navClicked)="navClicked$.emit()"
+  ></dv-shared-pattern-gesuch-step-nav>
+</dv-sachbearbeitung-app-pattern-gesuch-header>
 
 <!-- MAIN CONTENT -->
 <main class="page-body">

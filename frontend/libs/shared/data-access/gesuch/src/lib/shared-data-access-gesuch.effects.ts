@@ -132,6 +132,7 @@ export const loadGesuch = createEffect(
   ) => {
     return actions$.pipe(
       ofType(
+        SharedDataAccessGesuchEvents.loadGesuch,
         SharedEventGesuchFormPartner.init,
         SharedEventGesuchFormPerson.init,
         SharedEventGesuchFormEducation.init,

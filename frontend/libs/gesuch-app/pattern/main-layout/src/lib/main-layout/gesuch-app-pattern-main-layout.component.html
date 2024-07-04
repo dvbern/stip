@@ -1,9 +1,9 @@
 <dv-shared-pattern-app-header [closeMenu]="closeMenu">
-  <ng-content select=".header-mobile-addons" ngProjectAs=".header-mobile-addons"></ng-content>
-  <ng-content select=".header-desktop-left" ngProjectAs=".header-desktop-left"></ng-content>
-  <ng-content select=".header-desktop-right" ngProjectAs=".header-desktop-right"></ng-content>
-  <ng-content select=".mobile-nav-header" ngProjectAs=".mobile-nav-header"></ng-content>
-  <ng-content select=".mobile-nav-content" ngProjectAs=".mobile-nav-content"></ng-content>
+  <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
+  <ng-content select="[dvHeaderDesktopLeft]" ngProjectAs="[dvHeaderDesktopLeft]"></ng-content>
+  <ng-content select="[dvHeaderDesktopRight]" ngProjectAs="[dvHeaderDesktopRight]"></ng-content>
+  <ng-content select="[dvMobileNavHeader]" ngProjectAs="[dvMobileNavHeader]"></ng-content>
+  <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
 </dv-shared-pattern-app-header>
 
 <!-- MAIN CONTENT -->
