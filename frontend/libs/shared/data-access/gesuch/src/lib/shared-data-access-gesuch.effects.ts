@@ -162,7 +162,8 @@ export const loadGesuch = createEffect(
               handleNotFound((error) => {
                 globalNotifications.createNotification({
                   type: 'ERROR',
-                  messageKey: 'gesuch-app.gesuch.not-found-redirection',
+                  messageKey:
+                    'shared.genericError.gesuch-not-found-redirection',
                   content: error,
                 });
                 router.navigate(['/'], { replaceUrl: true });

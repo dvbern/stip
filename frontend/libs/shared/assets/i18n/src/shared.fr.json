@@ -21,6 +21,7 @@
   "shared.genericError.http": "Une erreur inattendue s'est produite lors de la connexion au serveur.",
   "shared.genericError.general": "Une erreur est survenue.",
   "shared.genericError.forbidden": "Vous n'êtes pas autorisé à accéder à cette page.",
+  "shared.genericError.gesuch-not-found-redirection": "La demande n'a pas été trouvée<br/>Vous avez été redirigé vers la page d'accueil",
   "shared.datepicker.month.1": "Jan",
   "shared.datepicker.month.2": "Fev",
   "shared.datepicker.month.3": "Mar",
