@@ -6,6 +6,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.type.NotificationType;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class KomplettEingereichtHandler implements StateChangeHandler {
     private final MailService mailService;
 
+    private final NotificationService notificationService;
+
     private final GesuchStatusService gesuchStatusService;
 
     @Override
@@ -27,12 +31,14 @@ public class KomplettEingereichtHandler implements StateChangeHandler {
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
-        mailService.sendGesuchEingereichtEmail(
+        mailService.sendStandardNotificationEmail(
             pia.getNachname(),
             pia.getVorname(),
             pia.getEmail(),
             AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
         );
+
+        notificationService.createNotification(NotificationType.GESUCH_EINGEREICHT, gesuch);
 
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
