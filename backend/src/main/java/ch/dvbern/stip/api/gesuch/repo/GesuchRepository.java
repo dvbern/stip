@@ -172,18 +172,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .stream();
     }
 
-    public Stream<Gesuch> findAllWithFormular() {
-        var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuch = QGesuch.gesuch;
-        var gesuchTranche = QGesuchTranche.gesuchTranche;
-
-        return queryFactory
-            .select(gesuch)
-            .from(gesuchTranche)
-            .where(gesuchTranche.gesuchFormular.isNotNull())
-            .stream();
-    }
-
     public Stream<Gesuch> findGesucheBySvNummer(String svNummer) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuch = QGesuch.gesuch;
