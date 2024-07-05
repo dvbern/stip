@@ -6,7 +6,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -54,6 +53,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './benutzer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,7 +74,6 @@ export class BenutzeDetailComponent implements OnDestroy {
     ],
     roles: [<SharedModelRoleList>[], [Validators.required]],
   });
-  isReadonly = signal(false);
 
   constructor() {
     this.store.loadAvailableRoles$();

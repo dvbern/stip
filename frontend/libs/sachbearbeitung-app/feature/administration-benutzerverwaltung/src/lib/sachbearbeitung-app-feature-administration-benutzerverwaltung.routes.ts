@@ -6,7 +6,7 @@ import {
   OPTION_BENUTZERVERWALTUNG,
 } from '@dv/sachbearbeitung-app/model/administration';
 
-import { BenutzeDetailComponent } from './benutzer-erstellung/benutzer-detail.component';
+import { BenutzeDetailComponent } from './benutzer-detail/benutzer-detail.component';
 import { BenutzerOverviewComponent } from './benutzer-overview/benutzer-overview.component';
 
 export const sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes: Route[] =

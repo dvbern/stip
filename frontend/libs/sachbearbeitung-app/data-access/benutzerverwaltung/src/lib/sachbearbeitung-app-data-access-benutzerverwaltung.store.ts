@@ -9,6 +9,7 @@ import {
   EMPTY,
   Observable,
   catchError,
+  combineLatestWith,
   exhaustMap,
   filter,
   forkJoin,
@@ -18,7 +19,6 @@ import {
   switchMap,
   tap,
   throwIfEmpty,
-  withLatestFrom,
 } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
@@ -152,13 +152,20 @@ export class BenutzerverwaltungStore extends signalStore(
           (r) => !roles.some((role) => role.name === r.name),
         );
 
+        const oldUser = {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          ...this.benutzer().data!,
+          roles: [...(this.benutzer().data?.roles ?? [])],
+        };
+
+        return { user, roles, rolesToRemove, oldUser };
+      }),
+      tap(() => {
         patchState(this, {
           benutzer: pending(),
         });
-
-        return { user, roles, rolesToRemove };
       }),
-      exhaustMap(({ user, roles, rolesToRemove }) =>
+      exhaustMap(({ user, roles, rolesToRemove, oldUser }) =>
         this.http
           .put(
             `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}`,
@@ -168,15 +175,19 @@ export class BenutzerverwaltungStore extends signalStore(
             },
           )
           .pipe(
-            switchMap(() => this.assignRoles$(user, roles)),
+            switchMap(() => this.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
             switchMap(() => {
               if (!rolesToRemove || rolesToRemove.length === 0) {
                 return of(user);
               }
 
-              return this.removeRoles$(user, rolesToRemove);
+              return this.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
             }),
             switchMap(() => this.getUserWithRoleMappings$(user.id)),
+            catchError(() => {
+              patchState(this, { benutzer: success(oldUser) });
+              return EMPTY;
+            }),
           ),
       ),
     ),
@@ -258,7 +269,7 @@ export class BenutzerverwaltungStore extends signalStore(
         this.createUser$(vorname, name, email).pipe(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
-          switchMap((response) => this.loadUser$(response)),
+          switchMap((response) => this.loadUserByLocation$(response)),
           switchMap((user) => this.assignRoles$(user, roles)),
           switchMap((user) =>
             this.notifyUser$(user).pipe(
@@ -341,7 +352,7 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private loadUser$(response: HttpResponseWithLocation) {
+  private loadUserByLocation$(response: HttpResponseWithLocation) {
     return this.http
       .get<SharedModelBenutzerApi>(response.headers.get('Location'), {
         context: noGlobalErrorsIf(true),
@@ -352,27 +363,31 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private getUserWithRoleMappings$(userId: string) {
+  private loadUser$(userId: string) {
     return this.http
       .get<SharedModelBenutzerApi>(
         `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}`,
+        {
+          context: noGlobalErrorsIf(true),
+        },
       )
       .pipe(
-        withLatestFrom(this.getRoleMappings$(userId)),
-        map(([user, rm]) => {
-          const benutzer = SharedModelBenutzerApi.parse(user);
-          const userRoles =
-            SharedModelModelMappingsRepresentation.parse(
-              rm,
-            ).realmMappings?.filter(byUsableRoles);
-
-          return {
-            ...benutzer,
-            roles: userRoles ?? [],
-          };
-        }),
-        handleApiResponse((benutzer) => patchState(this, { benutzer })),
+        map((user) => SharedModelBenutzerApi.parse(user)),
+        this.interceptError('laden'),
       );
+  }
+
+  private getUserWithRoleMappings$(userId: string) {
+    return this.loadUser$(userId).pipe(
+      combineLatestWith(this.getRoleMappings$(userId)),
+      map(([user, rm]) => {
+        return {
+          ...user,
+          roles: rm ?? [],
+        };
+      }),
+      handleApiResponse((benutzer) => patchState(this, { benutzer })),
+    );
   }
 
   private getRoleMappings$(userId: string) {
@@ -383,7 +398,14 @@ export class BenutzerverwaltungStore extends signalStore(
           context: noGlobalErrorsIf(true),
         },
       )
-      .pipe(this.interceptError('roleMapping'));
+      .pipe(
+        map((rm) => {
+          return SharedModelModelMappingsRepresentation.parse(
+            rm,
+          ).realmMappings?.filter(byUsableRoles);
+        }),
+        this.interceptError('roleMapping'),
+      );
   }
 
   private assignRoles$(
@@ -400,7 +422,7 @@ export class BenutzerverwaltungStore extends signalStore(
       )
       .pipe(
         map(() => user),
-        this.interceptError('assignRoles'),
+        this.interceptError('roleMapping'),
       );
   }
 
@@ -415,7 +437,7 @@ export class BenutzerverwaltungStore extends signalStore(
       )
       .pipe(
         map(() => user),
-        this.interceptError('removeRoles'),
+        this.interceptError('roleMapping'),
       );
   }
 
