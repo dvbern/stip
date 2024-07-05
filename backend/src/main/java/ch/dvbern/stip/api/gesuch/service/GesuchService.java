@@ -214,7 +214,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTyp getGesucheSBQueryTyp){
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTyp getGesucheSBQueryTyp) {
         return switch(getGesucheSBQueryTyp){
             case ALLE_BEARBEITBAR_MEINE -> findGesucheFilteredForSb();
             case ALLE_BEARBEITBAR -> gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
