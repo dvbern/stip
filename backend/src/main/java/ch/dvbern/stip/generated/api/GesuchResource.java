@@ -2,14 +2,12 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDto;
 import java.util.UUID;
-
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
 
 @Path("/gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
@@ -58,7 +56,7 @@ public interface GesuchResource {
     @GET
     @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") GetGesucheSBQueryTypDto getGesucheSBQueryTyp);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryTyp getGesucheSBQueryTyp);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")

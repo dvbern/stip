@@ -51,6 +51,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryTyp;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -70,7 +71,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDto;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
 @RequestScoped
@@ -214,7 +214,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTypDto getGesucheSBQueryTyp){
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTyp getGesucheSBQueryTyp){
         return switch(getGesucheSBQueryTyp){
             case ALLE_BEARBEITBAR_MEINE -> findGesucheFilteredForSb();
             case ALLE_BEARBEITBAR -> gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();

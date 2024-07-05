@@ -6,12 +6,12 @@ import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -78,7 +78,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
     @Override
-    public Response getGesucheSb(GetGesucheSBQueryTypDto getGesucheSBQueryTyp) {
+    public Response getGesucheSb(GetGesucheSBQueryTyp getGesucheSBQueryTyp) {
         return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryTyp)).build();
     }
 
