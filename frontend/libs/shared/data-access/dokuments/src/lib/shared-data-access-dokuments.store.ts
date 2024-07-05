@@ -4,7 +4,13 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { DokumentsService } from '@dv/shared/model/gesuch';
+import {
+  DokumentService,
+  DokumentServiceGesuchDokumentAblehnenRequestParams,
+  DokumentServiceGesuchDokumentAkzeptierenRequestParams,
+  GesuchService,
+  GesuchServiceGesuchFehlendeDokumenteRequestParams,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   RemoteData,
@@ -30,7 +36,8 @@ export class DokumentsStore extends signalStore(
   withState(initialState),
   withDevtools('DokumentsStore'),
 ) {
-  private dokumentsService = inject(DokumentsService);
+  private dokumentService = inject(DokumentService);
+  private gesuchService = inject(GesuchService);
 
   cachedDokumentsListViewSig = computed(() => {
     return fromCachedDataSig(this.cachedDokuments);
@@ -40,71 +47,47 @@ export class DokumentsStore extends signalStore(
     return this.dokuments.data();
   });
 
-  loadCachedDokuments$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedDokuments: cachedPending(state.cachedDokuments),
-        }));
-      }),
-      switchMap(() =>
-        this.dokumentsService
-          .getDokuments$()
-          .pipe(
-            handleApiResponse((cachedDokuments) =>
-              patchState(this, { cachedDokuments }),
-            ),
-          ),
+  gesuchDokumentAblehnen$ =
+    rxMethod<DokumentServiceGesuchDokumentAblehnenRequestParams>(
+      pipe(
+        switchMap((req) => {
+          return this.dokumentService.gesuchDokumentAblehnen$(req);
+        }),
       ),
-    ),
-  );
+    );
 
-  loadDokuments$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          dokuments: pending(),
-        }));
-      }),
-      switchMap(() =>
-        this.dokumentsService
-          .getDokuments$()
-          .pipe(
-            handleApiResponse((dokuments) => patchState(this, { dokuments })),
-          ),
+  gesuchDokumentAkzeptieren$ =
+    rxMethod<DokumentServiceGesuchDokumentAkzeptierenRequestParams>(
+      pipe(
+        switchMap((req) => {
+          return this.dokumentService.gesuchDokumentAkzeptieren$(req);
+        }),
       ),
-    ),
-  );
+    );
 
-  saveDokuments$ = rxMethod<{
-    dokumentsId: string;
-    values: unknown;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedDokuments: cachedPending(state.cachedDokuments),
-        }));
-      }),
-      switchMap(({ dokumentsId, values }) =>
-        this.dokumentsService
-          .updateDokuments$({
-            dokumentsId,
-            payload: values,
-          })
-          .pipe(
-            handleApiResponse(
-              (dokuments) => {
-                patchState(this, { dokuments });
-              },
-              {
-                onSuccess: (dokuments) => {
-                  // Do something after save, like showing a notification
-                },
-              },
-            ),
-          ),
+  setFehlendeDokumente$ =
+    rxMethod<GesuchServiceGesuchFehlendeDokumenteRequestParams>(
+      pipe(
+        switchMap((req) => {
+          return this.gesuchService.gesuchFehlendeDokumente$(req);
+        }),
       ),
-    ),
-  );
+    );
+
+  // loadDokuments$ = rxMethod<void>(
+  //   pipe(
+  //     tap(() => {
+  //       patchState(this, () => ({
+  //         dokuments: pending(),
+  //       }));
+  //     }),
+  //     switchMap(() =>
+  //       this.dokumentService
+  //         .getDokuments$()
+  //         .pipe(
+  //           handleApiResponse((dokuments) => patchState(this, { dokuments })),
+  //         ),
+  //     ),
+  //   ),
+  // );
 }

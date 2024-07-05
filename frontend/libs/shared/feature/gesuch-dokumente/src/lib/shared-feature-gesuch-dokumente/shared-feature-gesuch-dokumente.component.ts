@@ -2,16 +2,24 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
+import {
+  RejectDocumentDialogData,
+  RejectDokument,
+  SharedUiRejectDokumentComponent,
+} from '@dv/shared/ui/reject-dokument';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
@@ -105,6 +113,9 @@ function getFormStep(
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
   private stepManager = inject(SharedUtilGesuchFormStepManagerService);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
+  private dokumentsStore = inject(DokumentsStore);
 
   displayedColumns = [
     'expander',
@@ -204,14 +215,29 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  // TODO: Implement the following methods in 993
   acceptDocument(document: TableDocument) {
-    alert(`Accept ${document.dokumentTyp} kommt in 993`);
+    // do something
   }
 
-  // TODO: Implement the following methods in 993
   rejectDocument(document: TableDocument) {
-    alert(`reject ${document.dokumentTyp} kommt in 993`);
+    const dialogRef = this.dialog.open<
+      SharedUiRejectDokumentComponent,
+      RejectDocumentDialogData,
+      RejectDokument
+    >(SharedUiRejectDokumentComponent, {
+      data: {
+        dokument: document,
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          // do something
+        }
+      });
   }
 
   handleContinue() {
