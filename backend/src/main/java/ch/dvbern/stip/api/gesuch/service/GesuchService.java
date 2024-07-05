@@ -215,12 +215,18 @@ public class GesuchService {
 
     @Transactional
     public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTyp getGesucheSBQueryTyp) {
+        final var meId = benutzerService.getCurrentBenutzer().getId();
         return switch(getGesucheSBQueryTyp){
-            case ALLE_BEARBEITBAR_MEINE -> findGesucheFilteredForSb();
-            case ALLE_BEARBEITBAR -> gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
-            case ALLE_MEINE -> gesuchRepository.findAllIgnoreStatusFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
-            default -> findGesucheIgnoreStatusSb();
+            case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
+            case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
+            case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
+            default -> map(gesuchRepository.findAlle());
+
         };
+    }
+
+    private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
+        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional
@@ -309,20 +315,6 @@ public class GesuchService {
         }
 
         return validationReportDto;
-    }
-
-    private List<GesuchDto> findGesucheFilteredForSb() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
-    }
-
-    private List<GesuchDto> findGesucheIgnoreStatusSb(){
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenIgnoreStatusFilteredForSb(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
     }
 
     private void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {

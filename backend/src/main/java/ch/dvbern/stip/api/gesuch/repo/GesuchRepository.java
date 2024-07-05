@@ -35,8 +35,58 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
+    public Stream<Gesuch> findAlle() {
+        return getFindAlleQuery().stream();
+    }
+
+    public Stream<Gesuch> findAlleBearbeitbar() {
+        return getFindAlleBearbeitbarQuery().stream();
+    }
+
+    public Stream<Gesuch> findAlleMeine(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleQuery()).stream();
+    }
+
+    public Stream<Gesuch> findAlleMeineBearbeitbar(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery()).stream();
+    }
+
+    private JPAQuery<Gesuch> getAlleQuery() {
+        final var gesuch = QGesuch.gesuch;
+        return new JPAQueryFactory(entityManager).selectFrom(gesuch);
+    }
+
+    private JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
+        final var query = getAlleQuery();
+        return addStatusFilter(
+            query,
+            Gesuchstatus.IN_BEARBEITUNG_GS,
+            Gesuchstatus.EINGEREICHT
+        );
+    }
+
+    private JPAQuery<Gesuch> addStatusFilter(
+        final JPAQuery<Gesuch> query,
+        final Gesuchstatus... toExclude
+    ) {
+        final var gesuch = QGesuch.gesuch;
+        query.where(gesuch.gesuchStatus.notIn(toExclude));
+        return query;
+    }
+
+    private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
+        final var gesuch = QGesuch.gesuch;
+        final var zuordnung = QZuordnung.zuordnung;
+
+        query.join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
+            .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
+
+        return query;
+    }
+
+
     public Stream<Gesuch> findZugewiesenIgnoreStatusFilteredForSb(final UUID sachbearbeiterId) {
-        final var query = prepareFindAllIgnoreStatusFilteredForSbQuery();
+        final var query = getFindAlleQuery();
         return prepareFilterForSBJoinQuery(query,sachbearbeiterId).stream();
     }
 
@@ -50,7 +100,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Stream<Gesuch> findAllIgnoreStatusFilteredForSb(){
-        return prepareFindAllIgnoreStatusFilteredForSbQuery().stream();
+        return getFindAlleQuery().stream();
     }
 
     private JPAQuery<Gesuch> prepareFilterForSBJoinQuery(JPAQuery<Gesuch> initialQuery,UUID sachbearbeiterId){
@@ -64,7 +114,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return initialQuery;
     }
 
-    private JPAQuery<Gesuch> prepareFindAllIgnoreStatusFilteredForSbQuery(){
+    private JPAQuery<Gesuch> getFindAlleQuery(){
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
         return queryFactory.selectFrom(gesuch);
