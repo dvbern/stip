@@ -435,8 +435,9 @@ public class GesuchService {
         }
     }
 
-    public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) throws JsonProcessingException {
+    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) throws JsonProcessingException {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        return berechnungService.getBerechnungsResultatFromGesuch(gesuch);
+        final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch);
+        return List.of(resultat);
     }
 }

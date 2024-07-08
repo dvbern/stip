@@ -103,18 +103,27 @@ public class BerechnungService {
             BigDecimal kinderProzenteVater = BigDecimal.ZERO;
             BigDecimal kinderProzenteMutter = BigDecimal.ZERO;
             int noKinderOhneEigenenHaushalt = 0;
-            if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-                kinderProzenteVater =
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
-                kinderProzenteMutter =
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
+            if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() == Wohnsitz.MUTTER_VATER) {
+                kinderProzenteVater = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
+                kinderProzenteMutter = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
+                noKinderOhneEigenenHaushalt += 1;
+            } else if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() == Wohnsitz.FAMILIE) {
+                if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater() == null &&
+                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter() == null) {
+                    kinderProzenteVater = BigDecimal.valueOf(50);
+                    kinderProzenteMutter = BigDecimal.valueOf(50);
+                } else {
+                    kinderProzenteVater = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
+                    kinderProzenteMutter = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
+                }
                 noKinderOhneEigenenHaushalt += 1;
             }
+
             final var geschwisters = gesuchTranche.getGesuchFormular().getGeschwisters();
             for (final var geschwister : geschwisters) {
                 if (geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-                    kinderProzenteVater = geschwister.getWohnsitzAnteilVater().add(kinderProzenteVater);
-                    kinderProzenteMutter = geschwister.getWohnsitzAnteilMutter().add(kinderProzenteMutter);
+                    kinderProzenteVater = kinderProzenteVater.add(geschwister.getWohnsitzAnteilVater());
+                    kinderProzenteMutter = kinderProzenteMutter.add(geschwister.getWohnsitzAnteilMutter());
                     noKinderOhneEigenenHaushalt += 1;
                 }
             }
