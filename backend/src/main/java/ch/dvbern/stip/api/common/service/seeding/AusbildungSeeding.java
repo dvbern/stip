@@ -39,14 +39,17 @@ public class AusbildungSeeding extends Seeder {
             bildungsartRepository.persist(bildungsarten);
             bildungsartRepository.flush();
 
-            final var ausbildungsstaetten = getAusbildungsstaette();
+            final var ausbildungsstaetten = getAusbildungsstaetten();
             ausbildungsstaetteRepository.persist(ausbildungsstaetten);
             ausbildungsstaetteRepository.flush();
 
-            ausbildungsgangRepository.persist(getAusbildungsgaenge(
+            final var ausbildunggaenge = getAusbildungsgaenge(
                 ausbildungsstaetten,
                 bildungsarten
-            ));
+            );
+
+            ausbildungsgangRepository.persist(ausbildunggaenge);
+            ausbildungsgangRepository.flush();
         }
     }
 
@@ -74,7 +77,7 @@ public class AusbildungSeeding extends Seeder {
             .setBfs(bfs);
     }
 
-    private static List<Ausbildungsstaette> getAusbildungsstaette() {
+    private static List<Ausbildungsstaette> getAusbildungsstaetten() {
         return List.of(
             // Keep this order, or update dependencies as well
             createAusbildungsstaette("Berner Fachhochschule", "Haute école spécialisée bernoise"),
