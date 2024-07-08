@@ -71,7 +71,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.fall' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.fall }}
                   </td>
                 </ng-container>
@@ -80,7 +80,11 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.sv-nummer' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch" data-testid="cockpit-row-sv">
+                  <td
+                    mat-cell
+                    *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                    data-testid="cockpit-row-sv"
+                  >
                     {{ gesuch['sv-nummer'] }}
                   </td>
                 </ng-container>
@@ -89,7 +93,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.nachname }}
                   </td>
                 </ng-container>
@@ -98,7 +102,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.vorname' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.vorname }}
                   </td>
                 </ng-container>
@@ -107,7 +111,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.geburtsdatum | date: 'dd.MM.YYYY' }}
                   </td>
                 </ng-container>
@@ -116,7 +120,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.ort' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.ort }}
                   </td>
                 </ng-container>
@@ -125,7 +129,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ 'shared.gesuch.status.contract.' + gesuch.status | translate }}
                   </td>
                 </ng-container>
@@ -134,7 +138,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.bearbeiter' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.bearbeiter }}
                   </td>
                 </ng-container>
@@ -144,7 +148,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
                   </th>
-                  <td mat-cell *matCellDef="let gesuch">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
                     {{ gesuch.letzteAktivitaet | date }}
                   </td>
                 </ng-container>
@@ -154,7 +158,7 @@
                   dvSharedUiFocusableListItem
                   mat-row
                   tabindex="-1"
-                  *matRowDef="let gesuch; columns: displayedColumns"
+                  *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedColumns"
                   [routerLink]="['/gesuch/person', gesuch.id]"
                   class="highlightable"
                 ></tr>

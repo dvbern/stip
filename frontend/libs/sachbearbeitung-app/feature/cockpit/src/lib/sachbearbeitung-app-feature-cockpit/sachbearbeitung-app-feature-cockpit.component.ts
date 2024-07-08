@@ -36,6 +36,10 @@ import {
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import {
+  TypeSafeMatCellDefDirective,
+  TypeSafeMatRowDefDirective,
+} from '@dv/shared/ui/table-helper';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
@@ -55,6 +59,8 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    TypeSafeMatCellDefDirective,
+    TypeSafeMatRowDefDirective,
     RouterModule,
     A11yModule,
     SharedUiIconChipComponent,
@@ -100,6 +106,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   gesucheDataSourceSig = computed(() => {
     const sort = this.sortSig();
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
+      id: gesuch.id,
       fall: gesuch.fall.fallNummer,
       'sv-nummer':
         gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
