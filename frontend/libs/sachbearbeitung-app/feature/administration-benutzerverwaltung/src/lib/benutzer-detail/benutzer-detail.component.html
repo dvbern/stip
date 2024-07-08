@@ -27,8 +27,8 @@
     <div class="row g-4 mt-1">
       <!-- E-Mail Adresse -->
       <div
-        class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-8"
-        [ngClass]="{ readonly: !!idSig() === true }"
+        class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4"
+        [class.readonly]="form.controls.email.disabled"
       >
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>

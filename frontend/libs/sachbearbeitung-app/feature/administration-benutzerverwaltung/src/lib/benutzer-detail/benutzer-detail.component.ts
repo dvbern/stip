@@ -27,7 +27,6 @@ import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
-  SharedUiFormReadonlyDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -46,14 +45,12 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     MatInputModule,
     MatListModule,
     TranslateModule,
-    SharedUiFormReadonlyDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './benutzer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

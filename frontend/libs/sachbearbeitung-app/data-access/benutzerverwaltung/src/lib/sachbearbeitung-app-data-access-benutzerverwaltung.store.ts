@@ -269,7 +269,9 @@ export class BenutzerverwaltungStore extends signalStore(
         this.createUser$(vorname, name, email).pipe(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
-          switchMap((response) => this.loadUserByLocation$(response)),
+          switchMap((response) =>
+            this.loadUserByUrl$(response.headers.get('Location')),
+          ),
           switchMap((user) => this.assignRoles$(user, roles)),
           switchMap((user) =>
             this.notifyUser$(user).pipe(
@@ -352,9 +354,9 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private loadUserByLocation$(response: HttpResponseWithLocation) {
+  private loadUserByUrl$(url: string) {
     return this.http
-      .get<SharedModelBenutzerApi>(response.headers.get('Location'), {
+      .get<SharedModelBenutzerApi>(url, {
         context: noGlobalErrorsIf(true),
       })
       .pipe(
@@ -364,17 +366,9 @@ export class BenutzerverwaltungStore extends signalStore(
   }
 
   private loadUser$(userId: string) {
-    return this.http
-      .get<SharedModelBenutzerApi>(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}`,
-        {
-          context: noGlobalErrorsIf(true),
-        },
-      )
-      .pipe(
-        map((user) => SharedModelBenutzerApi.parse(user)),
-        this.interceptError('laden'),
-      );
+    return this.loadUserByUrl$(
+      `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}`,
+    );
   }
 
   private getUserWithRoleMappings$(userId: string) {
