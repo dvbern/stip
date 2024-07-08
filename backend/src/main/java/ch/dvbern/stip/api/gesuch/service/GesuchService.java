@@ -221,7 +221,6 @@ public class GesuchService {
             case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
             case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
             default -> map(gesuchRepository.findAlle());
-
         };
     }
 
