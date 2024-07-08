@@ -99,7 +99,6 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
 
   gesucheDataSourceSig = computed(() => {
     const sort = this.sortSig();
-    console.log(sort);
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
       fall: gesuch.fall.fallNummer,
       'sv-nummer':
@@ -126,10 +125,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     dataSource.paginator = this.paginator;
     if (sort) {
       dataSource.sort = sort;
-      (window as any).__debugSort = sort;
     }
-    //dataSource.sort = this.sortSig() ?? null;
-    console.log('sort', dataSource.sort);
 
     return dataSource;
   });
