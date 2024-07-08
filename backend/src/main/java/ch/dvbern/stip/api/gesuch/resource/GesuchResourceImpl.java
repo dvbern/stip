@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -76,7 +75,7 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchDokumente).build();
     }
 
-    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
+    @RolesAllowed({ GESUCH_READ})
     @Override
     public Response getGesucheSb(GetGesucheSBQueryTyp getGesucheSBQueryTyp) {
         return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryTyp)).build();
