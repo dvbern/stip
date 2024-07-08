@@ -15,7 +15,7 @@ public class DokumentstatusConfigProducer {
     private final StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> config = new StateMachineConfig<>();
 
     @Produces
-    public StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> createDokumentstatusStateMachine() {
+    public StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> createStateMachineConfig() {
         config.configure(Dokumentstatus.AUSSTEHEND)
             .permit(DokumentstatusChangeEvent.ABGELEHNT, Dokumentstatus.ABGELEHNT)
             .permit(DokumentstatusChangeEvent.AKZEPTIERT, Dokumentstatus.AKZEPTIERT);

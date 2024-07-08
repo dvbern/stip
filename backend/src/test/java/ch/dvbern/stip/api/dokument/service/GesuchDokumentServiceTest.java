@@ -124,7 +124,7 @@ class GesuchDokumentServiceTest {
             null,
             null,
             new DokumentstatusService(
-                new DokumentstatusConfigProducer().createDokumentstatusStateMachine(),
+                new DokumentstatusConfigProducer().createStateMachineConfig(),
                 new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository)
             )
         );
