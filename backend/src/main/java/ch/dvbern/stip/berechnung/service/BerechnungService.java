@@ -144,7 +144,7 @@ public class BerechnungService {
         baseObjectBuilder.add("vaterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
         baseObjectBuilder.add("mutterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForMutter.getDecisionEventList()));
 
-        return new BerechnungsresultatDto(berechnung, baseObjectBuilder.build());
+        return new BerechnungsresultatDto(berechnung, baseObjectBuilder.build().toString());
     }
 
     public DmnRequest getBerechnungRequest(

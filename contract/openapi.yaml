@@ -2889,8 +2889,8 @@ components:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
         berechnungsdaten:
-          description: 'Resultat der Berechnung als JSON objekt, transparent'
-          type: object      
+          description: 'Resultat der Berechnung als JSON string, transparent'
+          type: string      
   responses:
     Unauthorized:
       content:

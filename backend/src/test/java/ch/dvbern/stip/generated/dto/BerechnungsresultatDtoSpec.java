@@ -37,7 +37,7 @@ public class BerechnungsresultatDtoSpec {
   private Integer berechnung;
 
   public static final String JSON_PROPERTY_BERECHNUNGSDATEN = "berechnungsdaten";
-  private Object berechnungsdaten;
+  private String berechnungsdaten;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -68,28 +68,28 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  public BerechnungsresultatDtoSpec berechnungsdaten(Object berechnungsdaten) {
+  public BerechnungsresultatDtoSpec berechnungsdaten(String berechnungsdaten) {
     
     this.berechnungsdaten = berechnungsdaten;
     return this;
   }
 
    /**
-   * Resultat der Berechnung als JSON objekt, transparent
+   * Resultat der Berechnung als JSON string, transparent
    * @return berechnungsdaten
   **/
   @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_BERECHNUNGSDATEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Object getBerechnungsdaten() {
+  public String getBerechnungsdaten() {
     return berechnungsdaten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_BERECHNUNGSDATEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerechnungsdaten(Object berechnungsdaten) {
+  public void setBerechnungsdaten(String berechnungsdaten) {
     this.berechnungsdaten = berechnungsdaten;
   }
 

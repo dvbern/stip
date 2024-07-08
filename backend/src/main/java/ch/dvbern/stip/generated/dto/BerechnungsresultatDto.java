@@ -1,12 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import jakarta.json.JsonObject;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Resultat der Berechnung (eine Tranche)
@@ -19,7 +22,7 @@ import jakarta.validation.Valid;
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnung;
-  private @Valid JsonObject berechnungsdaten;
+  private @Valid String berechnungsdaten;
 
   /**
    * Berechneter Stpendiumsanspruch für diese Tranche
@@ -29,7 +32,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("berechnung")
   public Integer getBerechnung() {
     return berechnung;
@@ -41,21 +44,21 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
-   * Resultat der Berechnung als JSON objekt, transparent
+   * Resultat der Berechnung als JSON string, transparent
    **/
-  public BerechnungsresultatDto berechnungsdaten(JsonObject berechnungsdaten) {
+  public BerechnungsresultatDto berechnungsdaten(String berechnungsdaten) {
     this.berechnungsdaten = berechnungsdaten;
     return this;
   }
 
-
+  
   @JsonProperty("berechnungsdaten")
-  public Object getBerechnungsdaten() {
+  public String getBerechnungsdaten() {
     return berechnungsdaten;
   }
 
   @JsonProperty("berechnungsdaten")
-  public void setBerechnungsdaten(JsonObject berechnungsdaten) {
+  public void setBerechnungsdaten(String berechnungsdaten) {
     this.berechnungsdaten = berechnungsdaten;
   }
 
@@ -82,7 +85,7 @@ public class BerechnungsresultatDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDto {\n");
-
+    
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    berechnungsdaten: ").append(toIndentedString(berechnungsdaten)).append("\n");
     sb.append("}");
