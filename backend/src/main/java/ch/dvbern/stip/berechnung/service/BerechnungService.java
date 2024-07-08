@@ -1,6 +1,8 @@
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,6 @@ import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.json.Json;
@@ -56,20 +57,19 @@ public class BerechnungService {
         return baseObjectBuilder.build();
     }
 
-    public BerechnungsresultatDto getBerechnungsResultatFromGesuch(final Gesuch gesuch) throws JsonProcessingException {
-        final int majorVersionToUse = 1;
-        final int minorVersionToUse = 0;
+    public BerechnungsresultatDto getBerechnungsResultatFromGesuch(final Gesuch gesuch, final int majorVersion, final int minorVersion) {
         final var gesuchTranche = gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new);
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        // Use DMN model simply to get the number of budgets required. Bit overkill to do it for both parents but may serve as sanity check.
         final var personenImHaushaltRequestForVater = personenImHaushaltService.getPersonenImHaushaltRequest(
-            majorVersionToUse,
-            minorVersionToUse,
+            majorVersion,
+            minorVersion,
             gesuchFormular,
             ElternTyp.VATER
         );
         final var personenImHaushaltRequestForMutter = personenImHaushaltService.getPersonenImHaushaltRequest(
-            majorVersionToUse,
-            minorVersionToUse,
+            majorVersion,
+            minorVersion,
             gesuchFormular,
             ElternTyp.MUTTER
         );
@@ -80,29 +80,42 @@ public class BerechnungService {
         }
         final var noBudgetsRequired = personenImHaushaltForVater.getNoBudgetsRequired();
 
+        // Run the DMN for the stipendien berechnung
         final var stipendienCalculatedForVater = calculateStipendien(
             getBerechnungRequest(
-                majorVersionToUse,
-                minorVersionToUse,
+                majorVersion,
+                minorVersion,
                 gesuch,
                 gesuchTranche,
                 ElternTyp.VATER
             )
         );
-        final var stipendienCalculatedForMutter = calculateStipendien(
-            getBerechnungRequest(
-                majorVersionToUse,
-                minorVersionToUse,
-                gesuch,
-                gesuchTranche,
-                ElternTyp.VATER
-            )
-        );
+
+        final var factory = Json.createBuilderFactory(null);
+        JsonObjectBuilder baseObjectBuilder = factory.createObjectBuilder();
+        // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold. So we just take the one of the father
         var berechnung = stipendienCalculatedForVater.getStipendien();
         if (noBudgetsRequired > 1) {
+            final var stipendienCalculatedForMutter = calculateStipendien(
+                getBerechnungRequest(
+                    majorVersion,
+                    minorVersion,
+                    gesuch,
+                    gesuchTranche,
+                    ElternTyp.VATER
+                )
+            );
+
+            baseObjectBuilder.add("vaterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
+            baseObjectBuilder.add("mutterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForMutter.getDecisionEventList()));
+
+            // To address differences in the stipendienberechnung based on how many kids are in the households and how their care is divided between father and mother,
+            // we calculate how many "kidpercentages" each household has and divide this by the total number of kids in all households.
+            // This value can then be multiplied with the respective stipendienberechnung to get a proportianal stipendienamount.
             BigDecimal kinderProzenteVater = BigDecimal.ZERO;
             BigDecimal kinderProzenteMutter = BigDecimal.ZERO;
             int noKinderOhneEigenenHaushalt = 0;
+            // If the PIA is living split between both we take the noted percentage. Otherwise we assume 50/50
             if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() == Wohnsitz.MUTTER_VATER) {
                 kinderProzenteVater = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
                 kinderProzenteMutter = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
@@ -119,6 +132,7 @@ public class BerechnungService {
                 noKinderOhneEigenenHaushalt += 1;
             }
 
+            // Sum up the percentages for all siblings
             final var geschwisters = gesuchTranche.getGesuchFormular().getGeschwisters();
             for (final var geschwister : geschwisters) {
                 if (geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
@@ -127,23 +141,23 @@ public class BerechnungService {
                     noKinderOhneEigenenHaushalt += 1;
                 }
             }
+            // If all kids have their own living arrangement the calcualtion is moot and would lead to a /0 error. So we just the previously assigned value
             if (noKinderOhneEigenenHaushalt > 0) {
-                kinderProzenteVater = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt));
-                kinderProzenteMutter = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt));
+                // Calculate the relative percentage (i.e. how much of all kids live with each parent)
+                kinderProzenteVater = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt)).round(new MathContext(2, RoundingMode.HALF_UP));
+                kinderProzenteMutter = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt)).round(new MathContext(2, RoundingMode.HALF_UP));
 
+                // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.
                 berechnung =
                     kinderProzenteVater.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
-                        .divide(BigDecimal.valueOf(100))).intValue()
+                        .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue()
                         + kinderProzenteMutter.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
-                        .divide(BigDecimal.valueOf(100))).intValue();
+                        .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
             }
+        } else {
+            // If there is only one budget.
+            baseObjectBuilder.add("berechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
         }
-
-        final var factory = Json.createBuilderFactory(null);
-        JsonObjectBuilder baseObjectBuilder = factory.createObjectBuilder();
-        baseObjectBuilder.add("vaterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
-        baseObjectBuilder.add("mutterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForMutter.getDecisionEventList()));
-
         return new BerechnungsresultatDto(berechnung, baseObjectBuilder.build().toString());
     }
 

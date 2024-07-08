@@ -24,7 +24,11 @@ public class DMNService {
         return evaluateModel(models, context, null);
     }
 
-    public DMNResult evaluateModel(final List<Resource> models, final Map<String, Object> context, DMNRuntimeEventListener listener) {
+    public DMNResult evaluateModel(
+        final List<Resource> models,
+        final Map<String, Object> context,
+        final DMNRuntimeEventListener listener
+    ) {
         final var runtime = DMNRuntimeBuilder
             .fromDefaults()
             .buildConfiguration()
