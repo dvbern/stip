@@ -71,8 +71,8 @@ public class GesuchsperiodeSeeding extends Seeder{
         String yearAsString = String.valueOf(currentYear);
         String yearSuffix = yearAsString.substring(yearAsString.length() -2 , yearAsString.length());
         return new Gesuchsjahr()
-            .setBezeichnungDe("Gesuchsjahr "+yearSuffix)
-            .setBezeichnungFr("Année de la demande "+yearSuffix)
+            .setBezeichnungDe("Gesuchsjahr " + yearSuffix)
+            .setBezeichnungFr("Année de la demande " + yearSuffix)
             .setTechnischesJahr(currentYear)
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
     }
@@ -85,8 +85,8 @@ public class GesuchsperiodeSeeding extends Seeder{
         String jahrAsString = String.valueOf(jahr);
 
         return new Gesuchsperiode()
-            .setBezeichnungDe("Frühling "+jahrAsString)
-            .setBezeichnungFr("Printemps "+jahrAsString)
+            .setBezeichnungDe("Frühling " + jahrAsString)
+            .setBezeichnungFr("Printemps " + jahrAsString)
             .setFiskaljahr(jahrAsString)
             .setGesuchsjahr(jahr)
             .setGesuchsperiodeStart(from)
