@@ -27,6 +27,7 @@ public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid List<DokumentDto> dokumente;
+  private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus status;
 
   /**
    **/
@@ -98,6 +99,24 @@ public class GesuchDokumentDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public GesuchDokumentDto status(ch.dvbern.stip.api.dokument.type.Dokumentstatus status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  public ch.dvbern.stip.api.dokument.type.Dokumentstatus getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.api.dokument.type.Dokumentstatus status) {
+    this.status = status;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -110,12 +129,13 @@ public class GesuchDokumentDto  implements Serializable {
     GesuchDokumentDto gesuchDokument = (GesuchDokumentDto) o;
     return Objects.equals(this.id, gesuchDokument.id) &&
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
-        Objects.equals(this.dokumente, gesuchDokument.dokumente);
+        Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
+        Objects.equals(this.status, gesuchDokument.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumentTyp, dokumente);
+    return Objects.hash(id, dokumentTyp, dokumente, status);
   }
 
   @Override
@@ -126,6 +146,7 @@ public class GesuchDokumentDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

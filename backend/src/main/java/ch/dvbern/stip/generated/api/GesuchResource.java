@@ -48,7 +48,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    Response gesuchFehlendeDokumente(@PathParam("gesuchId") UUID gesuchId);
+    Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/all/sb")

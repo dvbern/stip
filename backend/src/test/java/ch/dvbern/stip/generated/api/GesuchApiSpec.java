@@ -67,7 +67,7 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
-                gesuchFehlendeDokumente(),
+                gesuchFehlendeDokumenteUebermitteln(),
                 getAllGesucheSb(),
                 getGesuch(),
                 getGesuchDokumente(),
@@ -97,8 +97,8 @@ public class GesuchApiSpec {
         return new GesuchEinreichenValidierenOper(createReqSpec());
     }
 
-    public GesuchFehlendeDokumenteOper gesuchFehlendeDokumente() {
-        return new GesuchFehlendeDokumenteOper(createReqSpec());
+    public GesuchFehlendeDokumenteUebermittelnOper gesuchFehlendeDokumenteUebermitteln() {
+        return new GesuchFehlendeDokumenteUebermittelnOper(createReqSpec());
     }
 
     public GetAllGesucheSbOper getAllGesucheSb() {
@@ -415,7 +415,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchIdPath  (required)
      */
-    public static class GesuchFehlendeDokumenteOper implements Oper {
+    public static class GesuchFehlendeDokumenteUebermittelnOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
         public static final String REQ_URI = "/gesuch/{gesuchId}/fehlendeDokumente";
@@ -423,7 +423,7 @@ public class GesuchApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GesuchFehlendeDokumenteOper(RequestSpecBuilder reqSpec) {
+        public GesuchFehlendeDokumenteUebermittelnOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -446,7 +446,7 @@ public class GesuchApiSpec {
          * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GesuchFehlendeDokumenteOper gesuchIdPath(Object gesuchId) {
+        public GesuchFehlendeDokumenteUebermittelnOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -456,7 +456,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GesuchFehlendeDokumenteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GesuchFehlendeDokumenteUebermittelnOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -466,7 +466,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GesuchFehlendeDokumenteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GesuchFehlendeDokumenteUebermittelnOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

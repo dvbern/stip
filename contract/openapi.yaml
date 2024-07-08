@@ -1042,7 +1042,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchFehlendeDokumente
+      operationId: gesuchFehlendeDokumenteUebermitteln
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
@@ -1591,6 +1591,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+        status:
+          $ref: '#/components/schemas/Dokumentstatus'
     Dokument:
       required:
         - id
@@ -3108,6 +3110,11 @@ components:
       properties:
         kommentar:
           type: string
+    Dokumentstatus:
+      enum:
+        - AUSSTEHEND
+        - ABGELEHNT
+        - AKZEPTIERT
   responses:
     Unauthorized:
       content:
