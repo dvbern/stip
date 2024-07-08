@@ -65,6 +65,7 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",
   "sachbearbeitung-app.admin.benutzerverwaltung.overview.roles": "Rollen",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt": "Benutzer wurde erfolgreich erstellt",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet": "Benutzer wurde erfolgreich bearbeitet",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "Benutzer wurde erfolgreich gelöscht",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Benutzer löschen",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Wollen Sie die Benutzer \"{{ name }}\" wirklich löschen?",

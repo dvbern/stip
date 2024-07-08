@@ -139,6 +139,7 @@ export class BenutzerverwaltungStore extends signalStore(
         }));
       }),
       switchMap((userId) => this.getUserWithRoleMappings$(userId)),
+      handleApiResponse((benutzer) => patchState(this, { benutzer })),
     ),
   );
 
@@ -152,20 +153,14 @@ export class BenutzerverwaltungStore extends signalStore(
           (r) => !roles.some((role) => role.name === r.name),
         );
 
-        const oldUser = {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          ...this.benutzer().data!,
-          roles: [...(this.benutzer().data?.roles ?? [])],
-        };
-
-        return { user, roles, rolesToRemove, oldUser };
+        return { user, roles, rolesToRemove };
       }),
       tap(() => {
         patchState(this, {
           benutzer: pending(),
         });
       }),
-      exhaustMap(({ user, roles, rolesToRemove, oldUser }) =>
+      exhaustMap(({ user, roles, rolesToRemove }) =>
         this.http
           .put(
             `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}`,
@@ -184,9 +179,17 @@ export class BenutzerverwaltungStore extends signalStore(
               return this.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
             }),
             switchMap(() => this.getUserWithRoleMappings$(user.id)),
-            catchError(() => {
-              patchState(this, { benutzer: success(oldUser) });
-              return EMPTY;
+            handleApiResponse(() => undefined, {
+              onSuccess: (benutzer) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+                });
+                patchState(this, { benutzer: success(benutzer) });
+              },
+              onFailure: () => {
+                this.loadBenutzerWithRoles$(user.id);
+              },
             }),
           ),
       ),
@@ -380,7 +383,6 @@ export class BenutzerverwaltungStore extends signalStore(
           roles: rm ?? [],
         };
       }),
-      handleApiResponse((benutzer) => patchState(this, { benutzer })),
     );
   }
 
