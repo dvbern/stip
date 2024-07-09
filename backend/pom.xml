@@ -550,6 +550,22 @@
                   <overwrite>true</overwrite>
                 </configuration>
               </execution>
+              <execution>
+                <id>copy-dmn-models-to-quarkus</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/src/main/resources/dmn</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${basedir}/dmn</directory>
+                    </resource>
+                  </resources>
+                  <overwrite>true</overwrite>
+                </configuration>
+              </execution>
               <!-- This copies only the relevant java classed of the the generated rest-assured client -->
               <execution>
                 <id>copy-openapi-rest-assured-classes-to-project</id>
