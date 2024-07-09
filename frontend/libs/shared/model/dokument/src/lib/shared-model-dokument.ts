@@ -1,4 +1,13 @@
-import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
+import { Dokument, DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+
+export interface SharedModelTableDokument {
+  formStep: SharedModelGesuchFormStep;
+  titleKey?: string;
+  dokumentTyp: string;
+  gesuchDokument?: GesuchDokument;
+  documentOptions: DocumentOptions | null;
+}
 
 export interface DocumentOptions {
   singleUpload: boolean;

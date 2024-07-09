@@ -17,11 +17,11 @@ import { filter } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
+import { DocumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { SharedPatternDocumentUploadDialogComponent } from '../document-upload-dialog/document-upload-dialog.component';
-import { DocumentOptions } from '../upload.model';
 import { UploadStore } from '../upload.store';
 
 type DialogType = SharedPatternDocumentUploadDialogComponent;

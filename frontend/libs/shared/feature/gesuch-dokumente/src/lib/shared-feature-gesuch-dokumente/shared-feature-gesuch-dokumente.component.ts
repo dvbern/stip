@@ -10,31 +10,24 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import {
-  RejectDocumentDialogData,
-  RejectDokument,
-  SharedUiRejectDokumentComponent,
-} from '@dv/shared/ui/reject-dokument';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { selectSharedDataAccessDokumentesView } from '@dv/shared/data-access/dokumente';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
-import { DokumentTyp } from '@dv/shared/model/gesuch';
+import { SharedModelTableDokument } from '@dv/shared/model/dokument';
+import { GesuchDokument } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
-  SharedModelGesuchFormStep,
-  gesuchFormSteps,
+  getFormStepByDocumentType,
 } from '@dv/shared/model/gesuch-form';
 import {
   DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
   SharedPatternDocumentUploadComponent,
-  TableDocument,
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
@@ -44,51 +37,13 @@ import {
   SharedUiIfSachbearbeiterDirective,
 } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import {
+  RejectDokument,
+  SharedUiRejectDokumentComponent,
+} from '@dv/shared/ui/reject-dokument';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-
-function getFormStep(
-  dokumentTyp: DokumentTyp | undefined,
-): SharedModelGesuchFormStep {
-  const unknownStep: SharedModelGesuchFormStep = {
-    route: 'unknown',
-    translationKey: 'unknown',
-    titleTranslationKey: 'unknown',
-    iconSymbolName: 'unknown',
-  };
-
-  if (!dokumentTyp) {
-    return unknownStep;
-  }
-
-  switch (dokumentTyp) {
-    case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
-      return gesuchFormSteps.DOKUMENTE;
-    }
-    case DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER:
-    case DokumentTyp.EK_BELEG_KINDERZULAGEN: {
-      return gesuchFormSteps.EINNAHMEN_KOSTEN;
-    }
-    case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
-      return gesuchFormSteps.GESCHWISTER;
-    }
-    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
-    case DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT: {
-      return gesuchFormSteps.PARTNER;
-    }
-    default: {
-      const step = Object.keys(gesuchFormSteps).find((key) => {
-        if (key === 'EINNAHMEN_KOSTEN') {
-          return dokumentTyp.includes('EK');
-        }
-        return dokumentTyp.includes(key);
-      }) as keyof typeof gesuchFormSteps;
-
-      return step ? gesuchFormSteps[step] : unknownStep;
-    }
-  }
-}
 
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',
@@ -125,51 +80,54 @@ export class SharedFeatureGesuchDokumenteComponent {
     'actions',
   ];
 
-  dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
+  // dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
   dokumenteDataSourceSig = computed(() => {
-    const documents = this.dokumenteSig().dokumentes;
-    const requiredDocumentTypes = this.dokumenteSig().requiredDocumentTypes;
+    const documents = this.dokumentsStore.dokumenteViewSig();
+    const requiredDocumentTypes =
+      this.dokumentsStore.requiredDocumentTypesViewSig();
     const gesuchId = this.gesuchViewSig().gesuchId;
     const readonly = this.gesuchViewSig().readonly;
     const allowTypes = this.gesuchViewSig().allowTypes;
     const stepsFlow = this.stepViewSig().stepsFlow;
 
     if (!gesuchId || !allowTypes) {
-      return new MatTableDataSource<TableDocument>([]);
+      return new MatTableDataSource<SharedModelTableDokument>([]);
     }
 
-    const uploadedDocuments: TableDocument[] = documents.map((document) => {
-      const dokumentTyp = document.dokumentTyp;
+    const uploadedDocuments: SharedModelTableDokument[] = documents.map(
+      (document) => {
+        const dokumentTyp = document.dokumentTyp;
 
-      if (!dokumentTyp) {
-        throw new Error('Document type is missing');
-      }
+        if (!dokumentTyp) {
+          throw new Error('Document type is missing');
+        }
 
-      const documentOptions = createDocumentOptions({
-        gesuchId,
-        allowTypes,
-        dokumentTyp,
-        initialDocuments: document.dokumente,
-        readonly,
-      });
+        const documentOptions = createDocumentOptions({
+          gesuchId,
+          allowTypes,
+          dokumentTyp,
+          initialDocuments: document.dokumente,
+          readonly,
+        });
 
-      const formStep = getFormStep(dokumentTyp);
+        const formStep = getFormStepByDocumentType(dokumentTyp);
 
-      return {
-        ...document,
-        dokumentTyp,
-        formStep,
-        titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-        documentOptions,
-      };
-    });
+        return {
+          dokumentTyp,
+          gesuchDokument: document,
+          formStep,
+          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+          documentOptions,
+        };
+      },
+    );
 
-    const missingDocuments: TableDocument[] = requiredDocumentTypes.map(
-      (dokumentTyp) => {
-        const formStep = getFormStep(dokumentTyp);
+    const missingDocuments: SharedModelTableDokument[] =
+      requiredDocumentTypes.map((dokumentTyp) => {
+        const formStep = getFormStepByDocumentType(dokumentTyp);
 
         const documentOptions = createDocumentOptions({
           gesuchId,
@@ -185,10 +143,9 @@ export class SharedFeatureGesuchDokumenteComponent {
           titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
           documentOptions,
         };
-      },
-    );
+      });
 
-    return new MatTableDataSource<TableDocument>(
+    return new MatTableDataSource<SharedModelTableDokument>(
       [...uploadedDocuments, ...missingDocuments].sort((a, b) =>
         this.stepManager.compareStepsByFlow(
           stepsFlow,
@@ -200,34 +157,38 @@ export class SharedFeatureGesuchDokumenteComponent {
     );
   });
 
-  trackByFn(index: number, item: TableDocument) {
-    return item.id ?? item.dokumentTyp;
+  trackByFn(index: number, item: SharedModelTableDokument) {
+    return item?.gesuchDokument?.id ?? item.dokumentTyp;
   }
 
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
       .subscribe((gesuchId) => {
-        this.store.dispatch(
-          SharedEventGesuchDokumente.loadDocuments({ gesuchId }),
-        );
+        this.dokumentsStore.dokumentsStateInit(gesuchId);
       });
+
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  acceptDocument(document: TableDocument) {
-    // do something
+  acceptDocument(document: SharedModelTableDokument) {
+    const gesuchId = this.gesuchViewSig().gesuchId;
+
+    if (!document?.gesuchDokument?.id || !gesuchId) return;
+
+    this.dokumentsStore.gesuchDokumentAkzeptieren$({
+      gesuchDokumentId: document.gesuchDokument.id,
+      gesuchId,
+    });
   }
 
-  rejectDocument(document: TableDocument) {
+  rejectDocument(document: SharedModelTableDokument) {
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
-      RejectDocumentDialogData,
+      GesuchDokument,
       RejectDokument
     >(SharedUiRejectDokumentComponent, {
-      data: {
-        dokument: document,
-      },
+      data: document.gesuchDokument,
     });
 
     dialogRef

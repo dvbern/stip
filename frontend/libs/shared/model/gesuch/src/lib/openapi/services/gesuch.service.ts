@@ -46,7 +46,7 @@ export interface GesuchServiceGesuchEinreichenValidierenRequestParams {
     gesuchId: string;
 }
 
-export interface GesuchServiceGesuchFehlendeDokumenteRequestParams {
+export interface GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams {
     gesuchId: string;
 }
 
@@ -449,13 +449,13 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public gesuchFehlendeDokumente$(requestParameters: GesuchServiceGesuchFehlendeDokumenteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
-     public gesuchFehlendeDokumente$(requestParameters: GesuchServiceGesuchFehlendeDokumenteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public gesuchFehlendeDokumente$(requestParameters: GesuchServiceGesuchFehlendeDokumenteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
-     public gesuchFehlendeDokumente$(requestParameters: GesuchServiceGesuchFehlendeDokumenteRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
+     public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchId = requestParameters.gesuchId;
         if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling gesuchFehlendeDokumente$.');
+            throw new Error('Required parameter gesuchId was null or undefined when calling gesuchFehlendeDokumenteUebermitteln$.');
         }
 
         let localVarHeaders = this.defaultHeaders;

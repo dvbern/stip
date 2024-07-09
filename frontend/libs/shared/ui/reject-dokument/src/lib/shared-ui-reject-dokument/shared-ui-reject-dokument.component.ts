@@ -6,12 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { TableDocument } from '@dv/shared/pattern/document-upload';
+import { GesuchDokument } from '@dv/shared/model/gesuch';
 import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
-
-export interface RejectDocumentDialogData {
-  dokument: TableDocument;
-}
 
 export interface RejectDokument {
   id: string;
@@ -34,7 +30,11 @@ export interface RejectDokument {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiRejectDokumentComponent {
-  public dialogData = inject<RejectDocumentDialogData>(MAT_DIALOG_DATA);
+  public gesuchDokument = inject<GesuchDokument>(MAT_DIALOG_DATA);
+  // private dialogRef =
+  //   inject<MatDialogRef<SharedUiRejectDokumentComponent, RejectDokument>>(
+  //     MatDialogRef,
+  //   );
   private dialogRef = inject(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
 
@@ -43,11 +43,11 @@ export class SharedUiRejectDokumentComponent {
   });
 
   cancel() {
-    this.dialogRef.close({ gigu: 'sdfsdf' });
+    this.dialogRef.close();
   }
 
   rejectDocument() {
-    const id = this.dialogData.dokument.id;
+    const id = this.gesuchDokument.id;
     const kommentar = this.form.value.kommentar;
 
     this.dialogRef.close({ id, kommentar });

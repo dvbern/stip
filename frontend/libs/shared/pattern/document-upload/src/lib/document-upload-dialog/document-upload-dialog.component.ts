@@ -11,11 +11,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
 
+import { DocumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
 
 import { SharedPatternDocumentUploadListComponent } from '../document-upload-list/document-upload-list.component';
-import { DocumentOptions } from '../upload.model';
 import { UploadStore } from '../upload.store';
 
 @Component({

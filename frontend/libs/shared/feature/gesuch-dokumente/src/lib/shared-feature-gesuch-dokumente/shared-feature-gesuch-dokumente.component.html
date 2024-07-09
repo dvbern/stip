@@ -34,7 +34,7 @@
           </ng-container>
 
           <!-- expander -->
-          <!-- TODO: Implement the following methods in 993 -->
+          <!-- TODO: Implement the following methods in 994 -->
           <ng-container matColumnDef="expander">
             <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
             <td class="expander-cell" mat-cell *matCellDef="let dokument"></td>
@@ -52,7 +52,7 @@
             </th>
             <td class="status-cell" mat-cell *matCellDef="let dokument">
               <div class="d-flex gap-2">
-                @if (dokument.id) {
+                @if (dokument?.gesuchDokument?.id) {
                   <ng-container *dvIfSachbearbeiter>
                     <button
                       (click)="acceptDocument(dokument)"
@@ -106,7 +106,11 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-          <tr [ngClass]="{ warning: !dokument.id }" mat-row *matRowDef="let dokument; columns: displayedColumns"></tr>
+          <tr
+            [ngClass]="{ warning: !dokument?.gesuchDokument?.id }"
+            mat-row
+            *matRowDef="let dokument; columns: displayedColumns"
+          ></tr>
         </table>
       </div>
     </div>

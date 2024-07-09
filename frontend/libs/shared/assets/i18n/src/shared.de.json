@@ -89,6 +89,8 @@
   "shared.dokumente.reject.message": "Wollen sie die Dokumente ablehnen?",
   "shared.dokumente.kommentar.label": "Kommentar",
   "shared.dokumente.reject": "Ablehnen",
+  "shared.dokumente.reject.success": "Dokument wurde abgelehnt",
+  "shared.dokumente.accept.success": "Dokument wurde akzeptiert",
   "shared.dokumente.table.requiredDocuments": "Benötigtes Dokument",
   "shared.dokumente.table.formStep": "Schritt",
   "shared.dokumente.table.filename": "Dateiname",

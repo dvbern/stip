@@ -1,4 +1,5 @@
 import {
+  DokumentTyp,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
   SteuerdatenTyp,
@@ -235,6 +236,37 @@ export const isStepValid = (
   }
 
   return formular?.[field] ? toStepState(field, invalidProps) : undefined;
+};
+
+export const getFormStepByDocumentType = (
+  dokumentTyp: DokumentTyp,
+): SharedModelGesuchFormStep => {
+  switch (dokumentTyp) {
+    case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
+      return gesuchFormSteps.DOKUMENTE;
+    }
+    case DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER:
+    case DokumentTyp.EK_BELEG_KINDERZULAGEN: {
+      return gesuchFormSteps.EINNAHMEN_KOSTEN;
+    }
+    case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
+      return gesuchFormSteps.GESCHWISTER;
+    }
+    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
+    case DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT: {
+      return gesuchFormSteps.PARTNER;
+    }
+    default: {
+      const step = Object.keys(gesuchFormSteps).find((key) => {
+        if (key === 'EINNAHMEN_KOSTEN') {
+          return dokumentTyp.includes('EK');
+        }
+        return dokumentTyp.includes(key);
+      }) as keyof typeof gesuchFormSteps;
+
+      return gesuchFormSteps[step];
+    }
+  }
 };
 
 const toDocumentStepState = (

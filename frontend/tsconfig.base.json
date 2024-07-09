@@ -86,6 +86,7 @@
       "@dv/shared/model/api": ["libs/shared/model/api/src/index.ts"],
       "@dv/shared/model/benutzer": ["libs/shared/model/benutzer/src/index.ts"],
       "@dv/shared/model/config": ["libs/shared/model/config/src/index.ts"],
+      "@dv/shared/model/dokument": ["libs/shared/model/dokument/src/index.ts"],
       "@dv/shared/model/eltern": ["libs/shared/model/eltern/src/index.ts"],
       "@dv/shared/model/error": ["libs/shared/model/error/src/index.ts"],
       "@dv/shared/model/gesuch": ["libs/shared/model/gesuch/src/index.ts"],

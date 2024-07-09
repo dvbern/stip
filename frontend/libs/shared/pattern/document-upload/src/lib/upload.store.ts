@@ -15,6 +15,11 @@ import {
   tap,
 } from 'rxjs/operators';
 
+import {
+  DocumentOptions,
+  DocumentState,
+  DocumentView,
+} from '@dv/shared/model/dokument';
 import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -30,7 +35,6 @@ import {
   toHumanReadableError,
   updateProgressFor,
 } from './helpers/upload';
-import { DocumentOptions, DocumentState, DocumentView } from './upload.model';
 
 @Injectable()
 export class UploadStore {

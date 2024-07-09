@@ -24,6 +24,7 @@ export * from './bildungsstufe';
 export * from './deploymentConfig';
 export * from './dokument';
 export * from './dokumentTyp';
+export * from './dokumentstatus';
 export * from './einnahmenKosten';
 export * from './einnahmenKostenUpdate';
 export * from './eltern';
