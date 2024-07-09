@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.event.DMNRuntimeEventListener;
@@ -16,6 +17,7 @@ import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
 
 @ApplicationScoped
+@Slf4j
 public class DMNService {
     private static final String DMN_BASE_DIR = "dmn";
     private static final String DMN_EXTENSION = ".dmn";
@@ -65,12 +67,13 @@ public class DMNService {
 
     public List<Resource> loadModelsForTenantAndVersionByName(final String tenantId, final String version, final String modelName) {
         // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
-        final var modelsDirectoryPath = "/" + DMN_BASE_DIR + "/" + tenantId + "/" + version;
+        final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
         final var modelsDirectory = new File(
             Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath)).getFile()
         );
 
         if (modelsDirectory.isDirectory()) {
+            LOG.info("modelsDirectory: " + modelsDirectory.toString() + " is a directory; Content: \n" + modelsDirectory.list().toString());
             final var models = modelsDirectory.listFiles(
                 path -> path.getName().toLowerCase().endsWith(DMN_EXTENSION) &&
                         path.getName().contains(modelName)
@@ -81,6 +84,6 @@ public class DMNService {
             }
         }
 
-        throw new AppErrorException("DMN model(s) not available");
+        throw new AppErrorException("DMN model(s) not available in modelsDirectory: " + modelsDirectory.toString());
     }
 }
