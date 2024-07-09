@@ -183,7 +183,7 @@ export class BenutzerverwaltungStore extends signalStore(
               onSuccess: (benutzer) => {
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey:
-                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
                 });
                 patchState(this, { benutzer: success(benutzer) });
               },
