@@ -52,6 +52,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -289,6 +290,7 @@ public class GesuchService {
     public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular, UUID gesuchId) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
         validationGroups.add(DocumentsRequiredValidationGroup.class);
+        validationGroups.add(LebenslaufItemPageValidation.class);
 
         final var violations = new HashSet<>(
             validator.validate(
