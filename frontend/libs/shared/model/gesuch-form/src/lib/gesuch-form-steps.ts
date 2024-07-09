@@ -230,6 +230,12 @@ export const isStepValid = (
       : undefined;
   }
 
+  if (field === 'lebenslaufItems') {
+    return formular?.personInAusbildung && formular.ausbildung
+      ? toStepState(field, invalidProps)
+      : undefined;
+  }
+
   if (field === 'dokuments') {
     return toDocumentStepState(invalidProps);
   }

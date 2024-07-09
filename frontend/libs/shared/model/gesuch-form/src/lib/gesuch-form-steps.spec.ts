@@ -44,7 +44,6 @@ const validationCases = typeGuard<
 >([
   [AUSBILDUNG, 'ausbildung'],
   [PERSON, 'personInAusbildung'],
-  [LEBENSLAUF, 'lebenslaufItems'],
   [FAMILIENSITUATION, 'familiensituation'],
   [ELTERN, 'elterns'],
   [GESCHWISTER, 'geschwisters'],
@@ -94,6 +93,16 @@ describe('GesuchFormSteps', () => {
     },
   );
 
+  it('route lebenslaufItems should be valid if personInAusbildung and ausbildung are set', () => {
+    expect(
+      isStepValid(
+        LEBENSLAUF,
+        { personInAusbildung: {} as any, ausbildung: {} as any },
+        { errors: [], hasDocuments: null },
+      ),
+    ).toBe('VALID');
+  });
+
   it.each(validationCases)(
     'route %s validity should be undefined if %s is not set',
     (step, field) => {
@@ -106,4 +115,14 @@ describe('GesuchFormSteps', () => {
       ).toBe(undefined);
     },
   );
+
+  it('route lebenslaufItems should be undefined if personInAusbildung is not set', () => {
+    expect(
+      isStepValid(
+        LEBENSLAUF,
+        { personInAusbildung: undefined, ausbildung: {} as any },
+        { errors: [], hasDocuments: null },
+      ),
+    ).toBe(undefined);
+  });
 });
