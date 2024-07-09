@@ -64,7 +64,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -435,7 +434,7 @@ public class GesuchService {
         }
     }
 
-    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) throws JsonProcessingException {
+    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
         final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
         return List.of(resultat);
