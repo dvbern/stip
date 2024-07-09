@@ -1,40 +1,35 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container pt-4 mt-2">
-    <div class="row g-4">
-      <div class="col-12 col-md-6 col-lg-4 d-flex">
-        <button type="button" (click)="showAllToggle.toggle()" class="flex-grow-1 card shadow-lg">
-          <div class="card-body d-flex text-start w-100">
+    <div class="row g-4" [formGroup]="quickFilterForm">
+      @for (quickFilter of quickFilters; track quickFilter) {
+        <div class="col-12 col-md-6 col-lg-4 d-flex">
+          <button
+            type="button"
+            (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
+            class="btn flex-grow-1 shadow-lg p-4 d-flex text-start align-items-center"
+            [class.btn-danger]="radio.checked"
+          >
             <dv-shared-ui-icon-chip class="me-3 chip">
-              <i class="icon material-symbols-rounded">person</i>
+              <i class="icon material-symbols-rounded">{{ quickFilter.icon }}</i>
             </dv-shared-ui-icon-chip>
             <div class="flex-grow-1">
-              <div class="d-flex">
-                <h2 class="card-title">{{ gesucheDataSourceSig().data.length }}</h2>
-                <div class="flex-grow-1"></div>
-                <mat-slide-toggle
-                  #showAllToggle
-                  class="fs-7"
-                  labelPosition="before"
-                  [checked]="showAll()"
-                  [formControl]="showAllControl"
-                  (click)="$event.stopPropagation()"
-                >
-                  {{ 'sachbearbeitung-app.cockpit.show-alle' | translate }}
-                </mat-slide-toggle>
-              </div>
-              @if (showAll()) {
-                <div class="text-muted">
-                  {{ 'sachbearbeitung-app.cockpit.alle-gesuche' | translate }}
-                </div>
-              } @else {
-                <div class="text-muted">
-                  {{ 'sachbearbeitung-app.cockpit.meine-gesuche' | translate }}
-                </div>
-              }
+              <h2 class="fw-bold fs-4">
+                {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | translate }}
+              </h2>
+              <input
+                #radio
+                class="fs-7 cdk-visually-hidden"
+                type="radio"
+                name="query"
+                labelPosition="before"
+                formControlName="query"
+                [value]="quickFilter.typ"
+                [attr.aria-label]="'sachbearbeitung-app.cockpit.quick-filter.label.' + quickFilter.typ | translate"
+              />
             </div>
-          </div>
-        </button>
-      </div>
+          </button>
+        </div>
+      }
     </div>
     <div class="row my-4">
       <div class="col-12">
