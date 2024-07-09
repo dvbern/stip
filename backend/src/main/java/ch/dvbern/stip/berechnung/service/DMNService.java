@@ -65,7 +65,7 @@ public class DMNService {
 
     public List<Resource> loadModelsForTenantAndVersionByName(final String tenantId, final String version, final String modelName) {
         // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
-        final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
+        final var modelsDirectoryPath = "/" + DMN_BASE_DIR + "/" + tenantId + "/" + version;
         final var modelsDirectory = new File(
             Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath)).getFile()
         );
