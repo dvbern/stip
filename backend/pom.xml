@@ -560,7 +560,7 @@
                   <outputDirectory>${basedir}/src/main/resources/dmn</outputDirectory>
                   <resources>
                     <resource>
-                      <directory>${basedir}/dmn</directory>
+                      <directory>${basedir}/src/main/resources/dmn</directory>
                     </resource>
                   </resources>
                   <overwrite>true</overwrite>
