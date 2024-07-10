@@ -84,7 +84,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
   displayedColumns = [
     'fall',
-    'sv-nummer',
+    'svNummer',
     'nachname',
     'vorname',
     'geburtsdatum',
@@ -108,7 +108,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
       id: gesuch.id,
       fall: gesuch.fall.fallNummer,
-      'sv-nummer':
+      svNummer:
         gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
           ?.sozialversicherungsnummer,
       nachname:

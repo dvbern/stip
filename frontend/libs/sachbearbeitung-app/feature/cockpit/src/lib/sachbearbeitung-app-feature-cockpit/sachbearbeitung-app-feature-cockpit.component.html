@@ -76,7 +76,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="sv-nummer">
+                <ng-container matColumnDef="svNummer">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.sv-nummer' | translate }}
                   </th>
@@ -85,7 +85,7 @@
                     *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
                     data-testid="cockpit-row-sv"
                   >
-                    {{ gesuch['sv-nummer'] }}
+                    {{ gesuch.svNummer }}
                   </td>
                 </ng-container>
 
@@ -143,9 +143,8 @@
                   </td>
                 </ng-container>
 
-                <!-- Created Column -->
                 <ng-container matColumnDef="letzteAktivitaet">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
