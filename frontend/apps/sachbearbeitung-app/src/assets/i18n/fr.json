@@ -55,6 +55,7 @@
 
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Utilisateurs",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Créer un utilisateur",
+  "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Modifier l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.name.label": "Nom",
   "sachbearbeitung-app.admin.benutzerverwaltung.vorname.label": "Prénom",
   "sachbearbeitung-app.admin.benutzerverwaltung.email.label": "E-Mail",
@@ -64,6 +65,7 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",
   "sachbearbeitung-app.admin.benutzervervaltung.overview.roles": "Rôles",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt": "L'utilisateur a été créé avec succès.",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet": "L'utilisateur a été modifié avec succès.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "L'utilisateur a été supprimé avec succès.",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Supprimer l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Voulez-vous vraiment supprimer l'utilisateur \"{{ name }}\" ?",
