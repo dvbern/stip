@@ -1,12 +1,9 @@
 package ch.dvbern.stip.berechnung.service;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.common.exception.AppErrorException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
@@ -48,27 +45,12 @@ public class DMNService {
         return runtime.evaluateAll(model, dynamicContext);
     }
 
-    public List<Resource> loadModelsForTenantAndVersion(final String tenantId, final String version) {
-        // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
-        final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
-        final var modelsDirectory = new File(
-            Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath)).getFile()
-        );
-
-        if (modelsDirectory.isDirectory()) {
-            final var models = modelsDirectory.listFiles(path -> path.getName().toLowerCase().endsWith(DMN_EXTENSION));
-            if (models != null && models.length > 0) {
-                return Arrays.stream(models).map(ResourceFactory::newFileResource).toList();
-            }
-        }
-
-        throw new AppErrorException("DMN model(s) not available");
-    }
-
     public List<Resource> loadModelsForTenantAndVersionByName(final String tenantId, final String version, final String modelName) {
         // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
         final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
         final var modelFilePath = modelsDirectoryPath + "/" + modelName + DMN_EXTENSION;
+        // When the app is packaged in a jar file the dirs/files are no longer dirs/files so we have to read them as a stream and listing files gets complicated.
+        // Since we depend on a specific model being present we just statically construct the path and load it that way.
         final var modelFileStream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(modelFilePath));
 
         final var modelResource = ResourceFactory.newInputStreamResource(modelFileStream);
