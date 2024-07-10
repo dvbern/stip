@@ -83,7 +83,6 @@ public class DMNService {
                 return Arrays.stream(models).map(ResourceFactory::newFileResource).toList();
             }
         }
-
         throw new AppErrorException("DMN model(s) not available in modelsDirectory: " + modelsDirectory.toString());
     }
 }
