@@ -6,6 +6,7 @@ import {
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
+  ELTERN_STEUER_STEPS,
   FAMILIENSITUATION,
   GESCHWISTER,
   KINDER,
@@ -93,6 +94,17 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
         (m) => m.gesuchAppFeatureGesuchFormElternRoutes,
       ),
   },
+  ...Object.values(ELTERN_STEUER_STEPS).map((step) => ({
+    path: step.route,
+    resolve: {
+      step: () => step,
+    },
+    title: step.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-eltern-steuerdaten').then(
+        (m) => m.sharedFeatureGesuchFormElternSteuerdatenRoutes,
+      ),
+  })),
   {
     path: PERSON.route,
     resolve: {
