@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.notification.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import jakarta.persistence.Column;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Table(name = "notification")
 @Getter
 @Setter
-public class Notification extends AbstractEntity {
+public class Notification extends AbstractMandantEntity {
     @Enumerated
     @Column(name = "notification_type")
     private NotificationType notificationType;

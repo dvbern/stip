@@ -14,7 +14,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void createNotification(NotificationType notificationType, Gesuch gesuch) {
+    public void createNotification(final NotificationType notificationType, final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(notificationType)
             .setGesuch(gesuch);

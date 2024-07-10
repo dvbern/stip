@@ -31,8 +31,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NotificationServiceTest {
-
-
     @Inject
     MockMailbox mailbox;
 
@@ -63,7 +61,6 @@ public class NotificationServiceTest {
     void init() {
         mailbox.clear();
     }
-
 
     @Test
     void gesuchEinreichenSuccessful() {
