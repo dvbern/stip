@@ -30,7 +30,7 @@
           <span>
             {{
               'sachbearbeitung-app.header.tranche.item'
-                | translate: { date: currentGesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.', index: 1 }
+                | translate: { date: currentGesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.YYYY', index: 1 }
             }}
             -
             {{ currentGesuch.gesuchsperiode.gesuchsperiodeStopp | date: 'MM.YYYY' }}
