@@ -14,12 +14,11 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
-
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
-public class GesuchsperiodeSeeding extends Seeder{
+public class
+GesuchsperiodeSeeding extends Seeder{
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final ConfigService configService;
@@ -42,18 +41,22 @@ public class GesuchsperiodeSeeding extends Seeder{
             return;
         }
 
-        int currentYear = LocalDate.now().getYear();
+        int currentYear = newJahr.getTechnischesJahr();
 
         final var newPerioden = List.of(
             getPeriodeForSeeding(
-                newJahr,
-                LocalDate.of(currentYear -1, 8, 1),
-                LocalDate.of(currentYear, 7, 31)
-            ),
-            getPeriodeForSeeding(
+                "Herbst",
+                "Automne",
                 newJahr,
                 LocalDate.of(currentYear, 8, 1),
                 LocalDate.of(currentYear + 1, 7, 31)
+            ),
+            getPeriodeForSeeding(
+                "Frühling",
+                "Printemps",
+                newJahr,
+                LocalDate.of(currentYear, 2, 1),
+                LocalDate.of(currentYear + 1, 1, 31)
             )
         );
 
@@ -78,23 +81,25 @@ public class GesuchsperiodeSeeding extends Seeder{
     }
 
     Gesuchsperiode getPeriodeForSeeding(
+        final String prefixDe,
+        final String prefixFr,
         final Gesuchsjahr jahr,
         final LocalDate from,
         final LocalDate to
     ) {
-        String jahrAsString = String.valueOf(jahr);
+        String jahrAsString = String.valueOf(jahr.getTechnischesJahr());
 
         return new Gesuchsperiode()
-            .setBezeichnungDe("Frühling " + jahrAsString)
-            .setBezeichnungFr("Printemps " + jahrAsString)
+            .setBezeichnungDe(prefixDe + ' ' + jahrAsString)
+            .setBezeichnungFr(prefixFr + ' ' + jahrAsString)
             .setFiskaljahr(jahrAsString)
             .setGesuchsjahr(jahr)
             .setGesuchsperiodeStart(from)
             .setGesuchsperiodeStopp(to)
             .setAufschaltterminStart(from)
             .setAufschaltterminStopp(to)
-            .setEinreichefristNormal(from.minusMonths(1))
-            .setEinreichefristReduziert(to.with(lastDayOfYear()))
+            .setEinreichefristNormal(from.minusMonths(7))
+            .setEinreichefristReduziert(to.minusMonths(4))
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
             .setFreibetragVermoegen(0)
