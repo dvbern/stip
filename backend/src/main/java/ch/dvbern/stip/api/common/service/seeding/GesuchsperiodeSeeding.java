@@ -98,7 +98,7 @@ GesuchsperiodeSeeding extends Seeder{
             .setGesuchsperiodeStopp(to)
             .setAufschaltterminStart(from)
             .setAufschaltterminStopp(to)
-            .setEinreichefristNormal(from.minusMonths(7))
+            .setEinreichefristNormal(to.minusMonths(7))
             .setEinreichefristReduziert(to.minusMonths(4))
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
