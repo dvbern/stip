@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * BildungsartDtoSpec
  */
 @JsonPropertyOrder({
   BildungsartDtoSpec.JSON_PROPERTY_BESCHREIBUNG,

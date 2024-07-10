@@ -25,7 +25,6 @@ public class AusbildungsstaetteUpdateDto  implements Serializable {
   private @Valid UUID id;
 
   /**
-   * 
    **/
   public AusbildungsstaetteUpdateDto nameDe(String nameDe) {
     this.nameDe = nameDe;
@@ -45,7 +44,6 @@ public class AusbildungsstaetteUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsstaetteUpdateDto nameFr(String nameFr) {
     this.nameFr = nameFr;

@@ -53,7 +53,7 @@ public class ValidationWarningDtoSpec {
   }
 
    /**
-   * 
+   * Get propertyPath
    * @return propertyPath
   **/
   @jakarta.annotation.Nullable
@@ -79,7 +79,7 @@ public class ValidationWarningDtoSpec {
   }
 
    /**
-   * 
+   * Get messageTemplate
    * @return messageTemplate
   **/
   @jakarta.annotation.Nonnull
@@ -105,7 +105,7 @@ public class ValidationWarningDtoSpec {
   }
 
    /**
-   * 
+   * Get message
    * @return message
   **/
   @jakarta.annotation.Nonnull

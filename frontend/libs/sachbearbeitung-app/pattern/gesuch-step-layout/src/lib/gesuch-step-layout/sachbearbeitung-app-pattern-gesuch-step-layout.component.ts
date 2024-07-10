@@ -3,20 +3,21 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -30,13 +31,14 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
   imports: [
     CommonModule,
     RouterLink,
+    TranslateModule,
+    GlobalNotificationsComponent,
     SharedPatternGesuchStepNavComponent,
-    SharedPatternAppHeaderComponent,
+    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiProgressBarComponent,
     SharedUiSearchComponent,
-    TranslateModule,
-    GlobalNotificationsComponent,
+    SachbearbeitungAppPatternGesuchHeaderComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-gesuch-step-layout.component.html',
@@ -45,10 +47,11 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppPatternAdministrationLayoutComponent {
-  @Input()
-  step?: SharedModelGesuchFormStep;
-  navClicked = new EventEmitter();
+export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
+  stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
+    alias: 'step',
+  });
+  navClicked$ = new EventEmitter();
 
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private store = inject(Store);
@@ -61,11 +64,13 @@ export class SachbearbeitungAppPatternAdministrationLayoutComponent {
     ),
   );
   currentStepProgressSig = computed(() => {
+    const currentStep = this.stepSig();
     const stepsFlow = this.stepsViewSig().stepsFlow;
-    return this.stepManager.getStepProgress(stepsFlow, this.step);
+    return this.stepManager.getStepProgress(stepsFlow, currentStep);
   });
   currentStepSig = computed(() => {
+    const currentStep = this.stepSig();
     const steps = this.stepsSig();
-    return steps.find((step) => step.route === this.step?.route);
+    return steps.find((step) => step.route === currentStep?.route);
   });
 }

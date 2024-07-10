@@ -24,7 +24,6 @@ public class ValidationWarningDto  implements Serializable {
   private @Valid String propertyPath;
 
   /**
-   * 
    **/
   public ValidationWarningDto messageTemplate(String messageTemplate) {
     this.messageTemplate = messageTemplate;
@@ -44,7 +43,6 @@ public class ValidationWarningDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public ValidationWarningDto message(String message) {
     this.message = message;
@@ -64,7 +62,6 @@ public class ValidationWarningDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public ValidationWarningDto propertyPath(String propertyPath) {
     this.propertyPath = propertyPath;

@@ -104,7 +104,6 @@ public class DokumentDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public DokumentDto objectId(String objectId) {
     this.objectId = objectId;

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * GeschwisterUpdateDtoSpec
  */
 @JsonPropertyOrder({
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_VORNAME,
