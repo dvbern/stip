@@ -1,9 +1,12 @@
 {
   "app-name": "Stipendien Online",
   "sachbearbeitung-app.header.antraege": "Anträge",
-  "sachbearbeitung-app.header.antragDetail": "Antragsdetail",
+  "sachbearbeitung-app.header.tranchenAuswahl": "Gesuch",
   "sachbearbeitung-app.header.administration": "Administration",
-  "sachbearbeitung-app.header.berechnung": "Berechnung",
+  "sachbearbeitung-app.header.verfuegung": "Verfügung",
+  "sachbearbeitung-app.header.aenderungen": "Änderungen",
+  "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
+  "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",
   "sachbearbeitung-app.header.back": "Zurück",
 
   "sachbearbeitung-app.admin.title": "Administration",
@@ -184,6 +187,12 @@
   "sachbearbeitung-app.admin.gesuchsperiode.confirmDelete.gesuchsjahr.text": "Wollen Sie das Ausbildungsjahr \"{{ bezeichnungDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
+
+  "sachbearbeitung-app.verfuegung.title": "Verfügung",
+  "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
+  "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}",
+  "sachbearbeitung-app.verfuegung.berechnung.berechnen": "Berechnen",
+  "sachbearbeitung-app.verfuegung.berechnung.resultat": "Resultat",
 
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",

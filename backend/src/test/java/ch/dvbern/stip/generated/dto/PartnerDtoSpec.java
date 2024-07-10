@@ -157,7 +157,7 @@ public class PartnerDtoSpec {
   }
 
    /**
-   * 
+   * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
   **/
   @jakarta.annotation.Nonnull

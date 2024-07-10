@@ -11,9 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("SachbearbeiterZuordnungStammdaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -25,7 +23,6 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
   private @Valid String buchstabenFr;
 
   /**
-   * 
    **/
   public SachbearbeiterZuordnungStammdatenDto buchstabenDe(String buchstabenDe) {
     this.buchstabenDe = buchstabenDe;
@@ -44,7 +41,6 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public SachbearbeiterZuordnungStammdatenDto buchstabenFr(String buchstabenFr) {
     this.buchstabenFr = buchstabenFr;

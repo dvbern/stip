@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * GesuchTrancheDtoSpec
  */
 @JsonPropertyOrder({
   GesuchTrancheDtoSpec.JSON_PROPERTY_ID,

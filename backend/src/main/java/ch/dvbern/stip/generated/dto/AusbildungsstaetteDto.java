@@ -32,7 +32,6 @@ public class AusbildungsstaetteDto  implements Serializable {
   private @Valid UUID id;
 
   /**
-   * 
    **/
   public AusbildungsstaetteDto nameDe(String nameDe) {
     this.nameDe = nameDe;
@@ -52,7 +51,6 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsstaetteDto nameFr(String nameFr) {
     this.nameFr = nameFr;
@@ -72,7 +70,6 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsstaetteDto ausbildungsgaenge(List<AusbildungsgangDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;

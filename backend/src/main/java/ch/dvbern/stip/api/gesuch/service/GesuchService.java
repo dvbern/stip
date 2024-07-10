@@ -54,6 +54,8 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -90,6 +92,7 @@ public class GesuchService {
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
     private final ConfigService configService;
+    private final BerechnungService berechnungService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -429,5 +432,11 @@ public class GesuchService {
                 "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
             );
         }
+    }
+
+    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
+        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
+        return List.of(resultat);
     }
 }
