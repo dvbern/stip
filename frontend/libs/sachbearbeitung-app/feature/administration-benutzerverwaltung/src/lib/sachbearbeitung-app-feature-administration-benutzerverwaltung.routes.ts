@@ -5,9 +5,8 @@ import {
   CHILD_OPTION_BENUTZER_ERSTELLEN,
   OPTION_BENUTZERVERWALTUNG,
 } from '@dv/sachbearbeitung-app/model/administration';
-import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
-import { BenutzerErstellungComponent } from './benutzer-erstellung/benutzer-erstellung.component';
+import { BenutzeDetailComponent } from './benutzer-detail/benutzer-detail.component';
 import { BenutzerOverviewComponent } from './benutzer-overview/benutzer-overview.component';
 
 export const sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes: Route[] =
@@ -25,12 +24,16 @@ export const sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes: Ro
           },
           title: 'sachbearbeitung-app.admin.benutzerverwaltung.route.create',
           path: 'create',
-          component: BenutzerErstellungComponent,
+          component: BenutzeDetailComponent,
         },
         {
-          data: { option: OPTION_BENUTZERVERWALTUNG },
+          data: {
+            option: CHILD_OPTION_BENUTZER_ERSTELLEN(
+              'sachbearbeitung-app.admin.benutzerverwaltung.route.edit',
+            ),
+          },
           path: 'edit/:id',
-          loadComponent: () => SharedUiCommingSoonComponent,
+          component: BenutzeDetailComponent,
         },
         {
           data: { option: OPTION_BENUTZERVERWALTUNG },

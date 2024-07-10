@@ -24,9 +24,6 @@ public class AusbildungSeeding extends Seeder {
     private final BildungsartRepository bildungsartRepository;
     private final ConfigService configService;
 
-    protected Bildungsart bildungsartSekundarstufeZwei;
-    protected Bildungsart bildungsartTertiaer;
-
     @Override
     @Startup
     public void startup() {
@@ -38,9 +35,21 @@ public class AusbildungSeeding extends Seeder {
         if (ausbildungsstaetteRepository.count() == 0) {
             LOG.info("Seeding Uni and FH");
 
-            createBildungsarten();
-            seedUni();
-            seedFh();
+            final var bildungsarten = getBildungsarten();
+            bildungsartRepository.persist(bildungsarten);
+            bildungsartRepository.flush();
+
+            final var ausbildungsstaetten = getAusbildungsstaetten();
+            ausbildungsstaetteRepository.persist(ausbildungsstaetten);
+            ausbildungsstaetteRepository.flush();
+
+            final var ausbildunggaenge = getAusbildungsgaenge(
+                ausbildungsstaetten,
+                bildungsarten
+            );
+
+            ausbildungsgangRepository.persist(ausbildunggaenge);
+            ausbildungsgangRepository.flush();
         }
     }
 
@@ -49,69 +58,69 @@ public class AusbildungSeeding extends Seeder {
         return configService.getSeedOnProfile();
     }
 
-    protected void createBildungsarten() {
-        final var artSek = new Bildungsart()
-            .setBeschreibung("Gymnasium")
-            .setBfs(-1)
-            .setBildungsstufe(Bildungsstufe.SEKUNDAR_2);
-        final var artTertiaer = new Bildungsart()
-            .setBeschreibung("Universität")
-            .setBfs(-2)
-            .setBildungsstufe(Bildungsstufe.TERTIAER);
-
-        bildungsartRepository.persistAndFlush(artSek);
-        bildungsartRepository.persistAndFlush(artTertiaer);
-        bildungsartSekundarstufeZwei = artSek;
-        bildungsartTertiaer = artTertiaer;
+    private static List<Bildungsart> getBildungsarten() {
+        return List.of(
+            // Keep this order, or update dependencies as well
+            createBildungsart("Universität", -2, Bildungsstufe.TERTIAER),
+            createBildungsart("Gymnasium", -1, Bildungsstufe.SEKUNDAR_2)
+        );
     }
 
-    protected void seedUni() {
-        final var uniBern = new Ausbildungsstaette()
-            .setNameDe("Universität Bern")
-            .setNameFr("Université de Berne");
-
-        ausbildungsstaetteRepository.persistAndFlush(uniBern);
-
-        final var uniBeGang1 = new Ausbildungsgang()
-            .setBezeichnungDe("Bsc. Informatik")
-            .setBezeichnungFr("Bsc. Informatique")
-            .setBildungsart(bildungsartTertiaer)
-            .setAusbildungsstaette(uniBern);
-
-        final var uniBeGang2 = new Ausbildungsgang()
-            .setBezeichnungDe("Bsc. Biologie")
-            .setBezeichnungFr("Bsc. Biologie")
-            .setBildungsart(bildungsartTertiaer)
-            .setAusbildungsstaette(uniBern);
-
-        ausbildungsgangRepository.persist(List.of(uniBeGang1, uniBeGang2));
+    private static Bildungsart createBildungsart(
+        final String beschreibung,
+        final int bfs,
+        final Bildungsstufe bildungsstufe
+    ) {
+        return new Bildungsart()
+            .setBeschreibung(beschreibung)
+            .setBildungsstufe(bildungsstufe)
+            .setBfs(bfs);
     }
 
-    protected void seedFh() {
-        final var bfh = new Ausbildungsstaette()
-            .setNameDe("Berner Fachhochschule")
-            .setNameFr("Haute école spécialisée bernoise");
+    private static List<Ausbildungsstaette> getAusbildungsstaetten() {
+        return List.of(
+            // Keep this order, or update dependencies as well
+            createAusbildungsstaette("Berner Fachhochschule", "Haute école spécialisée bernoise"),
+            createAusbildungsstaette("Universität Bern", "Université de Berne"),
+            createAusbildungsstaette("Lehrbetrieb", "Établissement"),
+            createAusbildungsstaette("Gymnasium Lebermatt", "Lycée Lebermatt"),
+            createAusbildungsstaette("BFF Bern", "BFF Berne"),
+            createAusbildungsstaette("Universität Lausanne", "Université Lausanne")
+        );
+    }
 
-        ausbildungsstaetteRepository.persistAndFlush(bfh);
+    private static Ausbildungsstaette createAusbildungsstaette(final String nameDe, final String nameFr) {
+        return new Ausbildungsstaette()
+            .setNameDe(nameDe)
+            .setNameFr(nameFr);
+    }
 
-        final var bfhGang1 = new Ausbildungsgang()
-            .setBezeichnungDe("Bsc. Informatik")
-            .setBezeichnungFr("Bsc. Informatique")
-            .setBildungsart(bildungsartTertiaer)
-            .setAusbildungsstaette(bfh);
+    private static List<Ausbildungsgang> getAusbildungsgaenge(
+        final List<Ausbildungsstaette> ausbildungsstaetten,
+        final List<Bildungsart> bildungsarten
+    ) {
+        return List.of(
+            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(0), bildungsarten.get(0)),
+            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(1), bildungsarten.get(0)),
+            createAusbildungsgang("Master", "Master", ausbildungsstaetten.get(1), bildungsarten.get(0)),
+            createAusbildungsgang("Lehre EBA", "Apprentissage AFP", ausbildungsstaetten.get(2), bildungsarten.get(1)),
+            createAusbildungsgang("Vorlehre", "Préapprentissage", ausbildungsstaetten.get(2), bildungsarten.get(1)),
+            createAusbildungsgang("Maturität", "Maturité", ausbildungsstaetten.get(3), bildungsarten.get(1)),
+            createAusbildungsgang("Lehre EFZ", "Apprentissage CFC", ausbildungsstaetten.get(2), bildungsarten.get(1)),
+            createAusbildungsgang("Berufsvorbereitendes Schuljahr", "Année scolaire de préparation professionnelle", ausbildungsstaetten.get(4), bildungsarten.get(1))
+        );
+    }
 
-        final var bfhGang2 = new Ausbildungsgang()
-            .setBezeichnungDe("Bsc. Biologie")
-            .setBezeichnungFr("Bsc. Biologie")
-            .setBildungsart(bildungsartTertiaer)
-            .setAusbildungsstaette(bfh);
-
-        final var bfhGang3 = new Ausbildungsgang()
-            .setBezeichnungDe("Gymnasium")
-            .setBezeichnungFr("Gymnasium")
-            .setBildungsart(bildungsartSekundarstufeZwei)
-            .setAusbildungsstaette(bfh);
-
-        ausbildungsgangRepository.persist(List.of(bfhGang1, bfhGang2, bfhGang3));
+    private static Ausbildungsgang createAusbildungsgang(
+        final String bezeichnungDe,
+        final String bezeichnungFr,
+        final Ausbildungsstaette ausbildungsstaette,
+        final Bildungsart bildungsart
+    ) {
+        return new Ausbildungsgang()
+            .setBezeichnungDe(bezeichnungDe)
+            .setBezeichnungFr(bezeichnungFr)
+            .setAusbildungsstaette(ausbildungsstaette)
+            .setBildungsart(bildungsart);
     }
 }

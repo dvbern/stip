@@ -22,56 +22,54 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
     inputs:
-      name: "deploy:dev"
-      deployment-environment: "dev"
-      deployment-environment-url: "https://dev-stip.$DVB_OCP_MERCURY_ROUTER"
-      deployment-environment-values-path: "charts/stip/environments/dev/values.yaml"
-      deployment-on: "default"
-      deployment-mode: "on_success"
-      argocd-server: "$ARGOCD_SERVER"
-      argocd-token: "$ARGOCD_TOKEN"
-      argocd-app-name: "$ARGOCD_APP"
-
-
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
-    inputs:
-      name: "deploy:uat"
-      deployment-environment: "uat"
-      deployment-environment-url: "https://uat-stip.kibon.ch"
-      deployment-environment-values-path: "charts/stip/environments/uat/values.yaml"
-      deployment-on: "tag"
-      deployment-mode: "manual"
-      argocd-server: "$ARGOCD_SERVER"
-      argocd-token: "$ARGOCD_TOKEN"
-      argocd-app-name: "$ARGOCD_APP"
+      name: 'deploy:dev'
+      deployment-environment: 'dev'
+      deployment-environment-url: 'https://dev-stip.$DVB_OCP_MERCURY_ROUTER'
+      deployment-environment-values-path: 'charts/stip/environments/dev/values.yaml'
+      deployment-on: 'default'
+      deployment-mode: 'on_success'
+      argocd-server: '$ARGOCD_SERVER'
+      argocd-token: '$ARGOCD_TOKEN'
+      argocd-app-name: '$ARGOCD_APP'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
     inputs:
-      name: "deploy:prod"
-      deployment-environment: "prod"
-      deployment-environment-url: "https://stip.kibon.ch"
-      deployment-environment-values-path: "charts/stip/environments/prod/values.yaml"
-      deployment-on: "tag"
-      deployment-mode: "manual"
-      argocd-server: "$ARGOCD_SERVER"
-      argocd-token: "$ARGOCD_TOKEN"
-      argocd-app-name: "$ARGOCD_APP"
+      name: 'deploy:uat'
+      deployment-environment: 'uat'
+      deployment-environment-url: 'https://uat-stip.kibon.ch'
+      deployment-environment-values-path: 'charts/stip/environments/uat/values.yaml'
+      deployment-on: 'tag'
+      deployment-mode: 'manual'
+      argocd-server: '$ARGOCD_SERVER'
+      argocd-token: '$ARGOCD_TOKEN'
+      argocd-app-name: '$ARGOCD_APP'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
+    inputs:
+      name: 'deploy:prod'
+      deployment-environment: 'prod'
+      deployment-environment-url: 'https://stip.kibon.ch'
+      deployment-environment-values-path: 'charts/stip/environments/prod/values.yaml'
+      deployment-on: 'tag'
+      deployment-mode: 'manual'
+      argocd-server: '$ARGOCD_SERVER'
+      argocd-token: '$ARGOCD_TOKEN'
+      argocd-app-name: '$ARGOCD_APP'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.8.0'
     inputs:
-      review-app-url: "https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER"
+      review-app-url: 'https://${CI_COMMIT_REF_SLUG}-stip.$DVB_OCP_MERCURY_ROUTER'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/github-mirror@v0.8.0'
     inputs:
-      git-mirror-clone-token: "$GITLAB_STIP_PULL_TOKEN"
-      git-mirror-target: "dvbern/stip"
-      mirror-on: "tag"
-      mirror-when: "always"
-
+      git-mirror-clone-token: '$GITLAB_STIP_PULL_TOKEN'
+      git-mirror-target: 'dvbern/stip'
+      mirror-on: 'tag'
+      mirror-when: 'always'
 
   - component: 'gitlab.dvbern.ch/components/build/nx@v1.2.1'
     inputs:
-      name: ".nx"
+      name: '.nx'
       e2e-test-package-version: '13.6.2'
       context-dir: 'frontend'
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
@@ -81,13 +79,13 @@ include:
       e2e-on: 'default'
 
 .install-argocd:
-  tags: [ "zone:tz", "os:linux", "type:docker" ]
+  tags: ['zone:tz', 'os:linux', 'type:docker']
   image:
     name: docker-registry.dvbern.ch/devops/docker/tools/k8s/main
-    entrypoint: [ "" ]
+    entrypoint: ['']
   variables:
-    ARGOCD_SERVER: "$ARGOCD_SERVER"
-    ARGOCD_AUTH_TOKEN: "$ARGOCD_TOKEN"
+    ARGOCD_SERVER: '$ARGOCD_SERVER'
+    ARGOCD_AUTH_TOKEN: '$ARGOCD_TOKEN'
   before_script:
     - |
       echo "Using ArgoCD Server at $ARGOCD_SERVER"
@@ -95,7 +93,7 @@ include:
 
 start-e2e:
   stage: e2e
-  resource_group: "argocd:dev"
+  resource_group: 'argocd:dev'
   extends: .install-argocd
   script:
     - argocd app sync stip-e2e --insecure
@@ -108,19 +106,19 @@ start-e2e:
     - argocd app wait stip-e2e --insecure
   environment:
     name: e2e
-    url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     action: start
   rules:
     - if: $PIPELINE_TYPE == "default"
       when: on_success
 
-run-e2e:  
+run-e2e:
   stage: e2e
   extends: .nx-e2e-test
-  resource_group: "e2e"
+  resource_group: 'e2e'
   variables:
-    E2E_BASEURL_GS: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
-    E2E_BASEURL_SB: "https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_GS: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_SB: 'https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
   needs:
     - start-e2e
 
@@ -128,8 +126,8 @@ wait-for-review:
   extends: .install-argocd
   stage: review-e2e
   variables:
-    ARGOCD_SERVER: "$REVIEW_ARGOCD_SERVER"
-    ARGOCD_AUTH_TOKEN: "$REVIEW_ARGOCD_TOKEN"
+    ARGOCD_SERVER: '$REVIEW_ARGOCD_SERVER'
+    ARGOCD_AUTH_TOKEN: '$REVIEW_ARGOCD_TOKEN'
   needs:
     - argocd:review-app:start
   script:
@@ -145,8 +143,8 @@ run-review-e2e:
   needs:
     - wait-for-review
   variables:
-    E2E_BASEURL_GS: "https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER"
-    E2E_BASEURL_SB: "https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER"
+    E2E_BASEURL_GS: 'https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_SB: 'https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER'
   rules:
     - if: $PIPELINE_TYPE == "mr"
 
@@ -155,7 +153,7 @@ stop-e2e:
   stage: e2e
   needs:
     - run-e2e
-  resource_group: "argocd:dev"
+  resource_group: 'argocd:dev'
   extends: .install-argocd
   script:
     - argocd app set stip-e2e --helm-set api.replicaCount=0 --insecure
@@ -166,7 +164,7 @@ stop-e2e:
     - argocd app wait stip-e2e --insecure
   environment:
     name: e2e
-    url: "https://e2e-stip.$DVB_OCP_MERCURY_ROUTER"
+    url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     action: stop
   rules:
     - if: $PIPELINE_TYPE == "default"
