@@ -61,6 +61,7 @@ import {
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
+import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
@@ -130,7 +131,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     steuerjahr: [
       <number | null>null,
       [
-        /** @see // add max year to steuerjahr */
+        /** @see // this.steuerjahrValidation */
       ],
     ],
   });
@@ -173,17 +174,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
-  steuerjahrPeriodeSig = computed(() => {
-    const { gesuch } = this.viewSig();
-
-    const technischesJahr = gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr;
-
-    if (!technischesJahr) {
-      return 0;
-    }
-
-    return technischesJahr - 1;
-  });
+  steuerjahrValidation = prepareSteuerjahrValidation(
+    this.form.controls.steuerjahr,
+    this.viewSig,
+  );
 
   formStateSig = computed(() => {
     const { gesuchFormular, ausbildungsstaettes, gesuch } = this.viewSig();
@@ -464,21 +458,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
-    // add max year to steuerjahr
-    effect(() => {
-      const steuerjahr = this.steuerjahrPeriodeSig();
-
-      if (!steuerjahr) {
-        return;
-      }
-
-      this.form.controls.steuerjahr.setValidators([
-        Validators.required,
-        sharedUtilValidatorRange(1900, steuerjahr),
-      ]);
-
-      this.form.controls.steuerjahr.updateValueAndValidity();
-    });
+    this.steuerjahrValidation.createEffect();
 
     // fill form
     effect(

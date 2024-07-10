@@ -7,7 +7,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -24,6 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   SharedModelGesuchFormularUpdate,
   SteuerdatenTyp,
@@ -43,6 +43,7 @@ import {
 } from '@dv/shared/util/form';
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
+import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
   selector: 'lib-shared-feature-gesuch-form-eltern-steuerdaten',
@@ -67,12 +68,12 @@ import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
+  private config = inject(SharedModelCompileTimeConfig);
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   maskitoNumber = maskitoNumber;
-  steuerjahrPeriodeSig = signal(new Date().getFullYear() - 1);
   form = this.formBuilder.group({
     totalEinkuenfte: [<string | null>null, [Validators.required]],
     eigenmietwert: [<string | null>null, [Validators.required]],
@@ -88,12 +89,10 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     fahrkostenPartner: [<string | null>null, [Validators.required]],
     verpflegung: [<string | null>null, [Validators.required]],
     verpflegungPartner: [<string | null>null, [Validators.required]],
-    // TODO use steuerjahr/veranlagungscode logic from KSITP-1055, according Issue is being created
     steuerjahr: [
       <number | null>null,
       [
-        Validators.required,
-        sharedUtilValidatorRange(1900, this.steuerjahrPeriodeSig()),
+        /** @see // this.steuerjahrValidation */
       ],
     ],
     veranlagungscode: [
@@ -126,8 +125,14 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     'verpflegungPartner',
   ]);
 
+  steuerjahrValidation = prepareSteuerjahrValidation(
+    this.form.controls.steuerjahr,
+    this.viewSig,
+  );
+
   constructor() {
     this.store.dispatch(SharedEventGesuchFormElternSteuerdaten.init());
+    this.steuerjahrValidation.createEffect();
     effect(
       () => {
         const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
@@ -138,6 +143,14 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
         this.hiddenFieldSet.setFieldVisibility(
           this.form.controls.saeule2,
           arbeitsverhaeltnis ?? false,
+        );
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.veranlagungscode,
+          this.config.isSachbearbeitungApp,
+        );
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.steuerjahr,
+          this.config.isSachbearbeitungApp,
         );
       },
       { allowSignalWrites: true },

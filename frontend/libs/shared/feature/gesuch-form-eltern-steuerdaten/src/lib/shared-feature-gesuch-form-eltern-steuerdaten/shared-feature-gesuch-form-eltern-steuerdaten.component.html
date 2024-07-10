@@ -62,38 +62,42 @@
         </mat-error>
       </mat-radio-group>
     </div>
-    <div class="row g-4 my-2">
-      @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule3a)) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule3a.label' | translate }}</mat-label>
-          <input
-            formControlName="saeule3a"
-            data-testid="form-eltern-steuerdaten.saeule3a"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      }
-      @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule2)) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule2.label' | translate }}</mat-label>
-          <input
-            formControlName="saeule2"
-            data-testid="form-eltern-steuerdaten.saeule2"
-            matInput
-            [maskito]="maskitoNumber"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      }
-    </div>
+    @if (
+      !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
+    ) {
+      <div class="row g-4 my-2">
+        @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule3a)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule3a.label' | translate }}</mat-label>
+            <input
+              formControlName="saeule3a"
+              data-testid="form-eltern-steuerdaten.saeule3a"
+              matInput
+              [maskito]="maskitoNumber"
+              type="text"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+        @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule2)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule2.label' | translate }}</mat-label>
+            <input
+              formControlName="saeule2"
+              data-testid="form-eltern-steuerdaten.saeule2"
+              matInput
+              [maskito]="maskitoNumber"
+              type="text"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+    }
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.kinderalimente.label' | translate }}</mat-label>
@@ -225,42 +229,53 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.steuerjahr.label' | translate }}</mat-label>
-        <input
-          formControlName="steuerjahr"
-          data-testid="form-eltern-steuerdaten.steuerjahr"
-          matInput
-          min="1900"
-          [max]="this.steuerjahrPeriodeSig()"
-          type="number"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'range'">
-          {{ 'shared.form.error.range' | translate: { min: 1900, max: this.steuerjahrPeriodeSig() } }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>
-        <input
-          formControlName="veranlagungscode"
-          data-testid="form-eltern-steuerdaten.veranlagungscode"
-          matInput
-          type="number"
-          min="0"
-          max="99"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'range'">
-          {{ 'shared.form.error.range' | translate: { min: 0, max: 99 } }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+    @if (
+      !hiddenFieldSet.valuesSig().has(form.controls.steuerjahr) ||
+      !hiddenFieldSet.valuesSig().has(form.controls.veranlagungscode)
+    ) {
+      <div class="row g-4 my-2">
+        @if (!hiddenFieldSet.valuesSig().has(form.controls.steuerjahr)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.eltern-steuerdaten.steuerjahr.label' | translate }}</mat-label>
+            <input
+              formControlName="steuerjahr"
+              data-testid="form-eltern-steuerdaten.steuerjahr"
+              matInput
+              min="1900"
+              [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
+              type="number"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'range'">
+              {{
+                'shared.form.error.range' | translate: { min: 1900, max: steuerjahrValidation.steuerjahrPeriodeSig() }
+              }}
+            </mat-error>
+          </mat-form-field>
+        }
+        @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungscode)) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>
+            <input
+              formControlName="veranlagungscode"
+              data-testid="form-eltern-steuerdaten.veranlagungscode"
+              matInput
+              type="number"
+              min="0"
+              max="99"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'range'">
+              {{ 'shared.form.error.range' | translate: { min: 0, max: 99 } }}
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+    }
     <dv-shared-ui-step-form-buttons>
       @if (!viewSig().readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
