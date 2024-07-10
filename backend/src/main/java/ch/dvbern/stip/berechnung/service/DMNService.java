@@ -68,21 +68,10 @@ public class DMNService {
     public List<Resource> loadModelsForTenantAndVersionByName(final String tenantId, final String version, final String modelName) {
         // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
         final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
-        final var modelsDirectory = new File(
-            Objects.requireNonNull(getClass().getClassLoader().getResource(modelsDirectoryPath)).getFile()
-        );
+        final var modelFilePath = modelsDirectoryPath + "/" + modelName + DMN_EXTENSION;
+        final var modelFileStream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(modelFilePath));
 
-        if (modelsDirectory.isDirectory()) {
-            LOG.info("modelsDirectory: " + modelsDirectory.toString() + " is a directory; Content: \n" + modelsDirectory.list().toString());
-            final var models = modelsDirectory.listFiles(
-                path -> path.getName().toLowerCase().endsWith(DMN_EXTENSION) &&
-                        path.getName().contains(modelName)
-            );
-
-            if (models != null && models.length > 0) {
-                return Arrays.stream(models).map(ResourceFactory::newFileResource).toList();
-            }
-        }
-        throw new AppErrorException("DMN model(s) not available in modelsDirectory: " + modelsDirectory.toString());
+        final var modelResource = ResourceFactory.newInputStreamResource(modelFileStream);
+        return List.of(modelResource);
     }
 }
