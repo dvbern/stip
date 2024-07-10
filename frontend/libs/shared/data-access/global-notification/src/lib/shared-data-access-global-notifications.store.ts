@@ -127,6 +127,19 @@ export class GlobalNotificationStore extends signalStore(
       notifications: notifications,
     });
   }
+
+  /**
+   * Clear all persistent notifications.
+   */
+  clearPersistentNotifications() {
+    const notifications = this.notifications().filter(
+      (n) => !PERMANENT_NOTIFICATIONS.includes(n.type),
+    );
+
+    return patchState(this, {
+      notifications: notifications,
+    });
+  }
 }
 
 const PRIORITY: NotificationType[] = [

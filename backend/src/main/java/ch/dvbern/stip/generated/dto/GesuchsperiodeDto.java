@@ -30,11 +30,12 @@ public class GesuchsperiodeDto  implements Serializable {
   private @Valid LocalDate gesuchsperiodeStart;
   private @Valid LocalDate gesuchsperiodeStopp;
   private @Valid LocalDate aufschaltterminStart;
+  private @Valid LocalDate aufschaltterminStopp;
+  private @Valid LocalDate einreichefristNormal;
+  private @Valid LocalDate einreichefristReduziert;
   private @Valid GesuchsjahrDto gesuchsjahr;
   private @Valid Integer ausbKostenSekII;
   private @Valid Integer ausbKostenTertiaer;
-  private @Valid LocalDate einreichefristNormal;
-  private @Valid LocalDate einreichefristReduziert;
 
   /**
    **/
@@ -151,7 +152,6 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
    **/
   public GesuchsperiodeDto aufschaltterminStart(LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
@@ -168,6 +168,63 @@ public class GesuchsperiodeDto  implements Serializable {
   @JsonProperty("aufschaltterminStart")
   public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto aufschaltterminStopp(LocalDate aufschaltterminStopp) {
+    this.aufschaltterminStopp = aufschaltterminStopp;
+    return this;
+  }
+
+  
+  @JsonProperty("aufschaltterminStopp")
+  @NotNull
+  public LocalDate getAufschaltterminStopp() {
+    return aufschaltterminStopp;
+  }
+
+  @JsonProperty("aufschaltterminStopp")
+  public void setAufschaltterminStopp(LocalDate aufschaltterminStopp) {
+    this.aufschaltterminStopp = aufschaltterminStopp;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto einreichefristNormal(LocalDate einreichefristNormal) {
+    this.einreichefristNormal = einreichefristNormal;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichefristNormal")
+  @NotNull
+  public LocalDate getEinreichefristNormal() {
+    return einreichefristNormal;
+  }
+
+  @JsonProperty("einreichefristNormal")
+  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
+    this.einreichefristNormal = einreichefristNormal;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeDto einreichefristReduziert(LocalDate einreichefristReduziert) {
+    this.einreichefristReduziert = einreichefristReduziert;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichefristReduziert")
+  @NotNull
+  public LocalDate getEinreichefristReduziert() {
+    return einreichefristReduziert;
+  }
+
+  @JsonProperty("einreichefristReduziert")
+  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
+    this.einreichefristReduziert = einreichefristReduziert;
   }
 
   /**
@@ -229,42 +286,6 @@ public class GesuchsperiodeDto  implements Serializable {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
 
-  /**
-   **/
-  public GesuchsperiodeDto einreichefristNormal(LocalDate einreichefristNormal) {
-    this.einreichefristNormal = einreichefristNormal;
-    return this;
-  }
-
-  
-  @JsonProperty("einreichefristNormal")
-  public LocalDate getEinreichefristNormal() {
-    return einreichefristNormal;
-  }
-
-  @JsonProperty("einreichefristNormal")
-  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
-    this.einreichefristNormal = einreichefristNormal;
-  }
-
-  /**
-   **/
-  public GesuchsperiodeDto einreichefristReduziert(LocalDate einreichefristReduziert) {
-    this.einreichefristReduziert = einreichefristReduziert;
-    return this;
-  }
-
-  
-  @JsonProperty("einreichefristReduziert")
-  public LocalDate getEinreichefristReduziert() {
-    return einreichefristReduziert;
-  }
-
-  @JsonProperty("einreichefristReduziert")
-  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
-    this.einreichefristReduziert = einreichefristReduziert;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -282,16 +303,17 @@ public class GesuchsperiodeDto  implements Serializable {
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiode.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiode.gesuchsperiodeStopp) &&
         Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
+        Objects.equals(this.aufschaltterminStopp, gesuchsperiode.aufschaltterminStopp) &&
+        Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
+        Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
         Objects.equals(this.ausbKostenSekII, gesuchsperiode.ausbKostenSekII) &&
-        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer) &&
-        Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
-        Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert);
+        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer, einreichefristNormal, einreichefristReduziert);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer);
   }
 
   @Override
@@ -306,11 +328,12 @@ public class GesuchsperiodeDto  implements Serializable {
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
+    sb.append("    aufschaltterminStopp: ").append(toIndentedString(aufschaltterminStopp)).append("\n");
+    sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
+    sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
     sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
-    sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
-    sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("}");
     return sb.toString();
   }
