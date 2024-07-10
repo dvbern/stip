@@ -117,6 +117,13 @@ class LebenslaufLuckenlosConstraintValidatorTest {
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
     }
 
+    @Test
+    void lebenslaufLuckenlosYoungerThan16OkTest() {
+        GesuchFormular gesuchFormular = initFormular();
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(15));
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
+    }
+
     @NotNull
     private GesuchFormular initFormularWithLebenslaufItem(LocalDate von, LocalDate bis) {
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
