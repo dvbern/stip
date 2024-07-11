@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTest
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NotificationServiceTest {
+class NotificationServiceTest {
     @Inject
     MockMailbox mailbox;
 
@@ -79,7 +79,7 @@ public class NotificationServiceTest {
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(personInAusbildung.getEmail());
         Mockito.verify(notificationRepositoryMock).persistAndFlush(Mockito.any(Notification.class));
 
-        assertThat(sent.size()).isEqualTo(1);
+        assertThat(sent).hasSize(1);
         assertThat(sent.get(0).getHtml()).contains("Guten Tag ", personInAusbildung.getVorname(), " ", personInAusbildung.getNachname());
     }
 }
