@@ -61,6 +61,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response gesuchEinreichenValidieren(UUID gesuchId) {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
     }
+
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuch(UUID gesuchId) {
