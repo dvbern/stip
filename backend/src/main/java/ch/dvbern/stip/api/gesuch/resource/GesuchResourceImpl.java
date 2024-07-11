@@ -6,7 +6,7 @@ import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryTyp;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -77,8 +77,8 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ GESUCH_READ})
     @Override
-    public Response getGesucheSb(GetGesucheSBQueryTyp getGesucheSBQueryTyp) {
-        return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryTyp)).build();
+    public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
+        return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })

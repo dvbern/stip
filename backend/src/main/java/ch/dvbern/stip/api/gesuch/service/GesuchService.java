@@ -51,7 +51,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryTyp;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -214,9 +214,9 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTyp getGesucheSBQueryTyp) {
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
-        return switch(getGesucheSBQueryTyp){
+        return switch(getGesucheSBQueryType){
             case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
             case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
             case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
