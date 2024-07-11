@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.notification.service;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    private final GesuchRepository gesuchRepository;
 
     @Transactional
     public void createNotification(final NotificationType notificationType, final Gesuch gesuch) {
