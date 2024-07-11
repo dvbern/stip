@@ -1,9 +1,12 @@
 {
   "app-name": "Stipendien Online",
   "sachbearbeitung-app.header.antraege": "Anträge",
-  "sachbearbeitung-app.header.antragDetail": "Antragsdetail",
+  "sachbearbeitung-app.header.tranchenAuswahl": "Gesuch",
   "sachbearbeitung-app.header.administration": "Administration",
-  "sachbearbeitung-app.header.berechnung": "Berechnung",
+  "sachbearbeitung-app.header.verfuegung": "Verfügung",
+  "sachbearbeitung-app.header.aenderungen": "Änderungen",
+  "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
+  "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",
   "sachbearbeitung-app.header.back": "Zurück",
 
   "sachbearbeitung-app.admin.title": "Administration",
@@ -55,6 +58,7 @@
 
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Benutzer",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Benutzer Erstellen",
+  "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Benutzer Bearbeiten",
   "sachbearbeitung-app.admin.benutzerverwaltung.name.label": "Name",
   "sachbearbeitung-app.admin.benutzerverwaltung.vorname.label": "Vorname",
   "sachbearbeitung-app.admin.benutzerverwaltung.email.label": "E-Mail",
@@ -64,6 +68,7 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",
   "sachbearbeitung-app.admin.benutzerverwaltung.overview.roles": "Rollen",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt": "Benutzer wurde erfolgreich erstellt",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet": "Benutzer wurde erfolgreich bearbeitet",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht": "Benutzer wurde erfolgreich gelöscht",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Benutzer löschen",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Wollen Sie die Benutzer \"{{ name }}\" wirklich löschen?",
@@ -182,6 +187,12 @@
   "sachbearbeitung-app.admin.gesuchsperiode.confirmDelete.gesuchsjahr.text": "Wollen Sie das Ausbildungsjahr \"{{ bezeichnungDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
+
+  "sachbearbeitung-app.verfuegung.title": "Verfügung",
+  "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
+  "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}",
+  "sachbearbeitung-app.verfuegung.berechnung.berechnen": "Berechnen",
+  "sachbearbeitung-app.verfuegung.berechnung.resultat": "Resultat",
 
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",

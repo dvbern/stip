@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * ElternDtoSpec
  */
 @JsonPropertyOrder({
   ElternDtoSpec.JSON_PROPERTY_VORNAME,

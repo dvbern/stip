@@ -23,7 +23,7 @@
 
       <!-- search and burgermenu -->
       <div class="d-flex gap-2 align-items-center">
-        <ng-content select=".header-mobile-addons"></ng-content>
+        <ng-content select="[dvHeaderMobileAddons]"></ng-content>
 
         <button class="dv-button-icon" type="button" [attr.aria-label]="'shared.menu' | translate" (click)="openMenu()">
           <span class="material-symbols-rounded">menu</span>
@@ -39,12 +39,12 @@
 
       <!-- top left -->
       <div class="d-flex flex-grow-1 ms-5">
-        <ng-content select=".header-desktop-left"></ng-content>
+        <ng-content select="[dvHeaderDesktopLeft]"></ng-content>
       </div>
 
       <!-- top right -->
       <div class="d-flex flex-grow-1 ms-3 justify-content-end align-items-center">
-        <ng-content select=".header-desktop-right"></ng-content>
+        <ng-content select="[dvHeaderDesktopRight]"></ng-content>
         <dv-shared-ui-language-selector
           class="p-3"
           [language]="languageSig()"
@@ -55,7 +55,7 @@
           <button
             type="button"
             class="btn btn-nav shadow-none fw-normal d-flex align-items-center pe-1"
-            data-testid="button-user-menu"
+            data-testid="header-nav-user-menu"
             [matMenuTriggerFor]="profileMenu"
           >
             <span>{{ benutzerNameSig() }}</span>
@@ -79,7 +79,7 @@
         [language]="languageSig()"
         (languageChange)="handleLanguageChangeHeader($event)"
       />
-      <ng-content select=".mobile-nav-header"></ng-content>
+      <ng-content select="[dvMobileNavHeader]"></ng-content>
     </div>
     <button
       type="button"
@@ -104,6 +104,6 @@
         </li>
       </ul>
     </div>
-    <ng-content select=".mobile-nav-content"></ng-content>
+    <ng-content select="[dvMobileNavContent]"></ng-content>
   </div>
 </ng-template>

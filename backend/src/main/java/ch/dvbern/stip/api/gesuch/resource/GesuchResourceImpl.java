@@ -123,4 +123,10 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response validateGesuchPages(UUID gesuchId) {
         return Response.ok(gesuchService.validatePages(gesuchId)).build();
     }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getBerechnungForGesuch(UUID gesuchId) {
+        return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
+    }
 }

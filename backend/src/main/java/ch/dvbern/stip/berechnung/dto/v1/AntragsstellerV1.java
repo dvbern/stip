@@ -46,11 +46,10 @@ public class AntragsstellerV1 {
           final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
           final var partner = gesuchFormular.getPartner();
           final var einnahmenKosten = gesuchFormular.getEinnahmenKosten();
-
-          return new AntragsstellerV1Builder()
+          final var antragsstellerBuilder = new AntragsstellerV1Builder();
+          antragsstellerBuilder
               .tertiaerstufe(false)
               .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
-              .einkommenPartner(partner.getJahreseinkommen() != null ? partner.getJahreseinkommen() : 0)
               .alimente(einnahmenKosten.getAlimente() != null ? einnahmenKosten.getAlimente() : 0)
               .rente(einnahmenKosten.getRenten() != null ? einnahmenKosten.getRenten() : 0)
               .kinderAusbildungszulagen(einnahmenKosten.getZulagen() != null ? einnahmenKosten.getZulagen() : 0)
@@ -65,15 +64,21 @@ public class AntragsstellerV1 {
               .steuern(0)
               .steuernKonkubinatspartner(0)
               .fahrkosten(einnahmenKosten.getFahrkosten())
-              .fahrkostenPartner(partner.getFahrkosten() != null ? partner.getFahrkosten() : 0)
               .verpflegung(0)
-              .verpflegungPartner(partner.getVerpflegungskosten() != null ? partner.getVerpflegungskosten() : 0)
               .fremdbetreuung(0)
               .anteilFamilienbudget(0)
               .lehre(true)
               .eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT)
-              .abgeschlosseneErstausbildung(true)
-              .build();
+              .abgeschlosseneErstausbildung(true);
+
+          if (partner != null) {
+              antragsstellerBuilder
+                  .einkommenPartner(partner.getJahreseinkommen() != null ? partner.getJahreseinkommen() : 0)
+                  .fahrkostenPartner(partner.getFahrkosten() != null ? partner.getFahrkosten() : 0)
+                  .verpflegungPartner(partner.getVerpflegungskosten() != null ? partner.getVerpflegungskosten() : 0);
+          }
+
+          return antragsstellerBuilder.build();
       }
 
       public static AntragsstellerV1 withDefaults() {

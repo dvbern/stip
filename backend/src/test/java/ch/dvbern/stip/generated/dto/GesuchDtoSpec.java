@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * GesuchDtoSpec
  */
 @JsonPropertyOrder({
   GesuchDtoSpec.JSON_PROPERTY_FALL,
@@ -157,7 +157,7 @@ public class GesuchDtoSpec {
   }
 
    /**
-   * 
+   * Get gesuchNummer
    * @return gesuchNummer
   **/
   @jakarta.annotation.Nonnull

@@ -83,7 +83,7 @@ export class GlobalNotificationsComponent {
     this.router.events
       .pipe(filter(byNavigationEnd), takeUntilDestroyed())
       .subscribe(() => {
-        this.store.clearUnimportantNotifications();
+        this.store.clearPersistentNotifications();
       });
   }
 

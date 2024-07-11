@@ -1,21 +1,18 @@
 <dv-shared-pattern-app-header [closeMenu]="closeMenu">
-  <div class="header-desktop-left d-flex gap-3 align-items-center">
+  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <div class="active btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
       <i class="material-symbols-rounded text-white me-2">list</i>
       <span>{{ 'sachbearbeitung-app.header.antraege' | translate }}</span>
     </div>
-  </div>
-  <div class="header-desktop-left d-flex gap-3 align-items-center ms-4">
     <a
       routerLink="/administration"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-step-nav-overview"
+      data-testid="gesuch-step-nav-administration"
     >
       <i class="material-symbols-rounded text-white me-2">settings</i>
       <span>{{ 'sachbearbeitung-app.header.administration' | translate }}</span>
     </a>
   </div>
-  <dv-shared-ui-search class="header-desktop-right col-auto align-self-center"></dv-shared-ui-search>
 </dv-shared-pattern-app-header>
 
 <!-- MAIN CONTENT -->

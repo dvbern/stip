@@ -38,6 +38,19 @@ export const appRoutes: Route[] = [
         (m) => m.sachbearbeitungAppFeatureGesuchFormRoutes,
       ),
   },
+  {
+    path: 'verfuegung',
+    canActivate: [hasBenutzer],
+    title: 'sachbearbeitung-app.verfuegung.title',
+    loadComponent: () =>
+      import('@dv/sachbearbeitung-app/feature/verfuegung').then(
+        (m) => m.SachbearbeitungAppFeatureVerfuegungComponent,
+      ),
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/verfuegung').then(
+        (m) => m.sachbearbeitungAppFeatureVerfuegungRoutes,
+      ),
+  },
 ];
 
 export const routes: Route[] = [

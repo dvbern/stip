@@ -11,9 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("TenantAuthConfig")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -44,7 +42,6 @@ public class TenantAuthConfigDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public TenantAuthConfigDto realm(String realm) {
     this.realm = realm;

@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -49,6 +50,11 @@ public interface GesuchResource {
     @Path("/all/sb")
     @Produces({ "application/json", "text/plain" })
     Response getAllGesucheSb();
+
+    @GET
+    @Path("/{gesuchId}/berechnung")
+    @Produces({ "application/json", "text/plain" })
+    Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}")

@@ -53,7 +53,7 @@ public class PlzDtoSpec {
   }
 
    /**
-   * 
+   * Get plz
    * @return plz
   **/
   @jakarta.annotation.Nonnull
@@ -79,7 +79,7 @@ public class PlzDtoSpec {
   }
 
    /**
-   * 
+   * Get ort
    * @return ort
   **/
   @jakarta.annotation.Nonnull
@@ -105,7 +105,7 @@ public class PlzDtoSpec {
   }
 
    /**
-   * 
+   * Get kantonskuerzel
    * @return kantonskuerzel
   **/
   @jakarta.annotation.Nonnull

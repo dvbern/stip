@@ -132,6 +132,7 @@ export const loadGesuch = createEffect(
   ) => {
     return actions$.pipe(
       ofType(
+        SharedDataAccessGesuchEvents.loadGesuch,
         SharedEventGesuchFormPartner.init,
         SharedEventGesuchFormPerson.init,
         SharedEventGesuchFormEducation.init,
@@ -161,7 +162,8 @@ export const loadGesuch = createEffect(
               handleNotFound((error) => {
                 globalNotifications.createNotification({
                   type: 'ERROR',
-                  messageKey: 'gesuch-app.gesuch.not-found-redirection',
+                  messageKey:
+                    'shared.genericError.gesuch-not-found-redirection',
                   content: error,
                 });
                 router.navigate(['/'], { replaceUrl: true });

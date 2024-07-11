@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * AusbildungsgangUpdateDtoSpec
  */
 @JsonPropertyOrder({
   AusbildungsgangUpdateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
@@ -58,7 +58,7 @@ public class AusbildungsgangUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get bezeichnungDe
    * @return bezeichnungDe
   **/
   @jakarta.annotation.Nonnull
@@ -84,7 +84,7 @@ public class AusbildungsgangUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get bezeichnungFr
    * @return bezeichnungFr
   **/
   @jakarta.annotation.Nonnull
