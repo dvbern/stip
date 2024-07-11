@@ -11,9 +11,6 @@
  */
 import { SachbearbeiterZuordnungStammdaten } from './sachbearbeiterZuordnungStammdaten';
 
-/**
- * 
- */
 export interface SachbearbeiterZuordnungStammdatenList { 
     sachbearbeiter?: string;
     zuordnung?: SachbearbeiterZuordnungStammdaten;

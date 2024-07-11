@@ -10,14 +10,8 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export interface BenutzereinstellungenUpdate { 
     id?: string;
-    /**
-     * 
-     */
     digitaleKommunikation?: boolean;
 }
 

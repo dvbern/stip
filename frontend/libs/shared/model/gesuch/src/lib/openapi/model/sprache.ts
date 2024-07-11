@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export type Sprache = 'DEUTSCH' | 'FRANZOESISCH';
 
 export const Sprache = {
