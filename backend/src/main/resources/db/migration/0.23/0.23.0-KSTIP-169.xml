@@ -38,6 +38,6 @@
     </createIndex>
   </changeSet>
   <changeSet author="jafa (generated)" id="1720624819861-4">
-    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="notification" constraintName="FKk6gxtq9gu0jodav5nvjxk0c2o" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="notification" constraintName="FK_notification_gesuch" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
   </changeSet>
 </databaseChangeLog>

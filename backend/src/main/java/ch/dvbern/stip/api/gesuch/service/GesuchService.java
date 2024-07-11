@@ -39,7 +39,6 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -54,6 +53,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -89,7 +89,7 @@ public class GesuchService {
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
-    private final ConfigService configService;
+    private final NotificationService notificationService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -243,6 +243,8 @@ public class GesuchService {
     public void deleteGesuch(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         preventUpdateVonGesuchIfReadOnly(gesuch);
+        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
+        notificationService.deleteNotificationsForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
     }
 
