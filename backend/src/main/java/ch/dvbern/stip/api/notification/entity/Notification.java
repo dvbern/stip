@@ -5,7 +5,9 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,11 +28,15 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class Notification extends AbstractMandantEntity {
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "notification_type")
     private NotificationType notificationType;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuch_id", nullable = false)
+    @JoinColumn(
+        name = "gesuch_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "FK_notification_gesuch")
+    )
     private Gesuch gesuch;
 }
