@@ -353,7 +353,7 @@ public class GesuchsperiodeDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbKostenSekII
    * @return ausbKostenSekII
   **/
   @jakarta.annotation.Nonnull
@@ -379,7 +379,7 @@ public class GesuchsperiodeDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbKostenTertiaer
    * @return ausbKostenTertiaer
   **/
   @jakarta.annotation.Nonnull

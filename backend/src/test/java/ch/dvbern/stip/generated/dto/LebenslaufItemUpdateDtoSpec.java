@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * LebenslaufItemUpdateDtoSpec
  */
 @JsonPropertyOrder({
   LebenslaufItemUpdateDtoSpec.JSON_PROPERTY_ID,
@@ -219,7 +219,7 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbildungAbgeschlossen
    * @return ausbildungAbgeschlossen
   **/
   @jakarta.annotation.Nullable

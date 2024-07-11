@@ -26,7 +26,6 @@ public class AusbildungsstaetteAnyOfDto  implements Serializable {
   private @Valid List<AusbildungsgangDto> ausbildungsgaenge;
 
   /**
-   * 
    **/
   public AusbildungsstaetteAnyOfDto ausbildungsgaenge(List<AusbildungsgangDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;

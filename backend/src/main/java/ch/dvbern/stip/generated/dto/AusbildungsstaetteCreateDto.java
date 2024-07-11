@@ -23,7 +23,6 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   private @Valid String nameFr;
 
   /**
-   * 
    **/
   public AusbildungsstaetteCreateDto nameDe(String nameDe) {
     this.nameDe = nameDe;
@@ -43,7 +42,6 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsstaetteCreateDto nameFr(String nameFr) {
     this.nameFr = nameFr;

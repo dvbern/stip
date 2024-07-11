@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { SachbearbeitungAppPatternAdministrationLayoutComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-step-layout';
+import { SachbearbeitungAppPatternGesuchStepLayoutComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-step-layout';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
@@ -9,7 +9,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
   standalone: true,
   imports: [
     SharedUiRouterOutletWrapperComponent,
-    SachbearbeitungAppPatternAdministrationLayoutComponent,
+    SachbearbeitungAppPatternGesuchStepLayoutComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

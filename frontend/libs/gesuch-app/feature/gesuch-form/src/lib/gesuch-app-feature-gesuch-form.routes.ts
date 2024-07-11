@@ -160,4 +160,8 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
         (m) => m.gesuchAppFeatureGesuchFormAbschlussRoutes,
       ),
   },
+  {
+    path: ':id',
+    redirectTo: PERSON.route + '/:id',
+  },
 ];

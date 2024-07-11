@@ -26,6 +26,7 @@ import {
 } from '@dv/shared/data-access/language';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
+import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
@@ -45,6 +46,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
     SharedUiIconChipComponent,
     SharedUiLanguageSelectorComponent,
     GesuchAppPatternMainLayoutComponent,
+    SharedPatternAppHeaderPartsDirective,
     RouterLink,
     RouterLinkActive,
   ],

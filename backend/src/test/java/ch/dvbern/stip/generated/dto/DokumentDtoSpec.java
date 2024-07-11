@@ -196,7 +196,7 @@ public class DokumentDtoSpec {
   }
 
    /**
-   * 
+   * Get objectId
    * @return objectId
   **/
   @jakarta.annotation.Nonnull

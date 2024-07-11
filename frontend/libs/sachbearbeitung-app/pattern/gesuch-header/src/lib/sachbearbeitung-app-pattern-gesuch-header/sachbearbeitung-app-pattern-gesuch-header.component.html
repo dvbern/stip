@@ -1,0 +1,82 @@
+<dv-shared-pattern-app-header
+  [closeMenu]="navClickedSig()"
+  [backLink]="{
+    path: '/',
+    text: 'sachbearbeitung-app.header.back' | translate
+  }"
+>
+  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+    <!-- Gesuch -->
+    <button
+      type="button"
+      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-header-nav-tranche-auswahl"
+      routerLinkActive="active"
+      [class.active]="isGesuchRouteSig()"
+      [matMenuTriggerFor]="gesuchMenu"
+    >
+      <i class="material-symbols-rounded text-white me-2">checklist</i>
+      <span>{{ 'sachbearbeitung-app.header.tranchenAuswahl' | translate }}</span>
+      <i class="material-symbols-rounded ms-2">expand_more</i>
+    </button>
+    <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
+      @if (currentGesuchSig(); as currentGesuch) {
+        <a
+          [routerLink]="['/', 'gesuch', currentGesuch.id]"
+          class="btn btn-light btn-nav active fw-normal px-3 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-overview"
+          mat-menu-item
+        >
+          <span>
+            {{
+              'sachbearbeitung-app.header.tranche.item'
+                | translate: { date: currentGesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.YYYY', index: 1 }
+            }}
+            -
+            {{ currentGesuch.gesuchsperiode.gesuchsperiodeStopp | date: 'MM.YYYY' }}
+          </span>
+        </a>
+      }
+    </mat-menu>
+
+    <!-- Verfuegung -->
+    <a
+      [routerLink]="['/', 'verfuegung', currentGesuchSig()?.id]"
+      routerLinkActive="active"
+      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-header-nav-verfuegung"
+      [class.disabled]="!currentGesuchSig()"
+    >
+      <i class="material-symbols-rounded text-white me-2">equal</i>
+      <span>{{ 'sachbearbeitung-app.header.verfuegung' | translate }}</span>
+    </a>
+
+    <!-- Änderungen -->
+    <button
+      type="button"
+      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-header-nav-aenderungen"
+      routerLinkActive="active"
+      disabled
+      [matMenuTriggerFor]="aenderungenMenu"
+    >
+      <i class="material-symbols-rounded text-white me-2">info</i>
+      <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
+    </button>
+    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'"> </mat-menu>
+
+    <!-- Separator -->
+    <div class="my-1 text-body-tertiary vr"></div>
+
+    <!-- Tranche erstellen -->
+    <a
+      routerLink="/"
+      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-header-nav-tranche-erstellen"
+    >
+      <i class="material-symbols-rounded text-white me-2">add_circle</i>
+      <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
+    </a>
+  </div>
+  <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
+</dv-shared-pattern-app-header>

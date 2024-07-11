@@ -2,7 +2,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import {
+  SharedPatternAppHeaderComponent,
+  SharedPatternAppHeaderPartsDirective,
+} from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 
@@ -13,6 +16,7 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
     RouterLink,
     RouterLinkActive,
     SharedPatternAppHeaderComponent,
+    SharedPatternAppHeaderPartsDirective,
     SharedUiSearchComponent,
     TranslateModule,
     GlobalNotificationsComponent,

@@ -13,7 +13,7 @@ export class NavigationPO {
     this.elems = {
       page,
       navLinkDashboard: page.getByTestId('gesuch-step-nav-dashboard'),
-      buttonUserMenu: page.getByTestId('button-user-menu'),
+      buttonUserMenu: page.getByTestId('header-nav-user-menu'),
       buttonLogout: page.getByTestId('button-logout'),
       buttonProfile: page.getByTestId('button-profile'),
     };
