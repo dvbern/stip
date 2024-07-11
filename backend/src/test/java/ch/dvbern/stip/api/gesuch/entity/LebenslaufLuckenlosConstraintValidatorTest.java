@@ -28,18 +28,19 @@ class LebenslaufLuckenlosConstraintValidatorTest {
     void isLebenslaufLuckenlosOkTest() {
         GesuchFormular gesuchFormular = initFormular();
         LebenslaufItem lebenslaufItem = createLebenslaufItem(
-            LocalDate.of(2016, 8, 1),
-            LocalDate.of(2023, 12, 31)
+            gesuchFormular.getPersonInAusbildung().getGeburtsdatum(),
+            gesuchFormular.getAusbildung().getAusbildungBegin()
         );
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
         gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
             , is(true));
-        lebenslaufItem.setBis(LocalDate.of(2022, 11, 30));
+        final var lebenslaufItemZweiStart = LocalDate.of(2022, 11, 30);
+        lebenslaufItem.setBis(lebenslaufItemZweiStart);
         LebenslaufItem lebenslaufItemZwei = createLebenslaufItem(
-            LocalDate.of(2022, 8, 1),
-            LocalDate.of(2023, 12, 31)
+            lebenslaufItemZweiStart,
+            gesuchFormular.getAusbildung().getAusbildungBegin()
         );
         lebenslaufItemSet.clear();
         lebenslaufItemSet.add(lebenslaufItem);
@@ -120,7 +121,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
     @Test
     void lebenslaufLuckenlosYoungerThan16OkTest() {
         GesuchFormular gesuchFormular = initFormular();
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(15));
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(gesuchFormular.getAusbildung().getAusbildungBegin().minusYears(15));
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
     }
 
