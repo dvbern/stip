@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.repo;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -84,52 +83,10 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query;
     }
 
-
-    public Stream<Gesuch> findZugewiesenIgnoreStatusFilteredForSb(final UUID sachbearbeiterId) {
-        final var query = getFindAlleQuery();
-        return prepareFilterForSBJoinQuery(query, sachbearbeiterId).stream();
-    }
-
-    public Stream<Gesuch> findZugewiesenFilteredForSb(final UUID sachbearbeiterId) {
-        final var query = findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT));
-        return prepareFilterForSBJoinQuery(query, sachbearbeiterId).stream();
-    }
-
-    public Stream<Gesuch> findAllFilteredForSb() {
-        return findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT)).stream();
-    }
-
-    public Stream<Gesuch> findAllIgnoreStatusFilteredForSb() {
-        return getFindAlleQuery().stream();
-    }
-
-    private JPAQuery<Gesuch> prepareFilterForSBJoinQuery(JPAQuery<Gesuch> initialQuery, UUID sachbearbeiterId) {
-        final var gesuch = QGesuch.gesuch;
-        final var zuordnung = QZuordnung.zuordnung;
-
-        initialQuery
-            .join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
-            .where(zuordnung.sachbearbeiter.id.eq(sachbearbeiterId));
-
-        return initialQuery;
-    }
-
     private JPAQuery<Gesuch> getFindAlleQuery() {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
         return queryFactory.selectFrom(gesuch);
-    }
-
-    private JPAQuery<Gesuch> findFilteredForSbPrepareQuery(List<Gesuchstatus> gesuchstatusList) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
-        final var gesuch = QGesuch.gesuch;
-        JPAQuery<Gesuch> query = queryFactory.selectFrom(gesuch);
-
-        for (final Gesuchstatus gesuchstatus : gesuchstatusList) {
-            query = query.where(gesuch.gesuchStatus.notIn(gesuchstatus));
-        }
-
-        return query;
     }
 
     public Stream<Gesuch> findAllForFall(UUID fallId) {
