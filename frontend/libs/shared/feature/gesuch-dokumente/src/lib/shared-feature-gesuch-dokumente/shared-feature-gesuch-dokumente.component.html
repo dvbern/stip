@@ -75,12 +75,29 @@
                       </span>
                     </button>
                   </ng-container>
-                  <dv-shared-ui-icon-badge *dvIfGesuchsteller type="info" class="status">
-                    {{ 'shared.dokumente.dokumentStatus.PENDING' | translate }}
-                  </dv-shared-ui-icon-badge>
+
+                  <ng-container *dvIfGesuchsteller>
+                    @switch (dokument?.gesuchDokument.status) {
+                      @case (DokumentStatus.AKZEPTIERT) {
+                        <dv-shared-ui-icon-badge type="success" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                      @case (DokumentStatus.AUSSTEHEND) {
+                        <dv-shared-ui-icon-badge type="warning" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                      @case (DokumentStatus.ABGELEHNT) {
+                        <dv-shared-ui-icon-badge type="danger" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                    }
+                  </ng-container>
                 } @else {
                   <dv-shared-ui-icon-badge type="warning" class="status">
-                    {{ 'shared.dokumente.dokumentStatus.MISSING' | translate }}
+                    {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND' | translate }}
                   </dv-shared-ui-icon-badge>
                 }
               </div>

@@ -2,12 +2,11 @@ import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   DokumentService,
-  DokumentServiceGesuchDokumentAblehnenRequestParams,
   DokumentTyp,
   GesuchDokument,
   GesuchService,
@@ -44,28 +43,45 @@ export class DokumentsStore extends signalStore(
     () => this.requiredDocumentTypes.data() ?? [],
   );
 
-  gesuchDokumentAblehnen$ =
-    rxMethod<DokumentServiceGesuchDokumentAblehnenRequestParams>(
-      pipe(
-        switchMap((req) => {
-          return this.dokumentService.gesuchDokumentAblehnen$(req);
-        }),
-        handleApiResponse((rd) => rd, {
-          onSuccess: () => {
-            this.globalNotificationStore.createSuccessNotification({
-              messageKey: 'shared.dokumente.reject.success',
-            });
-          },
-        }),
+  // error handling
+  gesuchDokumentAblehnen$ = rxMethod<{
+    gesuchId: string;
+    gesuchDokumentId: string;
+    kommentar: string;
+  }>(
+    pipe(
+      switchMap(({ gesuchId, gesuchDokumentId, kommentar }) =>
+        this.dokumentService
+          .gesuchDokumentAblehnen$({
+            gesuchDokumentId,
+            gesuchDokumentAblehnenRequest: {
+              kommentar,
+            },
+          })
+          .pipe(
+            switchMap(() =>
+              this.gesuchService.getGesuchDokumente$({
+                gesuchId,
+              }),
+            ),
+            handleApiResponse((dokuments) => patchState(this, { dokuments }), {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.reject.success',
+                });
+              },
+            }),
+          ),
       ),
-    );
+    ),
+  );
 
   gesuchDokumentAkzeptieren$ = rxMethod<{
     gesuchId: string;
     gesuchDokumentId: string;
   }>(
     pipe(
-      exhaustMap(({ gesuchDokumentId, gesuchId }) => {
+      switchMap(({ gesuchDokumentId, gesuchId }) => {
         return this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
