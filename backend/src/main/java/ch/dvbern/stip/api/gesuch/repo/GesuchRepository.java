@@ -87,23 +87,23 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Stream<Gesuch> findZugewiesenIgnoreStatusFilteredForSb(final UUID sachbearbeiterId) {
         final var query = getFindAlleQuery();
-        return prepareFilterForSBJoinQuery(query,sachbearbeiterId).stream();
+        return prepareFilterForSBJoinQuery(query, sachbearbeiterId).stream();
     }
 
     public Stream<Gesuch> findZugewiesenFilteredForSb(final UUID sachbearbeiterId) {
         final var query = findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT));
-            return prepareFilterForSBJoinQuery(query,sachbearbeiterId).stream();
+        return prepareFilterForSBJoinQuery(query, sachbearbeiterId).stream();
     }
 
     public Stream<Gesuch> findAllFilteredForSb() {
         return findFilteredForSbPrepareQuery(List.of(Gesuchstatus.IN_BEARBEITUNG_GS, Gesuchstatus.EINGEREICHT)).stream();
     }
 
-    public Stream<Gesuch> findAllIgnoreStatusFilteredForSb(){
+    public Stream<Gesuch> findAllIgnoreStatusFilteredForSb() {
         return getFindAlleQuery().stream();
     }
 
-    private JPAQuery<Gesuch> prepareFilterForSBJoinQuery(JPAQuery<Gesuch> initialQuery,UUID sachbearbeiterId){
+    private JPAQuery<Gesuch> prepareFilterForSBJoinQuery(JPAQuery<Gesuch> initialQuery, UUID sachbearbeiterId) {
         final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
 
@@ -114,7 +114,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return initialQuery;
     }
 
-    private JPAQuery<Gesuch> getFindAlleQuery(){
+    private JPAQuery<Gesuch> getFindAlleQuery() {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
         return queryFactory.selectFrom(gesuch);
