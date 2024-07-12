@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -841,75 +841,243 @@ class GesuchServiceTest {
         );
     }
 
-    private SteuerdatenUpdateDto createSteuerdatenUpdateDto(SteuerdatenTyp typ) {
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = new SteuerdatenUpdateDto();
-        steuerdatenUpdateDto1.setId(UUID.randomUUID());
-        steuerdatenUpdateDto1.setSteuerdatenTyp(typ);
-        steuerdatenUpdateDto1.setVeranlagungscode(5);
-        steuerdatenUpdateDto1.setSteuerjahr(2010);
-        steuerdatenUpdateDto1.setFahrkosten(0);
-        steuerdatenUpdateDto1.setEigenmietwert(0);
-        steuerdatenUpdateDto1.setErgaenzungsleistungen(0);
-        steuerdatenUpdateDto1.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenUpdateDto1.setKinderalimente(0);
-        steuerdatenUpdateDto1.setSteuernBund(0);
-        steuerdatenUpdateDto1.setSteuernStaat(0);
-        steuerdatenUpdateDto1.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto1.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto1.setVerpflegung(0);
-        steuerdatenUpdateDto1.setVermoegen(0);
-        return steuerdatenUpdateDto1;
+    private SteuerdatenUpdateDto initSteuerdatenUpdateDto(SteuerdatenTyp typ) {
+        SteuerdatenUpdateDto steuerdatenUpdateDto = new SteuerdatenUpdateDto();
+        steuerdatenUpdateDto.setId(UUID.randomUUID());
+        steuerdatenUpdateDto.setSteuerdatenTyp(typ);
+        steuerdatenUpdateDto.setVeranlagungscode(5);
+        steuerdatenUpdateDto.setSteuerjahr(2010);
+        steuerdatenUpdateDto.setFahrkosten(0);
+        steuerdatenUpdateDto.setEigenmietwert(0);
+        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
+        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdatenUpdateDto.setKinderalimente(0);
+        steuerdatenUpdateDto.setSteuernBund(0);
+        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setTotalEinkuenfte(0);
+        steuerdatenUpdateDto.setTotalEinkuenfte(0);
+        steuerdatenUpdateDto.setVerpflegung(0);
+        steuerdatenUpdateDto.setVermoegen(0);
+        return steuerdatenUpdateDto;
     }
+    /*
+    testfälle
+
+    sb
+    veranlagungscode null -> 0?
+    steuerjahr null -> vorjahr steuerjahr?
+
+    veranlagunscode 5 -> 5
+    steuerjahr 2010 -> 2010
+
+    gs
+    veranlagungscode null -> 0
+    steuerjahr null -> vorjahr steuerjahr
+
+    veranlagunscode 5 -> 0/db
+    steuerjahr 2010 -> vorjahr/db
+
+     */
 
     @Test
     @TestAsGesuchsteller
-    void gesuchUpdateSteuerdatenDefaultValuesTest_newEntries() {
+    void gesuchUpdateSteuerdatenSetDefaultValuesTest_NonNullValues() {
         GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
         var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
         GesuchUpdateDto gesuchUpdateDto = createGesuch();
-        //init steuerdaten
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
-        SteuerdatenUpdateDto steuerdatenUpdateDto1 = createSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
+        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
+        steuerdatenUpdateDto1.setSteuerjahr(null);
+        steuerdatenUpdateDto1.setVeranlagungscode(null);
 
-
-        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  createSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        steuerdatenUpdateDto2.setSteuerjahr(null);
+        steuerdatenUpdateDto2.setVeranlagungscode(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto2);
-
-
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(new FamiliensituationUpdateDto());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
-
-
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
 
-        /*
-        Steuerdaten steuerdatenTab1 = new Steuerdaten();
-        steuerdatenTab1.setVeranlagungsCode(null);
-        steuerdatenTab1.setSteuerjahr(null);
-        Steuerdaten steuerdatenTab2 = new Steuerdaten();
-        steuerdatenTab1.setVeranlagungsCode(null);
-        steuerdatenTab2.setSteuerjahr(null);
-        tranche.getGesuchFormular().getSteuerdaten().add(steuerdatenTab1);
-        tranche.getGesuchFormular().getSteuerdaten().add(steuerdatenTab2);
-         */
+        //update values with non-null values
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(2010);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(5);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(2010);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setVeranlagungscode(5);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        //todo: steuerdaten tab daten ausfüllen bis valid
         gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
-        //todo: add somehow in tranche.getGesuch...
+
         final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
         assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
         assertThat(
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuerjahr(),
+            steuerdatenTab.getSteuerjahr(),
             Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
         );
+    }
 
+    @Test
+    @TestAsGesuchsteller
+    void gesuchUpdateSteuerdatenTest_NonNullValues() {
+        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
+        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
+        steuerdatenUpdateDto1.setSteuerjahr(2010);
+        steuerdatenUpdateDto1.setVeranlagungscode(5);
+
+        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        steuerdatenUpdateDto2.setSteuerjahr(2010);
+        steuerdatenUpdateDto2.setVeranlagungscode(5);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto2);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(new FamiliensituationUpdateDto());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        //update values with non-null values
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(0);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(0);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(0);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setVeranlagungscode(0);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+
+        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
+        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(5));
+        assertThat(
+            steuerdatenTab.getSteuerjahr(),
+            Matchers.equalTo(2010)
+        );
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    void gesuchUpdateSteuerdatenSetDefaultValuesTest_SBNonNullValues() {
+        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
+        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
+        steuerdatenUpdateDto1.setSteuerjahr(null);
+        steuerdatenUpdateDto1.setVeranlagungscode(null);
+
+        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        steuerdatenUpdateDto2.setSteuerjahr(null);
+        steuerdatenUpdateDto2.setVeranlagungscode(null);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto2);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(new FamiliensituationUpdateDto());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        //update values with non-null values
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(2010);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(5);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(2010);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setVeranlagungscode(5);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+
+        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
+        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(5));
+        assertThat(
+            steuerdatenTab.getSteuerjahr(),
+            Matchers.equalTo(2010)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void gesuchUpdateSteuerdatenSetDefaultValuesTest_NullValues() {
+        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
+        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
+        steuerdatenUpdateDto1.setSteuerjahr(null);
+        steuerdatenUpdateDto1.setVeranlagungscode(null);
+
+        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        steuerdatenUpdateDto2.setSteuerjahr(null);
+        steuerdatenUpdateDto2.setVeranlagungscode(null);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto2);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(new FamiliensituationUpdateDto());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        //set null values
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setVeranlagungscode(null);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+
+        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
+        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
+        assertThat(
+            steuerdatenTab.getSteuerjahr(),
+            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void gesuchUpdateSteuerdatenSetDefaultValuesTest_SBNullValues() {
+        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
+        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
+        steuerdatenUpdateDto1.setSteuerjahr(null);
+        steuerdatenUpdateDto1.setVeranlagungscode(null);
+
+        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        steuerdatenUpdateDto2.setSteuerjahr(null);
+        steuerdatenUpdateDto2.setVeranlagungscode(null);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto2);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(new FamiliensituationUpdateDto());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getFamiliensituation().setElternVerheiratetZusammen(false);
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        //set null values
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setVeranlagungscode(null);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+
+        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
+        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
+        assertThat(
+            steuerdatenTab.getSteuerjahr(),
+            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
     }
 
     @Test

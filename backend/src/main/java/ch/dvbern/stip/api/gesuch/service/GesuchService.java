@@ -147,7 +147,6 @@ public class GesuchService {
 
         final var steuerdaten = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream().filter(x -> x.getSteuerdatenTyp() != null).toList();
 
-        int count = 0;
         for(Iterator<SteuerdatenUpdateDto> i = steuerdatenUpdateDtos.iterator(); i.hasNext();){
             SteuerdatenUpdateDto currentSteuerdatenUpdateDto = i.next();
             if(steuerdaten.stream().filter(x -> x.getId().equals(currentSteuerdatenUpdateDto.getId())).findFirst() != null){
@@ -156,11 +155,10 @@ public class GesuchService {
             }else{
                 setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, null, gesuchsjahr);
             }
-            count++;
         }
     }
-
-    private void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto, final Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr){
+    @Transactional
+    public void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto, final Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr){
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -225,7 +223,7 @@ public class GesuchService {
                 trancheToUpdate
             );
         }
-        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null || gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().size() > 0){
+        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null || !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()){
                 setAndValidateSteuerdatenUpdateLegality(
                     gesuchUpdateDto
                         .getGesuchTrancheToWorkWith()
