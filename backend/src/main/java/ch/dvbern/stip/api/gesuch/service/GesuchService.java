@@ -18,14 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,7 +49,6 @@ import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -148,68 +140,23 @@ public class GesuchService {
 
     @Transactional
     public void setAndValidateSteuerdatenUpdateLegality(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, final GesuchTranche trancheToUpdate) {
-        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
-            .getRollen()
-            .stream()
-            .map(Rolle::getKeycloakIdentifier)
-            .collect(Collectors.toSet());
-
         final var gesuchsjahr = trancheToUpdate
             .getGesuch()
             .getGesuchsperiode()
             .getGesuchsjahr();
-        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
-        Integer veranlagungsCodeToSet = 0;
-        final var steuerdaten = trancheToUpdate.getGesuchFormular().getSteuerdaten();
-        steuerdatenUpdateDtos.stream().filter(x -> x.getSteuerdatenTyp() == SteuerdatenTyp.VATER && x.get).for
+        final var steuerdaten = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream().filter(x -> x.getSteuerdatenTyp() != null).toList();
 
-        int currentTabIndex = 0;
-
-        while(steuerdatenUpdateDtos.iterator().hasNext()){
-            SteuerdatenUpdateDto currentSteuerdatenUpdateDto = steuerdatenUpdateDtos.iterator().next();
-            Steuerdaten currentSteuerdaten = steuerdaten.stream().toList().get(currentTabIndex);
-
-            if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
-                if(steuerdaten.isEmpty()){
-                    return;
-                }
-                while(steuerdaten.iterator().hasNext()){
-                    final var steuerdatenTab = steuerdaten.iterator().next();
-                    steuerjahrToSet = Objects.requireNonNullElse(
-                        steuerdatenTab.getSteuerjahr(),
-                        steuerjahrToSet
-                    );
-                    veranlagungsCodeToSet = Objects.requireNonNullElse(
-                        steuerdatenTab.getVeranlagungsCode(),
-                        veranlagungsCodeToSet
-                    );
-                }
-            } else {
-                if (currentSteuerdatenUpdateDto.getSteuerjahr() == null) {
-                    if (currentSteuerdaten != null) {
-                        steuerjahrToSet = Objects.requireNonNullElse(
-                            currentSteuerdaten.getSteuerjahr(),
-                            steuerjahrToSet
-                        );
-                    }
-                } else {
-                    steuerjahrToSet = currentSteuerdatenUpdateDto.getSteuerjahr();
-                }
-                if (currentSteuerdatenUpdateDto.getVeranlagungscode() == null) {
-                    if (currentSteuerdaten != null) {
-                        veranlagungsCodeToSet = Objects.requireNonNullElse(
-                            currentSteuerdaten.getVeranlagungsCode(),
-                            veranlagungsCodeToSet
-                        );
-                    }
-                } else {
-                    veranlagungsCodeToSet = currentSteuerdatenUpdateDto.getVeranlagungscode();
-                }
+        int count = 0;
+        for(Iterator<SteuerdatenUpdateDto> i = steuerdatenUpdateDtos.iterator(); i.hasNext();){
+            SteuerdatenUpdateDto currentSteuerdatenUpdateDto = i.next();
+            if(steuerdaten.stream().filter(x -> x.getId().equals(currentSteuerdatenUpdateDto.getId())).findFirst() != null){
+                Steuerdaten currentSteuerdaten = steuerdaten.stream().filter(x -> x.getId().equals(currentSteuerdatenUpdateDto.getId())).findFirst().get();
+                setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, currentSteuerdaten, gesuchsjahr);
+            }else{
+                setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, null, gesuchsjahr);
             }
-            currentSteuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
-            currentSteuerdatenUpdateDto.setVeranlagungscode(veranlagungsCodeToSet);
-            currentTabIndex++;
+            count++;
         }
     }
 
@@ -279,15 +226,12 @@ public class GesuchService {
             );
         }
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null || gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().size() > 0){
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().forEach(steuerdaten -> {
                 setAndValidateSteuerdatenUpdateLegality(
                     gesuchUpdateDto
                         .getGesuchTrancheToWorkWith()
                         .getGesuchFormular()
                         .getSteuerdaten(),
-                    trancheToUpdate
-                );
-            });
+                    trancheToUpdate);
         }
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 

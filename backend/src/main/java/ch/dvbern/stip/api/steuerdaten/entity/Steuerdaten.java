@@ -70,16 +70,14 @@ public class Steuerdaten extends AbstractEntity {
     @Column(name = "fahrkosten", nullable = false)
     private Integer fahrkosten;
 
-    @NotNull
-    @Column(name = "fahrkostenPartner", nullable = false)
+    @Column(name = "fahrkostenPartner", nullable = true)
     private Integer fahrkostenPartner;
 
     @NotNull
     @Column(name = "verpflegung", nullable = false)
     private Integer verpflegung;
 
-    @NotNull
-    @Column(name = "verpflegungPartner", nullable = false)
+    @Column(name = "verpflegungPartner", nullable = true)
     private Integer verpflegungPartner;
 
     @NotNull
