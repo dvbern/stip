@@ -14,12 +14,20 @@ import {
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {
   MatPaginator,
   MatPaginatorIntl,
   MatPaginatorModule,
 } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -29,19 +37,21 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiTableHeaderFilterComponent } from '@dv/shared/ui/table-header-filter';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
 
@@ -54,6 +64,10 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatSelectModule,
     ReactiveFormsModule,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
@@ -65,6 +79,7 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     A11yModule,
     SharedUiIconChipComponent,
     MatPaginatorModule,
+    SharedUiTableHeaderFilterComponent,
     SachbearbeitungAppPatternOverviewLayoutComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
@@ -77,6 +92,7 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
 export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
   private router = inject(Router);
+  private formBuilder = inject(NonNullableFormBuilder);
   showAll = input<true | undefined>(undefined, { alias: 'show-all' });
 
   @ViewChildren(SharedUiFocusableListItemDirective)
@@ -94,6 +110,18 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     'letzteAktivitaet',
   ];
 
+  filterForm = this.formBuilder.group({
+    fall: [<string | undefined>undefined],
+    svNummer: [<string | undefined>undefined],
+    nachname: [<string | undefined>undefined],
+    vorname: [<string | undefined>undefined],
+    geburtsdatum: [<string | undefined>undefined],
+    ort: [<string | undefined>undefined],
+    status: [''],
+    bearbeiter: [<string | undefined>undefined],
+    letzteAktivitaet: [<string | undefined>undefined],
+  });
+
   // FormControl is necessary instead of (change) event binding due to an potential issue
   // with the Angular Material SlideToggle, see https://github.com/angular/components/pull/28745
   showAllControl = new FormControl<boolean | undefined>(this.showAll());
@@ -103,6 +131,14 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     selectSachbearbeitungAppFeatureCockpitView,
   );
 
+  private filterFormChangedSig = toSignal(this.filterForm.valueChanges);
+  availableStatusSig = computed(() => {
+    return this.cockpitViewSig().gesuche.reduce<Gesuchstatus[]>(
+      (acc, gesuch) =>
+        acc.includes(gesuch.gesuchStatus) ? acc : [...acc, gesuch.gesuchStatus],
+      [],
+    );
+  });
   gesucheDataSourceSig = computed(() => {
     const sort = this.sortSig();
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
@@ -126,12 +162,41 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       bearbeiter: gesuch.bearbeiter,
       letzteAktivitaet: gesuch.aenderungsdatum,
     }));
+    const filterForm = this.filterFormChangedSig();
 
     const dataSource = new MatTableDataSource(gesuche);
 
     dataSource.paginator = this.paginator;
     if (sort) {
       dataSource.sort = sort;
+    }
+
+    if (hasFilterValues(filterForm)) {
+      dataSource.filterPredicate = (data) => {
+        const keys = Object.keys(filterForm) as (keyof typeof filterForm)[];
+        return keys.every((key) => {
+          const filterValue = filterForm[key];
+          if (!isDefined(filterForm[key]) || !isDefined(filterValue)) {
+            return true;
+          }
+          const value = data[key];
+          if (!isDefined(value)) {
+            return false;
+          }
+          if (typeof value === 'string' && filterValue) {
+            return value
+              .toLocaleLowerCase()
+              .includes(filterValue.toLocaleLowerCase());
+          }
+          if (typeof value === 'number') {
+            return value.toString() === filterValue.toString();
+          }
+          throw new Error('Unsupported type');
+        });
+      };
+      dataSource.filter = JSON.stringify(filterForm);
+    } else {
+      dataSource.filter = '';
     }
 
     return dataSource;
@@ -178,3 +243,14 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     );
   }
 }
+
+const hasFilterValues = <T extends Record<string, unknown>>(
+  values?: T,
+): values is NonNullable<T> => {
+  if (!values) {
+    return false;
+  }
+  return Object.values(values).some(
+    (value) => isDefined(value) && value !== '',
+  );
+};

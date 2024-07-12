@@ -142,6 +142,7 @@
       "@dv/shared/ui/search": ["libs/shared/ui/search/src/index.ts"],
       "@dv/shared/ui/step-form-buttons": ["libs/shared/ui/step-form-buttons/src/index.ts"],
       "@dv/shared/ui/stepper-navigation": ["libs/shared/ui/stepper-navigation/src/index.ts"],
+      "@dv/shared/ui/table-header-filter": ["libs/shared/ui/table-header-filter/src/index.ts"],
       "@dv/shared/ui/table-helper": ["libs/shared/ui/table-helper/src/index.ts"],
       "@dv/shared/ui/translated-property-pipe": ["libs/shared/ui/translated-property-pipe/src/index.ts"],
       "@dv/shared/ui/version-text": ["libs/shared/ui/version-text/src/index.ts"],
