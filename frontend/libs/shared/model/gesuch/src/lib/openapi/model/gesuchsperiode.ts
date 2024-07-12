@@ -19,12 +19,10 @@ export interface Gesuchsperiode {
     gueltigkeitStatus: GueltigkeitStatus;
     gesuchsperiodeStart: string;
     gesuchsperiodeStopp: string;
-    /**
-     * dd.MM.YYYY
-     */
     aufschaltterminStart: string;
-    einreichefristNormal?: string;
-    einreichefristReduziert?: string;
+    aufschaltterminStopp: string;
+    einreichefristNormal: string;
+    einreichefristReduziert: string;
     gesuchsjahr: Gesuchsjahr;
     /**
      * 
