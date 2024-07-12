@@ -16,9 +16,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("ValidationReport")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -31,7 +29,6 @@ public class ValidationReportDto  implements Serializable {
   private @Valid Boolean hasDocuments;
 
   /**
-   * 
    **/
   public ValidationReportDto validationErrors(List<ValidationErrorDto> validationErrors) {
     this.validationErrors = validationErrors;
@@ -67,7 +64,6 @@ public class ValidationReportDto  implements Serializable {
     return this;
   }
   /**
-   * 
    **/
   public ValidationReportDto validationWarnings(List<ValidationWarningDto> validationWarnings) {
     this.validationWarnings = validationWarnings;

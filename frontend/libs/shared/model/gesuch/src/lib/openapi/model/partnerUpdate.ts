@@ -15,9 +15,6 @@ export interface PartnerUpdate {
     adresse: Adresse;
     vorname: string;
     geburtsdatum: string;
-    /**
-     * 
-     */
     sozialversicherungsnummer: string;
     nachname: string;
     ausbildungMitEinkommenOderErwerbstaetig?: boolean;

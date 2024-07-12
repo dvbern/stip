@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * GesuchUpdateDtoSpec
  */
 @JsonPropertyOrder({
   GesuchUpdateDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH

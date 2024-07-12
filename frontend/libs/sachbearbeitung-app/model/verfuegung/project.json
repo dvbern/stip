@@ -1,0 +1,9 @@
+{
+  "name": "sachbearbeitung-app-model-verfuegung",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/model/verfuegung/src",
+  "projectType": "library",
+  "tags": ["type:model", "scope:sachbearbeitung-app"],
+  "// targets": "to see all targets run: nx show project sachbearbeitung-app-model-verfuegung --web",
+  "targets": {}
+}

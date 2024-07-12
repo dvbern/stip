@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -9,6 +9,7 @@ import {
   EMPTY,
   Observable,
   catchError,
+  combineLatestWith,
   exhaustMap,
   filter,
   forkJoin,
@@ -27,6 +28,8 @@ import {
   SharedModelBenutzerApi,
   SharedModelBenutzerList,
   SharedModelBenutzerRole,
+  SharedModelBenutzerWithRoles,
+  SharedModelModelMappingsRepresentation,
   SharedModelRole,
   SharedModelRoleList,
   SharedModelUserAdminError,
@@ -44,7 +47,6 @@ import {
   RemoteData,
   cachedPending,
   failure,
-  fromCachedDataSig,
   handleApiResponse,
   initial,
   pending,
@@ -56,16 +58,14 @@ type HttpResponseWithLocation = HttpResponse<unknown> & {
 };
 type BenutzerverwaltungState = {
   benutzers: CachedRemoteData<SharedModelBenutzer[]>;
+  benutzer: RemoteData<SharedModelBenutzerWithRoles>;
   availableRoles: CachedRemoteData<SharedModelRoleList>;
-  userCreated: RemoteData<SharedModelBenutzerApi>;
-  userDeleted: RemoteData<null>;
 };
 
 const initialState: BenutzerverwaltungState = {
   benutzers: initial(),
+  benutzer: initial(),
   availableRoles: initial(),
-  userCreated: initial(),
-  userDeleted: initial(),
 };
 
 @Injectable()
@@ -99,10 +99,6 @@ export class BenutzerverwaltungStore extends signalStore(
     return this._oauthParams;
   }
 
-  usearCreatedViewSig = computed(() => {
-    return fromCachedDataSig(this.userCreated);
-  });
-
   loadAllSbAppBenutzers$ = rxMethod<void>(
     pipe(
       tap(() => {
@@ -135,11 +131,79 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
+  loadBenutzerWithRoles$ = rxMethod<string>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          benutzer: pending(),
+        }));
+      }),
+      switchMap((userId) => this.getUserWithRoleMappings$(userId)),
+      handleApiResponse((benutzer) => patchState(this, { benutzer })),
+    ),
+  );
+
+  updateBenutzer$ = rxMethod<{
+    user: SharedModelBenutzerApi;
+    roles: SharedModelRoleList;
+  }>(
+    pipe(
+      map(({ user, roles }) => {
+        const rolesToRemove = this.benutzer().data?.roles.filter(
+          (r) => !roles.some((role) => role.name === r.name),
+        );
+
+        return { user, roles, rolesToRemove };
+      }),
+      tap(() => {
+        patchState(this, {
+          benutzer: pending(),
+        });
+      }),
+      exhaustMap(({ user, roles, rolesToRemove }) =>
+        this.http
+          .put(
+            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}`,
+            user,
+            {
+              context: noGlobalErrorsIf(true),
+            },
+          )
+          .pipe(
+            switchMap(() => this.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
+            switchMap(() => {
+              if (!rolesToRemove || rolesToRemove.length === 0) {
+                return of(user);
+              }
+
+              return this.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
+            }),
+            switchMap(() => this.getUserWithRoleMappings$(user.id)),
+            handleApiResponse(() => undefined, {
+              onSuccess: (benutzer) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
+                });
+                patchState(this, { benutzer: success(benutzer) });
+              },
+              onFailure: () => {
+                this.loadBenutzerWithRoles$(user.id);
+              },
+            }),
+          ),
+      ),
+    ),
+  );
+
+  resetBenutzer() {
+    patchState(this, { benutzer: initial() });
+  }
+
   deleteBenutzer$ = rxMethod<{ benutzerId: string }>(
     pipe(
       tap(() => {
         patchState(this, (s) => ({
-          userDeleted: pending(),
           benutzers: cachedPending(s.benutzers),
         }));
       }),
@@ -147,7 +211,7 @@ export class BenutzerverwaltungStore extends signalStore(
         this.deleteBenutzerFromBothApis$(benutzerId).pipe(
           handleApiResponse(
             () => {
-              patchState(this, { userDeleted: success(null) });
+              patchState(this, { benutzer: initial() });
             },
             {
               onSuccess: () => {
@@ -196,36 +260,45 @@ export class BenutzerverwaltungStore extends signalStore(
     vorname: string;
     email: string;
     roles: SharedModelRoleList;
-    onAfterSave?: (wasSuccessfull: boolean) => void;
+    onAfterSave?: (userId: string) => void;
   }>(
     pipe(
       tap(() => {
         patchState(this, {
-          userCreated: pending(),
+          benutzer: pending(),
         });
       }),
       exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
         this.createUser$(vorname, name, email).pipe(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
-          switchMap((response) => this.loadUser$(response)),
-          switchMap((user) => this.asignRoles(user, roles)),
+          switchMap((response) =>
+            this.loadUserByUrl$(response.headers.get('Location')),
+          ),
+          switchMap((user) => this.assignRoles$(user, roles)),
           switchMap((user) =>
             this.notifyUser$(user).pipe(
               handleApiResponse(
                 () => {
-                  patchState(this, { userCreated: success(user) });
+                  // roles are set optimistically on the user object
+                  patchState(this, { benutzer: success({ ...user, roles }) });
                 },
                 {
                   onSuccess: (wasSuccessfull) => {
-                    onAfterSave?.(wasSuccessfull);
+                    if (wasSuccessfull) {
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey:
+                          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
+                      });
+                      onAfterSave?.(user.id);
+                    }
                   },
                 },
               ),
             ),
           ),
           catchError((error) => {
-            patchState(this, { userCreated: failure(error) });
+            patchState(this, { benutzer: failure(error) });
             return EMPTY;
           }),
         ),
@@ -284,9 +357,9 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private loadUser$(response: HttpResponseWithLocation) {
+  private loadUserByUrl$(url: string) {
     return this.http
-      .get<SharedModelBenutzerApi>(response.headers.get('Location'), {
+      .get<SharedModelBenutzerApi>(url, {
         context: noGlobalErrorsIf(true),
       })
       .pipe(
@@ -295,7 +368,43 @@ export class BenutzerverwaltungStore extends signalStore(
       );
   }
 
-  private asignRoles(
+  private loadUser$(userId: string) {
+    return this.loadUserByUrl$(
+      `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}`,
+    );
+  }
+
+  private getUserWithRoleMappings$(userId: string) {
+    return this.loadUser$(userId).pipe(
+      combineLatestWith(this.getRoleMappings$(userId)),
+      map(([user, rm]) => {
+        return {
+          ...user,
+          roles: rm ?? [],
+        };
+      }),
+    );
+  }
+
+  private getRoleMappings$(userId: string) {
+    return this.http
+      .get<SharedModelModelMappingsRepresentation>(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}/role-mappings`,
+        {
+          context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(
+        map((rm) => {
+          return SharedModelModelMappingsRepresentation.parse(
+            rm,
+          ).realmMappings?.filter(byUsableRoles);
+        }),
+        this.interceptError('roleMapping'),
+      );
+  }
+
+  private assignRoles$(
     user: SharedModelBenutzerApi,
     roles: { id: string; name: string }[],
   ) {
@@ -305,6 +414,21 @@ export class BenutzerverwaltungStore extends signalStore(
         roles,
         {
           context: noGlobalErrorsIf(true),
+        },
+      )
+      .pipe(
+        map(() => user),
+        this.interceptError('roleMapping'),
+      );
+  }
+
+  private removeRoles$(user: SharedModelBenutzerApi, roles: SharedModelRole[]) {
+    return this.http
+      .delete(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
+        {
+          context: noGlobalErrorsIf(true),
+          body: roles,
         },
       )
       .pipe(

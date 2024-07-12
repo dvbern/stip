@@ -12,17 +12,8 @@
 import { ValidationError } from './validationError';
 import { ValidationWarning } from './validationWarning';
 
-/**
- * 
- */
 export interface ValidationReport { 
-    /**
-     * 
-     */
     validationErrors: Array<ValidationError>;
-    /**
-     * 
-     */
     validationWarnings: Array<ValidationWarning>;
     /**
      * Whether or not the Gesuch validated has one or more GesuchDokument attached

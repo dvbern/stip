@@ -54,7 +54,7 @@ public class AusbildungsstaetteUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get nameDe
    * @return nameDe
   **/
   @jakarta.annotation.Nonnull
@@ -80,7 +80,7 @@ public class AusbildungsstaetteUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get nameFr
    * @return nameFr
   **/
   @jakarta.annotation.Nonnull

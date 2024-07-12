@@ -14,7 +14,10 @@ import {
   AdminOptions,
   ChildAdminOption,
 } from '@dv/sachbearbeitung-app/model/administration';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import {
+  SharedPatternAppHeaderComponent,
+  SharedPatternAppHeaderPartsDirective,
+} from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
@@ -29,6 +32,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     RouterModule,
     SharedUiSearchComponent,
     SharedPatternAppHeaderComponent,
+    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     GlobalNotificationsComponent,
   ],

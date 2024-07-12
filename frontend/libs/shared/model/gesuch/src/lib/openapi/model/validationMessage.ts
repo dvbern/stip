@@ -10,21 +10,9 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export interface ValidationMessage { 
-    /**
-     * 
-     */
     propertyPath?: string;
-    /**
-     * 
-     */
     messageTemplate: string;
-    /**
-     * 
-     */
     message: string;
 }
 

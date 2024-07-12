@@ -12,9 +12,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("LebenslaufItemUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -130,7 +128,6 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public LebenslaufItemUpdateDto ausbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;

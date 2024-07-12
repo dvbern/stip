@@ -148,4 +148,8 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
         '@dv/sachbearbeitung-app/feature/gesuch-form-statusprotokoll'
       ).then((m) => m.sachbearbeitungAppFeatureGesuchFormStatusprotokollRoutes),
   },
+  {
+    path: ':id',
+    redirectTo: PERSON.route + '/:id',
+  },
 ];

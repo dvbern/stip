@@ -72,7 +72,7 @@ public class AusbildungsstaetteDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbildungsgaenge
    * @return ausbildungsgaenge
   **/
   @jakarta.annotation.Nullable
@@ -98,7 +98,7 @@ public class AusbildungsstaetteDtoSpec {
   }
 
    /**
-   * 
+   * Get nameDe
    * @return nameDe
   **/
   @jakarta.annotation.Nonnull
@@ -124,7 +124,7 @@ public class AusbildungsstaetteDtoSpec {
   }
 
    /**
-   * 
+   * Get nameFr
    * @return nameFr
   **/
   @jakarta.annotation.Nonnull

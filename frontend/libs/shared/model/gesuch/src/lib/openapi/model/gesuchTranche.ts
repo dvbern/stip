@@ -11,9 +11,6 @@
  */
 import { GesuchFormular } from './gesuchFormular';
 
-/**
- * 
- */
 export interface GesuchTranche { 
     id: string;
     gueltigAb: string;

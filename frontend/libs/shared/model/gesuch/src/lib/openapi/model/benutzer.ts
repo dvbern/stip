@@ -12,9 +12,6 @@
 import { BenutzereinstellungenUpdate } from './benutzereinstellungenUpdate';
 import { SachbearbeiterZuordnungStammdaten } from './sachbearbeiterZuordnungStammdaten';
 
-/**
- * 
- */
 export interface Benutzer { 
     id: string;
     sachbearbeiterZuordnungStammdaten?: SachbearbeiterZuordnungStammdaten;

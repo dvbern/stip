@@ -11,9 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("ValidationMessage")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,7 +24,6 @@ public class ValidationMessageDto  implements Serializable {
   private @Valid String propertyPath;
 
   /**
-   * 
    **/
   public ValidationMessageDto messageTemplate(String messageTemplate) {
     this.messageTemplate = messageTemplate;
@@ -46,7 +43,6 @@ public class ValidationMessageDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public ValidationMessageDto message(String message) {
     this.message = message;
@@ -66,7 +62,6 @@ public class ValidationMessageDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public ValidationMessageDto propertyPath(String propertyPath) {
     this.propertyPath = propertyPath;
