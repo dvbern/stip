@@ -20,7 +20,7 @@
         </caption>
 
         <ng-container matColumnDef="bezeichnung">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.bezeichnung' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource" class="fw-bold">
