@@ -57,8 +57,9 @@
                 mat-table
                 matSort
                 matSortActive="fall"
+                matSortDisableClear
                 matSortDirection="desc"
-                matSortStart="desc"
+                matSortStart="asc"
                 tabindex="0"
               >
                 <caption class="cdk-visually-hidden">
@@ -108,7 +109,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="geburtsdatum">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'">
                     {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
@@ -144,7 +145,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="letzteAktivitaet">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'">
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
