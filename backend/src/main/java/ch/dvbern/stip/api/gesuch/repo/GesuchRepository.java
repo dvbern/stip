@@ -50,13 +50,14 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery()).stream();
     }
 
-    private JPAQuery<Gesuch> getAlleQuery() {
+    private JPAQuery<Gesuch> getFindAlleQuery() {
+        final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
-        return new JPAQueryFactory(entityManager).selectFrom(gesuch);
+        return queryFactory.selectFrom(gesuch);
     }
 
     private JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
-        final var query = getAlleQuery();
+        final var query = getFindAlleQuery();
         return addStatusFilter(
             query,
             Gesuchstatus.IN_BEARBEITUNG_GS,
@@ -81,12 +82,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
 
         return query;
-    }
-
-    private JPAQuery<Gesuch> getFindAlleQuery() {
-        final var queryFactory = new JPAQueryFactory(entityManager);
-        final var gesuch = QGesuch.gesuch;
-        return queryFactory.selectFrom(gesuch);
     }
 
     public Stream<Gesuch> findAllForFall(UUID fallId) {
