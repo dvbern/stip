@@ -38,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_START,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_STOPP,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_START,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_AUFSCHALTTERMIN_STOPP,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_NORMAL,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
@@ -67,6 +68,9 @@ public class GesuchsperiodeDtoSpec {
 
   public static final String JSON_PROPERTY_AUFSCHALTTERMIN_START = "aufschaltterminStart";
   private LocalDate aufschaltterminStart;
+
+  public static final String JSON_PROPERTY_AUFSCHALTTERMIN_STOPP = "aufschaltterminStopp";
+  private LocalDate aufschaltterminStopp;
 
   public static final String JSON_PROPERTY_EINREICHEFRIST_NORMAL = "einreichefristNormal";
   private LocalDate einreichefristNormal;
@@ -249,7 +253,7 @@ public class GesuchsperiodeDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * Get aufschaltterminStart
    * @return aufschaltterminStart
   **/
   @jakarta.annotation.Nonnull
@@ -268,6 +272,32 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
+  public GesuchsperiodeDtoSpec aufschaltterminStopp(LocalDate aufschaltterminStopp) {
+    
+    this.aufschaltterminStopp = aufschaltterminStopp;
+    return this;
+  }
+
+   /**
+   * Get aufschaltterminStopp
+   * @return aufschaltterminStopp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getAufschaltterminStopp() {
+    return aufschaltterminStopp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_STOPP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAufschaltterminStopp(LocalDate aufschaltterminStopp) {
+    this.aufschaltterminStopp = aufschaltterminStopp;
+  }
+
+
   public GesuchsperiodeDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
     
     this.einreichefristNormal = einreichefristNormal;
@@ -278,9 +308,9 @@ public class GesuchsperiodeDtoSpec {
    * Get einreichefristNormal
    * @return einreichefristNormal
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEinreichefristNormal() {
     return einreichefristNormal;
@@ -288,7 +318,7 @@ public class GesuchsperiodeDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinreichefristNormal(LocalDate einreichefristNormal) {
     this.einreichefristNormal = einreichefristNormal;
   }
@@ -304,9 +334,9 @@ public class GesuchsperiodeDtoSpec {
    * Get einreichefristReduziert
    * @return einreichefristReduziert
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEinreichefristReduziert() {
     return einreichefristReduziert;
@@ -314,7 +344,7 @@ public class GesuchsperiodeDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
     this.einreichefristReduziert = einreichefristReduziert;
   }
@@ -413,6 +443,7 @@ public class GesuchsperiodeDtoSpec {
         Objects.equals(this.gesuchsperiodeStart, gesuchsperiode.gesuchsperiodeStart) &&
         Objects.equals(this.gesuchsperiodeStopp, gesuchsperiode.gesuchsperiodeStopp) &&
         Objects.equals(this.aufschaltterminStart, gesuchsperiode.aufschaltterminStart) &&
+        Objects.equals(this.aufschaltterminStopp, gesuchsperiode.aufschaltterminStopp) &&
         Objects.equals(this.einreichefristNormal, gesuchsperiode.einreichefristNormal) &&
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
@@ -422,7 +453,7 @@ public class GesuchsperiodeDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer);
   }
 
   @Override
@@ -436,6 +467,7 @@ public class GesuchsperiodeDtoSpec {
     sb.append("    gesuchsperiodeStart: ").append(toIndentedString(gesuchsperiodeStart)).append("\n");
     sb.append("    gesuchsperiodeStopp: ").append(toIndentedString(gesuchsperiodeStopp)).append("\n");
     sb.append("    aufschaltterminStart: ").append(toIndentedString(aufschaltterminStart)).append("\n");
+    sb.append("    aufschaltterminStopp: ").append(toIndentedString(aufschaltterminStopp)).append("\n");
     sb.append("    einreichefristNormal: ").append(toIndentedString(einreichefristNormal)).append("\n");
     sb.append("    einreichefristReduziert: ").append(toIndentedString(einreichefristReduziert)).append("\n");
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");

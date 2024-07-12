@@ -1,5 +1,4 @@
 import { createSelector } from '@ngrx/store';
-import { addDays, isAfter, isBefore } from 'date-fns';
 
 import { selectVersion } from '@dv/shared/data-access/config';
 import { sharedDataAccessGesuchsFeature } from '@dv/shared/data-access/gesuch';
@@ -14,11 +13,7 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
     ...gesuchsPerioden,
 
     gesuchsperiodes: gesuchsPerioden.gesuchsperiodes
-      // TODO where should we put this logic
-      .filter((p) => isBefore(Date.parse(p.aufschaltterminStart), new Date()))
-      .filter((p) =>
-        isAfter(Date.parse(p.gesuchsperiodeStopp), addDays(new Date(), 1)),
-      )
+      .filter((p) => p.erfassbar)
       .map((p) => ({
         ...p,
         gesuchLoading: gesucheLoading,
