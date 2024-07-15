@@ -81,7 +81,7 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchDokument> gesuchDokuments;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
