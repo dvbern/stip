@@ -2499,6 +2499,9 @@ components:
         - gesuchsperiodeStart
         - gesuchsperiodeStopp
         - aufschaltterminStart
+        - aufschaltterminStopp
+        - einreichefristNormal
+        - einreichefristReduziert
         - gueltigkeitStatus
         - gesuchsjahr
         - ausbKosten_SekII
@@ -2518,9 +2521,9 @@ components:
         gesuchsperiodeStopp:
           $ref: '#/components/schemas/LocalDate'
         aufschaltterminStart:
-          format: date
-          description: dd.MM.YYYY
-          type: string
+          $ref: '#/components/schemas/LocalDate'
+        aufschaltterminStopp:
+          $ref: '#/components/schemas/LocalDate'
         einreichefristNormal:
           $ref: '#/components/schemas/LocalDate'
         einreichefristReduziert:

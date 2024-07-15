@@ -11,6 +11,7 @@ import {
   effect,
   inject,
   input,
+  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -20,7 +21,7 @@ import {
   MatPaginatorModule,
 } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -35,6 +36,10 @@ import {
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import {
+  TypeSafeMatCellDefDirective,
+  TypeSafeMatRowDefDirective,
+} from '@dv/shared/ui/table-helper';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
@@ -60,6 +65,12 @@ const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
     SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    TypeSafeMatCellDefDirective,
+    TypeSafeMatRowDefDirective,
+    RouterModule,
+    A11yModule,
+    SharedUiIconChipComponent,
+    MatPaginatorModule,
     SachbearbeitungAppPatternOverviewLayoutComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
@@ -82,7 +93,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
   displayedColumns = [
     'fall',
-    'sv-nummer',
+    'svNummer',
     'nachname',
     'vorname',
     'geburtsdatum',
@@ -120,13 +131,39 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   });
 
   gesucheDataSourceSig = computed(() => {
-    const gesuche = this.cockpitViewSig().gesuche;
+    const sort = this.sortSig();
+    const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
+      id: gesuch.id,
+      fall: gesuch.fall.fallNummer,
+      svNummer:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.sozialversicherungsnummer,
+      nachname:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.nachname,
+      vorname:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.vorname,
+      geburtsdatum:
+        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+          ?.geburtsdatum,
+      ort: gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
+        ?.adresse.ort,
+      status: gesuch.gesuchStatus,
+      bearbeiter: gesuch.bearbeiter,
+      letzteAktivitaet: gesuch.aenderungsdatum,
+    }));
 
-    const dataSource = new MatTableDataSource<SharedModelGesuch>(gesuche);
+    const dataSource = new MatTableDataSource(gesuche);
 
     dataSource.paginator = this.paginator;
+    if (sort) {
+      dataSource.sort = sort;
+    }
+
     return dataSource;
   });
+  sortSig = viewChild(MatSort);
 
   constructor() {
     let isFirstChange = true;
