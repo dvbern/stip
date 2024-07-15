@@ -149,6 +149,7 @@ export class UploadStore {
 
     this.uploadDocument$
       .pipe(
+        tap(() => console.log('first uploadDocument$')),
         mergeMap((action) => this.handleUpload$(action)),
         takeUntilDestroyed(),
       )
@@ -274,17 +275,20 @@ export class UploadStore {
    */
   private handleUpload$(action: { fileUpload: File } & DocumentOptions) {
     const tempDokumentId = createTempId(action.fileUpload);
+
     // Prepare a cancel stream for this document upload
     const cancellingThisDocument$ = this.cancelDocumentUpload$.pipe(
       filter((d) => d.dokumentId === tempDokumentId),
       take(1),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
+
     const upload$ = this.documentService
       .createDokument$(action, 'events', undefined, {
         context: noGlobalErrorsIf(true),
       })
       .pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
     // Merge the upload stream with a fake progress stream
     const uploading$ = merge(
       upload$,
@@ -306,7 +310,11 @@ export class UploadStore {
       ),
     ).pipe(
       map((event) => ({ event, action, tempDokumentId })),
-      tap(() => this.documentChangedSig.set({ hasChanged: true })),
+      tap((x) => {
+        if (x.event.type === HttpEventType.Response) {
+          this.documentChangedSig.set({ hasChanged: true });
+        }
+      }),
       // On error, emit an event with the error
       catchError((error) =>
         of({

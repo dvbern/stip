@@ -70,7 +70,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   private stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
-  private dokumentsStore = inject(DokumentsStore);
+  public dokumentsStore = inject(DokumentsStore);
 
   displayedColumns = [
     'expander',
@@ -87,9 +87,9 @@ export class SharedFeatureGesuchDokumenteComponent {
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
   dokumenteDataSourceSig = computed(() => {
-    const documents = this.dokumentsStore.dokumenteViewSig();
+    const documents = this.dokumentsStore.dokumenteViewSig().dokuments;
     const requiredDocumentTypes =
-      this.dokumentsStore.requiredDocumentTypesViewSig();
+      this.dokumentsStore.dokumenteViewSig().requiredDocumentTypes;
     const gesuchId = this.gesuchViewSig().gesuchId;
     const readonly = this.gesuchViewSig().readonly;
     const allowTypes = this.gesuchViewSig().allowTypes;
@@ -167,7 +167,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
       .subscribe((gesuchId) => {
-        this.dokumentsStore.dokumentsStateInit(gesuchId);
+        this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
       });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
@@ -185,6 +185,10 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   rejectDocument(document: SharedModelTableDokument) {
+    const { gesuchId } = this.gesuchViewSig();
+
+    if (!gesuchId) return;
+
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
       GesuchDokument,
@@ -198,9 +202,21 @@ export class SharedFeatureGesuchDokumenteComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
-          // do something
+          this.dokumentsStore.gesuchDokumentAblehnen$({
+            gesuchDokumentId: result.id,
+            gesuchId,
+            kommentar: result.kommentar,
+          });
         }
       });
+  }
+
+  sendMissingDocuments() {
+    const { gesuchId } = this.gesuchViewSig();
+
+    if (gesuchId) {
+      this.dokumentsStore.sendMissingDocuments$(gesuchId);
+    }
   }
 
   handleContinue() {

@@ -13,13 +13,13 @@
   </h1>
   <p class="content" [innerHTML]="'shared.dokumente.reject.message' | translate"></p>
 
-  <form [formGroup]="form" novalidate>
-    <mat-form-field dvSharedUiFormField class="flex-grow-1">
+  <form [formGroup]="form" class="mt-4" novalidate>
+    <mat-form-field dvSharedUiFormField class="col-12">
       <mat-label>{{ 'shared.dokumente.kommentar.label' | translate }}</mat-label>
-      <textarea matInput formControlName="kommentar"></textarea>
+      <textarea rows="4" matInput formControlName="kommentar"></textarea>
     </mat-form-field>
 
-    <div class="d-flex mt-4 justify-content-end">
+    <div class="d-flex mt-4 justify-content-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | translate }}
       </button>

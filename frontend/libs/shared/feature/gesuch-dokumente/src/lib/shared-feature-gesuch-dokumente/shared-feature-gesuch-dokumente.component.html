@@ -54,28 +54,41 @@
               <div class="d-flex gap-2">
                 @if (dokument?.gesuchDokument?.id) {
                   <ng-container *dvIfSachbearbeiter>
-                    <button
-                      (click)="acceptDocument(dokument)"
-                      type="button"
-                      class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
-                    >
-                      <i class="material-symbols-rounded fs-4">check</i>
-                      <span>
-                        {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
-                      </span>
-                    </button>
-                    <button
-                      (click)="rejectDocument(dokument)"
-                      type="button"
-                      class="btn table-btn btn-danger d-flex align-items-center gap-1"
-                    >
-                      <i class="material-symbols-rounded fs-4">close</i>
-                      <span>
-                        {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
-                      </span>
-                    </button>
+                    @switch (dokument?.gesuchDokument.status) {
+                      @case (DokumentStatus.AUSSTEHEND) {
+                        <button
+                          (click)="acceptDocument(dokument)"
+                          type="button"
+                          class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+                        >
+                          <i class="material-symbols-rounded fs-4">check</i>
+                          <span>
+                            {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                          </span>
+                        </button>
+                        <button
+                          (click)="rejectDocument(dokument)"
+                          type="button"
+                          class="btn table-btn btn-danger d-flex align-items-center gap-1"
+                        >
+                          <i class="material-symbols-rounded fs-4">close</i>
+                          <span>
+                            {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                          </span>
+                        </button>
+                      }
+                      @case (DokumentStatus.AKZEPTIERT) {
+                        <dv-shared-ui-icon-badge type="success" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                      @case (DokumentStatus.ABGELEHNT) {
+                        <dv-shared-ui-icon-badge type="danger" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                    }
                   </ng-container>
-
                   <ng-container *dvIfGesuchsteller>
                     @switch (dokument?.gesuchDokument.status) {
                       @case (DokumentStatus.AKZEPTIERT) {
@@ -97,7 +110,7 @@
                   </ng-container>
                 } @else {
                   <dv-shared-ui-icon-badge type="warning" class="status">
-                    {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND' | translate }}
+                    {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
                   </dv-shared-ui-icon-badge>
                 }
               </div>
@@ -131,6 +144,19 @@
         </table>
       </div>
     </div>
+  </div>
+
+  <div class="mt-4 d-flex" *dvIfSachbearbeiter>
+    <!-- button sendMissingDocuments -->
+    <button
+      type="button"
+      class="btn btn-primary ml-auto"
+      (click)="sendMissingDocuments()"
+      data-testid="dokumente-button-sendMissingDocuments"
+      [disabled]="dokumentsStore.hasAusstehendeDokumentsSig()"
+    >
+      {{ 'shared.dokumente.dokumentStatus.action.sendMissingDocuments' | translate }}
+    </button>
   </div>
 
   <!-- Buttons -->

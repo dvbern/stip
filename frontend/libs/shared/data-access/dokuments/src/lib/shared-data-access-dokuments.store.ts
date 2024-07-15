@@ -8,20 +8,20 @@ import { GlobalNotificationStore } from '@dv/shared/data-access/global-notificat
 import {
   DokumentService,
   DokumentTyp,
+  Dokumentstatus,
   GesuchDokument,
   GesuchService,
-  GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams,
 } from '@dv/shared/model/gesuch';
 import {
-  RemoteData,
+  CachedRemoteData,
+  cachedPending,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
-  dokuments: RemoteData<GesuchDokument[]>;
-  requiredDocumentTypes: RemoteData<DokumentTyp[]>;
+  dokuments: CachedRemoteData<GesuchDokument[]>;
+  requiredDocumentTypes: CachedRemoteData<DokumentTyp[]>;
 };
 
 const initialState: DokumentsState = {
@@ -29,7 +29,7 @@ const initialState: DokumentsState = {
   requiredDocumentTypes: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DokumentsStore extends signalStore(
   withState(initialState),
   withDevtools('DokumentsStore'),
@@ -38,10 +38,22 @@ export class DokumentsStore extends signalStore(
   private gesuchService = inject(GesuchService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  dokumenteViewSig = computed(() => this.dokuments.data() ?? []);
-  requiredDocumentTypesViewSig = computed(
-    () => this.requiredDocumentTypes.data() ?? [],
-  );
+  dokumenteViewSig = computed(() => ({
+    dokuments: this.dokuments().data ?? [],
+    requiredDocumentTypes: this.requiredDocumentTypes.data() ?? [],
+  }));
+
+  hasAusstehendeDokumentsSig = computed(() => {
+    return (
+      this.dokuments
+        .data()
+        ?.some((dokument) =>
+          dokument.status
+            ? dokument.status === Dokumentstatus.AUSSTEHEND
+            : false,
+        ) ?? false
+    );
+  });
 
   // error handling
   gesuchDokumentAblehnen$ = rxMethod<{
@@ -102,30 +114,43 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
+  // error handling....
   /**
    * Send missing documents to the backend
    * only possible if there are documents in status "AGBELEHNT"
    * will trigger an email to the gesuchsteller
    */
-  sendMissingDocuments$ =
-    rxMethod<GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams>(
-      pipe(
-        switchMap((req) => {
-          return this.gesuchService.gesuchFehlendeDokumenteUebermitteln$(req);
-        }),
-      ),
-    );
+  sendMissingDocuments$ = rxMethod<string>(
+    pipe(
+      switchMap((gesuchId) => {
+        return this.gesuchService
+          .gesuchFehlendeDokumenteUebermitteln$({ gesuchId })
+          .pipe(
+            switchMap(() =>
+              this.gesuchService.getGesuchDokumente$({ gesuchId }),
+            ),
+            handleApiResponse((dokuments) => patchState(this, { dokuments }), {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.accept.success',
+                });
+              },
+            }),
+          );
+      }),
+    ),
+  );
 
-  dokumentsStateInit(gesuchId: string) {
+  getDokumenteAndRequired$(gesuchId: string) {
     this.getGesuchDokumente$(gesuchId);
     this.getRequiredDocumentTypes$(gesuchId);
   }
 
-  getGesuchDokumente$ = rxMethod<string>(
+  private getGesuchDokumente$ = rxMethod<string>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          dokuments: pending(),
+        patchState(this, (state) => ({
+          dokuments: cachedPending(state.dokuments),
         }));
       }),
       switchMap((gesuchId) =>
@@ -135,11 +160,11 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getRequiredDocumentTypes$ = rxMethod<string>(
+  private getRequiredDocumentTypes$ = rxMethod<string>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          requiredDocumentTypes: pending(),
+        patchState(this, (state) => ({
+          requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
         }));
       }),
       switchMap((gesuchId) =>
