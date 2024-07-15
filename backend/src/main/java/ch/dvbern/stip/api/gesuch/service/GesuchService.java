@@ -45,6 +45,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -259,6 +260,11 @@ public class GesuchService {
     public void gesuchFehlendeDokumente(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+        gesuch.getGesuchDokuments().stream().filter(
+            gesuchDokument -> gesuchDokument.getStatus() == Dokumentstatus.ABGELEHNT
+        ).forEach(
+            gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+        );
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
