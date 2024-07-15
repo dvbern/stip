@@ -1,8 +1,9 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
@@ -15,8 +16,10 @@ import {
 import {
   CachedRemoteData,
   cachedPending,
+  fromCachedDataSig,
   handleApiResponse,
   initial,
+  success,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
@@ -39,8 +42,8 @@ export class DokumentsStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   dokumenteViewSig = computed(() => ({
-    dokuments: this.dokuments().data ?? [],
-    requiredDocumentTypes: this.requiredDocumentTypes.data() ?? [],
+    dokuments: fromCachedDataSig(this.dokuments) ?? [],
+    requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
 
   hasAusstehendeDokumentsSig = computed(() => {
@@ -55,7 +58,6 @@ export class DokumentsStore extends signalStore(
     );
   });
 
-  // error handling
   gesuchDokumentAblehnen$ = rxMethod<{
     gesuchId: string;
     gesuchDokumentId: string;
@@ -71,17 +73,31 @@ export class DokumentsStore extends signalStore(
             },
           })
           .pipe(
+            tap(() => {
+              patchState(this, (state) => ({
+                dokuments: cachedPending(state.dokuments),
+              }));
+            }),
             switchMap(() =>
               this.gesuchService.getGesuchDokumente$({
                 gesuchId,
               }),
             ),
-            handleApiResponse((dokuments) => patchState(this, { dokuments }), {
-              onSuccess: () => {
+            tapResponse({
+              next: (dokuments) => {
+                patchState(this, { dokuments: success(dokuments) });
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dokumente.reject.success',
                 });
               },
+              error: () => {
+                patchState(this, (state) => ({
+                  dokuments: success(state.dokuments.data ?? []),
+                }));
+              },
+            }),
+            catchError(() => {
+              return EMPTY;
             }),
           ),
       ),
@@ -99,15 +115,29 @@ export class DokumentsStore extends signalStore(
             gesuchDokumentId,
           })
           .pipe(
+            tap(() => {
+              patchState(this, (state) => ({
+                dokuments: cachedPending(state.dokuments),
+              }));
+            }),
             switchMap(() =>
               this.gesuchService.getGesuchDokumente$({ gesuchId }),
             ),
-            handleApiResponse((dokuments) => patchState(this, { dokuments }), {
-              onSuccess: () => {
+            tapResponse({
+              next: (dokuments) => {
+                patchState(this, { dokuments: success(dokuments) });
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dokumente.accept.success',
                 });
               },
+              error: () => {
+                patchState(this, (state) => ({
+                  dokuments: success(state.dokuments.data ?? []),
+                }));
+              },
+            }),
+            catchError(() => {
+              return EMPTY;
             }),
           );
       }),
@@ -126,15 +156,29 @@ export class DokumentsStore extends signalStore(
         return this.gesuchService
           .gesuchFehlendeDokumenteUebermitteln$({ gesuchId })
           .pipe(
+            tap(() => {
+              patchState(this, (state) => ({
+                dokuments: cachedPending(state.dokuments),
+              }));
+            }),
             switchMap(() =>
               this.gesuchService.getGesuchDokumente$({ gesuchId }),
             ),
-            handleApiResponse((dokuments) => patchState(this, { dokuments }), {
-              onSuccess: () => {
+            tapResponse({
+              next: (dokuments) => {
+                patchState(this, { dokuments: success(dokuments) });
                 this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.accept.success',
+                  messageKey: 'shared.dokumente.uebermitteln.success',
                 });
               },
+              error: () => {
+                patchState(this, (state) => ({
+                  dokuments: success(state.dokuments.data ?? []),
+                }));
+              },
+            }),
+            catchError(() => {
+              return EMPTY;
             }),
           );
       }),
