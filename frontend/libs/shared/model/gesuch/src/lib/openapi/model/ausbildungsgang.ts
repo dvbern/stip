@@ -13,13 +13,7 @@ import { Bildungsart } from './bildungsart';
 
 export interface Ausbildungsgang { 
     id: string;
-    /**
-     * 
-     */
     bezeichnungDe?: string;
-    /**
-     * 
-     */
     bezeichnungFr?: string;
     bildungsart: Bildungsart;
     ausbildungsstaetteId?: string;

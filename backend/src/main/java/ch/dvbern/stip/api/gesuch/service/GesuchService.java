@@ -50,6 +50,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -217,16 +218,18 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findAllGesucheSb() {
-        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
+        final var meId = benutzerService.getCurrentBenutzer().getId();
+        return switch(getGesucheSBQueryType){
+            case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
+            case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
+            case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
+            case ALLE -> map(gesuchRepository.findAlle());
+        };
     }
 
-    @Transactional
-    public List<GesuchDto> findGesucheSb() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
+    private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
+        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional

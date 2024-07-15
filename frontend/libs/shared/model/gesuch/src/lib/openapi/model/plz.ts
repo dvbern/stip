@@ -14,17 +14,8 @@
  * PLZ und ort für Type ahead funktionalitaet
  */
 export interface Plz { 
-    /**
-     * 
-     */
     plz: string;
-    /**
-     * 
-     */
     ort: string;
-    /**
-     * 
-     */
     kantonskuerzel: string;
 }
 

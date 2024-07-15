@@ -11,9 +11,6 @@
  */
 import { BenutzereinstellungenUpdate } from './benutzereinstellungenUpdate';
 
-/**
- * 
- */
 export interface BenutzerUpdate { 
     sozialversicherungsnummer: string;
     vorname: string;

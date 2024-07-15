@@ -12,9 +12,6 @@
 import { Adresse } from './adresse';
 import { Kontoinhaber } from './kontoinhaber';
 
-/**
- * 
- */
 export interface Auszahlung { 
     vorname: string;
     adresse: Adresse;

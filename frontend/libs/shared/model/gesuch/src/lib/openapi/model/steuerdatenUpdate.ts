@@ -11,9 +11,6 @@
  */
 import { SteuerdatenTyp } from './steuerdatenTyp';
 
-/**
- * 
- */
 export interface SteuerdatenUpdate { 
     id?: string;
     steuerdatenTyp: SteuerdatenTyp;

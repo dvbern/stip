@@ -13,6 +13,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -480,7 +481,7 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getAllGesucheSb().execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -496,7 +497,7 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getGesucheSb().execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()

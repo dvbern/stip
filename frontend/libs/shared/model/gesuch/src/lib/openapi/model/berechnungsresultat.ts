@@ -19,7 +19,7 @@ export interface Berechnungsresultat {
      */
     berechnung?: number;
     /**
-     * Resultat der Berechnung als JSON objekt, transparent
+     * Resultat der Berechnung als JSON string, transparent
      */
     berechnungsdaten?: string;
 }

@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export type ElternTyp = 'VATER' | 'MUTTER';
 
 export const ElternTyp = {
