@@ -21,7 +21,7 @@
       <column name="mandant" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="notification_type" type="SMALLINT"/>
+      <column name="notification_type" type="VARCHAR(255)"/>
       <column name="gesuch_id" type="UUID">
         <constraints nullable="false"/>
       </column>
@@ -41,7 +41,7 @@
       <column name="user_erstellt" type="VARCHAR(255)"/>
       <column name="user_mutiert" type="VARCHAR(255)"/>
       <column name="mandant" type="VARCHAR(255)"/>
-      <column name="notification_type" type="SMALLINT"/>
+      <column name="notification_type" type="VARCHAR(255)"/>
       <column name="gesuch_id" type="UUID"/>
     </createTable>
   </changeSet>
