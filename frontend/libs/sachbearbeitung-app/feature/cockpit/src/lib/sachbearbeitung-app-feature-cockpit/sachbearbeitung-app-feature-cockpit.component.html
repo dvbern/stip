@@ -42,7 +42,7 @@
               <div class="flex-grow-1"></div>
             </div>
           </div>
-          <div class="row overflow-auto position-relative">
+          <form class="row overflow-auto position-relative" [formGroup]="filterForm">
             <div [class.opacity-50]="cockpitViewSig().gesucheLoading">
               <table
                 class="dv-crud-table"
@@ -52,9 +52,8 @@
                 mat-table
                 matSort
                 matSortActive="fall"
-                matSortDisableClear
                 matSortDirection="desc"
-                matSortStart="asc"
+                matSortStart="desc"
                 tabindex="0"
               >
                 <caption class="cdk-visually-hidden">
@@ -64,17 +63,49 @@
                 </caption>
 
                 <ng-container matColumnDef="fall">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.fall' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input
+                          matInput
+                          class="w-100"
+                          formControlName="fall"
+                          data-testid="cockpit-filter-fall"
+                          (click)="$event.stopPropagation()"
+                        />
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.fall.reset()"
+                        [valueSig]="filterForm.controls.fall.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.fall }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="svNummer">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.sv-nummer' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input
+                          matInput
+                          class="w-100"
+                          formControlName="svNummer"
+                          data-testid="cockpit-filter-svNummer"
+                          (click)="$event.stopPropagation()"
+                        />
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.svNummer.reset()"
+                        [valueSig]="filterForm.controls.svNummer.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
                   <td
                     mat-cell
@@ -86,65 +117,205 @@
                 </ng-container>
 
                 <ng-container matColumnDef="nachname">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input class="w-100" matInput formControlName="nachname" (click)="$event.stopPropagation()" />
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.nachname.reset()"
+                        [valueSig]="filterForm.controls.nachname.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.nachname }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="vorname">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.vorname' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input class="w-100" matInput formControlName="vorname" (click)="$event.stopPropagation()" />
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.vorname.reset()"
+                        [valueSig]="filterForm.controls.vorname.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.vorname }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="geburtsdatum">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    [start]="'desc'"
+                    class="filtered"
+                    example="01.01.2000"
+                  >
                     {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input
+                          class="w-100"
+                          matInput
+                          formControlName="geburtsdatum"
+                          [matDatepicker]="geburtsdatumDatepicker"
+                          (click)="$event.stopPropagation(); $event.stopPropagation()"
+                        />
+                        <button
+                          matIconSuffix
+                          type="button"
+                          class="btn btn-link text-muted"
+                          [attr.aria-label]="'shared.ui.open-date-picker'"
+                          (click)="geburtsdatumDatepicker.open()"
+                        >
+                          <dv-shared-ui-icon-chip class="fs-8">
+                            <i class="icon material-symbols-rounded fs-5">event</i>
+                          </dv-shared-ui-icon-chip>
+                        </button>
+                        <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.geburtsdatum.reset()"
+                        [valueSig]="filterForm.controls.geburtsdatum.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.geburtsdatum | date: 'dd.MM.YYYY' }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="ort">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.ort' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input
+                          matInput
+                          formControlName="ort"
+                          (click)="$event.stopPropagation()"
+                          example="Ostermundigen"
+                        />
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.ort.reset()"
+                        [valueSig]="filterForm.controls.ort.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.ort }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="status">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
+                    <mat-form-field>
+                      <mat-select
+                        formControlName="status"
+                        (click)="$event.stopPropagation()"
+                        class="fw-normal"
+                        panelClass="table-select"
+                      >
+                        <mat-option [value]="''">
+                          {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
+                        </mat-option>
+                        @for (status of availableStatusSig(); track status) {
+                          <mat-option [value]="status">
+                            {{ 'shared.gesuch.status.contract.' + status | translate }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ 'shared.gesuch.status.contract.' + gesuch.status | translate }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="bearbeiter">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
                     {{ 'sachbearbeitung-app.cockpit.table.bearbeiter' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <input class="w-100" matInput formControlName="bearbeiter" (click)="$event.stopPropagation()" />
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="filterForm.controls.bearbeiter.reset()"
+                        [valueSig]="filterForm.controls.bearbeiter.value"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.bearbeiter }}
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="letzteAktivitaet">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'" class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
+                    <div class="d-flex">
+                      <mat-form-field>
+                        <mat-date-range-input
+                          class="w-100"
+                          [rangePicker]="letzteAktivitaetRangePicker"
+                          (click)="$event.stopPropagation()"
+                        >
+                          <input
+                            formControlName="letzteAktivitaetStart"
+                            matStartDate
+                            [placeholder]="'shared.label.von' | translate"
+                          />
+                          <input
+                            formControlName="letzteAktivitaetEnd"
+                            matEndDate
+                            [placeholder]="'shared.label.bis' | translate"
+                          />
+                        </mat-date-range-input>
+                        <button
+                          matIconSuffix
+                          type="button"
+                          class="btn btn-link text-muted"
+                          [attr.aria-label]="'shared.ui.open-date-picker'"
+                          (click)="letzteAktivitaetRangePicker.open()"
+                        >
+                          <dv-shared-ui-icon-chip class="fs-8">
+                            <i class="icon material-symbols-rounded fs-5">event</i>
+                          </dv-shared-ui-icon-chip>
+                        </button>
+                        <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
+                      </mat-form-field>
+                      <dv-shared-ui-clear-button
+                        class="clear d-flex align-items-center position-absolute"
+                        (clear)="
+                          filterForm.controls.letzteAktivitaetStart.reset();
+                          filterForm.controls.letzteAktivitaetEnd.reset()
+                        "
+                        [valueSig]="[
+                          filterForm.controls.letzteAktivitaetStart.value,
+                          filterForm.controls.letzteAktivitaetEnd.value
+                        ]"
+                      ></dv-shared-ui-clear-button>
+                    </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()">
-                    {{ gesuch.letzteAktivitaet | date }}
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
+                    {{ gesuch.letzteAktivitaet | date: 'dd.MM.YYYY' }}
                   </td>
                 </ng-container>
 
@@ -167,7 +338,7 @@
                 [type]="'compact'"
               ></dv-shared-ui-loading>
             }
-          </div>
+          </form>
         </div>
       </div>
     </div>
