@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

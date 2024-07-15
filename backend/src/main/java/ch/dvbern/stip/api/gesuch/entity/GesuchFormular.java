@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -97,6 +98,10 @@ import org.hibernate.envers.Audited;
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
 @EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(groups = {
+    Default.class,
+    EinnahmenKostenPageValidation.class
+}, property = "einnahmenKosten")
+@SteuerdatenSteuerjahrInPastOrCurrentConstraint(groups = {
     Default.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
