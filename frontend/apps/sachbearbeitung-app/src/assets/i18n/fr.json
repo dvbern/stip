@@ -211,7 +211,7 @@
   "sachbearbeitung-app.cockpit.table.sv-nummer": "Numéro AVS",
   "sachbearbeitung-app.cockpit.table.vorname": "Prénom",
   "sachbearbeitung-app.cockpit.table.nachname": "Nom",
-  "sachbearbeitung-app.cockpit.table.geburtsdatum": "Date de naissance",
+  "sachbearbeitung-app.cockpit.table.geburtsdatum": "Né(e) le",
   "sachbearbeitung-app.cockpit.table.ort": "Lieu",
   "sachbearbeitung-app.cockpit.table.status": "État",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Agent",

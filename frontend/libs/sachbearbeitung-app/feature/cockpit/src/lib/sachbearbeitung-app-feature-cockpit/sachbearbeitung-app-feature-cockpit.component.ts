@@ -34,10 +34,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { isSameDay, isWithinInterval, startOfDay } from 'date-fns';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -50,6 +52,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
+import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -80,12 +83,14 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     SharedUiIconChipComponent,
     MatPaginatorModule,
     SharedUiTableHeaderFilterComponent,
+    SharedUiClearButtonComponent,
     SachbearbeitungAppPatternOverviewLayoutComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    provideDvDateAdapter(),
     { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
   ],
 })
@@ -115,11 +120,12 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     svNummer: [<string | undefined>undefined],
     nachname: [<string | undefined>undefined],
     vorname: [<string | undefined>undefined],
-    geburtsdatum: [<string | undefined>undefined],
+    geburtsdatum: [<Date | undefined>undefined],
     ort: [<string | undefined>undefined],
     status: [''],
     bearbeiter: [<string | undefined>undefined],
-    letzteAktivitaet: [<string | undefined>undefined],
+    letzteAktivitaetStart: [<Date | undefined>undefined],
+    letzteAktivitaetEnd: [<Date | undefined>undefined],
   });
 
   // FormControl is necessary instead of (change) event binding due to an potential issue
@@ -172,28 +178,21 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     }
 
     if (hasFilterValues(filterForm)) {
-      dataSource.filterPredicate = (data) => {
-        const keys = Object.keys(filterForm) as (keyof typeof filterForm)[];
-        return keys.every((key) => {
-          const filterValue = filterForm[key];
-          if (!isDefined(filterForm[key]) || !isDefined(filterValue)) {
-            return true;
-          }
-          const value = data[key];
-          if (!isDefined(value)) {
-            return false;
-          }
-          if (typeof value === 'string' && filterValue) {
-            return value
-              .toLocaleLowerCase()
-              .includes(filterValue.toLocaleLowerCase());
-          }
-          if (typeof value === 'number') {
-            return value.toString() === filterValue.toString();
-          }
-          throw new Error('Unsupported type');
-        });
-      };
+      dataSource.filterPredicate = (data) =>
+        [
+          checkFilter(data.fall, filterForm.fall),
+          checkFilter(data.svNummer, filterForm.svNummer),
+          checkFilter(data.nachname, filterForm.nachname),
+          checkFilter(data.vorname, filterForm.vorname),
+          checkFilter(data.geburtsdatum, filterForm.geburtsdatum),
+          checkFilter(data.ort, filterForm.ort),
+          checkFilter(data.status, filterForm.status),
+          checkFilter(data.bearbeiter, filterForm.bearbeiter),
+          checkFilter(data.letzteAktivitaet, [
+            filterForm.letzteAktivitaetStart,
+            filterForm.letzteAktivitaetEnd,
+          ]),
+        ].every((result) => result);
       dataSource.filter = JSON.stringify(filterForm);
     } else {
       dataSource.filter = '';
@@ -253,4 +252,44 @@ const hasFilterValues = <T extends Record<string, unknown>>(
   return Object.values(values).some(
     (value) => isDefined(value) && value !== '',
   );
+};
+
+const checkFilter = <T>(
+  value: T,
+  filter:
+    | string
+    | number
+    | Date
+    | [Date | undefined, Date | undefined]
+    | undefined
+    | null,
+) => {
+  if (!isDefined(value) || !isDefined(filter)) {
+    return true;
+  }
+  if (typeof value === 'number' || typeof filter === 'number') {
+    return value.toString() === filter.toString();
+  }
+  if (typeof value === 'string') {
+    if (!value) {
+      return true;
+    }
+    if (filter instanceof Date) {
+      return isSameDay(new Date(value), filter);
+    }
+    if (Array.isArray(filter)) {
+      return isInterval(filter)
+        ? isWithinInterval(startOfDay(new Date(value)), {
+            start: startOfDay(filter[0]),
+            end: startOfDay(filter[1]),
+          })
+        : true;
+    }
+    return value.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+  }
+  throw new Error('Unsupported type');
+};
+
+const isInterval = (value: unknown[]): value is [Date, Date] => {
+  return value.length === 2 && value.every((v) => v instanceof Date);
 };
