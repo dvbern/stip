@@ -66,7 +66,6 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsgangDto bezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
@@ -85,7 +84,6 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsgangDto bezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;

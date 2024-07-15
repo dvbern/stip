@@ -39,7 +39,6 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -51,12 +50,16 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -94,7 +97,8 @@ public class GesuchService {
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
-    private final ConfigService configService;
+    private final NotificationService notificationService;
+    private final BerechnungService berechnungService;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -219,16 +223,18 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findAllGesucheSb() {
-        return gesuchRepository.findAllFilteredForSb().map(this::mapWithTrancheToWorkWith).toList();
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
+        final var meId = benutzerService.getCurrentBenutzer().getId();
+        return switch(getGesucheSBQueryType){
+            case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
+            case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
+            case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
+            case ALLE -> map(gesuchRepository.findAlle());
+        };
     }
 
-    @Transactional
-    public List<GesuchDto> findGesucheSb() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        return gesuchRepository.findZugewiesenFilteredForSb(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
-            .toList();
+    private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
+        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
     }
 
     @Transactional
@@ -248,6 +254,8 @@ public class GesuchService {
     public void deleteGesuch(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         preventUpdateVonGesuchIfReadOnly(gesuch);
+        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
+        notificationService.deleteNotificationsForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
     }
 
@@ -444,5 +452,11 @@ public class GesuchService {
                 "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
             );
         }
+    }
+
+    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
+        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
+        return List.of(resultat);
     }
 }

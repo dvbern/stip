@@ -1,0 +1,23 @@
+@if (gesuchViewSig().gesuchId; as gesuchId) {
+  <button type="button" class="btn btn-primary" (click)="berechnen(gesuchId)">
+    {{ 'sachbearbeitung-app.verfuegung.berechnung.berechnen' | translate }}
+  </button>
+
+  @if (berechnungenSig().length > 0) {
+    <h2 class="pt-4 h3">{{ 'sachbearbeitung-app.verfuegung.berechnung.resultat' | translate }}</h2>
+    @for (berechnung of berechnungenSig(); track $index) {
+      <div class="row">
+        <div class="col-12 p-2 rounded bg-light">
+          <div>
+            <b>Berechnung {{ $index + 1 }} - Total: </b><span>{{ berechnung.berechnung }}</span>
+          </div>
+          @if (berechnung.parsedData) {
+            <pre>{{ berechnung.parsedData | json }}</pre>
+          } @else {
+            <pre>{{ berechnung.berechnungsdaten }}</pre>
+          }
+        </div>
+      </div>
+    }
+  }
+}

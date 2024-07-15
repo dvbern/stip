@@ -12,9 +12,6 @@
 import { Adresse } from './adresse';
 import { ElternTyp } from './elternTyp';
 
-/**
- * 
- */
 export interface Eltern { 
     vorname: string;
     adresse: Adresse;

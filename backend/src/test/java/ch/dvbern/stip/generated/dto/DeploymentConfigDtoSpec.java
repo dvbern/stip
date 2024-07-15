@@ -116,7 +116,7 @@ public class DeploymentConfigDtoSpec {
   }
 
    /**
-   * 
+   * Get allowedMimeTypes
    * @return allowedMimeTypes
   **/
   @jakarta.annotation.Nullable

@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export type Kontoinhaber = 'GESUCHSTELLER' | 'VATER' | 'MUTTER' | 'SOZIALDIENST_INSTITUTION' | 'ANDERE';
 
 export const Kontoinhaber = {

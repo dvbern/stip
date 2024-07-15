@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * SteuerdatenUpdateDtoSpec
  */
 @JsonPropertyOrder({
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_ID,

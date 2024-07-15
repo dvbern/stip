@@ -51,8 +51,14 @@ describe('sharedDataAccessGesuch Effects', () => {
       const gesuch2 = { id: '2' } as SharedModelGesuch;
 
       const gesuchServiceMock = mockGesuchService({
-        getAllGesucheSb$: () => cold('a', { a: [gesuch1, gesuch2] }),
-        getGesucheSb$: () => cold('a', { a: [gesuch1] }),
+        getGesucheSb$: (
+          ...args: Parameters<GesuchService['getGesucheSb$']>
+        ) => {
+          if (args[0].getGesucheSBQueryTyp === 'ALLE_BEARBEITBAR_MEINE') {
+            return cold('a', { a: [gesuch1] });
+          }
+          return cold('a', { a: [gesuch1, gesuch2] });
+        },
       });
 
       const debounced = `${LOAD_ALL_DEBOUNCE_TIME}ms`;
@@ -64,11 +70,15 @@ describe('sharedDataAccessGesuch Effects', () => {
        * (C) Debounced load with different filter                  -> should fire
        */
       const actionsMock$ = hot(`abb ${debounced} --bc`, {
-        a: SharedDataAccessGesuchEvents.loadAll({}),
-        b: SharedDataAccessGesuchEvents.loadAllDebounced({
-          filter: { showAll: true },
+        a: SharedDataAccessGesuchEvents.loadAll({
+          query: 'ALLE_BEARBEITBAR_MEINE',
         }),
-        c: SharedDataAccessGesuchEvents.loadAllDebounced({}),
+        b: SharedDataAccessGesuchEvents.loadAllDebounced({
+          query: 'ALLE',
+        }),
+        c: SharedDataAccessGesuchEvents.loadAllDebounced({
+          query: 'ALLE_BEARBEITBAR_MEINE',
+        }),
       });
 
       const effectStream$ = loadAllGesuchs(

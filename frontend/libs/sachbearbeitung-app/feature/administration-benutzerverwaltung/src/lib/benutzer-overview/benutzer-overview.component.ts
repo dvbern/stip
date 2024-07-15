@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   inject,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import {
   MatPaginator,
@@ -54,6 +56,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
 export class BenutzerOverviewComponent {
   private dialog = inject(MatDialog);
   store = inject(BenutzerverwaltungStore);
+  destroyRef = inject(DestroyRef);
 
   displayedColumns = ['name', 'email', 'roles', 'actions'];
   showFullListForBenutzer: Record<string, boolean> = {};
@@ -92,6 +95,7 @@ export class BenutzerOverviewComponent {
       translationObject: benutzer,
     })
       .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
           this.store.deleteBenutzer$({

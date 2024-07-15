@@ -11,17 +11,8 @@
  */
 
 export interface ValidationWarning { 
-    /**
-     * 
-     */
     propertyPath?: string;
-    /**
-     * 
-     */
     messageTemplate: string;
-    /**
-     * 
-     */
     message: string;
 }
 

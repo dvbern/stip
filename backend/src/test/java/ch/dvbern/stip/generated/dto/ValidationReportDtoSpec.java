@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * ValidationReportDtoSpec
  */
 @JsonPropertyOrder({
   ValidationReportDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS,
@@ -66,7 +66,7 @@ public class ValidationReportDtoSpec {
   }
 
    /**
-   * 
+   * Get validationErrors
    * @return validationErrors
   **/
   @jakarta.annotation.Nonnull
@@ -100,7 +100,7 @@ public class ValidationReportDtoSpec {
   }
 
    /**
-   * 
+   * Get validationWarnings
    * @return validationWarnings
   **/
   @jakarta.annotation.Nonnull

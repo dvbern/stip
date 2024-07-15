@@ -11,9 +11,6 @@
  */
 import { Bildungsstufe } from './bildungsstufe';
 
-/**
- * 
- */
 export interface Bildungsart { 
     beschreibung: string;
     bildungsstufe: Bildungsstufe;

@@ -12,9 +12,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("AusbildungsgangCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -28,7 +26,6 @@ public class AusbildungsgangCreateDto  implements Serializable {
   private @Valid UUID ausbildungsstaetteId;
 
   /**
-   * 
    **/
   public AusbildungsgangCreateDto bezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
@@ -48,7 +45,6 @@ public class AusbildungsgangCreateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public AusbildungsgangCreateDto bezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;

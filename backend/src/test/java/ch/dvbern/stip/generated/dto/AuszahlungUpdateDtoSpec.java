@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * AuszahlungUpdateDtoSpec
  */
 @JsonPropertyOrder({
   AuszahlungUpdateDtoSpec.JSON_PROPERTY_VORNAME,

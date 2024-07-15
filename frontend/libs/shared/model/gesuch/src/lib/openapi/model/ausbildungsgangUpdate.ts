@@ -10,17 +10,8 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export interface AusbildungsgangUpdate { 
-    /**
-     * 
-     */
     bezeichnungDe: string;
-    /**
-     * 
-     */
     bezeichnungFr: string;
     bildungsartId: string;
     ausbildungsstaetteId: string;

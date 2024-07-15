@@ -63,7 +63,6 @@ public class DeploymentConfigDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public DeploymentConfigDto allowedMimeTypes(List<String> allowedMimeTypes) {
     this.allowedMimeTypes = allowedMimeTypes;

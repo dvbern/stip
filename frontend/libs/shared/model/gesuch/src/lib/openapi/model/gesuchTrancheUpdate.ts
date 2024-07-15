@@ -11,9 +11,6 @@
  */
 import { GesuchFormularUpdate } from './gesuchFormularUpdate';
 
-/**
- * 
- */
 export interface GesuchTrancheUpdate { 
     gesuchFormular: GesuchFormularUpdate;
     id: string;

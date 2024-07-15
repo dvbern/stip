@@ -3,9 +3,9 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -30,7 +29,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 @Slf4j
 public class GesuchResourceImpl implements GesuchResource {
     private final GesuchService gesuchService;
-    private final GesuchDokumentService gesuchDokumentService;
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
 
@@ -44,7 +42,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_DELETE)
     @Override
     public Response deleteGesuch(UUID gesuchId) {
-        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
         return Response.noContent().build();
     }
@@ -76,16 +73,10 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchDokumente).build();
     }
 
-    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
+    @RolesAllowed({ GESUCH_READ})
     @Override
-    public Response getAllGesucheSb() {
-        return Response.ok(gesuchService.findAllGesucheSb()).build();
-    }
-
-    @RolesAllowed({ GESUCH_READ, ROLE_SACHBEARBEITER })
-    @Override
-    public Response getGesucheSb() {
-        return Response.ok(gesuchService.findGesucheSb()).build();
+    public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
+        return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
@@ -125,5 +116,11 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response validateGesuchPages(UUID gesuchId) {
         return Response.ok(gesuchService.validatePages(gesuchId)).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getBerechnungForGesuch(UUID gesuchId) {
+        return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 }

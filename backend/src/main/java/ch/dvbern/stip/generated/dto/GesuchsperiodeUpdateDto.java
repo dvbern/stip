@@ -69,7 +69,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   private @Valid LocalDate einreichfrist;
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto bezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
@@ -89,7 +88,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto bezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
@@ -109,7 +107,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto fiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
@@ -268,7 +265,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto ausbKostenSekII(Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
@@ -288,7 +284,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto ausbKostenTertiaer(Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
@@ -308,7 +303,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto freibetragVermoegen(Integer freibetragVermoegen) {
     this.freibetragVermoegen = freibetragVermoegen;
@@ -328,7 +322,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
@@ -348,7 +341,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto einkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
@@ -368,7 +360,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto elternbeteiligungssatz(Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
@@ -388,7 +379,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
     this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
@@ -408,7 +398,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto integrationszulage(Integer integrationszulage) {
     this.integrationszulage = integrationszulage;
@@ -428,7 +417,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto limiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
     this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
@@ -448,7 +436,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
@@ -468,7 +455,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto person1(Integer person1) {
     this.person1 = person1;
@@ -488,7 +474,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto personen2(Integer personen2) {
     this.personen2 = personen2;
@@ -508,7 +493,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto personen3(Integer personen3) {
     this.personen3 = personen3;
@@ -528,7 +512,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto personen4(Integer personen4) {
     this.personen4 = personen4;
@@ -548,7 +531,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto personen5(Integer personen5) {
     this.personen5 = personen5;
@@ -568,7 +550,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto personen6(Integer personen6) {
     this.personen6 = personen6;
@@ -588,7 +569,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto personen7(Integer personen7) {
     this.personen7 = personen7;
@@ -608,7 +588,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto proWeiterePerson(Integer proWeiterePerson) {
     this.proWeiterePerson = proWeiterePerson;
@@ -628,7 +607,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto kinder0018(Integer kinder0018) {
     this.kinder0018 = kinder0018;
@@ -648,7 +626,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto jugendlicheErwachsene1925(Integer jugendlicheErwachsene1925) {
     this.jugendlicheErwachsene1925 = jugendlicheErwachsene1925;
@@ -668,7 +645,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto erwachsene2699(Integer erwachsene2699) {
     this.erwachsene2699 = erwachsene2699;
@@ -688,7 +664,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenFam1pers(Integer wohnkostenFam1pers) {
     this.wohnkostenFam1pers = wohnkostenFam1pers;
@@ -708,7 +683,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenFam2pers(Integer wohnkostenFam2pers) {
     this.wohnkostenFam2pers = wohnkostenFam2pers;
@@ -728,7 +702,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenFam3pers(Integer wohnkostenFam3pers) {
     this.wohnkostenFam3pers = wohnkostenFam3pers;
@@ -748,7 +721,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenFam4pers(Integer wohnkostenFam4pers) {
     this.wohnkostenFam4pers = wohnkostenFam4pers;
@@ -768,7 +740,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
@@ -788,7 +759,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
@@ -808,7 +778,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
@@ -828,7 +797,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
@@ -848,7 +816,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
@@ -868,7 +835,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto wohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
@@ -888,7 +854,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto preisProMahlzeit(Integer preisProMahlzeit) {
     this.preisProMahlzeit = preisProMahlzeit;
@@ -908,7 +873,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto maxSaeule3a(Integer maxSaeule3a) {
     this.maxSaeule3a = maxSaeule3a;
@@ -928,7 +892,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto anzahlWochenLehre(Integer anzahlWochenLehre) {
     this.anzahlWochenLehre = anzahlWochenLehre;
@@ -948,7 +911,6 @@ public class GesuchsperiodeUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public GesuchsperiodeUpdateDto anzahlWochenSchule(Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;

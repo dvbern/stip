@@ -11,17 +11,8 @@
  */
 
 export interface ValidationError { 
-    /**
-     * 
-     */
     propertyPath?: string;
-    /**
-     * 
-     */
     messageTemplate: string;
-    /**
-     * 
-     */
     message: string;
 }
 

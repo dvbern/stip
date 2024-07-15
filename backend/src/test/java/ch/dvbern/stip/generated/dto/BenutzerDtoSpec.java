@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * BenutzerDtoSpec
  */
 @JsonPropertyOrder({
   BenutzerDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
