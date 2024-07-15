@@ -3,7 +3,6 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -30,7 +29,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 @Slf4j
 public class GesuchResourceImpl implements GesuchResource {
     private final GesuchService gesuchService;
-    private final GesuchDokumentService gesuchDokumentService;
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
 
@@ -44,7 +42,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_DELETE)
     @Override
     public Response deleteGesuch(UUID gesuchId) {
-        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
         return Response.noContent().build();
     }

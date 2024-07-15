@@ -43,18 +43,6 @@ public class MailService {
             .send().subscribe().asCompletionStage();
     }
 
-    public void sendGesuchEingereichtEmail(
-        String name,
-        String vorname,
-        String receiver,
-        AppLanguages language
-    ) {
-        Templates.getGesuchEingereicht(name, vorname, language)
-            .to(receiver)
-            .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.gesuch.eingereicht"))
-            .send().subscribe().asCompletionStage();
-    }
-
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
         String redirectURI = configService.getWelcomeMailURI(
             tenantService.getCurrentTenant().getIdentifier(),
@@ -129,16 +117,5 @@ public class MailService {
         private static native MailTemplateInstance standardNotificationFr(String name, String vorname);
 
         public static native MailTemplateInstance benutzerWelcome(String name, String vorname, String link);
-
-        private static native MailTemplateInstance gesuchEingereichtDe(String name, String vorname);
-
-        private static native MailTemplateInstance gesuchEingereichtFr(String name, String vorname);
-
-        public static MailTemplateInstance getGesuchEingereicht(String name, String vorname, AppLanguages language) {
-            return switch (language) {
-                case FR -> gesuchEingereichtFr(name, vorname);
-                case DE -> gesuchEingereichtDe(name, vorname);
-            };
-        }
     }
 }

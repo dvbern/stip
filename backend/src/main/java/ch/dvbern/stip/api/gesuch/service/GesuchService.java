@@ -39,7 +39,6 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -55,14 +54,7 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -73,6 +65,15 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
 @RequestScoped
@@ -91,7 +92,7 @@ public class GesuchService {
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final RequiredDokumentService requiredDokumentService;
-    private final ConfigService configService;
+    private final NotificationService notificationService;
     private final BerechnungService berechnungService;
 
     @Transactional
@@ -248,6 +249,8 @@ public class GesuchService {
     public void deleteGesuch(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         preventUpdateVonGesuchIfReadOnly(gesuch);
+        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
+        notificationService.deleteNotificationsForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
     }
 
