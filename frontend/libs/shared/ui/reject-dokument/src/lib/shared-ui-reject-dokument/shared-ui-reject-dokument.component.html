@@ -15,7 +15,7 @@
 
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
-      <mat-label>{{ 'shared.dokumente.kommentar.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.dokumente.reject.kommentar.label' | translate }}</mat-label>
       <textarea rows="4" matInput formControlName="kommentar"></textarea>
     </mat-form-field>
 
@@ -24,7 +24,7 @@
         {{ 'shared.cancel' | translate }}
       </button>
       <button type="button" class="btn btn-primary ms-2" (click)="rejectDocument()">
-        {{ 'shared.dokumente.reject' | translate }}
+        {{ 'shared.dokumente.reject.action' | translate }}
       </button>
     </div>
   </form>
