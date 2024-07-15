@@ -12,9 +12,6 @@
 import { Ausbildungssituation } from './ausbildungssituation';
 import { Wohnsitz } from './wohnsitz';
 
-/**
- * 
- */
 export interface Geschwister { 
     vorname: string;
     /**

@@ -14,11 +14,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  FormControl,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -27,6 +23,7 @@ import {
   MatPaginatorIntl,
   MatPaginatorModule,
 } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -38,7 +35,11 @@ import { isSameDay, isWithinInterval, startOfDay } from 'date-fns';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import {
+  GesuchFilter,
+  Gesuchstatus,
+  SharedModelGesuch,
+} from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
@@ -58,10 +59,13 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
 
+const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
+
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
   standalone: true,
   imports: [
+    A11yModule,
     CommonModule,
     TranslateModule,
     MatTableModule,
@@ -71,7 +75,11 @@ import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-ap
     MatInputModule,
     MatDatepickerModule,
     MatSelectModule,
+    MatRadioModule,
     ReactiveFormsModule,
+    RouterModule,
+    MatPaginatorModule,
+    SharedUiIconChipComponent,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
@@ -98,7 +106,9 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
   private router = inject(Router);
   private formBuilder = inject(NonNullableFormBuilder);
-  showAll = input<true | undefined>(undefined, { alias: 'show-all' });
+  showSig = input<GesuchFilter | undefined>(undefined, {
+    alias: 'show',
+  });
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
@@ -128,14 +138,32 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     letzteAktivitaetEnd: [<Date | undefined>undefined],
   });
 
-  // FormControl is necessary instead of (change) event binding due to an potential issue
-  // with the Angular Material SlideToggle, see https://github.com/angular/components/pull/28745
-  showAllControl = new FormControl<boolean | undefined>(this.showAll());
+  quickFilterForm = this.formBuilder.group({
+    query: [<GesuchFilter | undefined>undefined],
+  });
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
   cockpitViewSig = this.store.selectSignal(
     selectSachbearbeitungAppFeatureCockpitView,
   );
+  quickFilters: { typ: GesuchFilter; icon: string }[] = [
+    {
+      typ: 'ALLE_BEARBEITBAR_MEINE',
+      icon: 'person',
+    },
+    {
+      typ: 'ALLE_BEARBEITBAR',
+      icon: 'people',
+    },
+    {
+      typ: 'ALLE',
+      icon: 'all_inclusive',
+    },
+  ];
+  showViewSig = computed<GesuchFilter>(() => {
+    const show = this.showSig();
+    return show ?? DEFAULT_FILTER;
+  });
 
   private filterFormChangedSig = toSignal(this.filterForm.valueChanges);
   availableStatusSig = computed(() => {
@@ -206,26 +234,33 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     let isFirstChange = true;
     effect(
       () => {
-        const showAll = this.showAll();
+        const query = this.showViewSig();
         if (isFirstChange) {
           isFirstChange = false;
           return;
         }
         this.store.dispatch(
           SharedDataAccessGesuchEvents.loadAllDebounced({
-            filter: { showAll: showAll },
+            query,
           }),
         );
       },
       { allowSignalWrites: true },
     );
 
-    const showAllChanged = toSignal(this.showAllControl.valueChanges);
+    const quickFilterChanged = toSignal(
+      this.quickFilterForm.controls.query.valueChanges,
+    );
     effect(
       () => {
-        const showAll = showAllChanged();
+        const query = quickFilterChanged();
+        if (!query) {
+          return;
+        }
         this.router.navigate(['.'], {
-          queryParams: showAll ? { ['show-all']: showAll } : undefined,
+          queryParams: {
+            show: query === DEFAULT_FILTER ? undefined : query,
+          },
           replaceUrl: true,
         });
       },
@@ -234,10 +269,11 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.showAllControl.setValue(this.showAll());
+    const query = this.showViewSig();
+    this.quickFilterForm.reset({ query });
     this.store.dispatch(
       SharedDataAccessGesuchEvents.loadAll({
-        filter: { showAll: this.showAll() },
+        query,
       }),
     );
   }

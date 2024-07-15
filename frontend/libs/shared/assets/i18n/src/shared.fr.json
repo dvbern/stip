@@ -315,7 +315,7 @@
   "shared.form.lebenslauf.add.taetigkeit": "Ajouter une activité",
   "shared.form.lebenslauf.add.ausbildung.short": "Formation",
   "shared.form.lebenslauf.add.taetigkeit.short": "Activité",
-  "shared.form.lebenslauf.top.info": "Il convient d'établir une liste complète de toutes les formations et activités effectuées jusqu'à présent, de {{von}} à {{bis}}. (de l'âge de 16 ans au début de la formation actuelle).",
+  "shared.form.lebenslauf.top.info": "Veuillez indiquer toutes les formations et activités suivies depuis l'âge de 16 ans jusqu'au début de la formation actuelle.",
   "shared.form.lebenslauf.top.missing-dates": "Veuillez d'abord remplir les étapes \"Personne en formation\" et \"Formation\"..",
   "shared.form.lebenslauf.item.name": "Formation ou activité",
   "shared.form.lebenslauf.item.name.ausbildung": "Type de formation",

@@ -14,17 +14,8 @@ import { AusbildungsstaetteAnyOf } from './ausbildungsstaetteAnyOf';
 import { AusbildungsstaetteUpdate } from './ausbildungsstaetteUpdate';
 
 export interface Ausbildungsstaette { 
-    /**
-     * 
-     */
     ausbildungsgaenge?: Array<Ausbildungsgang>;
-    /**
-     * 
-     */
     nameDe: string;
-    /**
-     * 
-     */
     nameFr: string;
     id?: string;
 }

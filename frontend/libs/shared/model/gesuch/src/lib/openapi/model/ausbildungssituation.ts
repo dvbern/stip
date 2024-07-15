@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export type Ausbildungssituation = 'VORSCHULPFLICHTIG' | 'SCHULPFLICHTIG' | 'IN_AUSBILDUNG' | 'KEINE';
 
 export const Ausbildungssituation = {

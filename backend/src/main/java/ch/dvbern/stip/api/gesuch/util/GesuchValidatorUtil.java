@@ -12,10 +12,9 @@ public class GesuchValidatorUtil {
     public boolean addProperty(final @Nullable ConstraintValidatorContext context, @Nonnull final String property) {
 		if (context != null) {
 			return addProperty(context, context.getDefaultConstraintMessageTemplate(), property);
-		} else {
-            return false;
-        }
-	}
+		}
+        return false;
+    }
 
     public boolean addProperty(
         final @Nullable ConstraintValidatorContext context,
