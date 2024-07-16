@@ -13,9 +13,6 @@ export const sharedFeatureGesuchDokumenteRoutes: Route[] = [
         title: 'shared.dokumente.title',
         component: SharedFeatureGesuchDokumenteComponent,
       },
-      // add more routes here (siblings)
-      // it is also possible to add nested routes as children
-      // of this feature root component (or even lazy loaded sub features)
     ],
   },
 ];

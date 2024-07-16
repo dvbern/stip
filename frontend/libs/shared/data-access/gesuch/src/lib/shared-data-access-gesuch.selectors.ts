@@ -4,8 +4,6 @@ import { createSelector } from '@ngrx/store';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
-  Gesuchstatus,
-  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
   ValidationMessage,
@@ -30,6 +28,7 @@ import {
   SharedModelGesuchFormStep,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
+import { setGesuchFromularReadonly } from '@dv/shared/util/readonly-state';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -59,6 +58,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
   (config, lastUpdate, loading, gesuch, gesuchFormular) => {
     return {
+      config,
       lastUpdate,
       loading,
       gesuch,

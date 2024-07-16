@@ -13,6 +13,7 @@ import { Subject, mergeMap } from 'rxjs';
 
 import { DocumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
+import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
 
 import { SharedPatternDocumentUploadListComponent } from '../document-upload-list/document-upload-list.component';
@@ -27,6 +28,7 @@ import { UploadStore } from '../upload.store';
     MatFormFieldModule,
     SharedUiDropFileComponent,
     SharedPatternDocumentUploadListComponent,
+    SharedUiIfGesuchstellerDirective,
   ],
   templateUrl: './document-upload-dialog.component.html',
   styleUrls: ['./document-upload-dialog.component.scss'],

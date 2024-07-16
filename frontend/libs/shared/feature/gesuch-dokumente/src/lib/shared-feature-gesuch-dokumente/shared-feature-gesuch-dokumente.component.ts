@@ -32,10 +32,6 @@ import {
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
-import {
-  SharedUiIfGesuchstellerDirective,
-  SharedUiIfSachbearbeiterDirective,
-} from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   RejectDokument,
@@ -57,8 +53,6 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiBadgeComponent,
-    SharedUiIfSachbearbeiterDirective,
-    SharedUiIfGesuchstellerDirective,
     SharedUiIconBadgeComponent,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
@@ -82,7 +76,6 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   public DokumentStatus = Dokumentstatus;
 
-  // dokumenteSig = this.store.selectSignal(selectSharedDataAccessDokumentesView);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
@@ -173,7 +166,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  acceptDocument(document: SharedModelTableDokument) {
+  dokumentAkzeptieren(document: SharedModelTableDokument) {
     const gesuchId = this.gesuchViewSig().gesuchId;
 
     if (!document?.gesuchDokument?.id || !gesuchId) return;
@@ -184,7 +177,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     });
   }
 
-  rejectDocument(document: SharedModelTableDokument) {
+  dokumentAblehnen(document: SharedModelTableDokument) {
     const { gesuchId } = this.gesuchViewSig();
 
     if (!gesuchId) return;
@@ -211,11 +204,11 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
   }
 
-  sendMissingDocuments() {
+  fehlendeDokumenteUebermitteln() {
     const { gesuchId } = this.gesuchViewSig();
 
     if (gesuchId) {
-      this.dokumentsStore.sendMissingDocuments$(gesuchId);
+      this.dokumentsStore.fehlendeDokumenteUebermitteln$(gesuchId);
     }
   }
 

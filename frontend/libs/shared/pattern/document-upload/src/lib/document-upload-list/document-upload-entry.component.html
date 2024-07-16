@@ -15,7 +15,7 @@
       @if (document.state === 'uploading') {
         <button
           type="button"
-          class="dv-button-icon flex-shrink-0 cancel-icon ms-2"
+          class="dv-icon-button flex-shrink-0 cancel-icon ms-2"
           [attr.aria-label]="'shared.cancel' | translate"
           (click)="cancelUpload.emit({ dokumentId: document.file.id })"
         >
@@ -33,7 +33,7 @@
         </a>
         <button
           type="button"
-          class="dv-button-icon flex-shrink-0 delete-icon ms-2"
+          class="dv-icon-button flex-shrink-0 delete-icon ms-2"
           [attr.aria-label]="'shared.form.delete' | translate"
           [disabled]="uploadViewSig().readonly || loadingSig()"
           (click)="checkForRemove$.emit()"
