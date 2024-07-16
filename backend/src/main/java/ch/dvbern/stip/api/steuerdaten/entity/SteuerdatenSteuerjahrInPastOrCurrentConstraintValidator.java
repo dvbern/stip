@@ -36,6 +36,6 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator implements 
     }
 
     private boolean isSteuerjahrValid(Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr) {
-        return steuerdaten.getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+        return (steuerdaten.getSteuerjahr() != null) && (steuerdaten.getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr));
     }
 }
