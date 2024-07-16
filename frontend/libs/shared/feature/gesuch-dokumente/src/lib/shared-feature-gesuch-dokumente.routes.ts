@@ -1,12 +1,4 @@
 import { Route } from '@angular/router';
-import { provideEffects } from '@ngrx/effects';
-import { provideState } from '@ngrx/store';
-
-import {
-  sharedDataAccessDokumenteEffects,
-  sharedDataAccessDokumentesFeature,
-} from '@dv/shared/data-access/dokumente';
-import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 
 import { SharedFeatureGesuchDokumenteComponent } from './shared-feature-gesuch-dokumente/shared-feature-gesuch-dokumente.component';
 
@@ -14,11 +6,7 @@ export const sharedFeatureGesuchDokumenteRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      provideState(sharedDataAccessDokumentesFeature),
-      provideEffects(sharedDataAccessDokumenteEffects),
-      DokumentsStore,
-    ],
+    providers: [],
     children: [
       {
         path: ':id',

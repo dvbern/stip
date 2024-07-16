@@ -150,7 +150,7 @@ export class DokumentsStore extends signalStore(
    * only possible if there are documents in status "AGBELEHNT"
    * will trigger an email to the gesuchsteller
    */
-  sendMissingDocuments$ = rxMethod<string>(
+  fehlendeDokumenteUebermitteln$ = rxMethod<string>(
     pipe(
       switchMap((gesuchId) => {
         return this.gesuchService

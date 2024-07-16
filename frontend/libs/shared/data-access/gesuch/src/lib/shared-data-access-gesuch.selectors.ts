@@ -63,7 +63,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       loading,
       gesuch,
       gesuchFormular,
-      readonly: setReadOnly(
+      readonly: setGesuchFromularReadonly(
         gesuch,
         config.isGesuchApp,
         config.isSachbearbeitungApp,
@@ -130,24 +130,6 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   (state) => state.steuerdatenTabs,
 );
-
-const setReadOnly = (
-  gesuch: SharedModelGesuch | null,
-  isGesuchApp: boolean,
-  isSachbearbeitungApp: boolean,
-) => {
-  if (!gesuch) return false;
-
-  if (isGesuchApp) {
-    return gesuch.gesuchStatus !== Gesuchstatus.IN_BEARBEITUNG_GS;
-  }
-
-  if (isSachbearbeitungApp) {
-    return gesuch.gesuchStatus === Gesuchstatus.IN_BEARBEITUNG_GS;
-  }
-
-  throw new Error('setReadOnly: Unknown gesuchStatus');
-};
 
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
