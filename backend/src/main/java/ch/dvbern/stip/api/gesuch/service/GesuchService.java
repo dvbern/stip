@@ -50,6 +50,7 @@ import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.generated.dto.*;
+import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -153,6 +154,9 @@ public class GesuchService {
                 Optional<Steuerdaten> currentSteuerdaten = steuerdaten.stream().filter(x -> x.getId().equals(currentSteuerdatenUpdateDto.getId())).findFirst();
                 if(currentSteuerdaten.isPresent()){
                     setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, currentSteuerdaten.get(), gesuchsjahr);
+                }else{
+                    setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto,null, gesuchsjahr);
+
                 }
             }else{
                 setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, null, gesuchsjahr);
@@ -205,6 +209,7 @@ public class GesuchService {
         steuerdatenUpdateDto.setVeranlagungscode(veranlagungsCodeToSet);
     }
 
+    @TransactionConfiguration(timeout = 10000)
     @Transactional
     public void updateGesuch(
         final UUID gesuchId,
