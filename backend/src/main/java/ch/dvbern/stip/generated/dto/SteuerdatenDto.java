@@ -25,8 +25,6 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid Integer steuernBund;
   private @Valid Integer fahrkosten;
   private @Valid Integer verpflegung;
-  private @Valid Integer steuerjahr;
-  private @Valid Integer veranlagungscode;
   private @Valid Integer totalEinkuenfte;
   private @Valid Integer eigenmietwert;
   private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
@@ -36,6 +34,8 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
+  private @Valid Integer steuerjahr;
+  private @Valid Integer veranlagungscode;
   private @Valid Integer saeule3a;
   private @Valid Integer saeule2;
 
@@ -132,44 +132,6 @@ public class SteuerdatenDto  implements Serializable {
   @JsonProperty("verpflegung")
   public void setVerpflegung(Integer verpflegung) {
     this.verpflegung = verpflegung;
-  }
-
-  /**
-   **/
-  public SteuerdatenDto steuerjahr(Integer steuerjahr) {
-    this.steuerjahr = steuerjahr;
-    return this;
-  }
-
-  
-  @JsonProperty("steuerjahr")
-  @NotNull
-  public Integer getSteuerjahr() {
-    return steuerjahr;
-  }
-
-  @JsonProperty("steuerjahr")
-  public void setSteuerjahr(Integer steuerjahr) {
-    this.steuerjahr = steuerjahr;
-  }
-
-  /**
-   **/
-  public SteuerdatenDto veranlagungscode(Integer veranlagungscode) {
-    this.veranlagungscode = veranlagungscode;
-    return this;
-  }
-
-  
-  @JsonProperty("veranlagungscode")
-  @NotNull
-  public Integer getVeranlagungscode() {
-    return veranlagungscode;
-  }
-
-  @JsonProperty("veranlagungscode")
-  public void setVeranlagungscode(Integer veranlagungscode) {
-    this.veranlagungscode = veranlagungscode;
   }
 
   /**
@@ -342,6 +304,42 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
+  public SteuerdatenDto steuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+    return this;
+  }
+
+  
+  @JsonProperty("steuerjahr")
+  public Integer getSteuerjahr() {
+    return steuerjahr;
+  }
+
+  @JsonProperty("steuerjahr")
+  public void setSteuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+  }
+
+  /**
+   **/
+  public SteuerdatenDto veranlagungscode(Integer veranlagungscode) {
+    this.veranlagungscode = veranlagungscode;
+    return this;
+  }
+
+  
+  @JsonProperty("veranlagungscode")
+  public Integer getVeranlagungscode() {
+    return veranlagungscode;
+  }
+
+  @JsonProperty("veranlagungscode")
+  public void setVeranlagungscode(Integer veranlagungscode) {
+    this.veranlagungscode = veranlagungscode;
+  }
+
+  /**
+   **/
   public SteuerdatenDto saeule3a(Integer saeule3a) {
     this.saeule3a = saeule3a;
     return this;
@@ -391,8 +389,6 @@ public class SteuerdatenDto  implements Serializable {
         Objects.equals(this.steuernBund, steuerdaten.steuernBund) &&
         Objects.equals(this.fahrkosten, steuerdaten.fahrkosten) &&
         Objects.equals(this.verpflegung, steuerdaten.verpflegung) &&
-        Objects.equals(this.steuerjahr, steuerdaten.steuerjahr) &&
-        Objects.equals(this.veranlagungscode, steuerdaten.veranlagungscode) &&
         Objects.equals(this.totalEinkuenfte, steuerdaten.totalEinkuenfte) &&
         Objects.equals(this.eigenmietwert, steuerdaten.eigenmietwert) &&
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
@@ -402,13 +398,15 @@ public class SteuerdatenDto  implements Serializable {
         Objects.equals(this.id, steuerdaten.id) &&
         Objects.equals(this.fahrkostenPartner, steuerdaten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, steuerdaten.verpflegungPartner) &&
+        Objects.equals(this.steuerjahr, steuerdaten.steuerjahr) &&
+        Objects.equals(this.veranlagungscode, steuerdaten.veranlagungscode) &&
         Objects.equals(this.saeule3a, steuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, steuerdaten.saeule2);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, verpflegung, steuerjahr, veranlagungscode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, ergaenzungsleistungen, vermoegen, id, fahrkostenPartner, verpflegungPartner, saeule3a, saeule2);
+    return Objects.hash(steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, ergaenzungsleistungen, vermoegen, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungscode, saeule3a, saeule2);
   }
 
   @Override
@@ -421,8 +419,6 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
-    sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
-    sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
@@ -432,6 +428,8 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
+    sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
+    sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("}");
