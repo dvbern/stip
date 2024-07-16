@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -9,9 +10,7 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -75,6 +74,22 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
     }
 
+    private SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
+        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = new SteuerdatenUpdateDtoSpec();
+        steuerdatenUpdateDto.setSteuerdatenTyp(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenUpdateDto.setEigenmietwert(0);
+        steuerdatenUpdateDto.setFahrkosten(0);
+        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdatenUpdateDto.setKinderalimente(0);
+        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setTotalEinkuenfte(0);
+        steuerdatenUpdateDto.setVermoegen(0);
+        steuerdatenUpdateDto.setVerpflegung(0);
+        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
+        steuerdatenUpdateDto.setSteuernBund(0);
+        return steuerdatenUpdateDto;
+    }
+
     private UUID createFullGesuch() {
         var response = gesuchApiSpec.createGesuch()
             .body(TestUtil.initGesuchCreateDto())
@@ -97,7 +112,9 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .getPersonInAusbildung()
             .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
-
+        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = createSteuerdatenUpdateDtoSpec();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
