@@ -32,6 +32,7 @@ import {
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   RejectDokument,
@@ -54,6 +55,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     SharedPatternDocumentUploadComponent,
     SharedUiBadgeComponent,
     SharedUiIconBadgeComponent,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
