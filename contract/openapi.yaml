@@ -2906,8 +2906,6 @@ components:
         - steuernBund
         - fahrkosten
         - verpflegung
-        - steuerjahr
-        - veranlagungscode
         - totalEinkuenfte
         - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
