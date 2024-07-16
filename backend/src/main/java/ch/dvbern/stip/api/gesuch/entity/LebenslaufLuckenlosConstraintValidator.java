@@ -28,17 +28,15 @@ public class LebenslaufLuckenlosConstraintValidator
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
 
+        LocalDate turns16 = gesuchFormular.getPersonInAusbildung().getGeburtsdatum().plusYears(16);
+
         // If PIA is younger than 16 no items need to be present
-        if (
-            gesuchFormular.getPersonInAusbildung().getGeburtsdatum().plusYears(16)
-                .isAfter(gesuchFormular.getAusbildung().getAusbildungBegin())
-        ) {
+        if (turns16.getYear() >= gesuchFormular.getAusbildung().getAusbildungBegin().getYear()) {
             return true;
         }
 
-        LocalDate start = gesuchFormular.getPersonInAusbildung().getGeburtsdatum()
-            .plusYears(16);
-        LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin();
+        LocalDate start = turns16;
+        LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin().withDayOfMonth(1);
         List<DateRange> dateRanges = new ArrayList<>();
         gesuchFormular.getLebenslaufItems().stream().forEach(
             lebenslaufItem -> dateRanges.add(new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
