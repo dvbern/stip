@@ -1,23 +1,130 @@
-@if (gesuchViewSig().gesuchId; as gesuchId) {
-  <button type="button" class="btn btn-primary" (click)="berechnen(gesuchId)">
-    {{ 'sachbearbeitung-app.verfuegung.berechnung.berechnen' | translate }}
-  </button>
-
+@if (viewSig(); as view) {
+  <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
+  <dl class="d-flex g-2">
+    <dt class="me-2 fw-normal text-muted">von:</dt>
+    <dd class="me-4">{{ view.gueltigAb | date: 'MM.YYYY' }}</dd>
+    <dt class="me-2 fw-normal text-muted">bis:</dt>
+    <dd class="me-4">{{ view.gueltigBis | date: 'MM.YYYY' }}</dd>
+    <dt class="me-2 fw-normal text-muted">Monate:</dt>
+    <dd class="me-4">{{ view.monate }}</dd>
+  </dl>
   @if (berechnungenSig().length > 0) {
-    <h2 class="pt-4 h3">{{ 'sachbearbeitung-app.verfuegung.berechnung.resultat' | translate }}</h2>
     @for (berechnung of berechnungenSig(); track $index) {
-      <div class="row">
-        <div class="col-12 p-2 rounded bg-light">
-          <div>
-            <b>Berechnung {{ $index + 1 }} - Total: </b><span>{{ berechnung.berechnung }}</span>
-          </div>
-          @if (berechnung.parsedData) {
-            <pre>{{ berechnung.parsedData | json }}</pre>
-          } @else {
-            <pre>{{ berechnung.berechnungsdaten }}</pre>
-          }
-        </div>
-      </div>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <div class="d-flex flex-column ps-3">
+              <span class="text-muted mb-2">{{
+                'sachbearbeitung-app.verfuegung.berechnung.persoenlichesBudget.title' | translate
+              }}</span>
+              <span class="h3 mb-4">{{ view.person }}</span>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-accordion>
+          <mat-expansion-panel [togglePosition]="'before'">
+            <mat-expansion-panel-header [collapsedHeight]="'6rem'">
+              <mat-panel-title class="h3 mb-0">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.titel' | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="grid gap-4 ps-4">
+              <!-- Nettoerwerbseinkommen -->
+              <div classs="d-flex flex-column">
+                <div class="fs-4">
+                  {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.nettoerwerbseinkommen' | translate }}
+                </div>
+                <div class="text-muted">
+                  {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.nettoerwerbseinkommen.info' | translate }}
+                </div>
+              </div>
+              <div class="text-muted">
+                {{ berechnung.einnahmen.nettoerwerbseinkommen }}
+              </div>
+
+              <!-- EO -->
+              <div classs="d-flex flex-column">
+                <div class="fs-4">
+                  {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.eoLeistungen' | translate }}
+                </div>
+                <div class="text-muted">
+                  {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.eoLeistungen.info' | translate }}
+                </div>
+              </div>
+              <div class="text-muted">{{ berechnung.einnahmen.eoLeistungen }}</div>
+
+              <!-- Unterhaltsbeiträge -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.unterhaltsbeitraege' | translate }}
+              </div>
+              <div class="text-muted">{{ berechnung.einnahmen.unterhaltsbeitraege }}</div>
+
+              <!-- Kinder- und Ausbildungszulagen -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.kinderUndAusbildungszulagen' | translate }}
+              </div>
+              <div class="text-muted">
+                {{ berechnung.einnahmen.kinderUndAusbildungszulagen }}
+              </div>
+
+              <!-- Ergänzungsleistungen -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.ergaenzungsleistungen' | translate }}
+              </div>
+              <div class="text-muted">
+                {{ berechnung.einnahmen.ergaenzungsleistungen }}
+              </div>
+
+              <!-- Beiträge an Gemeindeinstitutionen -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.beitraegeGemeindeInstitution' | translate }}
+              </div>
+              <div class="text-muted">
+                {{ berechnung.einnahmen.beitraegeGemeindeInstitution }}
+              </div>
+
+              <!-- Steuerbares Vermögen -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.steuerbaresVermoegen' | translate }}
+              </div>
+              <div class="text-muted">
+                {{ berechnung.einnahmen.steuerbaresVermoegen }}
+              </div>
+
+              <!-- Elterliche Leistung -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.elterlicheLeistung' | translate }}
+              </div>
+              <div class="text-muted">{{ berechnung.einnahmen.elterlicheLeistung }}</div>
+
+              <!-- Einkommen Partner -->
+              <div class="fs-4">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.einkommenPartner' | translate }}
+              </div>
+              <div class="text-muted">{{ berechnung.einnahmen.einkommenPartner }}</div>
+              <div class="h4 mt-3">
+                {{ 'sachbearbeitung-app.verfuegung.berechnung.einnahmen.total' | translate }}
+              </div>
+              <div class="text-muted">{{ berechnung.einnahmen.total | formatChf }}</div>
+            </div>
+            <!--
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.nettoerwerbseinkommen.info
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.eoLeistungen
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.eoLeistungen.info
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.unterhaltsbeitraege
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.kinderUndAusbildungszulagen
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.ergaenzungsleistungen
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.beitraegeGemeindeInstitution
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.steuerbaresVermoegen
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.elterlicheLeistung
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.einkommenPartner
+              sachbearbeitung-app.verfuegung.berechnung.einnahmen.total
+            -->
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card>
     }
   }
 }
+
+<!-- Persönliches Budget-->

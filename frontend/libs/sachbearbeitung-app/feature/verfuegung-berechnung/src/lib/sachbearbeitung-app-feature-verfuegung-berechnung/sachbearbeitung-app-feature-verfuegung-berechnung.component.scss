@@ -1,0 +1,10 @@
+:host {
+  .grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    > :nth-child(2n) {
+      text-align: right;
+    }
+  }
+}
