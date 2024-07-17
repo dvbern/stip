@@ -493,7 +493,21 @@ class GesuchResourceTest {
         for (GesuchDtoSpec gesuch : gesuche) {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.EINGEREICHT));
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
         }
+
+
+        gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
+
+        for (GesuchDtoSpec gesuch : gesuche) {
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.EINGEREICHT));
+        }
+
     }
 
     @Test

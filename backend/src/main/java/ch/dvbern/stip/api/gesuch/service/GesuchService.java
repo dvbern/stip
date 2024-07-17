@@ -229,7 +229,7 @@ public class GesuchService {
             case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
             case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
             case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
-            case ALLE -> map(gesuchRepository.findAlle());
+            case ALLE -> map(gesuchRepository.findAlle().filter(x -> x.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung() != null));
         };
     }
 

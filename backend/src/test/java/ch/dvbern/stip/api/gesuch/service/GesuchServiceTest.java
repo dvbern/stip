@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -30,9 +31,11 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -903,6 +906,15 @@ class GesuchServiceTest {
         assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
     }
 
+    @TestAsSachbearbeiter
+    @Test
+    void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA(){
+        setupGesucheWithAndWithoutPia();
+        var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
+        assertThat(alleGesuche.stream().filter(x -> x.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null).count(), Matchers.is(0L));
+    }
+
+
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         return gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
@@ -977,6 +989,17 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
+    }
+
+    private void setupGesucheWithAndWithoutPia(){
+        Gesuch gesuchWithoutPia = GesuchGenerator.initGesuch();
+        gesuchWithoutPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
+        gesuchWithoutPia.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(null);
+
+        Gesuch gesuchWithPia = GesuchGenerator.initGesuch();
+        gesuchWithPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
+        gesuchWithPia.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(new PersonInAusbildung());
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutPia, gesuchWithPia));
     }
 
     private GesuchTranche updateWerZahltAlimente(
