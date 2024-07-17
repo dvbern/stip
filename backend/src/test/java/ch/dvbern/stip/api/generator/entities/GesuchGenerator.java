@@ -19,9 +19,20 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.util.TestConstants;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 
