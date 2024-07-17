@@ -92,7 +92,7 @@ public class GesuchDokumentService {
         return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void deleteAllDokumentForGesuchInRepository(final UUID gesuchId) {
         gesuchDokumentRepository.findAllForGesuch(gesuchId)
             .forEach(gesuchDokumentRepository::delete);

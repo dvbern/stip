@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * KindUpdateDtoSpec
  */
 @JsonPropertyOrder({
   KindUpdateDtoSpec.JSON_PROPERTY_VORNAME,

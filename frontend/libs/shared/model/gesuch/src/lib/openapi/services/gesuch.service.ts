@@ -18,11 +18,13 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { Berechnungsresultat } from '../model/berechnungsresultat';
 import { DokumentTyp } from '../model/dokumentTyp';
 import { Gesuch } from '../model/gesuch';
 import { GesuchCreate } from '../model/gesuchCreate';
 import { GesuchDokument } from '../model/gesuchDokument';
 import { GesuchUpdate } from '../model/gesuchUpdate';
+import { GetGesucheSBQueryTyp } from '../model/getGesucheSBQueryTyp';
 import { StatusprotokollEntry } from '../model/statusprotokollEntry';
 import { ValidationReport } from '../model/validationReport';
 
@@ -50,6 +52,10 @@ export interface GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams {
     gesuchId: string;
 }
 
+export interface GesuchServiceGetBerechnungForGesuchRequestParams {
+    gesuchId: string;
+}
+
 export interface GesuchServiceGetGesuchRequestParams {
     gesuchId: string;
 }
@@ -60,6 +66,10 @@ export interface GesuchServiceGetGesuchDokumenteRequestParams {
 
 export interface GesuchServiceGetGesucheForFallRequestParams {
     fallId: string;
+}
+
+export interface GesuchServiceGetGesucheSbRequestParams {
+    getGesucheSBQueryTyp: GetGesucheSBQueryTyp;
 }
 
 export interface GesuchServiceGetRequiredGesuchDokumentTypRequestParams {
@@ -517,14 +527,19 @@ export class GesuchService {
     }
 
     /**
-     * Returns gesuche filtered by status
+     * Berechnet und holt die Berechnung für ein Gesuch
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAllGesucheSb$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuch>>;
-     public getAllGesucheSb$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuch>>>;
-     public getAllGesucheSb$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuch>>>;
-     public getAllGesucheSb$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getBerechnungForGesuch$(requestParameters: GesuchServiceGetBerechnungForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Berechnungsresultat>>;
+     public getBerechnungForGesuch$(requestParameters: GesuchServiceGetBerechnungForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Berechnungsresultat>>>;
+     public getBerechnungForGesuch$(requestParameters: GesuchServiceGetBerechnungForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Berechnungsresultat>>>;
+     public getBerechnungForGesuch$(requestParameters: GesuchServiceGetBerechnungForGesuchRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getBerechnungForGesuch$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -571,8 +586,8 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/all/sb`;
-        return this.httpClient.request<Array<Gesuch>>('get', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/berechnung`;
+        return this.httpClient.request<Array<Berechnungsresultat>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -872,13 +887,18 @@ export class GesuchService {
 
     /**
      * Returns gesuche filtered by status and sb
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesucheSb$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuch>>;
-     public getGesucheSb$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuch>>>;
-     public getGesucheSb$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuch>>>;
-     public getGesucheSb$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuch>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuch>>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuch>>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const getGesucheSBQueryTyp = requestParameters.getGesucheSBQueryTyp;
+        if (getGesucheSBQueryTyp === null || getGesucheSBQueryTyp === undefined) {
+            throw new Error('Required parameter getGesucheSBQueryTyp was null or undefined when calling getGesucheSb$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -925,7 +945,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/benutzer/me/sb`;
+        const localVarPath = `/gesuch/benutzer/me/sb/${this.configuration.encodeParam({name: "getGesucheSBQueryTyp", value: getGesucheSBQueryTyp, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryTyp", dataFormat: undefined})}`;
         return this.httpClient.request<Array<Gesuch>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

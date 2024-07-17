@@ -237,7 +237,7 @@ public class GesuchFormularUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get elterns
    * @return elterns
   **/
   @jakarta.annotation.Nullable
@@ -271,7 +271,7 @@ public class GesuchFormularUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get geschwisters
    * @return geschwisters
   **/
   @jakarta.annotation.Nullable
@@ -305,7 +305,7 @@ public class GesuchFormularUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get lebenslaufItems
    * @return lebenslaufItems
   **/
   @jakarta.annotation.Nullable
@@ -339,7 +339,7 @@ public class GesuchFormularUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get kinds
    * @return kinds
   **/
   @jakarta.annotation.Nullable

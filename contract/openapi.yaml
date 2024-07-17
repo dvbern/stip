@@ -7,11 +7,9 @@ info:
     url: 'https://www.gnu.org/licenses/agpl.txt'
 servers:
   - url: 'http://localhost:{port}/api/v1'
-    description: ''
     variables:
       port:
         default: '8080'
-        description: ''
 paths:
   /mail/welcome:
     post:
@@ -54,31 +52,16 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  /gesuch/all/sb:
+  /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}:
     get:
       tags:
         - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Returns gesuche filtered by status
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllGesucheSb
-      summary: Returns gesuche filtered by status
-  /gesuch/benutzer/me/sb:
-    get:
-      tags:
-        - Gesuch
+      parameters:
+        - name: getGesucheSBQueryTyp
+          schema:
+            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
+          in: path
+          required: true
       responses:
         '200':
           content:
@@ -1073,6 +1056,37 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getStatusProtokoll
       summary: Holt das Statusprotokoll für ein Gesuch
+  '/gesuch/{gesuchId}/berechnung':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Stipendien berechnet für Gesuch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungForGesuch
+      summary: Berechnet und holt die Berechnung für ein Gesuch
   /tenant/current:
     get:
       tags:
@@ -1515,6 +1529,13 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
       type: string
+    GetGesucheSBQueryTyp:
+      enum:
+        - ALLE_BEARBEITBAR
+        - ALLE_BEARBEITBAR_MEINE
+        - ALLE_MEINE
+        - ALLE
+      type: string
     GueltigkeitStatus:
       enum:
         - ENTWURF
@@ -1576,7 +1597,6 @@ components:
         version:
           type: string
         allowedMimeTypes:
-          description: ''
           type: array
           items:
             type: string
@@ -1613,7 +1633,6 @@ components:
         timestampErstellt:
           type: string
         objectId:
-          description: ''
           type: string
     Fall:
       required:
@@ -1682,7 +1701,6 @@ components:
       type: string
     LebenslaufItemUpdate:
       title: Root Type for Lebenslauf
-      description: ''
       required:
         - bis
         - von
@@ -1691,7 +1709,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-          description: ''
         bildungsart:
           $ref: '#/components/schemas/LebenslaufAusbildungsArt'
           description: Required wenn taetigkeitsart = null
@@ -1703,9 +1720,7 @@ components:
           type: string
         wohnsitz:
           $ref: '#/components/schemas/WohnsitzKanton'
-          description: ''
         ausbildungAbgeschlossen:
-          description: ''
           type: boolean
         berufsbezeichnung:
           description: >-
@@ -1763,7 +1778,6 @@ components:
           $ref: '#/components/schemas/Elternschaftsteilung'
           description: Required nur wenn gerichtlicheAlimentenregelung = true
     Ausbildungssituation:
-      description: ''
       enum:
         - VORSCHULPFLICHTIG
         - SCHULPFLICHTIG
@@ -1772,7 +1786,6 @@ components:
       type: string
     GeschwisterUpdate:
       title: Root Type for Geschwister
-      description: ''
       required:
         - wohnsitz
         - vorname
@@ -1818,7 +1831,6 @@ components:
           $ref: '#/components/schemas/LocalDate'
           description: dd.MM.YYYY
         sozialversicherungsnummer:
-          description: ''
           type: string
         nachname:
           type: string
@@ -1835,7 +1847,6 @@ components:
           type: integer
     KindUpdate:
       title: Root Type for Geschwister
-      description: ''
       required:
         - wohnsitz
         - vorname
@@ -1868,14 +1879,12 @@ components:
           type: integer
     Auszahlung:
       title: Root Type for Auszahlung
-      description: ''
       type: object
       allOf:
         - type: object
         - $ref: '#/components/schemas/AuszahlungUpdate'
     AuszahlungUpdate:
       title: Root Type for Auszahlung
-      description: ''
       required:
         - adresse
         - iban
@@ -1888,19 +1897,6 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-          properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
         iban:
           type: string
         nachname:
@@ -1908,7 +1904,6 @@ components:
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
     Gesuch:
-      description: ''
       required:
         - fall
         - gesuchsperiode
@@ -1921,20 +1916,15 @@ components:
       properties:
         fall:
           $ref: '#/components/schemas/Fall'
-          description: ''
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
-          description: ''
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
-          description: ''
         gesuchNummer:
           format: int32
-          description: ''
           type: integer
         id:
           $ref: '#/components/schemas/UUID'
-          description: ''
         aenderungsdatum:
           $ref: '#/components/schemas/LocalDate'
           description: Datum wann das Gesuch zu letzt geändert wurde
@@ -1943,7 +1933,6 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
-          description: ''
     GesuchCreate:
       required:
         - fallId
@@ -1955,14 +1944,12 @@ components:
         gesuchsperiodeId:
           $ref: '#/components/schemas/UUID'
     GesuchUpdate:
-      description: ''
       required:
         - gesuchTrancheToWorkWith
       type: object
       properties:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTrancheUpdate'
-          description: ''
     Land:
       enum:
         - CH
@@ -1971,13 +1958,11 @@ components:
         - IT
       type: string
     Sprache:
-      description: ''
       enum:
         - DEUTSCH
         - FRANZOESISCH
       type: string
     WohnsitzKanton:
-      description: ''
       enum:
         - AG
         - AI
@@ -2022,7 +2007,6 @@ components:
         - SEKUNDAR_2
         - TERTIAER
     Bildungsart:
-      description: ''
       type: object
       required:
         - id
@@ -2039,7 +2023,6 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
     LebenslaufAusbildungsArt:
-      description: ''
       enum:
         - BERUFSVORBEREITENDES_SCHULJAHR
         - VORLEHRE
@@ -2065,14 +2048,12 @@ components:
           type: object
         - $ref: '#/components/schemas/PersonInAusbildungUpdate'
     ElternTyp:
-      description: ''
       enum:
         - VATER
         - MUTTER
       type: string
     ElternUpdate:
       title: Root Type for Eltern
-      description: ''
       required:
         - adresse
         - ausweisbFluechtling
@@ -2091,21 +2072,6 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-          properties:
-            coAdresse:
-              type: string
-            strasse:
-              type: string
-            hausnummer:
-              type: string
-            plz:
-              type: string
-            ort:
-              type: string
-            land:
-              type: string
-            id:
-              type: string
         identischerZivilrechtlicherWohnsitz:
           type: boolean
         identischerZivilrechtlicherWohnsitzOrt:
@@ -2132,32 +2098,27 @@ components:
           type: boolean
         id:
           $ref: '#/components/schemas/UUID'
-          description: ''
         elternTyp:
           $ref: '#/components/schemas/ElternTyp'
         nachname:
           type: string
     Eltern:
       title: Root Type for Eltern
-      description: ''
       type: object
       allOf:
         - $ref: '#/components/schemas/ElternUpdate'
     Geschwister:
       title: Root Type for Geschwister
-      description: ''
       type: object
       allOf:
         - $ref: '#/components/schemas/GeschwisterUpdate'
     Kind:
       title: Root Type for Geschwister
-      description: ''
       type: object
       allOf:
         - $ref: '#/components/schemas/KindUpdate'
     LebenslaufItem:
       title: Root Type for Lebenslauf
-      description: ''
       type: object
       allOf:
         - $ref: '#/components/schemas/LebenslaufItemUpdate'
@@ -2167,7 +2128,6 @@ components:
         - type: object
         - $ref: '#/components/schemas/PartnerUpdate'
     Kontoinhaber:
-      description: ''
       enum:
         - GESUCHSTELLER
         - VATER
@@ -2181,35 +2141,27 @@ components:
       properties:
         ausbildung:
           $ref: '#/components/schemas/Ausbildung'
-          description: ''
         personInAusbildung:
           $ref: '#/components/schemas/PersonInAusbildung'
-          description: ''
         familiensituation:
           $ref: '#/components/schemas/Familiensituation'
         partner:
           $ref: '#/components/schemas/Partner'
-          description: ''
         auszahlung:
           $ref: '#/components/schemas/Auszahlung'
-          description: ''
         elterns:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/Eltern'
         geschwisters:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/Geschwister'
         lebenslaufItems:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/LebenslaufItem'
         kinds:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/Kind'
@@ -2292,9 +2244,7 @@ components:
           type: string
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
-          description: ''
     Benutzer:
-      description: ''
       type: object
       allOf:
         - required:
@@ -2303,10 +2253,8 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/UUID'
-              description: ''
             sachbearbeiterZuordnungStammdaten:
               $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
-              description: ''
         - $ref: '#/components/schemas/BenutzerUpdate'
     GesuchFormularUpdate:
       required: []
@@ -2314,35 +2262,27 @@ components:
       properties:
         ausbildung:
           $ref: '#/components/schemas/AusbildungUpdate'
-          description: ''
         personInAusbildung:
           $ref: '#/components/schemas/PersonInAusbildungUpdate'
-          description: ''
         familiensituation:
           $ref: '#/components/schemas/FamiliensituationUpdate'
         partner:
           $ref: '#/components/schemas/PartnerUpdate'
-          description: ''
         auszahlung:
           $ref: '#/components/schemas/AuszahlungUpdate'
-          description: ''
         elterns:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/ElternUpdate'
         geschwisters:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/GeschwisterUpdate'
         lebenslaufItems:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/LebenslaufItemUpdate'
         kinds:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/KindUpdate'
@@ -2362,19 +2302,16 @@ components:
         - EIGENER_HAUSHALT
       type: string
     ValidationReport:
-      description: ''
       required:
         - validationErrors
         - validationWarnings
       type: object
       properties:
         validationErrors:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/ValidationError'
         validationWarnings:
-          description: ''
           type: array
           items:
             $ref: '#/components/schemas/ValidationWarning'
@@ -2382,20 +2319,16 @@ components:
           description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
           type: boolean
     ValidationMessage:
-      description: ''
       required:
         - message
         - messageTemplate
       type: object
       properties:
         propertyPath:
-          description: ''
           type: string
         messageTemplate:
-          description: ''
           type: string
         message:
-          description: ''
           type: string
     ValidationWarning:
       allOf:
@@ -2415,18 +2348,7 @@ components:
           type: string
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
-          properties:
-            authServerUrl:
-              type: string
-            clientId:
-              type: string
-      example:
-        identifier: some text
-        clientAuth:
-          authServerUrl: some text
-          clientId: some text
     BenutzerUpdate:
-      description: ''
       required:
         - nachname
         - sozialversicherungsnummer
@@ -2443,7 +2365,6 @@ components:
           $ref: '#/components/schemas/BenutzereinstellungenUpdate'
     TenantAuthConfig:
       title: Root Type for TenantAuthConfig
-      description: ''
       required:
         - authServerUrl
         - realm
@@ -2452,7 +2373,6 @@ components:
         authServerUrl:
           type: string
         realm:
-          description: ''
           type: string
       example:
         authServerUrl: some text
@@ -2569,7 +2489,6 @@ components:
       properties:
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
-          description: ''
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:
@@ -2587,14 +2506,12 @@ components:
           type: object
           properties:
             ausbildungsgaenge:
-              description: ''
               type: array
               items:
                 $ref: '#/components/schemas/Ausbildungsgang'
         - $ref: '#/components/schemas/AusbildungsstaetteUpdate'
       type: object
     AusbildungsgangUpdate:
-      description: ''
       required:
         - bezeichnungDe
         - bezeichnungFr
@@ -2603,17 +2520,14 @@ components:
       type: object
       properties:
         bezeichnungDe:
-          description: ''
           type: string
         bezeichnungFr:
-          description: ''
           type: string
         bildungsartId:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
     AusbildungsgangCreate:
-      description: ''
       required:
         - bezeichnungDe
         - bezeichnungFr
@@ -2622,17 +2536,14 @@ components:
       type: object
       properties:
         bezeichnungDe:
-          description: ''
           type: string
         bezeichnungFr:
-          description: ''
           type: string
         bildungsartId:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
     Ausbildungsort:
-      description: ''
       type: string
     GesuchsperiodeWithDaten:
       required:
@@ -2658,6 +2569,9 @@ components:
         - gesuchsperiodeStart
         - gesuchsperiodeStopp
         - aufschaltterminStart
+        - aufschaltterminStopp
+        - einreichefristNormal
+        - einreichefristReduziert
         - gueltigkeitStatus
         - gesuchsjahr
         - ausbKosten_SekII
@@ -2677,9 +2591,9 @@ components:
         gesuchsperiodeStopp:
           $ref: '#/components/schemas/LocalDate'
         aufschaltterminStart:
-          format: date
-          description: dd.MM.YYYY
-          type: string
+          $ref: '#/components/schemas/LocalDate'
+        aufschaltterminStopp:
+          $ref: '#/components/schemas/LocalDate'
         einreichefristNormal:
           $ref: '#/components/schemas/LocalDate'
         einreichefristReduziert:
@@ -2687,10 +2601,8 @@ components:
         gesuchsjahr:
           $ref: '#/components/schemas/Gesuchsjahr'
         ausbKosten_SekII:
-          description: ''
           type: integer
         ausbKosten_Tertiaer:
-          description: ''
           type: integer
     GesuchsperiodeCreate:
       type: object
@@ -2750,19 +2662,15 @@ components:
         - anzahlWochenSchule
       properties:
         bezeichnungDe:
-          description: ''
           type: string
         bezeichnungFr:
-          description: ''
           type: string
         einreichfrist:
           $ref: '#/components/schemas/LocalDate'
         fiskaljahr:
-          description: ''
           type: integer
         gesuchsjahrId:
           $ref: '#/components/schemas/UUID'
-          description: ''
         gesuchsperiodeStart:
           format: date
           description: dd.MM.YYYY
@@ -2788,109 +2696,74 @@ components:
           description: dd.MM.YYYY
           type: string
         ausbKosten_SekII:
-          description: ''
           type: integer
         ausbKosten_Tertiaer:
-          description: ''
           type: integer
         freibetrag_vermoegen:
-          description: ''
           type: integer
         freibetrag_erwerbseinkommen:
-          description: ''
           type: integer
         einkommensfreibetrag:
-          description: ''
           type: integer
         elternbeteiligungssatz:
-          description: ''
           type: integer
         vermogenSatzAngerechnet:
-          description: ''
           type: integer
         integrationszulage:
-          description: ''
           type: integer
         limite_EkFreibetrag_Integrationszulag:
-          description: ''
           type: integer
         stipLimite_Minimalstipendium:
-          description: ''
           type: integer
         person_1:
-          description: ''
           type: integer
         personen_2:
-          description: ''
           type: integer
         personen_3:
-          description: ''
           type: integer
         personen_4:
-          description: ''
           type: integer
         personen_5:
-          description: ''
           type: integer
         personen_6:
-          description: ''
           type: integer
         personen_7:
-          description: ''
           type: integer
         proWeiterePerson:
-          description: ''
           type: integer
         kinder_00_18:
-          description: ''
           type: integer
         jugendliche_erwachsene_19_25:
-          description: ''
           type: integer
         erwachsene_26_99:
-          description: ''
           type: integer
         wohnkosten_fam_1pers:
-          description: ''
           type: integer
         wohnkosten_fam_2pers:
-          description: ''
           type: integer
         wohnkosten_fam_3pers:
-          description: ''
           type: integer
         wohnkosten_fam_4pers:
-          description: ''
           type: integer
         wohnkosten_fam_5pluspers:
-          description: ''
           type: integer
         wohnkosten_persoenlich_1pers:
-          description: ''
           type: integer
         wohnkosten_persoenlich_2pers:
-          description: ''
           type: integer
         wohnkosten_persoenlich_3pers:
-          description: ''
           type: integer
         wohnkosten_persoenlich_4pers:
-          description: ''
           type: integer
         wohnkosten_persoenlich_5pluspers:
-          description: ''
           type: integer
         preisProMahlzeit:
-          description: ''
           type: integer
         maxSaeule3a:
-          description: ''
           type: integer
         anzahlWochenLehre:
-          description: ''
           type: integer
         anzahlWochenSchule:
-          description: ''
           type: integer
     AusbildungsstaetteUpdate:
       required:
@@ -2899,10 +2772,8 @@ components:
       type: object
       properties:
         nameDe:
-          description: ''
           type: string
         nameFr:
-          description: ''
           type: string
         id:
           $ref: '#/components/schemas/UUID'
@@ -2913,10 +2784,8 @@ components:
       type: object
       properties:
         nameDe:
-          description: ''
           type: string
         nameFr:
-          description: ''
           type: string
     Ausbildungsgang:
       required:
@@ -2927,19 +2796,14 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         bezeichnungDe:
-          description: ''
           type: string
         bezeichnungFr:
-          description: ''
           type: string
         bildungsart:
           $ref: '#/components/schemas/Bildungsart'
-          description: ''
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-          description: ''
     GesuchTranche:
-      description: ''
       required:
         - id
         - gueltigAb
@@ -2948,18 +2812,13 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-          description: ''
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'
-          description: ''
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
-          description: ''
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormular'
-          description: ''
     GesuchTrancheUpdate:
-      description: ''
       required:
         - gesuchFormular
         - id
@@ -2967,47 +2826,35 @@ components:
       properties:
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormularUpdate'
-          description: ''
         id:
           $ref: '#/components/schemas/UUID'
-          description: ''
     SachbearbeiterZuordnungStammdaten:
-      description: ''
       type: object
       properties:
         buchstabenDe:
-          description: ''
           type: string
         buchstabenFr:
-          description: ''
           type: string
     SachbearbeiterZuordnungStammdatenList:
-      description: ''
       type: object
       properties:
         sachbearbeiter:
           $ref: '#/components/schemas/UUID'
-          description: ''
         zuordnung:
           $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
-          description: ''
     Benutzereinstellungen:
-      description: ''
       type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         digitaleKommunikation:
-          description: ''
           type: boolean
     BenutzereinstellungenUpdate:
-      description: ''
       type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         digitaleKommunikation:
-          description: ''
           type: boolean
     plz:
       description: 'PLZ und ort für Type ahead funktionalitaet'
@@ -3018,17 +2865,13 @@ components:
         - kantonskuerzel
       properties:
         plz:
-          description: ''
           type: string
         ort:
-          description: ''
           type: string
         kantonskuerzel:
-          description: ''
           type: string
     SteuerdatenUpdate:
       title: Root Type for Steuerdaten
-      description: ''
       required:
         - steuernStaat
         - steuernBund
@@ -3083,7 +2926,6 @@ components:
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
-      description: ''
       type: object
       allOf:
         - $ref: '#/components/schemas/SteuerdatenUpdate'
@@ -3115,6 +2957,16 @@ components:
         - AUSSTEHEND
         - ABGELEHNT
         - AKZEPTIERT
+    Berechnungsresultat:
+      description: Resultat der Berechnung (eine Tranche)
+      type: object
+      properties:
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für diese Tranche'
+          type: integer
+        berechnungsdaten:
+          description: 'Resultat der Berechnung als JSON string, transparent'
+          type: string
   responses:
     Unauthorized:
       content:
@@ -3139,17 +2991,17 @@ components:
             $ref: '#/components/schemas/ValidationReport'
       description: Die Kunde Request Daten sind ungültig
   securitySchemes:
-    auth-dev-bern:
-      openIdConnectUrl: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern'
-      type: openIdConnect
-      description: Bern (DEV)
     auth-uat-bern:
-      openIdConnectUrl: 'https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern'
       type: openIdConnect
+      openIdConnectUrl: https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern
       description: Bern (UAT)
+    auth-dev-bern:
+      type: openIdConnect
+      openIdConnectUrl: https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern
+      description: Bern (DEV)
 security:
-  - auth-dev-bern: []
   - auth-uat-bern: []
+  - auth-dev-bern: []
 tags:
   - name: Ausbildungsstaette
   - name: Auth
@@ -3159,9 +3011,6 @@ tags:
   - name: Gesuchsperiode
   - name: Stammdaten
   - name: Benutzer
-    description: ''
   - name: Tenant
-    description: ''
   - name: Ausbildungsgang
-    description: ''
   - name: Mail

@@ -89,7 +89,6 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public PartnerUpdateDto sozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;

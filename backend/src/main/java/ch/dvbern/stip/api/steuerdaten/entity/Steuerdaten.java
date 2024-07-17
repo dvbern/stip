@@ -86,5 +86,5 @@ public class Steuerdaten extends AbstractEntity {
 
     @NotNull
     @Column(name = "veranlagungscode", nullable = false)
-    private Integer veranlagungscode;
+    private Integer veranlagungscode = 0;
 }

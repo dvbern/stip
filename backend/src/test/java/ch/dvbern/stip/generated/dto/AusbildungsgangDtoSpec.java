@@ -89,7 +89,7 @@ public class AusbildungsgangDtoSpec {
   }
 
    /**
-   * 
+   * Get bezeichnungDe
    * @return bezeichnungDe
   **/
   @jakarta.annotation.Nullable
@@ -115,7 +115,7 @@ public class AusbildungsgangDtoSpec {
   }
 
    /**
-   * 
+   * Get bezeichnungFr
    * @return bezeichnungFr
   **/
   @jakarta.annotation.Nullable

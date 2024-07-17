@@ -12,9 +12,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * 
- **/
+
 
 @JsonTypeName("BenutzereinstellungenUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -44,7 +42,6 @@ public class BenutzereinstellungenUpdateDto  implements Serializable {
   }
 
   /**
-   * 
    **/
   public BenutzereinstellungenUpdateDto digitaleKommunikation(Boolean digitaleKommunikation) {
     this.digitaleKommunikation = digitaleKommunikation;

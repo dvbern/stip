@@ -57,7 +57,7 @@ public class AusbildungsstaetteAnyOfDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbildungsgaenge
    * @return ausbildungsgaenge
   **/
   @jakarta.annotation.Nullable

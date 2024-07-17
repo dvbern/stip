@@ -11,9 +11,6 @@
  */
 import { GesuchTrancheUpdate } from './gesuchTrancheUpdate';
 
-/**
- * 
- */
 export interface GesuchUpdate { 
     gesuchTrancheToWorkWith: GesuchTrancheUpdate;
 }

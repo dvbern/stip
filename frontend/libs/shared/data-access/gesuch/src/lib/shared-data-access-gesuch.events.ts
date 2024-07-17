@@ -1,15 +1,24 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { SharedModelError } from '@dv/shared/model/error';
-import { GesuchCreate, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import {
+  GesuchCreate,
+  GetGesucheSBQueryTyp,
+  SharedModelGesuch,
+} from '@dv/shared/model/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export const SharedDataAccessGesuchEvents = createActionGroup({
   source: 'Gesuch API',
   events: {
     init: emptyProps(),
-    loadAll: props<{ filter?: { showAll?: boolean } }>(),
-    loadAllDebounced: props<{ filter?: { showAll?: boolean } }>(),
+    loadGesuch: emptyProps(),
+    loadAll: props<{
+      query: GetGesucheSBQueryTyp;
+    }>(),
+    loadAllDebounced: props<{
+      query: GetGesucheSBQueryTyp;
+    }>(),
     newTriggered: props<{
       create: GesuchCreate;
     }>(),
