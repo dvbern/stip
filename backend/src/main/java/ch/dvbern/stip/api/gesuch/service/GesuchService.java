@@ -171,12 +171,11 @@ public class GesuchService {
 
         final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream().filter(tab -> tab.getSteuerdatenTyp() != null).toList();
 
-        for (final var currentSteuerdatenUpdateDto : steuerdatenUpdateDtos){
-            setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, steuerdatenList.stream().filter(tab -> tab.getId().equals(currentSteuerdatenUpdateDto.getId())).findFirst().orElse(null),gesuchsjahr);
+        for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos){
+            setAndValidateSteuerdatenTabUpdateLegality(steuerdatenUpdateDto, steuerdatenList.stream().filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId())).findFirst().orElse(null),gesuchsjahr);
         }
     }
-    @Transactional
-    public void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto, final Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr){
+    private void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto, final Steuerdaten steuerdatenTabs, Gesuchsjahr gesuchsjahr){
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -187,21 +186,21 @@ public class GesuchService {
         Integer veranlagungsCodeToSet = 0;
 
         if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))){
-            if(steuerdaten != null){
+            if(steuerdatenTabs != null){
                 steuerjahrToSet = Objects.requireNonNullElse(
-                    steuerdaten.getSteuerjahr(),
+                    steuerdatenTabs.getSteuerjahr(),
                     steuerjahrToSet
                 );
                 veranlagungsCodeToSet = Objects.requireNonNullElse(
-                    steuerdaten.getVeranlagungsCode(),
+                    steuerdatenTabs.getVeranlagungsCode(),
                     veranlagungsCodeToSet
                 );
             }
         } else {
             if (steuerdatenUpdateDto.getSteuerjahr() == null) {
-                if (steuerdaten != null) {
+                if (steuerdatenTabs != null) {
                     steuerjahrToSet = Objects.requireNonNullElse(
-                        steuerdaten.getSteuerjahr(),
+                        steuerdatenTabs.getSteuerjahr(),
                         steuerjahrToSet
                     );
                 }
@@ -209,9 +208,9 @@ public class GesuchService {
                 steuerjahrToSet = steuerdatenUpdateDto.getSteuerjahr();
             }
             if (steuerdatenUpdateDto.getVeranlagungscode() == null) {
-                if (steuerdaten != null) {
+                if (steuerdatenTabs != null) {
                     veranlagungsCodeToSet = Objects.requireNonNullElse(
-                        steuerdaten.getVeranlagungsCode(),
+                        steuerdatenTabs.getVeranlagungsCode(),
                         veranlagungsCodeToSet
                     );
                 }
