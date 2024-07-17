@@ -26,6 +26,8 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -53,6 +55,23 @@ public class TestUtil {
         return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null, null,
             ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT
         );
+    }
+
+    public static Steuerdaten prepareSteuerdaten() {
+        Steuerdaten steuerdaten = new Steuerdaten();
+        steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        steuerdaten.setEigenmietwert(0);
+        steuerdaten.setVerpflegung(0);
+        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdaten.setTotalEinkuenfte(0);
+        steuerdaten.setFahrkosten(0);
+        steuerdaten.setKinderalimente(0);
+        steuerdaten.setSteuernBund(0);
+        steuerdaten.setSteuernStaat(0);
+        steuerdaten.setVermoegen(0);
+        steuerdaten.setErgaenzungsleistungen(0);
+        steuerdaten.setSteuerjahr(0);
+        return  steuerdaten;
     }
 
     public static GesuchCreateDtoSpec initGesuchCreateDto() {

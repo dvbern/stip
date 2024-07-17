@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -778,7 +779,6 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
-        //gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -798,7 +798,7 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().setPartner(null);
 
         Set<Steuerdaten> list = new LinkedHashSet<>();
-        list.add(prepareSteuerdaten());
+        list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
@@ -815,22 +815,7 @@ class GesuchServiceTest {
         EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(null);
     }
 
-    private Steuerdaten prepareSteuerdaten() {
-        Steuerdaten steuerdaten = new Steuerdaten();
-        steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
-        steuerdaten.setEigenmietwert(0);
-        steuerdaten.setVerpflegung(0);
-        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdaten.setTotalEinkuenfte(0);
-        steuerdaten.setFahrkosten(0);
-        steuerdaten.setKinderalimente(0);
-        steuerdaten.setSteuernBund(0);
-        steuerdaten.setSteuernStaat(0);
-        steuerdaten.setVermoegen(0);
-        steuerdaten.setErgaenzungsleistungen(0);
-        steuerdaten.setSteuerjahr(0);
-        return  steuerdaten;
-    }
+
 
     @Test
     @TestAsGesuchsteller
@@ -860,7 +845,7 @@ class GesuchServiceTest {
         );
 
         Set<Steuerdaten> list = new LinkedHashSet<>();
-        list.add(prepareSteuerdaten());
+        list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
         gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
