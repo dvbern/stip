@@ -31,11 +31,10 @@ export interface RejectDokument {
 })
 export class SharedUiRejectDokumentComponent {
   public gesuchDokument = inject<GesuchDokument>(MAT_DIALOG_DATA);
-  // private dialogRef =
-  //   inject<MatDialogRef<SharedUiRejectDokumentComponent, RejectDokument>>(
-  //     MatDialogRef,
-  //   );
-  private dialogRef = inject(MatDialogRef);
+  private dialogRef =
+    inject<MatDialogRef<SharedUiRejectDokumentComponent, RejectDokument>>(
+      MatDialogRef,
+    );
   private formBuilder = inject(NonNullableFormBuilder);
 
   form = this.formBuilder.group({
@@ -49,6 +48,8 @@ export class SharedUiRejectDokumentComponent {
   rejectDocument() {
     const id = this.gesuchDokument.id;
     const kommentar = this.form.value.kommentar;
+
+    if (!id || !kommentar) throw new Error('Id or Kommentar is missing');
 
     this.dialogRef.close({ id, kommentar });
   }

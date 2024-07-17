@@ -19,9 +19,14 @@ describe('DokumentsStore', () => {
 
   it('has a initial remote data state', () => {
     expect(store.dokuments()).toEqual({
-      data: null,
-      loading: false,
-      error: null,
+      data: undefined,
+      error: undefined,
+      type: 'initial',
+    });
+    expect(store.requiredDocumentTypes()).toEqual({
+      data: undefined,
+      error: undefined,
+      type: 'initial',
     });
   });
 });
