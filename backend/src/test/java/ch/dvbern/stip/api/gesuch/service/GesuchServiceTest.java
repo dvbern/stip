@@ -924,8 +924,9 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    @DisplayName("Correct default values should be set in steuerdaten when executed as GS")
+    @DisplayName("Steuerjahr and veranlagungscode existing in db should not be overwritten by GS")
     void gesuchUpdateSteuerdatenTest_NonNullValues() {
+        //init values like they would be in the db
         GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
         var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
         GesuchUpdateDto gesuchUpdateDto = createGesuch();
@@ -933,11 +934,10 @@ class GesuchServiceTest {
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
         steuerdatenUpdateDto1.setSteuerjahr(2010);
         steuerdatenUpdateDto1.setVeranlagungscode(5);
-
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        //update values with non-null values
+        //prepare an update dto and set values with non-null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(0);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(0);
 
