@@ -45,6 +45,8 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -808,6 +810,10 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.getGesuchFormular().setPartner(null);
 
+        Set<Steuerdaten> list = new LinkedHashSet<>();
+        list.add(TestUtil.prepareSteuerdaten());
+        tranche.getGesuchFormular().setSteuerdaten(list);
+
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
         assertThat(
@@ -900,7 +906,7 @@ class GesuchServiceTest {
         );
 
         Set<Steuerdaten> list = new LinkedHashSet<>();
-        list.add(prepareSteuerdaten());
+        list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
         gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
