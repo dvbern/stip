@@ -33,6 +33,19 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
@@ -55,6 +68,8 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
         gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
         gesuchFormularToWorkWith.setPartner(createPartner());
+        gesuchFormularToWorkWith.setSteuerdaten(new ArrayList<>());
+        gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenUpdateDtoSpec());
 
         GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
         gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);
@@ -70,23 +85,16 @@ public final class GesuchGenerator {
     }
 
     public static Gesuch initGesuch() {
-        final DateRange gueltigkeitsRange;
-        if (GUELTIGKEIT_PERIODE_23_24 != null) {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
-        } else {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
-        }
-
         var gesuch = new Gesuch()
             .setFall(new Fall())
             .setGesuchsperiode(
                 new Gesuchsperiode()
                     .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))
-                    .setGesuchsperiodeStart(gueltigkeitsRange.getGueltigAb())
-                    .setGesuchsperiodeStopp(gueltigkeitsRange.getGueltigBis())
+                    .setGesuchsperiodeStart(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
+                    .setGesuchsperiodeStopp(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
             );
         gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
-            .setGueltigkeit(gueltigkeitsRange)
+            .setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
             .setGesuch(gesuch)
             .setId(UUID.randomUUID()));
         return gesuch;
