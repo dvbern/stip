@@ -78,22 +78,6 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
     }
 
-    private SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
-        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = new SteuerdatenUpdateDtoSpec();
-        steuerdatenUpdateDto.setSteuerdatenTyp(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenUpdateDto.setEigenmietwert(0);
-        steuerdatenUpdateDto.setFahrkosten(0);
-        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenUpdateDto.setKinderalimente(0);
-        steuerdatenUpdateDto.setSteuernStaat(0);
-        steuerdatenUpdateDto.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto.setVermoegen(0);
-        steuerdatenUpdateDto.setVerpflegung(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
-        steuerdatenUpdateDto.setSteuernBund(0);
-        return steuerdatenUpdateDto;
-    }
-
     private UUID createFullGesuch() {
         var response = gesuchApiSpec.createGesuch()
             .body(TestUtil.initGesuchCreateDto())
@@ -116,7 +100,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .getPersonInAusbildung()
             .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
-        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = createSteuerdatenUpdateDtoSpec();
+        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = TestUtil.createSteuerdatenUpdateDtoSpec();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)

@@ -31,6 +31,8 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
 import io.restassured.response.ResponseBody;
@@ -72,6 +74,22 @@ public class TestUtil {
         steuerdaten.setErgaenzungsleistungen(0);
         steuerdaten.setSteuerjahr(0);
         return  steuerdaten;
+    }
+
+    public static SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
+        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = new SteuerdatenUpdateDtoSpec();
+        steuerdatenUpdateDto.setSteuerdatenTyp(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenUpdateDto.setEigenmietwert(0);
+        steuerdatenUpdateDto.setFahrkosten(0);
+        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdatenUpdateDto.setKinderalimente(0);
+        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setTotalEinkuenfte(0);
+        steuerdatenUpdateDto.setVermoegen(0);
+        steuerdatenUpdateDto.setVerpflegung(0);
+        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
+        steuerdatenUpdateDto.setSteuernBund(0);
+        return steuerdatenUpdateDto;
     }
 
     public static GesuchCreateDtoSpec initGesuchCreateDto() {
