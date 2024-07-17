@@ -87,6 +87,8 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .stream().count();
 
         if (dokuments == 0) {
+            final GesuchDokument gesuchDokument = requireById(gesuchDokumentId);
+            gesuchDokument.getGesuch().getGesuchDokuments().remove(gesuchDokument);
             deleteById(gesuchDokumentId);
         }
     }
