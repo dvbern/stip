@@ -38,7 +38,7 @@ public class ElternteilV1 {
         return new ElternteilV1Builder();
     }
 
-    public static ElternteilV1Builder builderWithGesuchsperiode(
+    public static ElternteilV1Builder buildFromDependants(
         final Gesuchsperiode gesuchsperiode,
         final Eltern elternteil,
         final Steuerdaten steuerdaten,
@@ -48,6 +48,11 @@ public class ElternteilV1 {
         builder.essenskostenPerson2(steuerdaten.getVerpflegungPartner());
 
         builder.grundbedarf(getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt));
+
+        builder.fahrkostenPerson1(steuerdaten.getFahrkosten());
+        builder.fahrkostenPerson2(steuerdaten.getFahrkostenPartner());
+
+
 
         builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
         builder.effektiveWohnkosten(getEffektiveWohnkosten(elternteil, gesuchsperiode, anzahlPersonenImHaushalt));
