@@ -2,12 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -783,7 +778,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
+        //gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -802,6 +797,10 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.getGesuchFormular().setPartner(null);
 
+        Set<Steuerdaten> list = new LinkedHashSet<>();
+        list.add(prepareSteuerdaten());
+        tranche.getGesuchFormular().setSteuerdaten(list);
+
         ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
 
         assertThat(
@@ -814,6 +813,23 @@ class GesuchServiceTest {
         );
 
         EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(null);
+    }
+
+    private Steuerdaten prepareSteuerdaten() {
+        Steuerdaten steuerdaten = new Steuerdaten();
+        steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        steuerdaten.setEigenmietwert(0);
+        steuerdaten.setVerpflegung(0);
+        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdaten.setTotalEinkuenfte(0);
+        steuerdaten.setFahrkosten(0);
+        steuerdaten.setKinderalimente(0);
+        steuerdaten.setSteuernBund(0);
+        steuerdaten.setSteuernStaat(0);
+        steuerdaten.setVermoegen(0);
+        steuerdaten.setErgaenzungsleistungen(0);
+        steuerdaten.setSteuerjahr(0);
+        return  steuerdaten;
     }
 
     @Test
@@ -842,6 +858,10 @@ class GesuchServiceTest {
                 .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
                 .toList()
         );
+
+        Set<Steuerdaten> list = new LinkedHashSet<>();
+        list.add(prepareSteuerdaten());
+        tranche.getGesuchFormular().setSteuerdaten(list);
 
         gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
 
@@ -1217,12 +1237,12 @@ class GesuchServiceTest {
             gesuchFormular.getLebenslaufItems().add(lebenslaufItemMapper.partialUpdate(item, new LebenslaufItem()));
         });
 
-        trancheUpdate.getGesuchFormular().getSteuerdaten().forEach(item ->{
-            item.setId(UUID.randomUUID());
-            gesuchFormular.getSteuerdaten().add(steuerdatenMapper.partialUpdate(item, new Steuerdaten()));
-        });
-
-        gesuchFormular.setFamiliensituation(new Familiensituation());
+        if(trancheUpdate.getGesuchFormular().getSteuerdaten() != null){
+            trancheUpdate.getGesuchFormular().getSteuerdaten().forEach(item ->{
+                item.setId(UUID.randomUUID());
+                gesuchFormular.getSteuerdaten().add(steuerdatenMapper.partialUpdate(item, new Steuerdaten()));
+            });
+        }
 
         return tranche.setGesuchFormular(gesuchFormular);
     }
