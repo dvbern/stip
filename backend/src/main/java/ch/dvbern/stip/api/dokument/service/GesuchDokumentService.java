@@ -111,7 +111,9 @@ public class GesuchDokumentService {
 
     private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
         if (gesuch.getGesuchStatus() != statusToVerify) {
-            throw new IllegalStateException("Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statusToVerify.toString());
+            throw new IllegalStateException(
+                "Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statusToVerify.toString()
+            );
         }
     }
 
