@@ -911,7 +911,7 @@ class GesuchServiceTest {
     void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA(){
         setupGesucheWithAndWithoutPia();
         var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
-        assertThat(alleGesuche.stream().filter(x -> x.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null).count(), Matchers.is(0L));
+        assertThat(alleGesuche.stream().filter(gesuch -> gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null).count(), Matchers.is(0L));
     }
 
 
