@@ -1,66 +1,49 @@
+import { AppType } from '@dv/shared/model/config';
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-// Define States in which the gesuch is readonly for the GS
-export const gesuchStellerReadonlyStatusMap: Record<Gesuchstatus, boolean> = {
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG: true,
-  ANSPRUCH_MANUELL_PRUEFEN: true,
-  BEREIT_FUER_BEARBEITUNG: true,
-  EINGEREICHT: true,
-  FEHLENDE_DOKUMENTE: false,
-  GESUCH_ABGELEHNT: true,
-  IN_BEARBEITUNG_GS: false,
-  IN_BEARBEITUNG_SB: true,
-  IN_FREIGABE: true,
-  JOUR_FIX: true,
-  KEIN_STIPENDIENANSPRUCH: true,
-  NICHT_ANSPRUCHSBERECHTIGT: true,
-  NICHT_BEITRAGSBERECHTIGT: true,
-  STIPENDIENANSPRUCH: true,
-  VERSANDBEREIT: true,
-  VERFUEGT: true,
-  VERSENDET: true,
-  WARTEN_AUF_UNTERSCHRIFTENBLATT: true,
-};
+/** Readonly */
+const R__ = 'readonly';
+/** Writable */
+const __W = 'writeable';
+type Persmissions = typeof R__ | typeof __W;
 
-// Define States in which the gesuch is readonly for the SB
-export const gesuchSachbearbeiterReadonlyStatusMap: Record<
-  Gesuchstatus,
-  boolean
-> = {
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG: true,
-  ANSPRUCH_MANUELL_PRUEFEN: true,
-  BEREIT_FUER_BEARBEITUNG: true,
-  EINGEREICHT: true,
-  FEHLENDE_DOKUMENTE: true,
-  GESUCH_ABGELEHNT: true,
-  IN_BEARBEITUNG_GS: true,
-  IN_BEARBEITUNG_SB: false,
-  IN_FREIGABE: true,
-  JOUR_FIX: true,
-  KEIN_STIPENDIENANSPRUCH: true,
-  NICHT_ANSPRUCHSBERECHTIGT: true,
-  NICHT_BEITRAGSBERECHTIGT: true,
-  STIPENDIENANSPRUCH: true,
-  VERSANDBEREIT: true,
-  VERFUEGT: true,
-  VERSENDET: true,
-  WARTEN_AUF_UNTERSCHRIFTENBLATT: true,
-};
+const gs = 'gesuch-app' satisfies AppType;
+const sb = 'sachbearbeitung-app' satisfies AppType;
 
-export const setGesuchFromularReadonly = (
+/**
+ * Define the readonly state for the gesuch based on the status.
+ * The readonly state depends on the app type
+ *
+ * * Format is: { [Gesuchstatus]: { [AppType]: boolean, ... other AppTypes } }
+ * * A short hand variable for the AppType and true/false is used to make the code more readable and monospaced
+ */
+export const readWriteStatusByAppType = {
+  IN_BEARBEITUNG_GS /**                */: { [gs]: __W, [sb]: R__ },
+  EINGEREICHT /**                      */: { [gs]: R__, [sb]: R__ },
+  BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: R__, [sb]: R__ },
+  IN_BEARBEITUNG_SB /**                */: { [gs]: R__, [sb]: __W },
+  IN_FREIGABE /**                      */: { [gs]: R__, [sb]: R__ },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: R__, [sb]: R__ },
+  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: R__, [sb]: R__ },
+  FEHLENDE_DOKUMENTE /**               */: { [gs]: __W, [sb]: R__ },
+  GESUCH_ABGELEHNT /**                 */: { [gs]: R__, [sb]: R__ },
+  JOUR_FIX /**                         */: { [gs]: R__, [sb]: R__ },
+  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: R__, [sb]: R__ },
+  NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: R__, [sb]: R__ },
+  NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: R__, [sb]: R__ },
+  STIPENDIENANSPRUCH /**               */: { [gs]: R__, [sb]: R__ },
+  WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: R__, [sb]: R__ },
+  VERSANDBEREIT /**                    */: { [gs]: R__, [sb]: R__ },
+  VERFUEGT /**                         */: { [gs]: R__, [sb]: R__ },
+  VERSENDET /**                        */: { [gs]: R__, [sb]: R__ },
+} as const satisfies Record<Gesuchstatus, Record<AppType, Persmissions>>;
+
+export const isGesuchFormularReadonly = (
   gesuch: SharedModelGesuch | null,
-  isGesuchApp: boolean,
-  isSachbearbeitungApp: boolean,
+  appType?: AppType,
 ) => {
-  if (!gesuch) return false;
+  if (!gesuch || !appType) return false;
 
-  if (isGesuchApp) {
-    return gesuchStellerReadonlyStatusMap[gesuch.gesuchStatus];
-  }
-
-  if (isSachbearbeitungApp) {
-    return gesuchSachbearbeiterReadonlyStatusMap[gesuch.gesuchStatus];
-  }
-
-  throw new Error('setReadOnly: Unknown gesuchStatus');
+  const state = readWriteStatusByAppType[gesuch.gesuchStatus][appType];
+  return state === R__;
 };

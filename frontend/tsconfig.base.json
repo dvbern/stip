@@ -139,6 +139,7 @@
       "@dv/shared/ui/loading": ["libs/shared/ui/loading/src/index.ts"],
       "@dv/shared/ui/percentage-splitter": ["libs/shared/ui/percentage-splitter/src/index.ts"],
       "@dv/shared/ui/plz-ort-autocomplete": ["libs/shared/ui/plz-ort-autocomplete/src/index.ts"],
+      "@dv/shared/ui/prefix-app-type": ["libs/shared/ui/prefix-app-type/src/index.ts"],
       "@dv/shared/ui/progress-bar": ["libs/shared/ui/progress-bar/src/index.ts"],
       "@dv/shared/ui/reject-dokument": ["libs/shared/ui/reject-dokument/src/index.ts"],
       "@dv/shared/ui/remote-data-pipe": ["libs/shared/ui/remote-data-pipe/src/index.ts"],

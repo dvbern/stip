@@ -80,11 +80,6 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
         );
 
         if (initialDocuments) {
-          // this.globalStore.dispatch(
-          //   SharedEventGesuchDokumente.loadDocuments({
-          //     gesuchId: this.optionsSig().gesuchId,
-          //   }),
-          // );
           this.dokumentsStore.getDokumenteAndRequired$(
             this.optionsSig().gesuchId,
           );

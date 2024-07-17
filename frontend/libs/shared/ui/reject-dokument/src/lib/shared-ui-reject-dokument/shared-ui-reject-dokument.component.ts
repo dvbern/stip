@@ -1,13 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchDokument } from '@dv/shared/model/gesuch';
-import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
+import {
+  SharedUiFormFieldDirective,
+  SharedUiFormMessageErrorDirective,
+} from '@dv/shared/ui/form';
 
 export interface RejectDokument {
   id: string;
@@ -23,6 +30,7 @@ export interface RejectDokument {
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,
+    SharedUiFormMessageErrorDirective,
     ReactiveFormsModule,
   ],
   templateUrl: './shared-ui-reject-dokument.component.html',
@@ -38,7 +46,7 @@ export class SharedUiRejectDokumentComponent {
   private formBuilder = inject(NonNullableFormBuilder);
 
   form = this.formBuilder.group({
-    kommentar: [<string | undefined>undefined],
+    kommentar: [<string | undefined>undefined, [Validators.required]],
   });
 
   cancel() {
@@ -46,6 +54,7 @@ export class SharedUiRejectDokumentComponent {
   }
 
   rejectDocument() {
+    this.form.markAllAsTouched();
     const id = this.gesuchDokument.id;
     const kommentar = this.form.value.kommentar;
 

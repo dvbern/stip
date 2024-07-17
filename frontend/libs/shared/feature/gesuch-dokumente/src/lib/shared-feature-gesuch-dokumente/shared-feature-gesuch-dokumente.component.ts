@@ -15,12 +15,13 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
+  SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
-import { Dokumentstatus, GesuchDokument } from '@dv/shared/model/gesuch';
+import { GesuchDokument } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
   getFormStepByDocumentType,
@@ -34,11 +35,13 @@ import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 
@@ -56,6 +59,8 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     SharedUiBadgeComponent,
     SharedUiIconBadgeComponent,
     SharedUiIfSachbearbeiterDirective,
+    SharedUiPrefixAppTypePipe,
+    TypeSafeMatCellDefDirective,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -75,8 +80,6 @@ export class SharedFeatureGesuchDokumenteComponent {
     'status',
     'actions',
   ];
-
-  public DokumentStatus = Dokumentstatus;
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
@@ -154,7 +157,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     );
   });
 
-  trackByFn(index: number, item: SharedModelTableDokument) {
+  trackByFn(_index: number, item: SharedModelTableDokument) {
     return item?.gesuchDokument?.id ?? item.dokumentTyp;
   }
 
@@ -210,7 +213,13 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { gesuchId } = this.gesuchViewSig();
 
     if (gesuchId) {
-      this.dokumentsStore.fehlendeDokumenteUebermitteln$(gesuchId);
+      this.dokumentsStore.fehlendeDokumenteUebermitteln$({
+        gesuchId,
+        onSuccess: () => {
+          // Reload gesuch because the status has changed
+          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        },
+      });
     }
   }
 

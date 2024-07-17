@@ -28,7 +28,7 @@ import {
   SharedModelGesuchFormStep,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
-import { setGesuchFromularReadonly } from '@dv/shared/util/readonly-state';
+import { isGesuchFormularReadonly } from '@dv/shared/util/readonly-state';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -63,10 +63,9 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       loading,
       gesuch,
       gesuchFormular,
-      readonly: setGesuchFromularReadonly(
+      readonly: isGesuchFormularReadonly(
         gesuch,
-        config.isGesuchApp,
-        config.isSachbearbeitungApp,
+        config.compileTimeConfig?.appType,
       ),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       gesuchId: gesuch?.id,

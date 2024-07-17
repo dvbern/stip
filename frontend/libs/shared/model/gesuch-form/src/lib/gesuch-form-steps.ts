@@ -155,6 +155,7 @@ export const gesuchFormSteps = {
   ABSCHLUSS,
   PROTOKOLL,
 };
+export type GesuchFormSteps = keyof typeof gesuchFormSteps;
 
 export const findStepIndex = (
   step: SharedModelGesuchFormStep,
@@ -263,12 +264,18 @@ export const getFormStepByDocumentType = (
       return gesuchFormSteps.PARTNER;
     }
     default: {
-      const step = Object.keys(gesuchFormSteps).find((key) => {
-        if (key === 'EINNAHMEN_KOSTEN') {
-          return dokumentTyp.includes('EK');
-        }
-        return dokumentTyp.includes(key);
-      }) as keyof typeof gesuchFormSteps;
+      const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
+        (key) => {
+          if (key === 'EINNAHMEN_KOSTEN') {
+            return dokumentTyp.includes('EK');
+          }
+          return dokumentTyp.includes(key);
+        },
+      );
+      if (!step) {
+        console.error(`No step found for document type "${dokumentTyp}"`);
+        return gesuchFormSteps.DOKUMENTE;
+      }
 
       return gesuchFormSteps[step];
     }

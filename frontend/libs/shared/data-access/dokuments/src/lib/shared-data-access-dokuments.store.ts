@@ -50,11 +50,8 @@ export class DokumentsStore extends signalStore(
     return (
       this.dokuments
         .data()
-        ?.some((dokument) =>
-          dokument.status
-            ? dokument.status === Dokumentstatus.AUSSTEHEND
-            : false,
-        ) ?? false
+        ?.some((dokument) => dokument.status === Dokumentstatus.AUSSTEHEND) ??
+      false
     );
   });
 
@@ -73,32 +70,10 @@ export class DokumentsStore extends signalStore(
             },
           })
           .pipe(
-            tap(() => {
-              patchState(this, (state) => ({
-                dokuments: cachedPending(state.dokuments),
-              }));
-            }),
-            switchMap(() =>
-              this.gesuchService.getGesuchDokumente$({
-                gesuchId,
-              }),
+            this.reloadGesuchDokumente(
+              gesuchId,
+              'shared.dokumente.reject.success',
             ),
-            tapResponse({
-              next: (dokuments) => {
-                patchState(this, { dokuments: success(dokuments) });
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.reject.success',
-                });
-              },
-              error: () => {
-                patchState(this, (state) => ({
-                  dokuments: success(state.dokuments.data ?? []),
-                }));
-              },
-            }),
-            catchError(() => {
-              return EMPTY;
-            }),
           ),
       ),
     ),
@@ -109,50 +84,32 @@ export class DokumentsStore extends signalStore(
     gesuchDokumentId: string;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, gesuchId }) => {
-        return this.dokumentService
+      switchMap(({ gesuchDokumentId, gesuchId }) =>
+        this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
           })
           .pipe(
-            tap(() => {
-              patchState(this, (state) => ({
-                dokuments: cachedPending(state.dokuments),
-              }));
-            }),
-            switchMap(() =>
-              this.gesuchService.getGesuchDokumente$({ gesuchId }),
+            this.reloadGesuchDokumente(
+              gesuchId,
+              'shared.dokumente.accept.success',
             ),
-            tapResponse({
-              next: (dokuments) => {
-                patchState(this, { dokuments: success(dokuments) });
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.accept.success',
-                });
-              },
-              error: () => {
-                patchState(this, (state) => ({
-                  dokuments: success(state.dokuments.data ?? []),
-                }));
-              },
-            }),
-            catchError(() => {
-              return EMPTY;
-            }),
-          );
-      }),
+          ),
+      ),
     ),
   );
 
-  // error handling....
   /**
    * Send missing documents to the backend
    * only possible if there are documents in status "AGBELEHNT"
    * will trigger an email to the gesuchsteller
    */
-  fehlendeDokumenteUebermitteln$ = rxMethod<string>(
+  fehlendeDokumenteUebermitteln$ = rxMethod<{
+    gesuchId: string;
+    onSuccess: () => void;
+  }>(
     pipe(
-      switchMap((gesuchId) => {
+      switchMap(({ gesuchId, onSuccess }) => {
         return this.gesuchService
           .gesuchFehlendeDokumenteUebermitteln$({ gesuchId })
           .pipe(
@@ -170,6 +127,7 @@ export class DokumentsStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dokumente.uebermitteln.success',
                 });
+                onSuccess();
               },
               error: () => {
                 patchState(this, (state) => ({
@@ -222,4 +180,34 @@ export class DokumentsStore extends signalStore(
       ),
     ),
   );
+
+  private reloadGesuchDokumente = (gesuchId: string, messageKey: string) =>
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          dokuments: cachedPending(state.dokuments),
+        }));
+      }),
+      switchMap(() =>
+        this.gesuchService.getGesuchDokumente$({
+          gesuchId,
+        }),
+      ),
+      tapResponse({
+        next: (dokuments) => {
+          patchState(this, { dokuments: success(dokuments) });
+          this.globalNotificationStore.createSuccessNotification({
+            messageKey,
+          });
+        },
+        error: () => {
+          patchState(this, (state) => ({
+            dokuments: success(state.dokuments.data ?? []),
+          }));
+        },
+      }),
+      catchError(() => {
+        return EMPTY;
+      }),
+    );
 }

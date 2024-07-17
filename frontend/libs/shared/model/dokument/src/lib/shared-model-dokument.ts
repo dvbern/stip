@@ -3,10 +3,10 @@ import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 
 export interface SharedModelTableDokument {
   formStep: SharedModelGesuchFormStep;
-  titleKey?: string;
+  titleKey: string;
   dokumentTyp: string;
   gesuchDokument?: GesuchDokument;
-  documentOptions: DocumentOptions | null;
+  documentOptions: DocumentOptions;
 }
 
 export interface DocumentOptions {

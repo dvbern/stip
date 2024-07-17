@@ -1,6 +1,6 @@
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-import { setGesuchFromularReadonly } from './shared-util-readonly-state';
+import { isGesuchFormularReadonly } from './shared-util-readonly-state';
 
 const gesuch: SharedModelGesuch = {
   fall: {
@@ -16,6 +16,9 @@ const gesuch: SharedModelGesuch = {
     gesuchsperiodeStart: '',
     gesuchsperiodeStopp: '',
     aufschaltterminStart: '',
+    aufschaltterminStopp: '',
+    einreichefristNormal: '',
+    einreichefristReduziert: '',
     gesuchsjahr: {
       id: '',
       bezeichnungDe: '',
@@ -38,27 +41,19 @@ const gesuch: SharedModelGesuch = {
 };
 
 describe('when App Gesuchsteller', () => {
-  const isGesuchApp = true;
-  const isSachbearbeitungApp = false;
-
   it('should be readonly if in bearbeitung Sachbearbeiter', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_SB;
 
-    expect(
-      setGesuchFromularReadonly(gesuch, isGesuchApp, isSachbearbeitungApp),
-    ).toBeTruthy();
+    expect(isGesuchFormularReadonly(gesuch, 'gesuch-app')).toBeTruthy();
   });
 });
 
 describe('when App Sachbearbeitung', () => {
-  const isGesuchApp = false;
-  const isSachbearbeitungApp = true;
-
   it('should be readonly if in bearbeitung Gesuchsteller', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     expect(
-      setGesuchFromularReadonly(gesuch, isGesuchApp, isSachbearbeitungApp),
+      isGesuchFormularReadonly(gesuch, 'sachbearbeitung-app'),
     ).toBeTruthy();
   });
 });

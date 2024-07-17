@@ -149,7 +149,6 @@ export class UploadStore {
 
     this.uploadDocument$
       .pipe(
-        tap(() => console.log('first uploadDocument$')),
         mergeMap((action) => this.handleUpload$(action)),
         takeUntilDestroyed(),
       )
@@ -310,8 +309,8 @@ export class UploadStore {
       ),
     ).pipe(
       map((event) => ({ event, action, tempDokumentId })),
-      tap((x) => {
-        if (x.event.type === HttpEventType.Response) {
+      tap(({ event }) => {
+        if (event.type === HttpEventType.Response) {
           this.documentChangedSig.set({ hasChanged: true });
         }
       }),
