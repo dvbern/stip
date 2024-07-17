@@ -171,8 +171,7 @@ public class GesuchService {
 
         final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream().filter(tab -> tab.getSteuerdatenTyp() != null).toList();
 
-        for(Iterator<SteuerdatenUpdateDto> item = steuerdatenUpdateDtos.iterator(); item.hasNext();){
-            SteuerdatenUpdateDto currentSteuerdatenUpdateDto = item.next();
+        for (final var currentSteuerdatenUpdateDto : steuerdatenUpdateDtos){
             setAndValidateSteuerdatenTabUpdateLegality(currentSteuerdatenUpdateDto, steuerdatenList.stream().filter(tab -> tab.getId().equals(currentSteuerdatenUpdateDto.getId())).findFirst().orElse(null),gesuchsjahr);
         }
     }
