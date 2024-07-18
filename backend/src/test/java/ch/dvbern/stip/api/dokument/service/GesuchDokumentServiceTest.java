@@ -14,7 +14,9 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import io.quarkus.test.InjectMock;
@@ -28,6 +30,7 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -89,6 +92,11 @@ class GesuchDokumentServiceTest {
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
+        GesuchTranche tranche = initGesuchTranche();
+
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        mockedDokument.setGesuch(tranche.getGesuch());
+
         // Act
         gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);
 
@@ -104,6 +112,11 @@ class GesuchDokumentServiceTest {
             .setStatus(Dokumentstatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
+
+        GesuchTranche tranche = initGesuchTranche();
+
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        mockedDokument.setGesuch(tranche.getGesuch());
 
         // Act
         gesuchDokumentService.gesuchDokumentAkzeptieren(mockedDokument.getId());
