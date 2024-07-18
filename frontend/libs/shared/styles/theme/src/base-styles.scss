@@ -10,6 +10,10 @@ main.page-body {
   position: relative;
   margin-top: var(--header-size);
   flex: 1 0 calc(100vh - var(--header-size));
+
+  .sidenav {
+    width: 296px;
+  }
 }
 
 // Typeahead popup (ng-bootstrap with custom popup class)

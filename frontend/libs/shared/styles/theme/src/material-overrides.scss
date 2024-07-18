@@ -279,6 +279,14 @@ $dv-all-colors: (
   }
 }
 
+.mat-mdc-card-content .mat-accordion.full-width {
+  display: block;
+  margin: 0 -16px;
+}
+.mat-accordion.large .mat-expansion-panel-header {
+  height: auto;
+}
+
 .mat-mdc-form-field-hint.mat-caution {
   color: mat.get-color-from-palette($gesuch-app-caution, 500);
 }

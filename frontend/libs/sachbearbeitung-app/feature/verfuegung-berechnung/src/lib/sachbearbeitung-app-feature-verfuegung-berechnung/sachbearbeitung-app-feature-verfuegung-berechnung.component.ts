@@ -17,8 +17,17 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
+import { FamilienBerechnung, PersoenlicheBerechnung } from '../../models';
+import {
+  FamilienEinnahmenComponent,
+  FamilienKostenComponent,
+  PersoenlicheEinnahmenComponent,
+  PersoenlicheKostenComponent,
+} from '../components';
+import { BerechnungsCardComponent } from '../components/berechnungs-card/berechnungs-card.component';
+
 @Component({
-  selector: 'lib-sachbearbeitung-app-feature-verfuegung-berechnung',
+  selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,15 +35,32 @@ import { toFormatedNumber } from '@dv/shared/util/maskito-util';
     TranslateModule,
     MatExpansionModule,
     SharedUiFormatChfPipe,
+    BerechnungsCardComponent,
+    PersoenlicheEinnahmenComponent,
+    PersoenlicheKostenComponent,
+    FamilienEinnahmenComponent,
+    FamilienKostenComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',
-  styleUrl:
-    './sachbearbeitung-app-feature-verfuegung-berechnung.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
+  expansionState = {
+    persoenlich: {
+      einnahmen: false,
+      kosten: false,
+    },
+    familie1: {
+      einnahmen: false,
+      kosten: false,
+    },
+    familie2: {
+      einnahmen: false,
+      kosten: false,
+    },
+  };
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   viewSig = computed(() => {
     const { gesuch, gesuchFormular } = this.gesuchViewSig();
@@ -54,19 +80,46 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   });
   berechnungStore = inject(BerechnungStore);
 
-  berechnungenSig = computed(() => {
-    const { gesuch } = this.gesuchViewSig();
+  berechnungenSig = computed<
+    {
+      persoenlich: PersoenlicheBerechnung;
+      familien: FamilienBerechnung[];
+    }[]
+  >(() => {
+    const { gesuch, gesuchFormular } = this.gesuchViewSig();
     const tranche = gesuch?.gesuchTrancheToWorkWith;
-    const berechnungen = this.berechnungStore.berechnungen().data;
-    if (!berechnungen || !tranche) {
+    const berechnungen = this.berechnungStore.berechnungen().data ?? [1];
+    if (!berechnungen || !tranche || !gesuchFormular) {
       return [];
     }
     return berechnungen.map(() => ({
-      einnahmen: {
-        ...formatAllNumbers(exampleBerechnung.einnahmen),
-        total: exampleBerechnung.einnahmen.total,
-      },
-      kosten: formatAllNumbers(exampleBerechnung.kosten),
+      persoenlich: {
+        typ: 'persoenlich',
+        name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
+        total: 39809,
+        totalEinnahmen: exampleBerechnung.einnahmen.total,
+        totalKosten: exampleBerechnung.kosten.total,
+        einnahmen: formatAllNumbersExceptTotal(exampleBerechnung.einnahmen),
+        kosten: formatAllNumbersExceptTotal(exampleBerechnung.kosten),
+      } as const,
+      familien:
+        gesuchFormular.elterns?.map(
+          (e) =>
+            ({
+              typ: 'familien',
+              nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${e.elternTyp}`,
+              year: gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr - 1,
+              total: 39524,
+              totalEinnahmen: exampleFamilienBerechnung.einnahmen.total,
+              totalKosten: exampleFamilienBerechnung.kosten.total,
+              einnahmen: formatAllNumbersExceptTotal(
+                exampleFamilienBerechnung.einnahmen,
+              ),
+              kosten: formatAllNumbersExceptTotal(
+                exampleFamilienBerechnung.kosten,
+              ),
+            }) as const,
+        ) ?? [],
     }));
   });
 
@@ -78,7 +131,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         if (!gesuchId) {
           return;
         }
-        this.berechnungStore.calculateBerechnung$({ gesuchId });
+        // this.berechnungStore.calculateBerechnung$({ gesuchId });
       },
       { allowSignalWrites: true },
     );
@@ -99,6 +152,7 @@ const exampleBerechnung = {
     einkommenPartner: 0,
   },
   kosten: {
+    total: 2715,
     anteilLebenshaltungskosten: 0,
     mehrkostenVerpflegung: 1645,
     grundbedarf0Personen: 0,
@@ -109,8 +163,37 @@ const exampleBerechnung = {
     fahrkostenPartner: 0,
     verpflegungPartner: 0,
     betreuungskostenKinder: 0,
-    ausbildungskosten: 0,
+    ausbildungskosten: 500,
+    fahrkosten: 570,
+  },
+};
+
+const exampleFamilienBerechnung = {
+  einnahmen: {
+    total: 90835,
+    totalEinkuenfte: 0,
+    ergaenzungsleistungen: 0,
+    steuerbaresVermoegen: 0,
+    vermoegensaufrechnung: 0,
+    abzuege: 0,
+    beitraegeSaule: 0,
+    mietwert: 0,
+    alimenteOderRenten: 0,
+    einkommensfreibeitrag: 6000,
+  },
+  kosten: {
+    total: 51311,
+    anzahlPersonen: 2,
+    grundbedarf: 17940,
+    wohnkosten: 9800,
+    medizinischeGrundversorgung: 10000,
+    integrationszulage: 2400,
+    kantonsGemeindesteuern: 10639,
+    bundessteuern: 532,
     fahrkosten: 0,
+    fahrkostenPartner: 0,
+    verpflegung: 0,
+    verpflegungPartner: 0,
   },
 };
 
@@ -118,7 +201,9 @@ type FormatedBerechnung<T extends Record<string, number>> = {
   [K in keyof T]: string;
 };
 
-const formatAllNumbers = <T extends Record<string, number>>(obj: T) => {
+const formatAllNumbersExceptTotal = <T extends Record<string, number>>(
+  obj: T,
+) => {
   const newObj = {} as unknown as FormatedBerechnung<T>;
   for (const key in obj) {
     const value = obj[key];
@@ -126,5 +211,5 @@ const formatAllNumbers = <T extends Record<string, number>>(obj: T) => {
       newObj[key] = toFormatedNumber(value);
     }
   }
-  return newObj;
+  return { ...newObj, total: obj['total'] };
 };
