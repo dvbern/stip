@@ -891,13 +891,7 @@ class GesuchServiceTest {
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
-
-        //reset zivilstand if necessary (due to generated values)
-        if(tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand().equals(LEDIG)
-            && tranche.getGesuchFormular().getFamiliensituation().getElternVerheiratetZusammen()
-            && tranche.getGesuchFormular().getFamiliensituation().getElternteilUnbekanntVerstorben() == null){
-            tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(VERHEIRATET);
-        }
+        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(VERHEIRATET);
 
         tranche.getGesuch().setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
