@@ -940,8 +940,6 @@ class GesuchServiceTest {
     @Test
     @TestAsGesuchsteller
     void gesuchUpdateSteuerdatenSetDefaultValuesTest_NonNullValues() {
-        GesuchCreateDtoSpec gesuchCreateDtoSpec = initGesuchCreateDto();
-        var gesuchDto = gesuchService.createGesuch(new GesuchCreateDto(gesuchCreateDtoSpec.getFallId(), gesuchCreateDtoSpec.getGesuchsperiodeId()));
         GesuchUpdateDto gesuchUpdateDto = createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
@@ -958,7 +956,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
-        gesuchService.updateGesuch(gesuchDto.getId(), gesuchUpdateDto, TENANT_ID);
+        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
 
         final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
         assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
