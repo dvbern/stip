@@ -763,13 +763,13 @@ public class GesuchApiSpec {
      * Returns gesuche filtered by status and sb
      * 
      *
-     * @see #getGesucheSBQueryTypPath  (required)
+     * @see #getGesucheSBQueryTypePath  (required)
      * return List&lt;GesuchDtoSpec&gt;
      */
     public static class GetGesucheSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}";
+        public static final String REQ_URI = "/gesuch/benutzer/me/sb/{getGesucheSBQueryType}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -781,7 +781,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}
+         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -792,7 +792,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}
+         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
          * @return List&lt;GesuchDtoSpec&gt;
          */
@@ -801,14 +801,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GET_GESUCHE_S_B_QUERY_TYP_PATH = "getGesucheSBQueryTyp";
+        public static final String GET_GESUCHE_S_B_QUERY_TYPE_PATH = "getGesucheSBQueryType";
 
         /**
-         * @param getGesucheSBQueryTyp (GetGesucheSBQueryTypDtoSpec)  (required)
+         * @param getGesucheSBQueryType (GetGesucheSBQueryTypDtoSpec)  (required)
          * @return operation
          */
-        public GetGesucheSbOper getGesucheSBQueryTypPath(Object getGesucheSBQueryTyp) {
-            reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYP_PATH, getGesucheSBQueryTyp);
+        public GetGesucheSbOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {
+            reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYPE_PATH, getGesucheSBQueryType);
             return this;
         }
 

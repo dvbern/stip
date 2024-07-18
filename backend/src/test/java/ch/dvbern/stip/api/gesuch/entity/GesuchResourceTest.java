@@ -484,7 +484,7 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypePath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -497,7 +497,7 @@ class GesuchResourceTest {
         }
 
 
-        gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+        gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypePath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -514,7 +514,7 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypePath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()

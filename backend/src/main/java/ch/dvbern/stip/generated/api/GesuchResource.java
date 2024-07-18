@@ -59,9 +59,9 @@ public interface GesuchResource {
     Response getGesucheGs();
 
     @GET
-    @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
+    @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryTyp);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")

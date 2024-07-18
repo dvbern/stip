@@ -52,12 +52,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}:
+  /gesuch/benutzer/me/sb/{getGesucheSBQueryType}:
     get:
       tags:
         - Gesuch
       parameters:
-        - name: getGesucheSBQueryTyp
+        - name: getGesucheSBQueryType
           schema:
             $ref: '#/components/schemas/GetGesucheSBQueryTyp'
           in: path
@@ -2885,7 +2885,7 @@ components:
           type: integer
         berechnungsdaten:
           description: 'Resultat der Berechnung als JSON string, transparent'
-          type: string      
+          type: string
   responses:
     Unauthorized:
       content:
