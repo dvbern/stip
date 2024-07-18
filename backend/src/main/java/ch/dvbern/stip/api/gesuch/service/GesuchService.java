@@ -26,9 +26,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import java.util.HashSet;
+import java.util.ArrayList;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
@@ -37,7 +42,6 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -121,42 +125,19 @@ public class GesuchService {
             .getGesuchsperiode()
             .getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-
         Integer veranlagungsCodeToSet = 0;
-        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
 
-        if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
-            if (einnahmenKosten != null) {
-                steuerjahrToSet = Objects.requireNonNullElse(
-                    einnahmenKosten.getSteuerjahr(),
-                    steuerjahrToSet
-                );
-                veranlagungsCodeToSet = Objects.requireNonNullElse(
-                    einnahmenKosten.getVeranlagungsCode(),
-                    veranlagungsCodeToSet
-                );
-            }
-        } else {
-            if (einnahmenKostenUpdateDto.getSteuerjahr() == null) {
-                if (einnahmenKosten != null) {
-                    steuerjahrToSet = Objects.requireNonNullElse(
-                        einnahmenKosten.getSteuerjahr(),
-                        steuerjahrToSet
-                    );
-                }
-            } else {
-                steuerjahrToSet = einnahmenKostenUpdateDto.getSteuerjahr();
-            }
-            if (einnahmenKostenUpdateDto.getVeranlagungsCode() == null) {
-                if (einnahmenKosten != null) {
-                    veranlagungsCodeToSet = Objects.requireNonNullElse(
-                        einnahmenKosten.getVeranlagungsCode(),
-                        veranlagungsCodeToSet
-                    );
-                }
-            } else {
-                veranlagungsCodeToSet = einnahmenKostenUpdateDto.getVeranlagungsCode();
-            }
+        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+        if(einnahmenKosten != null){
+            Object steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
+            Object steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
+            Object steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
+
+            Object veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
+            Object veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
+            Object veranlagungscodeDefaltValue = 0;
+            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
         einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
@@ -185,39 +166,18 @@ public class GesuchService {
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
         Integer veranlagungsCodeToSet = 0;
 
-        if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))){
-            if(steuerdatenTabs != null){
-                steuerjahrToSet = Objects.requireNonNullElse(
-                    steuerdatenTabs.getSteuerjahr(),
-                    steuerjahrToSet
-                );
-                veranlagungsCodeToSet = Objects.requireNonNullElse(
-                    steuerdatenTabs.getVeranlagungsCode(),
-                    veranlagungsCodeToSet
-                );
-            }
-        } else {
-            if (steuerdatenUpdateDto.getSteuerjahr() == null) {
-                if (steuerdatenTabs != null) {
-                    steuerjahrToSet = Objects.requireNonNullElse(
-                        steuerdatenTabs.getSteuerjahr(),
-                        steuerjahrToSet
-                    );
-                }
-            } else {
-                steuerjahrToSet = steuerdatenUpdateDto.getSteuerjahr();
-            }
-            if (steuerdatenUpdateDto.getVeranlagungscode() == null) {
-                if (steuerdatenTabs != null) {
-                    veranlagungsCodeToSet = Objects.requireNonNullElse(
-                        steuerdatenTabs.getVeranlagungsCode(),
-                        veranlagungsCodeToSet
-                    );
-                }
-            } else {
-                veranlagungsCodeToSet = steuerdatenUpdateDto.getVeranlagungscode();
-            }
+        if(steuerdatenTabs != null){
+            Object steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
+            Object steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
+            Object steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
+
+            Object veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungscode();
+            Object veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
+            Object veranlagungscodeDefaltValue = 0;
+            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
         }
+
         steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
         steuerdatenUpdateDto.setVeranlagungscode(veranlagungsCodeToSet);
     }
