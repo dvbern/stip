@@ -24,7 +24,7 @@ import { Gesuch } from '../model/gesuch';
 import { GesuchCreate } from '../model/gesuchCreate';
 import { GesuchDokument } from '../model/gesuchDokument';
 import { GesuchUpdate } from '../model/gesuchUpdate';
-import { GetGesucheSBQueryTyp } from '../model/getGesucheSBQueryTyp';
+import { GetGesucheSBQueryType } from '../model/getGesucheSBQueryType';
 import { StatusprotokollEntry } from '../model/statusprotokollEntry';
 import { ValidationReport } from '../model/validationReport';
 
@@ -65,7 +65,7 @@ export interface GesuchServiceGetGesucheForFallRequestParams {
 }
 
 export interface GesuchServiceGetGesucheSbRequestParams {
-    getGesucheSBQueryTyp: GetGesucheSBQueryTyp;
+    getGesucheSBQueryType: GetGesucheSBQueryType;
 }
 
 export interface GesuchServiceGetRequiredGesuchDokumentTypRequestParams {
@@ -818,9 +818,9 @@ export class GesuchService {
      public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuch>>>;
      public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuch>>>;
      public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const getGesucheSBQueryTyp = requestParameters.getGesucheSBQueryTyp;
-        if (getGesucheSBQueryTyp === null || getGesucheSBQueryTyp === undefined) {
-            throw new Error('Required parameter getGesucheSBQueryTyp was null or undefined when calling getGesucheSb$.');
+        const getGesucheSBQueryType = requestParameters.getGesucheSBQueryType;
+        if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
+            throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling getGesucheSb$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -868,7 +868,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/benutzer/me/sb/${this.configuration.encodeParam({name: "getGesucheSBQueryTyp", value: getGesucheSBQueryTyp, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryTyp", dataFormat: undefined})}`;
+        const localVarPath = `/gesuch/benutzer/me/sb/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}`;
         return this.httpClient.request<Array<Gesuch>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

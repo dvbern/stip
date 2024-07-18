@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetGesucheSBQueryTyp
+ * Gets or Sets GetGesucheSBQueryType
  */
-public enum GetGesucheSBQueryTypDtoSpec {
+public enum GetGesucheSBQueryTypeDtoSpec {
   
   ALLE_BEARBEITBAR("ALLE_BEARBEITBAR"),
   
@@ -36,7 +36,7 @@ public enum GetGesucheSBQueryTypDtoSpec {
 
   private String value;
 
-  GetGesucheSBQueryTypDtoSpec(String value) {
+  GetGesucheSBQueryTypeDtoSpec(String value) {
     this.value = value;
   }
 
@@ -51,8 +51,8 @@ public enum GetGesucheSBQueryTypDtoSpec {
   }
 
   @JsonCreator
-  public static GetGesucheSBQueryTypDtoSpec fromValue(String value) {
-    for (GetGesucheSBQueryTypDtoSpec b : GetGesucheSBQueryTypDtoSpec.values()) {
+  public static GetGesucheSBQueryTypeDtoSpec fromValue(String value) {
+    for (GetGesucheSBQueryTypeDtoSpec b : GetGesucheSBQueryTypeDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

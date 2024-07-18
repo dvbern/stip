@@ -59,7 +59,7 @@ paths:
       parameters:
         - name: getGesucheSBQueryType
           schema:
-            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
+            $ref: '#/components/schemas/GetGesucheSBQueryType'
           in: path
           required: true
       responses:
@@ -1461,7 +1461,7 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
       type: string
-    GetGesucheSBQueryTyp:
+    GetGesucheSBQueryType:
       enum:
         - ALLE_BEARBEITBAR
         - ALLE_BEARBEITBAR_MEINE
