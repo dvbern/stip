@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * SachbearbeiterZuordnungStammdatenDtoSpec
  */
 @JsonPropertyOrder({
   SachbearbeiterZuordnungStammdatenDtoSpec.JSON_PROPERTY_BUCHSTABEN_DE,
@@ -49,7 +49,7 @@ public class SachbearbeiterZuordnungStammdatenDtoSpec {
   }
 
    /**
-   * 
+   * Get buchstabenDe
    * @return buchstabenDe
   **/
   @jakarta.annotation.Nullable
@@ -75,7 +75,7 @@ public class SachbearbeiterZuordnungStammdatenDtoSpec {
   }
 
    /**
-   * 
+   * Get buchstabenFr
    * @return buchstabenFr
   **/
   @jakarta.annotation.Nullable

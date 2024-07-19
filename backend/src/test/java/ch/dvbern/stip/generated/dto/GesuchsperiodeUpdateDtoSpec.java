@@ -227,7 +227,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get bezeichnungDe
    * @return bezeichnungDe
   **/
   @jakarta.annotation.Nonnull
@@ -253,7 +253,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get bezeichnungFr
    * @return bezeichnungFr
   **/
   @jakarta.annotation.Nonnull
@@ -305,7 +305,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get fiskaljahr
    * @return fiskaljahr
   **/
   @jakarta.annotation.Nonnull
@@ -513,7 +513,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbKostenSekII
    * @return ausbKostenSekII
   **/
   @jakarta.annotation.Nonnull
@@ -539,7 +539,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get ausbKostenTertiaer
    * @return ausbKostenTertiaer
   **/
   @jakarta.annotation.Nonnull
@@ -565,7 +565,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get freibetragVermoegen
    * @return freibetragVermoegen
   **/
   @jakarta.annotation.Nonnull
@@ -591,7 +591,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get freibetragErwerbseinkommen
    * @return freibetragErwerbseinkommen
   **/
   @jakarta.annotation.Nonnull
@@ -617,7 +617,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get einkommensfreibetrag
    * @return einkommensfreibetrag
   **/
   @jakarta.annotation.Nonnull
@@ -643,7 +643,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get elternbeteiligungssatz
    * @return elternbeteiligungssatz
   **/
   @jakarta.annotation.Nonnull
@@ -669,7 +669,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get vermogenSatzAngerechnet
    * @return vermogenSatzAngerechnet
   **/
   @jakarta.annotation.Nonnull
@@ -695,7 +695,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get integrationszulage
    * @return integrationszulage
   **/
   @jakarta.annotation.Nonnull
@@ -721,7 +721,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get limiteEkFreibetragIntegrationszulag
    * @return limiteEkFreibetragIntegrationszulag
   **/
   @jakarta.annotation.Nonnull
@@ -747,7 +747,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get stipLimiteMinimalstipendium
    * @return stipLimiteMinimalstipendium
   **/
   @jakarta.annotation.Nonnull
@@ -773,7 +773,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get person1
    * @return person1
   **/
   @jakarta.annotation.Nonnull
@@ -799,7 +799,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get personen2
    * @return personen2
   **/
   @jakarta.annotation.Nonnull
@@ -825,7 +825,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get personen3
    * @return personen3
   **/
   @jakarta.annotation.Nonnull
@@ -851,7 +851,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get personen4
    * @return personen4
   **/
   @jakarta.annotation.Nonnull
@@ -877,7 +877,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get personen5
    * @return personen5
   **/
   @jakarta.annotation.Nonnull
@@ -903,7 +903,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get personen6
    * @return personen6
   **/
   @jakarta.annotation.Nonnull
@@ -929,7 +929,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get personen7
    * @return personen7
   **/
   @jakarta.annotation.Nonnull
@@ -955,7 +955,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get proWeiterePerson
    * @return proWeiterePerson
   **/
   @jakarta.annotation.Nonnull
@@ -981,7 +981,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get kinder0018
    * @return kinder0018
   **/
   @jakarta.annotation.Nonnull
@@ -1007,7 +1007,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get jugendlicheErwachsene1925
    * @return jugendlicheErwachsene1925
   **/
   @jakarta.annotation.Nonnull
@@ -1033,7 +1033,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get erwachsene2699
    * @return erwachsene2699
   **/
   @jakarta.annotation.Nonnull
@@ -1059,7 +1059,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenFam1pers
    * @return wohnkostenFam1pers
   **/
   @jakarta.annotation.Nonnull
@@ -1085,7 +1085,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenFam2pers
    * @return wohnkostenFam2pers
   **/
   @jakarta.annotation.Nonnull
@@ -1111,7 +1111,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenFam3pers
    * @return wohnkostenFam3pers
   **/
   @jakarta.annotation.Nonnull
@@ -1137,7 +1137,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenFam4pers
    * @return wohnkostenFam4pers
   **/
   @jakarta.annotation.Nonnull
@@ -1163,7 +1163,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenFam5pluspers
    * @return wohnkostenFam5pluspers
   **/
   @jakarta.annotation.Nonnull
@@ -1189,7 +1189,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenPersoenlich1pers
    * @return wohnkostenPersoenlich1pers
   **/
   @jakarta.annotation.Nonnull
@@ -1215,7 +1215,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenPersoenlich2pers
    * @return wohnkostenPersoenlich2pers
   **/
   @jakarta.annotation.Nonnull
@@ -1241,7 +1241,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenPersoenlich3pers
    * @return wohnkostenPersoenlich3pers
   **/
   @jakarta.annotation.Nonnull
@@ -1267,7 +1267,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenPersoenlich4pers
    * @return wohnkostenPersoenlich4pers
   **/
   @jakarta.annotation.Nonnull
@@ -1293,7 +1293,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get wohnkostenPersoenlich5pluspers
    * @return wohnkostenPersoenlich5pluspers
   **/
   @jakarta.annotation.Nonnull
@@ -1319,7 +1319,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get preisProMahlzeit
    * @return preisProMahlzeit
   **/
   @jakarta.annotation.Nonnull
@@ -1345,7 +1345,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get maxSaeule3a
    * @return maxSaeule3a
   **/
   @jakarta.annotation.Nonnull
@@ -1371,7 +1371,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get anzahlWochenLehre
    * @return anzahlWochenLehre
   **/
   @jakarta.annotation.Nonnull
@@ -1397,7 +1397,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get anzahlWochenSchule
    * @return anzahlWochenSchule
   **/
   @jakarta.annotation.Nonnull

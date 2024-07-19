@@ -99,12 +99,8 @@ export const loadAllGesuchs = createEffect(
     return combineLoadAllActions$(actions$).pipe(
       filter(isDefined),
       storeUtil.waitForBenutzerData$(),
-      switchMap(({ filter }) => {
-        const getCall = filter?.showAll
-          ? gesuchService.getAllGesucheSb$()
-          : gesuchService.getGesucheSb$();
-
-        return getCall.pipe(
+      switchMap(({ query }) =>
+        gesuchService.getGesucheSb$({ getGesucheSBQueryTyp: query }).pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -115,8 +111,8 @@ export const loadAllGesuchs = createEffect(
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
-        );
-      }),
+        ),
+      ),
     );
   },
   { functional: true },
@@ -132,6 +128,7 @@ export const loadGesuch = createEffect(
   ) => {
     return actions$.pipe(
       ofType(
+        SharedDataAccessGesuchEvents.loadGesuch,
         SharedEventGesuchFormPartner.init,
         SharedEventGesuchFormPerson.init,
         SharedEventGesuchFormEducation.init,
@@ -161,7 +158,8 @@ export const loadGesuch = createEffect(
               handleNotFound((error) => {
                 globalNotifications.createNotification({
                   type: 'ERROR',
-                  messageKey: 'gesuch-app.gesuch.not-found-redirection',
+                  messageKey:
+                    'shared.genericError.gesuch-not-found-redirection',
                   content: error,
                 });
                 router.navigate(['/'], { replaceUrl: true });
@@ -454,10 +452,7 @@ const combineLoadAllActions$ = (actions$: Actions) => {
   return merge(
     loadAll$,
     loadAllDebounced$.pipe(
-      distinctUntilChanged(
-        (prev, curr) =>
-          JSON.stringify(prev.filter) === JSON.stringify(curr.filter),
-      ),
+      distinctUntilChanged(),
       // skip the first value, because it's the same as the initial load
       skip(1),
     ),

@@ -16,9 +16,6 @@ export interface Dokument {
     filepath: string;
     filesize: string;
     timestampErstellt?: string;
-    /**
-     * 
-     */
     objectId: string;
 }
 

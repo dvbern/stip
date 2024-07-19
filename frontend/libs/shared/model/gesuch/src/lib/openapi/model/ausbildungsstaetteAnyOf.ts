@@ -12,9 +12,6 @@
 import { Ausbildungsgang } from './ausbildungsgang';
 
 export interface AusbildungsstaetteAnyOf { 
-    /**
-     * 
-     */
     ausbildungsgaenge?: Array<Ausbildungsgang>;
 }
 

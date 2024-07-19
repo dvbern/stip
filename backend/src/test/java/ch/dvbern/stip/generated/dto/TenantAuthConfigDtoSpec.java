@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * TenantAuthConfigDtoSpec
  */
 @JsonPropertyOrder({
   TenantAuthConfigDtoSpec.JSON_PROPERTY_AUTH_SERVER_URL,
@@ -75,7 +75,7 @@ public class TenantAuthConfigDtoSpec {
   }
 
    /**
-   * 
+   * Get realm
    * @return realm
   **/
   @jakarta.annotation.Nonnull

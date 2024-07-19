@@ -11,13 +11,7 @@
  */
 
 export interface AusbildungsstaetteUpdate { 
-    /**
-     * 
-     */
     nameDe: string;
-    /**
-     * 
-     */
     nameFr: string;
     id?: string;
 }

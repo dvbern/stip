@@ -10,14 +10,8 @@
  * Do not edit the class manually.
  */
 
-/**
- * 
- */
 export interface TenantAuthConfig { 
     authServerUrl: string;
-    /**
-     * 
-     */
     realm: string;
 }
 

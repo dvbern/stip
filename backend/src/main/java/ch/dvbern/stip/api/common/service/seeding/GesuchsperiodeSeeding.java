@@ -14,12 +14,11 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
-
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
-public class GesuchsperiodeSeeding extends Seeder{
+public class
+GesuchsperiodeSeeding extends Seeder{
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final ConfigService configService;
@@ -42,16 +41,22 @@ public class GesuchsperiodeSeeding extends Seeder{
             return;
         }
 
+        int currentYear = newJahr.getTechnischesJahr();
+
         final var newPerioden = List.of(
             getPeriodeForSeeding(
+                "Herbst",
+                "Automne",
                 newJahr,
-                LocalDate.of(2022, 8, 1),
-                LocalDate.of(2023, 7, 31)
+                LocalDate.of(currentYear, 8, 1),
+                LocalDate.of(currentYear + 1, 7, 31)
             ),
             getPeriodeForSeeding(
+                "Frühling",
+                "Printemps",
                 newJahr,
-                LocalDate.of(2023, 8, 1),
-                LocalDate.of(2024, 7, 31)
+                LocalDate.of(currentYear, 2, 1),
+                LocalDate.of(currentYear + 1, 1, 31)
             )
         );
 
@@ -65,29 +70,36 @@ public class GesuchsperiodeSeeding extends Seeder{
     }
 
     Gesuchsjahr getJahrForSeeding() {
+        int currentYear = LocalDate.now().getYear();
+        String yearAsString = String.valueOf(currentYear);
+        String yearSuffix = yearAsString.substring(yearAsString.length() -2 , yearAsString.length());
         return new Gesuchsjahr()
-            .setBezeichnungDe("Gesuchsjahr 24")
-            .setBezeichnungFr("Année de la demande 24")
-            .setTechnischesJahr(2024)
+            .setBezeichnungDe("Gesuchsjahr " + yearSuffix)
+            .setBezeichnungFr("Année de la demande " + yearSuffix)
+            .setTechnischesJahr(currentYear)
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
     }
 
     Gesuchsperiode getPeriodeForSeeding(
+        final String prefixDe,
+        final String prefixFr,
         final Gesuchsjahr jahr,
         final LocalDate from,
         final LocalDate to
     ) {
+        String jahrAsString = String.valueOf(jahr.getTechnischesJahr());
+
         return new Gesuchsperiode()
-            .setBezeichnungDe("Frühling 2023")
-            .setBezeichnungFr("Printemps 2023")
-            .setFiskaljahr("2023")
+            .setBezeichnungDe(prefixDe + ' ' + jahrAsString)
+            .setBezeichnungFr(prefixFr + ' ' + jahrAsString)
+            .setFiskaljahr(jahrAsString)
             .setGesuchsjahr(jahr)
             .setGesuchsperiodeStart(from)
             .setGesuchsperiodeStopp(to)
             .setAufschaltterminStart(from)
             .setAufschaltterminStopp(to)
-            .setEinreichefristNormal(from.minusMonths(1))
-            .setEinreichefristReduziert(to.with(lastDayOfYear()))
+            .setEinreichefristNormal(to.minusMonths(7))
+            .setEinreichefristReduziert(to.minusMonths(4))
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
             .setFreibetragVermoegen(0)

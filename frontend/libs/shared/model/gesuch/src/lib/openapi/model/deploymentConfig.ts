@@ -13,9 +13,6 @@
 export interface DeploymentConfig { 
     environment?: string;
     version?: string;
-    /**
-     * 
-     */
     allowedMimeTypes?: Array<string>;
 }
 

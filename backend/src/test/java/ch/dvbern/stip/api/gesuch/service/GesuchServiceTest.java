@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
@@ -73,6 +74,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -98,6 +100,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchRepository gesuchRepository;
+
+    @InjectMock
+    NotificationService notificationService;
 
     static final String TENANT_ID = "bern";
 
@@ -831,9 +836,12 @@ class GesuchServiceTest {
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+        final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
+        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        doNothing().when(notificationService).createNotification(any(), any());
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
@@ -855,6 +863,8 @@ class GesuchServiceTest {
             tranche.getGesuch().getGesuchStatus(),
             Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
         );
+
+        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
     }
 
     private SteuerdatenUpdateDto initSteuerdatenUpdateDto(SteuerdatenTyp typ) {

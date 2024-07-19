@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 
+ * BenutzereinstellungenUpdateDtoSpec
  */
 @JsonPropertyOrder({
   BenutzereinstellungenUpdateDtoSpec.JSON_PROPERTY_ID,
@@ -76,7 +76,7 @@ public class BenutzereinstellungenUpdateDtoSpec {
   }
 
    /**
-   * 
+   * Get digitaleKommunikation
    * @return digitaleKommunikation
   **/
   @jakarta.annotation.Nullable

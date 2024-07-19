@@ -13,9 +13,6 @@ import { WohnsitzKanton } from './wohnsitzKanton';
 import { LebenslaufAusbildungsArt } from './lebenslaufAusbildungsArt';
 import { Taetigkeitsart } from './taetigkeitsart';
 
-/**
- * 
- */
 export interface LebenslaufItemUpdate { 
     id?: string;
     bildungsart?: LebenslaufAusbildungsArt;
@@ -28,9 +25,6 @@ export interface LebenslaufItemUpdate {
      */
     bis: string;
     wohnsitz: WohnsitzKanton;
-    /**
-     * 
-     */
     ausbildungAbgeschlossen?: boolean;
     /**
      * Requierd wenn bildungsart = \'EIDGENOESSISCHES_BERUFSATTEST\' oder \'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS\'

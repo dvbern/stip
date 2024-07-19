@@ -1,0 +1,12 @@
+@if (isVisibleSig()) {
+  <button
+    class="btn btn-link"
+    type="button"
+    [attr.aria-label]="'shared.ui.clear' | translate"
+    (click)="clear.emit(); $event.stopPropagation()"
+  >
+    <dv-shared-ui-icon-chip class="fs-7">
+      <i class="icon material-symbols-rounded fs-5">clear</i>
+    </dv-shared-ui-icon-chip>
+  </button>
+}

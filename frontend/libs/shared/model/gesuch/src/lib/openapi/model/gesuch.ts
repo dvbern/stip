@@ -14,16 +14,10 @@ import { Gesuchstatus } from './gesuchstatus';
 import { Fall } from './fall';
 import { Gesuchsperiode } from './gesuchsperiode';
 
-/**
- * 
- */
 export interface Gesuch { 
     fall: Fall;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
-    /**
-     * 
-     */
     gesuchNummer: number;
     id: string;
     aenderungsdatum: string;

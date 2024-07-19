@@ -27,8 +27,17 @@ public class LebenslaufLuckenlosConstraintValidator
         if (gesuchFormular.getPersonInAusbildung() == null || gesuchFormular.getAusbildung() == null) {
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
-        LocalDate start = gesuchFormular.getPersonInAusbildung().getGeburtsdatum().withMonth(8).withDayOfMonth(1);
-        start = start.plusYears(16);
+
+        // If PIA is younger than 16 no items need to be present
+        if (
+            gesuchFormular.getPersonInAusbildung().getGeburtsdatum().plusYears(16)
+                .isAfter(gesuchFormular.getAusbildung().getAusbildungBegin())
+        ) {
+            return true;
+        }
+
+        LocalDate start = gesuchFormular.getPersonInAusbildung().getGeburtsdatum()
+            .plusYears(16);
         LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin();
         List<DateRange> dateRanges = new ArrayList<>();
         gesuchFormular.getLebenslaufItems().stream().forEach(
@@ -39,6 +48,10 @@ public class LebenslaufLuckenlosConstraintValidator
 
         // Check if first Lebenslaufitem is After birth
         LocalDate currentDate = start;
+        if (dateRanges.isEmpty()) {
+            LOG.warn("No Lebenslauf Items present");
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        }
         if (gesuchFormular.getPersonInAusbildung().getGeburtsdatum().isAfter(dateRanges.get(0).getGueltigAb())) {
             LOG.warn("Lebenslauf Item start bevor " + currentDate);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
