@@ -1,23 +1,10 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
-
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -25,11 +12,6 @@ import jakarta.validation.Valid;
 @Path("/gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchResource {
-
-    @POST
-    @Path("/status/in-bearbeitung/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Consumes({ "application/json" })
@@ -50,11 +32,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/einreichen/validieren")
     @Produces({ "application/json", "text/plain" })
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
-
-    @PATCH
-    @Path("/{gesuchId}/fehlendeDokumente")
-    @Produces({ "application/json", "text/plain" })
-    Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")
@@ -82,9 +59,9 @@ public interface GesuchResource {
     Response getGesucheGs();
 
     @GET
-    @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
+    @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryTyp);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")
