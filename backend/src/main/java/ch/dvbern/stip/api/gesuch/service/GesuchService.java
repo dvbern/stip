@@ -74,7 +74,6 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.generated.dto.*;
-import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
