@@ -149,16 +149,18 @@
   </div>
 
   <div class="mt-4 d-flex" *dvIfSachbearbeiter>
-    <!-- button sendMissingDocuments -->
-    <button
-      type="button"
-      class="btn btn-primary ml-auto"
-      (click)="fehlendeDokumenteUebermitteln()"
-      data-testid="dokumente-button-sendMissingDocuments"
-      [disabled]="dokumentsStore.hasAusstehendeDokumentsSig()"
-    >
-      {{ 'shared.dokumente.dokumentStatus.action.sendMissingDocuments' | translate }}
-    </button>
+    @if (dokumentsStore.hasAbgelehnteDokumentsSig()) {
+      <!-- button sendMissingDocuments -->
+      <button
+        type="button"
+        class="btn btn-primary ml-auto"
+        (click)="fehlendeDokumenteUebermitteln()"
+        data-testid="dokumente-button-sendMissingDocuments"
+        [disabled]="dokumentsStore.hasAusstehendeDokumentsSig()"
+      >
+        {{ 'shared.dokumente.dokumentStatus.action.sendMissingDocuments' | translate }}
+      </button>
+    }
   </div>
 
   <!-- Buttons -->

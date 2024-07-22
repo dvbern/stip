@@ -46,6 +46,14 @@ export class DokumentsStore extends signalStore(
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
 
+  hasAbgelehnteDokumentsSig = computed(() => {
+    return (
+      this.dokuments
+        .data()
+        ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
+      false
+    );
+  });
   hasAusstehendeDokumentsSig = computed(() => {
     return (
       this.dokuments
