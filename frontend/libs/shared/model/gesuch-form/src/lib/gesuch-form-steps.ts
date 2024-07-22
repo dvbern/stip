@@ -199,19 +199,18 @@ export const isStepValid = (
   formular: SharedModelGesuchFormular | null,
   invalidProps?: StepValidation,
 ): StepState | undefined => {
+  if (invalidProps?.errors === undefined) {
+    return undefined;
+  }
   const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
     [PERSON.route]: 'personInAusbildung',
     [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
     [FAMILIENSITUATION.route]: 'familiensituation',
     [ELTERN.route]: 'elterns',
-    ...formular?.steuerdaten?.reduce(
-      (steps, { steuerdatenTyp }) => ({
-        ...steps,
-        [ELTERN_STEUER_STEPS[steuerdatenTyp].route]: 'steuerdatenTabs',
-      }),
-      {} as Record<string, SharedModelGesuchFormularProps>,
-    ),
+    [ELTERN_STEUER_MUTTER.route]: 'steuerdatenTabs',
+    [ELTERN_STEUER_VATER.route]: 'steuerdatenTabs',
+    [ELTERN_STEUER_FAMILIE.route]: 'steuerdatenTabs',
     [GESCHWISTER.route]: 'geschwisters',
     [PARTNER.route]: 'partner',
     [KINDER.route]: 'kinds',
@@ -223,13 +222,18 @@ export const isStepValid = (
   const field = stepFieldMap[step.route];
 
   if (field === 'steuerdatenTabs') {
-    const [type] =
+    const thereAreSteuerdaten = formular?.steuerdaten?.some((data) => !!data);
+    const [stepSteuerdatenTyp] =
       Object.entries(ELTERN_STEUER_STEPS).find(
         ([, s]) => s.route === step.route,
       ) ?? [];
-    return formular?.steuerdaten?.find((s) => s.steuerdatenTyp === type)
-      ? 'VALID'
+    const currentHasDaten = formular?.steuerdaten?.find(
+      (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
+    );
+    const isValid = thereAreSteuerdaten
+      ? toStepState(field, invalidProps)
       : undefined;
+    return currentHasDaten ? 'VALID' : isValid;
   }
 
   if (field === 'lebenslaufItems') {
