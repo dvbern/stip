@@ -69,14 +69,27 @@
     <div class="my-1 text-body-tertiary vr"></div>
 
     <!-- Tranche erstellen -->
-    <a
-      routerLink="/"
-      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-tranche-erstellen"
-    >
-      <i class="material-symbols-rounded text-white me-2">add_circle</i>
-      <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
-    </a>
+    @if (canSetToBearbeitungSig()) {
+      <!-- Switch to In Bearbeitung SB -->
+      <button
+        type="button"
+        class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+        data-testid="gesuch-header-nav-gesuch-bearbeiten"
+        (click)="setToBearbeitung()"
+      >
+        <i class="material-symbols-rounded text-white me-2">edit_note</i>
+        <span>{{ 'sachbearbeitung-app.header.gesuch-bearbeiten' | translate }}</span>
+      </button>
+    } @else {
+      <a
+        routerLink="/"
+        class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+        data-testid="gesuch-header-nav-tranche-erstellen"
+      >
+        <i class="material-symbols-rounded text-white me-2">add_circle</i>
+        <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
+      </a>
+    }
   </div>
   <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
 </dv-shared-pattern-app-header>
