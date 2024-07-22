@@ -14,6 +14,26 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
 
     @Override
     public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
-        return gesuchService.getGesuchDokumenteForGesuch(gesuch.getId()).stream().allMatch(gesuchDokumentDto -> gesuchDokumentDto.getStatus() != Dokumentstatus.AUSSTEHEND);
+        var anyAusstehend = false;
+        var anyAbgelehnt = false;
+
+        final var gesuchDokumentDtos = gesuchService.getGesuchDokumenteForGesuch(gesuch.getId());
+        if (gesuchDokumentDtos.isEmpty()) {
+            return true;
+        }
+
+        for (final var gesuchDokumentDto : gesuchDokumentDtos) {
+            if (gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND) {
+                anyAusstehend = true;
+                break;
+            }
+
+            if (gesuchDokumentDto.getStatus() == Dokumentstatus.ABGELEHNT) {
+                anyAbgelehnt = true;
+            }
+        }
+
+        // Only return true if none are ausstehen and at least 1 is abgelehnt
+        return !anyAusstehend && anyAbgelehnt;
     }
 }

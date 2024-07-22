@@ -58,7 +58,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     }
 
     @Test
-    void allAkzeptiertIsValid() {
+    void allAkzeptiertIsNotValid() {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.AKZEPTIERT);
         final var gesuchDokumentDtos = gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
@@ -72,7 +72,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         final var isValid = validator.isValid(gesuch, null);
 
         // Assert
-        assertThat(isValid, is(true));
+        assertThat(isValid, is(false));
     }
 
     @Test
