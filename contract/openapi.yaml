@@ -112,7 +112,11 @@ paths:
           required: true
       responses:
         200:
-          description: Gesuchstatus changed to in bearbeitung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
