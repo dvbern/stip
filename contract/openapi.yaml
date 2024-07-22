@@ -100,6 +100,28 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesucheGs
       summary: Returns gesuche filtered by gs
+  /gesuch/status/in-bearbeitung/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          description: Gesuchstatus changed to in bearbeitung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToInBearbeitung
   '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:
@@ -2885,7 +2907,7 @@ components:
           type: integer
         berechnungsdaten:
           description: 'Resultat der Berechnung als JSON string, transparent'
-          type: string      
+          type: string
   responses:
     Unauthorized:
       content:
