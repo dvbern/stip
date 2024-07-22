@@ -2,9 +2,14 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
+import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -42,46 +47,97 @@ public class AntragsstellerV1 {
       boolean eigenerHaushalt;
       boolean abgeschlosseneErstausbildung;
 
-      public static AntragsstellerV1 fromGesuchFormular(final GesuchFormular gesuchFormular) {
+      public static AntragsstellerV1 buildFromDependants(
+          final GesuchFormular gesuchFormular
+      ) {
           final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
           final var partner = gesuchFormular.getPartner();
           final var einnahmenKosten = gesuchFormular.getEinnahmenKosten();
-          final var antragsstellerBuilder = new AntragsstellerV1Builder();
-          antragsstellerBuilder
-              .tertiaerstufe(false)
-              .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
-              .alimente(einnahmenKosten.getAlimente() != null ? einnahmenKosten.getAlimente() : 0)
-              .rente(einnahmenKosten.getRenten() != null ? einnahmenKosten.getRenten() : 0)
-              .kinderAusbildungszulagen(einnahmenKosten.getZulagen() != null ? einnahmenKosten.getZulagen() : 0)
-              .ergaenzungsleistungen(einnahmenKosten.getErgaenzungsleistungen() != null ? einnahmenKosten.getErgaenzungsleistungen() : 0)
-              .leistungenEO(einnahmenKosten.getEoLeistungen() != null ? einnahmenKosten.getEoLeistungen() : 0)
-              .gemeindeInstitutionen(0)
-              .alter((int) ChronoUnit.YEARS.between(LocalDate.now(), personInAusbildung.getGeburtsdatum()))
-              .grundbedarf(0)
-              .wohnkosten(einnahmenKosten.getWohnkosten() != null ? einnahmenKosten.getWohnkosten() : 0)
-              .medizinischeGrundversorgung(0)
-              .ausbildungskosten(einnahmenKosten.getAusbildungskostenTertiaerstufe() != null ? einnahmenKosten.getAusbildungskostenTertiaerstufe() : 0)
-              .steuern(0)
-              .steuernKonkubinatspartner(0)
-              .fahrkosten(einnahmenKosten.getFahrkosten())
-              .verpflegung(0)
-              .fremdbetreuung(0)
-              .anteilFamilienbudget(0)
-              .lehre(true)
-              .eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT)
-              .abgeschlosseneErstausbildung(true);
+          final var gesuchsperiode = gesuchFormular.getTranche().getGesuch().getGesuchsperiode();
+          final var ausbildung = gesuchFormular.getAusbildung();
 
-          if (partner != null) {
-              antragsstellerBuilder
-                  .einkommenPartner(partner.getJahreseinkommen() != null ? partner.getJahreseinkommen() : 0)
-                  .fahrkostenPartner(partner.getFahrkosten() != null ? partner.getFahrkosten() : 0)
-                  .verpflegungPartner(partner.getVerpflegungskosten() != null ? partner.getVerpflegungskosten() : 0);
+          final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
+          builder.tertiaerstufe(false);
+          builder.einkommen(einnahmenKosten.getNettoerwerbseinkommen());
+          builder.vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0));
+          builder.alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0));
+          builder.rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0));
+          builder.kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0));
+          builder.ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0));
+          builder.leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0));
+          // TODO: builder.gemeindeInstitutionen();
+          int alter = (int) ChronoUnit.YEARS.between(LocalDate.now(), personInAusbildung.getGeburtsdatum());
+          builder.alter(alter);
+
+          int anzahlPersonenImHaushalt = 0;
+          if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+              anzahlPersonenImHaushalt = 1;
+              if (partner != null) {
+                  anzahlPersonenImHaushalt += 1;
+              }
+              anzahlPersonenImHaushalt += gesuchFormular.getKinds().stream().filter(kind -> kind.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT).count();
+              builder.grundbedarf(
+                  BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt)
+              );
+          } else {
+              builder.grundbedarf(0);
           }
 
-          return antragsstellerBuilder.build();
+          builder.wohnkosten(0);
+          if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
+              builder.wohnkosten(
+                  BerechnungRequestV1.getEffektiveWohnkosten(einnahmenKosten.getWohnkosten(), gesuchsperiode, anzahlPersonenImHaushalt)
+              );
+          }
+
+          builder.medizinischeGrundversorgung(
+              BerechnungRequestV1.getMedizinischeGrundversorgung(alter, gesuchsperiode)
+          );
+
+          builder.ausbildungskosten(
+              getAusbildungskosten(
+                  einnahmenKosten,
+                  gesuchsperiode,
+                  ausbildung.getAusbildungsgang().getBildungsart().getBildungsstufe()
+              )
+          );
+          builder.steuern(
+              EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular)
+              // TODO: + einnahmenKosten.getSteuernStaat() + einnahmenKosten.getSteuernBund()
+          );
+          builder.fahrkosten(Objects.requireNonNullElse(einnahmenKosten.getFahrkosten(), 0));
+          builder.verpflegung(Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0));
+          builder.fremdbetreuung(Objects.requireNonNullElse(einnahmenKosten.getBetreuungskostenKinder(), 0));
+          // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
+          // TODO: builder.lehre(Objects.requireNonNullElse());
+          builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
+          // TODO: builder.abgeschlosseneErstausbildung(Objects.requireNonNullElse());
+
+          if (partner != null) {
+              builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
+              //TODO: builder.steuernKonkubinatspartner();
+              builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
+              builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
+          }
+          return builder.build();
       }
 
-      public static AntragsstellerV1 withDefaults() {
-          return new AntragsstellerV1Builder().build();
+      private static int getAusbildungskosten(
+          final EinnahmenKosten einnahmenKosten,
+          final Gesuchsperiode gesuchsperiode,
+          final Bildungsstufe bildungsstufe
+      ) {
+          return switch (bildungsstufe) {
+              case SEKUNDAR_2 -> Integer.min(
+                  Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
+                  gesuchsperiode.getAusbKostenSekII()
+              );
+              case TERTIAER -> Integer.min(
+                  Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenTertiaerstufe(), 0),
+                  gesuchsperiode.getAusbKostenTertiaer()
+              );
+          };
       }
+
+
 }

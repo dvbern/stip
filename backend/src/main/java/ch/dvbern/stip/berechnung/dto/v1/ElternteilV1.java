@@ -1,5 +1,9 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -18,7 +22,7 @@ public class ElternteilV1 {
     int grundbedarf;
     int fahrkostenPerson1;
     int fahrkostenPerson2;
-    int integrationszulage;
+    int integrationszulage; //TODO
     int steuernBund;
     int steuernStaat;
     int medizinischeGrundversorgung;
@@ -38,79 +42,53 @@ public class ElternteilV1 {
         return new ElternteilV1Builder();
     }
 
-    public static ElternteilV1Builder buildFromDependants(
+    public static ElternteilV1 buildFromDependants(
         final Gesuchsperiode gesuchsperiode,
         final Eltern elternteil,
         final Steuerdaten steuerdaten,
-        final int anzahlPersonenImHaushalt) {
+        final int anzahlPersonenImHaushalt,
+        final int anzahlGeschwisterInAusbildung
+    ) {
         final ElternteilV1Builder builder = builderWithDefaults();
+
         builder.essenskostenPerson1(steuerdaten.getVerpflegung());
         builder.essenskostenPerson2(steuerdaten.getVerpflegungPartner());
 
-        builder.grundbedarf(getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt));
+        builder.grundbedarf(BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt));
 
         builder.fahrkostenPerson1(steuerdaten.getFahrkosten());
         builder.fahrkostenPerson2(steuerdaten.getFahrkostenPartner());
 
+        // Where do we get this from?
+        // TODO: builder.integrationszulage(); gesuchsperiode.getIntegrationszulage();
 
+        builder.steuernBund(steuerdaten.getSteuernBund());
+        builder.steuernStaat(steuerdaten.getSteuernStaat());
 
+        builder.medizinischeGrundversorgung(
+            BerechnungRequestV1.getMedizinischeGrundversorgung(
+                (int) ChronoUnit.YEARS.between(
+                    LocalDate.now(),
+                    elternteil.getGeburtsdatum()),
+                gesuchsperiode)
+        );
+
+        builder.effektiveWohnkosten(
+            BerechnungRequestV1.getEffektiveWohnkosten(elternteil.getWohnkosten(), gesuchsperiode, anzahlPersonenImHaushalt)
+        );
+
+        builder.totalEinkuenfte(steuerdaten.getTotalEinkuenfte());
+        builder.ergaenzungsleistungen(steuerdaten.getErgaenzungsleistungen());
+        builder.eigenmietwert(steuerdaten.getEigenmietwert());
+        builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
+        builder.einzahlungSaeule3a(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0));
+        builder.steuerbaresVermoegen(steuerdaten.getVermoegen());
+        builder.selbststaendigErwerbend(steuerdaten.getIsArbeitsverhaeltnisSelbstaendig());
         builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
-        builder.effektiveWohnkosten(getEffektiveWohnkosten(elternteil, gesuchsperiode, anzahlPersonenImHaushalt));
+        builder.anzahlGeschwisterInAusbildung(anzahlGeschwisterInAusbildung);
 
-
-        return builder;
+        return builder.build();
     }
 
-    public static int getEffektiveWohnkosten(final Eltern elternteil, final Gesuchsperiode gesuchsperiode, int anzahlPersonenImHaushalt) {
-        int maxWohnkosten = gesuchsperiode.getWohnkostenFam5pluspers();
-        switch (anzahlPersonenImHaushalt) {
-            case 1:
-                maxWohnkosten = gesuchsperiode.getWohnkostenFam1pers();
-                break;
-            case 2:
-                maxWohnkosten = gesuchsperiode.getWohnkostenFam2pers();
-                break;
-            case 3:
-                maxWohnkosten = gesuchsperiode.getWohnkostenFam3pers();
-                break;
-            case 4:
-                maxWohnkosten = gesuchsperiode.getWohnkostenFam4pers();
-                break;
-            default:
-                break;
-        }
-        return Integer.min(elternteil.getWohnkosten(), maxWohnkosten);
-    }
-
-    public static int getGrundbedarf(final Gesuchsperiode gesuchsperiode, final int anzahlPersonenImHaushalt) {
-        int grundbedarf = 0;
-        switch (anzahlPersonenImHaushalt) {
-            case 1:
-                grundbedarf = gesuchsperiode.getPerson1();
-                break;
-            case 2:
-                grundbedarf = gesuchsperiode.getPersonen2();
-                break;
-            case 3:
-                grundbedarf = gesuchsperiode.getPersonen3();
-                break;
-            case 4:
-                grundbedarf = gesuchsperiode.getPersonen4();
-                break;
-            case 5:
-                grundbedarf = gesuchsperiode.getPersonen5();
-                break;
-            case 6:
-                grundbedarf = gesuchsperiode.getPersonen6();
-                break;
-            case 7:
-                grundbedarf = gesuchsperiode.getPersonen7();
-                break;
-            default:
-                grundbedarf = gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
-                break;
-        }
-        return grundbedarf;
-    }
 
 }

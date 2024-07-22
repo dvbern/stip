@@ -1,8 +1,15 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.util.List;
+import java.util.ListIterator;
+
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
@@ -69,20 +76,105 @@ public class BerechnungRequestV1 implements DmnRequest {
             elternTyp
         );
         final var personenImHaushalt = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequest);
+        final List<Integer> personenImHaushaltList = List.of(
+            personenImHaushalt.getPersonenImHaushalt1(),
+            personenImHaushalt.getPersonenImHaushalt2()
+        );
 
-        final var elternteil1Builder = ElternteilV1.builderWithDefaults();
-        final var elternteil2Builder = ElternteilV1.builderWithDefaults();
+        final List<ElternteilV1> elternteilerequests = List.of(
+            ElternteilV1.builderWithDefaults().build(),
+            ElternteilV1.builderWithDefaults().build()
+        );
 
-        final var antragssteller = AntragsstellerV1.fromGesuchFormular(gesuchFormular);
+        final List<Eltern> elternteile = gesuchFormular.getElterns().stream().toList();
+        ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten().stream().toList().listIterator();
 
-        elternteil1Builder.anzahlPersonenImHaushalt(personenImHaushalt.getPersonenImHaushalt1());
-        elternteil2Builder.anzahlPersonenImHaushalt(personenImHaushalt.getPersonenImHaushalt2());
+        while (steuerdatenListIterator.hasNext()) {
+            elternteilerequests.set(
+                steuerdatenListIterator.nextIndex(),
+                ElternteilV1.buildFromDependants(
+                    gesuch.getGesuchsperiode(),
+                    elternteile.get(steuerdatenListIterator.nextIndex()),
+                    steuerdatenListIterator.next(),
+                    personenImHaushaltList.get(steuerdatenListIterator.nextIndex()),
+                    (int) gesuchFormular.getGeschwisters().stream().filter(geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE).count()
+                )
+            );
+        }
+
+        final var antragssteller = AntragsstellerV1.buildFromDependants(gesuchFormular);
 
         return new BerechnungRequestV1(
             StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode()),
-            new InputFamilienbudgetV1(elternteil1Builder.build()),
-            new InputFamilienbudgetV1(elternteil2Builder.build()),
+            new InputFamilienbudgetV1(elternteilerequests.get(0)),
+            new InputFamilienbudgetV1(elternteilerequests.get(1)),
             new InputPersoenlichesbudgetV1(antragssteller)
         );
+    }
+
+    public static int getGrundbedarf(final Gesuchsperiode gesuchsperiode, final int anzahlPersonenImHaushalt) {
+        int grundbedarf = 0;
+        switch (anzahlPersonenImHaushalt) {
+        case 1:
+            grundbedarf = gesuchsperiode.getPerson1();
+            break;
+        case 2:
+            grundbedarf = gesuchsperiode.getPersonen2();
+            break;
+        case 3:
+            grundbedarf = gesuchsperiode.getPersonen3();
+            break;
+        case 4:
+            grundbedarf = gesuchsperiode.getPersonen4();
+            break;
+        case 5:
+            grundbedarf = gesuchsperiode.getPersonen5();
+            break;
+        case 6:
+            grundbedarf = gesuchsperiode.getPersonen6();
+            break;
+        case 7:
+            grundbedarf = gesuchsperiode.getPersonen7();
+            break;
+        default:
+            grundbedarf = gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
+            break;
+        }
+        return grundbedarf;
+    }
+
+    public static int getEffektiveWohnkosten(
+        final int eingegebeneWohnkosten,
+        final Gesuchsperiode gesuchsperiode,
+        int anzahlPersonenImHaushalt
+    ) {
+        int maxWohnkosten = gesuchsperiode.getWohnkostenFam5pluspers();
+        switch (anzahlPersonenImHaushalt) {
+        case 1:
+            maxWohnkosten = gesuchsperiode.getWohnkostenFam1pers();
+            break;
+        case 2:
+            maxWohnkosten = gesuchsperiode.getWohnkostenFam2pers();
+            break;
+        case 3:
+            maxWohnkosten = gesuchsperiode.getWohnkostenFam3pers();
+            break;
+        case 4:
+            maxWohnkosten = gesuchsperiode.getWohnkostenFam4pers();
+            break;
+        default:
+            break;
+        }
+        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
+    }
+
+    public static int getMedizinischeGrundversorgung(final int alter, final Gesuchsperiode gesuchsperiode) {
+        int medizinischeGrundversorgung = gesuchsperiode.getErwachsene2699();
+        if (alter <= 18) {
+            medizinischeGrundversorgung = gesuchsperiode.getKinder0018();
+        } else if (alter <= 25) {
+            medizinischeGrundversorgung = gesuchsperiode.getJugendlicheErwachsene1925();
+        }
+        return medizinischeGrundversorgung;
     }
 }
