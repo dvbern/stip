@@ -200,6 +200,8 @@
   "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
   "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Commentaire",
 
+  "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Manquant",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",

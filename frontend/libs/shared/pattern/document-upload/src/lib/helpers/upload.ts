@@ -1,7 +1,7 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, combineLatest, interval, map, takeWhile } from 'rxjs';
 
-import { DocumentUpload, DocumentView } from '../upload.model';
+import { DocumentUpload, DocumentView } from '@dv/shared/model/dokument';
 
 const PROGRESS_ANIMATION_TIME = 600;
 const FORMAT_ERROR = 'shared.file.invalidFormat';

@@ -1,6 +1,6 @@
 @use '../../theme/src/theme' as t;
 
-.dv-button-icon {
+.dv-icon-button {
   background: none;
   border: none;
   width: calc(var(--dv-size-unit) * 10);
@@ -23,6 +23,11 @@
 
   &:focus {
     outline: var(--dv-size-unit) solid var(--dv-border-color);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
   }
 
   &.#{t.$prefix}button-icon-sm {

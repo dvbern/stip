@@ -59,6 +59,13 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
     }
 
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
+        gesuchService.gesuchFehlendeDokumente(gesuchId);
+        return Response.ok().build();
+    }
+
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuch(UUID gesuchId) {

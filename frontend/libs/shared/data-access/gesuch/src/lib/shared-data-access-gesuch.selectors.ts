@@ -4,8 +4,6 @@ import { createSelector } from '@ngrx/store';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
-  Gesuchstatus,
-  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
   ValidationMessage,
@@ -30,6 +28,7 @@ import {
   SharedModelGesuchFormStep,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
+import { isGesuchFormularReadonly } from '@dv/shared/util/readonly-state';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -59,14 +58,14 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
   (config, lastUpdate, loading, gesuch, gesuchFormular) => {
     return {
+      config,
       lastUpdate,
       loading,
       gesuch,
       gesuchFormular,
-      readonly: setReadOnly(
+      readonly: isGesuchFormularReadonly(
         gesuch,
-        config.isGesuchApp,
-        config.isSachbearbeitungApp,
+        config.compileTimeConfig?.appType,
       ),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       gesuchId: gesuch?.id,
@@ -130,24 +129,6 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   (state) => state.steuerdatenTabs,
 );
-
-const setReadOnly = (
-  gesuch: SharedModelGesuch | null,
-  isGesuchApp: boolean,
-  isSachbearbeitungApp: boolean,
-) => {
-  if (!gesuch) return false;
-
-  if (isGesuchApp) {
-    return gesuch.gesuchStatus !== Gesuchstatus.IN_BEARBEITUNG_GS;
-  }
-
-  if (isSachbearbeitungApp) {
-    return gesuch.gesuchStatus === Gesuchstatus.IN_BEARBEITUNG_GS;
-  }
-
-  throw new Error('setReadOnly: Unknown gesuchStatus');
-};
 
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
