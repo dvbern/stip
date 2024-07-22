@@ -124,6 +124,7 @@
   "shared.gesuch.status.contract.IN_BEARBEITUNG_SB": "Prêt à être traité",
   "shared.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
   "shared.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",
+  "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Documents manquants",
 
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
