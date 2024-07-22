@@ -6,8 +6,9 @@ import java.util.Map;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class GesuchValidatorService {
 
     static {
         statusToValidationGroup.put(Gesuchstatus.EINGEREICHT, GesuchEinreichenValidationGroup.class);
+        statusToValidationGroup.put(Gesuchstatus.FEHLENDE_DOKUMENTE, GesuchFehlendeDokumenteValidationGroup.class);
     }
 
     private final Validator validator;

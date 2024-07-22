@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import java.io.File;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class DokumentApiSpec {
         return Arrays.asList(
                 createDokument(),
                 deleteDokument(),
+                gesuchDokumentAblehnen(),
+                gesuchDokumentAkzeptieren(),
                 getDokument(),
                 getDokumentDownloadToken(),
                 getDokumenteForTyp()
@@ -73,6 +76,14 @@ public class DokumentApiSpec {
 
     public DeleteDokumentOper deleteDokument() {
         return new DeleteDokumentOper(createReqSpec());
+    }
+
+    public GesuchDokumentAblehnenOper gesuchDokumentAblehnen() {
+        return new GesuchDokumentAblehnenOper(createReqSpec());
+    }
+
+    public GesuchDokumentAkzeptierenOper gesuchDokumentAkzeptieren() {
+        return new GesuchDokumentAkzeptierenOper(createReqSpec());
     }
 
     public GetDokumentOper getDokument() {
@@ -266,6 +277,141 @@ public class DokumentApiSpec {
          * @return operation
          */
         public DeleteDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchDokumentIdPath  (required)
+     * @see #body  (optional)
+     */
+    public static class GesuchDokumentAblehnenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchDokument/{gesuchDokumentId}/ablehnen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchDokumentAblehnenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchDokument/{gesuchDokumentId}/ablehnen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param gesuchDokumentAblehnenRequestDtoSpec (GesuchDokumentAblehnenRequestDtoSpec)  (optional)
+         * @return operation
+         */
+        public GesuchDokumentAblehnenOper body(GesuchDokumentAblehnenRequestDtoSpec gesuchDokumentAblehnenRequestDtoSpec) {
+            reqSpec.setBody(gesuchDokumentAblehnenRequestDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_DOKUMENT_ID_PATH = "gesuchDokumentId";
+
+        /**
+         * @param gesuchDokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchDokumentAblehnenOper gesuchDokumentIdPath(Object gesuchDokumentId) {
+            reqSpec.addPathParam(GESUCH_DOKUMENT_ID_PATH, gesuchDokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchDokumentAblehnenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchDokumentAblehnenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchDokumentIdPath  (required)
+     */
+    public static class GesuchDokumentAkzeptierenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchDokument/{gesuchDokumentId}/akzeptieren";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchDokumentAkzeptierenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchDokument/{gesuchDokumentId}/akzeptieren
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_DOKUMENT_ID_PATH = "gesuchDokumentId";
+
+        /**
+         * @param gesuchDokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchDokumentAkzeptierenOper gesuchDokumentIdPath(Object gesuchDokumentId) {
+            reqSpec.addPathParam(GESUCH_DOKUMENT_ID_PATH, gesuchDokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchDokumentAkzeptierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchDokumentAkzeptierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

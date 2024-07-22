@@ -15,11 +15,10 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
+import { DocumentView, UploadView } from '@dv/shared/model/dokument';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-
-import { DocumentView, UploadView } from '../upload.model';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-entry',

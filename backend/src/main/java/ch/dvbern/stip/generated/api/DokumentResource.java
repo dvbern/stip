@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import java.io.File;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -17,33 +18,44 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/dokument")
+@Path("")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface DokumentResource {
 
     @POST
-    @Path("/{gesuchId}/{dokumentTyp}")
+    @Path("/dokument/{gesuchId}/{dokumentTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createDokument(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @DELETE
-    @Path("/{gesuchId}/{dokumentTyp}/{dokumentId}")
+    @Path("/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}")
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> deleteDokument(@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId);
 
+    @PATCH
+    @Path("/gesuchDokument/{gesuchDokumentId}/ablehnen")
+    @Consumes({ "application/json" })
+    @Produces({ "text/plain" })
+    Response gesuchDokumentAblehnen(@PathParam("gesuchDokumentId") UUID gesuchDokumentId,@Valid GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto);
+
+    @PATCH
+    @Path("/gesuchDokument/{gesuchDokumentId}/akzeptieren")
+    @Produces({ "text/plain" })
+    Response gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
+
     @GET
-    @Path("/download")
+    @Path("/dokument/download")
     @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
-    @Path("/{gesuchId}/{dokumentTyp}/{dokumentId}")
+    @Path("/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}")
     @Produces({ "text/plain" })
     Response getDokumentDownloadToken(@PathParam("gesuchId") UUID gesuchId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/{gesuchId}/{dokumentTyp}")
+    @Path("/dokument/{gesuchId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
     Response getDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId);
 }
