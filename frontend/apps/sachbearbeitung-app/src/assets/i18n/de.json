@@ -201,6 +201,8 @@
   "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
   "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
 
+  "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
+
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",

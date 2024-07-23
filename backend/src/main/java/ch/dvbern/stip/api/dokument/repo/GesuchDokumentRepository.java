@@ -10,6 +10,8 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.QDokument;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
@@ -85,7 +87,20 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .stream().count();
 
         if (dokuments == 0) {
+            final GesuchDokument gesuchDokument = requireById(gesuchDokumentId);
+            gesuchDokument.getGesuch().getGesuchDokuments().remove(gesuchDokument);
             deleteById(gesuchDokumentId);
         }
+    }
+
+    public Stream<GesuchDokument> getAllForGesuchInStatus(final Gesuch gesuch, final Dokumentstatus dokumentstatus) {
+        final var gesuchDokument = QGesuchDokument.gesuchDokument;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchDokument)
+            .where(gesuchDokument.gesuch.id.eq(gesuch.getId())
+                .and(gesuchDokument.status.eq(dokumentstatus))
+            )
+            .stream();
     }
 }

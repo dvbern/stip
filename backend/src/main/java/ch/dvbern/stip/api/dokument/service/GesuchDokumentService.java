@@ -13,9 +13,13 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -47,6 +51,7 @@ public class GesuchDokumentService {
     private final GesuchRepository gesuchRepository;
     private final S3AsyncClient s3;
     private final ConfigService configService;
+    private final DokumentstatusService dokumentstatusService;
 
     @Transactional
     public DokumentDto uploadDokument(
@@ -104,6 +109,35 @@ public class GesuchDokumentService {
             ).toList();
     }
 
+    private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
+        if (gesuch.getGesuchStatus() != statusToVerify) {
+            throw new IllegalStateException(
+                "Gesuchstatus " + gesuch.getGesuchStatus().toString() + " not " + statusToVerify.toString()
+            );
+        }
+    }
+
+    @Transactional
+    public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        dokumentstatusService.triggerStatusChangeWithComment(
+            gesuchDokument,
+            DokumentstatusChangeEvent.ABGELEHNT,
+            dto.getKommentar()
+        );
+    }
+
+    @Transactional
+    public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        dokumentstatusService.triggerStatusChange(
+            gesuchDokument,
+            DokumentstatusChangeEvent.AKZEPTIERT
+        );
+    }
+
     public void deleteAllDokumentForGesuch(final UUID gesuchId) {
         executeDeleteDokumentsFromS3(getAllDokumentObjectIdsForGesuch(gesuchId));
         deleteAllDokumentForGesuchInRepository(gesuchId);
@@ -142,6 +176,27 @@ public class GesuchDokumentService {
         dokumentRepository.delete(dokument);
         gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(dokument.getGesuchDokument().getId());
         return dokumentObjectId;
+    }
+
+    @Transactional
+    public void deleteAbgelehnteDokumenteForGesuch(final Gesuch gesuch) {
+        // Query for these instead of iterating "in memory" because gesuchDokumente are lazy loaded
+        // and this results in only loading the ones we need instead of all
+        final var gesuchDokumente = gesuchDokumentRepository
+            .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
+            .toList();
+
+        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
+        for (final var gesuchDokument : gesuchDokumente) {
+            for (final var dokument : gesuchDokument.getDokumente()) {
+                dokumenteToDeleteFromS3.add(dokument.getObjectId());
+                dokumentRepository.delete(dokument);
+            }
+
+            gesuchDokumentRepository.delete(gesuchDokument);
+        }
+
+        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
     public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(
