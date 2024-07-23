@@ -1,8 +1,7 @@
 import { Signal, computed } from '@angular/core';
 
+import { DocumentOptions } from '@dv/shared/model/dokument';
 import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
-
-import { DocumentOptions } from '../upload.model';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: DocumentOptions['titleKey'];

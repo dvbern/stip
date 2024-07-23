@@ -46,6 +46,11 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
 
+    @PATCH
+    @Path("/{gesuchId}/fehlendeDokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+
     @GET
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })

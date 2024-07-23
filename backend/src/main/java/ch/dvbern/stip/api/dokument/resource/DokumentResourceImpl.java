@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -148,6 +149,23 @@ public class DokumentResourceImpl implements DokumentResource {
             .andSwitchTo(Uni.createFrom().item(Response.noContent().build()))
             .onFailure()
             .recoverWithItem(Response.serverError().build());
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchDokumentAblehnen(
+        UUID gesuchDokumentId,
+        GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
+    ) {
+        gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
+        gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
+        return Response.ok().build();
     }
 
     private static Buffer toBuffer(ByteBuffer bytebuffer) {

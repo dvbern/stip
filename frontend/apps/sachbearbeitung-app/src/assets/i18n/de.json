@@ -6,6 +6,7 @@
   "sachbearbeitung-app.header.verfuegung": "Verfügung",
   "sachbearbeitung-app.header.aenderungen": "Änderungen",
   "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
+  "sachbearbeitung-app.header.gesuch-bearbeiten": "Gesuch bearbeiten",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",
   "sachbearbeitung-app.header.back": "Zurück",
 
@@ -200,6 +201,8 @@
   "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Status",
   "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
   "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
+
+  "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",

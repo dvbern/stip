@@ -544,6 +544,7 @@ class GesuchResourceTest {
         assertThat(
             gesuchOpt.get().getGesuchStatus().toString(),
             gesuchOpt.get().getGesuchStatus(),
+            // TODO KSTIP-1217 revert
             is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
@@ -629,6 +630,7 @@ class GesuchResourceTest {
             is(3)
         );
 
+        // TODO KSTIP-1217: revert
         final var expectedOldStatus = Set.of(
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
             GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG,
