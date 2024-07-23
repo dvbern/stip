@@ -363,7 +363,13 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
-
+        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).getVeranlagungscode(), not(null));
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).getSteuerjahr(), not(null));
         validatePage();
     }
 
