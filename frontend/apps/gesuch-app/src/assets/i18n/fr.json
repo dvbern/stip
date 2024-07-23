@@ -5,7 +5,7 @@
   "gesuch-app.cockpit.welcome.titel": "Bonjour {{name}}",
   "gesuch-app.cockpit.gesuch.new": "Créer une application",
   "gesuch-app.cockpit.gesuch.edit": "Modifier",
-  "gesuch-app.cockpit.gesuch.nachfrist": "Demander un délai de grâce",
+  "gesuch-app.cockpit.gesuch.aenderung": "Signaler un changement",
   "gesuch-app.cockpit.periode.einreichfrist.titel": "Délai de soumission",
   "gesuch-app.cockpit.periode.einreichfrist.spaetestens": "au plus tard",
   "gesuch-app.cockpit.periode.status.titel": "Statut de l'application",

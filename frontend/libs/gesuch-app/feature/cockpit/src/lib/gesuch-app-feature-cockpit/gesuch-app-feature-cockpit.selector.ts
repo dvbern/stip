@@ -17,8 +17,7 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
       .map((p) => ({
         ...p,
         gesuchLoading: gesucheLoading,
-        gesuchId: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id)
-          ?.id,
+        gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
       })),
     version,
   }),

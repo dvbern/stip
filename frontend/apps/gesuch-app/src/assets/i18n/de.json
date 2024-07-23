@@ -5,7 +5,7 @@
   "gesuch-app.cockpit.welcome.titel": "Guten Morgen, {{name}}",
   "gesuch-app.cockpit.gesuch.new": "Antrag erstellen",
   "gesuch-app.cockpit.gesuch.edit": "Bearbeiten",
-  "gesuch-app.cockpit.gesuch.nachfrist": "Nachfrist verlangen",
+  "gesuch-app.cockpit.gesuch.aenderung": "Änderung Melden",
   "gesuch-app.cockpit.periode.einreichfrist.titel": "Einreichefrist",
   "gesuch-app.cockpit.periode.einreichfrist.spaetestens": "bis spätestens",
   "gesuch-app.cockpit.periode.status.titel": "Status des Antrags",
