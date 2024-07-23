@@ -1,19 +1,30 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import java.util.UUID;
+
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import java.util.UUID;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
 
 
 @Path("/gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchResource {
+
+    @POST
+    @Path("/status/in-bearbeitung/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Consumes({ "application/json" })
@@ -63,7 +74,7 @@ public interface GesuchResource {
     @GET
     @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") GetGesucheSBQueryType getGesucheSBQueryType);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryTyp);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")

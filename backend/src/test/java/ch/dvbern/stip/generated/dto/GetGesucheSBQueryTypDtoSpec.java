@@ -13,16 +13,11 @@
 
 package ch.dvbern.stip.generated.dto;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetGesucheSBQueryType
+ * Gets or Sets GetGesucheSBQueryTyp
  */
 public enum GetGesucheSBQueryTypDtoSpec {
 

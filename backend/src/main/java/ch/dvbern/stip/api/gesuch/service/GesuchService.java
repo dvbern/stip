@@ -268,6 +268,13 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
+    @Transactional
+    public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+        return gesuchMapper.toDto(gesuch);
+    }
+
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 

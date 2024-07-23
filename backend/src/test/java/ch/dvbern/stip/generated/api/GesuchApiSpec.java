@@ -13,22 +13,20 @@
 
 package ch.dvbern.stip.generated.api;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
-import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -36,11 +34,10 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
-import java.lang.reflect.Type;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import static io.restassured.http.Method.*;
+import static io.restassured.http.Method.DELETE;
+import static io.restassured.http.Method.GET;
+import static io.restassured.http.Method.PATCH;
+import static io.restassured.http.Method.POST;
 
 public class GesuchApiSpec {
 
@@ -65,6 +62,7 @@ public class GesuchApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                changeGesuchStatusToInBearbeitung(),
                 createGesuch(),
                 deleteGesuch(),
                 gesuchEinreichen(),
@@ -80,6 +78,10 @@ public class GesuchApiSpec {
                 updateGesuch(),
                 validateGesuchPages()
         );
+    }
+
+    public ChangeGesuchStatusToInBearbeitungOper changeGesuchStatusToInBearbeitung() {
+        return new ChangeGesuchStatusToInBearbeitungOper(createReqSpec());
     }
 
     public CreateGesuchOper createGesuch() {
@@ -148,6 +150,79 @@ public class GesuchApiSpec {
         return this;
     }
 
+    /**
+     *
+     *
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToInBearbeitungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/in-bearbeitung/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToInBearbeitungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/in-bearbeitung/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/in-bearbeitung/{gesuchId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToInBearbeitungOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToInBearbeitungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToInBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * Creates a new Gesuch
      *

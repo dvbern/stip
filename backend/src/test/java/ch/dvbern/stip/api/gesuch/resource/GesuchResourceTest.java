@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -483,6 +483,21 @@ class GesuchResourceTest {
     @Test
     @TestAsSachbearbeiter
     @Order(21)
+    void testGesuchStatusChangeToInBearbeitungSB() {
+        var gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDtoSpec.class);
+
+        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(22)
     void testGetAllGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
@@ -498,7 +513,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(22)
+    @Order(23)
     void testGetGesucheSbNoUnwantedStatus() {
         var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
@@ -514,7 +529,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(23)
+    @Order(24)
     void testFindGesuche() {
         var gesuche = gesuchApiSpec.getGesucheGs().execute(ResponseBody::prettyPeek)
             .then()
@@ -529,13 +544,13 @@ class GesuchResourceTest {
         assertThat(
             gesuchOpt.get().getGesuchStatus().toString(),
             gesuchOpt.get().getGesuchStatus(),
-            is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+            is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(24)
+    @Order(25)
     void testGetGesuchDokumente() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
@@ -596,7 +611,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(24)
+    @Order(26)
     void testGetStatusprotokoll() {
         final var statusprotokoll = gesuchApiSpec.getStatusProtokoll()
             .gesuchIdPath(gesuchId)
@@ -611,12 +626,13 @@ class GesuchResourceTest {
         assertThat(
             Arrays.toString(statusprotokoll),
             statusprotokoll.length,
-            is(2)
+            is(3)
         );
 
         final var expectedOldStatus = Set.of(
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
-            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG,
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
         );
 
         assertThat(
@@ -630,7 +646,7 @@ class GesuchResourceTest {
 
     @Test
     @TestAsAdmin
-    @Order(25)
+    @Order(27)
     void testDeleteGesuch() {
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)
