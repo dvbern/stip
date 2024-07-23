@@ -188,12 +188,14 @@ public class GesuchDokumentService {
 
         final var dokumenteToDeleteFromS3 = new ArrayList<String>();
         for (final var gesuchDokument : gesuchDokumente) {
-            for (final var dokument : gesuchDokument.getDokumente()) {
-                dokumenteToDeleteFromS3.add(dokument.getObjectId());
-                dokumentRepository.delete(dokument);
-            }
+            dokumenteToDeleteFromS3.addAll(
+                gesuchDokument
+                    .getDokumente()
+                    .stream()
+                    .map(Dokument::getObjectId).toList()
+            );
 
-            gesuchDokumentRepository.delete(gesuchDokument);
+            gesuchDokument.getDokumente().clear();
         }
 
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
