@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.ws.rs.NotFoundException;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -24,6 +25,11 @@ public interface SteuerdatenMapper {
     @BeforeMapping
     default void beforeMapping(SteuerdatenUpdateDto steuerdatenUpdateDto, @MappingTarget Steuerdaten steuerdaten) {
         steuerdaten.setVeranlagungsCode(steuerdatenUpdateDto.getVeranlagungscode());
+    }
+
+    @AfterMapping
+    default void afterMapping(Steuerdaten steuerdaten, @MappingTarget SteuerdatenDto steuerdatenDto) {
+        steuerdatenDto.setVeranlagungscode(steuerdaten.getVeranlagungsCode());
     }
 
     default Set<Steuerdaten> map(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, final @MappingTarget Set<Steuerdaten> steuerdatenSet) {

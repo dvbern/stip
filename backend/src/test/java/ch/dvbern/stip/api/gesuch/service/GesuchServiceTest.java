@@ -1072,6 +1072,35 @@ class GesuchServiceTest {
         );
     }
 
+    @TestAsGesuchsteller
+    @Test
+    void emptyPageSteuerdatenTest(){
+        GesuchUpdateDto gesuchUpdateDto = createGesuch();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
+        steuerdatenUpdateDto1.setSteuerjahr(null);
+        steuerdatenUpdateDto1.setVeranlagungscode(null);
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
+
+        //set null values
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setVeranlagungscode(null);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
+
+        final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
+        assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
+        assertThat(
+            steuerdatenTab.getSteuerjahr(),
+            Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
+    }
+
     @Test
     void pageValidation() {
         final var gesuch = new Gesuch();

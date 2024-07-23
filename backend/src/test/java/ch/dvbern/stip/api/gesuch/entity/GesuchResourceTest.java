@@ -368,8 +368,8 @@ class GesuchResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).getVeranlagungscode(), not(null));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).getSteuerjahr(), not(null));
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).getVeranlagungscode(),notNullValue());
+        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).getSteuerjahr(), notNullValue());
         validatePage();
     }
 
