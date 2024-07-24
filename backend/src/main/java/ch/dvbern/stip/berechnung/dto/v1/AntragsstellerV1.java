@@ -66,22 +66,38 @@ public class AntragsstellerV1 {
           builder.ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0));
           builder.leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0));
           // TODO: builder.gemeindeInstitutionen();
-          int alter = (int) ChronoUnit.YEARS.between(LocalDate.now(), personInAusbildung.getGeburtsdatum());
+          int alter = (int) ChronoUnit.YEARS.between(personInAusbildung.getGeburtsdatum(), LocalDate.now());
           builder.alter(alter);
 
+          int medizinischeGrundversorgung = 0;
           int anzahlPersonenImHaushalt = 0;
           if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
               anzahlPersonenImHaushalt = 1;
+              medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(alter, gesuchsperiode);
               if (partner != null) {
                   anzahlPersonenImHaushalt += 1;
+                  medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                      (int) ChronoUnit.YEARS.between(partner.getGeburtsdatum(), LocalDate.now()),
+                      gesuchsperiode
+                  );
               }
-              anzahlPersonenImHaushalt += gesuchFormular.getKinds().stream().filter(kind -> kind.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT).count();
+              for (final var kind : gesuchFormular.getKinds()) {
+                  if (kind.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
+                      anzahlPersonenImHaushalt += 1;
+                      medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                          (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()), gesuchsperiode
+                      );
+                  }
+              }
+
               builder.grundbedarf(
                   BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt)
               );
+              // TODO: adapt for ig wohhaft in WG einnahmenKosten.getWgWohnend();
           } else {
               builder.grundbedarf(0);
           }
+          builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
           builder.wohnkosten(0);
           if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
@@ -89,10 +105,6 @@ public class AntragsstellerV1 {
                   BerechnungRequestV1.getEffektiveWohnkosten(einnahmenKosten.getWohnkosten(), gesuchsperiode, anzahlPersonenImHaushalt)
               );
           }
-
-          builder.medizinischeGrundversorgung(
-              BerechnungRequestV1.getMedizinischeGrundversorgung(alter, gesuchsperiode)
-          );
 
           builder.ausbildungskosten(
               getAusbildungskosten(

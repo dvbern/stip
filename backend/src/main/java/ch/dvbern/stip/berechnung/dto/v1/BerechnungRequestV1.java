@@ -1,9 +1,13 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
+import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -81,23 +85,45 @@ public class BerechnungRequestV1 implements DmnRequest {
             personenImHaushalt.getPersonenImHaushalt2()
         );
 
-        final List<ElternteilV1> elternteilerequests = List.of(
-            ElternteilV1.builderWithDefaults().build(),
-            ElternteilV1.builderWithDefaults().build()
+        final List<ElternteilV1> elternteilerequests = new ArrayList<>(
+            List.of(
+                ElternteilV1.builderWithDefaults().build(),
+                ElternteilV1.builderWithDefaults().build()
+            )
         );
 
         final List<Eltern> elternteile = gesuchFormular.getElterns().stream().toList();
-        ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten().stream().toList().listIterator();
+        ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten().stream().sorted(
+            Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
+        ).toList().listIterator();
+
+        List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
+            gesuchFormular.getGeschwisters().stream()
+                .filter(
+                    geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
+                ).map(
+                    geschwister -> (AbstractFamilieEntity) geschwister)
+                .toList()
+        );
+
+        if (gesuchFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
+            kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
+        }
 
         while (steuerdatenListIterator.hasNext()) {
+            final int currentIdx = steuerdatenListIterator.nextIndex();
             elternteilerequests.set(
-                steuerdatenListIterator.nextIndex(),
+                currentIdx,
                 ElternteilV1.buildFromDependants(
                     gesuch.getGesuchsperiode(),
-                    elternteile.get(steuerdatenListIterator.nextIndex()),
+                    elternteile,
                     steuerdatenListIterator.next(),
-                    personenImHaushaltList.get(steuerdatenListIterator.nextIndex()),
-                    (int) gesuchFormular.getGeschwisters().stream().filter(geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE).count()
+                    personenImHaushaltList.get(currentIdx),
+                    kinderDerElternInHaushalten,
+                    (int) gesuchFormular.getGeschwisters().stream().filter(
+                        geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE
+                    ).count(),
+                    elternTyp
                 )
             );
         }
@@ -117,6 +143,9 @@ public class BerechnungRequestV1 implements DmnRequest {
         switch (anzahlPersonenImHaushalt) {
         case 1:
             grundbedarf = gesuchsperiode.getPerson1();
+//            if (wohntInWG) {
+//                grundbedarf -= gesuchsperiode.getW
+//            }
             break;
         case 2:
             grundbedarf = gesuchsperiode.getPersonen2();
