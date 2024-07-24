@@ -101,8 +101,7 @@ public class BerechnungRequestV1 implements DmnRequest {
             gesuchFormular.getGeschwisters().stream()
                 .filter(
                     geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
-                ).map(
-                    geschwister -> (AbstractFamilieEntity) geschwister)
+                ).map(AbstractFamilieEntity.class::cast)
                 .toList()
         );
 
