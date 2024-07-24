@@ -2883,9 +2883,123 @@ components:
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
-        berechnungsdaten:
-          description: 'Resultat der Berechnung als JSON string, transparent'
-          type: string      
+        persoenlichesBudgetresultat:
+          description: 'Berechnungsdaten des persönlichen Budgets'
+          $ref: '#/components/schemas/PersoenlichesBudgetresultat'
+        familienBudgetresultate:
+          description: "Berechnungsdaten der Familienbudgets"
+          type: array
+          items:
+            $ref: '#/components/schemas/FamilienBudgetresultat'
+        # berechnungsdaten:
+        #   description: 'Resultat der Berechnung als JSON string, transparent'
+        #   type: string
+    PersoenlichesBudgetresultat:
+      description: Persoenliche Budget daten fuer und von der Berechnung
+      type: object
+      properties:
+        eigenerHaushalt:
+          type: boolean
+        einkommen:
+          type: integer
+        leistungenEO:
+          type: integer
+        rente:
+          type: integer
+        kinderAusbildungszulagen:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        gemeindeInstitutionen:
+          type: integer
+        vermoegen:
+          type: integer
+        anteilFamilienbudget:
+          type: integer
+        einkommenPartner:
+          type: integer
+        einnahmenPersoenlichesBudget:
+          type: integer
+        grundbedarf:
+          type: integer
+        wohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        fremdbetreuung:
+          type: integer
+        ausbildungskosten:
+          type: integer
+        ausgabenPersoenlichesBudget:
+          type: integer
+        persoenlichesbudgetBerechnet:
+          type: integer
+    FamilienBudgetresultat:
+      description: Familien Budget daten fuer und von der Berechnung
+      type: object
+      properties:
+        familienBudgetTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        selbststaendigErwerbend:
+          type: boolean
+        anzahlPersonenImHaushalt:
+          type: integer
+        anzahlGeschwisterInAusbildung:
+          type: integer
+        totalEinkuenfte:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        steuerbaresVermoegen:
+          type: integer
+        vermoegen:
+          type: integer
+        einzahlungSaeule23a:
+          type: integer
+        eigenmietwert:
+          type: integer
+        alimente:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        einnahmenFamilienbudget:
+          type: integer
+        grundbedarf:
+          type: integer
+        effektiveWohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: integer
+        integrationszulage:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        steuernBund:
+          type: integer
+        steuernStaat:
+          type: integer
+        fahrkostenPerson1:
+          type: integer
+        fahrkostenPerson2:
+          type: integer
+        essenskostenPerson1:
+          type: integer
+        essenskostenPerson2:
+          type: integer
+        ausgabenFamilienbudget:
+          type: integer
+        familienbudgetBerechnet:
+          type: integer
   responses:
     Unauthorized:
       content:
