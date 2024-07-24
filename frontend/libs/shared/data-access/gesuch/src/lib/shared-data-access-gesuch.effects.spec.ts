@@ -54,7 +54,7 @@ describe('sharedDataAccessGesuch Effects', () => {
         getGesucheSb$: (
           ...args: Parameters<GesuchService['getGesucheSb$']>
         ) => {
-          if (args[0].getGesucheSBQueryTyp === 'ALLE_BEARBEITBAR_MEINE') {
+          if (args[0].getGesucheSBQueryType === 'ALLE_BEARBEITBAR_MEINE') {
             return cold('a', { a: [gesuch1] });
           }
           return cold('a', { a: [gesuch1, gesuch2] });
