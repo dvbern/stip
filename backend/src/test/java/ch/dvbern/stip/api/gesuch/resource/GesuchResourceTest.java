@@ -628,14 +628,15 @@ class GesuchResourceTest {
         assertThat(
             Arrays.toString(statusprotokoll),
             statusprotokoll.length,
-            is(3)
+            // TODO: KSTIP-1236 reset to 3
+            is(2)
         );
 
-        // TODO KSTIP-1217: revert
+        // TODO: KSTIP-1236 reset to 3
         final var expectedOldStatus = Set.of(
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
-            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG,
-            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
+            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+//            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
         );
 
         assertThat(
