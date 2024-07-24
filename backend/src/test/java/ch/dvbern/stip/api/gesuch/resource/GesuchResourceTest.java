@@ -635,11 +635,16 @@ class GesuchResourceTest {
         // TODO: KSTIP-1236 reset to 3
         final var expectedOldStatus = Set.of(
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
-            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
-//            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
+//            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
         );
 
         assertThat(
+            String.format(
+                "Expected: %s\nActual: %s",
+                Arrays.toString(expectedOldStatus.toArray()),
+                Arrays.toString(statusprotokoll)
+            ),
             expectedOldStatus.containsAll(Arrays.stream(statusprotokoll)
                 .map(StatusprotokollEntryDtoSpec::getStatus)
                 .toList()
