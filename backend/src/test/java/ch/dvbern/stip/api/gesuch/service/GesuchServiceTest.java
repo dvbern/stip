@@ -846,8 +846,7 @@ class GesuchServiceTest {
 
         assertThat(
             tranche.getGesuch().getGesuchStatus(),
-            // TODO KSTIP-1217 revert
-            Matchers.is(Gesuchstatus.IN_BEARBEITUNG_SB)
+            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
         );
 
         tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);

@@ -480,21 +480,20 @@ class GesuchResourceTest {
             .statusCode(Status.ACCEPTED.getStatusCode());
     }
 
-    // TODO: KSTIP-1236
-//    @Test
-//    @TestAsSachbearbeiter
-//    @Order(21)
-//    void testGesuchStatusChangeToInBearbeitungSB() {
-//        var gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
-//                .then()
-//                .assertThat()
-//                .statusCode(Status.OK.getStatusCode())
-//                .extract()
-//                .body()
-//                .as(GesuchDtoSpec.class);
-//
-//        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
-//    }
+    @Test
+    @TestAsSachbearbeiter
+    @Order(21)
+    void testGesuchStatusChangeToInBearbeitungSB() {
+        var gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDtoSpec.class);
+
+        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    }
 
     @Test
     @TestAsSachbearbeiter
@@ -559,7 +558,6 @@ class GesuchResourceTest {
         assertThat(
             gesuchOpt.get().getGesuchStatus().toString(),
             gesuchOpt.get().getGesuchStatus(),
-            // TODO KSTIP-1217 revert
             is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
@@ -642,14 +640,12 @@ class GesuchResourceTest {
         assertThat(
             Arrays.toString(statusprotokoll),
             statusprotokoll.length,
-            // TODO: KSTIP-1236 reset to 3
-            is(2)
+            is(3)
         );
 
-        // TODO: KSTIP-1236 reset to 3
         final var expectedOldStatus = Set.of(
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
-//            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG,
             GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
         );
 
