@@ -90,7 +90,6 @@ public class ElternteilV1 {
                 anzahlPersonenAddedToHaushalt += 1;
             }
         } else {
-
             switch (steuerdaten.getSteuerdatenTyp()) {
                 case VATER -> {
                     final var kinderDerElternVaterVollzeit  = kinderDerElternInHaushalten.stream().filter(
@@ -168,6 +167,7 @@ public class ElternteilV1 {
         }
 
         if ((anzahlPersonenImHaushalt - anzahlPersonenAddedToHaushalt) == 1) {
+            // TODO: Check with Fach which age to assume of the Partner
             medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(26, gesuchsperiode);
         } else if ((anzahlPersonenImHaushalt - anzahlPersonenAddedToHaushalt) > 1 ||
             (anzahlPersonenImHaushalt - anzahlPersonenAddedToHaushalt) < 0) {
@@ -189,7 +189,6 @@ public class ElternteilV1 {
         builder.selbststaendigErwerbend(steuerdaten.getIsArbeitsverhaeltnisSelbstaendig());
         builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
         builder.anzahlGeschwisterInAusbildung(anzahlGeschwisterInAusbildung);
-
 
         return builder;
     }

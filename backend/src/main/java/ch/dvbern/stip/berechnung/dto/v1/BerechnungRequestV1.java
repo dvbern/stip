@@ -139,37 +139,20 @@ public class BerechnungRequestV1 implements DmnRequest {
     }
 
     public static int getGrundbedarf(final Gesuchsperiode gesuchsperiode, final int anzahlPersonenImHaushalt) {
-        int grundbedarf = 0;
-        switch (anzahlPersonenImHaushalt) {
-        case 1:
-            grundbedarf = gesuchsperiode.getPerson1();
-//            if (wohntInWG) {
-//                grundbedarf -= gesuchsperiode.getW
-//            }
-            break;
-        case 2:
-            grundbedarf = gesuchsperiode.getPersonen2();
-            break;
-        case 3:
-            grundbedarf = gesuchsperiode.getPersonen3();
-            break;
-        case 4:
-            grundbedarf = gesuchsperiode.getPersonen4();
-            break;
-        case 5:
-            grundbedarf = gesuchsperiode.getPersonen5();
-            break;
-        case 6:
-            grundbedarf = gesuchsperiode.getPersonen6();
-            break;
-        case 7:
-            grundbedarf = gesuchsperiode.getPersonen7();
-            break;
-        default:
-            grundbedarf = gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
-            break;
-        }
-        return grundbedarf;
+        return switch (anzahlPersonenImHaushalt) {
+            case 1 -> gesuchsperiode.getPerson1();
+            // TODO:
+            // if (wohntInWG) {
+            //     grundbedarf -= gesuchsperiode.getW
+            // }
+            case 2 -> gesuchsperiode.getPersonen2();
+            case 3 -> gesuchsperiode.getPersonen3();
+            case 4 -> gesuchsperiode.getPersonen4();
+            case 5 -> gesuchsperiode.getPersonen5();
+            case 6 -> gesuchsperiode.getPersonen6();
+            case 7 -> gesuchsperiode.getPersonen7();
+            default -> gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
+        };
     }
 
     public static int getEffektiveWohnkosten(
@@ -177,23 +160,14 @@ public class BerechnungRequestV1 implements DmnRequest {
         final Gesuchsperiode gesuchsperiode,
         int anzahlPersonenImHaushalt
     ) {
-        int maxWohnkosten = gesuchsperiode.getWohnkostenFam5pluspers();
-        switch (anzahlPersonenImHaushalt) {
-        case 1:
-            maxWohnkosten = gesuchsperiode.getWohnkostenFam1pers();
-            break;
-        case 2:
-            maxWohnkosten = gesuchsperiode.getWohnkostenFam2pers();
-            break;
-        case 3:
-            maxWohnkosten = gesuchsperiode.getWohnkostenFam3pers();
-            break;
-        case 4:
-            maxWohnkosten = gesuchsperiode.getWohnkostenFam4pers();
-            break;
-        default:
-            break;
-        }
+        int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenFam1pers();
+            case 2 -> gesuchsperiode.getWohnkostenFam2pers();
+            case 3 -> gesuchsperiode.getWohnkostenFam3pers();
+            case 4 -> gesuchsperiode.getWohnkostenFam4pers();
+            default -> gesuchsperiode.getWohnkostenFam5pluspers();
+        };
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 
