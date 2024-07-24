@@ -1,6 +1,11 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +27,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnung;
-  private @Valid String berechnungsdaten;
+  private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
+  private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate;
 
   /**
    * Berechneter Stpendiumsanspruch für diese Tranche
@@ -44,24 +50,58 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
-   * Resultat der Berechnung als JSON string, transparent
    **/
-  public BerechnungsresultatDto berechnungsdaten(String berechnungsdaten) {
-    this.berechnungsdaten = berechnungsdaten;
+  public BerechnungsresultatDto persoenlichesBudgetresultat(PersoenlichesBudgetresultatDto persoenlichesBudgetresultat) {
+    this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
     return this;
   }
 
   
-  @JsonProperty("berechnungsdaten")
-  public String getBerechnungsdaten() {
-    return berechnungsdaten;
+  @JsonProperty("persoenlichesBudgetresultat")
+  public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
+    return persoenlichesBudgetresultat;
   }
 
-  @JsonProperty("berechnungsdaten")
-  public void setBerechnungsdaten(String berechnungsdaten) {
-    this.berechnungsdaten = berechnungsdaten;
+  @JsonProperty("persoenlichesBudgetresultat")
+  public void setPersoenlichesBudgetresultat(PersoenlichesBudgetresultatDto persoenlichesBudgetresultat) {
+    this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
   }
 
+  /**
+   * Berechnungsdaten der Familienbudgets
+   **/
+  public BerechnungsresultatDto familienBudgetresultate(List<FamilienBudgetresultatDto> familienBudgetresultate) {
+    this.familienBudgetresultate = familienBudgetresultate;
+    return this;
+  }
+
+  
+  @JsonProperty("familienBudgetresultate")
+  public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
+    return familienBudgetresultate;
+  }
+
+  @JsonProperty("familienBudgetresultate")
+  public void setFamilienBudgetresultate(List<FamilienBudgetresultatDto> familienBudgetresultate) {
+    this.familienBudgetresultate = familienBudgetresultate;
+  }
+
+  public BerechnungsresultatDto addFamilienBudgetresultateItem(FamilienBudgetresultatDto familienBudgetresultateItem) {
+    if (this.familienBudgetresultate == null) {
+      this.familienBudgetresultate = new ArrayList<>();
+    }
+
+    this.familienBudgetresultate.add(familienBudgetresultateItem);
+    return this;
+  }
+
+  public BerechnungsresultatDto removeFamilienBudgetresultateItem(FamilienBudgetresultatDto familienBudgetresultateItem) {
+    if (familienBudgetresultateItem != null && this.familienBudgetresultate != null) {
+      this.familienBudgetresultate.remove(familienBudgetresultateItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -73,12 +113,13 @@ public class BerechnungsresultatDto  implements Serializable {
     }
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
-        Objects.equals(this.berechnungsdaten, berechnungsresultat.berechnungsdaten);
+        Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
+        Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, berechnungsdaten);
+    return Objects.hash(berechnung, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -87,7 +128,8 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("class BerechnungsresultatDto {\n");
     
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
-    sb.append("    berechnungsdaten: ").append(toIndentedString(berechnungsdaten)).append("\n");
+    sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
+    sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
     sb.append("}");
     return sb.toString();
   }
