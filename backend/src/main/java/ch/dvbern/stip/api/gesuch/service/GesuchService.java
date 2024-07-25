@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -249,11 +250,17 @@ public class GesuchService {
     @Transactional
     public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
-        return switch(getGesucheSBQueryType){
+        return switch (getGesucheSBQueryType) {
             case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
             case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
             case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
-            case ALLE -> map(gesuchRepository.findAlle());
+            case ALLE -> map(gesuchRepository.findAlle()
+                .filter(gesuch -> gesuch.getNewestGesuchTranche()
+                    .orElseThrow(NotFoundException::new)
+                    .getGesuchFormular()
+                    .getPersonInAusbildung() != null
+                )
+            );
         };
     }
 
@@ -290,6 +297,17 @@ public class GesuchService {
         // No need to validate the entire Gesuch here, as it's done in the state machine
         validateAdditionalEinreichenCriteria(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional
+    public void gesuchFehlendeDokumente(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+        gesuch.getGesuchDokuments().stream().filter(
+            gesuchDokument -> gesuchDokument.getStatus() == Dokumentstatus.ABGELEHNT
+        ).forEach(
+            gesuchDokument -> gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+        );
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {

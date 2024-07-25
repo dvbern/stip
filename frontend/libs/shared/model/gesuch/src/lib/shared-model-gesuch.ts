@@ -1,7 +1,7 @@
 import { Gesuch } from './openapi/model/gesuch';
 import { GesuchFormular } from './openapi/model/gesuchFormular';
 import { GesuchFormularUpdate } from './openapi/model/gesuchFormularUpdate';
-import { GetGesucheSBQueryTyp } from './openapi/model/getGesucheSBQueryTyp';
+import { GetGesucheSBQueryType } from './openapi/model/getGesucheSBQueryType';
 
 export interface SharedModelGesuch extends Gesuch {
   view?: {
@@ -26,6 +26,6 @@ export enum GesuchsperiodeSemester {
 }
 
 export type GesuchFilter = keyof Omit<
-  typeof GetGesucheSBQueryTyp,
+  typeof GetGesucheSBQueryType,
   'ALLE_MEINE'
 >;

@@ -100,7 +100,7 @@ export const loadAllGesuchs = createEffect(
       filter(isDefined),
       storeUtil.waitForBenutzerData$(),
       switchMap(({ query }) =>
-        gesuchService.getGesucheSb$({ getGesucheSBQueryTyp: query }).pipe(
+        gesuchService.getGesucheSb$({ getGesucheSBQueryType: query }).pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,

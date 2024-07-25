@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.common.statemachines;
 
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import org.junit.jupiter.api.Test;
 

@@ -52,14 +52,14 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}:
+  /gesuch/benutzer/me/sb/{getGesucheSBQueryType}:
     get:
       tags:
         - Gesuch
       parameters:
-        - name: getGesucheSBQueryTyp
+        - name: getGesucheSBQueryType
           schema:
-            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
+            $ref: '#/components/schemas/GetGesucheSBQueryType'
           in: path
           required: true
       responses:
@@ -165,6 +165,51 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchDokumentId}/akzeptieren':
+    parameters:
+      - name: gesuchDokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchDokumentAkzeptieren
+  '/gesuchDokument/{gesuchDokumentId}/ablehnen':
+    parameters:
+      - name: gesuchDokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchDokumentAblehnenRequest'
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchDokumentAblehnen
   '/fall/sb':
     get:
       tags:
@@ -959,6 +1004,29 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
+  '/gesuch/{gesuchId}/fehlendeDokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchFehlendeDokumenteUebermitteln
+      summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -1461,7 +1529,7 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
       type: string
-    GetGesucheSBQueryTyp:
+    GetGesucheSBQueryType:
       enum:
         - ALLE_BEARBEITBAR
         - ALLE_BEARBEITBAR_MEINE
@@ -1543,6 +1611,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+        status:
+          $ref: '#/components/schemas/Dokumentstatus'
     Dokument:
       required:
         - id
@@ -2874,6 +2944,17 @@ components:
         kommentar:
           description: 'Kommentar vom SB über die Statusänderung'
           type: string
+    GesuchDokumentAblehnenRequest:
+      description: 'Meta information um ein GesuchDokument abzulehnen'
+      type: object
+      properties:
+        kommentar:
+          type: string
+    Dokumentstatus:
+      enum:
+        - AUSSTEHEND
+        - ABGELEHNT
+        - AKZEPTIERT
     Berechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       type: object
@@ -2883,7 +2964,7 @@ components:
           type: integer
         berechnungsdaten:
           description: 'Resultat der Berechnung als JSON string, transparent'
-          type: string      
+          type: string
   responses:
     Unauthorized:
       content:

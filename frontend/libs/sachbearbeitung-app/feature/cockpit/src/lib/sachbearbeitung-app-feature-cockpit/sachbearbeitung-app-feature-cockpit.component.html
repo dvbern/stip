@@ -63,7 +63,7 @@
                 </caption>
 
                 <ng-container matColumnDef="fall">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.fall' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
@@ -88,7 +88,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="svNummer">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.sv-nummer' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
@@ -117,7 +117,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="nachname">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
@@ -136,7 +136,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="vorname">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.vorname' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
@@ -160,7 +160,7 @@
                     *matHeaderCellDef
                     mat-sort-header
                     [start]="'desc'"
-                    class="filtered"
+                    class="filtered text-nowrap"
                     example="01.01.2000"
                   >
                     {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
@@ -171,7 +171,7 @@
                           matInput
                           formControlName="geburtsdatum"
                           [matDatepicker]="geburtsdatumDatepicker"
-                          (click)="$event.stopPropagation(); $event.stopPropagation()"
+                          (click)="$event.stopPropagation()"
                         />
                         <button
                           matIconSuffix
@@ -199,7 +199,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="ort">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.ort' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
@@ -223,7 +223,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="status">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
                     <mat-form-field>
                       <mat-select
@@ -249,7 +249,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="bearbeiter">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.bearbeiter' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
@@ -272,8 +272,26 @@
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
+                        <input
+                          class="range"
+                          matInput
+                          [value]="letzteAktivitaetRangeSig()"
+                          disabled
+                          (click)="$event.stopPropagation()"
+                        />
+                        <button
+                          matIconSuffix
+                          type="button"
+                          class="btn btn-link text-muted"
+                          [attr.aria-label]="'shared.ui.open-date-picker'"
+                          (click)="letzteAktivitaetRangePicker.open()"
+                        >
+                          <dv-shared-ui-icon-chip class="fs-8">
+                            <i class="icon material-symbols-rounded fs-5">event</i>
+                          </dv-shared-ui-icon-chip>
+                        </button>
                         <mat-date-range-input
-                          class="w-100"
+                          class="w-100 d-none"
                           [rangePicker]="letzteAktivitaetRangePicker"
                           (click)="$event.stopPropagation()"
                         >
@@ -288,17 +306,6 @@
                             [placeholder]="'shared.label.bis' | translate"
                           />
                         </mat-date-range-input>
-                        <button
-                          matIconSuffix
-                          type="button"
-                          class="btn btn-link text-muted"
-                          [attr.aria-label]="'shared.ui.open-date-picker'"
-                          (click)="letzteAktivitaetRangePicker.open()"
-                        >
-                          <dv-shared-ui-icon-chip class="fs-8">
-                            <i class="icon material-symbols-rounded fs-5">event</i>
-                          </dv-shared-ui-icon-chip>
-                        </button>
                         <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
                       </mat-form-field>
                       <dv-shared-ui-clear-button

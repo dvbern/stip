@@ -15,13 +15,13 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
+import { DocumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { SharedPatternDocumentUploadDialogComponent } from '../document-upload-dialog/document-upload-dialog.component';
-import { DocumentOptions } from '../upload.model';
 import { UploadStore } from '../upload.store';
 
 type DialogType = SharedPatternDocumentUploadDialogComponent;
@@ -46,6 +46,7 @@ type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
 export class SharedPatternDocumentUploadComponent implements OnInit {
   private dialog = inject(MatDialog);
   private globalStore = inject(Store);
+  private dokumentsStore = inject(DokumentsStore);
   private store = inject(UploadStore);
   optionsSig = input.required<DocumentOptions>();
 
@@ -79,10 +80,8 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
         );
 
         if (initialDocuments) {
-          this.globalStore.dispatch(
-            SharedEventGesuchDokumente.loadDocuments({
-              gesuchId: this.optionsSig().gesuchId,
-            }),
+          this.dokumentsStore.getDokumenteAndRequired$(
+            this.optionsSig().gesuchId,
           );
         }
       });

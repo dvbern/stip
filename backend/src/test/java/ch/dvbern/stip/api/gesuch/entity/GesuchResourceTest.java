@@ -490,7 +490,20 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(21)
     void testGetAllGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypePath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
+
+        for (GesuchDtoSpec gesuch : gesuche) {
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
+            assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.EINGEREICHT));
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
+        }
+
+
+        gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypePath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -500,13 +513,14 @@ class GesuchResourceTest {
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
             assertThat(gesuch.getGesuchStatus(), not(GesuchstatusDtoSpec.EINGEREICHT));
         }
+
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(22)
     void testGetGesucheSbNoUnwantedStatus() {
-        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypPath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
+        var gesuche = gesuchApiSpec.getGesucheSb().getGesucheSBQueryTypePath(GetGesucheSBQueryType.ALLE_BEARBEITBAR).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -535,7 +549,8 @@ class GesuchResourceTest {
         assertThat(
             gesuchOpt.get().getGesuchStatus().toString(),
             gesuchOpt.get().getGesuchStatus(),
-            is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+            // TODO KSTIP-1217 revert
+            is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
         assertThat(gesuchOpt.get().getAenderungsdatum(), notNullValue());
     }
 
@@ -620,9 +635,10 @@ class GesuchResourceTest {
             is(2)
         );
 
+        // TODO KSTIP-1217: revert
         final var expectedOldStatus = Set.of(
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
-            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB
         );
 
         assertThat(
