@@ -39,7 +39,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   private @Valid Integer elternbeteiligungssatz;
   private @Valid Integer vermogenSatzAngerechnet;
   private @Valid Integer integrationszulage;
-  private @Valid Integer limiteEkFreibetragIntegrationszulag;
+  private @Valid Integer limiteEkFreibetragIntegrationszulage;
   private @Valid Integer stipLimiteMinimalstipendium;
   private @Valid Integer person1;
   private @Valid Integer personen2;
@@ -418,21 +418,21 @@ public class GesuchsperiodeCreateDto  implements Serializable {
 
   /**
    **/
-  public GesuchsperiodeCreateDto limiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
-    this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
+  public GesuchsperiodeCreateDto limiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
+    this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
     return this;
   }
 
   
-  @JsonProperty("limite_EkFreibetrag_Integrationszulag")
+  @JsonProperty("limite_EkFreibetrag_Integrationszulage")
   @NotNull
-  public Integer getLimiteEkFreibetragIntegrationszulag() {
-    return limiteEkFreibetragIntegrationszulag;
+  public Integer getLimiteEkFreibetragIntegrationszulage() {
+    return limiteEkFreibetragIntegrationszulage;
   }
 
-  @JsonProperty("limite_EkFreibetrag_Integrationszulag")
-  public void setLimiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
-    this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
+  @JsonProperty("limite_EkFreibetrag_Integrationszulage")
+  public void setLimiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
+    this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
   }
 
   /**
@@ -975,7 +975,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeCreate.elternbeteiligungssatz) &&
         Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeCreate.vermogenSatzAngerechnet) &&
         Objects.equals(this.integrationszulage, gesuchsperiodeCreate.integrationszulage) &&
-        Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeCreate.limiteEkFreibetragIntegrationszulag) &&
+        Objects.equals(this.limiteEkFreibetragIntegrationszulage, gesuchsperiodeCreate.limiteEkFreibetragIntegrationszulage) &&
         Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeCreate.stipLimiteMinimalstipendium) &&
         Objects.equals(this.person1, gesuchsperiodeCreate.person1) &&
         Objects.equals(this.personen2, gesuchsperiodeCreate.personen2) &&
@@ -1007,7 +1007,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, einreichfrist);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, einreichfrist);
   }
 
   @Override
@@ -1033,7 +1033,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
     sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
-    sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");
+    sb.append("    limiteEkFreibetragIntegrationszulage: ").append(toIndentedString(limiteEkFreibetragIntegrationszulage)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
     sb.append("    person1: ").append(toIndentedString(person1)).append("\n");
     sb.append("    personen2: ").append(toIndentedString(personen2)).append("\n");

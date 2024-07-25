@@ -57,7 +57,7 @@ export * from './gesuchsperiodeDaten';
 export * from './gesuchsperiodeUpdate';
 export * from './gesuchsperiodeWithDaten';
 export * from './gesuchstatus';
-export * from './getGesucheSBQueryTyp';
+export * from './getGesucheSBQueryType';
 export * from './gueltigkeitStatus';
 export * from './kind';
 export * from './kindUpdate';

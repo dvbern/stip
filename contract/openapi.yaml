@@ -52,14 +52,14 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createGesuch
       summary: Creates a new Gesuch
-  /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}:
+  /gesuch/benutzer/me/sb/{getGesucheSBQueryType}:
     get:
       tags:
         - Gesuch
       parameters:
-        - name: getGesucheSBQueryTyp
+        - name: getGesucheSBQueryType
           schema:
-            $ref: '#/components/schemas/GetGesucheSBQueryTyp'
+            $ref: '#/components/schemas/GetGesucheSBQueryType'
           in: path
           required: true
       responses:
@@ -1529,7 +1529,7 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
       type: string
-    GetGesucheSBQueryTyp:
+    GetGesucheSBQueryType:
       enum:
         - ALLE_BEARBEITBAR
         - ALLE_BEARBEITBAR_MEINE
@@ -2633,7 +2633,7 @@ components:
         - einkommensfreibetrag
         - vermogenSatzAngerechnet
         - integrationszulage
-        - limite_EkFreibetrag_Integrationszulag
+        - limite_EkFreibetrag_Integrationszulage
         - stipLimite_Minimalstipendium
         - person_1
         - personen_2
@@ -2711,7 +2711,7 @@ components:
           type: integer
         integrationszulage:
           type: integer
-        limite_EkFreibetrag_Integrationszulag:
+        limite_EkFreibetrag_Integrationszulage:
           type: integer
         stipLimite_Minimalstipendium:
           type: integer
