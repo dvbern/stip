@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -46,6 +47,11 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
 
+    @PATCH
+    @Path("/{gesuchId}/fehlendeDokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+
     @GET
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
@@ -72,9 +78,9 @@ public interface GesuchResource {
     Response getGesucheGs();
 
     @GET
-    @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
+    @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryTyp);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryType") GetGesucheSBQueryTypeDto getGesucheSBQueryType);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")

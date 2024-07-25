@@ -19,7 +19,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -69,6 +69,7 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
+                gesuchFehlendeDokumenteUebermitteln(),
                 getBerechnungForGesuch(),
                 getGesuch(),
                 getGesuchDokumente(),
@@ -96,6 +97,10 @@ public class GesuchApiSpec {
 
     public GesuchEinreichenValidierenOper gesuchEinreichenValidieren() {
         return new GesuchEinreichenValidierenOper(createReqSpec());
+    }
+
+    public GesuchFehlendeDokumenteUebermittelnOper gesuchFehlendeDokumenteUebermitteln() {
+        return new GesuchFehlendeDokumenteUebermittelnOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchOper getBerechnungForGesuch() {
@@ -402,6 +407,68 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchEinreichenValidierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Dem GS übermitteln das Dokumente nicht akzeptiert wurden
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     */
+    public static class GesuchFehlendeDokumenteUebermittelnOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/fehlendeDokumente";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchFehlendeDokumenteUebermittelnOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/fehlendeDokumente
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchFehlendeDokumenteUebermittelnOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchFehlendeDokumenteUebermittelnOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchFehlendeDokumenteUebermittelnOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -763,13 +830,13 @@ public class GesuchApiSpec {
      * Returns gesuche filtered by status and sb
      * 
      *
-     * @see #getGesucheSBQueryTypPath  (required)
+     * @see #getGesucheSBQueryTypePath  (required)
      * return List&lt;GesuchDtoSpec&gt;
      */
     public static class GetGesucheSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}";
+        public static final String REQ_URI = "/gesuch/benutzer/me/sb/{getGesucheSBQueryType}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -781,7 +848,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}
+         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -792,7 +859,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryTyp}
+         * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
          * @return List&lt;GesuchDtoSpec&gt;
          */
@@ -801,14 +868,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GET_GESUCHE_S_B_QUERY_TYP_PATH = "getGesucheSBQueryTyp";
+        public static final String GET_GESUCHE_S_B_QUERY_TYPE_PATH = "getGesucheSBQueryType";
 
         /**
-         * @param getGesucheSBQueryTyp (GetGesucheSBQueryTypDtoSpec)  (required)
+         * @param getGesucheSBQueryType (GetGesucheSBQueryTypeDtoSpec)  (required)
          * @return operation
          */
-        public GetGesucheSbOper getGesucheSBQueryTypPath(Object getGesucheSBQueryTyp) {
-            reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYP_PATH, getGesucheSBQueryTyp);
+        public GetGesucheSbOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {
+            reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYPE_PATH, getGesucheSBQueryType);
             return this;
         }
 

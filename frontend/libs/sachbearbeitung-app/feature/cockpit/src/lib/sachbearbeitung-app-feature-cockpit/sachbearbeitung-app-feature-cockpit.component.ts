@@ -31,7 +31,15 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { isSameDay, isWithinInterval, startOfDay } from 'date-fns';
+import {
+  differenceInCalendarMonths,
+  differenceInCalendarYears,
+  differenceInDays,
+  format,
+  isSameDay,
+  isWithinInterval,
+  startOfDay,
+} from 'date-fns';
 
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
@@ -173,6 +181,32 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       [],
     );
   });
+  private letzteAktivitaetStartChangedSig = toSignal(
+    this.filterForm.controls.letzteAktivitaetStart.valueChanges,
+  );
+  private letzteAktivitaetEndChangedSig = toSignal(
+    this.filterForm.controls.letzteAktivitaetEnd.valueChanges,
+  );
+  letzteAktivitaetRangeSig = computed(() => {
+    const start = this.letzteAktivitaetStartChangedSig();
+    const end = this.letzteAktivitaetEndChangedSig();
+
+    if (!start || !end) {
+      return '';
+    }
+    const difference = {
+      days: differenceInDays(end, start),
+      months: differenceInCalendarMonths(end, start),
+      years: differenceInCalendarYears(end, start),
+    };
+    return difference.days
+      ? [
+          `${getDiffFormat(start, difference)}`,
+          `${format(end, 'dd.MM.yy')}`,
+        ].join(' - ')
+      : format(start, 'dd.MM.yyyy');
+  });
+
   gesucheDataSourceSig = computed(() => {
     const sort = this.sortSig();
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
@@ -328,4 +362,18 @@ const checkFilter = <T>(
 
 const isInterval = (value: unknown[]): value is [Date, Date] => {
   return value.length === 2 && value.every((v) => v instanceof Date);
+};
+
+const getDiffFormat = (
+  date: Date,
+  difference: { months: number; years: number },
+) => {
+  let value = format(date, 'dd.');
+  if (difference.months > 0) {
+    value += format(date, 'MM.');
+  }
+  if (difference.years > 0) {
+    value += format(date, 'yy');
+  }
+  return value;
 };

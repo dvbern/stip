@@ -8,8 +8,9 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { UploadView } from '@dv/shared/model/dokument';
+
 import { SharedPatternDocumentUploadEntryComponent } from './document-upload-entry.component';
-import { UploadView } from '../upload.model';
 import { UploadStore } from '../upload.store';
 
 @Component({

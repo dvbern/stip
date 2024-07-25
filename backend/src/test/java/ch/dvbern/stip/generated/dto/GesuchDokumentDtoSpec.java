@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,7 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchDokumentDtoSpec.JSON_PROPERTY_ID,
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
-  GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE
+  GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE,
+  GesuchDokumentDtoSpec.JSON_PROPERTY_STATUS
 })
 @JsonTypeName("GesuchDokument")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -48,6 +50,9 @@ public class GesuchDokumentDtoSpec {
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
   private List<DokumentDtoSpec> dokumente;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private DokumentstatusDtoSpec status;
 
   public GesuchDokumentDtoSpec() {
   }
@@ -137,6 +142,32 @@ public class GesuchDokumentDtoSpec {
     this.dokumente = dokumente;
   }
 
+
+  public GesuchDokumentDtoSpec status(DokumentstatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DokumentstatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatus(DokumentstatusDtoSpec status) {
+    this.status = status;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -148,12 +179,13 @@ public class GesuchDokumentDtoSpec {
     GesuchDokumentDtoSpec gesuchDokument = (GesuchDokumentDtoSpec) o;
     return Objects.equals(this.id, gesuchDokument.id) &&
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
-        Objects.equals(this.dokumente, gesuchDokument.dokumente);
+        Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
+        Objects.equals(this.status, gesuchDokument.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumentTyp, dokumente);
+    return Objects.hash(id, dokumentTyp, dokumente, status);
   }
 
   @Override
@@ -163,6 +195,7 @@ public class GesuchDokumentDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

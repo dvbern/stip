@@ -50,7 +50,6 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
@@ -67,6 +66,7 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -223,13 +223,19 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTypeDto getGesucheSBQueryType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
-        return switch(getGesucheSBQueryType){
+        return switch (getGesucheSBQueryType) {
             case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
             case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
             case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
-            case ALLE -> map(gesuchRepository.findAlle());
+            case ALLE -> map(gesuchRepository.findAlle()
+                .filter(gesuch -> gesuch.getNewestGesuchTranche()
+                    .orElseThrow(NotFoundException::new)
+                    .getGesuchFormular()
+                    .getPersonInAusbildung() != null
+                )
+            );
         };
     }
 
@@ -266,6 +272,12 @@ public class GesuchService {
         // No need to validate the entire Gesuch here, as it's done in the state machine
         validateAdditionalEinreichenCriteria(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional
+    public void gesuchFehlendeDokumente(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {

@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -40,6 +42,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -843,7 +846,8 @@ class GesuchServiceTest {
 
         assertThat(
             tranche.getGesuch().getGesuchStatus(),
-            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            // TODO KSTIP-1217 revert
+            Matchers.is(Gesuchstatus.IN_BEARBEITUNG_SB)
         );
 
         tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
@@ -902,6 +906,15 @@ class GesuchServiceTest {
         reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
         assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
     }
+
+    @TestAsSachbearbeiter
+    @Test
+    void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA(){
+        setupGesucheWithAndWithoutPia();
+        var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryTypeDto.ALLE);
+        assertThat(alleGesuche.stream().filter(gesuch -> gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null).count(), Matchers.is(0L));
+    }
+
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
@@ -977,6 +990,17 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
+    }
+
+    private void setupGesucheWithAndWithoutPia(){
+        Gesuch gesuchWithoutPia = GesuchGenerator.initGesuch();
+        gesuchWithoutPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
+        gesuchWithoutPia.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(null);
+
+        Gesuch gesuchWithPia = GesuchGenerator.initGesuch();
+        gesuchWithPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
+        gesuchWithPia.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(new PersonInAusbildung());
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutPia, gesuchWithPia));
     }
 
     private GesuchTranche updateWerZahltAlimente(

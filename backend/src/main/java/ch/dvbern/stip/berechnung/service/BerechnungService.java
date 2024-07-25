@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -126,7 +127,17 @@ public class BerechnungService {
         if (mapper.isEmpty()) {
             throw new IllegalArgumentException("Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion);
         }
-        return mapper.get().mapFromRequest(berechnungRequest, steuerdatenTyp, budgetToUse, 0, 0, 0, 0);
+        final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
+            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + budgetToUse)
+        ).toList().get(0).getResult().getDecisionResults();
+
+        final var familienbudgetMap = (HashMap<String, BigDecimal>) (
+            decisionResults.stream().filter(
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("Familienbudget_" + budgetToUse)
+        ).toList().get(0).getResult());
+        final var familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
+
+        return mapper.get().mapFromRequest(berechnungRequest, steuerdatenTyp, budgetToUse, 0, 0, familienbudgetBerechnet, 0);
     }
 
     public BerechnungsresultatDto getBerechnungsResultatFromGesuch(final Gesuch gesuch, final int majorVersion, final int minorVersion) {
@@ -168,7 +179,6 @@ public class BerechnungService {
         // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold. So we just take the one of the father
         var berechnung = stipendienCalculatedForVater.getStipendien();
         BerechnungRequestV1 stipendienBerechnungsRequestForMutter = null;
-        List<FamilienBudgetresultatDto> familienBudgetresultats = List.of();
         if (noBudgetsRequired > 1) {
             stipendienBerechnungsRequestForMutter = (BerechnungRequestV1) getBerechnungRequest(
                 majorVersion,
@@ -227,7 +237,6 @@ public class BerechnungService {
                         + kinderProzenteMutter.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
                         .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
             }
-
         } else {
             // If there is only one budget.
             baseObjectBuilder.add("berechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
@@ -245,7 +254,7 @@ public class BerechnungService {
                     stipendienBerechnungsRequestForVater,
                     stipendienCalculatedForVater,
                     steuerdaten.getSteuerdatenTyp(),
-                    steuerdatenListIterator.nextIndex() + 1,
+                    steuerdatenListIterator.nextIndex(),
                     majorVersion,
                     minorVersion
                 )

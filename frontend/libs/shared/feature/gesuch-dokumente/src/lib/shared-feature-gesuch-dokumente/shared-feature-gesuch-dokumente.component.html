@@ -16,7 +16,7 @@
             <th mat-header-cell *matHeaderCellDef>
               {{ 'shared.dokumente.table.requiredDocuments' | translate }}
             </th>
-            <td mat-cell *matCellDef="let dokument">
+            <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               {{ dokument.titleKey | translate }}
             </td>
           </ng-container>
@@ -26,7 +26,7 @@
             <th mat-header-cell *matHeaderCellDef>
               {{ 'shared.dokumente.table.formStep' | translate }}
             </th>
-            <td class="text-nowrap" mat-cell *matCellDef="let dokument">
+            <td class="text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               <a [routerLink]="['/gesuch', dokument.formStep.route, gesuchViewSig().gesuchId]">
                 {{ dokument.formStep.translationKey | translate }}
               </a>
@@ -34,10 +34,10 @@
           </ng-container>
 
           <!-- expander -->
-          <!-- TODO: Implement the following methods in 993 -->
+          <!-- TODO: Implement the following methods in 994 -->
           <ng-container matColumnDef="expander">
             <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
-            <td class="expander-cell" mat-cell *matCellDef="let dokument"></td>
+            <td class="expander-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"></td>
           </ng-container>
 
           <!-- status -->
@@ -50,37 +50,69 @@
             >
               {{ 'shared.dokumente.table.status' | translate }}
             </th>
-            <td class="status-cell" mat-cell *matCellDef="let dokument">
+            <td class="status-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               <div class="d-flex gap-2">
-                @if (dokument.id) {
-                  <ng-container *dvIfSachbearbeiter>
-                    <button
-                      (click)="acceptDocument(dokument)"
-                      type="button"
-                      class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
-                    >
-                      <i class="material-symbols-rounded fs-4">check</i>
-                      <span>
-                        {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
-                      </span>
-                    </button>
-                    <button
-                      (click)="rejectDocument(dokument)"
-                      type="button"
-                      class="btn table-btn btn-danger d-flex align-items-center gap-1"
-                    >
-                      <i class="material-symbols-rounded fs-4">close</i>
-                      <span>
-                        {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
-                      </span>
-                    </button>
-                  </ng-container>
-                  <dv-shared-ui-icon-badge *dvIfGesuchsteller type="info" class="status">
-                    {{ 'shared.dokumente.dokumentStatus.PENDING' | translate }}
-                  </dv-shared-ui-icon-badge>
+                @if (dokument?.gesuchDokument?.id) {
+                  @if (gesuchViewSig().config.isSachbearbeitungApp && !gesuchViewSig().readonly) {
+                    @switch (dokument?.gesuchDokument?.status) {
+                      @case ('AUSSTEHEND') {
+                        <button
+                          (click)="dokumentAkzeptieren(dokument)"
+                          type="button"
+                          class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+                        >
+                          <i class="material-symbols-rounded fs-4">check</i>
+                          <span>
+                            {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                          </span>
+                        </button>
+                        <button
+                          (click)="dokumentAblehnen(dokument)"
+                          type="button"
+                          class="btn table-btn btn-danger d-flex align-items-center gap-1"
+                        >
+                          <i class="material-symbols-rounded fs-4">close</i>
+                          <span>
+                            {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                          </span>
+                        </button>
+                      }
+                      @case ('AKZEPTIERT') {
+                        <dv-shared-ui-icon-badge type="success" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                      @case ('ABGELEHNT') {
+                        <dv-shared-ui-icon-badge type="danger" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                    }
+                  } @else {
+                    @switch (dokument?.gesuchDokument?.status) {
+                      @case ('AKZEPTIERT') {
+                        <dv-shared-ui-icon-badge type="success" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                      @case ('AUSSTEHEND') {
+                        <dv-shared-ui-icon-badge
+                          [type]="gesuchViewSig().config.isSachbearbeitungApp ? 'warning' : 'info'"
+                          class="status"
+                        >
+                          {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                      @case ('ABGELEHNT') {
+                        <dv-shared-ui-icon-badge type="danger" class="status">
+                          {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+                        </dv-shared-ui-icon-badge>
+                      }
+                    }
+                  }
                 } @else {
                   <dv-shared-ui-icon-badge type="warning" class="status">
-                    {{ 'shared.dokumente.dokumentStatus.MISSING' | translate }}
+                    {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
                   </dv-shared-ui-icon-badge>
                 }
               </div>
@@ -95,7 +127,7 @@
               mat-header-cell
               *matHeaderCellDef
             ></th>
-            <td mat-cell class="action-cell" *matCellDef="let dokument">
+            <td mat-cell class="action-cell" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               <div class="action-cell-content">
                 <dv-shared-pattern-document-upload
                   [optionsSig]="dokument.documentOptions"
@@ -106,10 +138,29 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-          <tr [ngClass]="{ warning: !dokument.id }" mat-row *matRowDef="let dokument; columns: displayedColumns"></tr>
+          <tr
+            [class.warning]="!dokument?.gesuchDokument?.id"
+            mat-row
+            *matRowDef="let dokument; columns: displayedColumns"
+          ></tr>
         </table>
       </div>
     </div>
+  </div>
+
+  <div class="mt-4 d-flex" *dvIfSachbearbeiter>
+    @if (canSendMissingDocumentsSig()) {
+      <!-- button sendMissingDocuments -->
+      <button
+        type="button"
+        class="btn btn-primary ml-auto"
+        (click)="fehlendeDokumenteUebermitteln()"
+        data-testid="dokumente-button-sendMissingDocuments"
+        [disabled]="dokumentsStore.hasAusstehendeDokumentsSig()"
+      >
+        {{ 'shared.dokumente.dokumentStatus.action.sendMissingDocuments' | translate }}
+      </button>
+    }
   </div>
 
   <!-- Buttons -->

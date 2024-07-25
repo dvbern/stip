@@ -5,12 +5,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -59,6 +59,13 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
     }
 
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
+        gesuchService.gesuchFehlendeDokumente(gesuchId);
+        return Response.ok().build();
+    }
+
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuch(UUID gesuchId) {
@@ -75,7 +82,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed({ GESUCH_READ})
     @Override
-    public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
+    public Response getGesucheSb(GetGesucheSBQueryTypeDto getGesucheSBQueryType) {
         return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
     }
 

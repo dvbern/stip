@@ -1,0 +1,38 @@
+<section class="d-flex flex-column position-relative p-4 rounded">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="title h5 mb-4 d-flex">
+    {{ 'shared.dokumente.reject.title' | translate }}
+  </h1>
+  <p class="content mb-0" [innerHTML]="'shared.dokumente.reject.message' | translate"></p>
+
+  <form [formGroup]="form" class="mt-4" novalidate>
+    <mat-form-field dvSharedUiFormField class="col-12">
+      <textarea
+        rows="4"
+        matInput
+        formControlName="kommentar"
+        [placeholder]="'shared.dokumente.reject.placeholder' | translate"
+      ></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="d-flex mt-4 justify-content-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary ms-2" (click)="rejectDocument()">
+        {{ 'shared.dokumente.reject.action' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

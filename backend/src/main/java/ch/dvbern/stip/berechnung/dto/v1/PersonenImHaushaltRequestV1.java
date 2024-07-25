@@ -1,5 +1,8 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -55,11 +58,11 @@ public class PersonenImHaushaltRequestV1 implements DmnRequest {
         final var geschwisterOhneEigenerHaushalt = gesuchFormular.getGeschwisters().stream().filter(geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT).toList();
         final int geschwisterTeilzeit = (int) geschwisterOhneEigenerHaushalt.stream()
             .filter(
-                geschwister -> geschwister.getWohnsitzAnteilMutter().intValue() > 0 &&
-                               geschwister.getWohnsitzAnteilVater().intValue()  > 0
+                geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0 &&
+                               Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(),  BigDecimal.ZERO).intValue() > 0
             ).count();
-        final int geschwisterVaterVollzeit = (int) geschwisterOhneEigenerHaushalt.stream().filter(geschwister -> geschwister.getWohnsitzAnteilVater().intValue() == 100).count();
-        final int geschwisterMutterVollzeit = (int) geschwisterOhneEigenerHaushalt.stream().filter(geschwister -> geschwister.getWohnsitzAnteilMutter().intValue() == 100).count();
+        final int geschwisterVaterVollzeit  = (int) geschwisterOhneEigenerHaushalt.stream().filter(geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(),  BigDecimal.valueOf(100)).intValue()  == 100).count();
+        final int geschwisterMutterVollzeit = (int) geschwisterOhneEigenerHaushalt.stream().filter(geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.valueOf(0)).intValue()    == 100).count();
         return new PersonenImHaushaltRequestV1(
             new PersonenImHaushaltInputV1(
                 FamiliensituationV1.fromFamiliensituation(gesuchFormular.getFamiliensituation()),
