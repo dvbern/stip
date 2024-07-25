@@ -102,7 +102,7 @@ public class BerechnungService {
                     minorVersion,
                     gesuch,
                     gesuchTranche,
-                    ElternTyp.VATER
+                    ElternTyp.MUTTER
                 )
             );
 

@@ -2633,7 +2633,7 @@ components:
         - einkommensfreibetrag
         - vermogenSatzAngerechnet
         - integrationszulage
-        - limite_EkFreibetrag_Integrationszulag
+        - limite_EkFreibetrag_Integrationszulage
         - stipLimite_Minimalstipendium
         - person_1
         - personen_2
@@ -2711,7 +2711,7 @@ components:
           type: integer
         integrationszulage:
           type: integer
-        limite_EkFreibetrag_Integrationszulag:
+        limite_EkFreibetrag_Integrationszulage:
           type: integer
         stipLimite_Minimalstipendium:
           type: integer

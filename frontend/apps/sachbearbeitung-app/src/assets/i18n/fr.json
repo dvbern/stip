@@ -134,7 +134,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.einkommensfreibetrag.label": "Exonération du revenu",
   "sachbearbeitung-app.admin.gesuchsperiode.vermogenSatzAngerechnet.label": "Taux de fortune pris en compte",
   "sachbearbeitung-app.admin.gesuchsperiode.integrationszulage.label": "Allocation d'intégration",
-  "sachbearbeitung-app.admin.gesuchsperiode.limite_EkFreibetrag_Integrationszulag.label": "Limite CE Montant libre Supplément",
+  "sachbearbeitung-app.admin.gesuchsperiode.limite_EkFreibetrag_Integrationszulage.label": "Limite CE Montant libre Supplément",
   "sachbearbeitung-app.admin.gesuchsperiode.stipLimite_Minimalstipendium.label": "Stip Limite Bourse minimale",
   "sachbearbeitung-app.admin.gesuchsperiode.grundbedarf.title": "Besoins de base",
   "sachbearbeitung-app.admin.gesuchsperiode.person_1.label": "1 Personne",

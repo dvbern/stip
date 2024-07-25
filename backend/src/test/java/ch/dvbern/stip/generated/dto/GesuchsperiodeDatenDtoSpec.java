@@ -48,7 +48,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
-  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_PERSON1,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_PERSONEN2,
@@ -136,8 +136,8 @@ public class GesuchsperiodeDatenDtoSpec {
   public static final String JSON_PROPERTY_INTEGRATIONSZULAGE = "integrationszulage";
   private Integer integrationszulage;
 
-  public static final String JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG = "limite_EkFreibetrag_Integrationszulag";
-  private Integer limiteEkFreibetragIntegrationszulag;
+  public static final String JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE = "limite_EkFreibetrag_Integrationszulage";
+  private Integer limiteEkFreibetragIntegrationszulage;
 
   public static final String JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM = "stipLimite_Minimalstipendium";
   private Integer stipLimiteMinimalstipendium;
@@ -714,29 +714,29 @@ public class GesuchsperiodeDatenDtoSpec {
   }
 
 
-  public GesuchsperiodeDatenDtoSpec limiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
+  public GesuchsperiodeDatenDtoSpec limiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
     
-    this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
+    this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
     return this;
   }
 
    /**
-   * Get limiteEkFreibetragIntegrationszulag
-   * @return limiteEkFreibetragIntegrationszulag
+   * Get limiteEkFreibetragIntegrationszulage
+   * @return limiteEkFreibetragIntegrationszulage
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG)
+  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getLimiteEkFreibetragIntegrationszulag() {
-    return limiteEkFreibetragIntegrationszulag;
+  public Integer getLimiteEkFreibetragIntegrationszulage() {
+    return limiteEkFreibetragIntegrationszulage;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAG)
+  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLimiteEkFreibetragIntegrationszulag(Integer limiteEkFreibetragIntegrationszulag) {
-    this.limiteEkFreibetragIntegrationszulag = limiteEkFreibetragIntegrationszulag;
+  public void setLimiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
+    this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
   }
 
 
@@ -1443,7 +1443,7 @@ public class GesuchsperiodeDatenDtoSpec {
         Objects.equals(this.elternbeteiligungssatz, gesuchsperiodeDaten.elternbeteiligungssatz) &&
         Objects.equals(this.vermogenSatzAngerechnet, gesuchsperiodeDaten.vermogenSatzAngerechnet) &&
         Objects.equals(this.integrationszulage, gesuchsperiodeDaten.integrationszulage) &&
-        Objects.equals(this.limiteEkFreibetragIntegrationszulag, gesuchsperiodeDaten.limiteEkFreibetragIntegrationszulag) &&
+        Objects.equals(this.limiteEkFreibetragIntegrationszulage, gesuchsperiodeDaten.limiteEkFreibetragIntegrationszulage) &&
         Objects.equals(this.stipLimiteMinimalstipendium, gesuchsperiodeDaten.stipLimiteMinimalstipendium) &&
         Objects.equals(this.person1, gesuchsperiodeDaten.person1) &&
         Objects.equals(this.personen2, gesuchsperiodeDaten.personen2) &&
@@ -1474,7 +1474,7 @@ public class GesuchsperiodeDatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulag, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
   }
 
   @Override
@@ -1500,7 +1500,7 @@ public class GesuchsperiodeDatenDtoSpec {
     sb.append("    elternbeteiligungssatz: ").append(toIndentedString(elternbeteiligungssatz)).append("\n");
     sb.append("    vermogenSatzAngerechnet: ").append(toIndentedString(vermogenSatzAngerechnet)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
-    sb.append("    limiteEkFreibetragIntegrationszulag: ").append(toIndentedString(limiteEkFreibetragIntegrationszulag)).append("\n");
+    sb.append("    limiteEkFreibetragIntegrationszulage: ").append(toIndentedString(limiteEkFreibetragIntegrationszulage)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
     sb.append("    person1: ").append(toIndentedString(person1)).append("\n");
     sb.append("    personen2: ").append(toIndentedString(personen2)).append("\n");

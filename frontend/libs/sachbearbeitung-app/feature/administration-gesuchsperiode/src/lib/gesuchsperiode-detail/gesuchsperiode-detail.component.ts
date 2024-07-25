@@ -123,7 +123,7 @@ export class GesuchsperiodeDetailComponent {
     elternbeteiligungssatz: [<string | null>null, [Validators.required]],
     vermogenSatzAngerechnet: [<string | null>null, [Validators.required]],
     integrationszulage: [<string | null>null, [Validators.required]],
-    limite_EkFreibetrag_Integrationszulag: [
+    limite_EkFreibetrag_Integrationszulage: [
       <string | null>null,
       [Validators.required],
     ],
@@ -200,7 +200,7 @@ export class GesuchsperiodeDetailComponent {
     'einkommensfreibetrag',
     'vermogenSatzAngerechnet',
     'integrationszulage',
-    'limite_EkFreibetrag_Integrationszulag',
+    'limite_EkFreibetrag_Integrationszulage',
     'stipLimite_Minimalstipendium',
     'person_1',
     'personen_2',
