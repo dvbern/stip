@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnung;
   private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
-  private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate;
+  private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
 
   /**
    * Berechneter Stpendiumsanspruch für diese Tranche
@@ -40,6 +40,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   
   @JsonProperty("berechnung")
+  @NotNull
   public Integer getBerechnung() {
     return berechnung;
   }
@@ -58,6 +59,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   
   @JsonProperty("persoenlichesBudgetresultat")
+  @NotNull
   public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
     return persoenlichesBudgetresultat;
   }
@@ -77,6 +79,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   
   @JsonProperty("familienBudgetresultate")
+  @NotNull
   public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
     return familienBudgetresultate;
   }

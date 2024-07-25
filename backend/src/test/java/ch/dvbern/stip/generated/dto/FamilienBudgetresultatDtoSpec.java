@@ -149,9 +149,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get familienBudgetTyp
    * @return familienBudgetTyp
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FAMILIEN_BUDGET_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SteuerdatenTypDtoSpec getFamilienBudgetTyp() {
     return familienBudgetTyp;
@@ -159,7 +159,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FAMILIEN_BUDGET_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFamilienBudgetTyp(SteuerdatenTypDtoSpec familienBudgetTyp) {
     this.familienBudgetTyp = familienBudgetTyp;
   }
@@ -175,9 +175,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get selbststaendigErwerbend
    * @return selbststaendigErwerbend
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SELBSTSTAENDIG_ERWERBEND)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getSelbststaendigErwerbend() {
     return selbststaendigErwerbend;
@@ -185,7 +185,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SELBSTSTAENDIG_ERWERBEND)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSelbststaendigErwerbend(Boolean selbststaendigErwerbend) {
     this.selbststaendigErwerbend = selbststaendigErwerbend;
   }
@@ -201,9 +201,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get anzahlPersonenImHaushalt
    * @return anzahlPersonenImHaushalt
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlPersonenImHaushalt() {
     return anzahlPersonenImHaushalt;
@@ -211,7 +211,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAnzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
   }
@@ -227,9 +227,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get anzahlGeschwisterInAusbildung
    * @return anzahlGeschwisterInAusbildung
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ANZAHL_GESCHWISTER_IN_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlGeschwisterInAusbildung() {
     return anzahlGeschwisterInAusbildung;
@@ -237,7 +237,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_GESCHWISTER_IN_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAnzahlGeschwisterInAusbildung(Integer anzahlGeschwisterInAusbildung) {
     this.anzahlGeschwisterInAusbildung = anzahlGeschwisterInAusbildung;
   }
@@ -253,9 +253,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get totalEinkuenfte
    * @return totalEinkuenfte
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TOTAL_EINKUENFTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotalEinkuenfte() {
     return totalEinkuenfte;
@@ -263,7 +263,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TOTAL_EINKUENFTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTotalEinkuenfte(Integer totalEinkuenfte) {
     this.totalEinkuenfte = totalEinkuenfte;
   }
@@ -279,9 +279,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get ergaenzungsleistungen
    * @return ergaenzungsleistungen
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
@@ -289,7 +289,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
@@ -305,9 +305,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get steuerbaresVermoegen
    * @return steuerbaresVermoegen
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STEUERBARES_VERMOEGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuerbaresVermoegen() {
     return steuerbaresVermoegen;
@@ -315,7 +315,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STEUERBARES_VERMOEGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSteuerbaresVermoegen(Integer steuerbaresVermoegen) {
     this.steuerbaresVermoegen = steuerbaresVermoegen;
   }
@@ -331,9 +331,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get vermoegen
    * @return vermoegen
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_VERMOEGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermoegen() {
     return vermoegen;
@@ -341,7 +341,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VERMOEGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setVermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
   }
@@ -357,9 +357,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get einzahlungSaeule23a
    * @return einzahlungSaeule23a
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINZAHLUNG_SAEULE23A)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinzahlungSaeule23a() {
     return einzahlungSaeule23a;
@@ -367,7 +367,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINZAHLUNG_SAEULE23A)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinzahlungSaeule23a(Integer einzahlungSaeule23a) {
     this.einzahlungSaeule23a = einzahlungSaeule23a;
   }
@@ -383,9 +383,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get eigenmietwert
    * @return eigenmietwert
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEigenmietwert() {
     return eigenmietwert;
@@ -393,7 +393,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEigenmietwert(Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }
@@ -409,9 +409,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get alimente
    * @return alimente
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAlimente() {
     return alimente;
@@ -419,7 +419,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAlimente(Integer alimente) {
     this.alimente = alimente;
   }
@@ -435,9 +435,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get einkommensfreibetrag
    * @return einkommensfreibetrag
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinkommensfreibetrag() {
     return einkommensfreibetrag;
@@ -445,7 +445,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
@@ -461,9 +461,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get einnahmenFamilienbudget
    * @return einnahmenFamilienbudget
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINNAHMEN_FAMILIENBUDGET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinnahmenFamilienbudget() {
     return einnahmenFamilienbudget;
@@ -471,7 +471,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINNAHMEN_FAMILIENBUDGET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinnahmenFamilienbudget(Integer einnahmenFamilienbudget) {
     this.einnahmenFamilienbudget = einnahmenFamilienbudget;
   }
@@ -487,9 +487,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get grundbedarf
    * @return grundbedarf
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GRUNDBEDARF)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getGrundbedarf() {
     return grundbedarf;
@@ -497,7 +497,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GRUNDBEDARF)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGrundbedarf(Integer grundbedarf) {
     this.grundbedarf = grundbedarf;
   }
@@ -513,9 +513,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get effektiveWohnkosten
    * @return effektiveWohnkosten
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EFFEKTIVE_WOHNKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEffektiveWohnkosten() {
     return effektiveWohnkosten;
@@ -523,7 +523,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EFFEKTIVE_WOHNKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEffektiveWohnkosten(Integer effektiveWohnkosten) {
     this.effektiveWohnkosten = effektiveWohnkosten;
   }
@@ -539,9 +539,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get medizinischeGrundversorgung
    * @return medizinischeGrundversorgung
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getMedizinischeGrundversorgung() {
     return medizinischeGrundversorgung;
@@ -549,7 +549,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setMedizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
   }
@@ -565,9 +565,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get integrationszulage
    * @return integrationszulage
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getIntegrationszulage() {
     return integrationszulage;
@@ -575,7 +575,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setIntegrationszulage(Integer integrationszulage) {
     this.integrationszulage = integrationszulage;
   }
@@ -591,9 +591,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get steuernKantonGemeinde
    * @return steuernKantonGemeinde
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuernKantonGemeinde() {
     return steuernKantonGemeinde;
@@ -601,7 +601,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
     this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
@@ -617,9 +617,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get steuernBund
    * @return steuernBund
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STEUERN_BUND)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuernBund() {
     return steuernBund;
@@ -627,7 +627,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STEUERN_BUND)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSteuernBund(Integer steuernBund) {
     this.steuernBund = steuernBund;
   }
@@ -643,9 +643,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get steuernStaat
    * @return steuernStaat
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuernStaat() {
     return steuernStaat;
@@ -653,7 +653,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSteuernStaat(Integer steuernStaat) {
     this.steuernStaat = steuernStaat;
   }
@@ -669,9 +669,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get fahrkostenPerson1
    * @return fahrkostenPerson1
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PERSON1)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFahrkostenPerson1() {
     return fahrkostenPerson1;
@@ -679,7 +679,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PERSON1)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFahrkostenPerson1(Integer fahrkostenPerson1) {
     this.fahrkostenPerson1 = fahrkostenPerson1;
   }
@@ -695,9 +695,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get fahrkostenPerson2
    * @return fahrkostenPerson2
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PERSON2)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFahrkostenPerson2() {
     return fahrkostenPerson2;
@@ -705,7 +705,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PERSON2)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFahrkostenPerson2(Integer fahrkostenPerson2) {
     this.fahrkostenPerson2 = fahrkostenPerson2;
   }
@@ -721,9 +721,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get essenskostenPerson1
    * @return essenskostenPerson1
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ESSENSKOSTEN_PERSON1)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEssenskostenPerson1() {
     return essenskostenPerson1;
@@ -731,7 +731,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ESSENSKOSTEN_PERSON1)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEssenskostenPerson1(Integer essenskostenPerson1) {
     this.essenskostenPerson1 = essenskostenPerson1;
   }
@@ -747,9 +747,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get essenskostenPerson2
    * @return essenskostenPerson2
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ESSENSKOSTEN_PERSON2)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEssenskostenPerson2() {
     return essenskostenPerson2;
@@ -757,7 +757,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ESSENSKOSTEN_PERSON2)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEssenskostenPerson2(Integer essenskostenPerson2) {
     this.essenskostenPerson2 = essenskostenPerson2;
   }
@@ -773,9 +773,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get ausgabenFamilienbudget
    * @return ausgabenFamilienbudget
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_AUSGABEN_FAMILIENBUDGET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusgabenFamilienbudget() {
     return ausgabenFamilienbudget;
@@ -783,7 +783,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSGABEN_FAMILIENBUDGET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAusgabenFamilienbudget(Integer ausgabenFamilienbudget) {
     this.ausgabenFamilienbudget = ausgabenFamilienbudget;
   }
@@ -799,9 +799,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get familienbudgetBerechnet
    * @return familienbudgetBerechnet
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FAMILIENBUDGET_BERECHNET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFamilienbudgetBerechnet() {
     return familienbudgetBerechnet;
@@ -809,7 +809,7 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FAMILIENBUDGET_BERECHNET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFamilienbudgetBerechnet(Integer familienbudgetBerechnet) {
     this.familienbudgetBerechnet = familienbudgetBerechnet;
   }

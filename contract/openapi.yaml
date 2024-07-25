@@ -2878,6 +2878,10 @@ components:
           type: string
     Berechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
+      required:
+        - berechnung
+        - persoenlichesBudgetresultat
+        - familienBudgetresultate
       type: object
       properties:
         berechnung:
@@ -2896,6 +2900,30 @@ components:
         #   type: string
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
+      required:
+        - eigenerHaushalt
+        - einkommen
+        - leistungenEO
+        - rente
+        - kinderAusbildungszulagen
+        - ergaenzungsleistungen
+        - gemeindeInstitutionen
+        - vermoegen
+        - anteilFamilienbudget
+        - einkommenPartner
+        - einnahmenPersoenlichesBudget
+        - grundbedarf
+        - wohnkosten
+        - medizinischeGrundversorgung
+        - steuernKantonGemeinde
+        - fahrkosten
+        - fahrkostenPartner
+        - verpflegung
+        - verpflegungPartner
+        - fremdbetreuung
+        - ausbildungskosten
+        - ausgabenPersoenlichesBudget
+        - persoenlichesbudgetBerechnet
       type: object
       properties:
         eigenerHaushalt:
@@ -2946,6 +2974,33 @@ components:
           type: integer
     FamilienBudgetresultat:
       description: Familien Budget daten fuer und von der Berechnung
+      required:
+        - familienBudgetTyp
+        - selbststaendigErwerbend
+        - anzahlPersonenImHaushalt
+        - anzahlGeschwisterInAusbildung
+        - totalEinkuenfte
+        - ergaenzungsleistungen
+        - steuerbaresVermoegen
+        - vermoegen
+        - einzahlungSaeule23a
+        - eigenmietwert
+        - alimente
+        - einkommensfreibetrag
+        - einnahmenFamilienbudget
+        - grundbedarf
+        - effektiveWohnkosten
+        - medizinischeGrundversorgung
+        - integrationszulage
+        - steuernKantonGemeinde
+        - steuernBund
+        - steuernStaat
+        - fahrkostenPerson1
+        - fahrkostenPerson2
+        - essenskostenPerson1
+        - essenskostenPerson2
+        - ausgabenFamilienbudget
+        - familienbudgetBerechnet
       type: object
       properties:
         familienBudgetTyp:
