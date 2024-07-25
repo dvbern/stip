@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import {
+  selectSharedDataAccessGesuchCache,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
@@ -55,12 +56,13 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
 
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private store = inject(Store);
+  cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   stepsSig = computed(() =>
     this.stepManager.getValidatedSteps(
       this.stepsViewSig().steps,
-      this.viewSig().gesuchFormular,
+      this.cacheSig().gesuchFormular,
     ),
   );
   currentStepProgressSig = computed(() => {

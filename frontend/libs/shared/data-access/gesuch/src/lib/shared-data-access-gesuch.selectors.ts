@@ -130,6 +130,11 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
   (state) => state.steuerdatenTabs,
 );
 
+export const selectSharedDataAccessGesuchCache = createSelector(
+  sharedDataAccessGesuchsFeature.selectCache,
+  (cache) => cache,
+);
+
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
   currentForm?: SharedModelGesuchFormular | null,
