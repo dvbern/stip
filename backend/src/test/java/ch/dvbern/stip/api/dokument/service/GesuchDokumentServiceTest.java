@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -153,7 +154,7 @@ class GesuchDokumentServiceTest {
         );
         gesuchDokumente.put(
             UUID.randomUUID(),
-            new GesuchDokument().setStatus(Dokumentstatus.AKZEPTIERT).setDokumente(List.of())
+            new GesuchDokument().setStatus(Dokumentstatus.AKZEPTIERT).setDokumente(new ArrayList<>())
         );
 
         // Act
