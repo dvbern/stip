@@ -279,7 +279,7 @@ public class GesuchService {
     public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
-        return gesuchMapper.toDto(gesuch);
+        return mapWithTrancheToWorkWith(gesuch);
     }
 
     @Transactional
