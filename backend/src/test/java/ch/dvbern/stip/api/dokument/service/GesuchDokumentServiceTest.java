@@ -149,7 +149,7 @@ class GesuchDokumentServiceTest {
             abgelehntId,
             (GesuchDokument) new GesuchDokument()
                 .setStatus(Dokumentstatus.ABGELEHNT)
-                .setDokumente(List.of())
+                .setDokumente(new ArrayList<>())
                 .setId(abgelehntId)
         );
         gesuchDokumente.put(
@@ -161,8 +161,14 @@ class GesuchDokumentServiceTest {
         gsDokService.deleteAbgelehnteDokumenteForGesuch(new Gesuch());
 
         // Assert
-        assertThat(gesuchDokumente.size(), is(1));
-        assertThat(gesuchDokumente.values().stream().findFirst().get().getStatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(gesuchDokumente.size(), is(2));
+        final var abgelehntesGesuchDokument = gesuchDokumente
+            .values()
+            .stream()
+            .filter(x -> x.getStatus() == Dokumentstatus.ABGELEHNT)
+            .findFirst()
+            .get();
+        assertThat(abgelehntesGesuchDokument.getDokumente().size(), is(0));
     }
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
