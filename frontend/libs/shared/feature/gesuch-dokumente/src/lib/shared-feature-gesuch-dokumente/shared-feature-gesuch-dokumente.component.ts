@@ -83,6 +83,14 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  canSendMissingDocumentsSig = computed(() => {
+    const hasAbgelehnteDokuments =
+      this.dokumentsStore.hasAbgelehnteDokumentsSig();
+    const isInCorrectState =
+      this.gesuchViewSig().gesuch?.gesuchStatus !== 'FEHLENDE_DOKUMENTE';
+
+    return hasAbgelehnteDokuments && isInCorrectState;
+  });
 
   dokumenteDataSourceSig = computed(() => {
     const documents = this.dokumentsStore.dokumenteViewSig().dokuments;
