@@ -17,7 +17,7 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
-import { FamilienBerechnung, PersoenlicheBerechnung } from '../../models';
+import { GesamtBerechnung } from '../../models';
 import {
   FamilienEinnahmenComponent,
   FamilienKostenComponent,
@@ -80,47 +80,94 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   });
   berechnungStore = inject(BerechnungStore);
 
-  berechnungenSig = computed<
-    {
-      persoenlich: PersoenlicheBerechnung;
-      familien: FamilienBerechnung[];
-    }[]
-  >(() => {
+  berechnungenSig = computed<GesamtBerechnung[]>(() => {
     const { gesuch, gesuchFormular } = this.gesuchViewSig();
     const tranche = gesuch?.gesuchTrancheToWorkWith;
-    const berechnungen = this.berechnungStore.berechnungen().data ?? [1];
+    const berechnungen = this.berechnungStore.berechnungen().data;
     if (!berechnungen || !tranche || !gesuchFormular) {
       return [];
     }
-    return berechnungen.map(() => ({
-      persoenlich: {
-        typ: 'persoenlich',
-        name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
-        total: 39809,
-        totalEinnahmen: exampleBerechnung.einnahmen.total,
-        totalKosten: exampleBerechnung.kosten.total,
-        einnahmen: formatAllNumbersExceptTotal(exampleBerechnung.einnahmen),
-        kosten: formatAllNumbersExceptTotal(exampleBerechnung.kosten),
-      } as const,
-      familien:
-        gesuchFormular.elterns?.map(
-          (e) =>
-            ({
-              typ: 'familien',
-              nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${e.elternTyp}`,
-              year: gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr - 1,
-              total: 39524,
-              totalEinnahmen: exampleFamilienBerechnung.einnahmen.total,
-              totalKosten: exampleFamilienBerechnung.kosten.total,
-              einnahmen: formatAllNumbersExceptTotal(
-                exampleFamilienBerechnung.einnahmen,
-              ),
-              kosten: formatAllNumbersExceptTotal(
-                exampleFamilienBerechnung.kosten,
-              ),
-            }) as const,
-        ) ?? [],
-    }));
+    return berechnungen.map(
+      ({
+        berechnung,
+        persoenlichesBudgetresultat: p,
+        familienBudgetresultate,
+      }) => ({
+        total: berechnung,
+        persoenlich: {
+          typ: 'persoenlich',
+          name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
+          total: p.persoenlichesbudgetBerechnet,
+          totalEinnahmen: p.einnahmenPersoenlichesBudget,
+          totalKosten: p.ausgabenPersoenlichesBudget,
+          einnahmen: {
+            eigenerHaushalt: p.eigenerHaushalt,
+            ...formatAllNumbersExceptTotal({
+              total: p.einnahmenPersoenlichesBudget,
+              nettoerwerbseinkommen: p.einkommen,
+              eoLeistungen: p.leistungenEO,
+              unterhaltsbeitraege: 0,
+              kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
+              ergaenzungsleistungen: p.ergaenzungsleistungen,
+              beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
+              steuerbaresVermoegen: 0,
+              elterlicheLeistung: 0,
+              einkommenPartner: p.einkommenPartner,
+            }),
+          },
+          kosten: formatAllNumbersExceptTotal({
+            total: p.ausgabenPersoenlichesBudget,
+            anteilLebenshaltungskosten: 0,
+            mehrkostenVerpflegung: p.verpflegung,
+            grundbedarf0Personen: p.grundbedarf,
+            wohnkosten0Personen: p.wohnkosten,
+            medizinischeGrundversorgung0Personen: p.medizinischeGrundversorgung,
+            kantonsGemeindesteuern: p.steuernKantonGemeinde,
+            bundessteuern: 0,
+            fahrkostenPartner: p.fahrkostenPartner,
+            verpflegungPartner: p.verpflegungPartner,
+            betreuungskostenKinder: p.fremdbetreuung,
+            ausbildungskosten: p.ausbildungskosten,
+            fahrkosten: p.fahrkosten,
+          }),
+        },
+        familien:
+          familienBudgetresultate.map((f) => ({
+            typ: 'familien',
+            nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${f.familienBudgetTyp}`,
+            year: gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr - 1,
+            total: f.familienbudgetBerechnet,
+            totalEinnahmen: f.einnahmenFamilienbudget,
+            totalKosten: f.ausgabenFamilienbudget,
+            einnahmen: formatAllNumbersExceptTotal({
+              total: f.einnahmenFamilienbudget,
+              totalEinkuenfte: f.totalEinkuenfte,
+              ergaenzungsleistungen: f.ergaenzungsleistungen,
+              steuerbaresVermoegen: f.steuerbaresVermoegen,
+              vermoegensaufrechnung: f.vermoegen,
+              abzuege: f.einzahlungSaeule23a,
+              beitraegeSaule: f.eigenmietwert,
+              mietwert: f.eigenmietwert,
+              alimenteOderRenten: f.alimente,
+              einkommensfreibeitrag: f.einkommensfreibetrag,
+            }),
+            kosten: formatAllNumbersExceptTotal({
+              total: f.ausgabenFamilienbudget,
+              anzahlPersonen: f.anzahlPersonenImHaushalt,
+              grundbedarf: f.grundbedarf,
+              wohnkosten: f.effektiveWohnkosten,
+              medizinischeGrundversorgung: f.medizinischeGrundversorgung,
+              integrationszulage: f.integrationszulage,
+              kantonsGemeindesteuern: f.steuernKantonGemeinde,
+              bundessteuern: f.steuernBund,
+              fahrkosten: f.fahrkostenPerson1,
+              fahrkostenPartner: f.fahrkostenPerson2,
+              verpflegung: f.essenskostenPerson1,
+              verpflegungPartner: f.essenskostenPerson2,
+            }),
+          })) ?? [],
+      }),
+    );
   });
 
   constructor() {
@@ -131,77 +178,20 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         if (!gesuchId) {
           return;
         }
-        // this.berechnungStore.calculateBerechnung$({ gesuchId });
+        this.berechnungStore.calculateBerechnung$({ gesuchId });
       },
       { allowSignalWrites: true },
     );
   }
 }
 
-const exampleBerechnung = {
-  einnahmen: {
-    total: 42524,
-    nettoerwerbseinkommen: 0,
-    eoLeistungen: 0,
-    unterhaltsbeitraege: 0,
-    kinderUndAusbildungszulagen: 0,
-    ergaenzungsleistungen: 0,
-    beitraegeGemeindeInstitution: 3000,
-    steuerbaresVermoegen: 0,
-    elterlicheLeistung: 39524,
-    einkommenPartner: 0,
-  },
-  kosten: {
-    total: 2715,
-    anteilLebenshaltungskosten: 0,
-    mehrkostenVerpflegung: 1645,
-    grundbedarf0Personen: 0,
-    wohnkosten0Personen: 0,
-    medizinischeGrundversorgung0Personen: 0,
-    kantonsGemeindesteuern: 0,
-    bundessteuern: 0,
-    fahrkostenPartner: 0,
-    verpflegungPartner: 0,
-    betreuungskostenKinder: 0,
-    ausbildungskosten: 500,
-    fahrkosten: 570,
-  },
-};
-
-const exampleFamilienBerechnung = {
-  einnahmen: {
-    total: 90835,
-    totalEinkuenfte: 0,
-    ergaenzungsleistungen: 0,
-    steuerbaresVermoegen: 0,
-    vermoegensaufrechnung: 0,
-    abzuege: 0,
-    beitraegeSaule: 0,
-    mietwert: 0,
-    alimenteOderRenten: 0,
-    einkommensfreibeitrag: 6000,
-  },
-  kosten: {
-    total: 51311,
-    anzahlPersonen: 2,
-    grundbedarf: 17940,
-    wohnkosten: 9800,
-    medizinischeGrundversorgung: 10000,
-    integrationszulage: 2400,
-    kantonsGemeindesteuern: 10639,
-    bundessteuern: 532,
-    fahrkosten: 0,
-    fahrkostenPartner: 0,
-    verpflegung: 0,
-    verpflegungPartner: 0,
-  },
-};
-
 type FormatedBerechnung<T extends Record<string, number>> = {
   [K in keyof T]: string;
 };
 
-const formatAllNumbersExceptTotal = <T extends Record<string, number>>(
+const formatAllNumbersExceptTotal = <
+  T extends Record<string, number> & { total: number },
+>(
   obj: T,
 ) => {
   const newObj = {} as unknown as FormatedBerechnung<T>;

@@ -6,6 +6,7 @@ export type PersoenlicheBerechnung = {
   totalKosten: number;
   einnahmen: {
     total: number;
+    eigenerHaushalt: boolean;
     nettoerwerbseinkommen: string;
     eoLeistungen: string;
     unterhaltsbeitraege: string;
@@ -70,3 +71,8 @@ export type FamilienBerechnung = {
 
 export type Berechnung = PersoenlicheBerechnung | FamilienBerechnung;
 export type BerechnungsValue = keyof Pick<Berechnung, 'einnahmen' | 'kosten'>;
+export type GesamtBerechnung = {
+  persoenlich: PersoenlicheBerechnung;
+  familien: FamilienBerechnung[];
+  total: number;
+};
