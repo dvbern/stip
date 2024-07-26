@@ -82,7 +82,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.
     VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
@@ -184,7 +183,7 @@ public class GesuchService {
                 getAndValidateLegalityValue(benutzerRollenIdentifiers,
                     steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
 
-            Object veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungscode();
+            Object veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
             Object veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
             Object veranlagungscodeDefaltValue = 0;
             veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.
@@ -193,7 +192,7 @@ public class GesuchService {
         }
 
         steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        steuerdatenUpdateDto.setVeranlagungscode(veranlagungsCodeToSet);
+        steuerdatenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
     }
 
     @Transactional
