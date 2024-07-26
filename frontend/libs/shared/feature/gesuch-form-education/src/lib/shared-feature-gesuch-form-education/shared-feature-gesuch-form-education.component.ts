@@ -27,7 +27,7 @@ import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
-import { startWith } from 'rxjs';
+import { Subject, startWith } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
@@ -109,6 +109,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   });
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormEducationView);
+  gotReenabled$ = new Subject<object>();
 
   ausbildungsstaetteSig = toSignal(
     this.form.controls.ausbildungsstaette.valueChanges,
@@ -155,6 +156,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
         }) ?? []
     );
   });
+
+  private gotReenabledSig = toSignal(this.gotReenabled$);
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -278,6 +281,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const isAusbildungAusland = !!isAusbildungAuslandSig();
 
         if (isAusbildungAusland) {
@@ -301,6 +305,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const staette = staetteSig();
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
@@ -330,22 +335,13 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
           this.viewSig().readonly ||
             (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
           !this.viewSig().readonly,
         );
-      },
-      { allowSignalWrites: true },
-    );
-
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
       },
       { allowSignalWrites: true },
     );

@@ -37,6 +37,7 @@ export interface State {
   gesuchFormular: SharedModelGesuchFormular | null;
   gesuchs: SharedModelGesuch[];
   cache: {
+    gesuch: SharedModelGesuch | null;
     gesuchId: string | null;
     gesuchFormular: SharedModelGesuchFormular | null;
   };
@@ -52,6 +53,7 @@ const initialState: State = {
   gesuchFormular: null,
   gesuchs: [],
   cache: {
+    gesuch: null,
     gesuchId: null,
     gesuchFormular: null,
   },
@@ -161,6 +163,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
               [],
           ),
           cache: {
+            gesuch: gesuch ?? state.cache.gesuch,
             gesuchId: gesuch.id ?? state.cache.gesuchId,
             gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
           },

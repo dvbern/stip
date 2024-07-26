@@ -143,10 +143,13 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
+  gotReenabled$ = new Subject<object>();
+
   validationViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchValidationView,
   );
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   updateValidity$ = new Subject<unknown>();
@@ -301,6 +304,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
 
   constructor() {
+    this.gotReenabled$.subscribe((x) => console.log('gotReenabled$???', x));
     this.formUtils.registerFormForUnsavedCheck(this);
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
@@ -323,6 +327,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     // visibility and disabled state for wohnsitzAnteilMutter and wohnsitzAnteilVater
     effect(
       () => {
+        this.gotReenabledSig();
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
@@ -395,6 +400,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
@@ -422,6 +428,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const nationalitaetChanged = nationalitaetChangedSig();
         // If nationality is Switzerland
         if (this.form.controls.nationalitaet.value === this.nationalitaetCH) {
@@ -501,6 +508,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         // Niederlassung B -> required einreisedatum
         const showEinreisedatum =
           niederlassungsstatusChangedSig() ===

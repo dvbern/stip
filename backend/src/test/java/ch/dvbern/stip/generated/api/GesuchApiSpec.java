@@ -65,12 +65,13 @@ public class GesuchApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                changeGesuchStatusToInBearbeitung(),
                 createGesuch(),
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchEinreichenValidieren(),
-                getBerechnungForGesuch(),
                 gesuchFehlendeDokumenteUebermitteln(),
+                getBerechnungForGesuch(),
                 getGesuch(),
                 getGesuchDokumente(),
                 getGesucheForFall(),
@@ -81,6 +82,10 @@ public class GesuchApiSpec {
                 updateGesuch(),
                 validateGesuchPages()
         );
+    }
+
+    public ChangeGesuchStatusToInBearbeitungOper changeGesuchStatusToInBearbeitung() {
+        return new ChangeGesuchStatusToInBearbeitungOper(createReqSpec());
     }
 
     public CreateGesuchOper createGesuch() {
@@ -153,6 +158,79 @@ public class GesuchApiSpec {
         return this;
     }
 
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToInBearbeitungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/in-bearbeitung/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToInBearbeitungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/in-bearbeitung/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/in-bearbeitung/{gesuchId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToInBearbeitungOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToInBearbeitungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToInBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * Creates a new Gesuch
      * 
@@ -413,7 +491,7 @@ public class GesuchApiSpec {
     }
     /**
      * Dem GS übermitteln das Dokumente nicht akzeptiert wurden
-     *
+     * 
      *
      * @see #gesuchIdPath  (required)
      */
@@ -871,7 +949,7 @@ public class GesuchApiSpec {
         public static final String GET_GESUCHE_S_B_QUERY_TYPE_PATH = "getGesucheSBQueryType";
 
         /**
-         * @param getGesucheSBQueryType (GetGesucheSBQueryTypDtoSpec)  (required)
+         * @param getGesucheSBQueryType (GetGesucheSBQueryTypeDtoSpec)  (required)
          * @return operation
          */
         public GetGesucheSbOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {

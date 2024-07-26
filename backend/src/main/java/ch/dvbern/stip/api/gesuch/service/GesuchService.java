@@ -275,6 +275,13 @@ public class GesuchService {
     }
 
     @Transactional
+    public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+        return mapWithTrancheToWorkWith(gesuch);
+    }
+
+    @Transactional
     public void gesuchFehlendeDokumente(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);

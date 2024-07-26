@@ -8,8 +8,10 @@ import {
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
   SharedPatternAppHeaderComponent,
@@ -36,6 +38,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     alias: 'currentGesuch',
   });
   navClickedSig = input.required<{ value: unknown }>({ alias: 'navClicked' });
+  store = inject(Store);
   router = inject(Router);
 
   isGesuchRouteSig = computed(() => {
@@ -50,4 +53,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       queryParams: 'ignored',
     });
   });
+  canSetToBearbeitungSig = computed(() => {
+    const gesuch = this.currentGesuchSig();
+    const status = gesuch?.gesuchStatus;
+    if (!status) {
+      return false;
+    }
+    return status === 'BEREIT_FUER_BEARBEITUNG';
+  });
+
+  setToBearbeitung() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchToBearbeitung());
+  }
 }

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,7 +27,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
@@ -81,6 +82,7 @@ const MEDIUM_AGE_ADULT = 40;
   selector: 'dv-shared-feature-gesuch-form-eltern-editor',
   standalone: true,
   imports: [
+    CommonModule,
     MaskitoDirective,
     TranslateModule,
     NgbInputDatepicker,
@@ -120,7 +122,9 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   @Output() formIsUnsaved: Observable<boolean>;
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  gotReenabled$ = new Subject<object>();
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
@@ -285,6 +289,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
         this.formUtils.setDisabledState(
           this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
@@ -319,19 +324,10 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
-      },
-      { allowSignalWrites: true },
-    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['elternteil'].currentValue) {
+    if (changes['elternteil']?.currentValue) {
       this.form.patchValue({
         ...this.elternteil,
         wohnkosten: this.elternteil.wohnkosten?.toString(),
