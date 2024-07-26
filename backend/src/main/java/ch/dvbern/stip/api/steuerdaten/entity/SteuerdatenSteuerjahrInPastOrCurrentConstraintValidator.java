@@ -8,7 +8,8 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
+public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
+    implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
@@ -36,6 +37,7 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator implements 
     }
 
     private boolean isSteuerjahrValid(Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr) {
-        return (steuerdaten.getSteuerjahr() != null) && (steuerdaten.getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr));
+        return (steuerdaten.getSteuerjahr() != null)
+            && (steuerdaten.getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr));
     }
 }

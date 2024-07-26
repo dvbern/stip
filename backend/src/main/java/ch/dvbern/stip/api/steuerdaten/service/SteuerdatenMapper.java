@@ -32,7 +32,8 @@ public interface SteuerdatenMapper {
         steuerdatenDto.setVeranlagungscode(steuerdaten.getVeranlagungsCode());
     }
 
-    default Set<Steuerdaten> map(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, final @MappingTarget Set<Steuerdaten> steuerdatenSet) {
+    default Set<Steuerdaten> map(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
+                                 final @MappingTarget Set<Steuerdaten> steuerdatenSet) {
         if (steuerdatenUpdateDtos.isEmpty()) {
             steuerdatenSet.clear();
         }

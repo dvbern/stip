@@ -155,19 +155,22 @@ import org.hibernate.envers.Audited;
 public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "person_in_ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"))
+    @JoinColumn(name = "person_in_ausbildung_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"))
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
+    @JoinColumn(name = "ausbildung_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
     @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Ausbildung ausbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "familiensituation_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"))
+    @JoinColumn(name = "familiensituation_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"))
     @HasPageValidation(FamiliensituationPageValidation.class)
     private @Valid Familiensituation familiensituation;
 
@@ -184,7 +187,8 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "einnahmen_kosten_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"))
+    @JoinColumn(name = "einnahmen_kosten_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"))
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 

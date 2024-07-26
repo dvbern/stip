@@ -78,7 +78,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.
+    VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -106,7 +107,8 @@ public class GesuchService {
     }
 
     @Transactional
-    public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto, final GesuchTranche trancheToUpdate) {
+    public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
+                                                            final GesuchTranche trancheToUpdate) {
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -125,31 +127,40 @@ public class GesuchService {
             Object steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             Object steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
             Object steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
+            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil
+                .getAndValidateLegalityValue(benutzerRollenIdentifiers,
+                    steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
 
             Object veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
             Object veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
             Object veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
+            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil
+                .getAndValidateLegalityValue(benutzerRollenIdentifiers,
+                    veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
         einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
     }
 
     @Transactional
-    public void setAndValidateSteuerdatenUpdateLegality(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, final GesuchTranche trancheToUpdate) {
+    public void setAndValidateSteuerdatenUpdateLegality(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
+                                                        final GesuchTranche trancheToUpdate) {
         final var gesuchsjahr = trancheToUpdate
             .getGesuch()
             .getGesuchsperiode()
             .getGesuchsjahr();
 
-        final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream().filter(tab -> tab.getSteuerdatenTyp() != null).toList();
+        final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream()
+            .filter(tab -> tab.getSteuerdatenTyp() != null).toList();
 
         for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos){
-            setAndValidateSteuerdatenTabUpdateLegality(steuerdatenUpdateDto, steuerdatenList.stream().filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId())).findFirst().orElse(null),gesuchsjahr);
+            setAndValidateSteuerdatenTabUpdateLegality(steuerdatenUpdateDto,
+                steuerdatenList.stream().filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId())).
+                    findFirst().orElse(null),gesuchsjahr);
         }
     }
-    private void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto, final Steuerdaten steuerdatenTabs, Gesuchsjahr gesuchsjahr){
+    private void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto,
+                                                            final Steuerdaten steuerdatenTabs, Gesuchsjahr gesuchsjahr){
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -163,12 +174,16 @@ public class GesuchService {
             Object steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
             Object steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
             Object steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
+            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil.
+                getAndValidateLegalityValue(benutzerRollenIdentifiers,
+                    steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
 
             Object veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungscode();
             Object veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
             Object veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
+            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.
+                getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,
+                    veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
         }
 
         steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
