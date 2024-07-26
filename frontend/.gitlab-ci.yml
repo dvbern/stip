@@ -23,6 +23,7 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
     inputs:
+      build-on: '^(?!mr).*$'
       name: package:sachbearbeitung-app
       context-dir: frontend
       image-name: 'sachbearbeitung-app'
@@ -33,6 +34,29 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
     inputs:
+      build-on: '^(?!mr).*$'
+      name: package:gesuch-app
+      context-dir: frontend
+      image-name: 'gesuch-app'
+      version: '$VERSION'
+      build-latest: 'false'
+      build-args: |
+        APP=gesuch-app
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
+    inputs:
+      build-on: 'mr'
+      name: package:sachbearbeitung-app
+      context-dir: frontend
+      image-name: 'sachbearbeitung-app'
+      version: '$VERSION'
+      build-latest: 'false'
+      build-args: |
+        APP=sachbearbeitung-app
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
+    inputs:
+      build-on: 'mr'
       name: package:gesuch-app
       context-dir: frontend
       image-name: 'gesuch-app'

@@ -17,9 +17,20 @@ include:
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
     inputs:
+      build-on: '^(?!mr).*$'
       name: api-image
       context-dir: backend
       image-name: 'api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
+      build-latest: 'false'
+
+  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
+    inputs:
+      build-on: 'mr'
+      name: api-image
+      context-dir: backend
+      image-name: 'api'
+      dockerfile-path: ./src/main/docker/Dockerfile.jvm
+      version: '$VERSION-$CI_COMMIT_SHORT_SHA'
       build-latest: 'false'
