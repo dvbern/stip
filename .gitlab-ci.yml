@@ -19,6 +19,8 @@ frontend:
 
 include:
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/workflow@v0.8.0'
+    inputs:
+      mr-version: "${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-deploy-helm@v0.8.0'
     inputs:
