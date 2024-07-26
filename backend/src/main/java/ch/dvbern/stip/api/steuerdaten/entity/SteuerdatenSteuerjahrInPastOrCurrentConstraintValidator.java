@@ -6,8 +6,6 @@ import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
     implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
 
@@ -27,13 +25,8 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
         }
 
         final var gesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr();
-        AtomicBoolean isValid = new AtomicBoolean(true);
-        gesuchFormular.getSteuerdaten().forEach(steuerdaten -> {
-            if (!isSteuerjahrValid(steuerdaten, gesuchsjahr)) {
-                isValid.set(false);
-            }
-        });
-        return isValid.get();
+        return gesuchFormular.getSteuerdaten().stream()
+            .allMatch(steuerdaten -> isSteuerjahrValid(steuerdaten, gesuchsjahr));
     }
 
     private boolean isSteuerjahrValid(Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr) {
