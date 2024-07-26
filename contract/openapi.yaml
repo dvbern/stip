@@ -2904,7 +2904,7 @@ components:
           type: integer
         steuerjahr:
           type: integer
-        veranlagungscode:
+        veranlagungsCode:
           type: integer
         totalEinkuenfte:
           type: integer

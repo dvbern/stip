@@ -874,7 +874,7 @@ class GesuchServiceTest {
         SteuerdatenUpdateDto steuerdatenUpdateDto = new SteuerdatenUpdateDto();
         steuerdatenUpdateDto.setId(UUID.randomUUID());
         steuerdatenUpdateDto.setSteuerdatenTyp(typ);
-        steuerdatenUpdateDto.setVeranlagungscode(5);
+        steuerdatenUpdateDto.setVeranlagungsCode(5);
         steuerdatenUpdateDto.setSteuerjahr(2010);
         steuerdatenUpdateDto.setFahrkosten(0);
         steuerdatenUpdateDto.setEigenmietwert(0);
@@ -897,7 +897,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
         steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungscode(null);
+        steuerdatenUpdateDto1.setVeranlagungsCode(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -905,7 +905,7 @@ class GesuchServiceTest {
         //update values with non-null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(2010);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular()
-            .getSteuerdaten().get(0).setVeranlagungscode(5);
+            .getSteuerdaten().get(0).setVeranlagungsCode(5);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -930,14 +930,14 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
         steuerdatenUpdateDto1.setSteuerjahr(2010);
-        steuerdatenUpdateDto1.setVeranlagungscode(5);
+        steuerdatenUpdateDto1.setVeranlagungsCode(5);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
         //prepare an update dto and set values with non-null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(0);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular()
-            .getSteuerdaten().get(0).setVeranlagungscode(0);
+            .getSteuerdaten().get(0).setVeranlagungsCode(0);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -960,7 +960,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
         steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungscode(null);
+        steuerdatenUpdateDto1.setVeranlagungsCode(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -968,7 +968,7 @@ class GesuchServiceTest {
         //update values with non-null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(2010);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular()
-            .getSteuerdaten().get(0).setVeranlagungscode(5);
+            .getSteuerdaten().get(0).setVeranlagungsCode(5);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -991,7 +991,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
         steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungscode(null);
+        steuerdatenUpdateDto1.setVeranlagungsCode(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -999,7 +999,7 @@ class GesuchServiceTest {
         //set null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular()
-            .getSteuerdaten().get(0).setVeranlagungscode(null);
+            .getSteuerdaten().get(0).setVeranlagungsCode(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -1023,11 +1023,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.VATER);
         steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungscode(null);
+        steuerdatenUpdateDto1.setVeranlagungsCode(null);
 
         SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
         steuerdatenUpdateDto2.setSteuerjahr(null);
-        steuerdatenUpdateDto2.setVeranlagungscode(null);
+        steuerdatenUpdateDto2.setVeranlagungsCode(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().
             getSteuerdaten().add(steuerdatenUpdateDto1);
@@ -1042,10 +1042,10 @@ class GesuchServiceTest {
         //set null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().
-            getSteuerdaten().get(0).setVeranlagungscode(null);
+            getSteuerdaten().get(0).setVeranlagungsCode(null);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(1).setSteuerjahr(null);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().
-            getSteuerdaten().get(1).setVeranlagungscode(null);
+            getSteuerdaten().get(1).setVeranlagungsCode(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -1095,7 +1095,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
         steuerdatenUpdateDto1.setSteuerjahr(null);
-        steuerdatenUpdateDto1.setVeranlagungscode(null);
+        steuerdatenUpdateDto1.setVeranlagungsCode(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto1);
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -1103,7 +1103,7 @@ class GesuchServiceTest {
         //set null values
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().get(0).setSteuerjahr(null);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().
-            getSteuerdaten().get(0).setVeranlagungscode(null);
+            getSteuerdaten().get(0).setVeranlagungsCode(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
