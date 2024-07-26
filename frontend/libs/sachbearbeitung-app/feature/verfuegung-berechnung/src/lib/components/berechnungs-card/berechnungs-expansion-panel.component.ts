@@ -34,7 +34,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
             class="mb-0 d-flex py-4"
             [ngClass]="panel.expanded && view.shouldChangeSize ? 'h3' : 'h4'"
           >
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column flex-grow-1">
               {{ view.titleKey | translate }}
               @if (!panel.expanded) {
                 @if (view.shouldChangeSize) {
@@ -75,7 +75,7 @@ export class BerechnungsExpansionPanelComponent {
     const variant = this.variantSig();
     return {
       titleKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.title`,
-      infoKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.info`,
+      infoKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.total`,
       shouldChangeSize: berechnung.typ === 'persoenlich',
       total: berechnung[`total${capitalized(variant)}`],
     };

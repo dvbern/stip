@@ -153,7 +153,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         }}
       </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().total | formatChf }}
+        {{ einnahmenSig().total | formatChf: false }}
       </div>
     </div>
   `,

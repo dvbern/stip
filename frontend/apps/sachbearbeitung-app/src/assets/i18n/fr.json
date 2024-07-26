@@ -195,7 +195,7 @@
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Revenu",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.info": "Revenu personnel de l'apprenti(e)",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Revenu personnel de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen": "Revenu net de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info": "(Pour les étudiants du degré tertiaire, l'abattement sur le revenu est déjà déduit)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen": "Prestations de l'assurance-accidents",
@@ -207,9 +207,8 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.steuerbaresVermoegen": "Fortune imposable",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung": "Prestation parentale déductible du budget familial",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner": "Revenu du conjoint",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Montant total des revenus personnels",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.title": "Coûts",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.info": "Total des coûts reconnus",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total": "Total des coûts reconnus",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.infoElternWohnend": "(vivant chez les parents)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten": "Partie non couverte des coûts de subsistance",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten.info": "(Transfert du budget familial)",
@@ -229,7 +228,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder": "Frais de garde d'enfants",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten": "Coûts de formation de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Frais de déplacement de l'apprenti(e)*",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total": "Total des coûts reconnus",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Montant total du budget",
 
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Budget familial",

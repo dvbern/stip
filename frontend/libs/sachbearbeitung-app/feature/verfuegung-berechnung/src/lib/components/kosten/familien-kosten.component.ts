@@ -160,8 +160,8 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Total -->
-    <div class="d-flex">
-      <div class="h4 mt-3">
+    <div class="d-flex mt-3">
+      <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total'
             | translate
