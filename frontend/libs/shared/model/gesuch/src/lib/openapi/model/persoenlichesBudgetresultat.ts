@@ -14,6 +14,7 @@
  * Persoenliche Budget daten fuer und von der Berechnung
  */
 export interface PersoenlichesBudgetresultat { 
+    anzahlPersonenImHaushalt: number;
     eigenerHaushalt: boolean;
     einkommen: number;
     leistungenEO: number;

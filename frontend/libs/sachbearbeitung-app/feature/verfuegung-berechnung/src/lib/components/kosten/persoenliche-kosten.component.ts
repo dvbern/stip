@@ -88,19 +88,19 @@ import { PersoenlicheBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         <div class="fs-4">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarf0Personen'
-              | translate
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
         <div class="text-muted">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarf0Personen.info'
-              | translate
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen.info'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
       </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ kostenSig().grundbedarf0Personen }}
+        {{ kostenSig().grundbedarfPersonen }}
       </div>
     </div>
 
@@ -109,19 +109,19 @@ import { PersoenlicheBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         <div class="fs-4">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkosten0Personen'
-              | translate
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
         <div class="text-muted">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkosten0Personen.info'
-              | translate
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen.info'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
       </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ kostenSig().wohnkosten0Personen }}
+        {{ kostenSig().wohnkostenPersonen }}
       </div>
     </div>
 
@@ -129,12 +129,12 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex">
       <div class="fs-4">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgung0Personen'
-            | translate
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen'
+            | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
         }}
       </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ kostenSig().medizinischeGrundversorgung0Personen }}
+        {{ kostenSig().medizinischeGrundversorgungPersonen }}
       </div>
     </div>
 

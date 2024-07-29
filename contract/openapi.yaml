@@ -3005,6 +3005,7 @@ components:
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
+        - anzahlPersonenImHaushalt
         - eigenerHaushalt
         - einkommen
         - leistungenEO
@@ -3030,6 +3031,8 @@ components:
         - persoenlichesbudgetBerechnet
       type: object
       properties:
+        anzahlPersonenImHaushalt:
+          type: integer
         eigenerHaushalt:
           type: boolean
         einkommen:

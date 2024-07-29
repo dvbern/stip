@@ -8,8 +8,10 @@
     <dt class="me-2 fw-normal text-muted">Monate:</dt>
     <dd class="me-4">{{ view.monate }}</dd>
   </dl>
-  @if (berechnungenSig().length > 0) {
-    @for (berechnung of berechnungenSig(); track $index) {
+  @if (berechnungenSig().loading) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else if (berechnungenSig().list.length > 0) {
+    @for (berechnung of berechnungenSig().list; track $index) {
       <div class="row">
         <div class="col-12">
           <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
@@ -41,5 +43,7 @@
         }
       </div>
     }
+  } @else {
+    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
   }
 }

@@ -6,6 +6,7 @@ export type PersoenlicheBerechnung = {
   totalKosten: number;
   einnahmen: {
     total: number;
+    anzahlPersonenImHaushalt: number;
     eigenerHaushalt: boolean;
     nettoerwerbseinkommen: string;
     eoLeistungen: string;
@@ -19,11 +20,12 @@ export type PersoenlicheBerechnung = {
   };
   kosten: {
     total: number;
+    anzahlPersonenImHaushalt: number;
     anteilLebenshaltungskosten: string;
     mehrkostenVerpflegung: string;
-    grundbedarf0Personen: string;
-    wohnkosten0Personen: string;
-    medizinischeGrundversorgung0Personen: string;
+    grundbedarfPersonen: string;
+    wohnkostenPersonen: string;
+    medizinischeGrundversorgungPersonen: string;
     kantonsGemeindesteuern: string;
     bundessteuern: string;
     fahrkostenPartner: string;

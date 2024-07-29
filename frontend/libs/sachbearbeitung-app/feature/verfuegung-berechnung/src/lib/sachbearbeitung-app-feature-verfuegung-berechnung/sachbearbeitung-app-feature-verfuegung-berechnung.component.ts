@@ -15,6 +15,7 @@ import { differenceInMonths } from 'date-fns';
 import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
 import { GesamtBerechnung } from '../../models';
@@ -40,6 +41,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
     PersoenlicheKostenComponent,
     FamilienEinnahmenComponent,
     FamilienKostenComponent,
+    SharedUiLoadingComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',
@@ -80,95 +82,106 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   });
   berechnungStore = inject(BerechnungStore);
 
-  berechnungenSig = computed<GesamtBerechnung[]>(() => {
-    const { gesuch, gesuchFormular } = this.gesuchViewSig();
-    const tranche = gesuch?.gesuchTrancheToWorkWith;
-    const berechnungen = this.berechnungStore.berechnungen().data;
-    if (!berechnungen || !tranche || !gesuchFormular) {
-      return [];
-    }
-    return berechnungen.map(
-      ({
-        berechnung,
-        persoenlichesBudgetresultat: p,
-        familienBudgetresultate,
-      }) => ({
-        total: berechnung,
-        persoenlich: {
-          typ: 'persoenlich',
-          name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
-          total: p.persoenlichesbudgetBerechnet,
-          totalEinnahmen: p.einnahmenPersoenlichesBudget,
-          totalKosten: p.ausgabenPersoenlichesBudget,
-          einnahmen: {
-            eigenerHaushalt: p.eigenerHaushalt,
-            ...formatAllNumbersExceptTotal({
-              total: p.einnahmenPersoenlichesBudget,
-              nettoerwerbseinkommen: p.einkommen,
-              eoLeistungen: p.leistungenEO,
-              unterhaltsbeitraege: 0,
-              kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
-              ergaenzungsleistungen: p.ergaenzungsleistungen,
-              beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
-              steuerbaresVermoegen: 0,
-              elterlicheLeistung: 0,
-              einkommenPartner: p.einkommenPartner,
-            }),
-          },
-          kosten: formatAllNumbersExceptTotal({
-            total: p.ausgabenPersoenlichesBudget,
-            anteilLebenshaltungskosten: 0,
-            mehrkostenVerpflegung: p.verpflegung,
-            grundbedarf0Personen: p.grundbedarf,
-            wohnkosten0Personen: p.wohnkosten,
-            medizinischeGrundversorgung0Personen: p.medizinischeGrundversorgung,
-            kantonsGemeindesteuern: p.steuernKantonGemeinde,
-            bundessteuern: 0,
-            fahrkostenPartner: p.fahrkostenPartner,
-            verpflegungPartner: p.verpflegungPartner,
-            betreuungskostenKinder: p.fremdbetreuung,
-            ausbildungskosten: p.ausbildungskosten,
-            fahrkosten: p.fahrkosten,
+  berechnungenSig = computed<{ loading: boolean; list: GesamtBerechnung[] }>(
+    () => {
+      const { gesuch, gesuchFormular } = this.gesuchViewSig();
+      const tranche = gesuch?.gesuchTrancheToWorkWith;
+      const berechnungenRd = this.berechnungStore.berechnungen();
+      if (!berechnungenRd.data || !tranche || !gesuchFormular) {
+        return { loading: berechnungenRd.type === 'pending', list: [] };
+      }
+      const berechnungen = berechnungenRd.data;
+      return {
+        loading: false,
+        list: berechnungen.map(
+          ({
+            berechnung,
+            persoenlichesBudgetresultat: p,
+            familienBudgetresultate,
+          }) => ({
+            total: berechnung,
+            persoenlich: {
+              typ: 'persoenlich' as const,
+              name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
+              total: p.persoenlichesbudgetBerechnet,
+              totalEinnahmen: p.einnahmenPersoenlichesBudget,
+              totalKosten: p.ausgabenPersoenlichesBudget,
+              einnahmen: {
+                anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
+                eigenerHaushalt: p.eigenerHaushalt,
+                ...formatAllNumbersExceptTotal({
+                  total: p.einnahmenPersoenlichesBudget,
+                  nettoerwerbseinkommen: p.einkommen,
+                  eoLeistungen: p.leistungenEO,
+                  unterhaltsbeitraege: 0,
+                  kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
+                  ergaenzungsleistungen: p.ergaenzungsleistungen,
+                  beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
+                  steuerbaresVermoegen: p.vermoegen,
+                  elterlicheLeistung: p.anteilFamilienbudget,
+                  einkommenPartner: p.einkommenPartner,
+                }),
+              },
+              kosten: {
+                anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
+                ...formatAllNumbersExceptTotal({
+                  total: p.ausgabenPersoenlichesBudget,
+                  anteilLebenshaltungskosten: 0,
+                  mehrkostenVerpflegung: p.verpflegung,
+                  grundbedarfPersonen: p.grundbedarf,
+                  wohnkostenPersonen: p.wohnkosten,
+                  medizinischeGrundversorgungPersonen:
+                    p.medizinischeGrundversorgung,
+                  kantonsGemeindesteuern: p.steuernKantonGemeinde,
+                  bundessteuern: 0,
+                  fahrkostenPartner: p.fahrkostenPartner,
+                  verpflegungPartner: p.verpflegungPartner,
+                  betreuungskostenKinder: p.fremdbetreuung,
+                  ausbildungskosten: p.ausbildungskosten,
+                  fahrkosten: p.fahrkosten,
+                }),
+              },
+            },
+            familien:
+              familienBudgetresultate.map((f) => ({
+                typ: 'familien' as const,
+                nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${f.familienBudgetTyp}`,
+                year: gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr - 1,
+                total: f.familienbudgetBerechnet,
+                totalEinnahmen: f.einnahmenFamilienbudget,
+                totalKosten: f.ausgabenFamilienbudget,
+                einnahmen: formatAllNumbersExceptTotal({
+                  total: f.einnahmenFamilienbudget,
+                  totalEinkuenfte: f.totalEinkuenfte,
+                  ergaenzungsleistungen: f.ergaenzungsleistungen,
+                  steuerbaresVermoegen: f.steuerbaresVermoegen,
+                  vermoegensaufrechnung: f.vermoegen,
+                  abzuege: f.einzahlungSaeule23a,
+                  beitraegeSaule: f.eigenmietwert,
+                  mietwert: f.eigenmietwert,
+                  alimenteOderRenten: f.alimente,
+                  einkommensfreibeitrag: f.einkommensfreibetrag,
+                }),
+                kosten: formatAllNumbersExceptTotal({
+                  total: f.ausgabenFamilienbudget,
+                  anzahlPersonen: f.anzahlPersonenImHaushalt,
+                  grundbedarf: f.grundbedarf,
+                  wohnkosten: f.effektiveWohnkosten,
+                  medizinischeGrundversorgung: f.medizinischeGrundversorgung,
+                  integrationszulage: f.integrationszulage,
+                  kantonsGemeindesteuern: f.steuernKantonGemeinde,
+                  bundessteuern: f.steuernBund,
+                  fahrkosten: f.fahrkostenPerson1,
+                  fahrkostenPartner: f.fahrkostenPerson2,
+                  verpflegung: f.essenskostenPerson1,
+                  verpflegungPartner: f.essenskostenPerson2,
+                }),
+              })) ?? [],
           }),
-        },
-        familien:
-          familienBudgetresultate.map((f) => ({
-            typ: 'familien',
-            nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${f.familienBudgetTyp}`,
-            year: gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr - 1,
-            total: f.familienbudgetBerechnet,
-            totalEinnahmen: f.einnahmenFamilienbudget,
-            totalKosten: f.ausgabenFamilienbudget,
-            einnahmen: formatAllNumbersExceptTotal({
-              total: f.einnahmenFamilienbudget,
-              totalEinkuenfte: f.totalEinkuenfte,
-              ergaenzungsleistungen: f.ergaenzungsleistungen,
-              steuerbaresVermoegen: f.steuerbaresVermoegen,
-              vermoegensaufrechnung: f.vermoegen,
-              abzuege: f.einzahlungSaeule23a,
-              beitraegeSaule: f.eigenmietwert,
-              mietwert: f.eigenmietwert,
-              alimenteOderRenten: f.alimente,
-              einkommensfreibeitrag: f.einkommensfreibetrag,
-            }),
-            kosten: formatAllNumbersExceptTotal({
-              total: f.ausgabenFamilienbudget,
-              anzahlPersonen: f.anzahlPersonenImHaushalt,
-              grundbedarf: f.grundbedarf,
-              wohnkosten: f.effektiveWohnkosten,
-              medizinischeGrundversorgung: f.medizinischeGrundversorgung,
-              integrationszulage: f.integrationszulage,
-              kantonsGemeindesteuern: f.steuernKantonGemeinde,
-              bundessteuern: f.steuernBund,
-              fahrkosten: f.fahrkostenPerson1,
-              fahrkostenPartner: f.fahrkostenPerson2,
-              verpflegung: f.essenskostenPerson1,
-              verpflegungPartner: f.essenskostenPerson2,
-            }),
-          })) ?? [],
-      }),
-    );
-  });
+        ),
+      };
+    },
+  );
 
   constructor() {
     effect(
