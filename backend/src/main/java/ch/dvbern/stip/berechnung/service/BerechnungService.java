@@ -137,14 +137,15 @@ public class BerechnungService {
         ).toList().get(0).getResult());
         final int familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
 
+        final String fambudgetKey = "familienbudgetBerechnet";
         final var einnahmenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("familienbudgetBerechnet")
+            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
         ).toList().get(budgetToUse-1).getResult().getDecisionResults().stream().filter(
             dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenFamilienbudget")
         ).toList().get(0).getResult()).intValue();
 
         final var ausgabenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("familienbudgetBerechnet")
+            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
         ).toList().get(budgetToUse-1).getResult().getDecisionResults().stream().filter(
             dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenFamilienbudget")
         ).toList().get(0).getResult()).intValue();
