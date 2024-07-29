@@ -1,0 +1,4 @@
+role,defaultValue,expected
+Gesuchsteller,0,0
+Sachbearbeiter,0,0
+Admin,0,0
