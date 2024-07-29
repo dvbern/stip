@@ -34,6 +34,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
             .familienBudgetTyp(steuerdatenTyp)
             .selbststaendigErwerbend(elternteil.isSelbststaendigErwerbend())
             .anzahlPersonenImHaushalt(elternteil.getAnzahlPersonenImHaushalt())
+            .anzahlPersonenImHaushalt(elternteil.getAnzahlPersonenImHaushalt())
             .anzahlGeschwisterInAusbildung(elternteil.getAnzahlGeschwisterInAusbildung())
             .totalEinkuenfte(elternteil.getTotalEinkuenfte())
             .ergaenzungsleistungen(elternteil.getErgaenzungsleistungen())
