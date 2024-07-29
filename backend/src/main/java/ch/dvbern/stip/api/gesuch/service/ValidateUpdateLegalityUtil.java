@@ -10,7 +10,7 @@ import java.util.Set;
 
 @UtilityClass
 public class ValidateUpdateLegalityUtil {
-    public <T> T getAndValidateLegalityValue(final Set<?> benutzerRollenIdentifiers, final T dtoValue, final T existingValue, final T defaultValue){
+    public <T> T getAndValidateLegalityValue(final Set<String> benutzerRollenIdentifiers, final T dtoValue, final T existingValue, final T defaultValue){
         if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER,
             OidcConstants.ROLE_ADMIN))) {
             return Objects.requireNonNullElse(
