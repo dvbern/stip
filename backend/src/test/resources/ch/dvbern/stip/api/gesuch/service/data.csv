@@ -1,0 +1,4 @@
+role, dtoValue, existingValue, defaultValue, expected
+Gesuchsteller,1,2,0,2
+Sachbearbeiter,1,2,0,1
+Admin,1,2,0,1
