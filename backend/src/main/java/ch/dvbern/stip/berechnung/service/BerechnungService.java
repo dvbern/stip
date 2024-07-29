@@ -137,12 +137,24 @@ public class BerechnungService {
         ).toList().get(0).getResult());
         final int familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
 
+        final var einnahmenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
+            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("familienbudgetBerechnet")
+        ).toList().get(budgetToUse-1).getResult().getDecisionResults().stream().filter(
+            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenFamilienbudget")
+        ).toList().get(0).getResult()).intValue();
+
+        final var ausgabenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
+            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("familienbudgetBerechnet")
+        ).toList().get(budgetToUse-1).getResult().getDecisionResults().stream().filter(
+            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenFamilienbudget")
+        ).toList().get(0).getResult()).intValue();
+
         return mapper.get().mapFromRequest(
             berechnungRequest,
             steuerdatenTyp,
             budgetToUse,
-            0,
-            0,
+            einnahmenFamilienbudget,
+            ausgabenFamilienbudget,
             familienbudgetBerechnet,
             0
         );
