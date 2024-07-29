@@ -17,18 +17,17 @@ public class ValidateUpdateLegalityUtil {
                 existingValue,
                 defaultValue
             );
-        } else{
-            if(dtoValue == null){
-                return Objects.requireNonNullElse(
-                    existingValue,
-                    defaultValue
-                );
-            }else{
-                return Objects.requireNonNullElse(
-                    dtoValue,
-                    defaultValue
-                );
-            }
+        }
+        if(dtoValue == null){
+            return Objects.requireNonNullElse(
+                existingValue,
+                defaultValue
+            );
+        }else{
+            return Objects.requireNonNullElse(
+                dtoValue,
+                defaultValue
+            );
         }
     }
 }
