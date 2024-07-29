@@ -235,6 +235,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
 
   "sachbearbeitung-app.verfuegung.berechnung.familien.title": "Familien Budget",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.FAMILIE": "Familie {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.typ.MUTTER": "Mutter {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.typ.VATER": "Vater {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Einnahmen",
