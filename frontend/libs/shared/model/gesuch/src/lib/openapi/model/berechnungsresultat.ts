@@ -9,6 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { FamilienBudgetresultat } from './familienBudgetresultat';
+import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
 
 /**
  * Resultat der Berechnung (eine Tranche)
@@ -17,10 +19,11 @@ export interface Berechnungsresultat {
     /**
      * Berechneter Stpendiumsanspruch für diese Tranche
      */
-    berechnung?: number;
+    berechnung: number;
+    persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**
-     * Resultat der Berechnung als JSON string, transparent
+     * Berechnungsdaten der Familienbudgets
      */
-    berechnungsdaten?: string;
+    familienBudgetresultate: Array<FamilienBudgetresultat>;
 }
 
