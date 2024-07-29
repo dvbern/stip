@@ -42,7 +42,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
                 (int) (
                     (
                         elternteil.getSteuerbaresVermoegen()
-                        - (elternteil.isSelbststaendigErwerbend() ? 30000 : 0)
+                        - (elternteil.isSelbststaendigErwerbend() ? 30000 : 0) // TODO: KSTIP-1259, aus DMN laden oder wo berechnen?
                     ) * 0.15
                 )
             )
@@ -55,7 +55,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
             .effektiveWohnkosten(elternteil.getEffektiveWohnkosten())
             .medizinischeGrundversorgung(elternteil.getMedizinischeGrundversorgung())
             .integrationszulage(elternteil.getIntegrationszulage())
-            .steuernKantonGemeinde(elternteil.getTotalEinkuenfte() >= 20000 ? (int) (elternteil.getTotalEinkuenfte() * 0.1) : 0)
+            .steuernKantonGemeinde(elternteil.getTotalEinkuenfte() >= 20000 ? (int) (elternteil.getTotalEinkuenfte() * 0.1) : 0) // TODO: KSTIP-1259 offizialisieren dieser berechnung
             .steuernBund(elternteil.getSteuernBund())
             .steuernStaat(elternteil.getSteuernStaat())
             .fahrkostenPerson1(elternteil.getFahrkostenPerson1())

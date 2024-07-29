@@ -1,15 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Persoenliche Budget daten fuer und von der Berechnung
@@ -52,7 +49,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("eigenerHaushalt")
   @NotNull
   public Boolean getEigenerHaushalt() {
@@ -71,7 +68,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einkommen")
   @NotNull
   public Integer getEinkommen() {
@@ -90,7 +87,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("leistungenEO")
   @NotNull
   public Integer getLeistungenEO() {
@@ -109,7 +106,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("rente")
   @NotNull
   public Integer getRente() {
@@ -128,7 +125,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("kinderAusbildungszulagen")
   @NotNull
   public Integer getKinderAusbildungszulagen() {
@@ -147,7 +144,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ergaenzungsleistungen")
   @NotNull
   public Integer getErgaenzungsleistungen() {
@@ -166,7 +163,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gemeindeInstitutionen")
   @NotNull
   public Integer getGemeindeInstitutionen() {
@@ -185,7 +182,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("vermoegen")
   @NotNull
   public Integer getVermoegen() {
@@ -204,7 +201,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("anteilFamilienbudget")
   @NotNull
   public Integer getAnteilFamilienbudget() {
@@ -223,7 +220,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einkommenPartner")
   @NotNull
   public Integer getEinkommenPartner() {
@@ -242,7 +239,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einnahmenPersoenlichesBudget")
   @NotNull
   public Integer getEinnahmenPersoenlichesBudget() {
@@ -261,7 +258,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("grundbedarf")
   @NotNull
   public Integer getGrundbedarf() {
@@ -280,7 +277,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("wohnkosten")
   @NotNull
   public Integer getWohnkosten() {
@@ -299,7 +296,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("medizinischeGrundversorgung")
   @NotNull
   public Integer getMedizinischeGrundversorgung() {
@@ -318,7 +315,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("steuernKantonGemeinde")
   @NotNull
   public Integer getSteuernKantonGemeinde() {
@@ -337,7 +334,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fahrkosten")
   @NotNull
   public Integer getFahrkosten() {
@@ -356,7 +353,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fahrkostenPartner")
   @NotNull
   public Integer getFahrkostenPartner() {
@@ -375,7 +372,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("verpflegung")
   @NotNull
   public Integer getVerpflegung() {
@@ -394,7 +391,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("verpflegungPartner")
   @NotNull
   public Integer getVerpflegungPartner() {
@@ -413,7 +410,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fremdbetreuung")
   @NotNull
   public Integer getFremdbetreuung() {
@@ -432,7 +429,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungskosten")
   @NotNull
   public Integer getAusbildungskosten() {
@@ -451,7 +448,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausgabenPersoenlichesBudget")
   @NotNull
   public Integer getAusgabenPersoenlichesBudget() {
@@ -470,7 +467,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("persoenlichesbudgetBerechnet")
   @NotNull
   public Integer getPersoenlichesbudgetBerechnet() {
@@ -526,7 +523,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PersoenlichesBudgetresultatDto {\n");
-    
+
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    einkommen: ").append(toIndentedString(einkommen)).append("\n");
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");

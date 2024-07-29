@@ -3002,9 +3002,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
-        # berechnungsdaten:
-        #   description: 'Resultat der Berechnung als JSON string, transparent'
-        #   type: string
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:

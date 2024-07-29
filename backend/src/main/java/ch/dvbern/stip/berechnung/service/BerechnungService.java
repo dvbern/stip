@@ -69,11 +69,6 @@ public class BerechnungService {
         return baseObjectBuilder.build();
     }
 
-//    private static FamilienBudgetresultatDto familienBudgetresultatFromRequest(final SteuerdatenTyp steuerdatenTyp, final BerechnungRequestV1 request) {
-//        return new FamilienBudgetresultatDto()
-//            .familienBudgetTyp(steuerdatenTyp)
-//            .selbststaendigErwerbend(request)
-//    }
     private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
         final DmnRequest berechnungRequest,
         final BerechnungResult berechnungResult,
@@ -106,7 +101,12 @@ public class BerechnungService {
             dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("PersoenlichesbudgetBerechnet")
         ).toList().get(0).getResult()).intValue();
 
-        return mapper.get().mapFromRequest(berechnungRequest, einnahmenPersoenlichesBudget, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+        return mapper.get().mapFromRequest(
+            berechnungRequest,
+            einnahmenPersoenlichesBudget,
+            ausgabenPersoenlichesBudget,
+            persoenlichesbudgetBerechnet
+        );
     }
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
@@ -131,13 +131,21 @@ public class BerechnungService {
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + budgetToUse)
         ).toList().get(0).getResult().getDecisionResults();
 
-        final var familienbudgetMap = (HashMap<String, BigDecimal>) (
-            decisionResults.stream().filter(
+        @SuppressWarnings("unchecked") // It's fine (and necessary)
+        final var familienbudgetMap = ((HashMap<String, BigDecimal>) decisionResults.stream().filter(
                 dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("Familienbudget_" + budgetToUse)
         ).toList().get(0).getResult());
-        final var familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
+        final int familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
 
-        return mapper.get().mapFromRequest(berechnungRequest, steuerdatenTyp, budgetToUse, 0, 0, familienbudgetBerechnet, 0);
+        return mapper.get().mapFromRequest(
+            berechnungRequest,
+            steuerdatenTyp,
+            budgetToUse,
+            0,
+            0,
+            familienbudgetBerechnet,
+            0
+        );
     }
 
     public BerechnungsresultatDto getBerechnungsResultatFromGesuch(final Gesuch gesuch, final int majorVersion, final int minorVersion) {
