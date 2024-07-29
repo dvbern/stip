@@ -136,6 +136,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   readonly ELTERN_UNBEKANNTHEITS_GRUND = ElternUnbekanntheitsGrund;
 
   hiddenFieldsSetSig = signal(new Set<FormControl>());
+  gotReenabled$ = new Subject<object>();
 
   form = this.formBuilder.group({
     elternVerheiratetZusammen: [<boolean | null>null, [Validators.required]],
@@ -190,6 +191,8 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     ELTERN_VERHEIRATET_ZUSAMMEN: 'in',
     ALIMENTENREGELUNG: 'right',
   });
+
+  private gotReenabledSig = toSignal(this.gotReenabled$);
 
   private currentFamiliensituationFormStep =
     FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN;
@@ -311,6 +314,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     // effect for gerichtlicheAlimentenregelung
     effect(
       () => {
+        this.gotReenabledSig();
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: gerichtlicheAlimentenregelung,
@@ -326,6 +330,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const gerichtlicheAlimentenregelung =
           this.gerichtlicheAlimentenregelungSig();
 
@@ -353,6 +358,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const elternteilUnbekanntVerstorben =
           elternteilUnbekanntVerstorbenSig();
 
@@ -398,6 +404,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const vaterUnbekanntVerstorben = vaterVerstorbenUnbekanntSig();
 
         updateVisbilityAndDisbledState({
@@ -416,6 +423,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const mutterUnbekanntVerstorben = mutterVerstorbenUnbekanntSig();
 
         updateVisbilityAndDisbledState({
@@ -434,6 +442,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const notGemeinsam = obhutSig() !== Elternschaftsteilung.GEMEINSAM;
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
@@ -455,6 +464,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const zahltMutterAlimente =
           werZahltAlimenteSig() === Elternschaftsteilung.MUTTER;
         const vaterWederVerstorbenNochUnbekannt =
@@ -484,6 +494,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
 
     effect(
       () => {
+        this.gotReenabledSig();
         const zahltVaterAlimente =
           werZahltAlimenteSig() === Elternschaftsteilung.VATER;
         const mutterWederVerstorbenNochUnbekannt =
@@ -507,16 +518,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           disabled: this.viewSig().readonly || !showMutterVerheiratedFrage,
           resetOnInvisible: true,
         });
-      },
-      { allowSignalWrites: true },
-    );
-
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
       },
       { allowSignalWrites: true },
     );

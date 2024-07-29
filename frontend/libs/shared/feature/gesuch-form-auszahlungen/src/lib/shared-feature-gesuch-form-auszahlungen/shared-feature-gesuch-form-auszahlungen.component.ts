@@ -6,6 +6,7 @@ import {
   computed,
   effect,
   inject,
+  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -25,7 +26,7 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { extractIBAN } from 'ibantools';
-import { distinctUntilChanged, shareReplay } from 'rxjs';
+import { Subject, distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -114,13 +115,13 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
   laenderSig = computed(() => {
     return this.viewSig().laender;
   });
-
   languageSig = this.store.selectSignal(selectLanguage);
-
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormAuszahlungenView,
   );
+  gotReenabled$ = new Subject<object>();
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   kontoinhaberChangesSig = toSignal(
@@ -179,6 +180,15 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       { allowSignalWrites: true },
     );
 
+    effect(() => {
+      this.gotReenabledSig();
+      const { gesuchFormular } = untracked(this.viewSig);
+      const kontoinhaberin = this.form.controls.kontoinhaber.value;
+      if (kontoinhaberin) {
+        this.handleKontoinhaberinChanged(kontoinhaberin, gesuchFormular);
+      }
+    });
+
     effect(
       () => {
         const kontoinhaberin = kontoinhaberinChangesSig();
@@ -190,16 +200,6 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
           kontoinhaber: kontoinhaberin,
         });
         this.handleKontoinhaberinChanged(kontoinhaberin, gesuchFormular);
-      },
-      { allowSignalWrites: true },
-    );
-
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
       },
       { allowSignalWrites: true },
     );

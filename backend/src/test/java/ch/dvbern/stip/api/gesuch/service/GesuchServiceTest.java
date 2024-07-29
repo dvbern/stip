@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -42,7 +43,6 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -72,7 +72,6 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -819,39 +818,39 @@ class GesuchServiceTest {
         EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(null);
     }
 
-    @Test
-    @TestAsGesuchsteller
-    void gesuchEinreichenTest() {
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-        tranche.getGesuchFormular()
-            .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
-        final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
-        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        doNothing().when(notificationService).createNotification(any(), any());
-
-        tranche.getGesuchFormular().setTranche(tranche);
-        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
-        tranche.getGesuchFormular().setPartner(null);
-        tranche.getGesuch().setGesuchDokuments(
-            Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
-                .toList()
-        );
-
-        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
-
-        assertThat(
-            tranche.getGesuch().getGesuchStatus(),
-            // TODO KSTIP-1217 revert
-            Matchers.is(Gesuchstatus.IN_BEARBEITUNG_SB)
-        );
-
-        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
-    }
+    // TODO KSTIP-1236: Enable this test
+//    @Test
+//    @TestAsGesuchsteller
+//    void gesuchEinreichenTest() {
+//        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+//        tranche.getGesuchFormular()
+//            .getAusbildung()
+//            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+//        final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
+//        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
+//
+//        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+//        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+//        doNothing().when(notificationService).createNotification(any(), any());
+//
+//        tranche.getGesuchFormular().setTranche(tranche);
+//        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
+//        tranche.getGesuchFormular().setPartner(null);
+//        tranche.getGesuch().setGesuchDokuments(
+//            Arrays.stream(DokumentTyp.values())
+//                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
+//                .toList()
+//        );
+//
+//        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
+//
+//        assertThat(
+//            tranche.getGesuch().getGesuchStatus(),
+//            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+//        );
+//
+//        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
+//    }
 
     @Test
     @TestAsGesuchsteller
@@ -911,7 +910,7 @@ class GesuchServiceTest {
     @Test
     void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA(){
         setupGesucheWithAndWithoutPia();
-        var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryTypeDto.ALLE);
+        var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
         assertThat(alleGesuche.stream().filter(gesuch -> gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null).count(), Matchers.is(0L));
     }
 

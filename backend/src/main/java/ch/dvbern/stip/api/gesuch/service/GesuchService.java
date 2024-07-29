@@ -50,6 +50,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
@@ -66,7 +67,6 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -223,7 +223,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryTypeDto getGesucheSBQueryType) {
+    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
         return switch (getGesucheSBQueryType) {
             case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
@@ -272,6 +272,13 @@ public class GesuchService {
         // No need to validate the entire Gesuch here, as it's done in the state machine
         validateAdditionalEinreichenCriteria(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+        return mapWithTrancheToWorkWith(gesuch);
     }
 
     @Transactional

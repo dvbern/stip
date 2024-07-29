@@ -24,6 +24,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       validations: { errors: [], hasDocuments: null },
       gesuchFormular: null,
       cache: {
+        gesuch: null,
         gesuchId: null,
         gesuchFormular: null,
       },
@@ -116,6 +117,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       },
       steuerdatenTabs: initial(),
       cache: {
+        gesuch: null,
         gesuchId: null,
         gesuchFormular: null,
       },
@@ -142,6 +144,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       gesuchFormular: null,
       steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
       cache: {
+        gesuch: null,
         gesuchId: null,
         gesuchFormular: null,
       },

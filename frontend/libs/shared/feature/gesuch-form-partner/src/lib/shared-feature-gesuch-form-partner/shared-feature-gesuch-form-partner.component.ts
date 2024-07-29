@@ -23,6 +23,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
+import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -109,6 +110,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
+  gotReenabled$ = new Subject<object>();
   laenderSig = computed(() => this.viewSig().laender);
   translatedLaender$ = toObservable(this.laenderSig).pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
@@ -148,6 +150,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     this.form.controls.ausbildungMitEinkommenOderErwerbstaetig.valueChanges,
   );
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   jahreseinkommenSig = toSignal(
@@ -232,6 +235,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const noAusbildungMitEinkommenOderErwerbstaetigkeit =
           !this.ausbildungMitEinkommenOderErwerbstaetigSig();
         if (this.viewSig().readonly) {

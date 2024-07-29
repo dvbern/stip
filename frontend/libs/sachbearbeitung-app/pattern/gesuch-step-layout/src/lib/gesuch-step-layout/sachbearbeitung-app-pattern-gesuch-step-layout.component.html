@@ -1,4 +1,4 @@
-<dv-sachbearbeitung-app-pattern-gesuch-header [navClicked]="navClicked$ | async" [currentGesuch]="viewSig().gesuch">
+<dv-sachbearbeitung-app-pattern-gesuch-header [navClicked]="navClicked$ | async" [currentGesuch]="cacheSig().gesuch">
   <dv-shared-pattern-gesuch-step-nav
     dvMobileNavContent
     [stepsSig]="stepsSig()"

@@ -6,6 +6,7 @@
     <form
       [formGroup]="form"
       [dvSharedUiFormReadonly]="viewSig().readonly"
+      (gotReenabledSig)="gotReenabled$.next({})"
       novalidate
       class="mt-4"
       data-testid="form-partner-form"
