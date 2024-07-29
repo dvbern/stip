@@ -233,6 +233,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
 
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Budget familial",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.FAMILIE": "La famille {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familie.typ.MUTTER": "Mère {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familie.typ.VATER": "Père {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familie.einnahmen.title": "Revenu",
