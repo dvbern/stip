@@ -120,7 +120,8 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   displayedChildColumns: string[] = [
     'bezeichnungDe',
     'bezeichnungFr',
-    'bildungsart',
+    'bildungskategorieDe',
+    'bildungskategorieFr',
     'actions',
   ];
 
@@ -129,7 +130,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   gangForm = this.fb.nonNullable.group({
     bezeichnungDe: ['', Validators.required],
     bezeichnungFr: ['', Validators.required],
-    bildungsartId: ['', Validators.required],
+    bildungskategorieId: ['', Validators.required],
   });
 
   constructor() {
@@ -148,7 +149,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       }
     });
     this.store.loadAusbildungsstaetten({});
-    this.store.loadBildungsarten({});
+    this.store.loadBildungskategorien({});
   }
 
   ngAfterViewInit() {
@@ -239,9 +240,10 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       id: 'new',
       bezeichnungDe: '',
       bezeichnungFr: '',
-      bildungsart: {
+      bildungskategorie: {
         id: '',
-        beschreibung: '',
+        bezeichnungDe: '',
+        bezeichnungFr: '',
         bfs: 0,
         bildungsstufe: Bildungsstufe.SEKUNDAR_2,
       },
@@ -262,7 +264,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       {
         bezeichnungDe: ausbildungsgang.bezeichnungDe,
         bezeichnungFr: ausbildungsgang.bezeichnungFr,
-        bildungsartId: ausbildungsgang.bildungsart.id,
+        bildungskategorieId: ausbildungsgang.bildungskategorie.id,
       },
       { emitEvent: false },
     );
