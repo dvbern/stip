@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
@@ -110,7 +110,7 @@ public class AntragsstellerV1 {
               getAusbildungskosten(
                   einnahmenKosten,
                   gesuchsperiode,
-                  ausbildung.getAusbildungsgang().getBildungsart().getBildungsstufe()
+                  ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe()
               )
           );
           builder.steuern(

@@ -14,20 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("AusbildungsgangCreate")
+@JsonTypeName("Bildungskategorie")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class AusbildungsgangCreateDto  implements Serializable {
+public class BildungskategorieDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid UUID bildungskategorieId;
-  private @Valid UUID ausbildungsstaetteId;
+  private @Valid ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe bildungsstufe;
+  private @Valid Integer bfs;
+  private @Valid UUID id;
 
   /**
    **/
-  public AusbildungsgangCreateDto bezeichnungDe(String bezeichnungDe) {
+  public BildungskategorieDto bezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
@@ -46,7 +47,7 @@ public class AusbildungsgangCreateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangCreateDto bezeichnungFr(String bezeichnungFr) {
+  public BildungskategorieDto bezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
@@ -65,39 +66,59 @@ public class AusbildungsgangCreateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangCreateDto bildungskategorieId(UUID bildungskategorieId) {
-    this.bildungskategorieId = bildungskategorieId;
+  public BildungskategorieDto bildungsstufe(ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe bildungsstufe) {
+    this.bildungsstufe = bildungsstufe;
     return this;
   }
 
   
-  @JsonProperty("bildungskategorieId")
+  @JsonProperty("bildungsstufe")
   @NotNull
-  public UUID getBildungskategorieId() {
-    return bildungskategorieId;
+  public ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe getBildungsstufe() {
+    return bildungsstufe;
   }
 
-  @JsonProperty("bildungskategorieId")
-  public void setBildungskategorieId(UUID bildungskategorieId) {
-    this.bildungskategorieId = bildungskategorieId;
+  @JsonProperty("bildungsstufe")
+  public void setBildungsstufe(ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe bildungsstufe) {
+    this.bildungsstufe = bildungsstufe;
   }
 
   /**
    **/
-  public AusbildungsgangCreateDto ausbildungsstaetteId(UUID ausbildungsstaetteId) {
-    this.ausbildungsstaetteId = ausbildungsstaetteId;
+  public BildungskategorieDto bfs(Integer bfs) {
+    this.bfs = bfs;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsstaetteId")
-  public UUID getAusbildungsstaetteId() {
-    return ausbildungsstaetteId;
+  @JsonProperty("bfs")
+  @NotNull
+  public Integer getBfs() {
+    return bfs;
   }
 
-  @JsonProperty("ausbildungsstaetteId")
-  public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
-    this.ausbildungsstaetteId = ausbildungsstaetteId;
+  @JsonProperty("bfs")
+  public void setBfs(Integer bfs) {
+    this.bfs = bfs;
+  }
+
+  /**
+   **/
+  public BildungskategorieDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
 
@@ -109,27 +130,29 @@ public class AusbildungsgangCreateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AusbildungsgangCreateDto ausbildungsgangCreate = (AusbildungsgangCreateDto) o;
-    return Objects.equals(this.bezeichnungDe, ausbildungsgangCreate.bezeichnungDe) &&
-        Objects.equals(this.bezeichnungFr, ausbildungsgangCreate.bezeichnungFr) &&
-        Objects.equals(this.bildungskategorieId, ausbildungsgangCreate.bildungskategorieId) &&
-        Objects.equals(this.ausbildungsstaetteId, ausbildungsgangCreate.ausbildungsstaetteId);
+    BildungskategorieDto bildungskategorie = (BildungskategorieDto) o;
+    return Objects.equals(this.bezeichnungDe, bildungskategorie.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, bildungskategorie.bezeichnungFr) &&
+        Objects.equals(this.bildungsstufe, bildungskategorie.bildungsstufe) &&
+        Objects.equals(this.bfs, bildungskategorie.bfs) &&
+        Objects.equals(this.id, bildungskategorie.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungskategorieId, ausbildungsstaetteId);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsstufe, bfs, id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AusbildungsgangCreateDto {\n");
+    sb.append("class BildungskategorieDto {\n");
     
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    bildungskategorieId: ").append(toIndentedString(bildungskategorieId)).append("\n");
-    sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
+    sb.append("    bildungsstufe: ").append(toIndentedString(bildungsstufe)).append("\n");
+    sb.append("    bfs: ").append(toIndentedString(bfs)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

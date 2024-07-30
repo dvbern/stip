@@ -1,11 +1,20 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DokumentDto;
+import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

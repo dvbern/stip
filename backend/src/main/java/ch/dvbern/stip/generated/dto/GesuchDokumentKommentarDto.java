@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
@@ -35,7 +38,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchDokumentId")
   @NotNull
   public UUID getGesuchDokumentId() {
@@ -54,7 +57,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -73,7 +76,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("dokumentTyp")
   @NotNull
   public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
@@ -93,7 +96,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("benutzer")
   @NotNull
   public String getBenutzer() {
@@ -112,7 +115,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("datum")
   @NotNull
   public LocalDate getDatum() {
@@ -131,7 +134,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("dokumentStatus")
   public ch.dvbern.stip.api.dokument.type.Dokumentstatus getDokumentStatus() {
     return dokumentStatus;
@@ -149,7 +152,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kommentar")
   public String getKommentar() {
     return kommentar;
@@ -188,7 +191,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDto {\n");
-
+    
     sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
