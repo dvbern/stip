@@ -1,9 +1,22 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
+import ch.dvbern.stip.api.ausbildung.util.AusbildungCopyUtil;
+import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
+import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
+import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
+import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.kind.util.KindCopyUtil;
+import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
+import ch.dvbern.stip.api.partner.PartnerCopyUtil;
+import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
+import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import lombok.experimental.UtilityClass;
 
@@ -17,10 +30,9 @@ public class GesuchTrancheCopyUtil {
         final var newTranche = new GesuchTranche();
         newTranche.setGesuch(gesuch);
 
+        // TODO KSTIP-1111: unit test this
         final var gesuchsperiodeStart = gesuch.getGesuchsperiode().getGesuchsperiodeStart();
         final var gesuchsperiodeStopp = gesuch.getGesuchsperiode().getGesuchsperiodeStopp();
-
-        // TODO KSTIP-1111: unit test this
         final var startDate = DateUtil.clamp(
             createDto.getStart(),
             gesuchsperiodeStart,
@@ -32,21 +44,70 @@ public class GesuchTrancheCopyUtil {
             gesuchsperiodeStopp
         );
 
-//        final var startDate = DateUtil.after(
-//            createDto.getStart(),
-//            gesuch.getGesuchsperiode().getGesuchsperiodeStart()
-//        );
-//        final var endDate = DateUtil.before(
-//            createDto.getEnd(),
-//            gesuch.getGesuchsperiode().getGesuchsperiodeStopp()
-//        );
-
         newTranche.setGueltigkeit(new DateRange(startDate, endDate));
         newTranche.setGesuchFormular(copy(gesuchTranche.getGesuchFormular()));
         return newTranche;
     }
 
-    private GesuchFormular copy(final GesuchFormular gesuchFormular) {
-        return new GesuchFormular();
+    GesuchFormular copy(final GesuchFormular other) {
+        final var copy = new GesuchFormular();
+
+        // PiA und PiA Adresse
+        copy.setPersonInAusbildung(PersonInAusbildungCopyUtil.createCopyIgnoreReferences(other.getPersonInAusbildung()));
+        final var piaAdresseCopy = AdresseCopyUtil.createCopy(other.getPersonInAusbildung().getAdresse());
+        copy.getPersonInAusbildung().setAdresse(piaAdresseCopy);
+
+        // Ausbildung
+        copy.setAusbildung(AusbildungCopyUtil.createCopyIncludingStammdatenReferences(other.getAusbildung()));
+
+        // Familiensituation
+        copy.setFamiliensituation(FamiliensituationCopyUtil.createCopy(other.getFamiliensituation()));
+
+        // Partner und Partner Adresse
+        copy.setPartner(PartnerCopyUtil.createCopyIgnoreReferences(other.getPartner()));
+        if (copy.getPartner() != null) {
+            copy.getPartner().setAdresse(AdresseCopyUtil.createCopy(other.getPartner().getAdresse()));
+        }
+
+        // Eltern
+        copy.setElterns(ElternCopyUtil.createCopyOfSetWithoutReferences(other.getElterns()));
+        Adresse mutterAdresseCopy = null;
+        Adresse vaterAdresseCopy = null;
+        for (final var eltern : copy.getElterns()) {
+            final var adresseCopy = AdresseCopyUtil.createCopy(eltern.getAdresse());
+            switch (eltern.getElternTyp()) {
+                case MUTTER -> mutterAdresseCopy = adresseCopy;
+                case VATER -> vaterAdresseCopy = adresseCopy;
+            }
+
+            eltern.setAdresse(adresseCopy);
+        }
+
+        // Auszahlung
+        copy.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(other.getAuszahlung()));
+        final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
+            case GESUCHSTELLER -> piaAdresseCopy;
+            case MUTTER -> mutterAdresseCopy;
+            case VATER -> vaterAdresseCopy;
+            default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
+        };
+        copy.getAuszahlung().setAdresse(auszahlungAdresseCopy);
+
+        // Einnahmen Kosten
+        copy.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(other.getEinnahmenKosten()));
+
+        // Lebenslauf
+        copy.setLebenslaufItems(LebenslaufItemCopyUtil.createCopyOfSet(other.getLebenslaufItems()));
+
+        // Geschwister
+        copy.setGeschwisters(GeschwisterCopyUtil.createCopyOfSet(other.getGeschwisters()));
+
+        // Kinds
+        copy.setKinds(KindCopyUtil.createCopySet(other.getKinds()));
+
+        // Steuerdaten
+        copy.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(other.getSteuerdaten()));
+
+        return copy;
     }
 }
