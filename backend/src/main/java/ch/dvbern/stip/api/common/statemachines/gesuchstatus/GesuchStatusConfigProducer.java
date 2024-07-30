@@ -3,7 +3,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.StateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.GesuchStatusStateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GesuchStatusConfigProducer {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
 
-    private final Instance<StateChangeHandler> handlers;
+    private final Instance<GesuchStatusStateChangeHandler> handlers;
 
     @Produces
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
@@ -120,7 +120,9 @@ public class GesuchStatusConfigProducer {
         return (Gesuch) args[0];
     }
 
-    private Optional<StateChangeHandler> getHandlerFor(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
+    private Optional<GesuchStatusStateChangeHandler> getHandlerFor(
+        final Transition<Gesuchstatus, GesuchStatusChangeEvent> transition
+    ) {
         return handlers.stream().filter(x -> x.handles(transition)).findFirst();
     }
 
@@ -131,7 +133,7 @@ public class GesuchStatusConfigProducer {
             handler.get().handle(transition, gesuch);
         } else {
             LOG.info(
-                "Es gibt kein handler für den die Transition von {} nach {}",
+                "No handler exists for Gesuchstatus transition {} -> {}",
                 transition.getSource(),
                 transition.getDestination()
             );

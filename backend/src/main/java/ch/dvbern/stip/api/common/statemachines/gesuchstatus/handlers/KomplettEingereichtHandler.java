@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class KomplettEingereichtHandler implements StateChangeHandler {
+public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandler {
     private final MailService mailService;
 
     private final NotificationService notificationService;
