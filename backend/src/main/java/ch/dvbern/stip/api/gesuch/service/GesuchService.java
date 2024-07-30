@@ -59,12 +59,12 @@ import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -287,6 +287,18 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
+    @Transactional
+    public GesuchDto createAenderungsantrag(
+        final UUID gesuchId,
+        final AenderungsantragCreateDto aenderungsantragCreateDto
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var trancheToCopy = getCurrentGesuchTranche(gesuch);
+        final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
+        gesuch.getGesuchTranchen().add(newTranche);
+        return mapWithTranche(gesuch, newTranche);
+    }
+
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -397,19 +409,18 @@ public class GesuchService {
     }
 
     private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
-        GesuchTrancheDto tranche = getCurrentGesuchTrancheDto(gesuch);
-        GesuchDto gesuchDto = gesuchMapper.toDto(gesuch);
-        gesuchDto.setGesuchTrancheToWorkWith(tranche);
+        return mapWithTranche(gesuch, getCurrentGesuchTranche(gesuch));
+    }
+
+    private GesuchDto mapWithTranche(final Gesuch gesuch, final GesuchTranche tranche) {
+        final var gesuchDto = gesuchMapper.toDto(gesuch);
+        gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
         return gesuchDto;
     }
 
     private GesuchTranche getCurrentGesuchTranche(Gesuch gesuch) {
         return gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
             .orElseThrow();
-    }
-
-    private GesuchTrancheDto getCurrentGesuchTrancheDto(Gesuch gesuch) {
-        return gesuchTrancheMapper.toDto(getCurrentGesuchTranche(gesuch));
     }
 
     private void validateGesuchEinreichen(Gesuch gesuch) {

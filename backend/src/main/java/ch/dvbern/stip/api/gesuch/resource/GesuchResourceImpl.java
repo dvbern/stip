@@ -39,12 +39,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchDto).build();
     }
 
-    @Override
-    public Response createAenderungsantrag(UUID gesuchId, AenderungsantragCreateDto aenderungsantragCreateDto) {
-        // TODO KSTIP-1111: return Gesuch with the created Aenderungsformular attached
-        return Response.ok().build();
-    }
-
     @RolesAllowed(GESUCH_CREATE)
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
@@ -142,5 +136,12 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getBerechnungForGesuch(UUID gesuchId) {
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response createAenderungsantrag(UUID gesuchId, AenderungsantragCreateDto aenderungsantragCreateDto) {
+        final var gesuchDto = gesuchService.createAenderungsantrag(gesuchId, aenderungsantragCreateDto);
+        return Response.ok(gesuchDto).build();
     }
 }
