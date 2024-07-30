@@ -126,6 +126,38 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToInBearbeitung
+  '/gesuch/{gesuchId}/aenderungsantrag':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AenderungsantragCreate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Aenderungsantrag wurde erstellt
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createAenderungsantrag
   '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:
@@ -3162,6 +3194,19 @@ components:
           type: integer
         familienbudgetBerechnet:
           type: integer
+    AenderungsantragCreate:
+      required:
+        - start
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+        reason:
+          type: string
   responses:
     Unauthorized:
       content:

@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -30,6 +31,12 @@ public interface GesuchResource {
     @Path("/status/in-bearbeitung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
+    @Path("/{gesuchId}/aenderungsantrag")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response createAenderungsantrag(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AenderungsantragCreateDto aenderungsantragCreateDto);
 
     @POST
     @Consumes({ "application/json" })

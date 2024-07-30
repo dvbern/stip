@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -36,6 +37,12 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
         GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return Response.ok(gesuchDto).build();
+    }
+
+    @Override
+    public Response createAenderungsantrag(UUID gesuchId, AenderungsantragCreateDto aenderungsantragCreateDto) {
+        // TODO KSTIP-1111: return Gesuch with the created Aenderungsformular attached
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_CREATE)
