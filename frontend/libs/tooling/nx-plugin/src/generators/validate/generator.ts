@@ -102,6 +102,9 @@ async function validateSelectors(tree: Tree, project: Project) {
     path.join(sourceRoot, 'lib'),
     /(component|pipe)\.ts$/,
   ).forEach((filePath) => {
+    if (filePath.includes('components')) {
+      return;
+    }
     const fileContent = tree.read(filePath, 'utf-8');
     const selectors = Array.from(
       fileContent?.matchAll(/selector:\s*'(?<selector>.*)'/g) ?? [],

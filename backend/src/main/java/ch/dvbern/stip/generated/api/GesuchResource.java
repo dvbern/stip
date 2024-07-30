@@ -27,6 +27,11 @@ import jakarta.validation.Valid;
 public interface GesuchResource {
 
     @POST
+    @Path("/status/in-bearbeitung/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
     Response createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);

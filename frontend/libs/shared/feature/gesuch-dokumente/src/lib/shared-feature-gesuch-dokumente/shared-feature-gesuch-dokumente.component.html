@@ -149,7 +149,7 @@
   </div>
 
   <div class="mt-4 d-flex" *dvIfSachbearbeiter>
-    @if (dokumentsStore.hasAbgelehnteDokumentsSig()) {
+    @if (canSendMissingDocumentsSig()) {
       <!-- button sendMissingDocuments -->
       <button
         type="button"

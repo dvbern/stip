@@ -1204,7 +1204,7 @@
             <column name="kinder_00_18" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-            <column name="limite_ek_freibetrag_integrationszulag" type="INTEGER">
+            <column name="limite_ek_freibetrag_integrationszulage" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
             <column name="max_saeule_3a" type="INTEGER">
@@ -1314,7 +1314,7 @@
             <column name="integrationszulage" type="INTEGER"/>
             <column name="jugendliche_erwachsene_19_25" type="INTEGER"/>
             <column name="kinder_00_18" type="INTEGER"/>
-            <column name="limite_ek_freibetrag_integrationszulag" type="INTEGER"/>
+            <column name="limite_ek_freibetrag_integrationszulage" type="INTEGER"/>
             <column name="max_saeule_3a" type="INTEGER"/>
             <column name="person_1" type="INTEGER"/>
             <column name="personen_2" type="INTEGER"/>

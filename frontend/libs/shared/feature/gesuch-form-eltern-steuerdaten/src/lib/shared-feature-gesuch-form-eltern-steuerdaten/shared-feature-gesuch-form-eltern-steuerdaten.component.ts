@@ -20,6 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -73,6 +74,8 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  gotReenabled$ = new Subject<object>();
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   maskitoNumber = maskitoNumber;
   form = this.formBuilder.group({
     totalEinkuenfte: [<string | null>null, [Validators.required]],
@@ -135,6 +138,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     this.steuerjahrValidation.createEffect();
     effect(
       () => {
+        this.gotReenabledSig();
         const arbeitsverhaeltnis = this.arbeitsverhaeltnisChangedSig();
         this.hiddenFieldSet.setFieldVisibility(
           this.form.controls.saeule3a,

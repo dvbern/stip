@@ -1,6 +1,7 @@
 <form
   [formGroup]="form"
   [dvSharedUiFormReadonly]="viewSig().readonly"
+  (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-kind-form"
   novalidate
   class="mt-4"

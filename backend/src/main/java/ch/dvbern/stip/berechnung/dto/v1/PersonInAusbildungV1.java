@@ -15,7 +15,7 @@ public class PersonInAusbildungV1 {
     Integer wohnsitzAnteilVater;
     Integer wohnsitzAnteilMutter;
 
-    public static PersonInAusbildungV1 fromPersonInAusbildung(PersonInAusbildung personInAusbildung) {
+    public static PersonInAusbildungV1 fromPersonInAusbildung(final PersonInAusbildung personInAusbildung) {
         return new PersonInAusbildungV1Builder()
             .wohnsitz(personInAusbildung.getWohnsitz().toString())
             .wohnsitzAnteilVater(personInAusbildung.getWohnsitzAnteilVater() != null ? personInAusbildung.getWohnsitzAnteilVater().intValue() : null)

@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -148,20 +149,26 @@ class GesuchDokumentServiceTest {
             abgelehntId,
             (GesuchDokument) new GesuchDokument()
                 .setStatus(Dokumentstatus.ABGELEHNT)
-                .setDokumente(List.of())
+                .setDokumente(new ArrayList<>())
                 .setId(abgelehntId)
         );
         gesuchDokumente.put(
             UUID.randomUUID(),
-            new GesuchDokument().setStatus(Dokumentstatus.AKZEPTIERT).setDokumente(List.of())
+            new GesuchDokument().setStatus(Dokumentstatus.AKZEPTIERT).setDokumente(new ArrayList<>())
         );
 
         // Act
         gsDokService.deleteAbgelehnteDokumenteForGesuch(new Gesuch());
 
         // Assert
-        assertThat(gesuchDokumente.size(), is(1));
-        assertThat(gesuchDokumente.values().stream().findFirst().get().getStatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(gesuchDokumente.size(), is(2));
+        final var abgelehntesGesuchDokument = gesuchDokumente
+            .values()
+            .stream()
+            .filter(x -> x.getStatus() == Dokumentstatus.ABGELEHNT)
+            .findFirst()
+            .get();
+        assertThat(abgelehntesGesuchDokument.getDokumente().size(), is(0));
     }
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {

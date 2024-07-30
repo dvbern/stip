@@ -7,6 +7,7 @@
     class="mt-4"
     (ngSubmit)="handleSave()"
     [dvSharedUiFormReadonly]="viewSig().readonly"
+    (gotReenabledSig)="gotReenabled$.next({})"
   >
     <h3 class="pt-5">
       {{ 'shared.form.shared.section.einnahmen' | translate }}

@@ -1,23 +1,49 @@
-@if (gesuchViewSig().gesuchId; as gesuchId) {
-  <button type="button" class="btn btn-primary" (click)="berechnen(gesuchId)">
-    {{ 'sachbearbeitung-app.verfuegung.berechnung.berechnen' | translate }}
-  </button>
-
-  @if (berechnungenSig().length > 0) {
-    <h2 class="pt-4 h3">{{ 'sachbearbeitung-app.verfuegung.berechnung.resultat' | translate }}</h2>
-    @for (berechnung of berechnungenSig(); track $index) {
+@if (viewSig(); as view) {
+  <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
+  <dl class="d-flex g-2">
+    <dt class="me-2 fw-normal text-muted">von:</dt>
+    <dd class="me-4">{{ view.gueltigAb | date: 'MM.YYYY' }}</dd>
+    <dt class="me-2 fw-normal text-muted">bis:</dt>
+    <dd class="me-4">{{ view.gueltigBis | date: 'MM.YYYY' }}</dd>
+    <dt class="me-2 fw-normal text-muted">Monate:</dt>
+    <dd class="me-4">{{ view.monate }}</dd>
+  </dl>
+  @if (berechnungenSig().loading) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else if (berechnungenSig().list.length > 0) {
+    @for (berechnung of berechnungenSig().list; track $index) {
       <div class="row">
-        <div class="col-12 p-2 rounded bg-light">
-          <div>
-            <b>Berechnung {{ $index + 1 }} - Total: </b><span>{{ berechnung.berechnung }}</span>
-          </div>
-          @if (berechnung.parsedData) {
-            <pre>{{ berechnung.parsedData | json }}</pre>
-          } @else {
-            <pre>{{ berechnung.berechnungsdaten }}</pre>
-          }
+        <div class="col-12">
+          <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
+            <dv-persoenliche-einnahmen
+              class="d-flex flex-column gap-4 ps-4"
+              [einnahmenSig]="berechnung.persoenlich.einnahmen"
+            ></dv-persoenliche-einnahmen>
+            <dv-persoenliche-kosten
+              class="d-flex flex-column gap-4 ps-4"
+              [kostenSig]="berechnung.persoenlich.kosten"
+            ></dv-persoenliche-kosten>
+          </dv-berechnungs-card>
         </div>
       </div>
+      <div class="row mt-4">
+        @for (familienbudget of berechnung.familien; track familienbudget) {
+          <div class="col-6">
+            <dv-berechnungs-card [berechnungSig]="familienbudget">
+              <dv-familien-einnahmen
+                class="d-flex flex-column gap-4 ps-4"
+                [einnahmenSig]="familienbudget.einnahmen"
+              ></dv-familien-einnahmen>
+              <dv-familien-kosten
+                class="d-flex flex-column gap-4 ps-4"
+                [kostenSig]="familienbudget.kosten"
+              ></dv-familien-kosten>
+            </dv-berechnungs-card>
+          </div>
+        }
+      </div>
     }
+  } @else {
+    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
   }
 }

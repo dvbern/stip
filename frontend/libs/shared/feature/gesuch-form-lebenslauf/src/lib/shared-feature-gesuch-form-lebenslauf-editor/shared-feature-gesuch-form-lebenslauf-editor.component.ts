@@ -25,7 +25,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
@@ -99,6 +99,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormLebenslaufVew);
+  gotReenabled$ = new Subject<object>();
+  private gotReenabledSig = toSignal(this.gotReenabled$);
 
   form = this.formBuilder.group({
     taetigkeitsBeschreibung: [
@@ -168,6 +170,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         this.formUtils.setDisabledState(
           this.form.controls.berufsbezeichnung,
           this.viewSig().readonly || !this.showBerufsbezeichnungSig(),
@@ -178,6 +181,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
           this.viewSig().readonly || !this.showFachrichtungSig(),
@@ -188,20 +192,12 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     );
     effect(
       () => {
+        this.gotReenabledSig();
         this.formUtils.setDisabledState(
           this.form.controls.titelDesAbschlusses,
           this.viewSig().readonly || !this.showTitelDesAbschlussesSig(),
           true,
         );
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
       },
       { allowSignalWrites: true },
     );

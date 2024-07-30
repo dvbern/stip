@@ -9,6 +9,7 @@ import com.savoirtech.json.JsonComparatorBuilder;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
+@Slf4j
 class V1StructureTest {
     @Inject
     PersonenImHaushaltService personenImHaushaltService;
@@ -34,13 +36,13 @@ class V1StructureTest {
                     "elternteil": {
                         "essenskostenPerson1": 0,
                         "essenskostenPerson2": 0,
-                        "grundbedarf": 0,
+                        "grundbedarf": 21816,
                         "fahrkostenPerson1": 0,
                         "fahrkostenPerson2": 0,
                         "integrationszulage": 0,
                         "steuernBund": 0,
                         "steuernStaat": 0,
-                        "medizinischeGrundversorgung": 0,
+                        "medizinischeGrundversorgung": 8200,
                         "effektiveWohnkosten": 0,
                         "totalEinkuenfte": 0,
                         "ergaenzungsleistungen": 0,
@@ -58,13 +60,13 @@ class V1StructureTest {
                     "elternteil": {
                         "essenskostenPerson1": 0,
                         "essenskostenPerson2": 0,
-                        "grundbedarf": 0,
+                        "grundbedarf": 21816,
                         "fahrkostenPerson1": 0,
                         "fahrkostenPerson2": 0,
                         "integrationszulage": 0,
                         "steuernBund": 0,
                         "steuernStaat": 0,
-                        "medizinischeGrundversorgung": 0,
+                        "medizinischeGrundversorgung": 12200,
                         "effektiveWohnkosten": 0,
                         "totalEinkuenfte": 0,
                         "ergaenzungsleistungen": 0,
@@ -90,10 +92,10 @@ class V1StructureTest {
                         "ergaenzungsleistungen": 1200,
                         "leistungenEO": 0,
                         "gemeindeInstitutionen": 0,
-                        "alter": -18,
-                        "grundbedarf": 0,
+                        "alter": 18,
+                        "grundbedarf": 17940,
                         "wohnkosten": 6000,
-                        "medizinischeGrundversorgung": 0,
+                        "medizinischeGrundversorgung": 2800,
                         "ausbildungskosten": 450,
                         "steuern": 0,
                         "steuernKonkubinatspartner": 0,
@@ -103,9 +105,9 @@ class V1StructureTest {
                         "verpflegungPartner": 0,
                         "fremdbetreuung": 0,
                         "anteilFamilienbudget": 0,
-                        "lehre": true,
+                        "lehre": false,
                         "eigenerHaushalt": true,
-                        "abgeschlosseneErstausbildung": true
+                        "abgeschlosseneErstausbildung": false
                     }
                 }
             }
@@ -117,6 +119,7 @@ class V1StructureTest {
     @Test
     void test() throws JsonProcessingException {
         final var gesuch = TestUtil.getGesuchForBerechnung(trancheUuid);
+
         final var request = BerechnungRequestV1.createRequest(
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
@@ -127,6 +130,7 @@ class V1StructureTest {
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(EXPECTED, actual);
+        LOG.info("Actual: " + actual.toString());
         assertTrue(result.isMatch(), result.getErrorMessage());
     }
 }

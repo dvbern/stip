@@ -107,8 +107,8 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "integrationszulage")
     private Integer integrationszulage;
 
-    @Column(nullable = false, name = "limite_ek_freibetrag_integrationszulag")
-    private Integer limiteEkFreibetragIntegrationszulag;
+    @Column(nullable = false, name = "limite_ek_freibetrag_integrationszulage")
+    private Integer limiteEkFreibetragIntegrationszulage;
 
     @Column(nullable = false, name = "stip_limite_minimalstipendium")
     private Integer stipLimiteMinimalstipendium;

@@ -1,3 +1,4 @@
+import { maskitoTransform } from '@maskito/core';
 import { maskitoNumberOptionsGenerator } from '@maskito/kit';
 
 export const NUMBER_THOUSAND_SEPARATOR = "'";
@@ -52,5 +53,5 @@ export function fromFormatedNumber(
 }
 
 export function toFormatedNumber(number: number): string {
-  return number.toLocaleString();
+  return maskitoTransform(number.toString(), maskitoNumber);
 }

@@ -32,6 +32,12 @@ public class GesuchResourceImpl implements GesuchResource {
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
 
+    @Override
+    public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
+        GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
+        return Response.ok(gesuchDto).build();
+    }
+
     @RolesAllowed(GESUCH_CREATE)
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
