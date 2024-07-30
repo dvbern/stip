@@ -18,7 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { Bildungsart } from '../model/bildungsart';
+import { Bildungskategorie } from '../model/bildungskategorie';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -28,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class BildungsartService {
+export class BildungskategorieService {
 
     protected basePath = '/api/v1';
     public defaultHeaders = new HttpHeaders();
@@ -89,14 +89,14 @@ export class BildungsartService {
     }
 
     /**
-     * Gets all Bildgunsarten
+     * Gets all Bildungskategorien
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getBildungsarten$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Bildungsart>>;
-     public getBildungsarten$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Bildungsart>>>;
-     public getBildungsarten$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Bildungsart>>>;
-     public getBildungsarten$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getBildungskategorien$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Bildungskategorie>>;
+     public getBildungskategorien$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Bildungskategorie>>>;
+     public getBildungskategorien$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Bildungskategorie>>>;
+     public getBildungskategorien$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -143,8 +143,8 @@ export class BildungsartService {
             }
         }
 
-        const localVarPath = `/bildungsart`;
-        return this.httpClient.request<Array<Bildungsart>>('get', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/bildungskategorie`;
+        return this.httpClient.request<Array<Bildungskategorie>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

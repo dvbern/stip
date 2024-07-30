@@ -160,7 +160,7 @@ async function sleep(msec: number) {
     'Ausbildungsgang',
     'Ausbildungsstaette',
     'Benutzer',
-    'Bildungsart',
+    'Bildungskategorie',
     'Configuration',
     'Dokument',
     'Fall',

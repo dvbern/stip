@@ -13,7 +13,7 @@
 export interface AusbildungsgangUpdate { 
     bezeichnungDe: string;
     bezeichnungFr: string;
-    bildungsartId: string;
+    bildungskategorieId: string;
     ausbildungsstaetteId: string;
 }
 

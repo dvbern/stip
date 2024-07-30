@@ -23,8 +23,8 @@ import {
   AusbildungsgangService,
   Ausbildungsstaette,
   AusbildungsstaetteService,
-  Bildungsart,
-  BildungsartService,
+  Bildungskategorie,
+  BildungskategorieService,
 } from '@dv/shared/model/gesuch';
 import {
   RemoteData,
@@ -36,7 +36,7 @@ import {
 
 export interface AdminAusbildungsstaetteState {
   tableData: MatTableDataSource<AusbildungsstaetteTableData>;
-  bildungsarten: RemoteData<Bildungsart[]>;
+  bildungskategorien: RemoteData<Bildungskategorie[]>;
   response: RemoteData<Ausbildungsstaette[]>;
 }
 
@@ -65,7 +65,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
 
     const initialState: AdminAusbildungsstaetteState = {
       tableData,
-      bildungsarten: initial(),
+      bildungskategorien: initial(),
       response: initial(),
     };
 
@@ -76,7 +76,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
       store,
       ausbildungsStaetteService = inject(AusbildungsstaetteService),
       ausbildungsgangService = inject(AusbildungsgangService),
-      bildungsartService = inject(BildungsartService),
+      bildungskategorieService = inject(BildungskategorieService),
     ) => ({
       setPaginator: (paginator: MatPaginator) => {
         patchState(store, (state) => {
@@ -363,7 +363,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 .createAusbildungsgang$({
                   ausbildungsgangCreate: {
                     ausbildungsstaetteId: staette.id,
-                    bildungsartId: gang.bildungsartId,
+                    bildungskategorieId: gang.bildungskategorieId,
                     bezeichnungDe: gang.bezeichnungDe ?? '',
                     bezeichnungFr: gang.bezeichnungFr ?? '',
                   },
@@ -415,7 +415,7 @@ export const AdminAusbildungsstaetteStore = signalStore(
                 ausbildungsgangId: gang.id,
                 ausbildungsgangUpdate: {
                   ausbildungsstaetteId: staette.id,
-                  bildungsartId: gang.bildungsart.id,
+                  bildungskategorieId: gang.bildungskategorie.id,
                   bezeichnungDe: gang.bezeichnungDe ?? '',
                   bezeichnungFr: gang.bezeichnungFr ?? '',
                 },
@@ -517,23 +517,23 @@ export const AdminAusbildungsstaetteStore = signalStore(
           takeUntilDestroyed(),
         ),
       ),
-      loadBildungsarten: rxMethod(
+      loadBildungskategorien: rxMethod(
         pipe(
           tap(() => {
             patchState(store, {
-              bildungsarten: pending(),
+              bildungskategorien: pending(),
             });
           }),
           switchMap(() =>
-            bildungsartService.getBildungsarten$().pipe(
+            bildungskategorieService.getBildungskategorien$().pipe(
               tapResponse({
-                next: (bildungsarten) =>
+                next: (bildungskategorien) =>
                   patchState(store, {
-                    bildungsarten: success(bildungsarten),
+                    bildungskategorien: success(bildungskategorien),
                   }),
                 error: (error: HttpErrorResponse) => {
                   patchState(store, {
-                    bildungsarten: failure(error),
+                    bildungskategorien: failure(error),
                   });
                 },
               }),
