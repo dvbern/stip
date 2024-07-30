@@ -218,28 +218,60 @@
                       </td>
                     </ng-container>
 
-                    <!-- bildungsart -->
-                    <ng-container matColumnDef="bildungsart">
+                    <!-- bildungskategorieDe -->
+                    <ng-container matColumnDef="bildungskategorieDe">
                       <th mat-header-cell *matHeaderCellDef>
-                        {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.bildungsart' | translate }}
+                        {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.bildungskategorieDe' | translate }}
                       </th>
                       <td mat-cell *dvMatCellDef="let ausbildungsgang; dataSource: staette.ausbildungsgaenge ?? []">
                         @if (editedAusbildungsgang === ausbildungsgang) {
                           <mat-form-field>
                             <mat-select
-                              formControlName="bildungsartId"
+                              formControlName="bildungskategorieId"
                               panelClass="table-select"
                               (click)="$event.stopPropagation()"
                             >
-                              @for (bildungsart of store.bildungsarten().data; track $index) {
-                                <mat-option [value]="bildungsart.id" [attr.data-testid]="bildungsart.beschreibung">
-                                  {{ bildungsart.beschreibung }}
+                              @for (bildungskategorie of store.bildungskategorien().data; track $index) {
+                                <mat-option
+                                  [value]="bildungskategorie.id"
+                                  [attr.data-testid]="bildungskategorie.bezeichnungDe"
+                                >
+                                  {{ bildungskategorie.bezeichnungDe }}
                                 </mat-option>
                               }
                             </mat-select>
                           </mat-form-field>
                         } @else {
-                          {{ ausbildungsgang.bildungsart.beschreibung }}
+                          {{ ausbildungsgang.bildungskategorie.bezeichnungDe }}
+                        }
+                      </td>
+                    </ng-container>
+
+                    <!-- bildungskategorieFr -->
+                    <ng-container matColumnDef="bildungskategorieFr">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.bildungskategorieFr' | translate }}
+                      </th>
+                      <td mat-cell *dvMatCellDef="let ausbildungsgang; dataSource: staette.ausbildungsgaenge ?? []">
+                        @if (editedAusbildungsgang === ausbildungsgang) {
+                          <mat-form-field>
+                            <mat-select
+                              formControlName="bildungskategorieId"
+                              panelClass="table-select"
+                              (click)="$event.stopPropagation()"
+                            >
+                              @for (bildungskategorie of store.bildungskategorien().data; track $index) {
+                                <mat-option
+                                  [value]="bildungskategorie.id"
+                                  [attr.data-testid]="bildungskategorie.bezeichnungFr"
+                                >
+                                  {{ bildungskategorie.bezeichnungFr }}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        } @else {
+                          {{ ausbildungsgang.bildungskategorie.bezeichnungFr }}
                         }
                       </td>
                     </ng-container>

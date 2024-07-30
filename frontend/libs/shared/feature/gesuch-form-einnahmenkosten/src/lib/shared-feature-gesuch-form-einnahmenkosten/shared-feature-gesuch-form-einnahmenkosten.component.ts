@@ -227,9 +227,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       )
       ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang.id);
     const willSekundarstufeZwei =
-      ausbildungsgang?.bildungsart.bildungsstufe === 'SEKUNDAR_2';
+      ausbildungsgang?.bildungskategorie.bildungsstufe === 'SEKUNDAR_2';
     const willTertiaerstufe =
-      ausbildungsgang?.bildungsart.bildungsstufe === 'TERTIAER';
+      ausbildungsgang?.bildungskategorie.bildungsstufe === 'TERTIAER';
 
     // return true if the person was 18 or older by the end of the year before the gesuchsjahr
     const gesuchsjahr: number | undefined =

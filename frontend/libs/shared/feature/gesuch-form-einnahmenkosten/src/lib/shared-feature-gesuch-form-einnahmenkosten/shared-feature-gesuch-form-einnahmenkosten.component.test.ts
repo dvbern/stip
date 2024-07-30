@@ -341,10 +341,11 @@ function createEmptyAusbildung(): Ausbildung {
     pensum: 'VOLLZEIT',
     ausbildungsgang: {
       id: '',
-      bildungsart: {
+      bildungskategorie: {
         id: '',
         bfs: -1,
-        beschreibung: '',
+        bezeichnungDe: '',
+        bezeichnungFr: '',
         bildungsstufe: 'SEKUNDAR_2',
       },
     },
