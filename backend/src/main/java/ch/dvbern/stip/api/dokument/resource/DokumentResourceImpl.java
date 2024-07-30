@@ -57,6 +57,11 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok(dokumentDtoList).build();
     }
 
+    @Override
+    public Response getGesuchDokumentKommentare(UUID gesuchDokumentId) {
+        return null;
+    }
+
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {

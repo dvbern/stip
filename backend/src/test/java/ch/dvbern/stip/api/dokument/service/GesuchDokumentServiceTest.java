@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -60,7 +62,7 @@ class GesuchDokumentServiceTest {
     private HashMap<UUID, GesuchDokument> gesuchDokumente;
 
     @BeforeEach
-    void setup() {
+    void setup() {//todo: anpassen
         Mockito.when(gesuchDokumentRepository.requireById(id)).thenAnswer(invocation -> mockedDokument);
 
         Mockito.doAnswer(invocation -> {
@@ -82,16 +84,23 @@ class GesuchDokumentServiceTest {
         }).when(gesuchDokumentRepository).delete(Mockito.any());
     }
 
+    //todo: add test cases: SB, GS, Validation, GET
+
     @Test
     void ablehnenCreatesCommentWithTextTest() {
         // Arrange
         final var someKnownComment = new GesuchDokumentAblehnenRequestDto();
-        someKnownComment.setKommentar("Some known comment");
-
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(Dokumentstatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
+
+        GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
+        gesuchDokumentKommentarDto.setGesuchDokumentId(mockedDokument.getId());
+        gesuchDokumentKommentarDto.setKommentar("Some known comment");
+        gesuchDokumentKommentarDto.setBenutzer("Max Muster");
+        gesuchDokumentKommentarDto.setDatum(LocalDate.now());
+        someKnownComment.setKommentar(gesuchDokumentKommentarDto);
 
         GesuchTranche tranche = initGesuchTranche();
 

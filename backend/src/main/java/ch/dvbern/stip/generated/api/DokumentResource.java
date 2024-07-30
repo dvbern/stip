@@ -1,19 +1,10 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DokumentDto;
-import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -58,4 +49,9 @@ public interface DokumentResource {
     @Path("/dokument/{gesuchId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
     Response getDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesuchDokumentKommentare(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 }
