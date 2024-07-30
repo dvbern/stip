@@ -2977,7 +2977,20 @@ components:
       type: object
       properties:
         kommentar:
+          $ref: '#/components/schemas/GesuchDokumentKommentar'
+    GesuchDokumentKommentar:
+      description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
+      type: object
+      properties:
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
+        kommentar:
           type: string
+        benutzer:
+          description: 'Der Benutzer welcher das Dokument abgelehnt hat'
+          type: string
+        datum:
+          $ref: '#/components/schemas/LocalDate'
     Dokumentstatus:
       enum:
         - AUSSTEHEND
