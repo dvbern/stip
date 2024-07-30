@@ -39,7 +39,7 @@ public final class TestConstants {
     public static final String IBAN_AT_NUMMER_VALID = "AT483200000012345864";
 
     public static UUID TEST_AUSBILDUNGSGANG_ID;
-    public static UUID TEST_BILDUNGSART_ID;
+    public static UUID TEST_BILDUNGSKATEGORIE_ID;
     public static UUID TEST_AUSBILDUNGSSTAETTE_ID;
 
     public static final DateRange GUELTIGKEIT_PERIODE_23_24 =
