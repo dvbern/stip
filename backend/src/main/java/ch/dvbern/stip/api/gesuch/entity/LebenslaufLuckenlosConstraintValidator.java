@@ -28,33 +28,37 @@ public class LebenslaufLuckenlosConstraintValidator
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
 
-        LocalDate turns16 = gesuchFormular.getPersonInAusbildung().getGeburtsdatum().plusYears(16);
+        final LocalDate start = gesuchFormular.getPersonInAusbildung().getGeburtsdatum()
+            .plusYears(16)
+            .withMonth(8)
+            .withDayOfMonth(1);
+        final LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin().withDayOfMonth(1);
 
         // If PIA is younger than 16 no items need to be present
-        if (turns16.getYear() >= gesuchFormular.getAusbildung().getAusbildungBegin().getYear()) {
+        if (stop.isBefore(start)) {
             return true;
         }
 
-        LocalDate start = turns16;
-        LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin().withDayOfMonth(1);
         List<DateRange> dateRanges = new ArrayList<>();
-        gesuchFormular.getLebenslaufItems().stream().forEach(
-            lebenslaufItem -> dateRanges.add(new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
+        gesuchFormular.getLebenslaufItems().forEach(
+            lebenslaufItem -> dateRanges.add(
+                new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis())
+            )
         );
         // Sort the Lebenslaufsitem Daterange
         Collections.sort(dateRanges, Comparator.comparing(DateRange::getGueltigAb));
 
-        // Check if first Lebenslaufitem is After birth
-        LocalDate currentDate = start;
         if (dateRanges.isEmpty()) {
             LOG.warn("No Lebenslauf Items present");
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
+        // Check if first Lebenslaufitem is After birth
         if (gesuchFormular.getPersonInAusbildung().getGeburtsdatum().isAfter(dateRanges.get(0).getGueltigAb())) {
-            LOG.warn("Lebenslauf Item start bevor " + currentDate);
+            LOG.warn("Lebenslauf Item start bevor " + start);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
 
+        LocalDate currentDate = start;
         for (DateRange range : dateRanges) {
             if (range.getGueltigAb().isAfter(currentDate)) {
                 LOG.warn("Lebenslauf Lücke found between " + currentDate + " and " + range.getGueltigAb());
