@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.gesuch.service;
+package ch.dvbern.stip.api.gesuch.util;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
@@ -12,6 +12,7 @@ import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
 import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
 import ch.dvbern.stip.api.partner.PartnerCopyUtil;
@@ -21,6 +22,7 @@ import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
+// TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
     public GesuchTranche createAenderungstranche(
         final GesuchTranche gesuchTranche,
@@ -30,9 +32,15 @@ public class GesuchTrancheCopyUtil {
         final var newTranche = new GesuchTranche();
         newTranche.setGesuch(gesuch);
 
-        // TODO KSTIP-1111: unit test this
-        final var gesuchsperiodeStart = gesuch.getGesuchsperiode().getGesuchsperiodeStart();
-        final var gesuchsperiodeStopp = gesuch.getGesuchsperiode().getGesuchsperiodeStopp();
+        newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDto));
+        newTranche.setComment(createDto.getComment());
+        newTranche.setGesuchFormular(copy(gesuchTranche.getGesuchFormular()));
+        return newTranche;
+    }
+
+    DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final AenderungsantragCreateDto createDto) {
+        final var gesuchsperiodeStart = gesuchsperiode.getGesuchsperiodeStart();
+        final var gesuchsperiodeStopp = gesuchsperiode.getGesuchsperiodeStopp();
         final var startDate = DateUtil.clamp(
             createDto.getStart(),
             gesuchsperiodeStart,
@@ -44,9 +52,7 @@ public class GesuchTrancheCopyUtil {
             gesuchsperiodeStopp
         );
 
-        newTranche.setGueltigkeit(new DateRange(startDate, endDate));
-        newTranche.setGesuchFormular(copy(gesuchTranche.getGesuchFormular()));
-        return newTranche;
+        return new DateRange(startDate, endDate);
     }
 
     GesuchFormular copy(final GesuchFormular other) {

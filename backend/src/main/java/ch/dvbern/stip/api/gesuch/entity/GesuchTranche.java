@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -53,4 +54,8 @@ public class GesuchTranche extends AbstractEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private GesuchTrancheStatus status = GesuchTrancheStatus.IN_BEARBEITUNG_GS;
+
+    @Nullable
+    @Column(name = "comment")
+    private String comment;
 }

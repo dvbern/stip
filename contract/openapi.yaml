@@ -3205,7 +3205,7 @@ components:
         end:
           type: string
           format: date
-        reason:
+        comment:
           type: string
   responses:
     Unauthorized:

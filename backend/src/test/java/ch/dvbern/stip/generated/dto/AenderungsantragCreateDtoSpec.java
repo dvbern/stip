@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AenderungsantragCreateDtoSpec.JSON_PROPERTY_START,
   AenderungsantragCreateDtoSpec.JSON_PROPERTY_END,
-  AenderungsantragCreateDtoSpec.JSON_PROPERTY_REASON
+  AenderungsantragCreateDtoSpec.JSON_PROPERTY_COMMENT
 })
 @JsonTypeName("AenderungsantragCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -41,8 +41,8 @@ public class AenderungsantragCreateDtoSpec {
   public static final String JSON_PROPERTY_END = "end";
   private LocalDate end;
 
-  public static final String JSON_PROPERTY_REASON = "reason";
-  private String reason;
+  public static final String JSON_PROPERTY_COMMENT = "comment";
+  private String comment;
 
   public AenderungsantragCreateDtoSpec() {
   }
@@ -99,29 +99,29 @@ public class AenderungsantragCreateDtoSpec {
   }
 
 
-  public AenderungsantragCreateDtoSpec reason(String reason) {
+  public AenderungsantragCreateDtoSpec comment(String comment) {
     
-    this.reason = reason;
+    this.comment = comment;
     return this;
   }
 
    /**
-   * Get reason
-   * @return reason
+   * Get comment
+   * @return comment
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_REASON)
+  @JsonProperty(JSON_PROPERTY_COMMENT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getReason() {
-    return reason;
+  public String getComment() {
+    return comment;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_REASON)
+  @JsonProperty(JSON_PROPERTY_COMMENT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setReason(String reason) {
-    this.reason = reason;
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
   @Override
@@ -135,12 +135,12 @@ public class AenderungsantragCreateDtoSpec {
     AenderungsantragCreateDtoSpec aenderungsantragCreate = (AenderungsantragCreateDtoSpec) o;
     return Objects.equals(this.start, aenderungsantragCreate.start) &&
         Objects.equals(this.end, aenderungsantragCreate.end) &&
-        Objects.equals(this.reason, aenderungsantragCreate.reason);
+        Objects.equals(this.comment, aenderungsantragCreate.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(start, end, reason);
+    return Objects.hash(start, end, comment);
   }
 
   @Override
@@ -149,7 +149,7 @@ public class AenderungsantragCreateDtoSpec {
     sb.append("class AenderungsantragCreateDtoSpec {\n");
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    end: ").append(toIndentedString(end)).append("\n");
-    sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AenderungsantragCreateDto  implements Serializable {
   private @Valid LocalDate start;
   private @Valid LocalDate end;
-  private @Valid String reason;
+  private @Valid String comment;
 
   /**
    **/
@@ -63,20 +63,20 @@ public class AenderungsantragCreateDto  implements Serializable {
 
   /**
    **/
-  public AenderungsantragCreateDto reason(String reason) {
-    this.reason = reason;
+  public AenderungsantragCreateDto comment(String comment) {
+    this.comment = comment;
     return this;
   }
 
   
-  @JsonProperty("reason")
-  public String getReason() {
-    return reason;
+  @JsonProperty("comment")
+  public String getComment() {
+    return comment;
   }
 
-  @JsonProperty("reason")
-  public void setReason(String reason) {
-    this.reason = reason;
+  @JsonProperty("comment")
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 
@@ -91,12 +91,12 @@ public class AenderungsantragCreateDto  implements Serializable {
     AenderungsantragCreateDto aenderungsantragCreate = (AenderungsantragCreateDto) o;
     return Objects.equals(this.start, aenderungsantragCreate.start) &&
         Objects.equals(this.end, aenderungsantragCreate.end) &&
-        Objects.equals(this.reason, aenderungsantragCreate.reason);
+        Objects.equals(this.comment, aenderungsantragCreate.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(start, end, reason);
+    return Objects.hash(start, end, comment);
   }
 
   @Override
@@ -106,7 +106,7 @@ public class AenderungsantragCreateDto  implements Serializable {
     
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    end: ").append(toIndentedString(end)).append("\n");
-    sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("}");
     return sb.toString();
   }
