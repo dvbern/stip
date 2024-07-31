@@ -40,6 +40,8 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -56,10 +58,10 @@ public class DokumentResourceImpl implements DokumentResource {
         List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
-
+    @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuchDokumentKommentare(UUID gesuchDokumentId) {
-        return null;
+        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentsByGesuchDokumentId(gesuchDokumentId)).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -156,7 +158,7 @@ public class DokumentResourceImpl implements DokumentResource {
             .recoverWithItem(Response.serverError().build());
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
     @Override
     public Response gesuchDokumentAblehnen(
         UUID gesuchDokumentId,
@@ -166,7 +168,7 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok().build();
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
     @Override
     public Response gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);

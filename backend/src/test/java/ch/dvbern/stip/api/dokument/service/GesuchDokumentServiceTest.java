@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -62,7 +63,7 @@ class GesuchDokumentServiceTest {
     private HashMap<UUID, GesuchDokument> gesuchDokumente;
 
     @BeforeEach
-    void setup() {//todo: anpassen
+    void setup() {
         Mockito.when(gesuchDokumentRepository.requireById(id)).thenAnswer(invocation -> mockedDokument);
 
         Mockito.doAnswer(invocation -> {
@@ -84,7 +85,7 @@ class GesuchDokumentServiceTest {
         }).when(gesuchDokumentRepository).delete(Mockito.any());
     }
 
-    //todo: add test cases: SB, GS, Validation, GET
+    //todo: only sb should be able to trigger endpoint
 
     @Test
     void ablehnenCreatesCommentWithTextTest() {
@@ -111,7 +112,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);
 
         // Assert
-        assertThat(comment.getKommentar(), is(someKnownComment.getKommentar()));
+        assertThat(comment.getKommentar(), is(someKnownComment.getKommentar().getKommentar()));
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.ABGELEHNT));
     }
 
@@ -148,7 +149,7 @@ class GesuchDokumentServiceTest {
             null,
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
-                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository)
+                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl())
             )
         );
 

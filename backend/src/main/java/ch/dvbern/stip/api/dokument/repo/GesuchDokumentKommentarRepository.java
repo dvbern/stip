@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokumentKommentar;
@@ -16,12 +16,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchDokumentKommentar> {
     private final EntityManager entityManager;
+    private static QGesuchDokumentKommentar gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
+
+    public List<GesuchDokumentKommentar> findAllByGesuchDokumentId(UUID gesuchDokumentId) {
+        return findAll().stream().filter(kommentar -> kommentar.getId().equals(gesuchDokumentId)).toList();
+    }
 
     public Optional<GesuchDokumentKommentar> getByTypAndGesuchId(
         final DokumentTyp dokumentTyp,
         final UUID gesuchId
     ) {
-        final var gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
         return Optional.ofNullable(
             new JPAQueryFactory(entityManager)
                 .selectFrom(gesuchDokumentKommentar)
