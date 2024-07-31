@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.partner;
+package ch.dvbern.stip.api.partner.util;
 
 import ch.dvbern.stip.api.common.util.AbstractPersonCopyUtil;
 import ch.dvbern.stip.api.partner.entity.Partner;
