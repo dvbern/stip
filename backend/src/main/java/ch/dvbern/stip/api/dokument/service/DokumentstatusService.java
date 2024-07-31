@@ -31,11 +31,11 @@ public class DokumentstatusService {
     public void triggerStatusChangeWithComment(
         final GesuchDokument gesuchDokument,
         final DokumentstatusChangeEvent event,
-        final String comment
+        final GesuchDokumentKommentarDto commentDto
     ) {
         final var sm = createStateMachine(gesuchDokument);
-        sm.fire(DokumentstatusChangeEventTriggerWithComment.createTrigger(event), gesuchDokument, comment);
-        dokumentKommentarService.createKommentarForGesuchDokument(gesuchDokument, comment);
+        sm.fire(DokumentstatusChangeEventTriggerWithComment.createTrigger(event), gesuchDokument, commentDto.getKommentar());
+        dokumentKommentarService.createKommentarForGesuchDokument(gesuchDokument, commentDto);
     }
 
     private StateMachine<Dokumentstatus, DokumentstatusChangeEvent> createStateMachine(

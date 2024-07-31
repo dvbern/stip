@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.Valid;
+
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

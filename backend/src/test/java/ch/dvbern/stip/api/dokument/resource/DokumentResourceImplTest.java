@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.dokument.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -41,8 +43,12 @@ class DokumentResourceImplTest {
         assertThat(dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID()).getStatus(), is(HttpStatus.SC_OK));
     }
 
-    //todo: add test cases: SB, GS, Validation, GET
-    //todo: mapper
+    @Test
+    @TestAsSachbearbeiter
+    void testPersistence(){
+        //todo: check persistence, make db migration
+        fail();
+    }
 
     @InjectMock
     GesuchDokumentService gesuchDokumentService;
@@ -61,13 +67,17 @@ class DokumentResourceImplTest {
         assertThrows(io.quarkus.security.ForbiddenException.class, () -> dokumentResource.gesuchDokumentAkzeptieren(UUID.randomUUID()));
     }
 
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Test
-    // Gesuchsteller should not be allowed to create a commend
-    void GesuchStellerShouldNotBeAbleToPostComment(){
-        //todo: test it in dokumentresource
+    void sbShouldBeAbleToDenyDocumentTest(){
+        doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(),any());
+        assertThat(dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(),null).getStatus(), is(HttpStatus.SC_OK));
     }
 
+    @TestAsSachbearbeiter
     @Test
-    void createGesuchKommentarValidationTest(){}
+    void sbShouldBeAbleToAcceptDocumentTest(){
+        doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
+        assertThat(dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(),null).getStatus(), is(HttpStatus.SC_OK));
+    }
 }

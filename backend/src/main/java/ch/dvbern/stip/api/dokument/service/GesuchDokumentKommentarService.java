@@ -22,13 +22,25 @@ public class GesuchDokumentKommentarService {
     }
 
     @Transactional
-    public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument, final String comment) {
+    public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument,final GesuchDokumentKommentarDto gesuchDokumentKommentarDto) {
+        final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
+        if(gesuchDokumentKommentarDto == null){
+            createEmptyKommentarForGesuchDokument(gesuchDokument,null);
+        }else{
+            kommentar.setGesuch(gesuchDokument.getGesuch());
+            kommentar.setDokumentstatus(gesuchDokument.getStatus());
+            kommentar.setDokumentTyp(gesuchDokument.getDokumentTyp());
+            gesuchDokumentKommentarRepository.persist(kommentar);
+        }
+    }
+
+    @Transactional
+    public void createEmptyKommentarForGesuchDokument(final GesuchDokument gesuchDokument, final String comment) {
         final var kommentar = new GesuchDokumentKommentar()
             .setGesuch(gesuchDokument.getGesuch())
             .setDokumentTyp(gesuchDokument.getDokumentTyp())
             .setDokumentstatus(gesuchDokument.getStatus())
             .setKommentar(comment);
-
         gesuchDokumentKommentarRepository.persist(kommentar);
     }
 }

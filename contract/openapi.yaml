@@ -3012,12 +3012,19 @@ components:
       type: object
       required:
         - gesuchDokumentId
-        - kommentar
+        - gesuchId
+        - dokumentTyp
         - datum
         - benutzer
       properties:
         gesuchDokumentId:
           $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        dokumentStatus:
+          $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
           type: string
         benutzer:

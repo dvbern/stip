@@ -130,7 +130,7 @@ public class GesuchDokumentService {
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             DokumentstatusChangeEvent.ABGELEHNT,
-            dto.getKommentar().getKommentar()
+            dto.getKommentar()
         );
     }
 
