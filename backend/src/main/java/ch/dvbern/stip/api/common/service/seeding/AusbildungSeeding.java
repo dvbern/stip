@@ -105,14 +105,14 @@ public class AusbildungSeeding extends Seeder {
         final List<Bildungskategorie> bildungskategorien
     ) {
         return List.of(
-            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(0), bildungskategorien.get(0)),
-            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(1), bildungskategorien.get(0)),
-            createAusbildungsgang("Master", "Master", ausbildungsstaetten.get(1), bildungskategorien.get(0)),
-            createAusbildungsgang("Lehre EBA", "Apprentissage AFP", ausbildungsstaetten.get(2), bildungskategorien.get(1)),
-            createAusbildungsgang("Vorlehre", "Préapprentissage", ausbildungsstaetten.get(2), bildungskategorien.get(1)),
-            createAusbildungsgang("Maturität", "Maturité", ausbildungsstaetten.get(3), bildungskategorien.get(1)),
-            createAusbildungsgang("Lehre EFZ", "Apprentissage CFC", ausbildungsstaetten.get(2), bildungskategorien.get(1)),
-            createAusbildungsgang("Berufsvorbereitendes Schuljahr", "Année scolaire de préparation professionnelle", ausbildungsstaetten.get(4), bildungskategorien.get(1))
+            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(0), bildungskategorien.get(6)),
+            createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(1), bildungskategorien.get(7)),
+            createAusbildungsgang("Master", "Master", ausbildungsstaetten.get(1), bildungskategorien.get(7)),
+            createAusbildungsgang("Lehre EBA", "Apprentissage AFP", ausbildungsstaetten.get(2), bildungskategorien.get(3)),
+            createAusbildungsgang("Vorlehre", "Préapprentissage", ausbildungsstaetten.get(2), bildungskategorien.get(3)),
+            createAusbildungsgang("Maturität", "Maturité", ausbildungsstaetten.get(3), bildungskategorien.get(0)),
+            createAusbildungsgang("Lehre EFZ", "Apprentissage CFC", ausbildungsstaetten.get(2), bildungskategorien.get(3)),
+            createAusbildungsgang("Berufsvorbereitendes Schuljahr", "Année scolaire de préparation professionnelle", ausbildungsstaetten.get(4), bildungskategorien.get(2))
         );
     }
 
