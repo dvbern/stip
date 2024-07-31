@@ -15,6 +15,8 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,6 +32,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_DOKUMENT_ID,
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_STATUS,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_KOMMENTAR,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_BENUTZER,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DATUM
@@ -39,6 +44,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchDokumentKommentarDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_DOKUMENT_ID = "gesuchDokumentId";
   private UUID gesuchDokumentId;
+
+  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
+  private DokumentTypDtoSpec dokumentTyp;
+
+  public static final String JSON_PROPERTY_DOKUMENT_STATUS = "dokumentStatus";
+  private DokumentstatusDtoSpec dokumentStatus;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
@@ -78,6 +92,84 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
+  public GesuchDokumentKommentarDtoSpec gesuchId(UUID gesuchId) {
+    
+    this.gesuchId = gesuchId;
+    return this;
+  }
+
+   /**
+   * Get gesuchId
+   * @return gesuchId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchId() {
+    return gesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
+  }
+
+
+  public GesuchDokumentKommentarDtoSpec dokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+    
+    this.dokumentTyp = dokumentTyp;
+    return this;
+  }
+
+   /**
+   * Get dokumentTyp
+   * @return dokumentTyp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public DokumentTypDtoSpec getDokumentTyp() {
+    return dokumentTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setDokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+    this.dokumentTyp = dokumentTyp;
+  }
+
+
+  public GesuchDokumentKommentarDtoSpec dokumentStatus(DokumentstatusDtoSpec dokumentStatus) {
+    
+    this.dokumentStatus = dokumentStatus;
+    return this;
+  }
+
+   /**
+   * Get dokumentStatus
+   * @return dokumentStatus
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DOKUMENT_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DokumentstatusDtoSpec getDokumentStatus() {
+    return dokumentStatus;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DOKUMENT_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDokumentStatus(DokumentstatusDtoSpec dokumentStatus) {
+    this.dokumentStatus = dokumentStatus;
+  }
+
+
   public GesuchDokumentKommentarDtoSpec kommentar(String kommentar) {
     
     this.kommentar = kommentar;
@@ -88,9 +180,9 @@ public class GesuchDokumentKommentarDtoSpec {
    * Get kommentar
    * @return kommentar
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getKommentar() {
     return kommentar;
@@ -98,7 +190,7 @@ public class GesuchDokumentKommentarDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -165,6 +257,9 @@ public class GesuchDokumentKommentarDtoSpec {
     }
     GesuchDokumentKommentarDtoSpec gesuchDokumentKommentar = (GesuchDokumentKommentarDtoSpec) o;
     return Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
+        Objects.equals(this.gesuchId, gesuchDokumentKommentar.gesuchId) &&
+        Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
+        Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.benutzer, gesuchDokumentKommentar.benutzer) &&
         Objects.equals(this.datum, gesuchDokumentKommentar.datum);
@@ -172,7 +267,7 @@ public class GesuchDokumentKommentarDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchDokumentId, kommentar, benutzer, datum);
+    return Objects.hash(gesuchDokumentId, gesuchId, dokumentTyp, dokumentStatus, kommentar, benutzer, datum);
   }
 
   @Override
@@ -180,6 +275,9 @@ public class GesuchDokumentKommentarDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDtoSpec {\n");
     sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
+    sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
     sb.append("    datum: ").append(toIndentedString(datum)).append("\n");
