@@ -158,6 +158,25 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createAenderungsantrag
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuche filtered by gs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAenderungsantrag
   '/dokument/{gesuchId}/{dokumentTyp}':
     get:
       tags:

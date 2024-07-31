@@ -2,13 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, of, pipe, switchMap, tap } from 'rxjs';
+import { catchError, map, of, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
-import {
-  GesuchAenderungService,
-  GesuchAenderungsAntrag,
-} from '@dv/shared/model/gesuch';
+import { AenderungsantragCreate, GesuchService } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -29,7 +26,7 @@ export class GesuchAenderungStore extends signalStore(
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
-  private gesuchAenderungService = inject(GesuchAenderungService);
+  private gesuchService = inject(GesuchService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   resetCachedGesuchAenderung() {
@@ -44,18 +41,21 @@ export class GesuchAenderungStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchId }) =>
-        this.gesuchAenderungService
-          .getGesuchsAntraege$({ gesuchId })
-          .pipe(
-            handleApiResponse((cachedGesuchAenderung) =>
-              patchState(this, { cachedGesuchAenderung }),
-            ),
-          ),
+        this.gesuchService.getAenderungsantrag$({ gesuchId }).pipe(
+          map((gesuchs) => gesuchs),
+          catchError((error) => {
+            console.error(error);
+            return of({ id: '123' }); // TODO KSTIP-1111: Actually handle error
+          }),
+        ),
       ),
     ),
   );
 
-  createGesuchAenderung$ = rxMethod<GesuchAenderungsAntrag>(
+  createGesuchAenderung$ = rxMethod<{
+    gesuchId: string;
+    aenderungsantrag: AenderungsantragCreate;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -63,12 +63,15 @@ export class GesuchAenderungStore extends signalStore(
         }));
       }),
       switchMap((aenderung) =>
-        this.gesuchAenderungService
-          .createGesuchsAntrag$({ gesuchAenderungsAntrag: aenderung })
+        this.gesuchService
+          .createAenderungsantrag$({
+            gesuchId: aenderung.gesuchId,
+            aenderungsantragCreate: aenderung.aenderungsantrag,
+          })
           .pipe(
             catchError((err) => {
               console.error(err);
-              return of({ id: '123' }); // TODO: Remove once backend is implemented
+              return of({ id: '123' }); // TODO-KSTIP-1111: Remove once backend is implemented
             }),
             handleApiResponse(
               (gesuchAenderung) => {

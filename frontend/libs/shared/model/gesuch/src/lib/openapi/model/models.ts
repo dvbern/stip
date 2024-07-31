@@ -1,4 +1,5 @@
 export * from './adresse';
+export * from './aenderungsantragCreate';
 export * from './anrede';
 export * from './ausbildung';
 export * from './ausbildungBase';
@@ -41,7 +42,6 @@ export * from './familiensituationUpdate';
 export * from './geschwister';
 export * from './geschwisterUpdate';
 export * from './gesuch';
-export * from './gesuchAenderungsAntrag';
 export * from './gesuchCreate';
 export * from './gesuchDokument';
 export * from './gesuchDokumentAblehnenRequest';

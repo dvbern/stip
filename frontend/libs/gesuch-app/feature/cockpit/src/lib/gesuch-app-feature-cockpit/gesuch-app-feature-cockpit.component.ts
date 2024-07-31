@@ -128,7 +128,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         if (result) {
           this.gesuchAenderungStore.createGesuchAenderung$({
             gesuchId,
-            ...result,
+            aenderungsantrag: result,
           });
         }
       });

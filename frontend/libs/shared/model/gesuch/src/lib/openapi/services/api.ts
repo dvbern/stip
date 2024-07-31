@@ -14,8 +14,6 @@ export * from './fall.service';
 // import { FallService } from './fall.service';
 export * from './gesuch.service';
 // import { GesuchService } from './gesuch.service';
-export * from './gesuchAenderung.service';
-// import { GesuchAenderungService } from './gesuchAenderung.service';
 export * from './gesuchsjahr.service';
 // import { GesuchsjahrService } from './gesuchsjahr.service';
 export * from './gesuchsperiode.service';
@@ -29,4 +27,4 @@ export * from './stammdaten.service';
 export * from './tenant.service';
 // import { TenantService } from './tenant.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
-// export const APIS = [AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungsartService, ConfigurationService, DokumentService, FallService, GesuchService, GesuchAenderungService, GesuchsjahrService, GesuchsperiodeService, MailService, PlzService, StammdatenService, TenantService];
+// export const APIS = [AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungsartService, ConfigurationService, DokumentService, FallService, GesuchService, GesuchsjahrService, GesuchsperiodeService, MailService, PlzService, StammdatenService, TenantService];
