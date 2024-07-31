@@ -6,6 +6,7 @@
   <form
     [formGroup]="form"
     [dvSharedUiFormReadonly]="viewSig().readonly"
+    (gotReenabledSig)="gotReenabled$.next({})"
     data-testid="form-education-form"
     novalidate
     class="mt-4"
@@ -242,7 +243,7 @@
         </mat-label>
 
         <mat-select formControlName="pensum" data-testid="form-education-pensum">
-          <mat-option [value]="null" selected>
+          <mat-option [value]="null" disabled selected>
             {{ 'shared.form.select.empty' | translate }}
           </mat-option>
           @for (l of ausbildungspensumValues; track trackByIndex($index)) {

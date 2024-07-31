@@ -11,11 +11,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { DocumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
+import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
 
 import { SharedPatternDocumentUploadListComponent } from '../document-upload-list/document-upload-list.component';
-import { DocumentOptions } from '../upload.model';
 import { UploadStore } from '../upload.store';
 
 @Component({
@@ -27,6 +29,7 @@ import { UploadStore } from '../upload.store';
     MatFormFieldModule,
     SharedUiDropFileComponent,
     SharedPatternDocumentUploadListComponent,
+    SharedUiIfGesuchstellerDirective,
   ],
   templateUrl: './document-upload-dialog.component.html',
   styleUrls: ['./document-upload-dialog.component.scss'],
@@ -39,12 +42,13 @@ export class SharedPatternDocumentUploadDialogComponent {
   translate = inject(TranslateService);
   dialogRef = inject(DialogRef);
   documentMerger = inject(SharedUtilDocumentMergerService);
+  config = inject(SharedModelCompileTimeConfig);
 
   uploadViewSig = computed(() => ({
     gesuchId: this.data.options.gesuchId,
     type: this.data.options.dokumentTyp,
     readonly: this.data.options.readonly,
-    // loading: this.data.store.isLoading(),
+    isSachbearbeitungApp: this.config.isSachbearbeitungApp,
   }));
 
   showUplaodSig = computed(() => {

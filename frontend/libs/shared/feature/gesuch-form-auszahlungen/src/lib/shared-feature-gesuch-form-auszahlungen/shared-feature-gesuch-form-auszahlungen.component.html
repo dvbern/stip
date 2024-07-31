@@ -17,6 +17,7 @@
     <form
       [formGroup]="form"
       [dvSharedUiFormReadonly]="viewSig().readonly"
+      (gotReenabledSig)="gotReenabled$.next({})"
       data-testid="form-auszahlung-form"
       novalidate
       class="mt-4"

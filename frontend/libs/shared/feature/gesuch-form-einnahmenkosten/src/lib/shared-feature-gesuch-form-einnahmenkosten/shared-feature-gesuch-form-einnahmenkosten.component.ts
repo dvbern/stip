@@ -23,6 +23,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
@@ -138,8 +139,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
+  gotReenabled$ = new Subject<object>();
   languageSig = this.store.selectSignal(selectLanguage);
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private sekundarstufeZweiChangedSig = toSignal(
     this.form.controls.ausbildungskostenSekundarstufeZwei.valueChanges,
   );
@@ -392,6 +395,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
+        this.gotReenabledSig();
         const {
           hasData,
           hatElternteilVerloren,
@@ -510,16 +514,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           });
         } else {
           this.form.reset();
-        }
-      },
-      { allowSignalWrites: true },
-    );
-
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="stip.kibon.ch"
-                 xmlns:kie="http://www.drools.org/kie/dmn/1.2"
-                 xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/"
-                 xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
-                 id="_29C4516C-614A-48F3-B851-A25E8853C853" name="Familienbudget" expressionLanguage="FEEL"
-                 typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="stip.kibon.ch">
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="stip.kibon.ch" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_29C4516C-614A-48F3-B851-A25E8853C853" name="Familienbudget" expressionLanguage="FEEL" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="stip.kibon.ch">
   <dmn:description>Berechnet Familienbudget für einen Elternetil</dmn:description>
   <dmn:extensionElements/>
   <dmn:itemDefinition id="_B0C80C2B-05F7-404C-A74E-61B514AD5835" name="ElternteilV1" isCollection="false">
@@ -20,8 +15,7 @@
     <dmn:itemComponent id="_425CF511-A909-4494-AE3D-9C112239988E" name="selbststaendigErwerbend" isCollection="false">
       <dmn:typeRef>boolean</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_CF15653B-718C-41F7-A419-F73B0AF81BDA" name="medizinischeGrundversorgung"
-                       isCollection="false">
+    <dmn:itemComponent id="_CF15653B-718C-41F7-A419-F73B0AF81BDA" name="medizinischeGrundversorgung" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
     <dmn:itemComponent id="_67407AC0-6B6B-467B-8097-B98C915DDCBF" name="integrationszulage" isCollection="false">
@@ -63,8 +57,7 @@
     <dmn:itemComponent id="_2DC65599-66EC-46A3-BBB8-E30649E9AC8D" name="steuerbaresVermoegen" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_55FBDD4F-E817-4CDF-8075-4B99769A67D1" name="anzahlGeschwisterInAusbildung"
-                       isCollection="false">
+    <dmn:itemComponent id="_55FBDD4F-E817-4CDF-8075-4B99769A67D1" name="anzahlGeschwisterInAusbildung" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
     <dmn:itemComponent id="_D5382E37-D093-4D7A-B34F-279DFDB0E6E5" name="anzahlPersonenImHaushalt" isCollection="false">
@@ -94,14 +87,19 @@
     </dmn:itemComponent>
   </dmn:itemDefinition>
   <dmn:itemDefinition id="_46D35BC3-2FB6-4ECC-9EBB-E9A042B8E8B2" name="FamilienbudgetReturnvalue" isCollection="false">
+    <dmn:itemComponent id="_79E50C45-B368-4DBD-AFC1-1E1748A6A9AE" name="AusgabenFamilienbudget" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_B43AD783-7637-4408-B57D-47C54173BDC4" name="EinnahmenFamilienbudget" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
     <dmn:itemComponent id="_52D191DD-D2FE-4812-952F-11FA9520C994" name="familienbudgetBerechnet" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
     <dmn:itemComponent id="_2B7BF0A9-C176-479A-8FFC-2C5C364C2FB4" name="anzahlPersonenImHaushalt" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_1FE3628D-4349-4D06-93AB-750A5FCB5BAA" name="anzahlGeschwisterInAusbildung"
-                       isCollection="false">
+    <dmn:itemComponent id="_1FE3628D-4349-4D06-93AB-750A5FCB5BAA" name="anzahlGeschwisterInAusbildung" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
   </dmn:itemDefinition>
@@ -118,8 +116,7 @@
   </dmn:decisionService>
   <dmn:decision id="_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" name="familienbudgetBerechnet">
     <dmn:extensionElements/>
-    <dmn:variable id="_D4532A69-481B-4CCF-A68D-F07420B2E5C7" name="familienbudgetBerechnet"
-                  typeRef="FamilienbudgetReturnvalue"/>
+    <dmn:variable id="_D4532A69-481B-4CCF-A68D-F07420B2E5C7" name="familienbudgetBerechnet" typeRef="FamilienbudgetReturnvalue"/>
     <dmn:informationRequirement id="_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4">
       <dmn:requiredDecision href="#_3AF45009-087F-499D-813E-B76AB0E89FCE"/>
     </dmn:informationRequirement>
@@ -132,7 +129,7 @@
   </dmn:decision>
   <dmn:decision id="_3AF45009-087F-499D-813E-B76AB0E89FCE" name="EinnahmenFamilienbudget">
     <dmn:extensionElements/>
-    <dmn:variable id="_115FA041-7057-4F74-BBA6-7EADDEFB82BC" name="EinnahmenFamilienbudget" typeRef="number"/>
+    <dmn:variable id="_115FA041-7057-4F74-BBA6-7EADDEFB82BC" name="EinnahmenFamilienbudget" typeRef="FamilienbudgetReturnvalue"/>
     <dmn:informationRequirement id="_E177DC15-40CA-45BA-8D37-A6F1BF2F0986">
       <dmn:requiredInput href="#_19E31FE9-3E67-4890-BE56-5704E55707A9"/>
     </dmn:informationRequirement>
@@ -166,8 +163,7 @@
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:variable id="_3D5C1476-4ED2-40B5-A3C6-0AE2CCF13700" name="Säule_3a" typeRef="number"/>
-        <dmn:decisionTable id="_DCE09626-8432-4AF8-AAAD-28311B5DEA1B" hitPolicy="FIRST"
-                           preferredOrientation="Rule-as-Row">
+        <dmn:decisionTable id="_DCE09626-8432-4AF8-AAAD-28311B5DEA1B" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
           <dmn:input id="_74CB7112-E2A9-473B-BFC8-7EE763319BEA">
             <dmn:inputExpression id="_6764BA64-128B-429E-9848-2C6D6E6AFBE9">
               <dmn:text>InputFamilienbudget.elternteil.selbststaendigErwerbend</dmn:text>
@@ -212,8 +208,7 @@
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:variable id="_FCE54F96-2875-44A3-AFE9-00B97024BAAC" name="Säule_2" typeRef="number"/>
-        <dmn:decisionTable id="_9A3A9689-1214-46D5-A743-D2DDFF41FB89" hitPolicy="FIRST"
-                           preferredOrientation="Rule-as-Row">
+        <dmn:decisionTable id="_9A3A9689-1214-46D5-A743-D2DDFF41FB89" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
           <dmn:input id="_AD086746-C6CC-41FA-B5DA-E267E3307FF1">
             <dmn:inputExpression id="_6764BA64-128B-429E-9848-2C6D6E6AFBE9YX">
               <dmn:text>InputFamilienbudget.elternteil.selbststaendigErwerbend</dmn:text>
@@ -258,8 +253,7 @@
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:variable id="_E90D9313-DA51-4192-A566-70DC2EA9A9C6" name="Vermögen" typeRef="number"/>
-        <dmn:decisionTable id="_DE0C354A-ED3D-4579-BE83-9939B8B61FAE" hitPolicy="FIRST"
-                           preferredOrientation="Rule-as-Row">
+        <dmn:decisionTable id="_DE0C354A-ED3D-4579-BE83-9939B8B61FAE" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
           <dmn:input id="_ABA3671A-39B6-4EC5-B625-2C753D719117">
             <dmn:inputExpression id="_6764BA64-128B-429E-9848-2C6D6E6AFBE912" typeRef="boolean">
               <dmn:text>InputFamilienbudget.elternteil.selbststaendigErwerbend</dmn:text>
@@ -313,7 +307,7 @@
   </dmn:decision>
   <dmn:decision id="_00A869A3-C329-408B-91FF-4C40A7BE7D25" name="AusgabenFamilienbudget">
     <dmn:extensionElements/>
-    <dmn:variable id="_5ADCBDD9-EDB8-4FCE-A40A-0DD47621C3F2" name="AusgabenFamilienbudget" typeRef="number"/>
+    <dmn:variable id="_5ADCBDD9-EDB8-4FCE-A40A-0DD47621C3F2" name="AusgabenFamilienbudget" typeRef="FamilienbudgetReturnvalue"/>
     <dmn:informationRequirement id="_EFE45371-68A1-4871-B5F1-B5CDE68F4579">
       <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
     </dmn:informationRequirement>
@@ -393,8 +387,7 @@
   </dmn:decision>
   <dmn:inputData id="_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" name="InputFamilienbudget">
     <dmn:extensionElements/>
-    <dmn:variable id="_BCC1662F-D4A2-4F06-A190-F12A7F275196" name="InputFamilienbudget"
-                  typeRef="InputFamilienbudgetV1"/>
+    <dmn:variable id="_BCC1662F-D4A2-4F06-A190-F12A7F275196" name="InputFamilienbudget" typeRef="InputFamilienbudgetV1"/>
   </dmn:inputData>
   <dmn:inputData id="_19E31FE9-3E67-4890-BE56-5704E55707A9" name="Stammdaten">
     <dmn:extensionElements/>
@@ -402,7 +395,7 @@
   </dmn:inputData>
   <dmn:decision id="_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" name="anzahlPersonenImHaushalt">
     <dmn:extensionElements/>
-    <dmn:variable id="_6396072D-2789-4959-89CA-89F241E05231" name="anzahlPersonenImHaushalt" typeRef="number"/>
+    <dmn:variable id="_6396072D-2789-4959-89CA-89F241E05231" name="anzahlPersonenImHaushalt" typeRef="FamilienbudgetReturnvalue"/>
     <dmn:informationRequirement id="_621599AC-82A1-4517-83C2-BE41D1674AA4">
       <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
     </dmn:informationRequirement>
@@ -412,7 +405,7 @@
   </dmn:decision>
   <dmn:decision id="_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" name="anzahlGeschwisterInAusbildung">
     <dmn:extensionElements/>
-    <dmn:variable id="_F37F115E-9ADE-4542-A7D6-73187A020621" name="anzahlGeschwisterInAusbildung"/>
+    <dmn:variable id="_F37F115E-9ADE-4542-A7D6-73187A020621" name="anzahlGeschwisterInAusbildung" typeRef="FamilienbudgetReturnvalue"/>
     <dmn:informationRequirement id="_13DE5E97-8565-410C-AC62-4A43F37DCA8F">
       <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
     </dmn:informationRequirement>
@@ -511,52 +504,47 @@
           </kie:ComponentWidths>
         </kie:ComponentsWidthsExtension>
       </di:extension>
-      <dmndi:DMNShape id="dmnshape-drg-_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3"
-                      dmnElementRef="_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3" dmnElementRef="_FDD7AAAE-2A7A-4CDF-BF0A-B7E86EE688E3" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="878.5" y="40" width="631" height="792"/>
+        <dc:Bounds x="965.5" y="64" width="631" height="792"/>
         <dmndi:DMNLabel/>
         <dmndi:DMNDecisionServiceDividerLine>
-          <di:waypoint x="878.5" y="268"/>
-          <di:waypoint x="1509.5" y="268"/>
+          <di:waypoint x="965.5" y="292"/>
+          <di:waypoint x="1596.5" y="292"/>
         </dmndi:DMNDecisionServiceDividerLine>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_B8D2CC7A-CE18-4D57-8141-DF53190E6D78"
-                      dmnElementRef="_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" dmnElementRef="_B8D2CC7A-CE18-4D57-8141-DF53190E6D78" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="965" y="133" width="205" height="71"/>
+        <dc:Bounds x="1017" y="147" width="205" height="71"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_3AF45009-087F-499D-813E-B76AB0E89FCE"
-                      dmnElementRef="_3AF45009-087F-499D-813E-B76AB0E89FCE" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_3AF45009-087F-499D-813E-B76AB0E89FCE" dmnElementRef="_3AF45009-087F-499D-813E-B76AB0E89FCE" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="1291" y="547" width="142" height="50"/>
+        <dc:Bounds x="1378" y="571" width="142" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_00A869A3-C329-408B-91FF-4C40A7BE7D25"
-                      dmnElementRef="_00A869A3-C329-408B-91FF-4C40A7BE7D25" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_00A869A3-C329-408B-91FF-4C40A7BE7D25" dmnElementRef="_00A869A3-C329-408B-91FF-4C40A7BE7D25" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="972" y="476" width="191" height="50"/>
+        <dc:Bounds x="1059" y="500" width="191" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"
-                      dmnElementRef="_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" dmnElementRef="_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
@@ -565,8 +553,7 @@
         <dc:Bounds x="1291.2990654205607" y="919" width="162" height="113"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_19E31FE9-3E67-4890-BE56-5704E55707A9"
-                      dmnElementRef="_19E31FE9-3E67-4890-BE56-5704E55707A9" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_19E31FE9-3E67-4890-BE56-5704E55707A9" dmnElementRef="_19E31FE9-3E67-4890-BE56-5704E55707A9" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
@@ -575,65 +562,55 @@
         <dc:Bounds x="779.2990654205607" y="974" width="100" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A"
-                      dmnElementRef="_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" dmnElementRef="_3CE92C5A-89DD-4F9A-A4B8-C54AB65E5E7A" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="1194" y="96" width="100" height="50"/>
+        <dc:Bounds x="1460" y="90" width="100" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC"
-                      dmnElementRef="_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" dmnElementRef="_A67FD583-04E9-4DA3-92ED-9A8C9DC791AC" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="1272" y="157" width="218" height="80"/>
+        <dc:Bounds x="1327" y="180" width="218" height="80"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNEdge id="dmnedge-drg-_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4-AUTO-TARGET"
-                     dmnElementRef="_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4">
-        <di:waypoint x="1362" y="572"/>
-        <di:waypoint x="1067.5" y="204"/>
+      <dmndi:DMNEdge id="dmnedge-drg-_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4-AUTO-TARGET" dmnElementRef="_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4">
+        <di:waypoint x="1449" y="596"/>
+        <di:waypoint x="1119.5" y="218"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_79C3E7EC-4A79-4944-B98C-5917EEABF614-AUTO-TARGET"
-                     dmnElementRef="_79C3E7EC-4A79-4944-B98C-5917EEABF614">
-        <di:waypoint x="1067.5" y="501"/>
-        <di:waypoint x="1067.5" y="204"/>
+      <dmndi:DMNEdge id="dmnedge-drg-_79C3E7EC-4A79-4944-B98C-5917EEABF614-AUTO-TARGET" dmnElementRef="_79C3E7EC-4A79-4944-B98C-5917EEABF614">
+        <di:waypoint x="1154.5" y="525"/>
+        <di:waypoint x="1119.5" y="218"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_E177DC15-40CA-45BA-8D37-A6F1BF2F0986-AUTO-TARGET"
-                     dmnElementRef="_E177DC15-40CA-45BA-8D37-A6F1BF2F0986">
+      <dmndi:DMNEdge id="dmnedge-drg-_E177DC15-40CA-45BA-8D37-A6F1BF2F0986-AUTO-TARGET" dmnElementRef="_E177DC15-40CA-45BA-8D37-A6F1BF2F0986">
         <di:waypoint x="829.2990654205607" y="999"/>
-        <di:waypoint x="1362" y="597"/>
+        <di:waypoint x="1449" y="621"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_EA769C99-6AE1-432C-8CC3-F33CB27D41AF-AUTO-TARGET"
-                     dmnElementRef="_EA769C99-6AE1-432C-8CC3-F33CB27D41AF">
+      <dmndi:DMNEdge id="dmnedge-drg-_EA769C99-6AE1-432C-8CC3-F33CB27D41AF-AUTO-TARGET" dmnElementRef="_EA769C99-6AE1-432C-8CC3-F33CB27D41AF">
         <di:waypoint x="1372.2990654205607" y="975.5"/>
-        <di:waypoint x="1362" y="597"/>
+        <di:waypoint x="1449" y="621"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_EFE45371-68A1-4871-B5F1-B5CDE68F4579-AUTO-TARGET"
-                     dmnElementRef="_EFE45371-68A1-4871-B5F1-B5CDE68F4579">
+      <dmndi:DMNEdge id="dmnedge-drg-_EFE45371-68A1-4871-B5F1-B5CDE68F4579-AUTO-TARGET" dmnElementRef="_EFE45371-68A1-4871-B5F1-B5CDE68F4579">
         <di:waypoint x="1372.2990654205607" y="975.5"/>
-        <di:waypoint x="1067.5" y="526"/>
+        <di:waypoint x="1154.5" y="550"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_D5208E11-A032-4854-8D1C-8097A8E22FFA-AUTO-TARGET"
-                     dmnElementRef="_D5208E11-A032-4854-8D1C-8097A8E22FFA">
+      <dmndi:DMNEdge id="dmnedge-drg-_D5208E11-A032-4854-8D1C-8097A8E22FFA-AUTO-TARGET" dmnElementRef="_D5208E11-A032-4854-8D1C-8097A8E22FFA">
         <di:waypoint x="829.2990654205607" y="999"/>
-        <di:waypoint x="1067.5" y="526"/>
+        <di:waypoint x="1154.5" y="550"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_621599AC-82A1-4517-83C2-BE41D1674AA4-AUTO-TARGET"
-                     dmnElementRef="_621599AC-82A1-4517-83C2-BE41D1674AA4">
+      <dmndi:DMNEdge id="dmnedge-drg-_621599AC-82A1-4517-83C2-BE41D1674AA4-AUTO-TARGET" dmnElementRef="_621599AC-82A1-4517-83C2-BE41D1674AA4">
         <di:waypoint x="1372.2990654205607" y="975.5"/>
-        <di:waypoint x="1244" y="146"/>
+        <di:waypoint x="1510" y="140"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_13DE5E97-8565-410C-AC62-4A43F37DCA8F-AUTO-TARGET"
-                     dmnElementRef="_13DE5E97-8565-410C-AC62-4A43F37DCA8F">
+      <dmndi:DMNEdge id="dmnedge-drg-_13DE5E97-8565-410C-AC62-4A43F37DCA8F-AUTO-TARGET" dmnElementRef="_13DE5E97-8565-410C-AC62-4A43F37DCA8F">
         <di:waypoint x="1372.2990654205607" y="975.5"/>
-        <di:waypoint x="1381" y="237"/>
+        <di:waypoint x="1436" y="260"/>
       </dmndi:DMNEdge>
     </dmndi:DMNDiagram>
   </dmndi:DMNDI>

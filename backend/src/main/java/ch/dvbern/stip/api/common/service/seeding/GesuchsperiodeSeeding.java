@@ -109,7 +109,7 @@ GesuchsperiodeSeeding extends Seeder{
             .setFreibetragVermoegen(30000)
             .setVermogenSatzAngerechnet(15)
             .setIntegrationszulage(2400)
-            .setLimiteEkFreibetragIntegrationszulag(13200)
+            .setLimiteEkFreibetragIntegrationszulage(13200)
             .setStipLimiteMinimalstipendium(500)
             .setPerson1(11724)
             .setPersonen2(17940)

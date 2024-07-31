@@ -48,8 +48,13 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
     if (checker && this.matFormField) {
       const formField = this.matFormField;
       effect(() => {
+        const previous = formField.subscriptSizing;
         if (checker.isReadonly()) {
           formField.subscriptSizing = 'dynamic';
+        } else {
+          formField.subscriptSizing = 'fixed';
+        }
+        if (previous !== formField.subscriptSizing) {
           this.changeDetector.markForCheck();
         }
       });

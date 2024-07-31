@@ -32,6 +32,12 @@ public class GesuchResourceImpl implements GesuchResource {
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
 
+    @Override
+    public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
+        GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
+        return Response.ok(gesuchDto).build();
+    }
+
     @RolesAllowed(GESUCH_CREATE)
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
@@ -57,6 +63,13 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response gesuchEinreichenValidieren(UUID gesuchId) {
         return Response.ok(gesuchService.validateGesuchEinreichen(gesuchId)).build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
+        gesuchService.gesuchFehlendeDokumente(gesuchId);
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_READ)

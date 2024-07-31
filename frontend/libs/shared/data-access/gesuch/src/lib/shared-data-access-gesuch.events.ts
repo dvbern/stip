@@ -3,7 +3,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   GesuchCreate,
-  GetGesucheSBQueryTyp,
+  GetGesucheSBQueryType,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
@@ -14,10 +14,10 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     init: emptyProps(),
     loadGesuch: emptyProps(),
     loadAll: props<{
-      query: GetGesucheSBQueryTyp;
+      query: GetGesucheSBQueryType;
     }>(),
     loadAllDebounced: props<{
-      query: GetGesucheSBQueryTyp;
+      query: GetGesucheSBQueryType;
     }>(),
     newTriggered: props<{
       create: GesuchCreate;
@@ -45,5 +45,6 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchValidationFailure: props<{ error: SharedModelError }>(),
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
+    setGesuchToBearbeitung: emptyProps(),
   },
 });

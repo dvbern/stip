@@ -116,6 +116,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject();
   maskitoNumber = maskitoNumber;
 
@@ -148,6 +149,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     erhalteneAlimentebeitraege: [<string | null>null, [Validators.required]],
   });
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   private wohnsitzChangedSig = toSignal(
@@ -181,6 +183,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(
       () => {
+        this.gotReenabledSig();
         updateWohnsitzControlsState(
           this.formUtils,
           this.form.controls,
@@ -192,21 +195,12 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
     effect(
       () => {
+        this.gotReenabledSig();
         this.formUtils.setDisabledState(
           this.form.controls.erhalteneAlimentebeitraege,
           this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
           !this.viewSig().readonly,
         );
-      },
-      { allowSignalWrites: true },
-    );
-
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
-        }
       },
       { allowSignalWrites: true },
     );

@@ -108,6 +108,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   private store = inject(Store);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
 
   form = this.formBuilder.group({
@@ -143,6 +144,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
   });
 
+  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   ausbildungssituationSig = toSignal(
@@ -176,6 +178,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     );
     effect(
       () => {
+        this.gotReenabledSig();
         const wohnsitzChanged = this.wohnsitzChangedSig();
         if (wohnsitzChanged !== Wohnsitz.MUTTER_VATER) {
           this.formUtils.setDisabledState(
@@ -188,15 +191,6 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
             true,
             true,
           );
-        }
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        const { readonly } = this.viewSig();
-        if (readonly) {
-          this.form.disable({ emitEvent: false });
         }
       },
       { allowSignalWrites: true },

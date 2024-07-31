@@ -225,11 +225,17 @@ public class GesuchService {
     @Transactional
     public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
-        return switch(getGesucheSBQueryType){
+        return switch (getGesucheSBQueryType) {
             case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
             case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
             case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
-            case ALLE -> map(gesuchRepository.findAlle());
+            case ALLE -> map(gesuchRepository.findAlle()
+                .filter(gesuch -> gesuch.getNewestGesuchTranche()
+                    .orElseThrow(NotFoundException::new)
+                    .getGesuchFormular()
+                    .getPersonInAusbildung() != null
+                )
+            );
         };
     }
 
@@ -266,6 +272,19 @@ public class GesuchService {
         // No need to validate the entire Gesuch here, as it's done in the state machine
         validateAdditionalEinreichenCriteria(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+        return mapWithTrancheToWorkWith(gesuch);
+    }
+
+    @Transactional
+    public void gesuchFehlendeDokumente(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {

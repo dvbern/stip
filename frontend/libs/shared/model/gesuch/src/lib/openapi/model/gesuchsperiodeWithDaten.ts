@@ -51,7 +51,7 @@ export interface GesuchsperiodeWithDaten {
     elternbeteiligungssatz: number;
     vermogenSatzAngerechnet: number;
     integrationszulage: number;
-    limite_EkFreibetrag_Integrationszulag: number;
+    limite_EkFreibetrag_Integrationszulage: number;
     stipLimite_Minimalstipendium: number;
     person_1: number;
     personen_2: number;

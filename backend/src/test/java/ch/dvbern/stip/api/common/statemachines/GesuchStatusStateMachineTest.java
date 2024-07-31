@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
-import ch.dvbern.stip.api.common.statemachines.handlers.StateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusChangeEventTrigger;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;

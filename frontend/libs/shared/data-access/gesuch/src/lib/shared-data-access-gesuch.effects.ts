@@ -100,7 +100,7 @@ export const loadAllGesuchs = createEffect(
       filter(isDefined),
       storeUtil.waitForBenutzerData$(),
       switchMap(({ query }) =>
-        gesuchService.getGesucheSb$({ getGesucheSBQueryTyp: query }).pipe(
+        gesuchService.getGesucheSb$({ getGesucheSBQueryType: query }).pipe(
           map((gesuchs) =>
             SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
               gesuchs,
@@ -393,6 +393,39 @@ export const refreshGesuchFormStep = createEffect(
   { functional: true, dispatch: false },
 );
 
+export const setGesuchToBearbeitung = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchToBearbeitung),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([, id]) => {
+        if (!id) {
+          throw new Error(
+            'Make sure that the route is correct and contains the gesuch :id',
+          );
+        }
+        return gesuchService
+          .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
+          .pipe(
+            map((gesuch) =>
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -406,6 +439,7 @@ export const sharedDataAccessGesuchEffects = {
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
+  setGesuchToBearbeitung,
 };
 
 const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [
