@@ -1,0 +1,73 @@
+package ch.dvbern.stip.api.dokument.resource;
+
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.generated.api.DokumentResource;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.List;
+import java.util.UUID;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static wiremock.org.hamcrest.MatcherAssert.assertThat;
+import static wiremock.org.hamcrest.Matchers.is;
+
+@QuarkusTest
+class DokumentResourceImplTest {
+    @Inject
+    DokumentResource dokumentResource;
+    @InjectMock
+    GesuchDokumentKommentarRepository dokumentKommentarRepository;
+
+
+    @BeforeEach
+    void setUp() {
+        GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
+        when(dokumentKommentarRepository.findAllByGesuchDokumentId(any())).thenReturn(List.of(kommentar));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    // Gesuchsteller should be able to read all comments of a gesuch document
+    void resourceShouldReturnCommentsOfADokument(){
+        assertThat(dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID()).getStatus(), is(HttpStatus.SC_OK));
+    }
+
+    //todo: add test cases: SB, GS, Validation, GET
+    //todo: mapper
+
+    @InjectMock
+    GesuchDokumentService gesuchDokumentService;
+
+    @TestAsGesuchsteller
+    @Test
+    void gsShouldNotBeAbleToDenyDocumentTest(){
+        doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(),any());
+        assertThrows(io.quarkus.security.ForbiddenException.class, () -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(),null));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    void gsShouldNotBeAbleToAcceptDocumentTest(){
+        doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
+        assertThrows(io.quarkus.security.ForbiddenException.class, () -> dokumentResource.gesuchDokumentAkzeptieren(UUID.randomUUID()));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    // Gesuchsteller should not be allowed to create a commend
+    void GesuchStellerShouldNotBeAbleToPostComment(){
+        //todo: test it in dokumentresource
+    }
+
+    @Test
+    void createGesuchKommentarValidationTest(){}
+}
