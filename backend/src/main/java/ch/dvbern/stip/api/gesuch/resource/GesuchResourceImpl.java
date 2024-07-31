@@ -144,4 +144,11 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchDto = gesuchService.createAenderungsantrag(gesuchId, aenderungsantragCreateDto);
         return Response.ok(gesuchDto).build();
     }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getAenderungsantrag(UUID gesuchId) {
+        final var gesuchDto = gesuchService.getAenderungsantrag(gesuchId);
+        return Response.ok(gesuchDto).build();
+    }
 }

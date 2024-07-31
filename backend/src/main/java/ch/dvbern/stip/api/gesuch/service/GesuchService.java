@@ -49,6 +49,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
@@ -107,7 +108,9 @@ public class GesuchService {
     }
 
     @Transactional
-    public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto, final GesuchTranche trancheToUpdate) {
+    public void setAndValidateEinnahmenkostenUpdateLegality(
+        final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
+        final GesuchTranche trancheToUpdate) {
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -123,7 +126,9 @@ public class GesuchService {
         Integer veranlagungsCodeToSet = 0;
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
 
-        if (!CollectionUtils.containsAny(benutzerRollenIdentifiers,  Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
+        if (!CollectionUtils.containsAny(
+            benutzerRollenIdentifiers,
+            Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
             if (einnahmenKosten != null) {
                 steuerjahrToSet = Objects.requireNonNullElse(
                     einnahmenKosten.getSteuerjahr(),
@@ -297,7 +302,27 @@ public class GesuchService {
         final var trancheToCopy = getCurrentGesuchTranche(gesuch);
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
+
+        final var violations = validator.validate(gesuch);
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+
+        // Manually persist so that when mapping happens the IDs on the new objects are set
+        gesuchRepository.persistAndFlush(gesuch);
         return mapWithTranche(gesuch, newTranche);
+    }
+
+    public GesuchDto getAenderungsantrag(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return mapWithTranche(
+            gesuch,
+            gesuch.getGesuchTranchen()
+                .stream()
+                .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+                .findFirst()
+                .orElseThrow(NotFoundException::new)
+        );
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
@@ -334,13 +359,15 @@ public class GesuchService {
     public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular, UUID gesuchId) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
         validationGroups.add(DocumentsRequiredValidationGroup.class);
-        // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not already present
-        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already validating LebenslaufItemPage
+        // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not
+        // already present
+        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already
+        // validating LebenslaufItemPage
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
+                validationGroups.contains(AusbildungPageValidation.class) &&
+                !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }

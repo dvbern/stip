@@ -64,6 +64,11 @@ public interface GesuchResource {
     Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/{gesuchId}/aenderungsantrag")
+    @Produces({ "application/json", "text/plain" })
+    Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
     Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);

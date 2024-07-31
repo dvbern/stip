@@ -80,7 +80,6 @@ export class SharedUiAenderungMeldenDialogComponent {
       'kommentar',
     ]);
     return this.dialogRef.close({
-      ...aenderungsAntrag,
       start: toBackendLocalDate(aenderungsAntrag.gueltigAb),
       end: aenderungsAntrag.gueltigBis
         ? toBackendLocalDate(aenderungsAntrag.gueltigBis)

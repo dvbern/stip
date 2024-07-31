@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notification.type.NotificationType;
@@ -39,7 +40,10 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
         );
 
         notificationService.createNotification(NotificationType.GESUCH_EINGEREICHT, gesuch);
-
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
     }
 }
