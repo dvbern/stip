@@ -81,6 +81,8 @@ export class SharedFeatureGesuchDokumenteComponent {
     'actions',
   ];
 
+  expandedRowId: string | null = null;
+
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   canSendMissingDocumentsSig = computed(() => {

@@ -148,6 +148,43 @@
     </div>
   </div>
 
+  <ng-container>
+    <td class="expander-cell" mat-cell [attr.colspan]="displayedColumns.length">
+      <!--      /*dvMatCellDef="let user; dataSource: userData"-->
+
+      <div class="detail-cell">
+        <!-- [@detailExpand]="user.id === expandedRowId ? 'expanded' : 'collapsed'"-->
+        <table mat-table class="child-table">
+          <!-- [dataSource]="user.userDaten ?? []"-->
+          <caption class="cdk-visually-hidden">
+            {{
+              'sachbearbeitung-app.admin.ausbildungsgaenge.description' | translate
+            }}
+          </caption>
+          <!-- User -->
+          <ng-container>
+            <dv-shared-ui-icon-badge>
+              <th>
+                {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.description' | translate }}
+              </th>
+            </dv-shared-ui-icon-badge>
+          </ng-container>
+          <!-- Timestamp -->
+          <ng-container>
+            <p>
+              {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.description' | translate }}
+            </p>
+          </ng-container>
+          <!-- Kommentar -->
+          <ng-container>
+            <p>
+              {{ 'sachbearbeitung-app.admin.ausbildungsgaenge.description' | translate }}
+            </p>
+          </ng-container>
+        </table>
+      </div>
+    </td>
+  </ng-container>
   <div class="mt-4 d-flex" *dvIfSachbearbeiter>
     @if (canSendMissingDocumentsSig()) {
       <!-- button sendMissingDocuments -->
