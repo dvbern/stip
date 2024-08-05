@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -132,7 +133,9 @@ class BerechnungServiceTest {
         //Act
         BerechnungsresultatDto berechnungsresultatDto = null;
         for (int i = 0; i< 1; i++) { // for profiling
-            berechnungsresultatDto = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
+            berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
+                gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+            );
         }
 
         //Assert
@@ -217,7 +220,9 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);;
+        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0)
+            ;;
 
         //Assert
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
@@ -313,7 +318,9 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
+        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+        );
 
         //Assert
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(266)));

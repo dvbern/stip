@@ -192,6 +192,9 @@
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}",
+  "sachbearbeitung-app.verfuegung.berechnung.months": "Mois",
+  "sachbearbeitung-app.verfuegung.berechnung.from": "de",
+  "sachbearbeitung-app.verfuegung.berechnung.to": "à",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Détails du calcul",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",

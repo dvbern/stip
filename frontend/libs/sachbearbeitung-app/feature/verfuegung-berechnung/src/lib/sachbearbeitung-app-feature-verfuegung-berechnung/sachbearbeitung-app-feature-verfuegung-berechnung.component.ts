@@ -10,7 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { differenceInMonths } from 'date-fns';
+import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
@@ -76,7 +76,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       person: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
       ...tranche,
       monate: Math.abs(
-        differenceInMonths(tranche.gueltigBis, tranche.gueltigAb),
+        differenceInMonths(addDays(tranche.gueltigBis, 1), tranche.gueltigAb),
       ),
     };
   });

@@ -75,7 +75,7 @@ import { Berechnung } from '../../../models';
                     '.total' | translate
                 }}
                 <span class="text-nowrap">{{
-                  berechnung.total | formatChf: false
+                  berechnung.total | formatChf: true
                 }}</span>
               </div>
             </div>

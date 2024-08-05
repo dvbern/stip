@@ -192,6 +192,9 @@
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}",
+  "sachbearbeitung-app.verfuegung.berechnung.months": "Monate",
+  "sachbearbeitung-app.verfuegung.berechnung.from": "von",
+  "sachbearbeitung-app.verfuegung.berechnung.to": "bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
