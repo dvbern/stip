@@ -8,43 +8,12 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class DateUtil {
     /**
-     * @return the date which is before the other. If any date is null, returns the other
-     * @throws IllegalArgumentException if both are null
+     * Clamps the given {@param date} to be no less than {@param min} and no more that {@param max},
+     * if the given value is already between the two dates it returns it.
+     * @throws IllegalArgumentException if {@param min} is after {@param max}
      * */
-    public LocalDate before(final LocalDate left, final LocalDate right) {
-        if (left == null && right == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (left == null) {
-            return right;
-        } else if (right == null) {
-            return left;
-        }
-
-        return left.isBefore(right) ? left : right;
-    }
-
-    /**
-     * @return the date which is after the other. If any date is null, returns the other
-     * @throws IllegalArgumentException if both are null
-     * */
-    public LocalDate after(final LocalDate left, final LocalDate right) {
-        if (left == null && right == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (left == null) {
-            return right;
-        } else if (right == null) {
-            return left;
-        }
-
-        return left.isAfter(right) ? left : right;
-    }
-
     public LocalDate clamp(final LocalDate date, final LocalDate min, final LocalDate max) {
-        if (min.isAfter(max) || max.isBefore(min)) {
+        if (min.isAfter(max)) {
             throw new IllegalArgumentException("Min must be after max and max must be after min");
         }
 

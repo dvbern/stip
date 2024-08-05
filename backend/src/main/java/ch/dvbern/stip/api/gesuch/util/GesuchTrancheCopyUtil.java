@@ -4,9 +4,11 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
+import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
 import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
@@ -52,6 +54,10 @@ public class GesuchTrancheCopyUtil {
             gesuchsperiodeStopp
         );
 
+        if (startDate.isAfter(endDate)) {
+            throw new AppErrorException("Start date for new GesuchTranche must be after end date");
+        }
+
         return new DateRange(startDate, endDate);
     }
 
@@ -81,9 +87,10 @@ public class GesuchTrancheCopyUtil {
         Adresse vaterAdresseCopy = null;
         for (final var eltern : copy.getElterns()) {
             final var adresseCopy = AdresseCopyUtil.createCopy(eltern.getAdresse());
-            switch (eltern.getElternTyp()) {
-                case MUTTER -> mutterAdresseCopy = adresseCopy;
-                case VATER -> vaterAdresseCopy = adresseCopy;
+            if (eltern.getElternTyp() == ElternTyp.MUTTER) {
+                mutterAdresseCopy = adresseCopy;
+            } else if (eltern.getElternTyp() == ElternTyp.VATER) {
+                vaterAdresseCopy = adresseCopy;
             }
 
             eltern.setAdresse(adresseCopy);

@@ -57,7 +57,7 @@ public class GesuchTrancheStatusConfigProducer {
     private Optional<GesuchTrancheStatusStateChangeHandler> getHandlerFor(
         final Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition
     ) {
-        return handlers.stream().filter(x -> x.handles(transition)).findFirst();
+        return handlers.stream().filter(handler -> handler.handles(transition)).findFirst();
     }
 
     private void onStateEntry(
