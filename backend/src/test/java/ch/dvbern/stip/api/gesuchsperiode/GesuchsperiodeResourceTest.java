@@ -2,12 +2,12 @@ package ch.dvbern.stip.api.gesuchsperiode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchsperiodeTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.GesuchsperiodeApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDtoSpec;
@@ -31,15 +31,12 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class GesuchsperiodeResourceTest {
-    private static final UUID GESUCHSJAHR_ID = UUID.fromString("9596bb3e-10ea-4493-8aed-a6ef510f806b");
-
     private final GesuchsperiodeApiSpec api = GesuchsperiodeApiSpec.gesuchsperiode(RequestSpecUtil.quarkusSpec());
     private GesuchsperiodeWithDatenDtoSpec gesuchsperiode;
 
@@ -61,7 +58,7 @@ class GesuchsperiodeResourceTest {
         newPeriode.setGesuchsperiodeStart(LocalDate.now().with(firstDayOfYear()));
         newPeriode.setGesuchsperiodeStopp(LocalDate.now().with(lastDayOfYear()));
         newPeriode.setFiskaljahr(LocalDate.now().getYear());
-        newPeriode.setGesuchsjahrId(GESUCHSJAHR_ID);
+        newPeriode.setGesuchsjahrId(TestConstants.TEST_GESUCHSJAHR_ID);
 
         gesuchsperiode = api.createGesuchsperiode().body(newPeriode)
             .execute(ResponseBody::prettyPeek)
@@ -130,7 +127,7 @@ class GesuchsperiodeResourceTest {
 
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
-        updateDto.setGesuchsjahrId(GESUCHSJAHR_ID);
+        updateDto.setGesuchsjahrId(TestConstants.TEST_GESUCHSJAHR_ID);
 
         final var updated = api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
@@ -192,7 +189,7 @@ class GesuchsperiodeResourceTest {
 
         final var updateBezeichnungDe = gesuchsperiode.getBezeichnungDe() + "UPDATED";
         updateDto.setBezeichnungDe(updateBezeichnungDe);
-        updateDto.setGesuchsjahrId(GESUCHSJAHR_ID);
+        updateDto.setGesuchsjahrId(TestConstants.TEST_GESUCHSJAHR_ID);
 
         api.updateGesuchsperiode()
             .gesuchsperiodeIdPath(gesuchsperiode.getId())
