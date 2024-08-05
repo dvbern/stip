@@ -1,15 +1,15 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -21,21 +21,11 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
-import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
-import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +44,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -664,9 +655,35 @@ class GesuchResourceTest {
         );
     }
 
+    @Inject
+    GesuchDokumentRepository dokumentRepository;
+    @Inject
+    GesuchDokumentService gesuchDokumentService;
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(27)
+    void testDokumentAblehnenKommentar(){
+        //dokumentApiSpec.gesuchDokumentAblehnen()
+        List<GesuchDokument> dokumente = dokumentRepository.findAllForGesuch(gesuch.getId()).toList();
+        final var dto = new GesuchDokumentAblehnenRequestDto();
+        final var kommentarDto = new GesuchDokumentKommentarDto();
+        kommentarDto.setKommentar("blabla");
+        kommentarDto.setDokumentTyp(dokumente.get(0).getDokumentTyp());
+        kommentarDto.setDatum(LocalDate.now());
+        kommentarDto.setBenutzer("testuser");
+        //UUID dokumentId = dokumente.get(0).getId();
+        UUID dokumentId = dokumente.get(0).getId();
+        kommentarDto.setGesuchDokumentId(dokumentId);
+        kommentarDto.setGesuchId(gesuch.getId());
+        dto.setKommentar(kommentarDto);
+        gesuchDokumentService.gesuchDokumentAblehnen(dokumentId,dto);
+        assertThat(gesuchDokumentService.getGesuchDokumentsByGesuchDokumentId(dokumente.get(0).getId()).size(), greaterThan(0));
+    }
+
     @Test
     @TestAsAdmin
-    @Order(27)
+    @Order(28)
     void testDeleteGesuch() {
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuchId)

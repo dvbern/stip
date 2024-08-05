@@ -43,13 +43,6 @@ class DokumentResourceImplTest {
         assertThat(dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID()).getStatus(), is(HttpStatus.SC_OK));
     }
 
-    @Test
-    @TestAsSachbearbeiter
-    void testPersistence(){
-        //todo: check persistence, make db migration
-        fail();
-    }
-
     @InjectMock
     GesuchDokumentService gesuchDokumentService;
 
