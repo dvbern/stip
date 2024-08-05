@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,7 +29,7 @@ class GesuchTrancheCopyUtilTest {
             .setGesuchsperiodeStart(gesuchsperiodeStart)
             .setGesuchsperiodeStopp(gesuchsperiodeStopp);
 
-        final var createDto = new AenderungsantragCreateDto();
+        final var createDto = new CreateAenderungsantragRequestDto();
         createDto.setStart(start);
         createDto.setEnd(end);
 

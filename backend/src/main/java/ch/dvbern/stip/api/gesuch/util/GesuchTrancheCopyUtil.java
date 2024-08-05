@@ -20,7 +20,7 @@ import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
 import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -28,7 +28,7 @@ import lombok.experimental.UtilityClass;
 public class GesuchTrancheCopyUtil {
     public GesuchTranche createAenderungstranche(
         final GesuchTranche gesuchTranche,
-        final AenderungsantragCreateDto createDto
+        final CreateAenderungsantragRequestDto createDto
     ) {
         final var gesuch = gesuchTranche.getGesuch();
         final var newTranche = new GesuchTranche();
@@ -40,7 +40,7 @@ public class GesuchTrancheCopyUtil {
         return newTranche;
     }
 
-    DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final AenderungsantragCreateDto createDto) {
+    DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final CreateAenderungsantragRequestDto createDto) {
         final var gesuchsperiodeStart = gesuchsperiode.getGesuchsperiodeStart();
         final var gesuchsperiodeStopp = gesuchsperiode.getGesuchsperiodeStopp();
         final var startDate = DateUtil.clamp(

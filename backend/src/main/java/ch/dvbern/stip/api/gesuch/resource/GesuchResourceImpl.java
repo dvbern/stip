@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -136,19 +135,5 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getBerechnungForGesuch(UUID gesuchId) {
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
-    }
-
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
-    public Response createAenderungsantrag(UUID gesuchId, AenderungsantragCreateDto aenderungsantragCreateDto) {
-        final var gesuchDto = gesuchService.createAenderungsantrag(gesuchId, aenderungsantragCreateDto);
-        return Response.ok(gesuchDto).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getAenderungsantrag(UUID gesuchId) {
-        final var gesuchDto = gesuchService.getAenderungsantrag(gesuchId);
-        return Response.ok(gesuchDto).build();
     }
 }

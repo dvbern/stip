@@ -97,6 +97,10 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
+    public GesuchTranche getCurrentGesuchTranche() {
+        return getGesuchTrancheValidOnDate(LocalDate.now()).orElseThrow();
+    }
+
     public Optional<GesuchTranche> getNewestGesuchTranche() {
         if (gesuchTranchen.isEmpty()) {
             return Optional.empty();
