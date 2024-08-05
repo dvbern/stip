@@ -27,6 +27,7 @@ public class GesuchDokumentKommentarService {
         if(gesuchDokumentKommentarDto == null){
             createEmptyKommentarForGesuchDokument(gesuchDokument,null);
         }else{
+            kommentar.setDokumentId(gesuchDokument.getId());
             kommentar.setGesuch(gesuchDokument.getGesuch());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
             kommentar.setDokumentTyp(gesuchDokument.getDokumentTyp());
