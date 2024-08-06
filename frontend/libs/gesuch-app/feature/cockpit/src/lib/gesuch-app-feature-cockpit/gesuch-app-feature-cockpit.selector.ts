@@ -9,16 +9,36 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchs,
   sharedDataAccessGesuchsFeature.selectLoading,
   selectVersion,
-  (gesuchsPerioden, gesuche, gesucheLoading, version) => ({
-    ...gesuchsPerioden,
-
-    gesuchsperiodes: gesuchsPerioden.gesuchsperiodes
+  (gesuchsPerioden, gesuche, gesucheLoading, version) => {
+    const periodeErfassbarMitGesuch = gesuchsPerioden.gesuchsperiodes
       .filter((p) => p.erfassbar)
-      .map((p) => ({
-        ...p,
-        gesuchLoading: gesucheLoading,
-        gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
-      })),
-    version,
-  }),
+      .find((p) =>
+        gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
+      );
+
+    if (!periodeErfassbarMitGesuch) {
+      return {
+        ...gesuchsPerioden,
+        gesuchsperiodes: gesuchsPerioden.gesuchsperiodes.map((p) => ({
+          ...p,
+          gesuchLoading: gesucheLoading,
+          gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
+        })),
+        version,
+      };
+    }
+
+    return {
+      ...gesuchsPerioden,
+      gesuchsperiodes: gesuchsPerioden.gesuchsperiodes
+        .map((p) => ({
+          ...p,
+          gesuchLoading: gesucheLoading,
+          gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
+        }))
+        // this filter is the key difference. do not show the herbst / fruehling periode if there is a gesuch
+        .filter((p) => p.gesuch),
+      version,
+    };
+  },
 );
