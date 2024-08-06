@@ -14,7 +14,6 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -25,8 +24,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.
-    VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
