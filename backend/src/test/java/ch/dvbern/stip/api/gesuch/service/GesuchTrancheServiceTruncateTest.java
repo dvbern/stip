@@ -1,0 +1,201 @@
+package ch.dvbern.stip.api.gesuch.service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+class GesuchTrancheServiceTruncateTest {
+    @Test
+    void oneExistingTruncated() {
+        // Arrange
+        final var existingTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+        final var gesuch = new Gesuch();
+        gesuch.getGesuchTranchen().add(existingTranche);
+
+        final var newTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 6, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var service = getDummyTrancheService();
+
+        // Act
+        service.truncateExistingTranchen(gesuch, newTranche);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Assert
+        assertThat(gesuch.getGesuchTranchen().size(), is(2));
+        assertThat(existingTranche.getGueltigkeit().getGueltigBis(), is(LocalDate.of(2024, 5, 31)));
+    }
+
+    @Test
+    void twoExistingBothTruncated() {
+        // Arrange
+        final var existingTranche1 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 3, 31)
+        ));
+
+        final var existingTranche2 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 4, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var gesuch = new Gesuch();
+        gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2));
+
+        final var newTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 3, 1),
+            LocalDate.of(2024, 5, 31)
+        ));
+
+        final var service = getDummyTrancheService();
+
+        // Act
+        service.truncateExistingTranchen(gesuch, newTranche);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Assert
+        assertThat(gesuch.getGesuchTranchen().size(), is(3));
+        assertThat(
+            existingTranche1.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2024, 2, 1).with(lastDayOfMonth()))
+        );
+        assertThat(
+            existingTranche2.getGueltigkeit().getGueltigAb(),
+            is(LocalDate.of(2024, 6, 1))
+        );
+    }
+
+    @Test
+    void twoExistingOneTruncated() {
+        // Arrange
+        final var oneId = UUID.fromString("12154079-9622-4869-b752-435604368cde");
+        final var existingTranche1 = (GesuchTranche) getDummyTranche(new DateRange(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 3, 31)
+        ))
+            .setId(oneId);
+
+        final var existingTranche2 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 4, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var gesuch = new Gesuch();
+        gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2));
+
+        final var newTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 5, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var service = getDummyTrancheService();
+
+        // Act
+        service.truncateExistingTranchen(gesuch, newTranche);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Assert
+        assertThat(gesuch.getGesuchTranchen().size(), is(3));
+        assertThat(
+            existingTranche1.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2024, 3, 31))
+        );
+        assertThat(
+            existingTranche2.getGueltigkeit().getGueltigAb(),
+            is(LocalDate.of(2024, 4, 1))
+        );
+        assertThat(
+            existingTranche2.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2024, 4, 30))
+        );
+    }
+
+    @Test
+    void twoExistingOneTruncatedOneDeleted() {
+        // Arrange
+        final var existingTranche1 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 3, 31)
+        ));
+
+        final var existingTranche2 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 4, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var gesuch = new Gesuch();
+        gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2));
+
+        final var newTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 3, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var service = getDummyTrancheService();
+
+        // Act
+        service.truncateExistingTranchen(gesuch, newTranche);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Assert
+        assertThat(gesuch.getGesuchTranchen().size(), is(2));
+        assertThat(
+            existingTranche1.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2024, 2, 1).with(lastDayOfMonth()))
+        );
+        assertThat(
+            existingTranche2.getGueltigkeit().getMonths(),
+            is(0)
+        );
+    }
+
+    private GesuchTrancheService getDummyTrancheService() {
+        final var mockTrancheRepo = Mockito.mock(GesuchTrancheRepository.class);
+        Mockito.doNothing().when(mockTrancheRepo).delete(Mockito.any());
+
+        return new GesuchTrancheService(
+            null,
+            mockTrancheRepo,
+            null,
+            null
+        );
+    }
+
+    private GesuchTranche getDummyTranche(final DateRange gueltigkeit) {
+        return new GesuchTranche()
+            .setGueltigkeit(gueltigkeit)
+            .setGesuchFormular(getDummyFormular());
+    }
+
+    private GesuchFormular getDummyFormular() {
+        return new GesuchFormular()
+            .setPersonInAusbildung(new PersonInAusbildung())
+            .setAusbildung(new Ausbildung())
+            .setFamiliensituation(new Familiensituation())
+            .setPartner(null)
+            .setAuszahlung(new Auszahlung())
+            .setEinnahmenKosten(new EinnahmenKosten());
+    }
+}

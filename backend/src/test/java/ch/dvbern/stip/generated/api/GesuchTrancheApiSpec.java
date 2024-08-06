@@ -60,7 +60,7 @@ public class GesuchTrancheApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createAenderungsantrag(),
-                createGesuchTranche(),
+                createGesuchTrancheCopy(),
                 getAenderungsantrag()
         );
     }
@@ -69,8 +69,8 @@ public class GesuchTrancheApiSpec {
         return new CreateAenderungsantragOper(createReqSpec());
     }
 
-    public CreateGesuchTrancheOper createGesuchTranche() {
-        return new CreateGesuchTrancheOper(createReqSpec());
+    public CreateGesuchTrancheCopyOper createGesuchTrancheCopy() {
+        return new CreateGesuchTrancheCopyOper(createReqSpec());
     }
 
     public GetAenderungsantragOper getAenderungsantrag() {
@@ -176,18 +176,19 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
+     * @see #trancheIdPath  (required)
      * @see #body  (optional)
      * return GesuchDtoSpec
      */
-    public static class CreateGesuchTrancheOper implements Oper {
+    public static class CreateGesuchTrancheCopyOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/tranche";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/tranche/{trancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public CreateGesuchTrancheOper(RequestSpecBuilder reqSpec) {
+        public CreateGesuchTrancheCopyOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -195,7 +196,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/tranche
+         * POST /gesuch/{gesuchId}/tranche/{trancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -206,7 +207,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/tranche
+         * POST /gesuch/{gesuchId}/tranche/{trancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -219,7 +220,7 @@ public class GesuchTrancheApiSpec {
          * @param createGesuchTrancheRequestDtoSpec (CreateGesuchTrancheRequestDtoSpec)  (optional)
          * @return operation
          */
-        public CreateGesuchTrancheOper body(CreateGesuchTrancheRequestDtoSpec createGesuchTrancheRequestDtoSpec) {
+        public CreateGesuchTrancheCopyOper body(CreateGesuchTrancheRequestDtoSpec createGesuchTrancheRequestDtoSpec) {
             reqSpec.setBody(createGesuchTrancheRequestDtoSpec);
             return this;
         }
@@ -230,8 +231,19 @@ public class GesuchTrancheApiSpec {
          * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public CreateGesuchTrancheOper gesuchIdPath(Object gesuchId) {
+        public CreateGesuchTrancheCopyOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        public static final String TRANCHE_ID_PATH = "trancheId";
+
+        /**
+         * @param trancheId (UUID)  (required)
+         * @return operation
+         */
+        public CreateGesuchTrancheCopyOper trancheIdPath(Object trancheId) {
+            reqSpec.addPathParam(TRANCHE_ID_PATH, trancheId);
             return this;
         }
 
@@ -240,7 +252,7 @@ public class GesuchTrancheApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public CreateGesuchTrancheOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public CreateGesuchTrancheCopyOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -250,7 +262,7 @@ public class GesuchTrancheApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public CreateGesuchTrancheOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public CreateGesuchTrancheCopyOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

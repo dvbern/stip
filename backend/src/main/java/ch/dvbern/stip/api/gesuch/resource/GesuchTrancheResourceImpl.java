@@ -33,8 +33,18 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return Response.ok(gesuchDto).build();
     }
 
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response createGesuchTranche(UUID gesuchId, CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto) {
-        return null;
+    public Response createGesuchTrancheCopy(
+        UUID gesuchId,
+        UUID trancheId,
+        CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
+    ) {
+        final var gesuchDto = gesuchTrancheService.createTrancheCopy(
+            gesuchId,
+            trancheId,
+            createGesuchTrancheRequestDto
+        );
+        return Response.ok(gesuchDto).build();
     }
 }

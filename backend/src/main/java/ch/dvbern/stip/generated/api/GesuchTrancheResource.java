@@ -29,10 +29,10 @@ public interface GesuchTrancheResource {
     Response createAenderungsantrag(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull CreateAenderungsantragRequestDto createAenderungsantragRequestDto);
 
     @POST
-    @Path("/tranche")
+    @Path("/tranche/{trancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createGesuchTranche(@PathParam("gesuchId") UUID gesuchId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
+    Response createGesuchTrancheCopy(@PathParam("gesuchId") UUID gesuchId,@PathParam("trancheId") UUID trancheId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
 
     @GET
     @Path("/aenderungsantrag")
