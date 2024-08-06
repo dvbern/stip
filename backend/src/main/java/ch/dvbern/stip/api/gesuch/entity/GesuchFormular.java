@@ -104,7 +104,7 @@ import org.hibernate.envers.Audited;
 @SteuerdatenSteuerjahrInPastOrCurrentConstraint(groups = {
     Default.class,
     EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
+}, property = "steuerdaten")
 @AusbildungskostenStufeRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
