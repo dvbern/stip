@@ -40,7 +40,7 @@ import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -103,7 +103,7 @@ import org.hibernate.envers.Audited;
 }, property = "einnahmenKosten")
 @SteuerdatenSteuerjahrInPastOrCurrentConstraint(groups = {
     Default.class,
-    EinnahmenKostenPageValidation.class
+    SteuerdatenPageValidation.class
 }, property = "steuerdaten")
 @AusbildungskostenStufeRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
