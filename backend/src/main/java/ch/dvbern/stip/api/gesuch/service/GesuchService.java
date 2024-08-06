@@ -83,8 +83,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.
-    VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -129,17 +128,17 @@ public class GesuchService {
 
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
         if(einnahmenKosten != null){
-            Object steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
-            Object steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
-            Object steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil
+            final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
+            final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
+            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+            steuerjahrToSet = ValidateUpdateLegalityUtil
                 .getAndValidateLegalityValue(benutzerRollenIdentifiers,
                     steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
 
-            Object veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
-            Object veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
-            Object veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil
+            final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
+            final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
+            final Integer veranlagungscodeDefaltValue = 0;
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil
                 .getAndValidateLegalityValue(benutzerRollenIdentifiers,
                     veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
         }
@@ -176,17 +175,17 @@ public class GesuchService {
         Integer veranlagungsCodeToSet = 0;
 
         if(steuerdatenTabs != null){
-            Object steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
-            Object steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
-            Object steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = (Integer) ValidateUpdateLegalityUtil.
+            final Integer steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
+            final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
+            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+            steuerjahrToSet = ValidateUpdateLegalityUtil.
                 getAndValidateLegalityValue(benutzerRollenIdentifiers,
                     steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
 
-            Object veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
-            Object veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
-            Object veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = (Integer) ValidateUpdateLegalityUtil.
+            final Integer veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
+            final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
+            final Integer veranlagungscodeDefaltValue = 0;
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.
                 getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,
                     veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
         }
