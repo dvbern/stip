@@ -1,17 +1,17 @@
 @if (viewSig(); as view) {
   <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
-  <dl class="d-flex g-2">
-    <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
-    <dd class="me-4">{{ view.gueltigAb | date: 'MM.YYYY' }}</dd>
-    <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | translate }}:</dt>
-    <dd class="me-4">{{ view.gueltigBis | date: 'MM.YYYY' }}</dd>
-    <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | translate }}:</dt>
-    <dd class="me-4">{{ view.monate }}</dd>
-  </dl>
   @if (berechnungenSig().loading) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else if (berechnungenSig().list.length > 0) {
     @for (berechnung of berechnungenSig().list; track $index) {
+      <dl class="d-flex g-2">
+        <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
+        <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.YYYY' }}</dd>
+        <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | translate }}:</dt>
+        <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.YYYY' }}</dd>
+        <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | translate }}:</dt>
+        <dd class="me-4">{{ berechnung.monate }}</dd>
+      </dl>
       <div class="row">
         <div class="col-12">
           <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">

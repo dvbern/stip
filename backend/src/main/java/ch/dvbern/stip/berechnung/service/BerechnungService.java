@@ -327,6 +327,8 @@ public class BerechnungService {
 
         return new BerechnungsresultatDto(
             berechnung,
+            gesuchTranche.getGueltigkeit().getGueltigAb(),
+            gesuchTranche.getGueltigkeit().getGueltigBis(),
             persoenlichesBudgetresultatFromRequest(
                 stipendienBerechnungsRequestForVater,
                 stipendienCalculatedForVater,

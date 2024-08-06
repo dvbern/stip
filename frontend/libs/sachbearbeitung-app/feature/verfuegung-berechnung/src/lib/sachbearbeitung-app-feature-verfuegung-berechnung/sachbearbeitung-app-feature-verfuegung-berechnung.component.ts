@@ -96,10 +96,15 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         list: berechnungen.map(
           ({
             berechnung,
+            gueltigAb,
+            gueltigBis,
             persoenlichesBudgetresultat: p,
             familienBudgetresultate,
           }) => ({
             total: berechnung,
+            gueltigAb: gueltigAb,
+            gueltigBis: gueltigBis,
+            monate: differenceInMonths(addDays(gueltigBis, 1), gueltigAb),
             persoenlich: {
               typ: 'persoenlich' as const,
               name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
