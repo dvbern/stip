@@ -30,7 +30,7 @@ import lombok.experimental.UtilityClass;
 public class GesuchTrancheCopyUtil {
     /**
      * Copies an existing {@link GesuchTranche} and sets all values, so it's a complete Aenderungstranche
-     * */
+     */
     public GesuchTranche createAenderungstranche(
         final GesuchTranche original,
         final CreateAenderungsantragRequestDto createDto
@@ -43,9 +43,10 @@ public class GesuchTrancheCopyUtil {
     }
 
     /**
-     * Copies an existing {@link GesuchTranche} in preparation for truncating
-     * */
-    public GesuchTranche createTranche(
+     * Copies an existing {@link GesuchTranche} and sets the new {@link GesuchTranche#status}
+     * to {@link GesuchTrancheStatus#UEBERPRUEFEN}
+     */
+    public GesuchTranche createNewTranche(
         final GesuchTranche gesuchTranche,
         final CreateGesuchTrancheRequestDto createDto
     ) {
@@ -61,8 +62,12 @@ public class GesuchTrancheCopyUtil {
 
     /**
      * Copies a tranche without setting references
-     * */
-    public GesuchTranche copyTranche(final GesuchTranche original, final DateRange createDateRange, final String comment) {
+     */
+    public GesuchTranche copyTranche(
+        final GesuchTranche original,
+        final DateRange createDateRange,
+        final String comment
+    ) {
         final var gesuch = original.getGesuch();
         final var newTranche = new GesuchTranche();
         newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDateRange));

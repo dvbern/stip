@@ -75,9 +75,10 @@ public class GesuchTrancheService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var trancheToCopy = gesuch.getGesuchTrancheById(originalTrancheId).orElseThrow(NotFoundException::new);
-        final var newTranche = GesuchTrancheCopyUtil.createTranche(trancheToCopy, createDto);
+        final var newTranche = GesuchTrancheCopyUtil.createNewTranche(trancheToCopy, createDto);
 
         // Truncate existing Tranche(n) before setting the Gesuch on the new one
+        // Truncating also removes all tranchen no longer needed (i.e. those with gueltigkeit <= 0 months)
         truncateExistingTranchen(gesuch, newTranche);
         newTranche.setGesuch(gesuch);
 
