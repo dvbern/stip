@@ -28,7 +28,8 @@ class DokumentResourceImplTest {
     DokumentResource dokumentResource;
     @InjectMock
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
-
+    @InjectMock
+    GesuchDokumentService gesuchDokumentService;
 
     @BeforeEach
     void setUp() {
@@ -42,9 +43,6 @@ class DokumentResourceImplTest {
     void resourceShouldReturnCommentsOfADokument(){
         assertThat(dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID()).getStatus(), is(HttpStatus.SC_OK));
     }
-
-    @InjectMock
-    GesuchDokumentService gesuchDokumentService;
 
     @TestAsGesuchsteller
     @Test

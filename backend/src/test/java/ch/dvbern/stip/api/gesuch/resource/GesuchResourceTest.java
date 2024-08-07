@@ -663,7 +663,6 @@ class GesuchResourceTest {
     @TestAsSachbearbeiter
     @Order(27)
     void testDokumentAblehnenKommentar(){
-        //dokumentApiSpec.gesuchDokumentAblehnen()
         List<GesuchDokument> dokumente = dokumentRepository.findAllForGesuch(gesuch.getId()).toList();
         final var dto = new GesuchDokumentAblehnenRequestDto();
         final var kommentarDto = new GesuchDokumentKommentarDto();
@@ -671,7 +670,6 @@ class GesuchResourceTest {
         kommentarDto.setDokumentTyp(dokumente.get(0).getDokumentTyp());
         kommentarDto.setDatum(LocalDate.now());
         kommentarDto.setBenutzer("testuser");
-        //UUID dokumentId = dokumente.get(0).getId();
         UUID dokumentId = dokumente.get(0).getId();
         kommentarDto.setGesuchDokumentId(dokumentId);
         kommentarDto.setGesuchId(gesuch.getId());
