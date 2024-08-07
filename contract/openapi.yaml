@@ -1404,7 +1404,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
-  '/gesuch/{gesuchId}/aenderungsantrag':
+  '/gesuchtranche/{gesuchId}/aenderungsantrag':
     parameters:
       - name: gesuchId
         schema:
@@ -1455,7 +1455,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAenderungsantrag
-  '/gesuch/{gesuchId}/tranche/{trancheId}':
+  '/gesuchtranche/{gesuchId}/tranche/{trancheId}':
     parameters:
       - name: gesuchId
         schema:

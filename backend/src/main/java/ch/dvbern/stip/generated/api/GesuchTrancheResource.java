@@ -18,7 +18,7 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/gesuch/{gesuchId}")
+@Path("/gesuchtranche/{gesuchId}")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchTrancheResource {
 

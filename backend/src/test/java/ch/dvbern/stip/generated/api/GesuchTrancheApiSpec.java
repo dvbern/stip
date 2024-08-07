@@ -98,7 +98,7 @@ public class GesuchTrancheApiSpec {
     public static class CreateAenderungsantragOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/aenderungsantrag";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchId}/aenderungsantrag";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -111,7 +111,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/aenderungsantrag
+         * POST /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
          * @param <T> type
          * @return type
@@ -122,7 +122,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/aenderungsantrag
+         * POST /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -183,7 +183,7 @@ public class GesuchTrancheApiSpec {
     public static class CreateGesuchTrancheCopyOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/tranche/{trancheId}";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchId}/tranche/{trancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -196,7 +196,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/tranche/{trancheId}
+         * POST /gesuchtranche/{gesuchId}/tranche/{trancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -207,7 +207,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuch/{gesuchId}/tranche/{trancheId}
+         * POST /gesuchtranche/{gesuchId}/tranche/{trancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -277,7 +277,7 @@ public class GesuchTrancheApiSpec {
     public static class GetAenderungsantragOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/aenderungsantrag";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchId}/aenderungsantrag";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -289,7 +289,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/aenderungsantrag
+         * GET /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
          * @param <T> type
          * @return type
@@ -300,7 +300,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/aenderungsantrag
+         * GET /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
          * @return List&lt;GesuchDtoSpec&gt;
          */

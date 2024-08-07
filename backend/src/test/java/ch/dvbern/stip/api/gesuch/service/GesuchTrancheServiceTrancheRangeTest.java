@@ -54,10 +54,10 @@ class GesuchTrancheServiceTrancheRangeTest {
                 ),
                 // Full
                 Arguments.of(
-                    LocalDate.of(2024, 4, 1),
-                    LocalDate.of(2024, 4, 30),
                     LocalDate.of(2024, 3, 1),
                     LocalDate.of(2024, 5, 31),
+                    LocalDate.of(2024, 4, 1),
+                    LocalDate.of(2024, 4, 30),
                     OverlapType.FULL
                 ),
                 // Left
@@ -91,6 +91,22 @@ class GesuchTrancheServiceTrancheRangeTest {
                     LocalDate.of(2024, 4, 1),
                     LocalDate.of(2024, 6, 30),
                     OverlapType.RIGHT_FULL
+                ),
+                // Inside
+                Arguments.of(
+                    LocalDate.of(2024, 4, 1),
+                    LocalDate.of(2024, 4, 30),
+                    LocalDate.of(2024, 3, 1),
+                    LocalDate.of(2024, 5, 31),
+                    OverlapType.INSIDE
+                ),
+                // None
+                Arguments.of(
+                    LocalDate.of(2024, 4, 1),
+                    LocalDate.of(2024, 5, 31),
+                    LocalDate.of(2024, 6, 1),
+                    LocalDate.of(2024, 7, 31),
+                    OverlapType.NONE
                 )
             );
         }

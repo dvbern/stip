@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -13,6 +15,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -46,6 +49,38 @@ class GesuchTrancheServiceTruncateTest {
         // Assert
         assertThat(gesuch.getGesuchTranchen().size(), is(2));
         assertThat(existingTranche.getGueltigkeit().getGueltigBis(), is(LocalDate.of(2024, 5, 31)));
+    }
+
+    @Test
+    void oneExistingSplitInsert() {
+        // Arrange
+        final var existingTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 31)
+        ));
+
+        final var gesuch = new Gesuch();
+        gesuch.getGesuchTranchen().add(existingTranche);
+        gesuch.setGesuchsperiode(new Gesuchsperiode()
+            .setGesuchsperiodeStart(LocalDate.of(2024, 1, 1))
+            .setGesuchsperiodeStopp(LocalDate.of(2024, 12, 31))
+        );
+
+        existingTranche.setGesuch(gesuch);
+
+        final var newTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 4, 1),
+            LocalDate.of(2024, 5, 31)
+        ));
+
+        final var service = getDummyTrancheService();
+
+        // Act
+        service.truncateExistingTranchen(gesuch, newTranche);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Assert
+        assertThat(gesuch.getGesuchTranchen().size(), is(3));
     }
 
     @Test
@@ -246,18 +281,19 @@ class GesuchTrancheServiceTruncateTest {
     }
 
     private GesuchTranche getDummyTranche(final DateRange gueltigkeit) {
-        return new GesuchTranche()
+        return ((GesuchTranche) new GesuchTranche()
             .setGueltigkeit(gueltigkeit)
-            .setGesuchFormular(getDummyFormular());
+            .setGesuchFormular(getDummyFormular())
+            .setId(UUID.randomUUID()));
     }
 
     private GesuchFormular getDummyFormular() {
         return new GesuchFormular()
-            .setPersonInAusbildung(new PersonInAusbildung())
+            .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
             .setAusbildung(new Ausbildung())
             .setFamiliensituation(new Familiensituation())
             .setPartner(null)
-            .setAuszahlung(new Auszahlung())
+            .setAuszahlung(new Auszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER))
             .setEinnahmenKosten(new EinnahmenKosten());
     }
 }

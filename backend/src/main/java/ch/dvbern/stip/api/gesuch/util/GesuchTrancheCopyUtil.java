@@ -73,6 +73,7 @@ public class GesuchTrancheCopyUtil {
         newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDateRange));
         newTranche.setComment(comment);
         newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
+        newTranche.getGesuchFormular().setTranche(newTranche);
         return newTranche;
     }
 

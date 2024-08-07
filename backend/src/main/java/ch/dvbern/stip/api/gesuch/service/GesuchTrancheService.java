@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -14,7 +13,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
-import ch.dvbern.stip.api.gesuch.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -46,11 +44,6 @@ public class GesuchTrancheService {
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
 
-        final var violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
-        }
-
         // Manually persist so that when mapping happens the IDs on the new objects are set
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithTranche(gesuch, newTranche);
@@ -68,6 +61,7 @@ public class GesuchTrancheService {
         );
     }
 
+    @Transactional
     public GesuchDto createTrancheCopy(
         final UUID gesuchId,
         final UUID originalTrancheId,
@@ -76,24 +70,25 @@ public class GesuchTrancheService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var trancheToCopy = gesuch.getGesuchTrancheById(originalTrancheId).orElseThrow(NotFoundException::new);
         final var newTranche = GesuchTrancheCopyUtil.createNewTranche(trancheToCopy, createDto);
+        newTranche.setGesuch(gesuch);
+        gesuch.getGesuchTranchen().add(newTranche);
+        gesuchRepository.persistAndFlush(gesuch);
 
         // Truncate existing Tranche(n) before setting the Gesuch on the new one
         // Truncating also removes all tranchen no longer needed (i.e. those with gueltigkeit <= 0 months)
         truncateExistingTranchen(gesuch, newTranche);
-        newTranche.setGesuch(gesuch);
 
-        final var violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
-        }
-
-        gesuchRepository.persistAndFlush(gesuch);
-        return null;
+        return gesuchMapperUtil.mapWithTranche(gesuch, newTranche);
     }
 
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var newTrancheRange = TrancheRange.from(newTranche);
+        final var added = new ArrayList<GesuchTranche>();
         for (final var existingTranche : gesuch.getGesuchTranchen()) {
+            if (newTranche.getId().equals(existingTranche.getId())) {
+                continue;
+            }
+
             final var existingTrancheRange = TrancheRange.from(existingTranche);
 
             final var overlaps = newTrancheRange.overlaps(existingTrancheRange);
@@ -103,8 +98,12 @@ public class GesuchTrancheService {
                 handleLeft(existingTranche, newTranche);
             } else if (overlaps == OverlapType.RIGHT || overlaps == OverlapType.RIGHT_FULL) {
                 handleRight(existingTranche, newTranche);
+            } else if (overlaps == OverlapType.INSIDE) {
+                added.add(handleInside(existingTranche, newTranche));
             }
         }
+
+        gesuch.getGesuchTranchen().addAll(added);
 
         final var toRemove = new ArrayList<GesuchTranche>();
         for (final var tranche : gesuch.getGesuchTranchen()) {
@@ -148,6 +147,30 @@ public class GesuchTrancheService {
             );
     }
 
+    /**
+     * Copy existing tranche and truncate one end and one start
+     */
+    GesuchTranche handleInside(final GesuchTranche existingTranche, final GesuchTranche newTranche) {
+        final var copyGueltigkeit = new DateRange(
+            newTranche.getGueltigkeit().getGueltigBis().plusMonths(1).with(firstDayOfMonth()),
+            existingTranche.getGueltigkeit().getGueltigBis()
+        );
+
+        // Truncate existing
+        existingTranche.getGueltigkeit().setGueltigBis(newTranche
+            .getGueltigkeit()
+            .getGueltigAb()
+            .minusMonths(1)
+            .with(lastDayOfMonth())
+        );
+
+        return GesuchTrancheCopyUtil.copyTranche(
+            existingTranche,
+            copyGueltigkeit,
+            existingTranche.getComment()
+        );
+    }
+
     enum OverlapType {
         EXACT,
         FULL,
@@ -155,30 +178,22 @@ public class GesuchTrancheService {
         LEFT_FULL,
         RIGHT,
         RIGHT_FULL,
-        NONE
-    }
-
-    enum ConsecutiveType {
-        BEFORE,
-        AFTER,
+        INSIDE,
         NONE
     }
 
     @Getter
     static class TrancheRange {
-        private LocalDate von;
-        private LocalDate bis;
-        private GesuchTranche tranche;
+        private final LocalDate von;
+        private final LocalDate bis;
 
-        private TrancheRange(final GesuchTranche tranche, final LocalDate von, final LocalDate bis) {
-            this.tranche = tranche;
+        private TrancheRange(final LocalDate von, final LocalDate bis) {
             this.von = von;
             this.bis = bis;
         }
 
         public static TrancheRange from(final GesuchTranche tranche) {
             return new TrancheRange(
-                tranche,
                 tranche.getGueltigkeit().getGueltigAb(),
                 tranche.getGueltigkeit().getGueltigBis()
             );
@@ -209,17 +224,11 @@ public class GesuchTrancheService {
                 return OverlapType.FULL;
             }
 
-            return OverlapType.NONE;
-        }
-
-        public ConsecutiveType consecutive(final TrancheRange other) {
-            if (getVon().isEqual(other.getBis())) {
-                return ConsecutiveType.BEFORE;
-            } else if (getBis().isEqual(other.getVon())) {
-                return ConsecutiveType.AFTER;
+            if (DateUtil.afterOrEqual(getVon(), other.getVon()) && DateUtil.beforeOrEqual(getBis(), other.getBis())) {
+                return OverlapType.INSIDE;
             }
 
-            return ConsecutiveType.NONE;
+            return OverlapType.NONE;
         }
     }
 }
