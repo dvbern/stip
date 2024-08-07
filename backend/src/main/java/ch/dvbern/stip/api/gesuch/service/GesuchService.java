@@ -19,6 +19,8 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -32,8 +34,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.HashSet;
-import java.util.ArrayList;
+
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
@@ -62,6 +63,7 @@ import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -71,9 +73,8 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -111,8 +112,10 @@ public class GesuchService {
     }
 
     @Transactional
-    public void setAndValidateEinnahmenkostenUpdateLegality(final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
-                                                            final GesuchTranche trancheToUpdate) {
+    public void setAndValidateEinnahmenkostenUpdateLegality(
+        final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
+        final GesuchTranche trancheToUpdate
+    ) {
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -127,28 +130,30 @@ public class GesuchService {
         Integer veranlagungsCodeToSet = 0;
 
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
-        if(einnahmenKosten != null){
+        if (einnahmenKosten != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
             steuerjahrToSet = ValidateUpdateLegalityUtil
                 .getAndValidateLegalityValue(benutzerRollenIdentifiers,
-                    steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
+                    steuerjahrDtoValue, steuerjahrExistingValue, steuerjahrDefaultValue);
 
             final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
             final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
             final Integer veranlagungscodeDefaltValue = 0;
             veranlagungsCodeToSet = ValidateUpdateLegalityUtil
                 .getAndValidateLegalityValue(benutzerRollenIdentifiers,
-                    veranlagungsCodeDtoValue,veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
+                    veranlagungsCodeDtoValue, veranlagungsCodeExistingValue, veranlagungscodeDefaltValue);
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
         einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
     }
 
     @Transactional
-    public void setAndValidateSteuerdatenUpdateLegality(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
-                                                        final GesuchTranche trancheToUpdate) {
+    public void setAndValidateSteuerdatenUpdateLegality(
+        final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
+        final GesuchTranche trancheToUpdate
+    ) {
         final var gesuchsjahr = trancheToUpdate
             .getGesuch()
             .getGesuchsperiode()
@@ -157,14 +162,18 @@ public class GesuchService {
         final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream()
             .filter(tab -> tab.getSteuerdatenTyp() != null).toList();
 
-        for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos){
+        for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos) {
             setAndValidateSteuerdatenTabUpdateLegality(steuerdatenUpdateDto,
                 steuerdatenList.stream().filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId())).
-                    findFirst().orElse(null),gesuchsjahr);
+                    findFirst().orElse(null), gesuchsjahr);
         }
     }
-    private void setAndValidateSteuerdatenTabUpdateLegality(final SteuerdatenUpdateDto steuerdatenUpdateDto,
-                                                            final Steuerdaten steuerdatenTabs, Gesuchsjahr gesuchsjahr){
+
+    private void setAndValidateSteuerdatenTabUpdateLegality(
+        final SteuerdatenUpdateDto steuerdatenUpdateDto,
+        final Steuerdaten steuerdatenTabs,
+        Gesuchsjahr gesuchsjahr
+    ) {
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -174,20 +183,20 @@ public class GesuchService {
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
         Integer veranlagungsCodeToSet = 0;
 
-        if(steuerdatenTabs != null){
+        if (steuerdatenTabs != null) {
             final Integer steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
             steuerjahrToSet = ValidateUpdateLegalityUtil.
                 getAndValidateLegalityValue(benutzerRollenIdentifiers,
-                    steuerjahrDtoValue,steuerjahrExistingValue,steuerjahrDefaultValue);
+                    steuerjahrDtoValue, steuerjahrExistingValue, steuerjahrDefaultValue);
 
             final Integer veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
             final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
             final Integer veranlagungscodeDefaltValue = 0;
             veranlagungsCodeToSet = ValidateUpdateLegalityUtil.
-                getAndValidateLegalityValue(benutzerRollenIdentifiers,veranlagungsCodeDtoValue,
-                    veranlagungsCodeExistingValue,veranlagungscodeDefaltValue);
+                getAndValidateLegalityValue(benutzerRollenIdentifiers, veranlagungsCodeDtoValue,
+                    veranlagungsCodeExistingValue, veranlagungscodeDefaltValue);
         }
 
         steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
@@ -215,13 +224,13 @@ public class GesuchService {
             );
         }
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
-            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()){
-                setAndValidateSteuerdatenUpdateLegality(
-                    gesuchUpdateDto
-                        .getGesuchTrancheToWorkWith()
-                        .getGesuchFormular()
-                        .getSteuerdaten(),
-                    trancheToUpdate);
+            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()) {
+            setAndValidateSteuerdatenUpdateLegality(
+                gesuchUpdateDto
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getSteuerdaten(),
+                trancheToUpdate);
         }
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
