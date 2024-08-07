@@ -67,7 +67,7 @@ public class DateUtil {
     /**
      * Gets the number of months between two dates.
      * <p>
-     * WARNING: If start = first day of month and end = last day of same month
+     * WARNING: If start = first day of month and end = last day of same month and year 1 will be returned
      */
     public int getMonthsBetween(final LocalDate start, final LocalDate end) {
         final var lastDayOfEndMonth = YearMonth.from(end).atEndOfMonth();

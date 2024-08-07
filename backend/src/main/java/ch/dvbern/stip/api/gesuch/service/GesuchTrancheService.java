@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
@@ -89,106 +91,134 @@ public class GesuchTrancheService {
     }
 
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
+        final var newTrancheRange = TrancheRange.from(newTranche);
         for (final var existingTranche : gesuch.getGesuchTranchen()) {
-            // Check if any Tranche is "cut in half" by the new tranche
-            if (newTranche.getGueltigkeit().getGueltigAb().isAfter(existingTranche.getGueltigkeit().getGueltigAb()) &&
-                newTranche.getGueltigkeit().getGueltigBis().isBefore(existingTranche.getGueltigkeit().getGueltigBis())
-            ) {
-                // Cut in half found, create a truncated copy
-                final var copyGueltigkeit = new DateRange(
-                    newTranche.getGueltigkeit().getGueltigBis().plusMonths(1).with(firstDayOfMonth()),
-                    existingTranche.getGueltigkeit().getGueltigBis()
-                );
-                final var copyOfExisting = GesuchTrancheCopyUtil.copyTranche(
-                    existingTranche,
-                    copyGueltigkeit,
-                    null
-                );
+            final var existingTrancheRange = TrancheRange.from(existingTranche);
 
-                gesuch.getGesuchTranchen().add(copyOfExisting);
-
-                // Truncate existing
-                existingTranche.getGueltigkeit().setGueltigBis(newTranche
-                    .getGueltigkeit()
-                    .getGueltigAb()
-                    .minusMonths(1)
-                    .with(lastDayOfMonth())
-                );
-            } else if (
-                // If start and end of newTranche equal an existing tranche
-                newTranche.getGueltigkeit().getGueltigAb().equals(existingTranche.getGueltigkeit().getGueltigAb())
-                && newTranche.getGueltigkeit().getGueltigBis().equals(existingTranche.getGueltigkeit().getGueltigBis())
-            ) {
-                // Set a 0-day gueltigkeit so this Tranche is removed in the cleanup
-                existingTranche.setGueltigkeit(new DateRange());
-                // Break because no other truncation needs to be made, the new tranche has replaced an existing one
-                break;
-            } else if (
-                // If the new tranche starts after an existing one and no tranchen are between
-                newTranche.getGueltigkeit().getGueltigAb().isAfter(existingTranche.getGueltigkeit().getGueltigAb())
-                && gesuch.getGesuchTranchen()
-                    .stream()
-                    .noneMatch(tranche -> tranche.getGueltigkeit()
-                        .contains(newTranche.getGueltigkeit().getGueltigAb(), true)
-                    )
-            ) {
-                // Truncate end of existing tranche
-                existingTranche.getGueltigkeit()
-                    .setGueltigBis(newTranche.getGueltigkeit()
-                        .getGueltigAb()
-                        .minusMonths(1)
-                        .with(lastDayOfMonth())
-                    );
-
-                // Find followUp tranche that contains the new endDate
-                final var followUpOverlap = gesuch
-                    .getGesuchTranchen()
-                    .stream()
-                    .filter(tranche -> tranche.getGueltigkeit().contains(newTranche.getGueltigkeit().getGueltigBis()))
-                    .findFirst();
-
-                // Find "skipped" tranchen between
-                gesuch
-                    .getGesuchTranchen()
-                    .stream()
-                    .filter(tranche -> {
-                        var trancheStartAfter = DateUtil.afterOrEqual(
-                            tranche.getGueltigkeit().getGueltigAb(),
-                            newTranche.getGueltigkeit().getGueltigAb()
-                        );
-
-                        var trancheEndBefore = DateUtil.beforeOrEqual(
-                            tranche.getGueltigkeit().getGueltigBis(),
-                            newTranche.getGueltigkeit().getGueltigBis()
-                        );
-
-                        // A "skipped" tranche is one where the new tranche starts before or on
-                        // and ends after or on a given tranche
-                        return trancheStartAfter && trancheEndBefore;
-                    })
-                    .forEach(tranche -> tranche.setGueltigkeit(new DateRange()));
-
-                // If a followUp that overlaps was found, then
-                // truncate the start date to the first of next month of the new end date
-                followUpOverlap.ifPresent(tranche -> tranche
-                    .getGueltigkeit()
-                    .setGueltigAb(newTranche.getGueltigkeit()
-                        .getGueltigBis()
-                        .plusMonths(1)
-                        .with(firstDayOfMonth())
-                    ));
+            OverlapType overlaps = newTrancheRange.overlaps(existingTrancheRange);
+            if (overlaps == OverlapType.FULL || overlaps == OverlapType.EXACT) {
+                handleFull(existingTranche);
+            } else if (overlaps == OverlapType.LEFT || overlaps == OverlapType.LEFT_FULL) {
+                handleLeft(existingTranche, newTranche);
+            } else if (overlaps == OverlapType.RIGHT || overlaps == OverlapType.RIGHT_FULL) {
+                handleRight(existingTranche, newTranche);
             }
         }
 
-        // Clean tranchen with less than 1 month Gueltigkeit
         final var toRemove = new ArrayList<GesuchTranche>();
-        for (final var gesuchTranche : gesuch.getGesuchTranchen()) {
-            if (gesuchTranche.getGueltigkeit().getMonths() <= 0) {
-                gesuchTrancheRepository.delete(gesuchTranche);
-                toRemove.add(gesuchTranche);
+        for (final var tranche : gesuch.getGesuchTranchen()) {
+            if (tranche.getGueltigkeit().getMonths() <= 0) {
+                toRemove.add(tranche);
+                gesuchTrancheRepository.delete(tranche);
             }
         }
 
         gesuch.getGesuchTranchen().removeAll(toRemove);
+    }
+
+    /**
+     * Set Gueltigkeit on existing tranche to a date range with less than 1 month, so it's cleaned up
+     */
+    void handleFull(final GesuchTranche existingTranche) {
+        existingTranche.setGueltigkeit(new DateRange());
+    }
+
+    /**
+     * Truncate existing tranche end date
+     */
+    void handleLeft(final GesuchTranche existingTranche, final GesuchTranche newTranche) {
+        existingTranche.getGueltigkeit()
+            .setGueltigBis(newTranche.getGueltigkeit()
+                .getGueltigAb()
+                .minusMonths(1)
+                .with(lastDayOfMonth())
+            );
+    }
+
+    /**
+     * Truncate existing tranche start date
+     */
+    void handleRight(final GesuchTranche existingTranche, final GesuchTranche newTranche) {
+        existingTranche.getGueltigkeit()
+            .setGueltigAb(newTranche.getGueltigkeit()
+                .getGueltigBis()
+                .plusMonths(1)
+                .with(firstDayOfMonth())
+            );
+    }
+
+    enum OverlapType {
+        EXACT,
+        FULL,
+        LEFT,
+        LEFT_FULL,
+        RIGHT,
+        RIGHT_FULL,
+        NONE
+    }
+
+    enum ConsecutiveType {
+        BEFORE,
+        AFTER,
+        NONE
+    }
+
+    @Getter
+    static class TrancheRange {
+        private LocalDate von;
+        private LocalDate bis;
+        private GesuchTranche tranche;
+
+        private TrancheRange(final GesuchTranche tranche, final LocalDate von, final LocalDate bis) {
+            this.tranche = tranche;
+            this.von = von;
+            this.bis = bis;
+        }
+
+        public static TrancheRange from(final GesuchTranche tranche) {
+            return new TrancheRange(
+                tranche,
+                tranche.getGueltigkeit().getGueltigAb(),
+                tranche.getGueltigkeit().getGueltigBis()
+            );
+        }
+
+        public OverlapType overlaps(final TrancheRange other) {
+            if (getVon().equals(other.getVon()) && getBis().equals(other.getBis())) {
+                return OverlapType.EXACT;
+            }
+
+            if (other.getVon().isBefore(getVon()) && other.getBis().isAfter(getVon())) {
+                if (other.getBis().isBefore(getBis())) {
+                    return OverlapType.LEFT;
+                } else if (other.getBis().isEqual(getBis())) {
+                    return OverlapType.LEFT_FULL;
+                }
+            }
+
+            if (other.getVon().isBefore(getBis()) && other.getBis().isAfter(getBis())) {
+                if (other.getVon().isAfter(getVon())) {
+                    return OverlapType.RIGHT;
+                } else if (other.getVon().isEqual(getVon())) {
+                    return OverlapType.RIGHT_FULL;
+                }
+            }
+
+            if (DateUtil.beforeOrEqual(getVon(), other.getVon()) && DateUtil.afterOrEqual(getBis(), other.getBis())) {
+                return OverlapType.FULL;
+            }
+
+            return OverlapType.NONE;
+        }
+
+        public ConsecutiveType consecutive(final TrancheRange other) {
+            if (getVon().isEqual(other.getBis())) {
+                return ConsecutiveType.BEFORE;
+            } else if (getBis().isEqual(other.getVon())) {
+                return ConsecutiveType.AFTER;
+            }
+
+            return ConsecutiveType.NONE;
+        }
     }
 }
