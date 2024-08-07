@@ -4,7 +4,6 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
-import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -15,9 +14,4 @@ public interface SteuerdatenMapper {
     SteuerdatenDto toDto(Steuerdaten steuerdaten);
 
     Steuerdaten partialUpdate(SteuerdatenUpdateDto steuerdatenDto, @MappingTarget Steuerdaten steuerdaten);
-
-    @BeforeMapping
-    default void beforeMapping(SteuerdatenUpdateDto steuerdatenUpdateDto, @MappingTarget Steuerdaten steuerdaten) {
-        steuerdaten.setVeranlagungsCode(steuerdatenUpdateDto.getVeranlagungsCode());
-    }
 }

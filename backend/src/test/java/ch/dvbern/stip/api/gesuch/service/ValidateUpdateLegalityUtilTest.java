@@ -1,8 +1,10 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.Set;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import java.util.Set;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -14,8 +16,13 @@ class ValidateUpdateLegalityUtilTest {
         "Admin,1,2,0,1",
     })
     @ParameterizedTest
-    void getAndValidateLegalityValueTest(String role, String dtoValue, String existingValue,
-                                         String defaultValue, String expected) {
+    void getAndValidateLegalityValueTest(
+        final String role,
+        final String dtoValue,
+        final String existingValue,
+        final String defaultValue,
+        final String expected
+    ) {
         assertThat(ValidateUpdateLegalityUtil.getAndValidateLegalityValue(Set.of(role),dtoValue,
             existingValue,defaultValue), is(expected));
     }
@@ -26,8 +33,12 @@ class ValidateUpdateLegalityUtilTest {
         "Admin,1,0,1"
     })
     @ParameterizedTest
-    void getAndValidateLegalityValueNoExistingValueTest(String role, String dtoValue,
-                                                        String defaultValue, String expected) {
+    void getAndValidateLegalityValueNoExistingValueTest(
+        final String role,
+        final String dtoValue,
+        final String defaultValue,
+        final String expected
+    ) {
         assertThat(ValidateUpdateLegalityUtil.getAndValidateLegalityValue(Set.of(role),
             dtoValue,null,defaultValue), is(expected));
     }
@@ -38,7 +49,11 @@ class ValidateUpdateLegalityUtilTest {
         "Admin,0,0"
     })
     @ParameterizedTest
-    void getAndValidateLegalityValueDefaultValueTest(String role,String defaultValue, String expected) {
+    void getAndValidateLegalityValueDefaultValueTest(
+        final String role,
+        final String defaultValue,
+        final String expected
+    ) {
         assertThat(ValidateUpdateLegalityUtil.getAndValidateLegalityValue(Set.of(role),
             null,null,defaultValue), is(expected));
     }
