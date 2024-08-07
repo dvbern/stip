@@ -13,7 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.BildungsartDtoSpec;
+import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,17 +33,17 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import static io.restassured.http.Method.*;
 
-public class BildungsartApiSpec {
+public class BildungskategorieApiSpec {
 
     private Supplier<RequestSpecBuilder> reqSpecSupplier;
     private Consumer<RequestSpecBuilder> reqSpecCustomizer;
 
-    private BildungsartApiSpec(Supplier<RequestSpecBuilder> reqSpecSupplier) {
+    private BildungskategorieApiSpec(Supplier<RequestSpecBuilder> reqSpecSupplier) {
         this.reqSpecSupplier = reqSpecSupplier;
     }
 
-    public static BildungsartApiSpec bildungsart(Supplier<RequestSpecBuilder> reqSpecSupplier) {
-        return new BildungsartApiSpec(reqSpecSupplier);
+    public static BildungskategorieApiSpec bildungskategorie(Supplier<RequestSpecBuilder> reqSpecSupplier) {
+        return new BildungskategorieApiSpec(reqSpecSupplier);
     }
 
     private RequestSpecBuilder createReqSpec() {
@@ -56,12 +56,12 @@ public class BildungsartApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                getBildungsarten()
+                getBildungskategorien()
         );
     }
 
-    public GetBildungsartenOper getBildungsarten() {
-        return new GetBildungsartenOper(createReqSpec());
+    public GetBildungskategorienOper getBildungskategorien() {
+        return new GetBildungskategorienOper(createReqSpec());
     }
 
     /**
@@ -69,33 +69,33 @@ public class BildungsartApiSpec {
      * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
      * @return api
      */
-    public BildungsartApiSpec reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+    public BildungskategorieApiSpec reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
         this.reqSpecCustomizer = reqSpecCustomizer;
         return this;
     }
 
     /**
-     * Gets all Bildgunsarten
+     * Gets all Bildungskategorien
      * 
      *
-     * return List&lt;BildungsartDtoSpec&gt;
+     * return List&lt;BildungskategorieDtoSpec&gt;
      */
-    public static class GetBildungsartenOper implements Oper {
+    public static class GetBildungskategorienOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/bildungsart";
+        public static final String REQ_URI = "/bildungskategorie";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetBildungsartenOper(RequestSpecBuilder reqSpec) {
+        public GetBildungskategorienOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /bildungsart
+         * GET /bildungskategorie
          * @param handler handler
          * @param <T> type
          * @return type
@@ -106,12 +106,12 @@ public class BildungsartApiSpec {
         }
 
         /**
-         * GET /bildungsart
+         * GET /bildungskategorie
          * @param handler handler
-         * @return List&lt;BildungsartDtoSpec&gt;
+         * @return List&lt;BildungskategorieDtoSpec&gt;
          */
-        public List<BildungsartDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<BildungsartDtoSpec>> type = new TypeRef<List<BildungsartDtoSpec>>(){};
+        public List<BildungskategorieDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<BildungskategorieDtoSpec>> type = new TypeRef<List<BildungskategorieDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
@@ -120,7 +120,7 @@ public class BildungsartApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetBildungsartenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetBildungskategorienOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -130,7 +130,7 @@ public class BildungsartApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetBildungsartenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetBildungskategorienOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -67,7 +66,7 @@ public class TestUtil {
     public static GesuchCreateDtoSpec initGesuchCreateDto() {
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
+        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         return gesuchDTO;
     }
 
@@ -255,9 +254,9 @@ public class TestUtil {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.TERTIAER)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
                         )
                 )
         );

@@ -6,9 +6,8 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.bildungsart.repo.BildungsartRepository;
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.util.TestConstants;
 import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
@@ -19,9 +18,9 @@ import lombok.RequiredArgsConstructor;
 public class AusbildungTestSeeding extends Seeder {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
-    private final BildungsartRepository bildungsartRepository;
+    private final BildungskategorieRepository bildungskategorieRepository;
 
-    private Bildungsart bildungsart;
+    private Bildungskategorie bildungskategorie;
 
     @Override
     @Startup
@@ -31,7 +30,7 @@ public class AusbildungTestSeeding extends Seeder {
 
     @Override
     protected void doSeed() {
-		createBildungsart();
+		createBildungskategorie();
         seedUni();
         seedFh();
     }
@@ -41,15 +40,22 @@ public class AusbildungTestSeeding extends Seeder {
         return List.of("test");
     }
 
-    protected void createBildungsart() {
-        final var art = new Bildungsart()
-			.setBeschreibung("Test Beschreibung")
-			.setBfs(1)
-			.setBildungsstufe(Bildungsstufe.TERTIAER);
+    protected void createBildungskategorie() {
+        final var bildungskategorieTertiaer = new Bildungskategorie()
+            .setBezeichnungDe("Test Beschreibung")
+            .setBezeichnungFr("Test Description")
+            .setBfs(10);
 
-        bildungsartRepository.persistAndFlush(art);
-        bildungsart = art;
-		TestConstants.TEST_BILDUNGSART_ID = bildungsart.getId();
+        bildungskategorieRepository.persistAndFlush(bildungskategorieTertiaer);
+
+        final var bildungskategorieSekundaer = new Bildungskategorie()
+            .setBezeichnungDe("Test Beschreibung")
+            .setBezeichnungFr("Test Description")
+			.setBfs(1);
+
+        bildungskategorieRepository.persistAndFlush(bildungskategorieSekundaer);
+        bildungskategorie = bildungskategorieSekundaer;
+		TestConstants.TEST_BILDUNGSKATEGORIE_ID = bildungskategorieSekundaer.getId();
     }
 
     private void seedUni() {
@@ -63,13 +69,13 @@ public class AusbildungTestSeeding extends Seeder {
         final var uniBeGang1 = (Ausbildungsgang) new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-            .setBildungsart(bildungsart)
+            .setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(uniBern);
 
         final var uniBeGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-			.setBildungsart(bildungsart)
+			.setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(uniBern);
 
         ausbildungsgangRepository.persist(List.of(uniBeGang1, uniBeGang2));
@@ -86,13 +92,13 @@ public class AusbildungTestSeeding extends Seeder {
         final var bfhGang1 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-			.setBildungsart(bildungsart)
+			.setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(bfh);
 
         final var bfhGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-			.setBildungsart(bildungsart)
+			.setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(bfh);
 
         ausbildungsgangRepository.persist(List.of(bfhGang1, bfhGang2));

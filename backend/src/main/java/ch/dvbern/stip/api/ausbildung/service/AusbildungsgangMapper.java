@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungsart.service.BildungsartMapper;
+import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieMapper;
 import ch.dvbern.stip.api.common.service.EntityIdReference;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -14,11 +14,11 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(config = MappingConfig.class, uses = BildungsartMapper.class)
+@Mapper(config = MappingConfig.class, uses = BildungskategorieMapper.class)
 public interface AusbildungsgangMapper {
     @Mapping(
-        target = "bildungsart",
-        source = "bildungsartId",
+        target = "bildungskategorie",
+        source = "bildungskategorieId",
         qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class }
     )
     Ausbildungsgang toEntity(AusbildungsgangCreateDto ausbildungsgangDto);
@@ -31,8 +31,8 @@ public interface AusbildungsgangMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(
-        target = "bildungsart",
-        source = "bildungsartId",
+        target = "bildungskategorie",
+        source = "bildungskategorieId",
         qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class }
     )
     Ausbildungsgang partialUpdate(
