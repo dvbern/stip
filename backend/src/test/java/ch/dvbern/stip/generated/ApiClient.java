@@ -45,8 +45,8 @@ public class ApiClient {
     public BenutzerApiSpec benutzer() {
         return BenutzerApiSpec.benutzer(config.reqSpecSupplier);
     }
-    public BildungsartApiSpec bildungsart() {
-        return BildungsartApiSpec.bildungsart(config.reqSpecSupplier);
+    public BildungskategorieApiSpec bildungskategorie() {
+        return BildungskategorieApiSpec.bildungskategorie(config.reqSpecSupplier);
     }
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);

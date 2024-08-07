@@ -4,8 +4,8 @@ import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import static ch.dvbern.stip.api.bildungsart.type.Bildungsstufe.SEKUNDAR_2;
-import static ch.dvbern.stip.api.bildungsart.type.Bildungsstufe.TERTIAER;
+import static ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe.SEKUNDAR_2;
+import static ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe.TERTIAER;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE;
 
 public class AusbildungskostenStufeRequiredConstraintValidator
@@ -24,7 +24,7 @@ public class AusbildungskostenStufeRequiredConstraintValidator
         if (gesuchFormular.getAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
-        if (gesuchFormular.getAusbildung().getAusbildungsgang().getBildungsart().getBildungsstufe()
+        if (gesuchFormular.getAusbildung().getAusbildungsgang().getBildungskategorie().getBildungsstufe()
             == SEKUNDAR_2) {
 			if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenSekundarstufeZwei() == null) {
 				return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
@@ -32,7 +32,7 @@ public class AusbildungskostenStufeRequiredConstraintValidator
 				return true;
 			}
         }
-        if (gesuchFormular.getAusbildung().getAusbildungsgang().getBildungsart().getBildungsstufe()
+        if (gesuchFormular.getAusbildung().getAusbildungsgang().getBildungskategorie().getBildungsstufe()
             == TERTIAER) {
             if (gesuchFormular.getEinnahmenKosten().getAusbildungskostenTertiaerstufe() == null) {
                 return GesuchValidatorUtil.addProperty(

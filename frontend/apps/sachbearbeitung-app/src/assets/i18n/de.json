@@ -9,19 +9,16 @@
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Gesuch bearbeiten",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",
   "sachbearbeitung-app.header.back": "Zurück",
-
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Speichern und publizieren",
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Ausbildungsstätte",
   "sachbearbeitung-app.admin.option.buchstabenZuteilung": "Buchstaben-Zuteilung",
   "sachbearbeitung-app.admin.option.gesuchsperioden": "Gesuchsperioden",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Benutzerverwaltung",
-
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Übersicht aller Buchstaben-Zuteilungen",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Sachbearbeiter",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter": "Filtern nach Sachbearbeiter",
   "sachbearbeitung-app.admin.buchstabenZuteilung.route.overview": "Buchstaben-Zuteilung Übersicht",
-
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.title": "Gesuchsperiode publizieren",
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.description": "Änderungen sind nach der publizierung nicht mehr möglich.",
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.button": "Gesuchsperiode publizieren",
@@ -39,7 +36,6 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Gesuchsperioden und Gesuchsjahre Übersicht",
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Gesuchsperiode erstellen",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Gesuchsperiode Detail Ansicht",
-
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.title": "Ausbildungsjahr publizieren",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.description": "Änderungen sind nach der publizierung nicht mehr möglich.",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.button": "Ausbildungsjahr publizieren",
@@ -56,7 +52,6 @@
   "sachbearbeitung-app.admin.gesuchsjahr.saveSuccess": "Gesuchsjahr wurde erfolgreich gespeichert",
   "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Gesuchsjahr erstellen",
   "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Gesuchsjahr Detail Ansicht",
-
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Benutzer",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Benutzer Erstellen",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Benutzer Bearbeiten",
@@ -79,7 +74,6 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.laden": "Bei der Benutzererstellung ist ein Fehler aufgetreten, bitte wenden Sie sich an den Support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.roleMapping": "Bei der Benutzer-Rollen Zuweisung ist ein Fehler aufgetreten, bitte wenden Sie sich an den Support.",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.benachrichtigen": "Es konnte keine Benachrichtigung an den Benutzer gesendet werden, entwerder ist die E-Mail Adresse ungültig oder es ist ein Fehler aufgetreten.<br><br>Bitte benachrichtigen Sie den Benutzer manuell.",
-
   "sachbearbeitung-app.admin.ausbildungsstaette.nameDe": "Ausbildungsstätte Deutsch",
   "sachbearbeitung-app.admin.ausbildungsstaette.nameFr": "Ausbildungsstätte Französisch",
   "sachbearbeitung-app.admin.ausbildungsstaette.ort": "Ort",
@@ -96,7 +90,6 @@
   "sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage": "Wollen Sie die Ausbildungsstätte \"{{ nameDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle": "Ausbildungsstätte löschen",
   "sachbearbeitung-app.admin.ausbildungsstaette.route.overview": "Ausbildungsstätten Übersicht",
-
   "sachbearbeitung-app.admin.ausbildungsgaenge.title": "Ausbildungsgänge",
   "sachbearbeitung-app.admin.ausbildungsgaenge.description": "Tabelle mit Ausbildungsgängen pro Ausbildungsstätte",
   "sachbearbeitung-app.admin.ausbildungsgaenge.delete": "Löschen",
@@ -105,12 +98,11 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.save": "Speichern",
   "sachbearbeitung-app.admin.ausbildungsgaenge.bezeichnungDe": "Bezeichnung Deutsch",
   "sachbearbeitung-app.admin.ausbildungsgaenge.bezeichnungFr": "Bezeichnung Französisch",
-  "sachbearbeitung-app.admin.ausbildungsgaenge.bildungsart": "Ausbildungsrichtung",
+  "sachbearbeitung-app.admin.ausbildungsgaenge.bildungskategorie": "Ausbildungsrichtung",
   "sachbearbeitung-app.admin.ausbildungsgaenge.ausbildungsort": "Ausbildungsort",
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Abbrechen",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Wollen Sie den Ausbildungsgang \"{{ bezeichnungDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteTitle": "Ausbildungsgang löschen",
-
   "sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title": "Meta Daten",
   "sachbearbeitung-app.admin.gesuchsperiode.bezeichnungDe.label": "Bezeichnung (DE)",
   "sachbearbeitung-app.admin.gesuchsperiode.bezeichnungFr.label": "Bezeichnung (FR)",
@@ -188,12 +180,10 @@
   "sachbearbeitung-app.admin.gesuchsperiode.confirmDelete.gesuchsjahr.text": "Wollen Sie das Ausbildungsjahr \"{{ bezeichnungDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
-
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
-
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.info": "Total anrechenbare Einnahmen",
@@ -233,7 +223,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total": "Total anerkannte Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Totaler Betrag des Budgets",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
-
   "sachbearbeitung-app.verfuegung.berechnung.familien.title": "Familien Budget",
   "sachbearbeitung-app.verfuegung.berechnung.familien.typ.FAMILIE": "Familie {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.typ.MUTTER": "Mutter {{ year }}",
@@ -265,16 +254,13 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung": "Verpflegung",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner": "Verpflegung auswärts Partner:in",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
-
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
   "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Datum",
   "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Status",
   "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
   "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
-
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
-
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
@@ -295,6 +281,5 @@
   "sachbearbeitung-app.cockpit.table.status": "Status",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Bearbeiter",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-
   "sachbearbeitung-app.gesuch-form.title": "Gesuch"
 }

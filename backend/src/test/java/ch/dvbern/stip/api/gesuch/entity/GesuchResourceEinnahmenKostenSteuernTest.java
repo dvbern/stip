@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -16,15 +18,16 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -48,7 +51,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
     void testCreateEndpoint() {
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
+        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
             .then();
 

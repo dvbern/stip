@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsgangUpdateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
-  private @Valid UUID bildungsartId;
+  private @Valid UUID bildungskategorieId;
   private @Valid UUID ausbildungsstaetteId;
 
   /**
@@ -65,21 +65,21 @@ public class AusbildungsgangUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsgangUpdateDto bildungsartId(UUID bildungsartId) {
-    this.bildungsartId = bildungsartId;
+  public AusbildungsgangUpdateDto bildungskategorieId(UUID bildungskategorieId) {
+    this.bildungskategorieId = bildungskategorieId;
     return this;
   }
 
   
-  @JsonProperty("bildungsartId")
+  @JsonProperty("bildungskategorieId")
   @NotNull
-  public UUID getBildungsartId() {
-    return bildungsartId;
+  public UUID getBildungskategorieId() {
+    return bildungskategorieId;
   }
 
-  @JsonProperty("bildungsartId")
-  public void setBildungsartId(UUID bildungsartId) {
-    this.bildungsartId = bildungsartId;
+  @JsonProperty("bildungskategorieId")
+  public void setBildungskategorieId(UUID bildungskategorieId) {
+    this.bildungskategorieId = bildungskategorieId;
   }
 
   /**
@@ -113,13 +113,13 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     AusbildungsgangUpdateDto ausbildungsgangUpdate = (AusbildungsgangUpdateDto) o;
     return Objects.equals(this.bezeichnungDe, ausbildungsgangUpdate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangUpdate.bezeichnungFr) &&
-        Objects.equals(this.bildungsartId, ausbildungsgangUpdate.bildungsartId) &&
+        Objects.equals(this.bildungskategorieId, ausbildungsgangUpdate.bildungskategorieId) &&
         Objects.equals(this.ausbildungsstaetteId, ausbildungsgangUpdate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsartId, ausbildungsstaetteId);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungskategorieId, ausbildungsstaetteId);
   }
 
   @Override
@@ -129,7 +129,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    bildungsartId: ").append(toIndentedString(bildungsartId)).append("\n");
+    sb.append("    bildungskategorieId: ").append(toIndentedString(bildungskategorieId)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
     sb.append("}");
     return sb.toString();

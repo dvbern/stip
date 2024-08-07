@@ -93,7 +93,7 @@ class GesuchResourceTest {
     void testCreateEndpoint() {
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(fallId);
-        gesuchDTO.setGesuchsperiodeId(TestConstants.GESUCHSPERIODE_TEST_ID);
+        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
             .then();
 
@@ -554,7 +554,7 @@ class GesuchResourceTest {
         var gesuchOpt = findGesuchWithId(gesuche, gesuchId);
         assertThat(gesuchOpt.isPresent(), is(true));
         assertThat(gesuchOpt.get().getFall().getId(), is(fallId));
-        assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.GESUCHSPERIODE_TEST_ID));
+        assertThat(gesuchOpt.get().getGesuchsperiode().getId(), is(TestConstants.TEST_GESUCHSPERIODE_ID));
         assertThat(
             gesuchOpt.get().getGesuchStatus().toString(),
             gesuchOpt.get().getGesuchStatus(),

@@ -14,39 +14,59 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("Bildungsart")
+@JsonTypeName("Bildungskategorie")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class BildungsartDto  implements Serializable {
-  private @Valid String beschreibung;
-  private @Valid ch.dvbern.stip.api.bildungsart.type.Bildungsstufe bildungsstufe;
+public class BildungskategorieDto  implements Serializable {
+  private @Valid String bezeichnungDe;
+  private @Valid String bezeichnungFr;
+  private @Valid ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe bildungsstufe;
   private @Valid Integer bfs;
   private @Valid UUID id;
 
   /**
    **/
-  public BildungsartDto beschreibung(String beschreibung) {
-    this.beschreibung = beschreibung;
+  public BildungskategorieDto bezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
   
-  @JsonProperty("beschreibung")
+  @JsonProperty("bezeichnungDe")
   @NotNull
-  public String getBeschreibung() {
-    return beschreibung;
+  public String getBezeichnungDe() {
+    return bezeichnungDe;
   }
 
-  @JsonProperty("beschreibung")
-  public void setBeschreibung(String beschreibung) {
-    this.beschreibung = beschreibung;
+  @JsonProperty("bezeichnungDe")
+  public void setBezeichnungDe(String bezeichnungDe) {
+    this.bezeichnungDe = bezeichnungDe;
   }
 
   /**
    **/
-  public BildungsartDto bildungsstufe(ch.dvbern.stip.api.bildungsart.type.Bildungsstufe bildungsstufe) {
+  public BildungskategorieDto bezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
+    return this;
+  }
+
+  
+  @JsonProperty("bezeichnungFr")
+  @NotNull
+  public String getBezeichnungFr() {
+    return bezeichnungFr;
+  }
+
+  @JsonProperty("bezeichnungFr")
+  public void setBezeichnungFr(String bezeichnungFr) {
+    this.bezeichnungFr = bezeichnungFr;
+  }
+
+  /**
+   **/
+  public BildungskategorieDto bildungsstufe(ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe bildungsstufe) {
     this.bildungsstufe = bildungsstufe;
     return this;
   }
@@ -54,18 +74,18 @@ public class BildungsartDto  implements Serializable {
   
   @JsonProperty("bildungsstufe")
   @NotNull
-  public ch.dvbern.stip.api.bildungsart.type.Bildungsstufe getBildungsstufe() {
+  public ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe getBildungsstufe() {
     return bildungsstufe;
   }
 
   @JsonProperty("bildungsstufe")
-  public void setBildungsstufe(ch.dvbern.stip.api.bildungsart.type.Bildungsstufe bildungsstufe) {
+  public void setBildungsstufe(ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe bildungsstufe) {
     this.bildungsstufe = bildungsstufe;
   }
 
   /**
    **/
-  public BildungsartDto bfs(Integer bfs) {
+  public BildungskategorieDto bfs(Integer bfs) {
     this.bfs = bfs;
     return this;
   }
@@ -84,7 +104,7 @@ public class BildungsartDto  implements Serializable {
 
   /**
    **/
-  public BildungsartDto id(UUID id) {
+  public BildungskategorieDto id(UUID id) {
     this.id = id;
     return this;
   }
@@ -110,24 +130,26 @@ public class BildungsartDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BildungsartDto bildungsart = (BildungsartDto) o;
-    return Objects.equals(this.beschreibung, bildungsart.beschreibung) &&
-        Objects.equals(this.bildungsstufe, bildungsart.bildungsstufe) &&
-        Objects.equals(this.bfs, bildungsart.bfs) &&
-        Objects.equals(this.id, bildungsart.id);
+    BildungskategorieDto bildungskategorie = (BildungskategorieDto) o;
+    return Objects.equals(this.bezeichnungDe, bildungskategorie.bezeichnungDe) &&
+        Objects.equals(this.bezeichnungFr, bildungskategorie.bezeichnungFr) &&
+        Objects.equals(this.bildungsstufe, bildungskategorie.bildungsstufe) &&
+        Objects.equals(this.bfs, bildungskategorie.bfs) &&
+        Objects.equals(this.id, bildungskategorie.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(beschreibung, bildungsstufe, bfs, id);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsstufe, bfs, id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BildungsartDto {\n");
+    sb.append("class BildungskategorieDto {\n");
     
-    sb.append("    beschreibung: ").append(toIndentedString(beschreibung)).append("\n");
+    sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
+    sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungsstufe: ").append(toIndentedString(bildungsstufe)).append("\n");
     sb.append("    bfs: ").append(toIndentedString(bfs)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
