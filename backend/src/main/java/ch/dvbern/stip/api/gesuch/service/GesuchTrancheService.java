@@ -96,7 +96,7 @@ public class GesuchTrancheService {
         for (final var existingTranche : gesuch.getGesuchTranchen()) {
             final var existingTrancheRange = TrancheRange.from(existingTranche);
 
-            OverlapType overlaps = newTrancheRange.overlaps(existingTrancheRange);
+            final var overlaps = newTrancheRange.overlaps(existingTrancheRange);
             if (overlaps == OverlapType.FULL || overlaps == OverlapType.EXACT) {
                 handleFull(existingTranche);
             } else if (overlaps == OverlapType.LEFT || overlaps == OverlapType.LEFT_FULL) {

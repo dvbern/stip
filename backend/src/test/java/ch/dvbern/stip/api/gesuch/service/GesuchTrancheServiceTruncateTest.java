@@ -171,6 +171,68 @@ class GesuchTrancheServiceTruncateTest {
         );
     }
 
+    @Test
+    void threeExistingTwoTruncated() {
+        // Arrange
+        final var existingTranche1 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 9, 1),
+            LocalDate.of(2024, 11, 1).with(lastDayOfMonth())
+        ));
+
+        final var existingTranche2 = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 12, 1),
+            LocalDate.of(2025, 2, 1).with(lastDayOfMonth())
+        ));
+
+        final var existingTranche3 = getDummyTranche(new DateRange(
+            LocalDate.of(2025, 3, 1),
+            LocalDate.of(2025, 12, 1).with(lastDayOfMonth())
+        ));
+
+        final var gesuch = new Gesuch();
+        gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2, existingTranche3));
+
+        final var newTranche = getDummyTranche(new DateRange(
+            LocalDate.of(2024, 11, 1),
+            LocalDate.of(2024, 11, 1).with(lastDayOfMonth())
+        ));
+
+        final var service = getDummyTrancheService();
+
+        // Act
+        service.truncateExistingTranchen(gesuch, newTranche);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Assert
+        assertThat(gesuch.getGesuchTranchen().size(), is(4));
+
+        // Tranche 1 bis changed
+        assertThat(
+            existingTranche1.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2024, 10, 1).with(lastDayOfMonth()))
+        );
+
+        // Tranche 2 unchanged
+        assertThat(
+            existingTranche2.getGueltigkeit().getGueltigAb(),
+            is(LocalDate.of(2024, 12, 1))
+        );
+        assertThat(
+            existingTranche2.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2025, 2, 1).with(lastDayOfMonth()))
+        );
+
+        // Tranche 3 unchanged
+        assertThat(
+            existingTranche3.getGueltigkeit().getGueltigAb(),
+            is(LocalDate.of(2025, 3, 1))
+        );
+        assertThat(
+            existingTranche3.getGueltigkeit().getGueltigBis(),
+            is(LocalDate.of(2025, 12, 1).with(lastDayOfMonth()))
+        );
+    }
+
     private GesuchTrancheService getDummyTrancheService() {
         final var mockTrancheRepo = Mockito.mock(GesuchTrancheRepository.class);
         Mockito.doNothing().when(mockTrancheRepo).delete(Mockito.any());
