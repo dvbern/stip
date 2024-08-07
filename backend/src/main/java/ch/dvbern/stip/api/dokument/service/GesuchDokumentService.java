@@ -55,7 +55,7 @@ public class GesuchDokumentService {
     private final DokumentstatusService dokumentstatusService;
 
     @Transactional
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentsByGesuchDokumentId(UUID gesuchDokumentId) {
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(UUID gesuchDokumentId) {
         return dokumentstatusService.getGesuchDokumentKommentareByGesuchDokumentId(gesuchDokumentId);
     }
 
