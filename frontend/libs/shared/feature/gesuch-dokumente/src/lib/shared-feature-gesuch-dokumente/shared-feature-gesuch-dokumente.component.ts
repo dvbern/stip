@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -61,6 +62,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     SharedUiIfSachbearbeiterDirective,
     SharedUiPrefixAppTypePipe,
     TypeSafeMatCellDefDirective,
+    MatExpansionPanel,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -73,6 +75,8 @@ export class SharedFeatureGesuchDokumenteComponent {
   private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
+  detailColumns = ['expandedDetail'];
+
   displayedColumns = [
     'expander',
     'documentName',
@@ -80,6 +84,8 @@ export class SharedFeatureGesuchDokumenteComponent {
     'status',
     'actions',
   ];
+
+  displayedChildColumns = ['user', 'timestamp', 'kommentar'];
 
   expandedRowId: string | null = null;
 
@@ -217,6 +223,14 @@ export class SharedFeatureGesuchDokumenteComponent {
           });
         }
       });
+  }
+
+  expandRow(dokument: SharedModelTableDokument) {
+    if (this.expandedRowId === dokument.dokumentTyp) {
+      this.expandedRowId = null;
+    } else {
+      this.expandedRowId = dokument.dokumentTyp;
+    }
   }
 
   fehlendeDokumenteUebermitteln() {
