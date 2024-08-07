@@ -61,7 +61,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuchDokumentKommentare(UUID gesuchDokumentId) {
-        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentsByGesuchDokumentId(gesuchDokumentId)).build();
+        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId)).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)

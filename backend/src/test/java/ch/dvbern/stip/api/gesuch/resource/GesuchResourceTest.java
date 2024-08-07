@@ -6,7 +6,6 @@ import java.util.*;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -678,7 +677,7 @@ class GesuchResourceTest {
         kommentarDto.setGesuchId(gesuch.getId());
         dto.setKommentar(kommentarDto);
         gesuchDokumentService.gesuchDokumentAblehnen(dokumentId,dto);
-        assertThat(gesuchDokumentService.getGesuchDokumentsByGesuchDokumentId(dokumente.get(0).getId()).size(), greaterThan(0));
+        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(dokumente.get(0).getId()).size(), greaterThan(0));
     }
 
     @Test
