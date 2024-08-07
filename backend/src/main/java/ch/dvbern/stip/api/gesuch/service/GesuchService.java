@@ -367,13 +367,15 @@ public class GesuchService {
     public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular, UUID gesuchId) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
         validationGroups.add(DocumentsRequiredValidationGroup.class);
-        // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not already present
-        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already validating LebenslaufItemPage
+        // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not
+        // already present
+        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already
+        // validating LebenslaufItemPage
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
+                validationGroups.contains(AusbildungPageValidation.class) &&
+                !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }
