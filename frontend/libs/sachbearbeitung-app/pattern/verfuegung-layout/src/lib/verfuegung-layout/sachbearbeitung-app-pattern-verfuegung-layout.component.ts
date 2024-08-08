@@ -5,12 +5,14 @@ import {
   EventEmitter,
   Input,
   computed,
+  effect,
   inject,
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
 import {
   VERFUEGUNG_OPTIONS,
   VerfuegungOption,
@@ -38,6 +40,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   styleUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.scss',
   templateUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BerechnungStore],
 })
 export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   @Input() option?: VerfuegungOption;
@@ -47,14 +50,41 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   verfuegungOptions = VERFUEGUNG_OPTIONS;
 
+  berechnungStore = inject(BerechnungStore);
+
   berechnungenSig = computed(() => {
     const gesuchId = this.gesuchViewSig().gesuchId;
     // berechnungenOptions will be fetched dynamically in the future
-    const berechnungenOptions = [createBerechnungOption(0)];
+    const berechnungenOptions = [];
+
+    const berechnungenRd = this.berechnungStore.berechnungen();
+    if (berechnungenRd.data) {
+      for (
+        let berechnungIndex = 0;
+        berechnungIndex < berechnungenRd.data.length;
+        berechnungIndex++
+      ) {
+        berechnungenOptions.push(createBerechnungOption(berechnungIndex));
+      }
+    }
 
     return berechnungenOptions.map((option) => ({
       ...option,
       fullRoute: ['/', 'verfuegung', gesuchId, ...option.route.split('/')],
     }));
   });
+
+  constructor() {
+    effect(
+      () => {
+        const { gesuchId } = this.gesuchViewSig();
+
+        if (!gesuchId) {
+          return;
+        }
+        this.berechnungStore.calculateBerechnung$({ gesuchId });
+      },
+      { allowSignalWrites: true },
+    );
+  }
 }

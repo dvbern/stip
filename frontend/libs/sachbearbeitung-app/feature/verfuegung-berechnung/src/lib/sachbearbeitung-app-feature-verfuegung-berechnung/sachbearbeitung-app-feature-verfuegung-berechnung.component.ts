@@ -66,18 +66,17 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   viewSig = computed(() => {
     const { gesuch, gesuchFormular } = this.gesuchViewSig();
-    const tranche = gesuch?.gesuchTrancheToWorkWith;
 
-    if (!gesuch || !tranche || !gesuchFormular) {
+    if (!gesuch || !gesuchFormular) {
       return null;
     }
     return {
       gesuchId: gesuch.id,
       person: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
-      ...tranche,
-      monate: Math.abs(
-        differenceInMonths(addDays(tranche.gueltigBis, 1), tranche.gueltigAb),
-      ),
+      // ...tranche,
+      // monate: Math.abs(
+      //   differenceInMonths(addDays(tranche.gueltigBis, 1), tranche.gueltigAb),
+      // ),
     };
   });
   berechnungStore = inject(BerechnungStore);
@@ -85,9 +84,8 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   berechnungenSig = computed<{ loading: boolean; list: GesamtBerechnung[] }>(
     () => {
       const { gesuch, gesuchFormular } = this.gesuchViewSig();
-      const tranche = gesuch?.gesuchTrancheToWorkWith;
       const berechnungenRd = this.berechnungStore.berechnungen();
-      if (!berechnungenRd.data || !tranche || !gesuchFormular) {
+      if (!berechnungenRd.data || !gesuch || !gesuchFormular) {
         return { loading: berechnungenRd.type === 'pending', list: [] };
       }
       const berechnungen = berechnungenRd.data;
