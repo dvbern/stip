@@ -191,12 +191,17 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchDokumentId}/kommentare':
+  '/gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare':
     get:
       tags:
         - Dokument
       parameters:
-        - name: gesuchDokumentId
+        - name: dokumentTyp
+          schema:
+            $ref: '#/components/schemas/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path

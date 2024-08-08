@@ -151,7 +151,7 @@ class GesuchDokumentServiceTest {
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
                 new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl())
-            )
+            ), new GesuchDokumentKommentarMapperImpl()
         );
 
         gesuchDokumente = new HashMap<>();
@@ -190,7 +190,8 @@ class GesuchDokumentServiceTest {
             GesuchRepository gesuchRepository,
             S3AsyncClient s3,
             ConfigService configService,
-            DokumentstatusService dokumentstatusService
+            DokumentstatusService dokumentstatusService,
+            GesuchDokumentKommentarMapper dokumentKommentarMapper
         ) {
             super(
                 dokumentMapper,
@@ -199,7 +200,8 @@ class GesuchDokumentServiceTest {
                 gesuchRepository,
                 s3,
                 configService,
-                dokumentstatusService
+                dokumentstatusService,
+                dokumentKommentarMapper
             );
         }
 

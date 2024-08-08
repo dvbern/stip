@@ -669,12 +669,13 @@ class GesuchResourceTest {
         kommentarDto.setDokumentTyp(dokumente.get(0).getDokumentTyp());
         kommentarDto.setDatum(LocalDate.now());
         kommentarDto.setBenutzer("testuser");
+        kommentarDto.setGesuchId(gesuch.getId());
         UUID dokumentId = dokumente.get(0).getId();
         kommentarDto.setGesuchDokumentId(dokumentId);
         kommentarDto.setGesuchId(gesuch.getId());
         dto.setKommentar(kommentarDto);
         gesuchDokumentService.gesuchDokumentAblehnen(dokumentId,dto);
-        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(dokumente.get(0).getId()).size(), greaterThan(0));
+        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuch.getId(),dokumente.get(0).getDokumentTyp()).size(), greaterThan(0));
     }
 
     @Test

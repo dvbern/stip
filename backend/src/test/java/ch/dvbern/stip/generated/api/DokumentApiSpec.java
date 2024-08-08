@@ -681,13 +681,14 @@ public class DokumentApiSpec {
      * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
      * 
      *
-     * @see #gesuchDokumentIdPath  (required)
+     * @see #dokumentTypPath  (required)
+     * @see #gesuchIdPath  (required)
      * return List&lt;GesuchDokumentKommentarDtoSpec&gt;
      */
     public static class GetGesuchDokumentKommentareOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchDokument/{gesuchDokumentId}/kommentare";
+        public static final String REQ_URI = "/gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -699,7 +700,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/{gesuchDokumentId}/kommentare
+         * GET /gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare
          * @param handler handler
          * @param <T> type
          * @return type
@@ -710,7 +711,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/{gesuchDokumentId}/kommentare
+         * GET /gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare
          * @param handler handler
          * @return List&lt;GesuchDokumentKommentarDtoSpec&gt;
          */
@@ -719,14 +720,25 @@ public class DokumentApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_DOKUMENT_ID_PATH = "gesuchDokumentId";
+        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
 
         /**
-         * @param gesuchDokumentId (UUID)  (required)
+         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
          * @return operation
          */
-        public GetGesuchDokumentKommentareOper gesuchDokumentIdPath(Object gesuchDokumentId) {
-            reqSpec.addPathParam(GESUCH_DOKUMENT_ID_PATH, gesuchDokumentId);
+        public GetGesuchDokumentKommentareOper dokumentTypPath(Object dokumentTyp) {
+            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
