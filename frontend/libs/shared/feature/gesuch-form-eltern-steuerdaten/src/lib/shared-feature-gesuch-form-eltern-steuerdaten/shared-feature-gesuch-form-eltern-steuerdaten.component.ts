@@ -98,7 +98,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
         /** @see // this.steuerjahrValidation */
       ],
     ],
-    veranlagungscode: [
+    veranlagungsCode: [
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 99)],
     ],
@@ -149,7 +149,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
           arbeitsverhaeltnis ?? false,
         );
         this.hiddenFieldSet.setFieldVisibility(
-          this.form.controls.veranlagungscode,
+          this.form.controls.veranlagungsCode,
           this.config.isSachbearbeitungApp,
         );
         this.hiddenFieldSet.setFieldVisibility(
@@ -221,7 +221,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       'verpflegung',
       'verpflegungPartner',
       'steuerjahr',
-      'veranlagungscode',
+      'veranlagungsCode',
     ]);
     const originalSteuerdaten = this.originalSteuerdatenSig();
     const steuerdaten = {
