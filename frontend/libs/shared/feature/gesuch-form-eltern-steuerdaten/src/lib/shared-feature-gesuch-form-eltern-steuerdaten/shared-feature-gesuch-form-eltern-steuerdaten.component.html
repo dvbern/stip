@@ -232,7 +232,7 @@
     </div>
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.steuerjahr) ||
-      !hiddenFieldSet.valuesSig().has(form.controls.veranlagungscode)
+      !hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)
     ) {
       <div class="row g-4 my-2">
         @if (!hiddenFieldSet.valuesSig().has(form.controls.steuerjahr)) {
@@ -256,11 +256,11 @@
             </mat-error>
           </mat-form-field>
         }
-        @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungscode)) {
+        @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>
             <input
-              formControlName="veranlagungscode"
+              formControlName="veranlagungsCode"
               data-testid="form-eltern-steuerdaten.veranlagungscode"
               matInput
               type="number"
