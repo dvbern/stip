@@ -37,6 +37,7 @@ export const selectGesuchAppFeatureCockpitView = createSelector(
           gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
         }))
         // this filter is the key difference. do not show the herbst / fruehling periode if there is a gesuch
+        // for either of them. Feel free to find a better solution to implement this logic.
         .filter((p) => p.gesuch),
       version,
     };
