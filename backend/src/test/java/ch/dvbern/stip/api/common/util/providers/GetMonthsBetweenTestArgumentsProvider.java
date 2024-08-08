@@ -52,6 +52,34 @@ public class GetMonthsBetweenTestArgumentsProvider implements ArgumentsProvider 
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 1, 31),
                 1
+            ),
+            // Multiple months same day
+            Arguments.of(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 3, 1),
+                2
+            ),
+            // Multiple months later end day
+            Arguments.of(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 3, 4),
+                2
+            ),
+            Arguments.of(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 4, 4),
+                3
+            ),
+            // Multiple months non-first days
+            Arguments.of(
+                LocalDate.of(2024, 1, 17),
+                LocalDate.of(2024, 4, 16),
+                2
+            ),
+            Arguments.of(
+                LocalDate.of(2024, 1, 17),
+                LocalDate.of(2024, 4, 18),
+                3
             )
         );
     }

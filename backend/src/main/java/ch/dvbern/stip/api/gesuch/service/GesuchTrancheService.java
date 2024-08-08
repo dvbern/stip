@@ -71,6 +71,7 @@ public class GesuchTrancheService {
         final var trancheToCopy = gesuch.getGesuchTrancheById(originalTrancheId).orElseThrow(NotFoundException::new);
         final var newTranche = GesuchTrancheCopyUtil.createNewTranche(trancheToCopy, createDto);
         newTranche.setGesuch(gesuch);
+        newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         gesuch.getGesuchTranchen().add(newTranche);
         gesuchRepository.persistAndFlush(gesuch);
 
@@ -120,7 +121,7 @@ public class GesuchTrancheService {
      * Set Gueltigkeit on existing tranche to a date range with less than 1 month, so it's cleaned up
      */
     void handleFull(final GesuchTranche existingTranche) {
-        existingTranche.setGueltigkeit(new DateRange());
+        existingTranche.setGueltigkeit(new DateRange(LocalDate.now(), LocalDate.now()));
     }
 
     /**
