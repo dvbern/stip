@@ -77,7 +77,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       );
       return {
         ...periode,
-        aenderungsAntrag, // check for status and date in future (1104)
+        aenderungsAntrag, // check for status and date in future (1104), sice there is an antrag if the gesuch is not submitted
       };
     });
   });
@@ -87,7 +87,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       () => {
         const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
         if (isSuccess(aenderung)) {
-          this.gesuchAenderungStore.resetCachedGesuchAenderung();
+          // this.gesuchAenderungStore.resetCachedGesuchAenderung(); reset in future (1104)
           // this.router.navigate(['/', 'aenderung', aenderung.data.id]); navigate to aenderung in future (1104)
         }
       },

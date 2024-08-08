@@ -10,11 +10,14 @@ import {
   Gesuch,
   GesuchService,
 } from '@dv/shared/model/gesuch';
+import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   cachedPending,
   handleApiResponse,
   initial,
+  isSuccess,
+  success,
 } from '@dv/shared/util/remote-data';
 
 type GesuchAenderungState = {
@@ -61,7 +64,11 @@ export class GesuchAenderungStore extends signalStore(
       exhaustMap((gesuchIds) => {
         return forkJoin(
           gesuchIds.map((gesuchId) =>
-            this.gesuchService.getAenderungsantrag$({ gesuchId }),
+            this.gesuchService
+              .getAenderungsantrag$({ gesuchId }, undefined, undefined, {
+                context: shouldIgnoreNotFoundErrorsIf(true),
+              })
+              .pipe(map((gesuch) => gesuch ?? [])),
           ),
         );
       }),
@@ -91,7 +98,15 @@ export class GesuchAenderungStore extends signalStore(
           .pipe(
             handleApiResponse(
               (gesuchAenderung) => {
-                patchState(this, { cachedGesuchAenderung: gesuchAenderung });
+                patchState(this, (state) => ({
+                  cachedGesuchAenderung: gesuchAenderung,
+                  cachedAenderungsGesuche: isSuccess(gesuchAenderung)
+                    ? success([
+                        ...(state.cachedAenderungsGesuche.data ?? []),
+                        gesuchAenderung.data,
+                      ])
+                    : cachedPending(state.cachedAenderungsGesuche),
+                }));
               },
               {
                 onSuccess: () => {
