@@ -97,7 +97,7 @@ class GesuchTrancheCopyUtilTest {
                 // Aenderung clamped to end of end month
                 Arguments.of(
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 10, 1),
+                    LocalDate.of(2024, 10, 31),
                     LocalDate.of(2024, 2, 16),
                     LocalDate.of(2024, 10, 16),
                     LocalDate.of(2024, 3, 1),

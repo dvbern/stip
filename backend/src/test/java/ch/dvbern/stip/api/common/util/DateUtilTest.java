@@ -14,7 +14,7 @@ class DateUtilTest {
     @ParameterizedTest
     @ArgumentsSource(RoundToStartOrEndTestArgumentsProvider.class)
     void roundToStartOrEndTest(final LocalDate toRound, final LocalDate expected, final int midpoint) {
-        final var rounded = DateUtil.roundToStartOrEnd(toRound, midpoint);
+        final var rounded = DateUtil.roundToStartOrEnd(toRound, midpoint, false);
         assertThat(rounded, is(expected));
     }
 

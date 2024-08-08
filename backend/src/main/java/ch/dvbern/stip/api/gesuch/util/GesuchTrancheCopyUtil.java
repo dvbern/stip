@@ -85,14 +85,16 @@ public class GesuchTrancheCopyUtil {
                 createDateRange.getGueltigAb(),
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
-            )
+            ),
+            true
         );
         final var endDate = DateUtil.roundToStartOrEnd(
             DateUtil.clamp(
                 createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
-            )
+            ),
+            false
         );
 
         if (startDate.isAfter(endDate)) {
