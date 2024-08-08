@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
  **/
@@ -20,32 +19,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchDokumentKommentarDto  implements Serializable {
-  private @Valid UUID gesuchDokumentId;
   private @Valid UUID gesuchId;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
-  private @Valid BenutzerDto benutzer;
-  private @Valid LocalDate datum;
-  private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus dokumentStatus;
   private @Valid String kommentar;
-
-  /**
-   **/
-  public GesuchDokumentKommentarDto gesuchDokumentId(UUID gesuchDokumentId) {
-    this.gesuchDokumentId = gesuchDokumentId;
-    return this;
-  }
-
-
-  @JsonProperty("gesuchDokumentId")
-  @NotNull
-  public UUID getGesuchDokumentId() {
-    return gesuchDokumentId;
-  }
-
-  @JsonProperty("gesuchDokumentId")
-  public void setGesuchDokumentId(UUID gesuchDokumentId) {
-    this.gesuchDokumentId = gesuchDokumentId;
-  }
+  private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus dokumentStatus;
+  private @Valid BenutzerDto benutzer;
+  private @Valid LocalDate timestampErstellt;
 
   /**
    **/
@@ -87,40 +66,21 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentKommentarDto benutzer(BenutzerDto benutzer) {
-    this.benutzer = benutzer;
+  public GesuchDokumentKommentarDto kommentar(String kommentar) {
+    this.kommentar = kommentar;
     return this;
   }
 
 
-  @JsonProperty("benutzer")
+  @JsonProperty("kommentar")
   @NotNull
-  public BenutzerDto getBenutzer() {
-    return benutzer;
+  public String getKommentar() {
+    return kommentar;
   }
 
-  @JsonProperty("benutzer")
-  public void setBenutzer(BenutzerDto benutzer) {
-    this.benutzer = benutzer;
-  }
-
-  /**
-   **/
-  public GesuchDokumentKommentarDto datum(LocalDate datum) {
-    this.datum = datum;
-    return this;
-  }
-
-
-  @JsonProperty("datum")
-  @NotNull
-  public LocalDate getDatum() {
-    return datum;
-  }
-
-  @JsonProperty("datum")
-  public void setDatum(LocalDate datum) {
-    this.datum = datum;
+  @JsonProperty("kommentar")
+  public void setKommentar(String kommentar) {
+    this.kommentar = kommentar;
   }
 
   /**
@@ -143,20 +103,38 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentKommentarDto kommentar(String kommentar) {
-    this.kommentar = kommentar;
+  public GesuchDokumentKommentarDto benutzer(BenutzerDto benutzer) {
+    this.benutzer = benutzer;
     return this;
   }
 
 
-  @JsonProperty("kommentar")
-  public String getKommentar() {
-    return kommentar;
+  @JsonProperty("benutzer")
+  public BenutzerDto getBenutzer() {
+    return benutzer;
   }
 
-  @JsonProperty("kommentar")
-  public void setKommentar(String kommentar) {
-    this.kommentar = kommentar;
+  @JsonProperty("benutzer")
+  public void setBenutzer(BenutzerDto benutzer) {
+    this.benutzer = benutzer;
+  }
+
+  /**
+   **/
+  public GesuchDokumentKommentarDto timestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+
+  @JsonProperty("timestampErstellt")
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
   }
 
 
@@ -169,18 +147,17 @@ public class GesuchDokumentKommentarDto  implements Serializable {
       return false;
     }
     GesuchDokumentKommentarDto gesuchDokumentKommentar = (GesuchDokumentKommentarDto) o;
-    return Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
-        Objects.equals(this.gesuchId, gesuchDokumentKommentar.gesuchId) &&
+    return Objects.equals(this.gesuchId, gesuchDokumentKommentar.gesuchId) &&
         Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
-        Objects.equals(this.benutzer, gesuchDokumentKommentar.benutzer) &&
-        Objects.equals(this.datum, gesuchDokumentKommentar.datum) &&
+        Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
-        Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar);
+        Objects.equals(this.benutzer, gesuchDokumentKommentar.benutzer) &&
+        Objects.equals(this.timestampErstellt, gesuchDokumentKommentar.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchDokumentId, gesuchId, dokumentTyp, benutzer, datum, dokumentStatus, kommentar);
+    return Objects.hash(gesuchId, dokumentTyp, kommentar, dokumentStatus, benutzer, timestampErstellt);
   }
 
   @Override
@@ -188,13 +165,12 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDto {\n");
 
-    sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
-    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
-    sb.append("    datum: ").append(toIndentedString(datum)).append("\n");
-    sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
+    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

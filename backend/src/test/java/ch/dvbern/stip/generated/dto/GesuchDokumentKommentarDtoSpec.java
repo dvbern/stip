@@ -32,20 +32,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Kommentar zu einem (abgelehnten) GesuchDokument
  */
 @JsonPropertyOrder({
-  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_DOKUMENT_ID,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_ID,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_STATUS,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_KOMMENTAR,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_BENUTZER,
-  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DATUM
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
 @JsonTypeName("GesuchDokumentKommentar")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDokumentKommentarDtoSpec {
-  public static final String JSON_PROPERTY_GESUCH_DOKUMENT_ID = "gesuchDokumentId";
-  private UUID gesuchDokumentId;
-
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
   private UUID gesuchId;
 
@@ -61,37 +57,11 @@ public class GesuchDokumentKommentarDtoSpec {
   public static final String JSON_PROPERTY_BENUTZER = "benutzer";
   private BenutzerDtoSpec benutzer;
 
-  public static final String JSON_PROPERTY_DATUM = "datum";
-  private LocalDate datum;
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  private LocalDate timestampErstellt;
 
   public GesuchDokumentKommentarDtoSpec() {
   }
-
-  public GesuchDokumentKommentarDtoSpec gesuchDokumentId(UUID gesuchDokumentId) {
-    
-    this.gesuchDokumentId = gesuchDokumentId;
-    return this;
-  }
-
-   /**
-   * Get gesuchDokumentId
-   * @return gesuchDokumentId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_DOKUMENT_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getGesuchDokumentId() {
-    return gesuchDokumentId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_DOKUMENT_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchDokumentId(UUID gesuchDokumentId) {
-    this.gesuchDokumentId = gesuchDokumentId;
-  }
-
 
   public GesuchDokumentKommentarDtoSpec gesuchId(UUID gesuchId) {
     
@@ -181,9 +151,9 @@ public class GesuchDokumentKommentarDtoSpec {
    * Get kommentar
    * @return kommentar
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
     return kommentar;
@@ -191,7 +161,7 @@ public class GesuchDokumentKommentarDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -207,9 +177,9 @@ public class GesuchDokumentKommentarDtoSpec {
    * Get benutzer
    * @return benutzer
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_BENUTZER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BenutzerDtoSpec getBenutzer() {
     return benutzer;
@@ -217,35 +187,35 @@ public class GesuchDokumentKommentarDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BENUTZER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBenutzer(BenutzerDtoSpec benutzer) {
     this.benutzer = benutzer;
   }
 
 
-  public GesuchDokumentKommentarDtoSpec datum(LocalDate datum) {
+  public GesuchDokumentKommentarDtoSpec timestampErstellt(LocalDate timestampErstellt) {
     
-    this.datum = datum;
+    this.timestampErstellt = timestampErstellt;
     return this;
   }
 
    /**
-   * Get datum
-   * @return datum
+   * Get timestampErstellt
+   * @return timestampErstellt
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DATUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public LocalDate getDatum() {
-    return datum;
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DATUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDatum(LocalDate datum) {
-    this.datum = datum;
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
   }
 
   @Override
@@ -257,31 +227,29 @@ public class GesuchDokumentKommentarDtoSpec {
       return false;
     }
     GesuchDokumentKommentarDtoSpec gesuchDokumentKommentar = (GesuchDokumentKommentarDtoSpec) o;
-    return Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
-        Objects.equals(this.gesuchId, gesuchDokumentKommentar.gesuchId) &&
+    return Objects.equals(this.gesuchId, gesuchDokumentKommentar.gesuchId) &&
         Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
         Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.benutzer, gesuchDokumentKommentar.benutzer) &&
-        Objects.equals(this.datum, gesuchDokumentKommentar.datum);
+        Objects.equals(this.timestampErstellt, gesuchDokumentKommentar.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchDokumentId, gesuchId, dokumentTyp, dokumentStatus, kommentar, benutzer, datum);
+    return Objects.hash(gesuchId, dokumentTyp, dokumentStatus, kommentar, benutzer, timestampErstellt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDtoSpec {\n");
-    sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
-    sb.append("    datum: ").append(toIndentedString(datum)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

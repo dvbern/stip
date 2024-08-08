@@ -3070,14 +3070,10 @@ components:
       description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
       type: object
       required:
-        - gesuchDokumentId
         - gesuchId
         - dokumentTyp
-        - datum
-        - benutzer
+        - kommentar
       properties:
-        gesuchDokumentId:
-          $ref: '#/components/schemas/UUID'
         gesuchId:
           $ref: '#/components/schemas/UUID'
         dokumentTyp:
@@ -3088,7 +3084,7 @@ components:
           type: string
         benutzer:
           $ref: '#/components/schemas/Benutzer'
-        datum:
+        timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
     Dokumentstatus:
       enum:

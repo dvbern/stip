@@ -29,6 +29,7 @@ public class GesuchDokumentKommentarService {
     public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument,final GesuchDokumentKommentarDto gesuchDokumentKommentarDto) {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
+
         if(gesuchDokumentKommentarDto == null){
             createEmptyKommentarForGesuchDokument(gesuchDokument,null);
         }else{

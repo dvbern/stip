@@ -104,10 +104,9 @@ class GesuchDokumentServiceTest {
             .setId(id);
 
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
-        gesuchDokumentKommentarDto.setGesuchDokumentId(mockedDokument.getId());
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
         gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
-        gesuchDokumentKommentarDto.setDatum(LocalDate.now());
+        gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
         someKnownComment.setKommentar(gesuchDokumentKommentarDto);
 
         GesuchTranche tranche = initGesuchTranche();
@@ -158,7 +157,7 @@ class GesuchDokumentServiceTest {
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
                 new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository,new GesuchDokumentKommentarMapperImpl(), benutzerService)
-            ), new GesuchDokumentKommentarMapperImpl()
+            )
         );
 
         gesuchDokumente = new HashMap<>();
@@ -197,8 +196,7 @@ class GesuchDokumentServiceTest {
             GesuchRepository gesuchRepository,
             S3AsyncClient s3,
             ConfigService configService,
-            DokumentstatusService dokumentstatusService,
-            GesuchDokumentKommentarMapper dokumentKommentarMapper
+            DokumentstatusService dokumentstatusService
         ) {
             super(
                 dokumentMapper,
@@ -207,8 +205,7 @@ class GesuchDokumentServiceTest {
                 gesuchRepository,
                 s3,
                 configService,
-                dokumentstatusService,
-                dokumentKommentarMapper
+                dokumentstatusService
             );
         }
 
