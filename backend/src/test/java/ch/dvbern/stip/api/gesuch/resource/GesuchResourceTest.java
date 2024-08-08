@@ -668,7 +668,7 @@ class GesuchResourceTest {
         kommentarDto.setKommentar("blabla");
         kommentarDto.setDokumentTyp(dokumente.get(0).getDokumentTyp());
         kommentarDto.setDatum(LocalDate.now());
-        kommentarDto.setBenutzer("testuser");
+        kommentarDto.setBenutzer(new BenutzerDto());
         kommentarDto.setGesuchId(gesuch.getId());
         UUID dokumentId = dokumente.get(0).getId();
         kommentarDto.setGesuchDokumentId(dokumentId);

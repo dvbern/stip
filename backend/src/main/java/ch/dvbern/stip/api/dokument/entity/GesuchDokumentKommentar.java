@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.dokument.entity;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
@@ -47,9 +48,13 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @Column(name = "kommentar")
     private String kommentar;
 
-    @NotNull
-    @Column(name = "benutzer")
-    private String benutzer;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "benutzer_id",
+        foreignKey = @ForeignKey(name = "FK_gesuchdokumentkommentar_benutzer_id"),
+        nullable = false
+    )
+    private Benutzer benutzer;
 
     @NotNull
     @Column(name = "datum")
