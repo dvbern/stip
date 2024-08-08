@@ -5,7 +5,7 @@
     <div class="container card pb-3 pt-3 mt-5 shadow">
       <div class="row overflow-auto">
         <table
-          class="document-table"
+          class="document-table dv-expandable-table"
           mat-table
           [dataSource]="dokumenteDataSourceSig()"
           [trackBy]="trackByFn"
@@ -144,40 +144,18 @@
 
           <!-- expandedDetail -->
           <ng-container matColumnDef="expandedDetail">
-            <td class="expander-cell" mat-cell [attr.colspan]="displayedColumns.length">
-              <!--      /*dvMatCellDef="let user; dataSource: userData"-->
-
-              <div class="detail-cell">
-                <!-- [@detailExpand]="user.id === expandedRowId ? 'expanded' : 'collapsed'"-->
-                <table mat-table class="child-table">
-                  <!-- [dataSource]="user.userDaten ?? []"-->
-                  <caption class="cdk-visually-hidden">
-                    {{
-                      'shared.dokumente.expanded-detail.caption' | translate
-                    }}
-                  </caption>
-                  <!-- User -->
-                  <ng-container matColumnDef="user">
-                    <th mat-header-cell *matHeaderCellDef>
-                      {{ 'shared.dokumente.expanded-detail.user' | translate }}
-                    </th>
-                  </ng-container>
-                  <!-- Timestamp -->
-                  <ng-container matColumnDef="timestamp">
-                    <p mat-header-cell *matHeaderCellDef>
-                      {{ 'shared.dokumente.expanded-detail.timestamp' | translate }}
-                    </p>
-                  </ng-container>
-                  <!-- Kommentar -->
-                  <ng-container matColumnDef="kommentar">
-                    <th mat-header-cell *matHeaderCellDef>
-                      {{ 'shared.dokumente.expanded-detail.kommentar' | translate }}
-                    </th>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedChildColumns"></tr>
-                  <tr mat-row *matRowDef="let dokumente; columns: displayedChildColumns"></tr>
-                </table>
+            <td
+              class="expander-cell"
+              mat-cell
+              [attr.colspan]="displayedColumns.length"
+              *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
+            >
+              <div
+                class="detail-cell"
+                [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
+              >
+                <!-- -->
+                {{ dokument.gesuchDokument?.status }}
               </div>
             </td>
           </ng-container>
@@ -193,7 +171,7 @@
               'expanded-row': dokument.dokumentTyp === expandedRowId
             }"
           ></tr>
-          <tr mat-row class="detail-row" *matRowDef="let childColumns; columns: detailColumns"></tr>
+          <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
         </table>
       </div>
     </div>
