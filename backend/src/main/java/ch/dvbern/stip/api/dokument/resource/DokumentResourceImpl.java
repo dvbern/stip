@@ -58,10 +58,11 @@ public class DokumentResourceImpl implements DokumentResource {
         List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
+
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesuchDokumentKommentare(UUID gesuchDokumentId) {
-        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchDokumentId)).build();
+    public Response getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
+        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp)).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)

@@ -12,7 +12,6 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
@@ -29,18 +28,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Setter
 public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "gesuch_dokument_id")
-    private UUID dokumentId;
+    @Column(name = "dokument_typ", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DokumentTyp dokumentTyp;
 
     @NotNull
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_id"))
     private Gesuch gesuch;
-
-    @NotNull
-    @Column(name = "dokument_typ", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DokumentTyp dokumentTyp;
 
     @NotNull
     @Column(name = "dokumentstatus")

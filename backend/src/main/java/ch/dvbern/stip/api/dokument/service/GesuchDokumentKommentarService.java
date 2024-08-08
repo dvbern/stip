@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.dokument.service;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -16,9 +17,10 @@ import java.util.UUID;
 public class GesuchDokumentKommentarService {
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
+
     @Transactional
-    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchDokumentId(final UUID gesuchDokumentId) {
-        return gesuchDokumentKommentarRepository.findAllByGesuchDokumentId(gesuchDokumentId).stream().map(gesuchDokumentKommentarMapper::toDto).toList();
+    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchIdAndDokumentTyp(final UUID gesuchId, final DokumentTyp dokumentTyp) {
+        return gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId).stream().map(gesuchDokumentKommentarMapper::toDto).toList();
     }
 
     @Transactional
@@ -27,10 +29,8 @@ public class GesuchDokumentKommentarService {
         if(gesuchDokumentKommentarDto == null){
             createEmptyKommentarForGesuchDokument(gesuchDokument,null);
         }else{
-            kommentar.setDokumentId(gesuchDokument.getId());
             kommentar.setGesuch(gesuchDokument.getGesuch());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
-            kommentar.setDokumentTyp(gesuchDokument.getDokumentTyp());
             gesuchDokumentKommentarRepository.persist(kommentar);
         }
     }
@@ -39,7 +39,6 @@ public class GesuchDokumentKommentarService {
     public void createEmptyKommentarForGesuchDokument(final GesuchDokument gesuchDokument, final String comment) {
         final var kommentar = new GesuchDokumentKommentar()
             .setGesuch(gesuchDokument.getGesuch())
-            .setDokumentTyp(gesuchDokument.getDokumentTyp())
             .setDokumentstatus(gesuchDokument.getStatus())
             .setKommentar(comment);
         gesuchDokumentKommentarRepository.persist(kommentar);

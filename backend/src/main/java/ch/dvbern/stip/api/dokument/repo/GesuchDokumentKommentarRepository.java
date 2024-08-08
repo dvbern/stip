@@ -1,7 +1,6 @@
 package ch.dvbern.stip.api.dokument.repo;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
@@ -19,10 +18,6 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
     private final EntityManager entityManager;
     private static QGesuchDokumentKommentar gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
 
-    public List<GesuchDokumentKommentar> findAllByGesuchDokumentId(UUID gesuchDokumentId) {
-        return findAll().stream().filter(kommentar -> kommentar.getDokumentId().equals(gesuchDokumentId)).toList();
-    }
-
     @Transactional
     public void deleteAllForGesuch(final UUID gesuchId) {
         final var kommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
@@ -32,18 +27,18 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
             .execute();
     }
 
-    public Optional<GesuchDokumentKommentar> getByTypAndGesuchId(
+    public List<GesuchDokumentKommentar> getByTypAndGesuchId(
         final DokumentTyp dokumentTyp,
         final UUID gesuchId
     ) {
-        return Optional.ofNullable(
+
+        return
             new JPAQueryFactory(entityManager)
                 .selectFrom(gesuchDokumentKommentar)
                 .where(
                     gesuchDokumentKommentar.gesuch.id.eq(gesuchId)
                         .and(gesuchDokumentKommentar.dokumentTyp.eq(dokumentTyp))
                 )
-                .fetchOne()
-        );
+                .fetch();
     }
 }

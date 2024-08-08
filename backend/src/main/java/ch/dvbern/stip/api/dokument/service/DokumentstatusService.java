@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -18,8 +19,8 @@ public class DokumentstatusService {
     private final StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> config;
     private final GesuchDokumentKommentarService dokumentKommentarService;
 
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchDokumentId(UUID gesuchDokumentId){
-        return dokumentKommentarService.getAllKommentareForGesuchDokumentId(gesuchDokumentId);
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchAndType(UUID gesuchId, DokumentTyp dokumentTyp){
+        return dokumentKommentarService.getAllKommentareForGesuchIdAndDokumentTyp(gesuchId, dokumentTyp);
     }
 
     public void triggerStatusChange(final GesuchDokument gesuchDokument, final DokumentstatusChangeEvent event) {

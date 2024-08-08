@@ -53,10 +53,11 @@ public class GesuchDokumentService {
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
+    private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
 
     @Transactional
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(UUID gesuchDokumentId) {
-        return dokumentstatusService.getGesuchDokumentKommentareByGesuchDokumentId(gesuchDokumentId);
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(UUID gesuchDokumentId, DokumentTyp dokumentTyp) {
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId,dokumentTyp);
     }
 
     @Transactional
