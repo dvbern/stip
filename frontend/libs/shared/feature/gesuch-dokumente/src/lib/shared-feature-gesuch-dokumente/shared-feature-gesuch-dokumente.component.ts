@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -94,8 +101,6 @@ export class SharedFeatureGesuchDokumenteComponent {
     'status',
     'actions',
   ];
-
-  displayedChildColumns = ['user', 'timestamp', 'kommentar'];
 
   expandedRowId: string | null = null;
 
