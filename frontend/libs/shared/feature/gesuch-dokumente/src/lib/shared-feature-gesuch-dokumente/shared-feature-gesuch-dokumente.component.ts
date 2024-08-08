@@ -29,7 +29,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
-import { GesuchDokument } from '@dv/shared/model/gesuch';
+import { DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
   getFormStepByDocumentType,
@@ -245,7 +245,15 @@ export class SharedFeatureGesuchDokumenteComponent {
       this.expandedRowId = null;
     } else {
       this.expandedRowId = dokument.dokumentTyp;
+      this.getGesuchDokumentKommentare(dokument);
     }
+  }
+
+  getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
+    this.dokumentsStore.getGesuchDokumentKommentare$({
+      dokumentTyp: dokument.dokumentTyp as DokumentTyp,
+      gesuchId: this.gesuchViewSig().gesuchId!,
+    });
   }
 
   fehlendeDokumenteUebermitteln() {
