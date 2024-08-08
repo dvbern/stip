@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -58,7 +59,7 @@ public class GesuchDokumentKommentarDtoSpec {
   private String kommentar;
 
   public static final String JSON_PROPERTY_BENUTZER = "benutzer";
-  private String benutzer;
+  private BenutzerDtoSpec benutzer;
 
   public static final String JSON_PROPERTY_DATUM = "datum";
   private LocalDate datum;
@@ -196,28 +197,28 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  public GesuchDokumentKommentarDtoSpec benutzer(String benutzer) {
+  public GesuchDokumentKommentarDtoSpec benutzer(BenutzerDtoSpec benutzer) {
     
     this.benutzer = benutzer;
     return this;
   }
 
    /**
-   * Der Benutzer welcher das Dokument abgelehnt hat
+   * Get benutzer
    * @return benutzer
   **/
   @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_BENUTZER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getBenutzer() {
+  public BenutzerDtoSpec getBenutzer() {
     return benutzer;
   }
 
 
   @JsonProperty(JSON_PROPERTY_BENUTZER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBenutzer(String benutzer) {
+  public void setBenutzer(BenutzerDtoSpec benutzer) {
     this.benutzer = benutzer;
   }
 

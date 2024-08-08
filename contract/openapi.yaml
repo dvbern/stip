@@ -3087,8 +3087,7 @@ components:
         kommentar:
           type: string
         benutzer:
-          description: 'Der Benutzer welcher das Dokument abgelehnt hat'
-          type: string
+          $ref: '#/components/schemas/Benutzer'
         datum:
           $ref: '#/components/schemas/LocalDate'
     Dokumentstatus:

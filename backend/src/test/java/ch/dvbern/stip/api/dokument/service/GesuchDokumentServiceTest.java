@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -21,6 +23,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.quarkus.test.InjectMock;
@@ -56,6 +59,9 @@ class GesuchDokumentServiceTest {
     @Inject
     GesuchDokumentService gesuchDokumentService;
 
+    @Inject
+    BenutzerService benutzerService;
+
     private final UUID id = UUID.randomUUID();
 
     private GesuchDokument mockedDokument;
@@ -87,7 +93,7 @@ class GesuchDokumentServiceTest {
     }
 
     //todo: only sb should be able to trigger endpoint
-
+    @TestAsSachbearbeiter
     @Test
     void ablehnenCreatesCommentWithTextTest() {
         // Arrange
@@ -100,7 +106,7 @@ class GesuchDokumentServiceTest {
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
         gesuchDokumentKommentarDto.setGesuchDokumentId(mockedDokument.getId());
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
-        gesuchDokumentKommentarDto.setBenutzer("Max Muster");
+        gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
         gesuchDokumentKommentarDto.setDatum(LocalDate.now());
         someKnownComment.setKommentar(gesuchDokumentKommentarDto);
 
@@ -117,6 +123,7 @@ class GesuchDokumentServiceTest {
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.ABGELEHNT));
     }
 
+    @TestAsSachbearbeiter
     @Test
     void akzeptierenCreatesCommentWithNull() {
         // Arrange
@@ -150,7 +157,7 @@ class GesuchDokumentServiceTest {
             null,
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
-                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl())
+                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository,new GesuchDokumentKommentarMapperImpl(), benutzerService)
             ), new GesuchDokumentKommentarMapperImpl()
         );
 
