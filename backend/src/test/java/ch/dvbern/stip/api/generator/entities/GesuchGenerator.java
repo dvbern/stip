@@ -68,8 +68,6 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
         gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
         gesuchFormularToWorkWith.setPartner(createPartner());
-        gesuchFormularToWorkWith.setSteuerdaten(new ArrayList<>());
-        gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenUpdateDtoSpec());
 
         GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
         gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);
@@ -85,16 +83,23 @@ public final class GesuchGenerator {
     }
 
     public static Gesuch initGesuch() {
+        final DateRange gueltigkeitsRange;
+        if (GUELTIGKEIT_PERIODE_23_24 != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
+        } else {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
+        }
+
         var gesuch = new Gesuch()
             .setFall(new Fall())
             .setGesuchsperiode(
                 new Gesuchsperiode()
                     .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))
-                    .setGesuchsperiodeStart(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
-                    .setGesuchsperiodeStopp(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
+                    .setGesuchsperiodeStart(gueltigkeitsRange.getGueltigAb())
+                    .setGesuchsperiodeStopp(gueltigkeitsRange.getGueltigBis())
             );
         gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
-            .setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
+            .setGueltigkeit(gueltigkeitsRange)
             .setGesuch(gesuch)
             .setId(UUID.randomUUID()));
         return gesuch;

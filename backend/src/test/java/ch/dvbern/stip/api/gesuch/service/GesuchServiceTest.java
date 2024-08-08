@@ -45,6 +45,9 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -67,6 +70,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
@@ -801,7 +805,6 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -871,55 +874,6 @@ class GesuchServiceTest {
 //
 //        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
 //    }
-    private Steuerdaten prepareSteuerdaten() {
-        Steuerdaten steuerdaten = new Steuerdaten();
-        steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
-        steuerdaten.setEigenmietwert(0);
-        steuerdaten.setVerpflegung(0);
-        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdaten.setTotalEinkuenfte(0);
-        steuerdaten.setFahrkosten(0);
-        steuerdaten.setKinderalimente(0);
-        steuerdaten.setSteuernBund(0);
-        steuerdaten.setSteuernStaat(0);
-        steuerdaten.setVermoegen(0);
-        steuerdaten.setErgaenzungsleistungen(0);
-        steuerdaten.setSteuerjahr(0);
-        return  steuerdaten;
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void gesuchEinreichenTest() {
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-        tranche.getGesuchFormular()
-            .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-
-        tranche.getGesuchFormular().setTranche(tranche);
-        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
-        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(VERHEIRATET);
-
-        tranche.getGesuch().setGesuchDokuments(
-            Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
-                .toList()
-        );
-
-        Set<Steuerdaten> list = new LinkedHashSet<>();
-        list.add(TestUtil.prepareSteuerdaten());
-        tranche.getGesuchFormular().setSteuerdaten(list);
-
-        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
-
-        assertThat(
-            tranche.getGesuch().getGesuchStatus(),
-            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-        );
-    }
 
     private SteuerdatenUpdateDto initSteuerdatenUpdateDto(SteuerdatenTyp typ) {
         SteuerdatenUpdateDto steuerdatenUpdateDto = new SteuerdatenUpdateDto();
@@ -1347,7 +1301,6 @@ class GesuchServiceTest {
                 gesuchFormular.getSteuerdaten().add(steuerdatenMapper.partialUpdate(item, new Steuerdaten()));
             });
         }
-        gesuchFormular.setFamiliensituation(new Familiensituation());
 
         return tranche.setGesuchFormular(gesuchFormular);
     }

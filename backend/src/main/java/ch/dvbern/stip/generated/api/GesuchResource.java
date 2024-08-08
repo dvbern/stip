@@ -14,6 +14,11 @@ import jakarta.validation.Valid;
 public interface GesuchResource {
 
     @POST
+    @Path("/status/in-bearbeitung/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
     Response createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
@@ -32,6 +37,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/einreichen/validieren")
     @Produces({ "application/json", "text/plain" })
     Response gesuchEinreichenValidieren(@PathParam("gesuchId") UUID gesuchId);
+
+    @PATCH
+    @Path("/{gesuchId}/fehlendeDokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")
@@ -59,9 +69,9 @@ public interface GesuchResource {
     Response getGesucheGs();
 
     @GET
-    @Path("/benutzer/me/sb/{getGesucheSBQueryTyp}")
+    @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryTyp") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryTyp);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
 
     @GET
     @Path("/{gesuchId}/requiredDokumente")
