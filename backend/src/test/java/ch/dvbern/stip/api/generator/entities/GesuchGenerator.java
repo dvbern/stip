@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
@@ -34,6 +35,7 @@ import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 
 public final class GesuchGenerator {
     private GesuchGenerator() {
@@ -67,17 +69,25 @@ public final class GesuchGenerator {
         return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs;
     }
 
+    /* return a new instance of Gesuch with a valid GesuchPeriode */
     public static Gesuch initGesuch() {
+        final DateRange gueltigkeitsRange;
+        if (GUELTIGKEIT_PERIODE_23_24 != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_23_24;
+        } else {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
+        }
+
         var gesuch = new Gesuch()
             .setFall(new Fall())
             .setGesuchsperiode(
                 new Gesuchsperiode()
                     .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))
-                    .setGesuchsperiodeStart(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
-                    .setGesuchsperiodeStopp(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
+                    .setGesuchsperiodeStart(gueltigkeitsRange.getGueltigAb())
+                    .setGesuchsperiodeStopp(gueltigkeitsRange.getGueltigBis())
             );
         gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
-            .setGueltigkeit(GUELTIGKEIT_PERIODE_23_24)
+            .setGueltigkeit(gueltigkeitsRange)
             .setGesuch(gesuch)
             .setId(UUID.randomUUID()));
         return gesuch;

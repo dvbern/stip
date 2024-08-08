@@ -1,10 +1,14 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -19,11 +23,14 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +58,9 @@ class GesuchDokumentServiceTest {
 
     @Inject
     GesuchDokumentService gesuchDokumentService;
+
+    @Inject
+    BenutzerService benutzerService;
 
     private final UUID id = UUID.randomUUID();
 
@@ -82,16 +92,23 @@ class GesuchDokumentServiceTest {
         }).when(gesuchDokumentRepository).delete(Mockito.any());
     }
 
+    //todo: only sb should be able to trigger endpoint
+    @TestAsSachbearbeiter
     @Test
     void ablehnenCreatesCommentWithTextTest() {
         // Arrange
         final var someKnownComment = new GesuchDokumentAblehnenRequestDto();
-        someKnownComment.setKommentar("Some known comment");
-
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(Dokumentstatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
+
+        GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
+        gesuchDokumentKommentarDto.setGesuchDokumentId(mockedDokument.getId());
+        gesuchDokumentKommentarDto.setKommentar("Some known comment");
+        gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
+        gesuchDokumentKommentarDto.setDatum(LocalDate.now());
+        someKnownComment.setKommentar(gesuchDokumentKommentarDto);
 
         GesuchTranche tranche = initGesuchTranche();
 
@@ -102,10 +119,11 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);
 
         // Assert
-        assertThat(comment.getKommentar(), is(someKnownComment.getKommentar()));
+        assertThat(comment.getKommentar(), is(someKnownComment.getKommentar().getKommentar()));
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.ABGELEHNT));
     }
 
+    @TestAsSachbearbeiter
     @Test
     void akzeptierenCreatesCommentWithNull() {
         // Arrange
@@ -139,8 +157,8 @@ class GesuchDokumentServiceTest {
             null,
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
-                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository)
-            )
+                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository,new GesuchDokumentKommentarMapperImpl(), benutzerService)
+            ), new GesuchDokumentKommentarMapperImpl()
         );
 
         gesuchDokumente = new HashMap<>();
@@ -179,7 +197,8 @@ class GesuchDokumentServiceTest {
             GesuchRepository gesuchRepository,
             S3AsyncClient s3,
             ConfigService configService,
-            DokumentstatusService dokumentstatusService
+            DokumentstatusService dokumentstatusService,
+            GesuchDokumentKommentarMapper dokumentKommentarMapper
         ) {
             super(
                 dokumentMapper,
@@ -188,7 +207,8 @@ class GesuchDokumentServiceTest {
                 gesuchRepository,
                 s3,
                 configService,
-                dokumentstatusService
+                dokumentstatusService,
+                dokumentKommentarMapper
             );
         }
 

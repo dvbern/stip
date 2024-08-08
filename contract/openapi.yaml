@@ -191,6 +191,40 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: '#/components/schemas/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+          description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumentKommentare
+      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
   '/gesuchDokument/{gesuchDokumentId}/akzeptieren':
     parameters:
       - name: gesuchDokumentId
@@ -1404,10 +1438,10 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
-  /bildungsart:
+  /bildungskategorie:
     get:
       tags:
-        - Bildungsart
+        - Bildungskategorie
       responses:
         '200':
           content:
@@ -1415,8 +1449,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Bildungsart'
-          description: Returns all Bildungsarten
+                  $ref: '#/components/schemas/Bildungskategorie'
+          description: Returns all Bildungskategorien
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1425,8 +1459,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getBildungsarten
-      summary: Gets all Bildgunsarten
+      operationId: getBildungskategorien
+      summary: Gets all Bildungskategorien
   /plz:
     get:
       tags:
@@ -2032,15 +2066,18 @@ components:
       enum:
         - SEKUNDAR_2
         - TERTIAER
-    Bildungsart:
+    Bildungskategorie:
       type: object
       required:
         - id
-        - beschreibung
+        - bezeichnungDe
+        - bezeichnungFr
         - bildungsstufe
         - bfs
       properties:
-        beschreibung:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
           type: string
         bildungsstufe:
           $ref: '#/components/schemas/Bildungsstufe'
@@ -2541,7 +2578,7 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - bildungsartId
+        - bildungskategorieId
         - ausbildungsstaetteId
       type: object
       properties:
@@ -2549,7 +2586,7 @@ components:
           type: string
         bezeichnungFr:
           type: string
-        bildungsartId:
+        bildungskategorieId:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
@@ -2557,7 +2594,7 @@ components:
       required:
         - bezeichnungDe
         - bezeichnungFr
-        - bildungsartId
+        - bildungskategorieId
         - ausbildungsstaette
       type: object
       properties:
@@ -2565,7 +2602,7 @@ components:
           type: string
         bezeichnungFr:
           type: string
-        bildungsartId:
+        bildungskategorieId:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
@@ -2815,7 +2852,7 @@ components:
           type: string
     Ausbildungsgang:
       required:
-        - bildungsart
+        - bildungskategorie
         - id
       type: object
       properties:
@@ -2825,8 +2862,8 @@ components:
           type: string
         bezeichnungFr:
           type: string
-        bildungsart:
-          $ref: '#/components/schemas/Bildungsart'
+        bildungskategorie:
+          $ref: '#/components/schemas/Bildungskategorie'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
     GesuchTranche:
@@ -2977,7 +3014,31 @@ components:
       type: object
       properties:
         kommentar:
+          $ref: '#/components/schemas/GesuchDokumentKommentar'
+    GesuchDokumentKommentar:
+      description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
+      type: object
+      required:
+        - gesuchDokumentId
+        - gesuchId
+        - dokumentTyp
+        - datum
+        - benutzer
+      properties:
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        dokumentStatus:
+          $ref: '#/components/schemas/Dokumentstatus'
+        kommentar:
           type: string
+        benutzer:
+          $ref: '#/components/schemas/Benutzer'
+        datum:
+          $ref: '#/components/schemas/LocalDate'
     Dokumentstatus:
       enum:
         - AUSSTEHEND
@@ -2985,14 +3046,183 @@ components:
         - AKZEPTIERT
     Berechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
+      required:
+        - berechnung
+        - persoenlichesBudgetresultat
+        - familienBudgetresultate
       type: object
       properties:
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
-        berechnungsdaten:
-          description: 'Resultat der Berechnung als JSON string, transparent'
-          type: string
+        persoenlichesBudgetresultat:
+          description: 'Berechnungsdaten des persönlichen Budgets'
+          $ref: '#/components/schemas/PersoenlichesBudgetresultat'
+        familienBudgetresultate:
+          description: "Berechnungsdaten der Familienbudgets"
+          type: array
+          items:
+            $ref: '#/components/schemas/FamilienBudgetresultat'
+    PersoenlichesBudgetresultat:
+      description: Persoenliche Budget daten fuer und von der Berechnung
+      required:
+        - anzahlPersonenImHaushalt
+        - eigenerHaushalt
+        - einkommen
+        - leistungenEO
+        - rente
+        - kinderAusbildungszulagen
+        - ergaenzungsleistungen
+        - gemeindeInstitutionen
+        - vermoegen
+        - anteilFamilienbudget
+        - einkommenPartner
+        - einnahmenPersoenlichesBudget
+        - grundbedarf
+        - wohnkosten
+        - medizinischeGrundversorgung
+        - steuernKantonGemeinde
+        - fahrkosten
+        - fahrkostenPartner
+        - verpflegung
+        - verpflegungPartner
+        - fremdbetreuung
+        - ausbildungskosten
+        - ausgabenPersoenlichesBudget
+        - persoenlichesbudgetBerechnet
+      type: object
+      properties:
+        anzahlPersonenImHaushalt:
+          type: integer
+        eigenerHaushalt:
+          type: boolean
+        einkommen:
+          type: integer
+        leistungenEO:
+          type: integer
+        rente:
+          type: integer
+        kinderAusbildungszulagen:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        gemeindeInstitutionen:
+          type: integer
+        vermoegen:
+          type: integer
+        anteilFamilienbudget:
+          type: integer
+        einkommenPartner:
+          type: integer
+        einnahmenPersoenlichesBudget:
+          type: integer
+        grundbedarf:
+          type: integer
+        wohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        fremdbetreuung:
+          type: integer
+        ausbildungskosten:
+          type: integer
+        ausgabenPersoenlichesBudget:
+          type: integer
+        persoenlichesbudgetBerechnet:
+          type: integer
+    FamilienBudgetresultat:
+      description: Familien Budget daten fuer und von der Berechnung
+      required:
+        - familienBudgetTyp
+        - selbststaendigErwerbend
+        - anzahlPersonenImHaushalt
+        - anzahlGeschwisterInAusbildung
+        - totalEinkuenfte
+        - ergaenzungsleistungen
+        - steuerbaresVermoegen
+        - vermoegen
+        - einzahlungSaeule23a
+        - eigenmietwert
+        - alimente
+        - einkommensfreibetrag
+        - einnahmenFamilienbudget
+        - grundbedarf
+        - effektiveWohnkosten
+        - medizinischeGrundversorgung
+        - integrationszulage
+        - steuernKantonGemeinde
+        - steuernBund
+        - steuernStaat
+        - fahrkostenPerson1
+        - fahrkostenPerson2
+        - essenskostenPerson1
+        - essenskostenPerson2
+        - ausgabenFamilienbudget
+        - familienbudgetBerechnet
+      type: object
+      properties:
+        familienBudgetTyp:
+          $ref: '#/components/schemas/SteuerdatenTyp'
+        selbststaendigErwerbend:
+          type: boolean
+        anzahlPersonenImHaushalt:
+          type: integer
+        anzahlGeschwisterInAusbildung:
+          type: integer
+        totalEinkuenfte:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        steuerbaresVermoegen:
+          type: integer
+        vermoegen:
+          type: integer
+        einzahlungSaeule23a:
+          type: integer
+        eigenmietwert:
+          type: integer
+        alimente:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        einnahmenFamilienbudget:
+          type: integer
+        grundbedarf:
+          type: integer
+        effektiveWohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: integer
+        integrationszulage:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        steuernBund:
+          type: integer
+        steuernStaat:
+          type: integer
+        fahrkostenPerson1:
+          type: integer
+        fahrkostenPerson2:
+          type: integer
+        essenskostenPerson1:
+          type: integer
+        essenskostenPerson2:
+          type: integer
+        ausgabenFamilienbudget:
+          type: integer
+        familienbudgetBerechnet:
+          type: integer
   responses:
     Unauthorized:
       content:

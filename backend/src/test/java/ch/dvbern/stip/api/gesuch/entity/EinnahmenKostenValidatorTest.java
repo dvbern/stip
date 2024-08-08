@@ -6,8 +6,7 @@ import java.util.HashSet;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -22,7 +21,6 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
 
 class EinnahmenKostenValidatorTest {
 
@@ -85,14 +83,14 @@ class EinnahmenKostenValidatorTest {
         GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungsgang(new Ausbildungsgang());
-        ausbildung.getAusbildungsgang().setBildungsart(new Bildungsart().setBildungsstufe(Bildungsstufe.SEKUNDAR_2));
+        ausbildung.getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(1));
         gesuchFormular.setAusbildung(ausbildung);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isFalse();
         gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(1);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
-        gesuchFormular.getAusbildung().getAusbildungsgang().setBildungsart(new Bildungsart().setBildungsstufe(Bildungsstufe.TERTIAER));
+        gesuchFormular.getAusbildung().getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(10));
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(
             gesuchFormular,
             TestUtil.initValidatorContext()))

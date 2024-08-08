@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -93,6 +94,7 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
@@ -262,6 +264,7 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
+        gesuchDokumentKommentarRepository.deleteAllForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
     }
 
