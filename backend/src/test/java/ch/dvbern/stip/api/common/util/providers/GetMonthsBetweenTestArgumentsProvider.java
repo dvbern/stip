@@ -37,7 +37,7 @@ public class GetMonthsBetweenTestArgumentsProvider implements ArgumentsProvider 
             ),
             // Reverse
             Arguments.of(
-                LocalDate.of(2024, 2, 1),
+                LocalDate.of(2024, 3, 1),
                 LocalDate.of(2024, 1, 1),
                 -1
             ),
@@ -73,12 +73,12 @@ public class GetMonthsBetweenTestArgumentsProvider implements ArgumentsProvider 
             // Multiple months non-first days
             Arguments.of(
                 LocalDate.of(2024, 1, 17),
-                LocalDate.of(2024, 4, 16),
+                LocalDate.of(2024, 4, 15),
                 2
             ),
             Arguments.of(
                 LocalDate.of(2024, 1, 17),
-                LocalDate.of(2024, 4, 18),
+                LocalDate.of(2024, 4, 17),
                 3
             )
         );

@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.YearMonth;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import lombok.experimental.UtilityClass;
@@ -72,18 +71,12 @@ public class DateUtil {
     /**
      * Gets the number of months between two dates.
      * <p>
-     * WARNING: If start = first day of month and end = last day of same month and year 1 will be returned
+     * WARNING: If the start is the 15th and the end the 16th of at least the next month, it will count as 1.
+     * This means it's not mathematically accurate,
+     * but logically there is 1 month between e.g. 01.03.2024 and 31.03.2024
      */
     public int getMonthsBetween(final LocalDate start, final LocalDate end) {
-        final var lastDayOfEndMonth = YearMonth.from(end).atEndOfMonth();
-        // If same year and month but first and last day of month return 1
-        if (start.getYear() == end.getYear() &&
-            start.getMonth().equals(end.getMonth()) &&
-            start.getDayOfMonth() == 1 && lastDayOfEndMonth.getDayOfMonth() == end.getDayOfMonth()) {
-            return 1;
-        }
-
-        return Period.between(start, end).getMonths();
+        return Period.between(start, end.plusDays(1)).getMonths();
     }
 
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {
