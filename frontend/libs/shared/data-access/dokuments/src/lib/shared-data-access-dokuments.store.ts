@@ -3,6 +3,7 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { DeepSignal } from '@ngrx/signals/src/deep-signal';
 import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
@@ -11,25 +12,30 @@ import {
   DokumentTyp,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentKommentar,
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   requiredDocumentTypes: CachedRemoteData<DokumentTyp[]>;
+  gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
 };
 
 const initialState: DokumentsState = {
   dokuments: initial(),
   requiredDocumentTypes: initial(),
+  gesuchDokumentKommentare: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -45,6 +51,15 @@ export class DokumentsStore extends signalStore(
     dokuments: fromCachedDataSig(this.dokuments) ?? [],
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
+
+  gesuchDokumentKommentareSig = computed(() => {
+    return (
+      this.gesuchDokumentKommentare.data() ?? [
+        // dummy data
+        { kommentar: '', datum: '', benutzer: { nachname: '', vorname: '' } },
+      ]
+    );
+  });
 
   hasAbgelehnteDokumentsSig = computed(() => {
     return (
@@ -63,6 +78,25 @@ export class DokumentsStore extends signalStore(
     );
   });
 
+  getGesuchDokumentKommentare$ = rxMethod<{
+    dokumentTyp: DokumentTyp;
+    gesuchId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          gesuchDokumentKommentare: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.dokumentService.getGesuchDokumentKommentare$(req),
+      ),
+      handleApiResponse((gesuchDokumentKommentare) =>
+        patchState(this, { gesuchDokumentKommentare }),
+      ),
+    ),
+  );
+
   gesuchDokumentAblehnen$ = rxMethod<{
     gesuchId: string;
     gesuchDokumentId: string;
@@ -74,7 +108,20 @@ export class DokumentsStore extends signalStore(
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
             gesuchDokumentAblehnenRequest: {
-              kommentar,
+              kommentar: {
+                gesuchDokumentId,
+                kommentar,
+                dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+                datum: new Date().toISOString(),
+                benutzer: {
+                  id: 'bla',
+                  nachname: 'test',
+                  sozialversicherungsnummer: '123',
+                  vorname: 'bla',
+                },
+                gesuchId,
+                dokumentStatus: Dokumentstatus.ABGELEHNT,
+              },
             },
           })
           .pipe(

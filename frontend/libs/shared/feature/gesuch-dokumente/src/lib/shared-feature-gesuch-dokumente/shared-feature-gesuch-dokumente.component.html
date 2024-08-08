@@ -154,7 +154,13 @@
                 class="detail-cell"
                 [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
               >
-                {{ dokument.gesuchDokument?.status }}
+                @for (kommentar of dokumentsStore.gesuchDokumentKommentareSig(); track $index) {
+                  <div>
+                    <pre>
+                      {{ kommentar | json }}
+                    </pre>
+                  </div>
+                }
               </div>
             </td>
           </ng-container>

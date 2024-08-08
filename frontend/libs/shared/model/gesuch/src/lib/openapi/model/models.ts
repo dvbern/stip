@@ -45,6 +45,7 @@ export * from './gesuch';
 export * from './gesuchCreate';
 export * from './gesuchDokument';
 export * from './gesuchDokumentAblehnenRequest';
+export * from './gesuchDokumentKommentar';
 export * from './gesuchFormular';
 export * from './gesuchFormularUpdate';
 export * from './gesuchTranche';
