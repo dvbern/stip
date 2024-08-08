@@ -3,7 +3,6 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { DeepSignal } from '@ngrx/signals/src/deep-signal';
 import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
@@ -108,19 +107,11 @@ export class DokumentsStore extends signalStore(
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
             gesuchDokumentAblehnenRequest: {
+              // TODO: muss noch angepasst werden in 994
               kommentar: {
-                gesuchDokumentId,
                 kommentar,
                 dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
-                datum: new Date().toISOString(),
-                benutzer: {
-                  id: 'bla',
-                  nachname: 'test',
-                  sozialversicherungsnummer: '123',
-                  vorname: 'bla',
-                },
                 gesuchId,
-                dokumentStatus: Dokumentstatus.ABGELEHNT,
               },
             },
           })

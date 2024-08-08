@@ -17,13 +17,12 @@ import { DokumentTyp } from './dokumentTyp';
  * Kommentar zu einem (abgelehnten) GesuchDokument
  */
 export interface GesuchDokumentKommentar { 
-    gesuchDokumentId: string;
     gesuchId: string;
     dokumentTyp: DokumentTyp;
     dokumentStatus?: Dokumentstatus;
-    kommentar?: string;
-    benutzer: Benutzer;
-    datum: string;
+    kommentar: string;
+    benutzer?: Benutzer;
+    timestampErstellt?: string;
 }
 
 
