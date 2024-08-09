@@ -38,6 +38,7 @@ import org.hibernate.envers.Audited;
 @DocumentsRequiredFehlendeDokumenteConstraint(groups = {
     GesuchFehlendeDokumenteValidationGroup.class
 })
+@OnlyOneTrancheInBearbeitungConstraint
 @Audited
 @Entity
 @Table(

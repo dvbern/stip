@@ -1,4 +1,5 @@
 export * from './adresse';
+export * from './aenderungsantragCreate';
 export * from './anrede';
 export * from './ausbildung';
 export * from './ausbildungBase';

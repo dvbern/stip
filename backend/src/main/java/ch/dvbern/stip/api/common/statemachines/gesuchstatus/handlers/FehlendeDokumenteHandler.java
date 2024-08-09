@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class FehlendeDokumenteHandler implements StateChangeHandler {
+public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler {
     private final GesuchDokumentService gesuchDokumentService;
 
     @Override
