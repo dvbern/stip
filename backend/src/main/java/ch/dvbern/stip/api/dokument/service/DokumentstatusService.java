@@ -20,8 +20,7 @@ public class DokumentstatusService {
     private final GesuchDokumentKommentarService dokumentKommentarService;
 
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchAndType(UUID gesuchId, DokumentTyp dokumentTyp){
-        return dokumentKommentarService.getAllKommentareForGesuchIdAndDokumentTyp(gesuchId, dokumentTyp);
-    }
+        return dokumentKommentarService.getAllKommentareForGesuchIdAndDokumentTyp(gesuchId, dokumentTyp);}
 
     public void triggerStatusChange(final GesuchDokument gesuchDokument, final DokumentstatusChangeEvent event) {
         final var sm = createStateMachine(gesuchDokument);

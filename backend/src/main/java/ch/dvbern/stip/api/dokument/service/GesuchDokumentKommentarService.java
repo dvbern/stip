@@ -22,13 +22,19 @@ public class GesuchDokumentKommentarService {
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchIdAndDokumentTyp(final UUID gesuchId, final DokumentTyp dokumentTyp) {
-        return gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId).stream().map(gesuchDokumentKommentarMapper::toDto).toList();
+        if(gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId) != null){
+            return gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId).stream()
+                .map(gesuchDokumentKommentarMapper::toDto).toList();
+        }else{
+            return List.of();
+        }
     }
 
     @Transactional
     public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument,final GesuchDokumentKommentarDto gesuchDokumentKommentarDto) {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
+
         if(gesuchDokumentKommentarDto == null){
             createEmptyKommentarForGesuchDokument(gesuchDokument,null);
         }else{

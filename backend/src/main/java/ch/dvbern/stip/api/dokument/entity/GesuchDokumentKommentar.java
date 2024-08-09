@@ -12,8 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.time.LocalDate;
-
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Audited
@@ -55,8 +53,4 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
         nullable = false
     )
     private Benutzer benutzer;
-
-    @NotNull
-    @Column(name = "datum")
-    private LocalDate datum;
 }

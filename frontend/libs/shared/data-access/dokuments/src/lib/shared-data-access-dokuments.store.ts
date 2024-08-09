@@ -11,25 +11,30 @@ import {
   DokumentTyp,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentKommentar,
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   requiredDocumentTypes: CachedRemoteData<DokumentTyp[]>;
+  gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
 };
 
 const initialState: DokumentsState = {
   dokuments: initial(),
   requiredDocumentTypes: initial(),
+  gesuchDokumentKommentare: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -45,6 +50,15 @@ export class DokumentsStore extends signalStore(
     dokuments: fromCachedDataSig(this.dokuments) ?? [],
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
+
+  gesuchDokumentKommentareSig = computed(() => {
+    return (
+      this.gesuchDokumentKommentare.data() ?? [
+        // dummy data
+        { kommentar: '', datum: '', benutzer: { nachname: '', vorname: '' } },
+      ]
+    );
+  });
 
   hasAbgelehnteDokumentsSig = computed(() => {
     return (
@@ -63,6 +77,25 @@ export class DokumentsStore extends signalStore(
     );
   });
 
+  getGesuchDokumentKommentare$ = rxMethod<{
+    dokumentTyp: DokumentTyp;
+    gesuchId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          gesuchDokumentKommentare: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.dokumentService.getGesuchDokumentKommentare$(req),
+      ),
+      handleApiResponse((gesuchDokumentKommentare) =>
+        patchState(this, { gesuchDokumentKommentare }),
+      ),
+    ),
+  );
+
   gesuchDokumentAblehnen$ = rxMethod<{
     gesuchId: string;
     gesuchDokumentId: string;
@@ -74,7 +107,12 @@ export class DokumentsStore extends signalStore(
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
             gesuchDokumentAblehnenRequest: {
-              kommentar,
+              // TODO: muss noch angepasst werden in 994
+              kommentar: {
+                kommentar,
+                dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+                gesuchId,
+              },
             },
           })
           .pipe(
