@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
  **/
