@@ -27,6 +27,7 @@ import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.quarkus.test.InjectMock;
+import io.quarkus.test.Mock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -40,9 +41,10 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @RequiredArgsConstructor
@@ -120,6 +122,14 @@ class GesuchDokumentServiceTest {
         // Assert
         assertThat(comment.getKommentar(), is(someKnownComment.getKommentar().getKommentar()));
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.ABGELEHNT));
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void getKommentareDoesNotThrowWhenNoEntriesExisitng(){
+        when(gesuchDokumentKommentarRepository.getByTypAndGesuchId(any(), any())).thenReturn(null);
+        assertDoesNotThrow(() -> {gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), DokumentTyp.EK_VERMOEGEN);});
+        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), DokumentTyp.EK_VERMOEGEN).size(), notNullValue());
     }
 
     @TestAsSachbearbeiter
