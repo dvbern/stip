@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -17,12 +19,10 @@ import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
-import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -154,7 +154,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         if (result) {
           this.gesuchAenderungStore.createGesuchAenderung$({
             gesuchId,
-            aenderungsantrag: result,
+            createAenderungsantragRequest: result,
           });
         }
       });

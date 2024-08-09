@@ -6,9 +6,9 @@ import { exhaustMap, forkJoin, map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
-  AenderungsantragCreate,
+  CreateAenderungsantragRequest,
   Gesuch,
-  GesuchService,
+  GesuchTrancheService,
 } from '@dv/shared/model/gesuch';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
@@ -35,36 +35,19 @@ export class GesuchAenderungStore extends signalStore(
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
-  private gesuchService = inject(GesuchService);
+  private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   resetCachedGesuchAenderung() {
     patchState(this, { cachedGesuchAenderung: initial() });
   }
 
-  loadCachedGesuchAenderung$ = rxMethod<{ gesuchId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
-        }));
-      }),
-      switchMap(({ gesuchId }) =>
-        this.gesuchService.getAenderungsantrag$({ gesuchId }).pipe(
-          handleApiResponse((gesuche) => {
-            patchState(this, { cachedAenderungsGesuche: gesuche });
-          }),
-        ),
-      ),
-    ),
-  );
-
   getAllGesuchAenderungen$ = rxMethod<string[]>(
     pipe(
       exhaustMap((gesuchIds) => {
         return forkJoin(
           gesuchIds.map((gesuchId) =>
-            this.gesuchService
+            this.gesuchTrancheService
               .getAenderungsantrag$({ gesuchId }, undefined, undefined, {
                 context: shouldIgnoreNotFoundErrorsIf(true),
               })
@@ -81,7 +64,7 @@ export class GesuchAenderungStore extends signalStore(
 
   createGesuchAenderung$ = rxMethod<{
     gesuchId: string;
-    aenderungsantrag: AenderungsantragCreate;
+    createAenderungsantragRequest: CreateAenderungsantragRequest;
   }>(
     pipe(
       tap(() => {
@@ -89,11 +72,11 @@ export class GesuchAenderungStore extends signalStore(
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap((aenderung) =>
-        this.gesuchService
+      switchMap(({ gesuchId, createAenderungsantragRequest }) =>
+        this.gesuchTrancheService
           .createAenderungsantrag$({
-            gesuchId: aenderung.gesuchId,
-            aenderungsantragCreate: aenderung.aenderungsantrag,
+            gesuchId,
+            createAenderungsantragRequest,
           })
           .pipe(
             handleApiResponse(

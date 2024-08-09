@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { AenderungsantragCreate } from '@dv/shared/model/gesuch';
+import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -24,7 +24,6 @@ import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
-type GesuchAenderungResult = Omit<AenderungsantragCreate, 'gesuchId'>;
 type GesuchAenderungData = {
   minDate: Date;
   maxDate: Date;
@@ -53,7 +52,7 @@ export class SharedUiAenderungMeldenDialogComponent {
   dialogData = inject<GesuchAenderungData>(MAT_DIALOG_DATA);
   private dialogRef: MatDialogRef<
     SharedUiAenderungMeldenDialogComponent,
-    GesuchAenderungResult | null
+    CreateAenderungsantragRequest | null
   > = inject(MatDialogRef);
 
   form = this.formBuilder.group({
@@ -66,7 +65,7 @@ export class SharedUiAenderungMeldenDialogComponent {
     return dialog.open<
       SharedUiAenderungMeldenDialogComponent,
       GesuchAenderungData,
-      GesuchAenderungResult
+      CreateAenderungsantragRequest
     >(SharedUiAenderungMeldenDialogComponent, { data });
   }
 
