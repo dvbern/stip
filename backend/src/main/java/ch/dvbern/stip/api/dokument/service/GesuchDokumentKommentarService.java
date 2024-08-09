@@ -22,7 +22,12 @@ public class GesuchDokumentKommentarService {
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchIdAndDokumentTyp(final UUID gesuchId, final DokumentTyp dokumentTyp) {
-        return gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId).stream().map(gesuchDokumentKommentarMapper::toDto).toList();
+        if(gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId) != null){
+            return gesuchDokumentKommentarRepository.getByTypAndGesuchId(dokumentTyp,gesuchId).stream()
+                .map(gesuchDokumentKommentarMapper::toDto).toList();
+        }else{
+            return List.of();
+        }
     }
 
     @Transactional
