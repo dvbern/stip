@@ -100,7 +100,7 @@ class GesuchDokumentServiceTest {
     @Test
     void gesuchStellerShouldNotBeAbleToInvokeEndpoint() {
         // Arrange
-        final var someKnownComment = new GesuchDokumentAblehnenRequestDto();
+        final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(Dokumentstatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
@@ -110,7 +110,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
         gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
         gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
-        someKnownComment.setKommentar(gesuchDokumentKommentarDto);
+        ablehnenRequest.setKommentar(gesuchDokumentKommentarDto);
 
         GesuchTranche tranche = initGesuchTranche();
 
@@ -118,14 +118,14 @@ class GesuchDokumentServiceTest {
         mockedDokument.setGesuch(tranche.getGesuch());
 
         // Act & Assert
-        assertThrows(ForbiddenException.class, ()->{gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);});
+        assertThrows(ForbiddenException.class, ()->{gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), ablehnenRequest);});
     }
 
     @TestAsSachbearbeiter
     @Test
     void ablehnenCreatesCommentWithTextTest() {
         // Arrange
-        final var someKnownComment = new GesuchDokumentAblehnenRequestDto();
+        final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(Dokumentstatus.AUSSTEHEND)
             .setDokumentTyp(DokumentTyp.EK_VERDIENST)
@@ -135,7 +135,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
         gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
         gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
-        someKnownComment.setKommentar(gesuchDokumentKommentarDto);
+        ablehnenRequest.setKommentar(gesuchDokumentKommentarDto);
 
         GesuchTranche tranche = initGesuchTranche();
 
@@ -143,10 +143,10 @@ class GesuchDokumentServiceTest {
         mockedDokument.setGesuch(tranche.getGesuch());
 
         // Act
-        gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);
+        gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), ablehnenRequest);
 
         // Assert
-        assertThat(comment.getKommentar(), is(someKnownComment.getKommentar().getKommentar()));
+        assertThat(comment.getKommentar(), is(ablehnenRequest.getKommentar().getKommentar()));
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.ABGELEHNT));
     }
 
