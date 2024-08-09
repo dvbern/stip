@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.Mock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -42,6 +43,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -94,7 +96,31 @@ class GesuchDokumentServiceTest {
         }).when(gesuchDokumentRepository).delete(Mockito.any());
     }
 
-    //todo: only sb should be able to trigger endpoint
+    @TestAsGesuchsteller
+    @Test
+    void gesuchStellerShouldNotBeAbleToInvokeEndpoint() {
+        // Arrange
+        final var someKnownComment = new GesuchDokumentAblehnenRequestDto();
+        mockedDokument = (GesuchDokument) new GesuchDokument()
+            .setStatus(Dokumentstatus.AUSSTEHEND)
+            .setDokumentTyp(DokumentTyp.EK_VERDIENST)
+            .setId(id);
+
+        GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
+        gesuchDokumentKommentarDto.setKommentar("Some known comment");
+        gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
+        gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
+        someKnownComment.setKommentar(gesuchDokumentKommentarDto);
+
+        GesuchTranche tranche = initGesuchTranche();
+
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        mockedDokument.setGesuch(tranche.getGesuch());
+
+        // Act & Assert
+        assertThrows(ForbiddenException.class, ()->{gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);});
+    }
+
     @TestAsSachbearbeiter
     @Test
     void ablehnenCreatesCommentWithTextTest() {
