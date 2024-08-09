@@ -247,10 +247,24 @@ const upsertSteuerdaten = (
   steuerdaten: SteuerdatenUpdate,
   gesuchFormular?: SharedModelGesuchFormularUpdate | null,
 ) => {
-  const a = [...(gesuchFormular?.steuerdaten ?? []), steuerdaten].map((s) =>
-    s.steuerdatenTyp === steuerdaten.steuerdatenTyp
-      ? { ...s, ...steuerdaten }
-      : s,
-  );
-  return a;
+  const uniqueSteuerdaten = new Set<string>();
+  const result = [];
+
+  const combinedSteuerdaten = [
+    ...(gesuchFormular?.steuerdaten ?? []),
+    steuerdaten,
+  ];
+
+  for (const s of combinedSteuerdaten) {
+    if (!uniqueSteuerdaten.has(s.steuerdatenTyp)) {
+      uniqueSteuerdaten.add(s.steuerdatenTyp);
+      result.push(
+        s.steuerdatenTyp === steuerdaten.steuerdatenTyp
+          ? { ...s, ...steuerdaten }
+          : s,
+      );
+    }
+  }
+
+  return result;
 };
