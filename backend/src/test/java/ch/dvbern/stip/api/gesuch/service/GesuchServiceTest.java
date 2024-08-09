@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -790,7 +790,7 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
         tranche.getGesuchFormular().setTranche(tranche);
         tranche.getGesuch().setGesuchDokuments(

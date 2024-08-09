@@ -125,6 +125,52 @@ class LebenslaufLuckenlosConstraintValidatorTest {
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
     }
 
+    @Test
+    void lebenslaufLuckenlosStartsBarelyEarlyEnoughOkTest() {
+        // Arrange
+        GesuchFormular gesuchFormular = initFormular();
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
+            LocalDate.of(2000, 1, 16)
+        );
+        gesuchFormular.getAusbildung().setAusbildungBegin(
+            LocalDate.of(2016, 7, 31)
+        );
+
+        // Act/Assert
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
+
+        // Arrange
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
+            LocalDate.of(2000, 12, 16)
+        );
+
+        // Act/Assert
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
+    }
+
+    @Test
+    void lebenslaufLuckenlosStartsBarelyTooLateFailTest() {
+        // Arrange
+        GesuchFormular gesuchFormular = initFormular();
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
+            LocalDate.of(2000, 1, 16)
+        );
+        gesuchFormular.getAusbildung().setAusbildungBegin(
+            LocalDate.of(2016, 8, 1)
+        );
+
+        // Act/Assert
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
+
+        // Arrange
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
+            LocalDate.of(2000, 12, 16)
+        );
+
+        // Act/Assert
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
+    }
+
     @NotNull
     private GesuchFormular initFormularWithLebenslaufItem(LocalDate von, LocalDate bis) {
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();

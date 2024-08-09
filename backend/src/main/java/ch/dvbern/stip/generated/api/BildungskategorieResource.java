@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.BildungsartDto;
+import ch.dvbern.stip.generated.dto.BildungskategorieDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -15,11 +15,11 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/bildungsart")
+@Path("/bildungskategorie")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
-public interface BildungsartResource {
+public interface BildungskategorieResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getBildungsarten();
+    Response getBildungskategorien();
 }

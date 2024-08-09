@@ -29,7 +29,7 @@ import {
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs';
 
 import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
@@ -91,6 +91,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
   formUtils = inject(SharedUtilFormService);
+  translate = inject(TranslateService);
 
   @ViewChild('paginator', { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
@@ -120,7 +121,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   displayedChildColumns: string[] = [
     'bezeichnungDe',
     'bezeichnungFr',
-    'bildungsart',
+    'bildungskategorie',
     'actions',
   ];
 
@@ -129,7 +130,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   gangForm = this.fb.nonNullable.group({
     bezeichnungDe: ['', Validators.required],
     bezeichnungFr: ['', Validators.required],
-    bildungsartId: ['', Validators.required],
+    bildungskategorieId: ['', Validators.required],
   });
 
   constructor() {
@@ -148,7 +149,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       }
     });
     this.store.loadAusbildungsstaetten({});
-    this.store.loadBildungsarten({});
+    this.store.loadBildungskategorien({});
   }
 
   ngAfterViewInit() {
@@ -239,9 +240,10 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       id: 'new',
       bezeichnungDe: '',
       bezeichnungFr: '',
-      bildungsart: {
+      bildungskategorie: {
         id: '',
-        beschreibung: '',
+        bezeichnungDe: '',
+        bezeichnungFr: '',
         bfs: 0,
         bildungsstufe: Bildungsstufe.SEKUNDAR_2,
       },
@@ -262,7 +264,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
       {
         bezeichnungDe: ausbildungsgang.bezeichnungDe,
         bezeichnungFr: ausbildungsgang.bezeichnungFr,
-        bildungsartId: ausbildungsgang.bildungsart.id,
+        bildungskategorieId: ausbildungsgang.bildungskategorie.id,
       },
       { emitEvent: false },
     );
