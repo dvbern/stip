@@ -6,6 +6,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+
 import { SachbearbeitungAppPatternVerfuegungLayoutComponent } from './sachbearbeitung-app-pattern-verfuegung-layout.component';
 
 describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
@@ -19,6 +21,7 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
         TranslateModule.forRoot(),
       ],
       providers: [
+        GesuchAenderungStore,
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),

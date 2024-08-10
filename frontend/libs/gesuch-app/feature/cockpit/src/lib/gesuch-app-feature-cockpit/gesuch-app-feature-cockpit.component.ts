@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -19,10 +17,12 @@ import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
+import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -71,13 +71,14 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     const aenderungsAntraege =
       this.gesuchAenderungStore.cachedAenderungsGesuche().data ?? [];
 
+    // could there be multiple aenderungsAntraege for one gesuch? => ja => change to filter? or don't flatten the result of getAll
     return perioden.map((periode) => {
       const aenderungsAntrag = aenderungsAntraege.find(
         (a) => a.id === periode.gesuch?.id,
       );
       return {
         ...periode,
-        aenderungsAntrag, // check for status and date in future (1104), sice there is an antrag if the gesuch is not submitted
+        aenderungsAntrag, // how can we make shure we then work on the ritght tranche, stats is on gesuch! and date (1104), sice initial gesuch shows as an Antrag if not submitted.
       };
     });
   });
@@ -85,10 +86,10 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   constructor() {
     effect(
       () => {
-        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
+        const aenderung = this.gesuchAenderungStore.cachedAenderungsGesuch();
         if (isSuccess(aenderung)) {
-          // this.gesuchAenderungStore.resetCachedGesuchAenderung(); reset in future (1104)
-          // this.router.navigate(['/', 'aenderung', aenderung.data.id]); navigate to aenderung in future (1104)
+          this.router.navigate(['/', 'gesuch', aenderung.data.id]); // navigate to aenderung (1104)
+          this.gesuchAenderungStore.resetCachedGesuchAenderung();
         }
       },
       { allowSignalWrites: true },
@@ -100,7 +101,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         .filter((g) => g !== undefined) as string[];
 
       if (gesuchIds.length > 0) {
-        this.gesuchAenderungStore.getAllGesuchAenderungen$(gesuchIds);
+        this.gesuchAenderungStore.getAllAenderungsGesuche$(gesuchIds);
       }
     });
   }

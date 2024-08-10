@@ -7,6 +7,7 @@ import { exhaustMap, forkJoin, map, pipe, switchMap, tap } from 'rxjs';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   CreateAenderungsantragRequest,
+  CreateGesuchTrancheRequest,
   Gesuch,
   GesuchTrancheService,
 } from '@dv/shared/model/gesuch';
@@ -21,12 +22,12 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type GesuchAenderungState = {
-  cachedGesuchAenderung: CachedRemoteData<Gesuch>;
+  cachedAenderungsGesuch: CachedRemoteData<Gesuch>;
   cachedAenderungsGesuche: CachedRemoteData<Gesuch[]>;
 };
 
 const initialState: GesuchAenderungState = {
-  cachedGesuchAenderung: initial(),
+  cachedAenderungsGesuch: initial(),
   cachedAenderungsGesuche: initial(),
 };
 
@@ -39,10 +40,10 @@ export class GesuchAenderungStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   resetCachedGesuchAenderung() {
-    patchState(this, { cachedGesuchAenderung: initial() });
+    patchState(this, { cachedAenderungsGesuch: initial() });
   }
 
-  getAllGesuchAenderungen$ = rxMethod<string[]>(
+  getAllAenderungsGesuche$ = rxMethod<string[]>(
     pipe(
       exhaustMap((gesuchIds) => {
         return forkJoin(
@@ -56,6 +57,9 @@ export class GesuchAenderungStore extends signalStore(
         );
       }),
       map((gesuche) => gesuche.flat()),
+      tap((x) => {
+        console.log('getAllAenderungsGesuche$', x);
+      }),
       handleApiResponse((gesuche) => {
         patchState(this, { cachedAenderungsGesuche: gesuche });
       }),
@@ -69,7 +73,8 @@ export class GesuchAenderungStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
+          // change to not cached?
+          cachedAenderungsGesuch: cachedPending(state.cachedAenderungsGesuch),
         }));
       }),
       switchMap(({ gesuchId, createAenderungsantragRequest }) =>
@@ -82,7 +87,52 @@ export class GesuchAenderungStore extends signalStore(
             handleApiResponse(
               (gesuchAenderung) => {
                 patchState(this, (state) => ({
-                  cachedGesuchAenderung: gesuchAenderung,
+                  cachedAenderungsGesuch: gesuchAenderung,
+                  cachedAenderungsGesuche: isSuccess(gesuchAenderung)
+                    ? success([
+                        ...(state.cachedAenderungsGesuche.data ?? []),
+                        gesuchAenderung.data,
+                      ])
+                    : cachedPending(state.cachedAenderungsGesuche),
+                }));
+              },
+              {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.dialog.gesuch-aenderung.success',
+                  });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createGesuchTrancheCopy$ = rxMethod<{
+    gesuchId: string;
+    trancheId: string;
+    createGesuchTrancheRequest?: CreateGesuchTrancheRequest;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          // change to not cached?
+          cachedAenderungsGesuch: cachedPending(state.cachedAenderungsGesuch),
+        }));
+      }),
+      switchMap(({ gesuchId, trancheId, createGesuchTrancheRequest }) =>
+        this.gesuchTrancheService
+          .createGesuchTrancheCopy$({
+            gesuchId,
+            trancheId,
+            createGesuchTrancheRequest,
+          })
+          .pipe(
+            handleApiResponse(
+              (gesuchAenderung) => {
+                patchState(this, (state) => ({
+                  cachedAenderungsGesuch: gesuchAenderung,
                   cachedAenderungsGesuche: isSuccess(gesuchAenderung)
                     ? success([
                         ...(state.cachedAenderungsGesuche.data ?? []),

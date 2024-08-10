@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
@@ -29,6 +30,7 @@ export const appRoutes: Route[] = [
     path: 'gesuch',
     canActivate: [hasBenutzer],
     title: 'sachbearbeitung-app.gesuch-form.title',
+    providers: [GesuchAenderungStore],
     loadComponent: () =>
       import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
         (m) => m.SachbearbeitungAppFeatureGesuchFormComponent,

@@ -18,7 +18,7 @@ describe('GesuchAenderungStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.cachedGesuchAenderung()).toEqual({
+    expect(store.cachedAenderungsGesuch()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,
