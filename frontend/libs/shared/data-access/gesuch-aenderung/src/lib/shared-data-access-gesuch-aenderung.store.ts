@@ -31,7 +31,7 @@ const initialState: GesuchAenderungState = {
   cachedAenderungsGesuche: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GesuchAenderungStore extends signalStore(
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
@@ -57,9 +57,6 @@ export class GesuchAenderungStore extends signalStore(
         );
       }),
       map((gesuche) => gesuche.flat()),
-      tap((x) => {
-        console.log('getAllAenderungsGesuche$', x);
-      }),
       handleApiResponse((gesuche) => {
         patchState(this, { cachedAenderungsGesuche: gesuche });
       }),

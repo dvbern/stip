@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
@@ -20,6 +21,7 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
+import { isSuccess } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -58,6 +60,28 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       queryParams: 'ignored',
     });
   });
+
+  aenderungsGesucheSig = computed(() => {
+    const aenderugsGesuche =
+      this.gesuchAenderungStore.cachedAenderungsGesuche();
+
+    if (isSuccess(aenderugsGesuche)) {
+      return aenderugsGesuche.data;
+    }
+
+    return [];
+  });
+
+  constructor() {
+    effect(() => {
+      const gesuchId = this.currentGesuchSig()?.id;
+
+      if (gesuchId) {
+        this.gesuchAenderungStore.getAllAenderungsGesuche$([gesuchId]);
+      }
+    });
+  }
+
   canSetToBearbeitungSig = computed(() => {
     const gesuch = this.currentGesuchSig();
     const status = gesuch?.gesuchStatus;

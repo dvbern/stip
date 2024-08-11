@@ -1,9 +1,9 @@
 {
   "app-name": "Stipendien Online",
   "sachbearbeitung-app.header.antraege": "Anträge",
-  "sachbearbeitung-app.header.tranchenAuswahl": "Gesuch",
+  "sachbearbeitung-app.header.tranchenAuswahl": "Tranchenauswahl",
   "sachbearbeitung-app.header.administration": "Administration",
-  "sachbearbeitung-app.header.verfuegung": "Verfügung",
+  "sachbearbeitung-app.header.verfuegung": "Zusammenfassung",
   "sachbearbeitung-app.header.aenderungen": "Änderungen",
   "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Gesuch bearbeiten",

@@ -92,7 +92,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
           this.gesuchAenderungStore.resetCachedGesuchAenderung();
         }
       },
-      { allowSignalWrites: true },
+      { allowSignalWrites: true }, // @scph is this needed here?
     );
 
     effect(() => {

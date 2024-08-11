@@ -6,7 +6,7 @@
   }"
 >
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
-    <!-- Gesuch -->
+    <!-- Gesuch / Tranchen -->
     <button
       type="button"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
@@ -20,26 +20,45 @@
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
-      @if (currentGesuchSig(); as currentGesuch) {
-        <a
-          [routerLink]="['/', 'gesuch', currentGesuch.id]"
-          class="btn btn-light btn-nav active fw-normal px-3 d-flex align-items-center shadow-none"
-          data-testid="gesuch-step-nav-overview"
-          mat-menu-item
-        >
-          <span>
-            {{
-              'sachbearbeitung-app.header.tranche.item'
-                | translate: { date: currentGesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.YYYY', index: 1 }
-            }}
-            -
-            {{ currentGesuch.gesuchsperiode.gesuchsperiodeStopp | date: 'MM.YYYY' }}
-          </span>
-        </a>
-      }
+      <div class="d-flex flex-column gap-2">
+        @if (currentGesuchSig(); as currentGesuch) {
+          <a
+            [routerLink]="['/', 'gesuch', currentGesuch.id]"
+            class="btn btn-light btn-nav active fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.tranche.item'
+                  | translate: { date: currentGesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.YYYY', index: 1 }
+              }}
+              -
+              {{ currentGesuch.gesuchsperiode.gesuchsperiodeStopp | date: 'MM.YYYY' }}
+            </span>
+          </a>
+        }
+        @for (gesuch of aenderungsGesucheSig(); track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuch.id]"
+            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.tranche.item'
+                  | translate: { date: gesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.YYYY', index: $index + 2 }
+              }}
+              -
+              {{ gesuch.gesuchsperiode.gesuchsperiodeStopp | date: 'MM.YYYY' }}
+            </span>
+          </a>
+        }
+      </div>
     </mat-menu>
 
-    <!-- Verfuegung -->
+    <!-- Verfuegung / Zusammenfassung -->
     <a
       [routerLink]="['/', 'verfuegung', currentGesuchSig()?.id]"
       routerLinkActive="active"
@@ -86,6 +105,7 @@
         class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
         data-testid="gesuch-header-nav-tranche-erstellen"
         (click)="createTranche()"
+        [disabled]="aenderungsGesucheSig().length > 0"
       >
         <i class="material-symbols-rounded text-white me-2">add_circle</i>
         <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
