@@ -135,6 +135,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.ausbildungsort.if.swiss.message}";
     public static final String VALIDATION_DOCUMENTS_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
+    public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
+        "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

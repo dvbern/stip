@@ -16,6 +16,8 @@ import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @Order(1)
     @TestAsGesuchsteller
     void gesuchEinreichtenWithUniqueSvNummerAccepted() {
+        RestAssured.filters(new RequestLoggingFilter());
         UUID gesuchId = createFullGesuch();
 
         final var file = TestUtil.getTestPng();
@@ -61,6 +64,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @Order(2)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
+        RestAssured.filters(new RequestLoggingFilter());
         UUID gesuchId = createFullGesuch(); //neues Gesuch mit selber AHV-Nummer wird erstellt
 
         var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)

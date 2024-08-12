@@ -218,7 +218,6 @@ public class GesuchFormular extends AbstractMandantEntity {
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
     private @Valid GesuchTranche tranche;
 
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
