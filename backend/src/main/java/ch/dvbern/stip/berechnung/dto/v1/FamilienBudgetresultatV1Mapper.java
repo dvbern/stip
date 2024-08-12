@@ -18,8 +18,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         final int budgetToUse,
         final int einnahmenFamilienbudget,
         final int ausgabenFamilienbudget,
-        final int familienbudgetBerechnet,
-        final int einkommensfreibetrag
+        final int familienbudgetBerechnet
     ) {
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         InputFamilienbudgetV1 inputFamilienbudget = null;
@@ -49,7 +48,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
             .einzahlungSaeule23a(elternteil.getEinzahlungSaeule2() + elternteil.getEinzahlungSaeule3a())
             .eigenmietwert(elternteil.getEigenmietwert())
             .alimente(elternteil.getAlimente())
-            .einkommensfreibetrag(einkommensfreibetrag)
+            .einkommensfreibetrag(berechnungsRequest.getStammdaten().getEinkommensfreibetrag())
             .einnahmenFamilienbudget(einnahmenFamilienbudget)
             .grundbedarf(elternteil.getGrundbedarf())
             .effektiveWohnkosten(elternteil.getEffektiveWohnkosten())

@@ -3010,6 +3010,7 @@ components:
       required:
         - anzahlPersonenImHaushalt
         - eigenerHaushalt
+        - anteilLebenshaltungskosten
         - einkommen
         - leistungenEO
         - rente
@@ -3038,6 +3039,8 @@ components:
           type: integer
         eigenerHaushalt:
           type: boolean
+        anteilLebenshaltungskosten:
+          type: integer
         einkommen:
           type: integer
         leistungenEO:

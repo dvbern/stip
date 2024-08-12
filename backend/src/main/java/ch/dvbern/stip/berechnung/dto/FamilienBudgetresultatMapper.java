@@ -10,7 +10,6 @@ public interface FamilienBudgetresultatMapper {
         final int budgetToUse,
         final int einnahmenFamilienbudget,
         final int ausgabenFamilienbudget,
-        final int familienbudgetBerechnet,
-        final int einkommensfreibetrag
+        final int familienbudgetBerechnet
     );
 }

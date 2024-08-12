@@ -238,7 +238,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule": "Bei Selbständigerwerbenden in die 2.Säule /Säule 3a",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert": "Abzüglich Mietwert",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten": "Abzüglich Alimente/Renten für in Ausbildung stehende Person",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag": "*Einkommensfreibetrag",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag": "Einkommensfreibetrag",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.title": "Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total": "Total anrechenbare, jährliche Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen": "Anzahl anrechenbare Personen: {{ anzahlPersonen }}",
