@@ -108,7 +108,7 @@ class GesuchDokumentServiceTest {
 
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
-        gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
+        //gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
         gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
         ablehnenRequest.setKommentar(gesuchDokumentKommentarDto);
 
@@ -133,7 +133,7 @@ class GesuchDokumentServiceTest {
 
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
-        gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
+        //gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
         gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
         ablehnenRequest.setKommentar(gesuchDokumentKommentarDto);
 

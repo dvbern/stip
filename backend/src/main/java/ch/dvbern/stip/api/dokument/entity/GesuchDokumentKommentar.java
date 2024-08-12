@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
@@ -15,8 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.FetchType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -56,12 +53,4 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
     @Column(name = "kommentar")
     private String kommentar;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "benutzer_id",
-        foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_benutzer_id"),
-        nullable = false
-    )
-    private Benutzer benutzer;
 }

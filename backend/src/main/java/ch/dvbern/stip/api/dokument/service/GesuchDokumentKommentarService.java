@@ -33,13 +33,10 @@ public class GesuchDokumentKommentarService {
 
     @Transactional
     public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument,final GesuchDokumentKommentarDto gesuchDokumentKommentarDto) {
-        final var benutzer = benutzerService.getCurrentBenutzer();
         final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
-
         if(gesuchDokumentKommentarDto == null){
             createEmptyKommentarForGesuchDokument(gesuchDokument);
         }else{
-            kommentar.setBenutzer(benutzer);
             kommentar.setGesuch(gesuchDokument.getGesuch());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persist(kommentar);

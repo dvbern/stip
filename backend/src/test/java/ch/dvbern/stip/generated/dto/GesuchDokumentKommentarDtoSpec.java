@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.BenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_STATUS,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_KOMMENTAR,
-  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_BENUTZER,
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
 @JsonTypeName("GesuchDokumentKommentar")
@@ -54,8 +53,8 @@ public class GesuchDokumentKommentarDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
 
-  public static final String JSON_PROPERTY_BENUTZER = "benutzer";
-  private BenutzerDtoSpec benutzer;
+  public static final String JSON_PROPERTY_USER_ERSTELLT = "user_erstellt";
+  private String userErstellt;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private LocalDate timestampErstellt;
@@ -167,29 +166,29 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  public GesuchDokumentKommentarDtoSpec benutzer(BenutzerDtoSpec benutzer) {
+  public GesuchDokumentKommentarDtoSpec userErstellt(String userErstellt) {
     
-    this.benutzer = benutzer;
+    this.userErstellt = userErstellt;
     return this;
   }
 
    /**
-   * Get benutzer
-   * @return benutzer
+   * Get userErstellt
+   * @return userErstellt
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BENUTZER)
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BenutzerDtoSpec getBenutzer() {
-    return benutzer;
+  public String getUserErstellt() {
+    return userErstellt;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BENUTZER)
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBenutzer(BenutzerDtoSpec benutzer) {
-    this.benutzer = benutzer;
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
   }
 
 
@@ -231,13 +230,13 @@ public class GesuchDokumentKommentarDtoSpec {
         Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
         Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
-        Objects.equals(this.benutzer, gesuchDokumentKommentar.benutzer) &&
+        Objects.equals(this.userErstellt, gesuchDokumentKommentar.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchDokumentKommentar.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, dokumentTyp, dokumentStatus, kommentar, benutzer, timestampErstellt);
+    return Objects.hash(gesuchId, dokumentTyp, dokumentStatus, kommentar, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -248,7 +247,7 @@ public class GesuchDokumentKommentarDtoSpec {
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();

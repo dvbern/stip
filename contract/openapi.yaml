@@ -3082,8 +3082,8 @@ components:
           $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
           type: string
-        benutzer:
-          $ref: '#/components/schemas/Benutzer'
+        user_erstellt:
+          type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
     Dokumentstatus:

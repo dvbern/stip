@@ -24,7 +24,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid String kommentar;
   private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus dokumentStatus;
-  private @Valid BenutzerDto benutzer;
+  private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
 
   /**
@@ -104,20 +104,20 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentKommentarDto benutzer(BenutzerDto benutzer) {
-    this.benutzer = benutzer;
+  public GesuchDokumentKommentarDto userErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
     return this;
   }
 
 
-  @JsonProperty("benutzer")
-  public BenutzerDto getBenutzer() {
-    return benutzer;
+  @JsonProperty("user_erstellt")
+  public String getUserErstellt() {
+    return userErstellt;
   }
 
-  @JsonProperty("benutzer")
-  public void setBenutzer(BenutzerDto benutzer) {
-    this.benutzer = benutzer;
+  @JsonProperty("user_erstellt")
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
   }
 
   /**
@@ -152,13 +152,13 @@ public class GesuchDokumentKommentarDto  implements Serializable {
         Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
-        Objects.equals(this.benutzer, gesuchDokumentKommentar.benutzer) &&
+        Objects.equals(this.userErstellt, gesuchDokumentKommentar.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchDokumentKommentar.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, dokumentTyp, kommentar, dokumentStatus, benutzer, timestampErstellt);
+    return Objects.hash(gesuchId, dokumentTyp, kommentar, dokumentStatus, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -170,7 +170,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
-    sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
