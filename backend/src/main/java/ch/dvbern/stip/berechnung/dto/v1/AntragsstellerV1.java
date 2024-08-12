@@ -70,7 +70,6 @@ public class AntragsstellerV1 {
               .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
               .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
               .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
-          LOG.info("rente: " + einnahmenKosten.getRenten());
           int alter = (int) ChronoUnit.YEARS.between(personInAusbildung.getGeburtsdatum(), LocalDate.now());
           builder.alter(alter);
 
@@ -111,7 +110,7 @@ public class AntragsstellerV1 {
               );
           }
 
-          builder.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
+          builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
 
           builder.ausbildungskosten(
               getAusbildungskosten(
