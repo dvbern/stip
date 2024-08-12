@@ -2957,8 +2957,6 @@ components:
         - steuernBund
         - fahrkosten
         - verpflegung
-        - steuerjahr
-        - veranlagungscode
         - totalEinkuenfte
         - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
@@ -2986,7 +2984,7 @@ components:
           type: integer
         steuerjahr:
           type: integer
-        veranlagungscode:
+        veranlagungsCode:
           type: integer
         totalEinkuenfte:
           type: integer

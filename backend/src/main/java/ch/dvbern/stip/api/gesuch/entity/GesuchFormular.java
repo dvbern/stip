@@ -40,12 +40,13 @@ import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PartnerPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -100,6 +101,10 @@ import org.hibernate.envers.Audited;
     Default.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
+@SteuerdatenSteuerjahrInPastOrCurrentConstraint(groups = {
+    Default.class,
+    SteuerdatenPageValidation.class
+}, property = "steuerdaten")
 @AusbildungskostenStufeRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
@@ -150,19 +155,22 @@ import org.hibernate.envers.Audited;
 public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "person_in_ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"))
+    @JoinColumn(name = "person_in_ausbildung_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"))
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
+    @JoinColumn(name = "ausbildung_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
     @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Ausbildung ausbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "familiensituation_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"))
+    @JoinColumn(name = "familiensituation_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"))
     @HasPageValidation(FamiliensituationPageValidation.class)
     private @Valid Familiensituation familiensituation;
 
@@ -179,7 +187,8 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "einnahmen_kosten_id", foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"))
+    @JoinColumn(name = "einnahmen_kosten_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"))
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 
@@ -206,11 +215,11 @@ public class GesuchFormular extends AbstractMandantEntity {
     @HasPageValidation(KindPageValidation.class)
     private @Valid Set<Kind> kinds = new LinkedHashSet<>();
 
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
+    private @Valid GesuchTranche tranche;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
     private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
-
-    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
-    private @Valid GesuchTranche tranche;
 }

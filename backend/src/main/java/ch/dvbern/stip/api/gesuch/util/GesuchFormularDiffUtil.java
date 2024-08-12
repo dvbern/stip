@@ -116,7 +116,11 @@ public final class GesuchFormularDiffUtil {
 
         // Boxed !=
         return !Objects.equals(newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
-            toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben());
+            toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben()) ||
+            !Objects.equals(newFormular.getFamiliensituation().getMutterUnbekanntVerstorben(),
+                toUpdate.getFamiliensituation().getMutterUnbekanntVerstorben()) ||
+            !Objects.equals(newFormular.getFamiliensituation().getVaterUnbekanntVerstorben(),
+                toUpdate.getFamiliensituation().getVaterUnbekanntVerstorben());
     }
 
     public boolean hasWohnsitzChanged(

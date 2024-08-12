@@ -63,7 +63,7 @@ public class ElternRequiredDocumentsProducer {
             requiredDocs.add(AUSWEIS_MAP.get(elternteil.getElternTyp()));
         }
 
-        if (elternteil.getWohnkosten() != null) {
+        if (elternteil.getWohnkosten() != null && elternteil.getWohnkosten() > 0) {
             requiredDocs.add(WOHNKOSTEN_MAP.get(elternteil.getElternTyp()));
         }
 

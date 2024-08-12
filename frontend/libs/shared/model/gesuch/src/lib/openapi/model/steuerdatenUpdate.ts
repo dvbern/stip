@@ -20,8 +20,8 @@ export interface SteuerdatenUpdate {
     fahrkostenPartner?: number;
     verpflegung: number;
     verpflegungPartner?: number;
-    steuerjahr: number;
-    veranlagungscode: number;
+    steuerjahr?: number;
+    veranlagungsCode?: number;
     totalEinkuenfte: number;
     eigenmietwert: number;
     isArbeitsverhaeltnisSelbstaendig: boolean;

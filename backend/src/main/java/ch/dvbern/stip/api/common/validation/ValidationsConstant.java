@@ -102,6 +102,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.einnahmen.kosten.ausbildungskosten.stufe3.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_STEUERJAHR_INVALID_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.steuerjahr.invalid.message}";
+    public static final String VALIDATION_STEUERDATEN_STEUERJAHR_INVALID_MESSAGE =
+        "{jakarta.validation.constraints.steuerdaten.steuerjahr.invalid.message}";
     public static final String VALIDATION_LEBENSLAUF_AUSBILDUNG_UEBERSCHNEIDEN_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.ausbildung.ueberschneiden.message}";
     public static final String VALIDATION_PERSONS_AHV_NUMBER_UNIQUENESS_MESSAGE =
