@@ -115,6 +115,7 @@
   "shared.dokumente.table.delete": "Löschen",
   "shared.dokumente.table.upload": "Hochladen",
   "shared.dokumente.table.status": "Status",
+  "shared.dokumente.table.kommentar.empty": "Kein Kommentar vorhanden",
   "shared.dokumente.expanded-detail.caption": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
   "shared.dokumente.expanded-detail.user": "Lorem IpsumLorem Ipsum Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum",
   "shared.dokumente.expanded-detail.timestamp": "Lorem Ipsum Lorem IpsumLorem IpsumLorem Ipsum ",

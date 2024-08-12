@@ -52,12 +52,21 @@ export class DokumentsStore extends signalStore(
   }));
 
   gesuchDokumentKommentareSig = computed(() => {
-    return (
-      this.gesuchDokumentKommentare.data() ?? [
-        // dummy data
-        { kommentar: '', datum: '', benutzer: { nachname: '', vorname: '' } },
-      ]
-    );
+    return [
+      // Dummy Data, remove in 994
+      {
+        id: '1',
+        kommentar:
+          'Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August',
+        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+        benutzer: {
+          vorname: 'Ruedi',
+          nachname: 'Tester',
+        },
+        timestampErstellt: '2024-08-12T12:44:43.401Z',
+        gesuchId: '1',
+      },
+    ];
   });
 
   hasAbgelehnteDokumentsSig = computed(() => {
@@ -98,19 +107,19 @@ export class DokumentsStore extends signalStore(
 
   gesuchDokumentAblehnen$ = rxMethod<{
     gesuchId: string;
+    dokumentTyp: DokumentTyp;
     gesuchDokumentId: string;
     kommentar: string;
   }>(
     pipe(
-      switchMap(({ gesuchId, gesuchDokumentId, kommentar }) =>
+      switchMap(({ gesuchId, gesuchDokumentId, dokumentTyp, kommentar }) =>
         this.dokumentService
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
             gesuchDokumentAblehnenRequest: {
-              // TODO: muss noch angepasst werden in 994
               kommentar: {
                 kommentar,
-                dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+                dokumentTyp,
                 gesuchId,
               },
             },

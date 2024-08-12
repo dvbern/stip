@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.BenutzerDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -9,6 +10,9 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
@@ -34,7 +38,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -53,7 +57,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("dokumentTyp")
   @NotNull
   public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
@@ -72,7 +76,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kommentar")
   @NotNull
   public String getKommentar() {
@@ -91,7 +95,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("dokumentStatus")
   public ch.dvbern.stip.api.dokument.type.Dokumentstatus getDokumentStatus() {
     return dokumentStatus;
@@ -109,7 +113,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("benutzer")
   public BenutzerDto getBenutzer() {
     return benutzer;
@@ -127,7 +131,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -165,7 +169,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDto {\n");
-
+    
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
