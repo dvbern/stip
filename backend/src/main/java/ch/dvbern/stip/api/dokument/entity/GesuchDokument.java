@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,10 +56,6 @@ public class GesuchDokument extends AbstractMandantEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_id"))
     private Gesuch gesuch;
-
-    @Nullable
-    @OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    private List<GesuchDokumentKommentar> kommentare;
 
     @NotNull
     @Column(name = "dokument_typ", nullable = false)

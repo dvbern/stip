@@ -4,9 +4,11 @@ import {
   Component,
   OnInit,
   computed,
+  effect,
   inject,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -15,14 +17,18 @@ import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
+import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
+import { isSuccess } from '@dv/shared/util/remote-data';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -38,6 +44,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiIconChipComponent,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    SharedUiRdIsPendingPipe,
   ],
   providers: [FallStore],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
@@ -46,15 +53,57 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 })
 export class GesuchAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
+  gesuchAenderungStore = inject(GesuchAenderungStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   // Do not initialize signals in computed directly, just usage
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
+
+  periodenSig = computed(() => {
+    const perioden = this.cockpitViewSig().gesuchsperiodes;
+    const aenderungsAntraege =
+      this.gesuchAenderungStore.cachedAenderungsGesuche().data ?? [];
+
+    return perioden.map((periode) => {
+      const aenderungsAntrag = aenderungsAntraege.find(
+        (a) => a.id === periode.gesuch?.id,
+      );
+      return {
+        ...periode,
+        aenderungsAntrag, // check for status and date in future (1104), sice there is an antrag if the gesuch is not submitted
+      };
+    });
+  });
+
+  constructor() {
+    effect(
+      () => {
+        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
+        if (isSuccess(aenderung)) {
+          // this.gesuchAenderungStore.resetCachedGesuchAenderung(); reset in future (1104)
+          // this.router.navigate(['/', 'aenderung', aenderung.data.id]); navigate to aenderung in future (1104)
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(() => {
+      const gesuchIds = this.cockpitViewSig()
+        .gesuchsperiodes.map((p) => p.gesuch?.id)
+        .filter((g) => g !== undefined) as string[];
+
+      if (gesuchIds.length > 0) {
+        this.gesuchAenderungStore.getAllGesuchAenderungen$(gesuchIds);
+      }
+    });
+  }
 
   ngOnInit() {
     this.fallStore.loadCurrentFall$();
@@ -93,5 +142,21 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     this.store.dispatch(
       SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
+  }
+
+  aenderungMelden(gesuchId: string, minDate: string, maxDate: string) {
+    SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
+      minDate: new Date(minDate),
+      maxDate: new Date(maxDate),
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.gesuchAenderungStore.createGesuchAenderung$({
+            gesuchId,
+            aenderungsantrag: result,
+          });
+        }
+      });
   }
 }
