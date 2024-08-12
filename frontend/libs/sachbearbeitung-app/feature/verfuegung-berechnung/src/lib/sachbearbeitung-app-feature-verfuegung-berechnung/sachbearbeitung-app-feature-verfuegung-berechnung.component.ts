@@ -8,14 +8,15 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
+import { addDays, differenceInMonths } from 'date-fns';
+
 import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { toFormatedNumber } from '@dv/shared/util/maskito-util';
-import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
-import { addDays, differenceInMonths } from 'date-fns';
 
 import { GesamtBerechnung } from '../../models';
 import {

@@ -5,8 +5,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 
 import {
-  SharedUiFormatChfPipe,
   SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
 import { BerechnungsExpansionPanelComponent } from './berechnungs-expansion-panel.component';
