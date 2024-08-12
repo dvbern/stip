@@ -27,7 +27,7 @@ public class SteuerdatenCopyUtil {
         copy.setVerpflegung(other.getVerpflegung());
         copy.setVerpflegungPartner(other.getVerpflegungPartner());
         copy.setSteuerjahr(other.getSteuerjahr());
-        copy.setVeranlagungscode(other.getVeranlagungscode());
+        copy.setVeranlagungsCode(other.getVeranlagungsCode());
 
         return copy;
     }
