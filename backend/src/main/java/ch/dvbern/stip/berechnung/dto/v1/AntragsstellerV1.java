@@ -42,8 +42,8 @@ public class AntragsstellerV1 {
       int fahrkosten;
       int fahrkostenPartner;
       int verpflegung;
-      int fremdbetreuung;
       int verpflegungPartner;
+      int fremdbetreuung;
       int anteilFamilienbudget;
       boolean lehre;
       boolean eigenerHaushalt;
