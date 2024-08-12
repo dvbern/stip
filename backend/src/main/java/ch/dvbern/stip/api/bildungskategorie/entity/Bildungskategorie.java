@@ -17,6 +17,9 @@ import org.hibernate.envers.Audited;
 @Table
 @RequiredArgsConstructor
 public class Bildungskategorie extends AbstractEntity {
+    // Bildungskategorien from BFS code 7 adn higher are of Bildungsstufe Tertiaer, lower are sekundaer_2
+    private static final int MIN_TERTIAER_BFS = 7;
+
 	@Column(name = "bezeichnung_de", nullable = false)
 	private String bezeichnungDe;
 
@@ -27,6 +30,6 @@ public class Bildungskategorie extends AbstractEntity {
 	private int bfs;
 
     public Bildungsstufe getBildungsstufe() {
-        return bfs >= 7 ? Bildungsstufe.TERTIAER : Bildungsstufe.SEKUNDAR_2;
+        return bfs >= MIN_TERTIAER_BFS ? Bildungsstufe.TERTIAER : Bildungsstufe.SEKUNDAR_2;
     }
 }
