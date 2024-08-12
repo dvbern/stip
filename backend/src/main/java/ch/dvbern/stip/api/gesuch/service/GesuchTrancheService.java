@@ -4,11 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
-import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -16,8 +13,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
-import ch.dvbern.stip.api.partner.service.PartnerService;
-import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -35,11 +30,6 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 public class GesuchTrancheService {
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final PersonInAusbildungService personInAusbildungService;
-    private final PartnerService partnerService;
-    private final ElternService elternService;
-    private final AuszahlungService auszahlungService;
-    private final AdresseRepository adresseRepository;
     private final GesuchMapperUtil gesuchMapperUtil;
 
     @Transactional
