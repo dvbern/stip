@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import lombok.experimental.UtilityClass;
@@ -76,7 +76,7 @@ public class DateUtil {
      * but logically there is 1 month between e.g. 01.03.2024 and 31.03.2024
      */
     public int getMonthsBetween(final LocalDate start, final LocalDate end) {
-        return Period.between(start, end.plusDays(1)).getMonths();
+        return (int) ChronoUnit.MONTHS.between(start, end.plusDays(1));
     }
 
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {

@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.repo.AdresseRepository;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungDiffUtil;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;

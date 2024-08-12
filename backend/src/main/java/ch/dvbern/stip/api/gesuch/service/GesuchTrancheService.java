@@ -4,8 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -13,12 +16,13 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
+import ch.dvbern.stip.api.partner.service.PartnerService;
+import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +35,11 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 public class GesuchTrancheService {
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final Validator validator;
+    private final PersonInAusbildungService personInAusbildungService;
+    private final PartnerService partnerService;
+    private final ElternService elternService;
+    private final AuszahlungService auszahlungService;
+    private final AdresseRepository adresseRepository;
     private final GesuchMapperUtil gesuchMapperUtil;
 
     @Transactional
@@ -116,7 +124,6 @@ public class GesuchTrancheService {
 
         gesuch.getGesuchTranchen().removeAll(toRemove);
     }
-
     /**
      * Set Gueltigkeit on existing tranche to a date range with less than 1 month, so it's cleaned up
      */
