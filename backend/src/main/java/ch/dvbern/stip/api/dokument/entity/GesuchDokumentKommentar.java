@@ -1,11 +1,19 @@
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -45,12 +53,4 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
     @Column(name = "kommentar")
     private String kommentar;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "benutzer_id",
-        foreignKey = @ForeignKey(name = "FK_gesuchdokumentkommentar_benutzer_id"),
-        nullable = false
-    )
-    private Benutzer benutzer;
 }
