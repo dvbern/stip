@@ -1,5 +1,4 @@
 package ch.dvbern.stip.generated.api;
-
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import java.util.UUID;
 
