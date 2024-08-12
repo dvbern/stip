@@ -14,11 +14,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Builder
 @Jacksonized
 @Value
+@Slf4j
 public class AntragsstellerV1 {
       boolean tertiaerstufe;
       int einkommen;
@@ -46,6 +48,7 @@ public class AntragsstellerV1 {
       boolean lehre;
       boolean eigenerHaushalt;
       boolean abgeschlosseneErstausbildung;
+      int anzahlPersonenImHaushalt;
 
       public static AntragsstellerV1 buildFromDependants(
           final GesuchFormular gesuchFormular
@@ -57,15 +60,16 @@ public class AntragsstellerV1 {
           final var ausbildung = gesuchFormular.getAusbildung();
 
           final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
-          builder.tertiaerstufe(false);
-          builder.einkommen(einnahmenKosten.getNettoerwerbseinkommen());
-          builder.vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0));
-          builder.alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0));
-          builder.rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0));
-          builder.kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0));
-          builder.ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0));
-          builder.leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0));
-          // TODO: builder.gemeindeInstitutionen();
+          builder
+              .tertiaerstufe(ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe() == Bildungsstufe.TERTIAER)
+              .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
+              .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
+              .alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0))
+              .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
+              .kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0))
+              .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
+              .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
+              .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
           int alter = (int) ChronoUnit.YEARS.between(personInAusbildung.getGeburtsdatum(), LocalDate.now());
           builder.alter(alter);
 
@@ -105,6 +109,8 @@ public class AntragsstellerV1 {
                   BerechnungRequestV1.getEffektiveWohnkosten(einnahmenKosten.getWohnkosten(), gesuchsperiode, anzahlPersonenImHaushalt)
               );
           }
+
+          builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
 
           builder.ausbildungskosten(
               getAusbildungskosten(
