@@ -60,7 +60,7 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "benutzer_id",
-        foreignKey = @ForeignKey(name = "FK_gesuchdokumentkommentar_benutzer_id"),
+        foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_benutzer_id"),
         nullable = false
     )
     private Benutzer benutzer;
