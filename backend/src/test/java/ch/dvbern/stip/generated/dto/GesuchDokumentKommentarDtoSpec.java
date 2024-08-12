@@ -150,9 +150,9 @@ public class GesuchDokumentKommentarDtoSpec {
    * Get kommentar
    * @return kommentar
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getKommentar() {
     return kommentar;
@@ -160,7 +160,7 @@ public class GesuchDokumentKommentarDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }

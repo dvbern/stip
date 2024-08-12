@@ -3072,7 +3072,6 @@ components:
       required:
         - gesuchId
         - dokumentTyp
-        - kommentar
       properties:
         gesuchId:
           $ref: '#/components/schemas/UUID'

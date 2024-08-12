@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,8 +50,8 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private Dokumentstatus dokumentstatus;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "kommentar")
+    @Column(name = "kommentar", nullable = true)
     private String kommentar;
 }
