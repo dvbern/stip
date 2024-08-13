@@ -5,7 +5,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
-public class BildungskategorieTest {
+class BildungskategorieTest {
     @Test
     void testBildungsstufeSekundaer() {
         //Arrange
@@ -25,6 +25,4 @@ public class BildungskategorieTest {
         bk.setBfs(7);
         MatcherAssert.assertThat(bk.getBildungsstufe(), Matchers.is(Bildungsstufe.TERTIAER));
     }
-
-
 }

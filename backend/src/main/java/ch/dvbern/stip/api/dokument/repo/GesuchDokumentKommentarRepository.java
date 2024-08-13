@@ -31,7 +31,6 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
         final DokumentTyp dokumentTyp,
         final UUID gesuchId
     ) {
-
         return
             new JPAQueryFactory(entityManager)
                 .selectFrom(gesuchDokumentKommentar)
