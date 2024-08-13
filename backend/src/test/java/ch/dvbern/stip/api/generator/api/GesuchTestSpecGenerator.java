@@ -2,6 +2,8 @@ package ch.dvbern.stip.api.generator.api;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -39,77 +41,88 @@ public class GesuchTestSpecGenerator {
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildung);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(PersonInAusbildungUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecPersonInAusbildung);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecFamiliensituation =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituation);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(FamiliensituationUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecFamiliensituation);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecPartner =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(PartnerUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPartner);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(PartnerUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecPartner);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(AusbildungUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecAusbildung);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(AuszahlungUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecAuszahlung);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecGeschwister =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(GeschwisterUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecGeschwisters);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(GeschwisterUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecGeschwisters);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecLebenslauf =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(LebenslaufItemUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecLebenslauf);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(LebenslaufItemUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecLebenslauf);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecElterns =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(ElternUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecElterns);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSteuerdatenTabs =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(SteuerdatenUpdateTabsDtoSpecModel
+                .gesuchFormularUpdateDtoSpecSteuerdaten);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecEinnahmenKosten =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKosten);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(EinnahmenKostenUpdateDtoSpecModel
+                .gesuchFormularUpdateDtoSpecEinnahmenKosten);
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecKinder =
         TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(KindUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecKinder);
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(KindUpdateDtoSpecModel.
+                gesuchFormularUpdateDtoSpecKinder);
         });
 
     private static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecFull =
@@ -142,7 +155,6 @@ public class GesuchTestSpecGenerator {
 
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec);
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs);
-            model.setSteuerdaten(SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
         });
 
     public static final GesuchUpdateDtoSpec gesuchUpdateDtoSpecFull =

@@ -82,7 +82,7 @@ class V1StructureTest {
                 },
                 "InputPersoenlichesbudget_V1": {
                     "antragssteller": {
-                        "tertiaerstufe": false,
+                        "tertiaerstufe": true,
                         "einkommen": 12916,
                         "einkommenPartner": 0,
                         "vermoegen": 0,
@@ -107,7 +107,8 @@ class V1StructureTest {
                         "anteilFamilienbudget": 0,
                         "lehre": false,
                         "eigenerHaushalt": true,
-                        "abgeschlosseneErstausbildung": false
+                        "abgeschlosseneErstausbildung": false,
+                        "anzahlPersonenImHaushalt": 2
                     }
                 }
             }

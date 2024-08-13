@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer anzahlPersonenImHaushalt;
   private @Valid Boolean eigenerHaushalt;
+  private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer einkommen;
   private @Valid Integer leistungenEO;
   private @Valid Integer rente;
@@ -82,6 +83,25 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   @JsonProperty("eigenerHaushalt")
   public void setEigenerHaushalt(Boolean eigenerHaushalt) {
     this.eigenerHaushalt = eigenerHaushalt;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto anteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+    this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
+    return this;
+  }
+
+  
+  @JsonProperty("anteilLebenshaltungskosten")
+  @NotNull
+  public Integer getAnteilLebenshaltungskosten() {
+    return anteilLebenshaltungskosten;
+  }
+
+  @JsonProperty("anteilLebenshaltungskosten")
+  public void setAnteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+    this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
   }
 
   /**
@@ -514,6 +534,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     PersoenlichesBudgetresultatDto persoenlichesBudgetresultat = (PersoenlichesBudgetresultatDto) o;
     return Objects.equals(this.anzahlPersonenImHaushalt, persoenlichesBudgetresultat.anzahlPersonenImHaushalt) &&
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
+        Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultat.anteilLebenshaltungskosten) &&
         Objects.equals(this.einkommen, persoenlichesBudgetresultat.einkommen) &&
         Objects.equals(this.leistungenEO, persoenlichesBudgetresultat.leistungenEO) &&
         Objects.equals(this.rente, persoenlichesBudgetresultat.rente) &&
@@ -540,7 +561,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, einkommen, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, vermoegen, anteilFamilienbudget, einkommenPartner, einnahmenPersoenlichesBudget, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilLebenshaltungskosten, einkommen, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, vermoegen, anteilFamilienbudget, einkommenPartner, einnahmenPersoenlichesBudget, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
   }
 
   @Override
@@ -550,6 +571,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
+    sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    einkommen: ").append(toIndentedString(einkommen)).append("\n");
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");
     sb.append("    rente: ").append(toIndentedString(rente)).append("\n");
