@@ -8,8 +8,8 @@
   "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} du {{ date }}",
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Modifier la demande",
   "sachbearbeitung-app.header.tranche.erstellen": "Créer une tranche",
-
   "sachbearbeitung-app.header.back": "Retour",
+
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Enregistrer et publier",
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Centre de formation",
