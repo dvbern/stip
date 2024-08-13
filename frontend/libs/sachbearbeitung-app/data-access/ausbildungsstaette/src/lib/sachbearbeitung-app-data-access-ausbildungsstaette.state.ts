@@ -544,8 +544,11 @@ export const AdminAusbildungsstaetteStore = signalStore(
       ),
     }),
   ),
-  withComputed(({ tableData, response }) => ({
+  withComputed(({ tableData, response, bildungskategorien }) => ({
     ausbildungsstaetteCount: computed(() => tableData().data.length ?? 0),
     loading: computed(() => response.type() === 'pending'),
+    sortedBildungskategorien: computed(
+      () => bildungskategorien().data?.sort((a, b) => a.bfs - b.bfs) ?? [],
+    ),
   })),
 );
