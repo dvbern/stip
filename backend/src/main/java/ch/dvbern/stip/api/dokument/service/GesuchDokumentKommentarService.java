@@ -39,7 +39,7 @@ public class GesuchDokumentKommentarService {
         }else{
             kommentar.setGesuch(gesuchDokument.getGesuch());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
-            gesuchDokumentKommentarRepository.persist(kommentar);
+            gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
     }
 
@@ -48,7 +48,8 @@ public class GesuchDokumentKommentarService {
         final var kommentar = new GesuchDokumentKommentar()
             .setGesuch(gesuchDokument.getGesuch())
             .setDokumentstatus(gesuchDokument.getStatus())
+            .setDokumentTyp(gesuchDokument.getDokumentTyp())
             .setKommentar(null);
-        gesuchDokumentKommentarRepository.persist(kommentar);
+        gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
     }
 }

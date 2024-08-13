@@ -43,9 +43,11 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -80,7 +82,7 @@ class GesuchDokumentServiceTest {
         Mockito.doAnswer(invocation -> {
             comment = invocation.getArgument(0);
             return null;
-        }).when(gesuchDokumentKommentarRepository).persist((GesuchDokumentKommentar) Mockito.any());
+        }).when(gesuchDokumentKommentarRepository).persistAndFlush((GesuchDokumentKommentar) Mockito.any());
 
         Mockito.when(gesuchDokumentRepository.getAllForGesuchInStatus(Mockito.any(), Mockito.any()))
             .thenAnswer(invocation -> gesuchDokumente.values()
@@ -133,7 +135,6 @@ class GesuchDokumentServiceTest {
 
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
         gesuchDokumentKommentarDto.setKommentar("Some known comment");
-        //gesuchDokumentKommentarDto.setBenutzer(new BenutzerDto());
         gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
         ablehnenRequest.setKommentar(gesuchDokumentKommentarDto);
 
@@ -176,7 +177,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAkzeptieren(mockedDokument.getId());
 
         // Assert
-        assertThat(comment.getKommentar(), is(nullValue()));
+        assertEquals(null,comment.getKommentar());
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.AKZEPTIERT));
     }
 
