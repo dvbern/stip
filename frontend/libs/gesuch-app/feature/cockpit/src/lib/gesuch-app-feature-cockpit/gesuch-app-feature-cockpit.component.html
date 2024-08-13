@@ -105,7 +105,7 @@
                           </a>
                         </div>
                         <div class="col-md">
-                          <!-- <button
+                          <button
                             type="button"
                             class="btn btn-outline-primary mt-3 w-100"
                             data-testid="cockpit-gesuch-aenderung"
@@ -119,34 +119,7 @@
                             "
                           >
                             {{ 'gesuch-app.cockpit.gesuch.aenderung' | translate }}
-                          </button> -->
-
-                          <!-- go to aenderungsAntrag / for testing -->
-                          @if (periode.aenderungsAntrag) {
-                            <a
-                              class="btn btn-primary mt-3 w-100"
-                              data-testid="cockpit-gesuch-edit"
-                              [routerLink]="['/gesuch', periode.aenderungsAntrag.id]"
-                            >
-                              Go Aenderung
-                            </a>
-                          } @else {
-                            <button
-                              type="button"
-                              class="btn btn-outline-primary mt-3 w-100"
-                              data-testid="cockpit-gesuch-aenderung"
-                              [disabled]="periode.aenderungsAntrag"
-                              (click)="
-                                aenderungMelden(
-                                  periode.gesuch.id,
-                                  periode.gesuchsperiodeStart,
-                                  periode.gesuchsperiodeStopp
-                                )
-                              "
-                            >
-                              {{ 'gesuch-app.cockpit.gesuch.aenderung' | translate }}
-                            </button>
-                          }
+                          </button>
                         </div>
                       }
                     </div>
