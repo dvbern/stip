@@ -106,6 +106,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+
   canSendMissingDocumentsSig = computed(() => {
     const hasAbgelehnteDokuments =
       this.dokumentsStore.hasAbgelehnteDokumentsSig();
@@ -116,11 +117,11 @@ export class SharedFeatureGesuchDokumenteComponent {
   });
 
   dokumenteDataSourceSig = computed(() => {
-    const documents = this.dokumentsStore.dokumenteViewSig().dokuments;
-    const requiredDocumentTypes =
-      this.dokumentsStore.dokumenteViewSig().requiredDocumentTypes;
-    const gesuchId = this.gesuchViewSig().gesuchId;
-    const readonly = this.gesuchViewSig().readonly;
+    const { dokuments, requiredDocumentTypes } =
+      this.dokumentsStore.dokumenteViewSig();
+
+    const { gesuchId, readonly } = this.gesuchViewSig();
+
     const allowTypes = this.gesuchViewSig().allowTypes;
     const stepsFlow = this.stepViewSig().stepsFlow;
 
@@ -128,7 +129,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       return new MatTableDataSource<SharedModelTableDokument>([]);
     }
 
-    const uploadedDocuments: SharedModelTableDokument[] = documents.map(
+    const uploadedDocuments: SharedModelTableDokument[] = dokuments.map(
       (document) => {
         const dokumentTyp = document.dokumentTyp;
 
@@ -235,6 +236,7 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchDokumentId: result.id,
             gesuchId,
             kommentar: result.kommentar,
+            dokumentTyp: document.dokumentTyp as DokumentTyp,
           });
         }
       });
@@ -250,9 +252,12 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
+    const { gesuchId } = this.gesuchViewSig();
+    if (!gesuchId) return;
+
     this.dokumentsStore.getGesuchDokumentKommentare$({
       dokumentTyp: dokument.dokumentTyp as DokumentTyp,
-      gesuchId: this.gesuchViewSig().gesuchId!,
+      gesuchId,
     });
   }
 

@@ -5,7 +5,7 @@
     <div class="container card pb-3 pt-3 mt-5 shadow">
       <div class="row overflow-auto">
         <table
-          class="document-table dv-expandable-table"
+          class="document-table"
           mat-table
           [dataSource]="dokumenteDataSourceSig()"
           [trackBy]="trackByFn"
@@ -48,10 +48,15 @@
           </ng-container>
 
           <!-- expander -->
-          <!-- TODO: Implement the following methods in 994 -->
           <ng-container matColumnDef="expander">
             <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
-            <td class="expander-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"></td>
+            <td class="expander-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+              @if (expandedRowId === dokument.dokumentTyp) {
+                <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
+              } @else {
+                <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
+              }
+            </td>
           </ng-container>
 
           <!-- status -->
@@ -71,7 +76,7 @@
                     @switch (dokument?.gesuchDokument?.status) {
                       @case ('AUSSTEHEND') {
                         <button
-                          (click)="dokumentAkzeptieren(dokument)"
+                          (click)="dokumentAkzeptieren(dokument); $event.stopPropagation()"
                           type="button"
                           class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
                         >
@@ -81,7 +86,7 @@
                           </span>
                         </button>
                         <button
-                          (click)="dokumentAblehnen(dokument)"
+                          (click)="dokumentAblehnen(dokument); $event.stopPropagation()"
                           type="button"
                           class="btn table-btn btn-danger d-flex align-items-center gap-1"
                         >
@@ -142,11 +147,6 @@
               *matHeaderCellDef
             ></th>
             <td mat-cell class="action-cell" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-              @if (expandedRowId === dokument.dokumentTyp) {
-                <i class="material-symbols-rounded fs-4">expand_less</i>
-              } @else {
-                <i class="material-symbols-rounded fs-4">expand_more</i>
-              }
               <div class="action-cell-content">
                 <dv-shared-pattern-document-upload
                   [optionsSig]="dokument.documentOptions"
@@ -167,11 +167,27 @@
                 class="detail-cell"
                 [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
               >
-                @for (kommentar of dokumentsStore.gesuchDokumentKommentareSig(); track $index) {
-                  <div>
-                    <pre>
-                      {{ kommentar | json }}
-                    </pre>
+                @if (!dokumentsStore.gesuchDokumentKommentareSig().length) {
+                  <div class="text-center p-2">
+                    {{ 'shared.dokumente.table.kommentar.empty' | translate }}
+                  </div>
+                } @else {
+                  <div class="ms-5 grid-3-cols p-2">
+                    @for (kommentar of dokumentsStore.gesuchDokumentKommentareSig(); track $index) {
+                      <div class="d-flex align-items-center gap-3">
+                        <i class="material-symbols-rounded text-gray">person</i>
+                        <span>
+                          <span>{{ kommentar.benutzer?.vorname }}</span>
+                          <span> {{ kommentar.benutzer?.nachname }}</span>
+                        </span>
+                      </div>
+                      <div>
+                        {{ kommentar.timestampErstellt | date: 'dd.MM.YYYY' }}
+                      </div>
+                      <div>
+                        {{ kommentar.kommentar }}
+                      </div>
+                    }
                   </div>
                 }
               </div>
