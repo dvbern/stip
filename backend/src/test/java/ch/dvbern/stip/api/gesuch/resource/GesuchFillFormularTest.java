@@ -28,7 +28,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
-import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -83,16 +82,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(1)
     void createFall() {
-        var fall = fallApiSpec.createFallForGs()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(FallDtoSpec.class);
-
-        fallId = fall.getId();
+        fallId = TestUtil.getOrCreateFall(fallApiSpec).getId();
     }
 
     @Test

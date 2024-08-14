@@ -48,7 +48,6 @@ import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
-import io.restassured.response.ResponseBody;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
@@ -104,27 +103,38 @@ public class TestUtil {
         }
     }
 
-    public static GesuchDtoSpec createGesuchAndFall(final FallApiSpec fallApiSpec, final GesuchApiSpec gesuchApiSpec) {
-        final var fall = fallApiSpec.createFallForGs()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(FallDtoSpec.class);
+    public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
+        final var response = fallApiSpec.getFallForGs().execute(PEEK_IF_ENV_SET);
+        FallDtoSpec fall;
+        if (response.statusCode() == Status.NOT_FOUND.getStatusCode()) {
+            fall = fallApiSpec.createFallForGs()
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(FallDtoSpec.class);
+        } else {
+            fall = response.body().as(FallDtoSpec.class);
+        }
 
+        return fall;
+    }
+
+    public static GesuchDtoSpec createGesuchAndFall(final FallApiSpec fallApiSpec, final GesuchApiSpec gesuchApiSpec) {
+        final var fall = getOrCreateFall(fallApiSpec);
         final var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(fall.getId());
         gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        final var response = gesuchApiSpec.createGesuch()
+        final var gesuchResponse = gesuchApiSpec.createGesuch()
             .body(gesuchDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
 
-        final var gesuchId = TestUtil.extractIdFromResponse(response);
+        final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
         return gesuchApiSpec.getGesuch()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -258,7 +268,7 @@ public class TestUtil {
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");
             })
-            .execute(ResponseBody::prettyPeek)
+            .execute(PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());

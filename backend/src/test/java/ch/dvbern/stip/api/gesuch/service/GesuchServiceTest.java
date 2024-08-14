@@ -808,7 +808,6 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
-        tranche.getGesuchFormular().setPartner(null);
 
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());

@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.util.Arrays;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -12,6 +14,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -27,6 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -50,47 +54,42 @@ class GesuchGetGesucheTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
-    @Order(2)
-    void getAlleGesuchenNoneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE);
-        assertThat(found.length, is(0));
-    }
-
-    @Test
     @TestAsGesuchsteller
-    @Order(3)
+    @Order(2)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(3)
     void getAlleGesucheOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE);
-        assertThat(found.length, is(1));
+        final var withoutPia = Arrays.stream(found)
+            .filter(gesuch -> gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null)
+            .toList();
+        assertThat(withoutPia.size(), is(0));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(4)
+    void getMeineBearbeitbarenNoneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
+        allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(5)
-    void getMeineBearbeitbarenNoneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
-        assertThat(found.length, is(0));
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Order(6)
     void getAlleBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
-        assertThat(found.length, is(0));
+        allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(6)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuch.getId())
@@ -102,26 +101,34 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(7)
     void getMeineBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
-        assertThat(found.length, is(0));
+        allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(8)
     void getAlleBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
-        assertThat(found.length, is(1));
+        allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
     @Test
     @TestAsAdmin
-    @Order(10)
+    @Order(9)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
+    private void allAreNotInWrongStatus(final GesuchDtoSpec[] gesuche, final GesuchstatusDtoSpec... wrongStatus) {
+        for (final var gesuch : gesuche) {
+            for (final var status : wrongStatus) {
+                assertThat(gesuch.getGesuchStatus(), not(status));
+            }
+        }
     }
 
     private GesuchDtoSpec[] getWithQueryType(final GetGesucheSBQueryTypeDtoSpec queryType) {

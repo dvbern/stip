@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.generated.dto.FallDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -33,6 +34,8 @@ public class FallService {
 
     public FallDto findFallForGs() {
         final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
-        return fallMapper.toDto(fallRepository.findFallForGsOptional(gesuchstellerId).orElse(null));
+        return fallMapper.toDto(
+            fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow(NotFoundException::new)
+        );
     }
 }

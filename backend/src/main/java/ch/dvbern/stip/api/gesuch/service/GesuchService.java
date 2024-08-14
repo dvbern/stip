@@ -41,6 +41,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -100,6 +101,7 @@ public class GesuchService {
     private final RequiredDokumentService requiredDokumentService;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
+    private final FallRepository fallRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
