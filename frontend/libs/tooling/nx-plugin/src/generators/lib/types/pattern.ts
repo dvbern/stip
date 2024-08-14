@@ -13,6 +13,12 @@ export function patternTypeFactory(
     libGenerator: libraryGenerator,
     libDefaultOptions: {
       skipModule: true,
+      flat: true,
+      style: 'none',
+      skipSelector: true,
+      skipTests: true,
+      inlineStyle: true,
+      inlineTemplate: true,
     },
     generators: [],
     postprocess,
@@ -22,6 +28,15 @@ export function patternTypeFactory(
 function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
   updateTsConfig(tree, options);
+  tree.delete(
+    path.join(
+      options.projectRoot,
+      options.nameDasherized,
+      'src',
+      'lib',
+      options.projectName + '.component.ts',
+    ),
+  );
   tree.delete(
     path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );

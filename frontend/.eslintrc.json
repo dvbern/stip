@@ -16,8 +16,19 @@
         "@nx/enforce-module-boundaries": [
           "error",
           {
+            /**
+             * Disabled due to problems with angular migrations, the migrations look inside the project.json
+             * files and search for a `tsConfig` option in either the `build` or `test` targets.
+             *
+             * If none is found the migration is skipped, to workarround this a nx:noop build executor
+             * is added to the `build` targets of the projects that are not technically not buildable
+             * and the `tsConfig` option is set to the `tsconfig.lib.json` file.
+             *
+             * @see https://github.com/nrwl/nx/issues/9280#issuecomment-1399012596
+             * @see https://github.com/angular/components/blob/bd84c2a67476b688a0c775de8566a4ff4b3b2ce0/src/cdk/schematics/ng-update/devkit-migration-rule.ts#L92
+             */
+            "enforceBuildableLibDependency": false,
             "banTransitiveDependencies": true,
-            "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
               {
