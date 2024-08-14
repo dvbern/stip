@@ -52,7 +52,7 @@ class AusbildungsgangResourceTest {
     @Order(1)
     void createAusbildungsgangAsGesuchstellerForbidden() {
         ausbildungsgangApi.createAusbildungsgang()
-            .body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec)
+            .body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec())
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -64,7 +64,7 @@ class AusbildungsgangResourceTest {
     @Order(2)
     void createAusbildungsgangAsJurist() {
         var response = ausbildungsgangApi.createAusbildungsgang()
-            .body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec)
+            .body(AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec())
             .execute(ResponseBody::prettyPeek)
             .then();
 
@@ -91,7 +91,7 @@ class AusbildungsgangResourceTest {
     @Order(4)
     void createNewAusbildungsgangWithExistingAusbildungsstaette() {
         var ausbildungsstaettes = getAusbildungsstaettenFromApi();
-        var ausbildungsgang = AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec;
+        var ausbildungsgang = AusbildungsgangCreateDtoSpecModel.ausbildungsgangCreateDtoSpec();
 
         ausbildungsgang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());
 
@@ -109,7 +109,7 @@ class AusbildungsgangResourceTest {
     @TestAsJurist
     @Order(5)
     void updateAusbildungsgangNotFound() {
-        var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
+        var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec();
         ausbildunggang.setAusbildungsstaetteId(ausbildungsstaetteId);
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
@@ -124,7 +124,7 @@ class AusbildungsgangResourceTest {
     @TestAsGesuchsteller
     @Order(6)
     void updateAusbildungsgangAsGesuchstellerForbidden() {
-        var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
+        var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec();
 
         ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
             .body(ausbildunggang)
@@ -140,7 +140,7 @@ class AusbildungsgangResourceTest {
     void updateAusbildungsgang() {
         var ausbildungsstaettes = getAusbildungsstaettenFromApi();
 
-        var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec;
+        var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec();
         final var updateBezeichnung = ausbildunggang.getBezeichnungDe() + "UPDATED";
         ausbildunggang.setBezeichnungDe(updateBezeichnung);
         ausbildunggang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());

@@ -15,9 +15,9 @@ import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 
 public final class PersonInAusbildungUpdateDtoSpecModel {
-    public static final PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec =
-        TestUtil.createUpdateDtoSpec(PersonInAusbildungUpdateDtoSpec::new, (model, faker) -> {
-            model.setAdresse(AdresseSpecModel.adresseDtoSpec);
+    public static PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(PersonInAusbildungUpdateDtoSpec::new, (model, faker) -> {
+            model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIdentischerZivilrechtlicherWohnsitz(false);
             model.setNationalitaet(LandDtoSpec.CH);
             model.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
@@ -26,12 +26,18 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
             model.setVorname(faker.name().firstName());
             model.setNachname(faker.name().lastName());
-            model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1, 1)));
+            model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(
+                LocalDate.of(1920, 1, 1),
+                LocalDate.of(2002, 1, 1))
+            );
             model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
             model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
             model.setAnrede(TestUtil.getRandomElementFromArray(AnredeDtoSpec.values()));
             model.setTelefonnummer(faker.phoneNumber().cellPhone());
-            model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1980, 1, 1), LocalDate.of(2000, 1, 1)));
+            model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(
+                LocalDate.of(1980, 1, 1),
+                LocalDate.of(2000, 1, 1))
+            );
             model.setHeimatort(faker.address().cityName());
             model.setZivilstand(ZivilstandDtoSpec.LEDIG);
             model.setSozialhilfebeitraege(true);
@@ -40,7 +46,12 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setIdentischerZivilrechtlicherWohnsitzPLZ("3011");
             model.setKorrespondenzSprache(TestUtil.getRandomElementFromArray(SpracheDtoSpec.values()));
         });
+    }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPersonInAusbildung =
-        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setPersonInAusbildung(personInAusbildungUpdateDtoSpec));
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPersonInAusbildung() {
+        return TestUtil.createUpdateDtoSpec(
+            GesuchFormularUpdateDtoSpec::new,
+            (model, faker) -> model.setPersonInAusbildung(personInAusbildungUpdateDtoSpec())
+        );
+    }
 }

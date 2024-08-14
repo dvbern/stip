@@ -46,7 +46,7 @@ class AusbildungsstaetteResourceTest {
     @Order(1)
     void createAusbildungsstaetteAsGesuchstellerForbidden() {
         api.createAusbildungsstaette()
-                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec)
+                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
                 .execute(ResponseBody::prettyPeek)
                 .then()
                 .assertThat()
@@ -58,7 +58,7 @@ class AusbildungsstaetteResourceTest {
     @Order(2)
     void createAusbildungsstaetteAsJurist() {
         var response = api.createAusbildungsstaette()
-                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec)
+                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
                 .execute(ResponseBody::prettyPeek)
                 .then();
 
@@ -97,7 +97,7 @@ class AusbildungsstaetteResourceTest {
     @TestAsJurist
     @Order(5)
     void updateAusbildungsstaetteNotFound() {
-        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
+        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec();
 
         api.updateAusbildungsstaette().ausbildungsstaetteIdPath(UUID.randomUUID())
 			.body(ausbildungsstaette)
@@ -111,7 +111,7 @@ class AusbildungsstaetteResourceTest {
     @TestAsGesuchsteller
     @Order(6)
     void updateAusbildungsstaetteAsGesuchstellerForbidden() {
-        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
+        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec();
 
         api.updateAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
                 .body(ausbildungsstaette)
@@ -125,7 +125,7 @@ class AusbildungsstaetteResourceTest {
     @TestAsJurist
     @Order(7)
     void updateAusbildungsstaette() {
-        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec;
+        var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec();
 
         var uniAarau = "Uni Aarau";
         ausbildungsstaette.setNameDe(uniAarau);

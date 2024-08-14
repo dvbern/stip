@@ -14,8 +14,8 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 public final class AusbildungUpdateDtoSpecModel {
-    public static final AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec =
-        TestUtil.createUpdateDtoSpec(AusbildungUpdateDtoSpec::new, (model, faker) -> {
+    public static AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(AusbildungUpdateDtoSpec::new, (model, faker) -> {
             model.setAusbildungBegin(LocalDate.now().minusMonths(1).with(firstDayOfMonth())
                 .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN)));
             model.setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth())
@@ -27,7 +27,12 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setIsAusbildungAusland(false);
             model.setAusbildungsort("Bern");
         });
+    }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung =
-        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setAusbildung(ausbildungUpdateDtoSpec));
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung() {
+        return TestUtil.createUpdateDtoSpec(
+            GesuchFormularUpdateDtoSpec::new,
+            (model, faker) -> model.setAusbildung(ausbildungUpdateDtoSpec())
+        );
+    }
 }

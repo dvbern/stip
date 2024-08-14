@@ -123,7 +123,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void updateWithNotExistingGesuchTranche() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -135,7 +135,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(4)
     void testUpdateGesuchEmptyEinnahmenKosten() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setEinnahmenKosten(null);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
@@ -154,7 +154,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(5)
     void testUpdateGesuchEndpointPersonInAusbildung() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
@@ -176,7 +176,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(6)
     void testUpdateGesuchEndpointAusbildung() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -188,7 +188,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(7)
     void testUpdateGesuchAddLebenslaufEndpoint() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecLebenslauf;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecLebenslauf();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -202,7 +202,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(8)
     void testUpdateGesuchEndpointFamiliensituation() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituation;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFamiliensituation();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -233,7 +233,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(10)
     void testUpdateGesuchEndpointAuszahlung() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlung;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAuszahlung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -247,7 +247,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(11)
     void testUpdateGesuchEndpointAddGeschwister() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -265,7 +265,7 @@ class GesuchResourceTest {
             gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
                 .as(GesuchDtoSpec.class);
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular()
             .getGeschwisters()
@@ -295,7 +295,7 @@ class GesuchResourceTest {
         mutter.setElternTyp(ElternTypDtoSpec.MUTTER);
         mutter.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
 
-        var gesuchUpdatDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns;
+        var gesuchUpdatDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns();
         gesuchUpdatDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>() {{
             add(vater);
             add(mutter);
@@ -314,12 +314,12 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(15)
     void testUpdateGesuchAddForeignEltern() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecElterns();
         final var elternteile = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns();
 
         for (final var elternteil : elternteile) {
             elternteil.setSozialversicherungsnummer(null);
-            final var newAdresse = AdresseSpecModel.adresseDtoSpec;
+            final var newAdresse = AdresseSpecModel.adresseDtoSpec();
             newAdresse.setLand(LandDtoSpec.DE);
             elternteil.setAdresse(newAdresse);
         }
@@ -338,7 +338,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(15)
     void testUpdateGesuchEndpointAddKind() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinder;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecKinder();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
@@ -354,7 +354,7 @@ class GesuchResourceTest {
     void testUpdateGesuchEndpointAddSteuerdatenTabs() {
         updateGesuch();
 
-        final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSteuerdatenTabs;
+        final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSteuerdatenTabs();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec
             .updateGesuch()
@@ -386,10 +386,10 @@ class GesuchResourceTest {
     void testUpdateGesuchEndpointAddEinnahmenKoster() {
         updateGesuch();
 
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(null);
         final var personInAusbildung =
-            GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung.getGesuchTrancheToWorkWith()
+            GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung().getGesuchTrancheToWorkWith()
                 .getGesuchFormular()
                 .getPersonInAusbildung();
         personInAusbildung.getAdresse().setId(
@@ -687,7 +687,7 @@ class GesuchResourceTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
-        AdresseSpecModel.adresseDtoSpec.setId(null);
+        AdresseSpecModel.adresseDtoSpec().setId(null);
     }
 
     private void updateGesuch() {
