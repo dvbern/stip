@@ -4,6 +4,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -52,6 +53,8 @@ import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLev
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 
 public class TestUtil {
+    public static final DateTimeFormatter DATE_TIME_FORMATTER =
+        DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN);
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
         var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
