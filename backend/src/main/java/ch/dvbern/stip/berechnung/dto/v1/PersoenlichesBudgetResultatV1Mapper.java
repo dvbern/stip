@@ -24,6 +24,21 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
     ) {
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         final var antragssteller = berechnungsRequest.getInputPersoenlichesBudget().antragssteller;
+        final var stammdaten = berechnungsRequest.getStammdaten();
+
+        var einkommen = antragssteller.getEinkommen();
+        if (antragssteller.isTertiaerstufe()) {
+            einkommen -= stammdaten.getEinkommensfreibetrag();
+            einkommen = Integer.max(einkommen, 0);
+        }
+        var verpflegung = 0;
+        if (!antragssteller.isEigenerHaushalt()) {
+            final var wochenProJahr =
+                berechnungsRequest.getInputPersoenlichesBudget().antragssteller.isLehre()
+                    ? stammdaten.getAnzahlWochenLehre()
+                    : stammdaten.getAnzahlWochenSchule();
+            verpflegung = antragssteller.getVerpflegung() * wochenProJahr * stammdaten.getPreisProMahlzeit();
+        }
 
         return new PersoenlichesBudgetresultatDto()
             .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
@@ -31,7 +46,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
                 getAnteilLebenshaltungskosten(familienBudgetresultatList, antragssteller)
             )
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
-            .einkommen(antragssteller.getEinkommen())
+            .einkommen(einkommen)
             .leistungenEO(antragssteller.getLeistungenEO())
             .rente(antragssteller.getRente())
             .kinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen())
@@ -49,7 +64,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .steuernKantonGemeinde(antragssteller.getSteuern())
             .fahrkosten(antragssteller.getFahrkosten())
             .fahrkostenPartner(antragssteller.getFahrkostenPartner())
-            .verpflegung(antragssteller.getVerpflegung())
+            .verpflegung(verpflegung)
             .verpflegungPartner(antragssteller.getVerpflegungPartner())
             .fremdbetreuung(antragssteller.getFremdbetreuung())
             .ausbildungskosten(antragssteller.getAusbildungskosten())

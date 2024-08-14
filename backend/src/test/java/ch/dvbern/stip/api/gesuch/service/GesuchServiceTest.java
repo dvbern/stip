@@ -1,14 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -50,12 +42,6 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
-import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -888,7 +874,7 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
         steuerdatenUpdateDto.setSteuernBund(0);
-        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVerpflegung(0);

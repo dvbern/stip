@@ -75,7 +75,7 @@ public class TestUtil {
         steuerdaten.setFahrkosten(0);
         steuerdaten.setKinderalimente(0);
         steuerdaten.setSteuernBund(0);
-        steuerdaten.setSteuernStaat(0);
+        steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
         steuerdaten.setErgaenzungsleistungen(0);
         steuerdaten.setSteuerjahr(0);
@@ -89,7 +89,7 @@ public class TestUtil {
         steuerdatenUpdateDto.setFahrkosten(0);
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
-        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVermoegen(0);
         steuerdatenUpdateDto.setVerpflegung(0);
@@ -184,6 +184,8 @@ public class TestUtil {
                 .setAnzahlWochenLehre(42)
                 .setAnzahlWochenSchule(37)
                 .setPreisProMahlzeit(7)
+                .setIntegrationszulage(2400)
+                .setLimiteEkFreibetragIntegrationszulage(13200)
                 .setPerson1(11724)
                 .setPersonen2(17940)
                 .setPersonen3(21816)
@@ -319,7 +321,7 @@ public class TestUtil {
                     .setFahrkosten(0)
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
-                    .setSteuernStaat(0)
+                    .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(0)
                     .setErgaenzungsleistungen(0)
                     .setEigenmietwert(0)
@@ -334,7 +336,7 @@ public class TestUtil {
                     .setFahrkosten(0)
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
-                    .setSteuernStaat(0)
+                    .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(0)
                     .setErgaenzungsleistungen(0)
                     .setEigenmietwert(0)

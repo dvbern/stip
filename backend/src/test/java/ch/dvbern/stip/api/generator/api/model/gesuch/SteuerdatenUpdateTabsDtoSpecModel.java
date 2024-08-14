@@ -20,7 +20,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setKinderalimente(TestUtil.getRandomInt(1, 10000));
             model.ergaenzungsleistungen(TestUtil.getRandomInt(1, 10000));
             model.setVermoegen(TestUtil.getRandomInt(1, 10000));
-            model.setSteuernStaat(TestUtil.getRandomInt(1, 10000));
+            model.setSteuernKantonGemeinde(TestUtil.getRandomInt(1, 10000));
             model.steuernBund(TestUtil.getRandomInt(1, 10000));
             model.setFahrkosten(TestUtil.getRandomInt(1, 10000));
             model.setFahrkostenPartner(TestUtil.getRandomInt(1, 10000));

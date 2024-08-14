@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_ID,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
-  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_STAAT,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_BUND,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
@@ -57,8 +57,8 @@ public class SteuerdatenUpdateDtoSpec {
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
-  public static final String JSON_PROPERTY_STEUERN_STAAT = "steuernStaat";
-  private Integer steuernStaat;
+  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
+  private Integer steuernKantonGemeinde;
 
   public static final String JSON_PROPERTY_STEUERN_BUND = "steuernBund";
   private Integer steuernBund;
@@ -160,29 +160,29 @@ public class SteuerdatenUpdateDtoSpec {
   }
 
 
-  public SteuerdatenUpdateDtoSpec steuernStaat(Integer steuernStaat) {
+  public SteuerdatenUpdateDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
     
-    this.steuernStaat = steuernStaat;
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
    /**
-   * Get steuernStaat
-   * @return steuernStaat
+   * Get steuernKantonGemeinde
+   * @return steuernKantonGemeinde
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSteuernStaat() {
-    return steuernStaat;
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
 
@@ -586,7 +586,7 @@ public class SteuerdatenUpdateDtoSpec {
     SteuerdatenUpdateDtoSpec steuerdatenUpdate = (SteuerdatenUpdateDtoSpec) o;
     return Objects.equals(this.id, steuerdatenUpdate.id) &&
         Objects.equals(this.steuerdatenTyp, steuerdatenUpdate.steuerdatenTyp) &&
-        Objects.equals(this.steuernStaat, steuerdatenUpdate.steuernStaat) &&
+        Objects.equals(this.steuernKantonGemeinde, steuerdatenUpdate.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, steuerdatenUpdate.steuernBund) &&
         Objects.equals(this.fahrkosten, steuerdatenUpdate.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, steuerdatenUpdate.fahrkostenPartner) &&
@@ -606,7 +606,7 @@ public class SteuerdatenUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
+    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
   }
 
   @Override
@@ -615,7 +615,7 @@ public class SteuerdatenUpdateDtoSpec {
     sb.append("class SteuerdatenUpdateDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
-    sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");

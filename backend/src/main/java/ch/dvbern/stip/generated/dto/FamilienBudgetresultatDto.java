@@ -38,9 +38,8 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid Integer effektiveWohnkosten;
   private @Valid Integer medizinischeGrundversorgung;
   private @Valid Integer integrationszulage;
-  private @Valid Integer steuernKantonGemeinde;
   private @Valid Integer steuernBund;
-  private @Valid Integer steuernStaat;
+  private @Valid Integer steuernKantonGemeinde;
   private @Valid Integer fahrkostenPerson1;
   private @Valid Integer fahrkostenPerson2;
   private @Valid Integer essenskostenPerson1;
@@ -373,25 +372,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   /**
    **/
-  public FamilienBudgetresultatDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
-    return this;
-  }
-
-  
-  @JsonProperty("steuernKantonGemeinde")
-  @NotNull
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
-  }
-
-  @JsonProperty("steuernKantonGemeinde")
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
-  }
-
-  /**
-   **/
   public FamilienBudgetresultatDto steuernBund(Integer steuernBund) {
     this.steuernBund = steuernBund;
     return this;
@@ -411,21 +391,21 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   /**
    **/
-  public FamilienBudgetresultatDto steuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  public FamilienBudgetresultatDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
   
-  @JsonProperty("steuernStaat")
+  @JsonProperty("steuernKantonGemeinde")
   @NotNull
-  public Integer getSteuernStaat() {
-    return steuernStaat;
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
   }
 
-  @JsonProperty("steuernStaat")
-  public void setSteuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  @JsonProperty("steuernKantonGemeinde")
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
   /**
@@ -569,9 +549,8 @@ public class FamilienBudgetresultatDto  implements Serializable {
         Objects.equals(this.effektiveWohnkosten, familienBudgetresultat.effektiveWohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, familienBudgetresultat.medizinischeGrundversorgung) &&
         Objects.equals(this.integrationszulage, familienBudgetresultat.integrationszulage) &&
-        Objects.equals(this.steuernKantonGemeinde, familienBudgetresultat.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, familienBudgetresultat.steuernBund) &&
-        Objects.equals(this.steuernStaat, familienBudgetresultat.steuernStaat) &&
+        Objects.equals(this.steuernKantonGemeinde, familienBudgetresultat.steuernKantonGemeinde) &&
         Objects.equals(this.fahrkostenPerson1, familienBudgetresultat.fahrkostenPerson1) &&
         Objects.equals(this.fahrkostenPerson2, familienBudgetresultat.fahrkostenPerson2) &&
         Objects.equals(this.essenskostenPerson1, familienBudgetresultat.essenskostenPerson1) &&
@@ -582,7 +561,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, vermoegen, einzahlungSaeule23a, eigenmietwert, alimente, einkommensfreibetrag, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernKantonGemeinde, steuernBund, steuernStaat, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, vermoegen, einzahlungSaeule23a, eigenmietwert, alimente, einkommensfreibetrag, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
   }
 
   @Override
@@ -607,9 +586,8 @@ public class FamilienBudgetresultatDto  implements Serializable {
     sb.append("    effektiveWohnkosten: ").append(toIndentedString(effektiveWohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
-    sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    fahrkostenPerson1: ").append(toIndentedString(fahrkostenPerson1)).append("\n");
     sb.append("    fahrkostenPerson2: ").append(toIndentedString(fahrkostenPerson2)).append("\n");
     sb.append("    essenskostenPerson1: ").append(toIndentedString(essenskostenPerson1)).append("\n");
