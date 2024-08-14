@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -80,22 +79,12 @@ class GesuchFillFormularTest {
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
 
-    private final Function<io.restassured.response.Response, io.restassured.response.Response> peekIfEnvSet =
-        response -> {
-            final var env = System.getenv("STIP_TESTING_PEEK_RESPONSE");
-            if (env != null && env.equals("true")) {
-                response.prettyPeek();
-            }
-
-            return response;
-        };
-
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void createFall() {
         var fall = fallApiSpec.createFallForGs()
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -115,7 +104,7 @@ class GesuchFillFormularTest {
         gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         var response = gesuchApiSpec.createGesuch()
             .body(gesuchDTO)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
@@ -129,7 +118,7 @@ class GesuchFillFormularTest {
     void gesuchTrancheCreated() {
         final var gesuch = gesuchApiSpec.getGesuch()
             .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
@@ -153,7 +142,7 @@ class GesuchFillFormularTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NOT_FOUND.getStatusCode());
@@ -305,7 +294,7 @@ class GesuchFillFormularTest {
         // This is needed so the follow check if only necessary documents are saved works
         gesuchApiSpec.getGesuchDokumente()
             .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
@@ -375,7 +364,7 @@ class GesuchFillFormularTest {
     void gesuchEinreichenValidation() {
         final var validationReport = gesuchApiSpec.gesuchEinreichenValidieren()
             .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
@@ -396,7 +385,7 @@ class GesuchFillFormularTest {
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.ACCEPTED.getStatusCode());
@@ -407,12 +396,7 @@ class GesuchFillFormularTest {
     @Order(21)
     @AlwaysRun
     void deleteGesuch() {
-        gesuchApiSpec.deleteGesuch()
-            .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
     private GesuchDtoSpec patchAndValidate() {
@@ -428,14 +412,14 @@ class GesuchFillFormularTest {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDtoSpec)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
         return gesuchApiSpec.getGesuch()
             .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
@@ -452,7 +436,7 @@ class GesuchFillFormularTest {
         final var report = gesuchApiSpec
             .validateGesuchPages()
             .gesuchIdPath(gesuchId)
-            .execute(peekIfEnvSet)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())

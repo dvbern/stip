@@ -1,8 +1,5 @@
 package ch.dvbern.stip.api.generator.api;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
@@ -22,10 +19,8 @@ import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
-
-import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
-import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 public class GesuchTestSpecGenerator {
     public static GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec() {
@@ -147,33 +142,20 @@ public class GesuchTestSpecGenerator {
     private static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecFull() {
         return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> {
             model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
-            model.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
             model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
-
-            model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
-            model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
-            model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec());
-
-            model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs()
-                .stream()
-                .peek(li -> {
-                    li.setVon(LocalDate.now().minusMonths(2 + 4).with(firstDayOfMonth())
-                        .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN)));
-                    li.setBis(LocalDate.now().minusMonths(2).with(lastDayOfMonth())
-                        .format(DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN)));
-                })
-                .toList()
-            );
-
+            model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs());
+            model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             model.setElterns(ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2));
             model.getElterns().get(0).setElternTyp(ElternTypDtoSpec.VATER);
             model.getElterns().get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
             model.getElterns().get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
             model.getElterns().get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
-
-            model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
+            model.setSteuerdaten(SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
+            model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
+            model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec());
+            model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
         });
     }
 

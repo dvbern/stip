@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
@@ -46,6 +48,7 @@ import io.restassured.response.ResponseBody;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
@@ -55,6 +58,25 @@ import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 public class TestUtil {
     public static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN);
+
+    public static final Function<io.restassured.response.Response, io.restassured.response.Response> PEEK_IF_ENV_SET =
+        response -> {
+            final var env = System.getenv("STIP_TESTING_PEEK_RESPONSE");
+            if (env != null && env.equals("true")) {
+                response.prettyPeek();
+            }
+
+            return response;
+        };
+
+    public static void deleteGesuch(final GesuchApiSpec gesuchApiSpec, final UUID gesuchId) {
+        gesuchApiSpec.deleteGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
         var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
