@@ -29,7 +29,7 @@ import {
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs';
 
 import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
@@ -42,6 +42,7 @@ import {
 import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
@@ -61,6 +62,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     ReactiveFormsModule,
     MatPaginatorModule,
     MatSelectModule,
+    TranslatedPropertyPipe,
     TypeSafeMatCellDefDirective,
   ],
   templateUrl:
@@ -91,6 +93,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
   formUtils = inject(SharedUtilFormService);
+  translate = inject(TranslateService);
 
   @ViewChild('paginator', { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
@@ -120,8 +123,7 @@ export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent
   displayedChildColumns: string[] = [
     'bezeichnungDe',
     'bezeichnungFr',
-    'bildungskategorieDe',
-    'bildungskategorieFr',
+    'bildungskategorie',
     'actions',
   ];
 
