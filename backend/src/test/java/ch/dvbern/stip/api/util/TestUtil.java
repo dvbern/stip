@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -37,9 +38,12 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import com.github.javafaker.Faker;
@@ -78,6 +82,60 @@ public class TestUtil {
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
+    public static void fillGesuch(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+        fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(fullGesuch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
+
+        for (final var dokTyp : DokumentTypDtoSpec.values()) {
+            final var file = TestUtil.getTestPng();
+            TestUtil.uploadFile(dokumentApiSpec, gesuch.getId(), dokTyp, file);
+        }
+    }
+
+    public static GesuchDtoSpec createGesuchAndFall(final FallApiSpec fallApiSpec, final GesuchApiSpec gesuchApiSpec) {
+        final var fall = fallApiSpec.createFallForGs()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDtoSpec.class);
+
+        final var gesuchDTO = new GesuchCreateDtoSpec();
+        gesuchDTO.setFallId(fall.getId());
+        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
+        final var response = gesuchApiSpec.createGesuch()
+            .body(gesuchDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
+
+        final var gesuchId = TestUtil.extractIdFromResponse(response);
+        return gesuchApiSpec.getGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+    }
+
     public static UUID extractIdFromResponse(ValidatableResponse response) {
         var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
         var idString = locationString[locationString.length - 1];
@@ -104,7 +162,7 @@ public class TestUtil {
         steuerdaten.setVermoegen(0);
         steuerdaten.setErgaenzungsleistungen(0);
         steuerdaten.setSteuerjahr(0);
-        return  steuerdaten;
+        return steuerdaten;
     }
 
     public static SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
@@ -189,7 +247,11 @@ public class TestUtil {
         return new File(TEST_PNG_FILE_LOCATION);
     }
 
-    public static void uploadFile(DokumentApiSpec dokumentApiSpec, UUID gesuchId, DokumentTypDtoSpec dokTyp, File file) {
+    public static void uploadFile(
+        DokumentApiSpec dokumentApiSpec,
+        UUID gesuchId,
+        DokumentTypDtoSpec dokTyp,
+        File file) {
         dokumentApiSpec.createDokument()
             .gesuchIdPath(gesuchId)
             .dokumentTypPath(dokTyp)
@@ -201,6 +263,7 @@ public class TestUtil {
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
+
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()

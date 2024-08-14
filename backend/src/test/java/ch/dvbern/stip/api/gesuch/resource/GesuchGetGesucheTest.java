@@ -1,10 +1,8 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -14,8 +12,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
+import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -38,7 +35,7 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class GesuchStatusprotokollTest {
+class GesuchGetGesucheTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
@@ -53,15 +50,47 @@ class GesuchStatusprotokollTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(2)
-    void fillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+    void getAlleGesuchenNoneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE);
+        assertThat(found.length, is(0));
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(3)
+    void fillGesuch() {
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(4)
+    void getAlleGesucheOneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE);
+        assertThat(found.length, is(1));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(5)
+    void getMeineBearbeitbarenNoneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
+        assertThat(found.length, is(0));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
+    void getAlleBearbeitbarenNoneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
+        assertThat(found.length, is(0));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(7)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuch.getId())
@@ -72,50 +101,38 @@ class GesuchStatusprotokollTest {
     }
 
     @Test
-    @TestAsGesuchsteller
-    @Order(4)
-    void gesuchStatusChangeToInBearbeitungSB() {
-        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class);
-
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    @TestAsSachbearbeiter
+    @Order(8)
+    void getMeineBearbeitbarenOneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
+        assertThat(found.length, is(0));
     }
 
     @Test
-    @TestAsGesuchsteller
-    @Order(5)
-    void getStatusProtokoll() {
-        final var statusProtokoll = gesuchApiSpec.getStatusProtokoll()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(StatusprotokollEntryDtoSpec[].class);
-
-        assertThat(statusProtokoll.length, is(3));
-        final var sorted = Arrays.stream(statusProtokoll)
-            .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
-            .toList();
-        assertThat(sorted.get(0).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-        assertThat(sorted.get(1).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    @TestAsSachbearbeiter
+    @Order(9)
+    void getAlleBearbeitbarenOneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
+        assertThat(found.length, is(1));
     }
 
     @Test
     @TestAsAdmin
-    @Order(6)
+    @Order(10)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
+    private GesuchDtoSpec[] getWithQueryType(final GetGesucheSBQueryTypeDtoSpec queryType) {
+        return gesuchApiSpec.getGesucheSb()
+            .getGesucheSBQueryTypePath(queryType)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
     }
 }
