@@ -32,9 +32,8 @@ export interface FamilienBudgetresultat {
     effektiveWohnkosten: number;
     medizinischeGrundversorgung: number;
     integrationszulage: number;
-    steuernKantonGemeinde: number;
     steuernBund: number;
-    steuernStaat: number;
+    steuernKantonGemeinde: number;
     fahrkostenPerson1: number;
     fahrkostenPerson2: number;
     essenskostenPerson1: number;
