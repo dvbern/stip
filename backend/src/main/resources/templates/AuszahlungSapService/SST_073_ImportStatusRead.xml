@@ -1,0 +1,26 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:ImportStatusRead_Request>
+         <SENDER>
+            <SYSID>{sysId}</SYSID>
+            <!--Optional:-->
+            <BETRIEB/>
+            <!--Optional:-->
+            <VERSION>1.0</VERSION>
+         </SENDER>
+         <FILTER_PARMS>
+            <!--Optional:-->
+            <DELIVERY_ID>{deliveryId}</DELIVERY_ID>
+            <!--Optional:-->
+            <SHOW_DETAILS>true</SHOW_DETAILS>
+            <!--Optional:-->
+            <STATUS/>
+            <!--Optional:-->
+            <OFFSET/>
+            <!--Optional:-->
+            <LIMIT/>
+         </FILTER_PARMS>
+      </urn:ImportStatusRead_Request>
+   </soapenv:Body>
+</soapenv:Envelope>
