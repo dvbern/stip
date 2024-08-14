@@ -6,3 +6,4 @@ deploy
 dist
 libs/shared/model/gesuch/src/lib/openapi/
 libs/tooling/nx-plugin/src/generators/lib/files/
+/.nx/workspace-data

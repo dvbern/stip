@@ -70,6 +70,7 @@ const initialState: BenutzerverwaltungState = {
 
 @Injectable()
 export class BenutzerverwaltungStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('BenutzerverwaltungStore'),
 ) {

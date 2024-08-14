@@ -23,6 +23,7 @@ const initialState: StatusprotokollState = {
 
 @Injectable()
 export class StatusprotokollStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('StatusprotokollStore'),
 ) {
