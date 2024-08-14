@@ -14,7 +14,7 @@ public class GesuchMapperUtil {
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
 
-    public GesuchDto mapWithTrancheToWorkWith(final Gesuch gesuch) {
+    public GesuchDto mapWithCurrentTranche(final Gesuch gesuch) {
         return mapWithTranche(gesuch, gesuch.getCurrentGesuchTranche());
     }
 

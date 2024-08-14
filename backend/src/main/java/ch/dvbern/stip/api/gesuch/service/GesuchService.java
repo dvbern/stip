@@ -102,8 +102,17 @@ public class GesuchService {
     private final GesuchMapperUtil gesuchMapperUtil;
 
     @Transactional
-    public Optional<GesuchDto> findGesuch(UUID id) {
-        return gesuchRepository.findByIdOptional(id).map(gesuchMapperUtil::mapWithTrancheToWorkWith);
+    public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
+        return gesuchRepository.findByIdOptional(id).map(gesuchMapperUtil::mapWithCurrentTranche);
+    }
+
+    @Transactional
+    public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
+        return gesuchRepository.findByIdOptional(gesuchId)
+            .map(gesuch -> gesuchMapperUtil.mapWithTranche(
+                gesuch,
+                gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new))
+            );
     }
 
     @Transactional
@@ -211,7 +220,7 @@ public class GesuchService {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
         gesuchRepository.persistAndFlush(gesuch);
-        return gesuchMapperUtil.mapWithTrancheToWorkWith(gesuch);
+        return gesuchMapperUtil.mapWithCurrentTranche(gesuch);
     }
 
     private void createInitialGesuchTranche(Gesuch gesuch) {
@@ -245,20 +254,20 @@ public class GesuchService {
     }
 
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
-        return gesuche.map(gesuchMapperUtil::mapWithTrancheToWorkWith).toList();
+        return gesuche.map(gesuchMapperUtil::mapWithCurrentTranche).toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findForGs(benutzer.getId())
-            .map(gesuchMapperUtil::mapWithTrancheToWorkWith)
+            .map(gesuchMapperUtil::mapWithCurrentTranche)
             .toList();
     }
 
     @Transactional
     public List<GesuchDto> findAllForFall(UUID fallId) {
-        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithTrancheToWorkWith).toList();
+        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithCurrentTranche).toList();
     }
 
     @Transactional
@@ -283,7 +292,7 @@ public class GesuchService {
     public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
-        return gesuchMapperUtil.mapWithTrancheToWorkWith(gesuch);
+        return gesuchMapperUtil.mapWithCurrentTranche(gesuch);
     }
 
     @Transactional
@@ -333,8 +342,8 @@ public class GesuchService {
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
+                validationGroups.contains(AusbildungPageValidation.class) &&
+                !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }

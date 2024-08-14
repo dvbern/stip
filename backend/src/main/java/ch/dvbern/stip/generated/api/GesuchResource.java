@@ -62,9 +62,14 @@ public interface GesuchResource {
     Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}")
+    @Path("/{gesuchId}/current")
     @Produces({ "application/json", "text/plain" })
-    Response getGesuch(@PathParam("gesuchId") UUID gesuchId);
+    Response getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}/dokumente")

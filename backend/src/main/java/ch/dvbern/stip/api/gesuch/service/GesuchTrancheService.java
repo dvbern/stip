@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -16,6 +17,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -31,6 +33,7 @@ public class GesuchTrancheService {
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchMapperUtil gesuchMapperUtil;
+    private final GesuchTrancheMapper gesuchTrancheMapper;
 
     @Transactional
     public GesuchDto createAenderungsantrag(
@@ -57,6 +60,10 @@ public class GesuchTrancheService {
                 .findFirst()
                 .orElseThrow(NotFoundException::new)
         );
+    }
+
+    public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
+        return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
     }
 
     @Transactional
@@ -114,6 +121,7 @@ public class GesuchTrancheService {
 
         gesuch.getGesuchTranchen().removeAll(toRemove);
     }
+
     /**
      * Set Gueltigkeit on existing tranche to a date range with less than 1 month, so it's cleaned up
      */

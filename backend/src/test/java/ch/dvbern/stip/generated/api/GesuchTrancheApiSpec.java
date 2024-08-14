@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -61,7 +62,8 @@ public class GesuchTrancheApiSpec {
         return Arrays.asList(
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
-                getAenderungsantrag()
+                getAenderungsantrag(),
+                getAllTranchenForGesuch()
         );
     }
 
@@ -75,6 +77,10 @@ public class GesuchTrancheApiSpec {
 
     public GetAenderungsantragOper getAenderungsantrag() {
         return new GetAenderungsantragOper(createReqSpec());
+    }
+
+    public GetAllTranchenForGesuchOper getAllTranchenForGesuch() {
+        return new GetAllTranchenForGesuchOper(createReqSpec());
     }
 
     /**
@@ -336,6 +342,79 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public GetAenderungsantragOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;GesuchTrancheSlimDtoSpec&gt;
+     */
+    public static class GetAllTranchenForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/tranche/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllTranchenForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /tranche/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /tranche/{gesuchId}
+         * @param handler handler
+         * @return List&lt;GesuchTrancheSlimDtoSpec&gt;
+         */
+        public List<GesuchTrancheSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchTrancheSlimDtoSpec>> type = new TypeRef<List<GesuchTrancheSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllTranchenForGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllTranchenForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllTranchenForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
