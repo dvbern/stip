@@ -1,21 +1,17 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="jafa (generated)" id="1723628958881-1">
-        <addColumn tableName="steuerdaten">
-            <column name="steuernkantongemeinde" type="integer">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="renameColumn-steuernkantongemeinde-steuernstaat">
+      <renameColumn
+        tableName="steuerdaten"
+        oldColumnName="steuernstaat"
+        newColumnName="steuernKantonGemeinde"
+      />
     </changeSet>
-    <changeSet author="jafa (generated)" id="1723628958881-2">
-        <addColumn tableName="steuerdaten_aud">
-            <column name="steuernkantongemeinde" type="integer"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1723628958881-3">
-        <dropColumn columnName="steuernstaat" tableName="steuerdaten"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1723628958881-4">
-        <dropColumn columnName="steuernstaat" tableName="steuerdaten_aud"/>
-    </changeSet>
+  <changeSet author="jafa (generated)" id="renameColumn-steuernkantongemeinde_aud-steuernstaat_aud">
+      <renameColumn
+        tableName="steuerdaten_aud"
+        oldColumnName="steuernstaat"
+        newColumnName="steuernKantonGemeinde"
+      />
+  </changeSet>
 </databaseChangeLog>

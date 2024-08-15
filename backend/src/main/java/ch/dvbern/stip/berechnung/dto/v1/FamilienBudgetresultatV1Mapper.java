@@ -54,7 +54,6 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
             .effektiveWohnkosten(elternteil.getEffektiveWohnkosten())
             .medizinischeGrundversorgung(elternteil.getMedizinischeGrundversorgung())
             .integrationszulage(elternteil.getIntegrationszulage())
-//            .steuernKantonGemeinde(elternteil.getTotalEinkuenfte() >= 20000 ? (int) (elternteil.getTotalEinkuenfte() * 0.1) : 0) // TODO: KSTIP-1259 offizialisieren dieser berechnung
             .steuernBund(elternteil.getSteuernBund())
             .steuernKantonGemeinde(elternteil.getSteuernStaat())
             .fahrkostenPerson1(elternteil.getFahrkostenPerson1())

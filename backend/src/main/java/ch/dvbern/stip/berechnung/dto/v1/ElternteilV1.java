@@ -88,8 +88,7 @@ public class ElternteilV1 {
                     gesuchsperiode
                 );
                 anzahlPersonenAddedToHaushalt += 1;
-                if (kindDerElternInHaushalten instanceof Geschwister) {
-                    var geschwister = (Geschwister) kindDerElternInHaushalten;
+                if (kindDerElternInHaushalten instanceof Geschwister geschwister) {
                     if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                         anzahlKinderInAusbildung += 1;
                     }
@@ -109,8 +108,7 @@ public class ElternteilV1 {
                             gesuchsperiode
                         );
                         anzahlPersonenAddedToHaushalt += 1;
-                        if (kind instanceof Geschwister) {
-                            var geschwister = (Geschwister) kind;
+                        if (kind instanceof Geschwister geschwister) {
                             if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                                 anzahlKinderInAusbildung += 1;
                             }
@@ -129,8 +127,7 @@ public class ElternteilV1 {
                             gesuchsperiode
                         );
                         anzahlPersonenAddedToHaushalt += 1;
-                        if (kind instanceof Geschwister) {
-                            var geschwister = (Geschwister) kind;
+                        if (kind instanceof Geschwister geschwister) {
                             if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                                 anzahlKinderInAusbildung += 1;
                             }
@@ -155,8 +152,7 @@ public class ElternteilV1 {
                         gesuchsperiode
                     );
                     anzahlPersonenAddedToHaushalt += 1;
-                    if (kind instanceof Geschwister) {
-                        var geschwister = (Geschwister) kind;
+                    if (kind instanceof Geschwister geschwister) {
                         if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                             anzahlKinderInAusbildung += 1;
                         }
