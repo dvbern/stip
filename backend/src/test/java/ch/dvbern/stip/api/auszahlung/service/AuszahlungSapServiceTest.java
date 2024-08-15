@@ -17,7 +17,6 @@ class AuszahlungSapServiceTest {
         GetAuszahlungImportStatusRequestDto dto = new GetAuszahlungImportStatusRequestDto();
         dto.setDeliveryId(SOME_KNOWN_DELIVERY_ID);
         dto.setSysId("2080");
-        //assertTrue(sapService.SST_073_ImportStatusRead != null);
         final var response = sapService.getImportStatus(dto);
         assertNotNull(response);
     }
