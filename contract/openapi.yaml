@@ -3230,6 +3230,22 @@ components:
           format: date
         comment:
           type: string
+    GetAuszahlungImportStatusRequest:
+      type: object
+      required:
+        - deliveryId
+      properties:
+        sysId:
+          type: string
+        deliveryId:
+          type: string
+    GetAuszahlungImportStatusResponse:
+      type: object
+      properties:
+        deliveryId:
+          type: string
+        message:
+          type: string
   responses:
     Unauthorized:
       content:
