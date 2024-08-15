@@ -31,8 +31,12 @@ public class Steuerdaten extends AbstractEntity {
     private Integer totalEinkuenfte;
 
     @NotNull
-    @Column(name = "eigenmietwert", nullable = false)
+    @Column(name = "eigenmietwert")
     private Integer eigenmietwert;
+
+    @NotNull
+    @Column(name = "wohnkosten", nullable = false)
+    private Integer wohnkosten;
 
     @NotNull
     @Column(name = "is_arbeitsverhaeltnis_selbstaendig", nullable = false)
@@ -50,9 +54,21 @@ public class Steuerdaten extends AbstractEntity {
     @Column(name = "kinderalimente", nullable = false)
     private Integer kinderalimente;
 
-    @NotNull
-    @Column(name = "ergaenzungsleistungen", nullable = false)
+    @Nullable
+    @Column(name = "ergaenzungsleistungen")
     private Integer ergaenzungsleistungen;
+
+    @Nullable
+    @Column(name = "ergaenzungsleistungen_partner")
+    private Integer ergaenzungsleistungenPartner;
+
+    @Nullable
+    @Column(name = "sozialhilfebeitraege")
+    private Integer sozialhilfebeitraege;
+
+    @Nullable
+    @Column(name = "sozialhilfebeitraege_partner")
+    private Integer sozialhilfebeitraegePartner;
 
     @NotNull
     @Column(name = "vermoegen", nullable = false)

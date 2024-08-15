@@ -582,12 +582,12 @@ class GesuchResourceTest {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
             DokumentTypDtoSpec.PERSON_AUSWEIS,
-            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
-            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER,
-            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_VATER,
-            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
-            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
-            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
+            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
+            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER,
+            DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_VATER,
+            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
+            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER,
+            DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             //            DokumentTypDtoSpec.PARTNER_AUSBILDUNG_LOHNABRECHNUNG, //Temporarily disabled due to
             //            fundamentally broken tests

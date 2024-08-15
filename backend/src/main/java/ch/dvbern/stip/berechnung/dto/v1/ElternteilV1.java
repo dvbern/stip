@@ -135,18 +135,11 @@ public class ElternteilV1 {
             }
         }
 
-        int wohnkosten = 0;
         switch (steuerdaten.getSteuerdatenTyp()) {
-            case FAMILIE -> {
-                for (final var elternteil : eltern) {
-                    wohnkosten += elternteil.getWohnkosten();
-                }
-            }
             case VATER -> {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
                 ).toList().get(0);
-                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -157,7 +150,6 @@ public class ElternteilV1 {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
                 ).toList().get(0);
-                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -177,7 +169,12 @@ public class ElternteilV1 {
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
         builder.effektiveWohnkosten(
-            BerechnungRequestV1.getEffektiveWohnkosten(wohnkosten, gesuchsperiode, anzahlPersonenImHaushalt)
+            // TODO KSTIP-1305: Abklaeren mit Daenu, wohnkosten not null, eigenmietwert?
+            BerechnungRequestV1.getEffektiveWohnkosten(
+                steuerdaten.getWohnkosten(),
+                gesuchsperiode,
+                anzahlPersonenImHaushalt
+            )
         );
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));

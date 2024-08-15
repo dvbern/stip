@@ -21,6 +21,15 @@ public class RequiredDocsUtil {
         assertType(requiredDocs, dokTyp);
     }
 
+    public void requiresCountAndTypes(
+        final int count,
+        final Pair<String, List<DokumentTyp>> requiredDocs,
+        final DokumentTyp... dokTypes
+    ) {
+        assertCount(requiredDocs, count);
+        assertTypes(requiredDocs, dokTypes);
+    }
+
     public void assertCount(final Pair<String, List<DokumentTyp>> requiredDocs, final int count) {
         assertCount(requiredDocs.getRight(), count);
     }

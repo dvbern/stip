@@ -2996,7 +2996,7 @@ components:
           type: integer
         ergaenzungsleistungenPartner:
           description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Mutter'
             'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null'
           type: integer
         vermoegen:

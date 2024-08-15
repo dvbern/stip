@@ -300,11 +300,9 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
-                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
 
             )
@@ -314,6 +312,9 @@ public class TestUtil {
             Set.of(
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setWohnkosten(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
@@ -329,6 +330,9 @@ public class TestUtil {
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setWohnkosten(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
