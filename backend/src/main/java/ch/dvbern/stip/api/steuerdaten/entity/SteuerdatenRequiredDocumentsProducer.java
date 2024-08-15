@@ -47,7 +47,7 @@ public class SteuerdatenRequiredDocumentsProducer implements RequiredDocumentPro
                 if (steuerTab.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
                     requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(SteuerdatenTyp.VATER));
                 } else {
-                    ERGAENZUNGSLEISTUNGEN_MAP.get(steuerTab.getSteuerdatenTyp());
+                    requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(steuerTab.getSteuerdatenTyp()));
                 }
             }
 
@@ -59,7 +59,7 @@ public class SteuerdatenRequiredDocumentsProducer implements RequiredDocumentPro
                 if (steuerTab.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
                     requiredDocs.add(SOZIALHILFEBETRAEGE_MAP.get(SteuerdatenTyp.VATER));
                 } else {
-                    SOZIALHILFEBETRAEGE_MAP.get(steuerTab.getSteuerdatenTyp());
+                    requiredDocs.add(SOZIALHILFEBETRAEGE_MAP.get(steuerTab.getSteuerdatenTyp()));
                 }
             }
 

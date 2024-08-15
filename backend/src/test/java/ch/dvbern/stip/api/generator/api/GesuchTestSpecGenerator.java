@@ -2,8 +2,7 @@ package ch.dvbern.stip.api.generator.api;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -135,6 +134,7 @@ public class GesuchTestSpecGenerator {
             model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec);
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec);
             model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec);
+            model.setSteuerdaten(List.of(SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE)));
 
             model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs
                 .stream()

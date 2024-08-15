@@ -79,6 +79,7 @@ public class TestUtil {
         steuerdaten.setVermoegen(0);
         steuerdaten.setErgaenzungsleistungen(0);
         steuerdaten.setSteuerjahr(0);
+        steuerdaten.setWohnkosten(0);
         return  steuerdaten;
     }
 
@@ -95,6 +96,7 @@ public class TestUtil {
         steuerdatenUpdateDto.setVerpflegung(0);
         steuerdatenUpdateDto.setErgaenzungsleistungen(0);
         steuerdatenUpdateDto.setSteuernBund(0);
+        steuerdatenUpdateDto.setWohnkosten(0);
         return steuerdatenUpdateDto;
     }
 

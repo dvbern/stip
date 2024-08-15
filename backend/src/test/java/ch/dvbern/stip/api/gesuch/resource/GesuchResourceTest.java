@@ -582,16 +582,11 @@ class GesuchResourceTest {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
             DokumentTypDtoSpec.PERSON_AUSWEIS,
-            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
             DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER,
             DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_VATER,
-            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
-            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER,
             DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER,
+            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
-            //            DokumentTypDtoSpec.PARTNER_AUSBILDUNG_LOHNABRECHNUNG, //Temporarily disabled due to
-            //            fundamentally broken tests
-            //            DokumentTypDtoSpec.PARTNER_BELEG_OV_ABONNEMENT,
             DokumentTypDtoSpec.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION,
             DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
             DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,

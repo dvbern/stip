@@ -131,7 +131,7 @@ class SteuerdatenRequiredDocumentsProducerTest {
 
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
+            DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_VATER
         );
     }
 
@@ -145,7 +145,7 @@ class SteuerdatenRequiredDocumentsProducerTest {
 
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
+            DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
         );
     }
 
@@ -159,7 +159,7 @@ class SteuerdatenRequiredDocumentsProducerTest {
 
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
+            DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_VATER
         );
     }
 
@@ -173,7 +173,7 @@ class SteuerdatenRequiredDocumentsProducerTest {
 
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
+            DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
         );
     }
 
@@ -189,8 +189,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
         RequiredDocsUtil.requiresCountAndTypes(
             2,
             producer.getRequiredDocuments(formular),
-            DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER,
-            DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
+            DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_VATER,
+            DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
         );
     }
 }
