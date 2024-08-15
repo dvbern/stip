@@ -21,8 +21,4 @@ public class SachbearbeiterZuordnungStammdatenDtoSpecModel {
             model.setBuchstabenFr("A-C,E");
         });
     }
-
-    public static List<SachbearbeiterZuordnungStammdatenListDtoSpec> sachbearbeiterZuordnungStammdatenListDtoSpecs() {
-        return sachbearbeiterZuordnungStammdatenListDtoSpecs(1);
-    }
 }
