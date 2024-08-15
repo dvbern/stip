@@ -2990,16 +2990,28 @@ components:
         kinderalimente:
           type: integer
         ergaenzungsleistungen:
+          description: |
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
+            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
           type: integer
         ergaenzungsleistungenPartner:
+          description: |
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
+            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null'
           type: integer
         vermoegen:
           type: integer
         wohnkosten:
           type: integer
         sozialhilfebeitraege:
+          description: |
+            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
+            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
           type: integer
         sozialhilfebeitraegePartner:
+          description: |
+           'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter'
+           'Falls steuerdatenTyp != Famile: null'
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
