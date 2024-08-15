@@ -32,6 +32,10 @@ import {
 } from '@dv/shared/model/gesuch';
 import { ELTERN_STEUER_STEPS } from '@dv/shared/model/gesuch-form';
 import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
+import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
@@ -42,7 +46,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
@@ -62,6 +69,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-steuerdaten.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,23 +78,27 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private config = inject(SharedModelCompileTimeConfig);
+
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   gotReenabled$ = new Subject<object>();
-  private gotReenabledSig = toSignal(this.gotReenabled$);
   maskitoNumber = maskitoNumber;
   form = this.formBuilder.group({
     totalEinkuenfte: [<string | null>null, [Validators.required]],
-    eigenmietwert: [<string | null>null, [Validators.required]],
+    eigenmietwert: [<string | null>null, []],
     arbeitsverhaeltnis: [<boolean | null>null, [Validators.required]],
     saeule3a: [<string | null>null, [Validators.required]],
     saeule2: [<string | null>null, [Validators.required]],
     kinderalimente: [<string | null>null, [Validators.required]],
-    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
     vermoegen: [<string | null>null, [Validators.required]],
+    wohnkosten: [<string | null>null, [Validators.required]],
     steuernStaat: [<string | null>null, [Validators.required]],
+    ergaenzungsleistungen: [<string | null>null, []],
+    ergaenzungsleistungenPartner: [<string | null>null, []],
+    sozialhilfebeitraege: [<string | null>null, []],
+    sozialhilfebeitraegePartner: [<string | null>null, []],
     steuernBund: [<string | null>null, [Validators.required]],
     fahrkosten: [<string | null>null, [Validators.required]],
     fahrkostenPartner: [<string | null>null, [Validators.required]],
@@ -103,15 +115,20 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       [Validators.required, sharedUtilValidatorRange(0, 99)],
     ],
   });
-  hiddenFieldSet = this.formUtils.createHiddenFieldSet();
-  arbeitsverhaeltnisChangedSig = toSignal(
+
+  private gotReenabledSig = toSignal(this.gotReenabled$);
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+  private arbeitsverhaeltnisChangedSig = toSignal(
     this.form.controls.arbeitsverhaeltnis.valueChanges,
   );
+
+  hiddenFieldSet = this.formUtils.createHiddenFieldSet();
   originalSteuerdatenSig = computed(() => {
     return this.viewSig().gesuchFormular?.steuerdaten?.find(
       (s) => s.steuerdatenTyp === this.stepSig().type,
     );
   });
+
   numberConverter = this.formUtils.createNumberConverter(this.form, [
     'totalEinkuenfte',
     'eigenmietwert',
@@ -119,7 +136,11 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     'saeule2',
     'kinderalimente',
     'ergaenzungsleistungen',
+    'ergaenzungsleistungenPartner',
+    'sozialhilfebeitraege',
+    'sozialhilfebeitraegePartner',
     'vermoegen',
+    'wohnkosten',
     'steuernStaat',
     'steuernBund',
     'fahrkosten',
@@ -132,6 +153,61 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     this.form.controls.steuerjahr,
     this.viewSig,
   );
+
+  private wohnkostenChangedSig = toSignal(
+    this.form.controls.wohnkosten.valueChanges,
+  );
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const steuerdatenTyp = this.stepSig().type;
+    const wohnkosten =
+      fromFormatedNumber(this.wohnkostenChangedSig() ?? undefined) ?? 0;
+
+    return wohnkosten > 0
+      ? `STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_${steuerdatenTyp}`
+      : null;
+  });
+
+  private ergaenzungsleistungChangedSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+  private ergaenzungsleistungPartnerChangedSig = toSignal(
+    this.form.controls.ergaenzungsleistungenPartner.valueChanges,
+  );
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const steuerdatenTyp = this.stepSig().type;
+    const ergaenzungsleistung = this.ergaenzungsleistungChangedSig();
+
+    return ergaenzungsleistung
+      ? `STEUERDATEN_ERGAENZUNGSLEISTUNGEN_${defaultVater(steuerdatenTyp)}`
+      : null;
+  });
+  ergaenzungsleistungenPartnerDocumentSig = this.createUploadOptionsSig(() => {
+    const ergaenzungsleistung = this.ergaenzungsleistungPartnerChangedSig();
+
+    return ergaenzungsleistung
+      ? 'STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER'
+      : null;
+  });
+
+  private sozialhilfeChangedSig = toSignal(
+    this.form.controls.sozialhilfebeitraege.valueChanges,
+  );
+  private sozialhilfePartnerChangedSig = toSignal(
+    this.form.controls.sozialhilfebeitraegePartner.valueChanges,
+  );
+  sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
+    const steuerdatenTyp = this.stepSig().type;
+    const sozialhilfe = this.sozialhilfeChangedSig();
+
+    return sozialhilfe
+      ? `STEUERDATEN_SOZIALHILFEBUDGET_${defaultVater(steuerdatenTyp)}`
+      : null;
+  });
+  sozialhilfePartnerDocumentSig = this.createUploadOptionsSig(() => {
+    const sozialhilfe = this.sozialhilfePartnerChangedSig();
+
+    return sozialhilfe ? 'STEUERDATEN_SOZIALHILFEBUDGET_MUTTER' : null;
+  });
 
   constructor() {
     this.store.dispatch(SharedEventGesuchFormElternSteuerdaten.init());
@@ -213,7 +289,11 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       'saeule2',
       'kinderalimente',
       'ergaenzungsleistungen',
+      'ergaenzungsleistungenPartner',
+      'sozialhilfebeitraege',
+      'sozialhilfebeitraegePartner',
       'vermoegen',
+      'wohnkosten',
       'steuernStaat',
       'steuernBund',
       'fahrkosten',
@@ -267,4 +347,11 @@ const upsertSteuerdaten = (
   }
 
   return result;
+};
+
+const defaultVater = (steuerdatenTyp: SteuerdatenTyp) => {
+  if (steuerdatenTyp !== 'FAMILIE') {
+    return steuerdatenTyp;
+  }
+  return 'VATER';
 };

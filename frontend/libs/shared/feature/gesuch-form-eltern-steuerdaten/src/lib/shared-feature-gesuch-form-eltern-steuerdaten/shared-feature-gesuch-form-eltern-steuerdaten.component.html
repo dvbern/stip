@@ -114,21 +114,6 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.ergaenzungsleistungen.label' | translate }}</mat-label>
-        <input
-          formControlName="ergaenzungsleistungen"
-          data-testid="form-eltern-steuerdaten.ergaenzungsleistungen"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.vermoegen.label' | translate }}</mat-label>
         <input
           formControlName="vermoegen"
@@ -141,6 +126,143 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+    </div>
+    <ng-template #ergaenzungsleistungen let-type>
+      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{
+            'shared.form.eltern-steuerdaten.ergaenzungsleistungen.' + type + '.label' | translate
+          }}</mat-label>
+          <input
+            formControlName="ergaenzungsleistungen"
+            data-testid="form-eltern-steuerdaten.ergaenzungsleistungen"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        @if (ergaenzungsleistungenDocumentSig(); as options) {
+          <div class="d-flex gap-2 align-items-center">
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          </div>
+        }
+      </div>
+    </ng-template>
+    <ng-template #sozialhilfebeitraege let-type>
+      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{
+            'shared.form.eltern-steuerdaten.sozialhilfebeitraege.' + type + '.label' | translate
+          }}</mat-label>
+          <input
+            formControlName="sozialhilfebeitraege"
+            data-testid="form-eltern-steuerdaten.sozialhilfebeitraege"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        @if (sozialhilfeDocumentSig(); as options) {
+          <div class="d-flex gap-2 align-items-center">
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          </div>
+        }
+      </div>
+    </ng-template>
+    @if (stepSig().type === 'FAMILIE') {
+      <div class="row g-4 my-2">
+        <ng-container *ngTemplateOutlet="ergaenzungsleistungen; context: { $implicit: 'VATER' }"></ng-container>
+        <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>{{ 'shared.form.eltern-steuerdaten.ergaenzungsleistungen.MUTTER.label' | translate }}</mat-label>
+            <input
+              formControlName="ergaenzungsleistungenPartner"
+              data-testid="form-eltern-steuerdaten.ergaenzungsleistungenPartner"
+              matInput
+              [maskito]="maskitoNumber"
+              type="text"
+            />
+          </mat-form-field>
+
+          @if (ergaenzungsleistungenPartnerDocumentSig(); as options) {
+            <div class="d-flex gap-2 align-items-center">
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="row g-4 my-2">
+        <ng-container *ngTemplateOutlet="sozialhilfebeitraege; context: { $implicit: 'VATER' }"></ng-container>
+        <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>{{ 'shared.form.eltern-steuerdaten.sozialhilfebeitraege.MUTTER.label' | translate }}</mat-label>
+            <input
+              formControlName="sozialhilfebeitraegePartner"
+              data-testid="form-eltern-steuerdaten.sozialhilfePartner"
+              matInput
+              [maskito]="maskitoNumber"
+              type="text"
+            />
+          </mat-form-field>
+
+          @if (sozialhilfePartnerDocumentSig(); as options) {
+            <div class="d-flex gap-2 align-items-center">
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="row g-4 my-2">
+        <ng-container *ngTemplateOutlet="ergaenzungsleistungen; context: { $implicit: stepSig().type }"></ng-container>
+        <ng-container *ngTemplateOutlet="sozialhilfebeitraege; context: { $implicit: stepSig().type }"></ng-container>
+      </div>
+    }
+    <div class="row g-4 my-2">
+      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.shared.wohnkosten.label' | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="wohnkosten"
+            data-testid="form-eltern-steuerdaten-wohnkosten"
+            [maskito]="maskitoNumber"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        @if (wohnkostenDocumentSig(); as options) {
+          <div class="d-flex gap-2 align-items-center">
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          </div>
+        }
+      </div>
     </div>
 
     <h3 class="pt-5">
