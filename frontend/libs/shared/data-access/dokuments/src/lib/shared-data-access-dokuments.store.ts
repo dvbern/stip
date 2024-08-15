@@ -56,15 +56,50 @@ export class DokumentsStore extends signalStore(
       // Dummy Data, remove in 994
       {
         id: '1',
-        kommentar:
-          'Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August',
+        kommentar: 'Ausbildungsjahres',
         dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
         benutzer: {
-          vorname: 'Ruedi',
-          nachname: 'Tester',
+          vorname: 'Rud',
+          nachname: 'Test',
         },
         timestampErstellt: '2024-08-12T12:44:43.401Z',
         gesuchId: '1',
+      },
+      {
+        id: '2',
+        kommentar:
+          'Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein Jahr',
+        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+        benutzer: {
+          vorname: 'Rudolpho',
+          nachname: 'Testerinho Dominguez',
+        },
+        timestampErstellt: '2024-08-12T12:44:46.401Z',
+        gesuchId: '2',
+      },
+      {
+        id: '3',
+        kommentar:
+          ',Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein JahrAusbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein JahrAusbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein Jahr',
+        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+        benutzer: {
+          vorname: 'Rudolpho',
+          nachname: 'Testerinho Dominguez',
+        },
+        timestampErstellt: '2024-08-12T12:44:46.401Z',
+        gesuchId: '3',
+      },
+      {
+        id: '4',
+        kommentar:
+          'Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein Jahr',
+        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
+        benutzer: {
+          vorname: 'Rudolpho',
+          nachname: 'Testerinho Dominguez',
+        },
+        timestampErstellt: '2024-08-12T12:44:46.401Z',
+        gesuchId: '4',
       },
     ];
   });

@@ -27,10 +27,10 @@
           </ng-container>
           <!-- required document -->
           <ng-container matColumnDef="documentName">
-            <th mat-header-cell *matHeaderCellDef>
+            <th mat-header-cell *matHeaderCellDef class="required-document">
               {{ 'shared.dokumente.table.requiredDocuments' | translate }}
             </th>
-            <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+            <td mat-cell class="required-document" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               {{ dokument.titleKey | translate }}
             </td>
           </ng-container>
@@ -174,7 +174,7 @@
                 } @else {
                   <div class="ms-5 grid-3-cols p-2">
                     @for (kommentar of dokumentsStore.gesuchDokumentKommentareSig(); track $index) {
-                      <div class="d-flex align-items-center gap-3">
+                      <div class="d-flex align-items-md-start gap-3">
                         <i class="material-symbols-rounded text-gray">person</i>
                         <span>
                           <span>{{ kommentar.benutzer.vorname }}</span>
