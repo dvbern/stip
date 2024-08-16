@@ -16,11 +16,16 @@
 
 .grid-3-cols {
   display: grid;
-  grid-template-columns: 30% 25% auto;
+  grid-template-columns: 30% 18% auto;
   gap: 1rem;
+
+  @media screen and (max-width: var(--dv-breakpoint-sm)) {
+      grid-template-columns: 30% 20% auto;
+  }
 }
 
 .required-document {
   min-width: 400px;
 }
+
 
