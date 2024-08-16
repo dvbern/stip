@@ -3242,7 +3242,16 @@ components:
     GetAuszahlungImportStatusResponse:
       type: object
       properties:
-        deliveryId:
+        status:
+          type: string
+        logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuszahlungImportStatusLog'
+    AuszahlungImportStatusLog:
+      type: object
+      properties:
+        datetime:
           type: string
         message:
           type: string
