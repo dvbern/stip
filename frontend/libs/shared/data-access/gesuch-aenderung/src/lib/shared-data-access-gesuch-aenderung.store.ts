@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, forkJoin, map, pipe, switchMap, tap } from 'rxjs';
+import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
@@ -10,6 +10,7 @@ import {
   CreateGesuchTrancheRequest,
   Gesuch,
   GesuchTrancheService,
+  GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
@@ -17,18 +18,16 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
-  isSuccess,
-  success,
 } from '@dv/shared/util/remote-data';
 
 type GesuchAenderungState = {
-  cachedAenderungsGesuch: CachedRemoteData<Gesuch>;
-  cachedAenderungsGesuche: CachedRemoteData<Gesuch[]>;
+  cachedGesuchAenderung: CachedRemoteData<Gesuch>;
+  cachedTranchenSlim: CachedRemoteData<GesuchTrancheSlim[]>;
 };
 
 const initialState: GesuchAenderungState = {
-  cachedAenderungsGesuch: initial(),
-  cachedAenderungsGesuche: initial(),
+  cachedGesuchAenderung: initial(),
+  cachedTranchenSlim: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -40,25 +39,27 @@ export class GesuchAenderungStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   resetCachedGesuchAenderung() {
-    patchState(this, { cachedAenderungsGesuch: initial() });
+    patchState(this, { cachedGesuchAenderung: initial() });
   }
 
-  getAllAenderungsGesuche$ = rxMethod<string[]>(
+  getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
-      exhaustMap((gesuchIds) => {
-        return forkJoin(
-          gesuchIds.map((gesuchId) =>
-            this.gesuchTrancheService
-              .getAenderungsantrag$({ gesuchId }, undefined, undefined, {
-                context: shouldIgnoreNotFoundErrorsIf(true),
-              })
-              .pipe(map((gesuch) => gesuch ?? [])),
-          ),
-        );
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedTranchenSlim: cachedPending(state.cachedTranchenSlim),
+        }));
       }),
-      map((gesuche) => gesuche.flat()),
-      handleApiResponse((gesuche) => {
-        patchState(this, { cachedAenderungsGesuche: gesuche });
+      switchMap((req) =>
+        this.gesuchTrancheService
+          .getAllTranchenForGesuch$(req, undefined, undefined, {
+            context: shouldIgnoreNotFoundErrorsIf(true),
+          })
+          .pipe(map((tranchen) => tranchen ?? [])),
+      ),
+      handleApiResponse((tranchen) => {
+        patchState(this, () => ({
+          cachedTranchenSlim: tranchen,
+        }));
       }),
     ),
   );
@@ -71,7 +72,7 @@ export class GesuchAenderungStore extends signalStore(
       tap(() => {
         patchState(this, (state) => ({
           // change to not cached?
-          cachedAenderungsGesuch: cachedPending(state.cachedAenderungsGesuch),
+          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
       switchMap(({ gesuchId, createAenderungsantragRequest }) =>
@@ -83,14 +84,8 @@ export class GesuchAenderungStore extends signalStore(
           .pipe(
             handleApiResponse(
               (gesuchAenderung) => {
-                patchState(this, (state) => ({
-                  cachedAenderungsGesuch: gesuchAenderung,
-                  cachedAenderungsGesuche: isSuccess(gesuchAenderung)
-                    ? success([
-                        ...(state.cachedAenderungsGesuche.data ?? []),
-                        gesuchAenderung.data,
-                      ])
-                    : cachedPending(state.cachedAenderungsGesuche),
+                patchState(this, () => ({
+                  cachedGesuchAenderung: gesuchAenderung,
                 }));
               },
               {
@@ -114,8 +109,7 @@ export class GesuchAenderungStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          // change to not cached?
-          cachedAenderungsGesuch: cachedPending(state.cachedAenderungsGesuch),
+          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
       switchMap(({ gesuchId, trancheId, createGesuchTrancheRequest }) =>
@@ -128,14 +122,8 @@ export class GesuchAenderungStore extends signalStore(
           .pipe(
             handleApiResponse(
               (gesuchAenderung) => {
-                patchState(this, (state) => ({
-                  cachedAenderungsGesuch: gesuchAenderung,
-                  cachedAenderungsGesuche: isSuccess(gesuchAenderung)
-                    ? success([
-                        ...(state.cachedAenderungsGesuche.data ?? []),
-                        gesuchAenderung.data,
-                      ])
-                    : cachedPending(state.cachedAenderungsGesuche),
+                patchState(this, () => ({
+                  cachedGesuchAenderung: gesuchAenderung,
                 }));
               },
               {

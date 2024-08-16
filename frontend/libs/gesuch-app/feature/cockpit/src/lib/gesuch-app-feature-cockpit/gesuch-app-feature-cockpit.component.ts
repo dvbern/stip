@@ -66,44 +66,16 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
 
-  periodenSig = computed(() => {
-    const perioden = this.cockpitViewSig().gesuchsperiodes;
-    const aenderungsAntraege =
-      this.gesuchAenderungStore.cachedAenderungsGesuche().data ?? [];
-
-    // could there be multiple aenderungsAntraege for one gesuch? => ja => change to filter? or don't flatten the result of getAll
-    return perioden.map((periode) => {
-      const aenderungsAntrag = aenderungsAntraege.find(
-        (a) => a.id === periode.gesuch?.id,
-      );
-      return {
-        ...periode,
-        aenderungsAntrag, // how can we make shure we then work on the ritght tranche, stats is on gesuch! and date (1104), sice initial gesuch shows as an Antrag if not submitted.
-      };
-    });
-  });
-
   constructor() {
     effect(
       () => {
-        const aenderung = this.gesuchAenderungStore.cachedAenderungsGesuch();
+        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
         if (isSuccess(aenderung)) {
-          this.router.navigate(['/', 'gesuch', aenderung.data.id]); // navigate to aenderung (1104)
           this.gesuchAenderungStore.resetCachedGesuchAenderung();
         }
       },
-      { allowSignalWrites: true }, // @scph is this needed here?
+      { allowSignalWrites: true },
     );
-
-    effect(() => {
-      const gesuchIds = this.cockpitViewSig()
-        .gesuchsperiodes.map((p) => p.gesuch?.id)
-        .filter((g) => g !== undefined) as string[];
-
-      if (gesuchIds.length > 0) {
-        this.gesuchAenderungStore.getAllAenderungsGesuche$(gesuchIds);
-      }
-    });
   }
 
   ngOnInit() {

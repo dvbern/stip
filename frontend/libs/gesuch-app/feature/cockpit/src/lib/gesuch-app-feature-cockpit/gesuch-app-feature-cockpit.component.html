@@ -21,7 +21,7 @@
         <!-- period 1-2 -->
         @if (fallStore.currentFallViewSig(); as fall) {
           <div>
-            @for (periode of periodenSig(); track trackByPerioden($index, periode)) {
+            @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
               <div class="card mb-5 shadow-lg" [class.col-md-6]="!periode.gesuch" [class.col-md-12]="periode.gesuch">
                 <div class="card-body">
                   <div class="row">
@@ -90,7 +90,7 @@
                   <!-- existing Gesuch buttons -->
                   @if (periode.gesuch) {
                     <div class="row">
-                      @if (gesuchAenderungStore.cachedAenderungsGesuch() | rdIsPending) {
+                      @if (gesuchAenderungStore.cachedGesuchAenderung() | rdIsPending) {
                         <div class="col-12 mt-2">
                           <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
                         </div>
@@ -109,7 +109,6 @@
                             type="button"
                             class="btn btn-outline-primary mt-3 w-100"
                             data-testid="cockpit-gesuch-aenderung"
-                            [disabled]="periode.aenderungsAntrag"
                             (click)="
                               aenderungMelden(
                                 periode.gesuch.id,

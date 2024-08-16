@@ -61,25 +61,27 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     });
   });
 
-  aenderungsGesucheSig = computed(() => {
-    const aenderugsGesuche =
-      this.gesuchAenderungStore.cachedAenderungsGesuche();
+  tranchenSig = computed(() => {
+    const tranchen = this.gesuchAenderungStore.cachedTranchenSlim();
 
-    if (isSuccess(aenderugsGesuche)) {
-      return aenderugsGesuche.data;
+    if (isSuccess(tranchen)) {
+      return tranchen.data;
     }
 
     return [];
   });
 
   constructor() {
-    effect(() => {
-      const gesuchId = this.currentGesuchSig()?.id;
+    effect(
+      () => {
+        const gesuchId = this.currentGesuchSig()?.id;
 
-      if (gesuchId) {
-        this.gesuchAenderungStore.getAllAenderungsGesuche$([gesuchId]);
-      }
-    });
+        if (gesuchId) {
+          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   canSetToBearbeitungSig = computed(() => {

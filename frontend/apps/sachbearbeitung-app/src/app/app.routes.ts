@@ -29,7 +29,6 @@ export const appRoutes: Route[] = [
     path: 'gesuch',
     canActivate: [hasBenutzer],
     title: 'sachbearbeitung-app.gesuch-form.title',
-    providers: [],
     loadComponent: () =>
       import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
         (m) => m.SachbearbeitungAppFeatureGesuchFormComponent,

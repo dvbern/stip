@@ -28,7 +28,5 @@ export * from './stammdaten.service';
 // import { StammdatenService } from './stammdaten.service';
 export * from './tenant.service';
 // import { TenantService } from './tenant.service';
-export * from './gesuchTranche.service'
-// import { GesuchTrancheService } from './gesuchTranche.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
 // export const APIS = [AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungsartService, ConfigurationService, DokumentService, FallService, GesuchService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, MailService, PlzService, StammdatenService, TenantService];

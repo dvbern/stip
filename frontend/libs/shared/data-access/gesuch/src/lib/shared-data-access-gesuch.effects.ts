@@ -5,6 +5,7 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import {
   catchError,
+  combineLatestWith,
   concatMap,
   debounceTime,
   distinctUntilChanged,
@@ -54,6 +55,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
   selectRouteId,
+  selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
 } from './shared-data-access-gesuch.selectors';
 
@@ -144,15 +146,35 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormAbschluss.init,
         SharedEventGesuchFormProtokoll.init,
       ),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      switchMap(([, id]) => {
+      concatLatestFrom(() =>
+        store
+          .select(selectRouteId)
+          .pipe(combineLatestWith(store.select(selectRouteTrancheId))),
+      ),
+      switchMap(([, [id, trancheId]]) => {
         if (!id) {
           throw new Error(
             'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
           );
         }
+
+        if (trancheId) {
+          return gesuchService
+            .getGesuch$({ gesuchId: id, gesuchTrancheId: trancheId })
+            .pipe(
+              map((gesuch) =>
+                SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+              ),
+              catchError((error) => [
+                SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                  error: sharedUtilFnErrorTransformer(error),
+                }),
+              ]),
+            );
+        }
+
         return gesuchService
-          .getGesuch$({ gesuchId: id }, undefined, undefined, {
+          .getCurrentGesuch$({ gesuchId: id }, undefined, undefined, {
             context: noGlobalErrorsIf(
               true,
               handleNotFound((error) => {

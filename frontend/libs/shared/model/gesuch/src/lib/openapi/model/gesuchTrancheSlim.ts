@@ -9,18 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchFormular } from './gesuchFormular';
+import { GesuchTrancheStatus } from './gesuchTrancheStatus';
 
-export interface GesuchAenderungsAntrag { 
-    /**
-     * dd.MM.YYYY
-     */
-    gueltigAb: string;
-    /**
-     * dd.MM.YYYY
-     */
+export interface GesuchTrancheSlim { 
+    id?: string;
+    gueltigAb?: string;
     gueltigBis?: string;
-    kommentar?: string;
-    gesuchId: string;
+    status?: GesuchTrancheStatus;
 }
+
+
 
