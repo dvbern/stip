@@ -169,7 +169,6 @@ public class ElternteilV1 {
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
         builder.effektiveWohnkosten(
-            // TODO KSTIP-1305: Abklaeren mit Daenu, wohnkosten not null, eigenmietwert?
             BerechnungRequestV1.getEffektiveWohnkosten(
                 steuerdaten.getWohnkosten(),
                 gesuchsperiode,
