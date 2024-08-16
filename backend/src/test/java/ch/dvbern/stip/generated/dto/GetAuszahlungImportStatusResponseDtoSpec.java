@@ -15,11 +15,15 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -27,70 +31,78 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GetAuszahlungImportStatusResponseDtoSpec
  */
 @JsonPropertyOrder({
-  GetAuszahlungImportStatusResponseDtoSpec.JSON_PROPERTY_DELIVERY_ID,
-  GetAuszahlungImportStatusResponseDtoSpec.JSON_PROPERTY_MESSAGE
+  GetAuszahlungImportStatusResponseDtoSpec.JSON_PROPERTY_STATUS,
+  GetAuszahlungImportStatusResponseDtoSpec.JSON_PROPERTY_LOGS
 })
 @JsonTypeName("GetAuszahlungImportStatusResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GetAuszahlungImportStatusResponseDtoSpec {
-  public static final String JSON_PROPERTY_DELIVERY_ID = "deliveryId";
-  private String deliveryId;
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private String status;
 
-  public static final String JSON_PROPERTY_MESSAGE = "message";
-  private String message;
+  public static final String JSON_PROPERTY_LOGS = "logs";
+  private List<AuszahlungImportStatusLogDtoSpec> logs;
 
   public GetAuszahlungImportStatusResponseDtoSpec() {
   }
 
-  public GetAuszahlungImportStatusResponseDtoSpec deliveryId(String deliveryId) {
+  public GetAuszahlungImportStatusResponseDtoSpec status(String status) {
     
-    this.deliveryId = deliveryId;
+    this.status = status;
     return this;
   }
 
    /**
-   * Get deliveryId
-   * @return deliveryId
+   * Get status
+   * @return status
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DELIVERY_ID)
+  @JsonProperty(JSON_PROPERTY_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getDeliveryId() {
-    return deliveryId;
+  public String getStatus() {
+    return status;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DELIVERY_ID)
+  @JsonProperty(JSON_PROPERTY_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDeliveryId(String deliveryId) {
-    this.deliveryId = deliveryId;
+  public void setStatus(String status) {
+    this.status = status;
   }
 
 
-  public GetAuszahlungImportStatusResponseDtoSpec message(String message) {
+  public GetAuszahlungImportStatusResponseDtoSpec logs(List<AuszahlungImportStatusLogDtoSpec> logs) {
     
-    this.message = message;
+    this.logs = logs;
+    return this;
+  }
+
+  public GetAuszahlungImportStatusResponseDtoSpec addLogsItem(AuszahlungImportStatusLogDtoSpec logsItem) {
+    if (this.logs == null) {
+      this.logs = new ArrayList<>();
+    }
+    this.logs.add(logsItem);
     return this;
   }
 
    /**
-   * Get message
-   * @return message
+   * Get logs
+   * @return logs
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonProperty(JSON_PROPERTY_LOGS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getMessage() {
-    return message;
+  public List<AuszahlungImportStatusLogDtoSpec> getLogs() {
+    return logs;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonProperty(JSON_PROPERTY_LOGS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMessage(String message) {
-    this.message = message;
+  public void setLogs(List<AuszahlungImportStatusLogDtoSpec> logs) {
+    this.logs = logs;
   }
 
   @Override
@@ -102,21 +114,21 @@ public class GetAuszahlungImportStatusResponseDtoSpec {
       return false;
     }
     GetAuszahlungImportStatusResponseDtoSpec getAuszahlungImportStatusResponse = (GetAuszahlungImportStatusResponseDtoSpec) o;
-    return Objects.equals(this.deliveryId, getAuszahlungImportStatusResponse.deliveryId) &&
-        Objects.equals(this.message, getAuszahlungImportStatusResponse.message);
+    return Objects.equals(this.status, getAuszahlungImportStatusResponse.status) &&
+        Objects.equals(this.logs, getAuszahlungImportStatusResponse.logs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deliveryId, message);
+    return Objects.hash(status, logs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetAuszahlungImportStatusResponseDtoSpec {\n");
-    sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    logs: ").append(toIndentedString(logs)).append("\n");
     sb.append("}");
     return sb.toString();
   }

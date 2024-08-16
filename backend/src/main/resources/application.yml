@@ -86,6 +86,12 @@ quarkus:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
     AuszahlungSapImportStatusEndpoint:
       url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_ImportStatusRead&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS'
+    AuszahlungSapBusinessPartnerCreateEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerCreate&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
+    AuszahlungSapBusinessPartnerChangeEndpoint:
+      url: ''
+    AuszahlungSapBusinessPartnerReadEndpoint:
+      url: ''
 #    store-type: jdbc-tx
 
 '%dev':

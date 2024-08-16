@@ -1,6 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.Valid;
 
@@ -13,45 +15,61 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GetAuszahlungImportStatusResponseDto  implements Serializable {
-  private @Valid String deliveryId;
-  private @Valid String message;
+  private @Valid String status;
+  private @Valid List<AuszahlungImportStatusLogDto> logs;
 
   /**
    **/
-  public GetAuszahlungImportStatusResponseDto deliveryId(String deliveryId) {
-    this.deliveryId = deliveryId;
+  public GetAuszahlungImportStatusResponseDto status(String status) {
+    this.status = status;
     return this;
   }
 
 
-  @JsonProperty("deliveryId")
-  public String getDeliveryId() {
-    return deliveryId;
+  @JsonProperty("status")
+  public String getStatus() {
+    return status;
   }
 
-  @JsonProperty("deliveryId")
-  public void setDeliveryId(String deliveryId) {
-    this.deliveryId = deliveryId;
+  @JsonProperty("status")
+  public void setStatus(String status) {
+    this.status = status;
   }
 
   /**
    **/
-  public GetAuszahlungImportStatusResponseDto message(String message) {
-    this.message = message;
+  public GetAuszahlungImportStatusResponseDto logs(List<AuszahlungImportStatusLogDto> logs) {
+    this.logs = logs;
     return this;
   }
 
 
-  @JsonProperty("message")
-  public String getMessage() {
-    return message;
+  @JsonProperty("logs")
+  public List<AuszahlungImportStatusLogDto> getLogs() {
+    return logs;
   }
 
-  @JsonProperty("message")
-  public void setMessage(String message) {
-    this.message = message;
+  @JsonProperty("logs")
+  public void setLogs(List<AuszahlungImportStatusLogDto> logs) {
+    this.logs = logs;
   }
 
+  public GetAuszahlungImportStatusResponseDto addLogsItem(AuszahlungImportStatusLogDto logsItem) {
+    if (this.logs == null) {
+      this.logs = new ArrayList<>();
+    }
+
+    this.logs.add(logsItem);
+    return this;
+  }
+
+  public GetAuszahlungImportStatusResponseDto removeLogsItem(AuszahlungImportStatusLogDto logsItem) {
+    if (logsItem != null && this.logs != null) {
+      this.logs.remove(logsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -62,13 +80,13 @@ public class GetAuszahlungImportStatusResponseDto  implements Serializable {
       return false;
     }
     GetAuszahlungImportStatusResponseDto getAuszahlungImportStatusResponse = (GetAuszahlungImportStatusResponseDto) o;
-    return Objects.equals(this.deliveryId, getAuszahlungImportStatusResponse.deliveryId) &&
-        Objects.equals(this.message, getAuszahlungImportStatusResponse.message);
+    return Objects.equals(this.status, getAuszahlungImportStatusResponse.status) &&
+        Objects.equals(this.logs, getAuszahlungImportStatusResponse.logs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deliveryId, message);
+    return Objects.hash(status, logs);
   }
 
   @Override
@@ -76,8 +94,8 @@ public class GetAuszahlungImportStatusResponseDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetAuszahlungImportStatusResponseDto {\n");
 
-    sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    logs: ").append(toIndentedString(logs)).append("\n");
     sb.append("}");
     return sb.toString();
   }
