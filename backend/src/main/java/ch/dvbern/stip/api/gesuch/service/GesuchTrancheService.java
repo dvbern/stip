@@ -90,7 +90,12 @@ public class GesuchTrancheService {
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var newTrancheRange = TrancheRange.from(newTranche);
         final var added = new ArrayList<GesuchTranche>();
-        for (final var existingTranche : gesuch.getGesuchTranchen()) {
+        final var tranchenToTruncate = gesuch.getGesuchTranchen()
+            .stream()
+            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .toList();
+
+        for (final var existingTranche : tranchenToTruncate) {
             if (newTranche.getId().equals(existingTranche.getId())) {
                 continue;
             }
@@ -174,7 +179,7 @@ public class GesuchTrancheService {
             existingTranche,
             copyGueltigkeit,
             existingTranche.getComment()
-        );
+        ).setGesuch(existingTranche.getGesuch());
     }
 
     enum OverlapType {

@@ -110,7 +110,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         if (result) {
           this.gesuchAenderungStore.createGesuchTrancheCopy$({
             gesuchId: gesuch.id,
-            trancheId: gesuch.gesuchTrancheToWorkWith.id,
             createGesuchTrancheRequest: result,
           });
         }

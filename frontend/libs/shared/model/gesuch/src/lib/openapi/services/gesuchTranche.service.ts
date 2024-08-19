@@ -34,7 +34,6 @@ export interface GesuchTrancheServiceCreateAenderungsantragRequestParams {
 
 export interface GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams {
     gesuchId: string;
-    trancheId: string;
     createGesuchTrancheRequest?: CreateGesuchTrancheRequest;
 }
 
@@ -209,10 +208,6 @@ export class GesuchTrancheService {
         if (gesuchId === null || gesuchId === undefined) {
             throw new Error('Required parameter gesuchId was null or undefined when calling createGesuchTrancheCopy$.');
         }
-        const trancheId = requestParameters.trancheId;
-        if (trancheId === null || trancheId === undefined) {
-            throw new Error('Required parameter trancheId was null or undefined when calling createGesuchTrancheCopy$.');
-        }
         const createGesuchTrancheRequest = requestParameters.createGesuchTrancheRequest;
 
         let localVarHeaders = this.defaultHeaders;
@@ -269,7 +264,7 @@ export class GesuchTrancheService {
             }
         }
 
-        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tranche/${this.configuration.encodeParam({name: "trancheId", value: trancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tranche`;
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

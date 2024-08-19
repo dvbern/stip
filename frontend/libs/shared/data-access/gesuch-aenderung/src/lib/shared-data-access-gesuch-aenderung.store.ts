@@ -104,7 +104,6 @@ export class GesuchAenderungStore extends signalStore(
 
   createGesuchTrancheCopy$ = rxMethod<{
     gesuchId: string;
-    trancheId: string;
     createGesuchTrancheRequest?: CreateGesuchTrancheRequest;
   }>(
     pipe(
@@ -113,11 +112,10 @@ export class GesuchAenderungStore extends signalStore(
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap(({ gesuchId, trancheId, createGesuchTrancheRequest }) =>
+      switchMap(({ gesuchId, createGesuchTrancheRequest }) =>
         this.gesuchTrancheService
           .createGesuchTrancheCopy$({
             gesuchId,
-            trancheId,
             createGesuchTrancheRequest,
           })
           .pipe(
