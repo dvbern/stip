@@ -108,7 +108,7 @@ class GesuchResourceTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+        gesuch = gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -142,7 +142,7 @@ class GesuchResourceTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
-        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+        gesuch = gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -262,7 +262,7 @@ class GesuchResourceTest {
     @Order(12)
     void testUpdateGesuchEndpointUpdateGeschwister() {
         var gesuch =
-            gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
+            gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek).then().extract()
                 .body()
                 .as(GesuchDtoSpec.class);
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister;
@@ -679,7 +679,7 @@ class GesuchResourceTest {
     }
 
     private void updateGesuch() {
-        gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+        gesuch = gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
