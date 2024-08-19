@@ -63,7 +63,7 @@ class GesuchGetGesucheTest {
     @Test
     @TestAsSachbearbeiter
     @Order(3)
-    void getAlleGesucheOneFound() {
+    void getAlleGesucheNoneWithoutPiaFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE);
         final var withoutPia = Arrays.stream(found)
             .filter(gesuch -> gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung() == null)

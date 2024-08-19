@@ -68,7 +68,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-    // TODO KSTIP-1236: Test Aenderungsantrag once proper generation is done
+    // TODO KSTIP-1303: Test Aenderungsantrag once proper generation is done
 class GesuchFillFormularTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());

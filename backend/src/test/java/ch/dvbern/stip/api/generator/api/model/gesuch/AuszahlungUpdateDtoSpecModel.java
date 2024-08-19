@@ -16,6 +16,7 @@ public final class AuszahlungUpdateDtoSpecModel {
             model.setKontoinhaber(KontoinhaberDtoSpec.SOZIALDIENST_INSTITUTION);
         });
     }
+
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAuszahlung() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
