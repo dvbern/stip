@@ -267,6 +267,17 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner": "Nourriture à l'extérieur du partenaire",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Montant total du budget",
 
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Résultat",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.angenommen": "Sur la base de votre demande, celle-ci a été acceptée.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.abgelehnt": "Sur la base de votre demande, celle-ci a été refusée.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Résultat : Bourse accordée",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Résultat : Bourse refusée",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Résumé",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Détails du calcul",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total du calcul {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}",
+
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
   "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Date",

@@ -1,11 +1,82 @@
-<mat-card class="rouded-4">
+<mat-card class="rounded-4 mb-4">
   <mat-card-header>
     <mat-card-title>
-      <h3 class="d-flex align-items-center">
-        <i class="material-symbols-rounded me-3">equal</i>
+      <h2 class="d-flex align-items-center gap-2 mb-0">
+        <dv-shared-ui-icon-chip>
+          <i class="material-symbols-rounded text-info">equal</i>
+        </dv-shared-ui-icon-chip>
         {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title' | translate }}
+      </h2>
+    </mat-card-title>
+  </mat-card-header>
+
+  <div class="border-bottom border-1 mt-4 mb-4"></div>
+
+  @if (berechnungStore.berechnungZusammenfassungViewSig().totalBetragStipendium > 0) {
+    <mat-card-content>
+      <div class="mb-4 fs-4">
+        {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.angenommen' | translate }}
+      </div>
+      <div class="accept p-4 rounded-4 fs-3 fw-bold">
+        {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
+      </div>
+    </mat-card-content>
+  } @else {
+    <mat-card-content>
+      <div class="mb-4 fs-4">
+        {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.abgelehnt' | translate }}
+      </div>
+      <div class="reject p-4 rounded-4 fs-3 fw-bold">
+        {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
+      </div>
+    </mat-card-content>
+  }
+</mat-card>
+
+<!-- zusammenfassung -->
+<mat-card class="rounded-4 mb-4">
+  <mat-card-header>
+    <mat-card-title>
+      <div class="text-muted">{{ 'sachbearbeitung-app.verfuegung.zusammenfassung.subtitle' | translate }}</div>
+      <h3 class="d-flex align-items-center mb-0">
+        {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.title' | translate }}
       </h3>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content> test </mat-card-content>
+
+  <div class="border-bottom border-1 mt-4 mb-4"></div>
+
+  <mat-card-content class="d-flex flex-column gap-4">
+    @for (berechnung of berechnungStore.berechnungZusammenfassungViewSig().berechnungsresultate; track $index) {
+      <div>
+        <div class="d-flex justify-content-between fs-4 mb-2">
+          <div translate [translateParams]="{ index: $index + 1 }">
+            sachbearbeitung-app.verfuegung.zusammenfassung.item.total
+          </div>
+          <div>{{ berechnung.berechnung }}</div>
+        </div>
+        <a class="text-decoration-none text-info" [routerLink]="['../berechnung', $index + 1]">
+          <div class="d-flex align-items-center gap-2">
+            <span class="text-decoration-underline" translate [translateParams]="{ index: $index + 1 }"
+              >sachbearbeitung-app.verfuegung.zusammenfassung.item.link</span
+            >
+            <i class="material-symbols-rounded fs-5 text-decoration-none">open_in_new</i>
+          </div>
+        </a>
+      </div>
+    }
+  </mat-card-content>
+
+  <div class="border-bottom border-1 mt-4"></div>
+
+  <mat-card-footer class="px-3 py-4">
+    <div class="d-flex justify-content-between fs-4 fw-bold">
+      <div>
+        {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
+      </div>
+      <div>
+        {{ berechnungStore.berechnungZusammenfassungViewSig().totalBetragStipendium | formatChf: false }}
+      </div>
+    </div>
+  </mat-card-footer>
 </mat-card>

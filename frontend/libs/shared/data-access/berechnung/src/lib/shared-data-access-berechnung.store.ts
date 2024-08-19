@@ -26,12 +26,6 @@ export class BerechnungStore extends signalStore(
   withDevtools('BerechnungStore'),
 ) {
   private gesuchService = inject(GesuchService);
-  // private store = inject(Store);
-  // gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
-
-  // berechnungViewSig = computed(() => {
-  //   return this.berechnungen.data();
-  // });
 
   berechnungZusammenfassungViewSig = computed(() => {
     const value = { totalBetragStipendium: 0, berechnungsresultate: [] };

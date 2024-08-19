@@ -12,7 +12,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
+import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import {
   VERFUEGUNG_OPTIONS,
   VerfuegungOption,

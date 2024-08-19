@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addDays, differenceInMonths } from 'date-fns';
 
-import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
+import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -73,10 +73,6 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     return {
       gesuchId: gesuch.id,
       person: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
-      // ...tranche,
-      // monate: Math.abs(
-      //   differenceInMonths(addDays(tranche.gueltigBis, 1), tranche.gueltigAb),
-      // ),
     };
   });
   berechnungStore = inject(BerechnungStore);
