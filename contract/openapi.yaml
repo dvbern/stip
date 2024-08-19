@@ -3230,15 +3230,28 @@ components:
           format: date
         comment:
           type: string
-    GetAuszahlungImportStatusRequest:
+    CreateAuszahlungKreditor:
       type: object
       required:
         - deliveryId
+        - extId
+        - auszahlung
       properties:
         sysId:
           type: string
         deliveryId:
           type: string
+        extId:
+          type: string
+        auszahlung:
+          $ref: '#/components/schemas/Auszahlung'
+    GetAuszahlungImportStatusRequest:
+      type: object
+      required:
+        - deliveryId
+      properties:
+        deliveryId:
+          type: integer
     GetAuszahlungImportStatusResponse:
       type: object
       properties:

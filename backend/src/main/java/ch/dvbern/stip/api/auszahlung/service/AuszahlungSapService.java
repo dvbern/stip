@@ -12,6 +12,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.io.StringReader;
@@ -26,15 +27,22 @@ public class AuszahlungSapService {
     @Location("AuszahlungSapService/SST_009_BusinessPartnerCreate.xml")
     public Template SST_009_BusinessPartnerCreate;
 
+    private final GetAuszahlungImportStatusRequestMapper getAuszahlungImportStatusRequestMapper;
+
+    @ConfigProperty(name = "stip_sap_sysid")
+    Integer sysid;
+
     @RestClient
     ImportStatusReadClient importStatusReadClient;
 
-    private String buildPayload(Template template, Object data){
+    private String buildPayload(Template template, GetAuszahlungImportStatusRequest data){
         return template.data("dto", data).render();
     }
 
     private GetAuszahlungImportStatusResponseDto getAndParseSAPResponse(GetAuszahlungImportStatusRequestDto dto) throws JAXBException {
-        String response = importStatusReadClient.getImportStatus(buildPayload(SST_073_ImportStatusRead,dto));
+        GetAuszahlungImportStatusRequest data = getAuszahlungImportStatusRequestMapper.toGetAuszahlungImportStatusRequest(dto);
+        data.setSysId(sysid);
+        String response = importStatusReadClient.getImportStatus(buildPayload(SST_073_ImportStatusRead,data));
         JAXBContext context = JAXBContext.newInstance(GetAuszahlungImportStatusResponse.class);
         String shortendResponse = response.substring(response.indexOf("<POSITION>"), response.indexOf("</POSITION>")+ "</POSITION>".length());
         StringReader reader = new StringReader(shortendResponse);

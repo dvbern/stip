@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class AuszahlungSapServiceTest {
-    private static final String SOME_KNOWN_DELIVERY_ID = "2761";
+    private static final Integer SOME_KNOWN_DELIVERY_ID = 2761;
     @Inject
     AuszahlungSapService sapService;
 
@@ -34,7 +34,6 @@ class AuszahlungSapServiceTest {
         when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
         GetAuszahlungImportStatusRequestDto dto = new GetAuszahlungImportStatusRequestDto();
         dto.setDeliveryId(SOME_KNOWN_DELIVERY_ID);
-        dto.setSysId("2080");
         final var response = sapService.getImportStatus(dto);
         assertEquals(HttpStatus.SC_OK,response.getStatus());
         final var responseDto = (GetAuszahlungImportStatusResponseDto) response.getEntity();
@@ -43,22 +42,10 @@ class AuszahlungSapServiceTest {
     }
 
     @Test
-    void getImportStatusInvalidDeliveryIdTest(){
-        when(importStatusReadClient.getImportStatus(any())).thenThrow(WebApplicationException.class);
-        GetAuszahlungImportStatusRequestDto dto = new GetAuszahlungImportStatusRequestDto();
-        dto.setDeliveryId("");
-        dto.setSysId("2080");
-        final var response = sapService.getImportStatus(dto);
-        assertEquals(HttpStatus.SC_BAD_REQUEST,response.getStatus());
-
-    }
-
-    @Test
     void getImportStatusNonExistingDeliveryIdTest(){
         when(importStatusReadClient.getImportStatus(any())).thenThrow(WebApplicationException.class);
         GetAuszahlungImportStatusRequestDto dto = new GetAuszahlungImportStatusRequestDto();
-        dto.setDeliveryId("");
-        dto.setSysId("2080");
+        dto.setDeliveryId(0);
         final var response = sapService.getImportStatus(dto);
         assertEquals(HttpStatus.SC_BAD_REQUEST,response.getStatus());
     }

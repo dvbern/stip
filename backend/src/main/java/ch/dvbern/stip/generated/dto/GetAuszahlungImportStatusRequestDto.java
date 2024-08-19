@@ -14,12 +14,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GetAuszahlungImportStatusRequestDto  implements Serializable {
-  private @Valid String deliveryId;
-  private @Valid String sysId;
+  private @Valid Integer deliveryId;
 
   /**
    **/
-  public GetAuszahlungImportStatusRequestDto deliveryId(String deliveryId) {
+  public GetAuszahlungImportStatusRequestDto deliveryId(Integer deliveryId) {
     this.deliveryId = deliveryId;
     return this;
   }
@@ -27,31 +26,13 @@ public class GetAuszahlungImportStatusRequestDto  implements Serializable {
 
   @JsonProperty("deliveryId")
   @NotNull
-  public String getDeliveryId() {
+  public Integer getDeliveryId() {
     return deliveryId;
   }
 
   @JsonProperty("deliveryId")
-  public void setDeliveryId(String deliveryId) {
+  public void setDeliveryId(Integer deliveryId) {
     this.deliveryId = deliveryId;
-  }
-
-  /**
-   **/
-  public GetAuszahlungImportStatusRequestDto sysId(String sysId) {
-    this.sysId = sysId;
-    return this;
-  }
-
-
-  @JsonProperty("sysId")
-  public String getSysId() {
-    return sysId;
-  }
-
-  @JsonProperty("sysId")
-  public void setSysId(String sysId) {
-    this.sysId = sysId;
   }
 
 
@@ -64,13 +45,12 @@ public class GetAuszahlungImportStatusRequestDto  implements Serializable {
       return false;
     }
     GetAuszahlungImportStatusRequestDto getAuszahlungImportStatusRequest = (GetAuszahlungImportStatusRequestDto) o;
-    return Objects.equals(this.deliveryId, getAuszahlungImportStatusRequest.deliveryId) &&
-        Objects.equals(this.sysId, getAuszahlungImportStatusRequest.sysId);
+    return Objects.equals(this.deliveryId, getAuszahlungImportStatusRequest.deliveryId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(deliveryId, sysId);
+    return Objects.hash(deliveryId);
   }
 
   @Override
@@ -79,7 +59,6 @@ public class GetAuszahlungImportStatusRequestDto  implements Serializable {
     sb.append("class GetAuszahlungImportStatusRequestDto {\n");
 
     sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
-    sb.append("    sysId: ").append(toIndentedString(sysId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
