@@ -10,7 +10,15 @@ export function dataAccessTypeFactory(
 ): LibTypeGenerator {
   return {
     libGenerator: libraryGenerator,
-    libDefaultOptions: { skipModule: true },
+    libDefaultOptions: {
+      skipModule: true,
+      flat: true,
+      style: 'none',
+      skipSelector: true,
+      skipTests: true,
+      inlineStyle: true,
+      inlineTemplate: true,
+    },
     generators: [],
     postprocess,
   };
@@ -30,6 +38,15 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       ];
       return json;
     },
+  );
+  tree.delete(
+    path.join(
+      options.projectRoot,
+      options.nameDasherized,
+      'src',
+      'lib',
+      options.projectName + '.component.ts',
+    ),
   );
   tree.delete(
     path.join(options.projectRoot, options.nameDasherized, 'README.md'),

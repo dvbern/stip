@@ -40,6 +40,7 @@ const initialState: DokumentsState = {
 
 @Injectable({ providedIn: 'root' })
 export class DokumentsStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('DokumentsStore'),
 ) {

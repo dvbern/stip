@@ -22,6 +22,7 @@ const initialState: BerechnungState = {
 
 @Injectable()
 export class BerechnungStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('BerechnungStore'),
 ) {

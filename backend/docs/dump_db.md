@@ -13,4 +13,4 @@ And redirect that to a .sql file.
 Following are a few premade commands to dump common collections of tables:
 
 ## Dump all Gesuche
-    pg_dump $STIP_DB_URL --column-inserts -a -t gesuch -t gesuch_tranche -t gesuch_formular -t person_in_ausbildung -t ausbildung -t familiensituation -t partner -t auszahlung -t einnahmen_kosten -t lebenslauf_item -t geschwister -t eltern -t kind -t steuerdaten
+    pg_dump $STIP_DB_URL --column-inserts -a -t gesuch -t gesuch_tranche -t gesuch_formular -t person_in_ausbildung -t ausbildung -t familiensituation -t partner -t auszahlung -t einnahmen_kosten -t lebenslauf_item -t geschwister -t eltern -t kind -t steuerdaten -t adresse -t fall -t benutzer -t benutzer_einstellungen

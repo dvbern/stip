@@ -1,6 +1,6 @@
 import { FormBuilder } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { fireEvent, render } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { SharedUiWohnsitzSplitterComponent } from './shared-ui-wohnsitz-splitter.component';
@@ -27,7 +27,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
   });
 
   it('should show component with empty values', async () => {
-    const { getByTestId } = await render(SharedUiWohnsitzSplitterComponent, {
+    await render(SharedUiWohnsitzSplitterComponent, {
       imports: [
         TranslateTestingModule.withTranslations({}),
         NoopAnimationsModule,
@@ -36,8 +36,12 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
         controls: initializeControls().controls,
       },
     });
-    expect(getByTestId('component-percentage-splitter-a')).toHaveValue('');
-    expect(getByTestId('component-percentage-splitter-b')).toHaveValue('');
+    expect(screen.getByTestId('component-percentage-splitter-a')).toHaveValue(
+      '',
+    );
+    expect(screen.getByTestId('component-percentage-splitter-b')).toHaveValue(
+      '',
+    );
   });
 
   [
@@ -49,7 +53,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
     [300, '100%', '0%'],
   ].forEach(([value, expectedA, expectedB]) =>
     it(`should show component with valueA: [${value}] to be A('${expectedA}') B('${expectedB}')`, async () => {
-      const { getByTestId } = await render(SharedUiWohnsitzSplitterComponent, {
+      await render(SharedUiWohnsitzSplitterComponent, {
         imports: [
           TranslateTestingModule.withTranslations({}),
           NoopAnimationsModule,
@@ -58,8 +62,8 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
           controls: initializeControls().controls,
         },
       });
-      const controlA = getByTestId('component-percentage-splitter-a');
-      const controlB = getByTestId('component-percentage-splitter-b');
+      const controlA = screen.getByTestId('component-percentage-splitter-a');
+      const controlB = screen.getByTestId('component-percentage-splitter-b');
 
       fireEvent.input(controlA, { target: { value } });
 
