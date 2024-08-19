@@ -182,14 +182,13 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * @see #trancheIdPath  (required)
      * @see #body  (optional)
      * return GesuchDtoSpec
      */
     public static class CreateGesuchTrancheCopyOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuchtranche/{gesuchId}/tranche/{trancheId}";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchId}/tranche";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -202,7 +201,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuchtranche/{gesuchId}/tranche/{trancheId}
+         * POST /gesuchtranche/{gesuchId}/tranche
          * @param handler handler
          * @param <T> type
          * @return type
@@ -213,7 +212,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * POST /gesuchtranche/{gesuchId}/tranche/{trancheId}
+         * POST /gesuchtranche/{gesuchId}/tranche
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -239,17 +238,6 @@ public class GesuchTrancheApiSpec {
          */
         public CreateGesuchTrancheCopyOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        public static final String TRANCHE_ID_PATH = "trancheId";
-
-        /**
-         * @param trancheId (UUID)  (required)
-         * @return operation
-         */
-        public CreateGesuchTrancheCopyOper trancheIdPath(Object trancheId) {
-            reqSpec.addPathParam(TRANCHE_ID_PATH, trancheId);
             return this;
         }
 

@@ -69,11 +69,11 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchDto createTrancheCopy(
         final UUID gesuchId,
-        final UUID originalTrancheId,
         final CreateGesuchTrancheRequestDto createDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var trancheToCopy = gesuch.getGesuchTrancheById(originalTrancheId).orElseThrow(NotFoundException::new);
+        final var trancheToCopy = gesuch.getTrancheValidOnDate(createDto.getStart())
+            .orElseThrow(NotFoundException::new);
         final var newTranche = GesuchTrancheCopyUtil.createNewTranche(trancheToCopy, createDto);
         newTranche.setGesuch(gesuch);
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);

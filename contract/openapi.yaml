@@ -1510,14 +1510,9 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAenderungsantrag
-  '/gesuchtranche/{gesuchId}/tranche/{trancheId}':
+  '/gesuchtranche/{gesuchId}/tranche':
     parameters:
       - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-      - name: trancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path

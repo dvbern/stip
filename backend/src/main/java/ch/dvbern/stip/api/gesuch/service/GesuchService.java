@@ -363,7 +363,7 @@ public class GesuchService {
     }
 
     public ValidationReportDto validatePages(final Gesuch gesuch) {
-        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+        final var formular = gesuch.getAllTranchenValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
 
@@ -432,7 +432,7 @@ public class GesuchService {
 
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+        final var formular = gesuch.getAllTranchenValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
 
@@ -447,7 +447,7 @@ public class GesuchService {
 
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+        final var formular = gesuch.getAllTranchenValidOnDate(LocalDate.now())
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular();
 

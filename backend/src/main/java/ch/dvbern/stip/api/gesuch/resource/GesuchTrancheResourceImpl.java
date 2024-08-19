@@ -44,12 +44,10 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     public Response createGesuchTrancheCopy(
         UUID gesuchId,
-        UUID trancheId,
         CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
     ) {
         final var gesuchDto = gesuchTrancheService.createTrancheCopy(
             gesuchId,
-            trancheId,
             createGesuchTrancheRequestDto
         );
         return Response.ok(gesuchDto).build();
