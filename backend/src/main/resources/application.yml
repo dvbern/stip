@@ -25,6 +25,7 @@ kstip:
     kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
     kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
   stip_sap_auth_header_value: '${STIP_SAP_AUTH_HEADER_VALUE}'
+  stip_sap_sysid: '${STIP_SAP_SYSID}'
 quarkus:
   execution-model-annotations:
     # TODO: use FAIL as soon as @Blocking is detected on subclasses

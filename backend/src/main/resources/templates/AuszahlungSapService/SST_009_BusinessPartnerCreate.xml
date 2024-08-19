@@ -106,7 +106,7 @@
         </COMMUNICATION>
         <!--Zero or more repetitions:-->
         <PAYMENT_DETAIL>
-          <IBAN/>
+          <IBAN>{iban}</IBAN>
           <!--Optional:-->
           <ACCOUNTHOLDER/>
         </PAYMENT_DETAIL>

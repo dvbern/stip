@@ -27,48 +27,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GetAuszahlungImportStatusRequestDtoSpec
  */
 @JsonPropertyOrder({
-  GetAuszahlungImportStatusRequestDtoSpec.JSON_PROPERTY_SYS_ID,
   GetAuszahlungImportStatusRequestDtoSpec.JSON_PROPERTY_DELIVERY_ID
 })
 @JsonTypeName("GetAuszahlungImportStatusRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GetAuszahlungImportStatusRequestDtoSpec {
-  public static final String JSON_PROPERTY_SYS_ID = "sysId";
-  private String sysId;
-
   public static final String JSON_PROPERTY_DELIVERY_ID = "deliveryId";
-  private String deliveryId;
+  private Integer deliveryId;
 
   public GetAuszahlungImportStatusRequestDtoSpec() {
   }
 
-  public GetAuszahlungImportStatusRequestDtoSpec sysId(String sysId) {
-    
-    this.sysId = sysId;
-    return this;
-  }
-
-   /**
-   * Get sysId
-   * @return sysId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SYS_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getSysId() {
-    return sysId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SYS_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSysId(String sysId) {
-    this.sysId = sysId;
-  }
-
-
-  public GetAuszahlungImportStatusRequestDtoSpec deliveryId(String deliveryId) {
+  public GetAuszahlungImportStatusRequestDtoSpec deliveryId(Integer deliveryId) {
     
     this.deliveryId = deliveryId;
     return this;
@@ -82,14 +52,14 @@ public class GetAuszahlungImportStatusRequestDtoSpec {
   @JsonProperty(JSON_PROPERTY_DELIVERY_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getDeliveryId() {
+  public Integer getDeliveryId() {
     return deliveryId;
   }
 
 
   @JsonProperty(JSON_PROPERTY_DELIVERY_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDeliveryId(String deliveryId) {
+  public void setDeliveryId(Integer deliveryId) {
     this.deliveryId = deliveryId;
   }
 
@@ -102,20 +72,18 @@ public class GetAuszahlungImportStatusRequestDtoSpec {
       return false;
     }
     GetAuszahlungImportStatusRequestDtoSpec getAuszahlungImportStatusRequest = (GetAuszahlungImportStatusRequestDtoSpec) o;
-    return Objects.equals(this.sysId, getAuszahlungImportStatusRequest.sysId) &&
-        Objects.equals(this.deliveryId, getAuszahlungImportStatusRequest.deliveryId);
+    return Objects.equals(this.deliveryId, getAuszahlungImportStatusRequest.deliveryId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sysId, deliveryId);
+    return Objects.hash(deliveryId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetAuszahlungImportStatusRequestDtoSpec {\n");
-    sb.append("    sysId: ").append(toIndentedString(sysId)).append("\n");
     sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
     sb.append("}");
     return sb.toString();
