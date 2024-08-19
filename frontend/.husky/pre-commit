@@ -1,9 +1,6 @@
-#!/usr/bin/env sh
 frontend="$(git rev-parse --show-toplevel)/frontend"
 
 if ! git diff --quiet --stat HEAD -- $frontend -ne 0; then
-    . "$(dirname -- "$0")/_/husky.sh"
-
     cd $frontend
 
     npx lint-staged

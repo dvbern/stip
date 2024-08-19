@@ -30,10 +30,11 @@ async function setup() {
                 id: '1',
                 ausbildungsgaenge: [
                   {
-                    bildungsart: {
+                    bildungskategorie: {
                       id: '',
                       bfs: -1,
-                      beschreibung: '',
+                      bezeichnungDe: '',
+                      bezeichnungFr: '',
                       bildungsstufe: 'SEKUNDAR_2',
                     },
                     bezeichnungDe: 'gang1',

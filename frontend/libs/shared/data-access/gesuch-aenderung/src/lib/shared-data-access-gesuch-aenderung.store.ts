@@ -32,6 +32,7 @@ const initialState: GesuchAenderungState = {
 
 @Injectable({ providedIn: 'root' })
 export class GesuchAenderungStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {

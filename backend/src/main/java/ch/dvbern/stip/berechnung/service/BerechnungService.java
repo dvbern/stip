@@ -72,6 +72,7 @@ public class BerechnungService {
     private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
         final DmnRequest berechnungRequest,
         final BerechnungResult berechnungResult,
+        final List<FamilienBudgetresultatDto> familienBudgetresultatList,
         final int majorVersion,
         final int minorVersion
     ) {
@@ -105,7 +106,8 @@ public class BerechnungService {
             berechnungRequest,
             einnahmenPersoenlichesBudget,
             ausgabenPersoenlichesBudget,
-            persoenlichesbudgetBerechnet
+            persoenlichesbudgetBerechnet,
+            familienBudgetresultatList
         );
     }
 
@@ -156,8 +158,7 @@ public class BerechnungService {
             budgetToUse,
             einnahmenFamilienbudget,
             ausgabenFamilienbudget,
-            familienbudgetBerechnet,
-            0
+            familienbudgetBerechnet
         );
     }
 
@@ -287,6 +288,7 @@ public class BerechnungService {
             persoenlichesBudgetresultatFromRequest(
                 stipendienBerechnungsRequestForVater,
                 stipendienCalculatedForVater,
+                familienBudgetresultatList,
                 majorVersion,
                 minorVersion
             ),

@@ -1,9 +1,0 @@
-{
-  "overrides": [
-    {
-      "files": ["*.ts"],
-      "rules": {},
-      "extends": ["plugin:@ngrx/eslint-plugin/strict"]
-    }
-  ]
-}

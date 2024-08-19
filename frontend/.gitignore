@@ -48,3 +48,4 @@ Thumbs.db
 affected-apps.gitlab-ci.yml
 
 .nx/cache
+.nx/workspace-data

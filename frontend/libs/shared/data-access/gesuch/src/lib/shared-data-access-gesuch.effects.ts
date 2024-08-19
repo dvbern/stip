@@ -385,6 +385,7 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormPartner.nextTriggered,
         SharedEventGesuchFormPerson.nextTriggered,
         SharedEventGesuchFormEducation.nextTriggered,
+        SharedEventGesuchFormElternSteuerdaten.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,

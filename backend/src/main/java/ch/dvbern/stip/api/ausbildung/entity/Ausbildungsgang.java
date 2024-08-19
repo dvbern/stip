@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -52,10 +52,10 @@ public class Ausbildungsgang extends AbstractMandantEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "bildungsart_id",
+        name = "bildungskategorie_id",
         nullable = false,
         foreignKey = @ForeignKey(name = "FK_ausbildungsgang_bildungsart_id")
     )
-    private Bildungsart bildungsart;
+    private Bildungskategorie bildungskategorie;
 
 }

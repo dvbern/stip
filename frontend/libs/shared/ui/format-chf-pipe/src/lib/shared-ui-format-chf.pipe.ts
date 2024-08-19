@@ -20,3 +20,19 @@ export class SharedUiFormatChfPipe implements PipeTransform {
     return `- ${toFormatedNumber(+value)} CHF`;
   }
 }
+
+@Pipe({
+  name: 'formatChfNegative',
+  standalone: true,
+})
+export class SharedUiFormatChfNegativePipe implements PipeTransform {
+  transform(value: string | number | undefined): string {
+    if (value === undefined) {
+      return '';
+    }
+    if (+value >= 0) {
+      return `${toFormatedNumber(+value)} CHF`;
+    }
+    return `- ${toFormatedNumber(+value)} CHF`;
+  }
+}

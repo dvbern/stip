@@ -9,7 +9,7 @@ public class AusbildungsgangCreateDtoSpecModel {
         TestUtil.createUpdateDtoSpec(AusbildungsgangCreateDtoSpec::new, (model, faker) -> {
             model.setBezeichnungDe("Bachelor Informatik");
             model.setBezeichnungFr("Bachelor Informatik");
-            model.setBildungsartId(TestConstants.TEST_BILDUNGSART_ID); //TODO: use test constance and update entity to hold id
+            model.setBildungskategorieId(TestConstants.TEST_BILDUNGSKATEGORIE_ID); //TODO: use test constance and update entity to hold id
             model.setAusbildungsstaetteId(TestConstants.TEST_AUSBILDUNGSSTAETTE_ID);
         });
 }

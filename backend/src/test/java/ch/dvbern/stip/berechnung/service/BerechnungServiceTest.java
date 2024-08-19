@@ -7,8 +7,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -122,9 +121,9 @@ class BerechnungServiceTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.TERTIAER)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
                         )
                 )
         );
@@ -209,9 +208,9 @@ class BerechnungServiceTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.SEKUNDAR_2)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
                         )
                 )
         );
@@ -305,9 +304,9 @@ class BerechnungServiceTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.SEKUNDAR_2)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
                         )
                 )
         );

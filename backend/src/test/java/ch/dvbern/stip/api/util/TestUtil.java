@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -38,6 +37,8 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
 import io.restassured.response.ResponseBody;
@@ -62,6 +63,39 @@ public class TestUtil {
         return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null, null,
             ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT
         );
+    }
+
+    public static Steuerdaten prepareSteuerdaten() {
+        Steuerdaten steuerdaten = new Steuerdaten();
+        steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        steuerdaten.setEigenmietwert(0);
+        steuerdaten.setVerpflegung(0);
+        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdaten.setTotalEinkuenfte(0);
+        steuerdaten.setFahrkosten(0);
+        steuerdaten.setKinderalimente(0);
+        steuerdaten.setSteuernBund(0);
+        steuerdaten.setSteuernStaat(0);
+        steuerdaten.setVermoegen(0);
+        steuerdaten.setErgaenzungsleistungen(0);
+        steuerdaten.setSteuerjahr(0);
+        return  steuerdaten;
+    }
+
+    public static SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
+        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = new SteuerdatenUpdateDtoSpec();
+        steuerdatenUpdateDto.setSteuerdatenTyp(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenUpdateDto.setEigenmietwert(0);
+        steuerdatenUpdateDto.setFahrkosten(0);
+        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
+        steuerdatenUpdateDto.setKinderalimente(0);
+        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setTotalEinkuenfte(0);
+        steuerdatenUpdateDto.setVermoegen(0);
+        steuerdatenUpdateDto.setVerpflegung(0);
+        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
+        steuerdatenUpdateDto.setSteuernBund(0);
+        return steuerdatenUpdateDto;
     }
 
     public static GesuchCreateDtoSpec initGesuchCreateDto() {
@@ -255,9 +289,9 @@ public class TestUtil {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.TERTIAER)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
                         )
                 )
         );
