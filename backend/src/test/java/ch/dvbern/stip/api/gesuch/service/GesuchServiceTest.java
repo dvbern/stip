@@ -873,7 +873,7 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
         steuerdatenUpdateDto.setSteuernBund(0);
-        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVerpflegung(0);
