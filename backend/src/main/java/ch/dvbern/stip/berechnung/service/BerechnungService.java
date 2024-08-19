@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -164,7 +164,10 @@ public class BerechnungService {
     }
 
     private int calcMonthsBetween(final LocalDate from, final LocalDate to) {
-        return Period.between(from, to.plusDays(1)).getMonths();
+        return (int) ChronoUnit.MONTHS.between(
+            from,
+            to.plusDays(1)
+        );
     }
 
     public List<BerechnungsresultatDto> getBerechnungsresultateFromGesuch(
