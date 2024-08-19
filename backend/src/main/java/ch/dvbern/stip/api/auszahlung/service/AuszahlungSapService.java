@@ -1,11 +1,14 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDto;
-import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusRequestDto;
+import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
 import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.xml.bind.JAXBContext;
@@ -28,6 +31,7 @@ public class AuszahlungSapService {
     public Template SST_009_BusinessPartnerCreate;
 
     private final GetAuszahlungImportStatusRequestMapper getAuszahlungImportStatusRequestMapper;
+    private final CreateAuszahlungKreditorMapper createAuszahlungKreditorMapper;
 
     @ConfigProperty(name = "stip_sap_sysid")
     Integer sysid;
@@ -35,12 +39,16 @@ public class AuszahlungSapService {
     @RestClient
     ImportStatusReadClient importStatusReadClient;
 
-    private String buildPayload(Template template, GetAuszahlungImportStatusRequest data){
-        return template.data("dto", data).render();
+    @RestClient
+    BusinessPartnerCreateClient businessPartnerCreateClient;
+
+    private String buildPayload(Template template, Object data){
+        return template.data("data", data).render();
     }
 
-    private GetAuszahlungImportStatusResponseDto getAndParseSAPResponse(GetAuszahlungImportStatusRequestDto dto) throws JAXBException {
-        GetAuszahlungImportStatusRequest data = getAuszahlungImportStatusRequestMapper.toGetAuszahlungImportStatusRequest(dto);
+    private GetAuszahlungImportStatusResponseDto getAndParseGetSAPImportStatusResponse(Integer deliveryId) throws JAXBException {
+        GetAuszahlungImportStatusRequest data = new GetAuszahlungImportStatusRequest();
+        data.setDeliveryId(deliveryId);
         data.setSysId(sysid);
         String response = importStatusReadClient.getImportStatus(buildPayload(SST_073_ImportStatusRead,data));
         JAXBContext context = JAXBContext.newInstance(GetAuszahlungImportStatusResponse.class);
@@ -55,9 +63,9 @@ public class AuszahlungSapService {
         return result;
     }
 
-    public Response getImportStatus(GetAuszahlungImportStatusRequestDto dto){
+    public Response getImportStatus(@Valid @Positive @NotNull Integer deliveryId){
         try{
-            return Response.status(HttpStatus.SC_OK).entity(getAndParseSAPResponse(dto)).build();
+            return Response.status(HttpStatus.SC_OK).entity(getAndParseGetSAPImportStatusResponse(deliveryId)).build();
 
         }
         catch(WebApplicationException | JAXBException ex){
@@ -65,8 +73,18 @@ public class AuszahlungSapService {
         }
     }
 
-    public String createBusinessPartner(String sysId, String deliveryId){
-        return SST_009_BusinessPartnerCreate.data("sysId",sysId,"deliveryId",deliveryId).render();
+    public Response createBusinessPartner(CreateAuszahlungKreditorDto dto){
+        try{
+            CreateAuszahlungKreditor data = createAuszahlungKreditorMapper.toAuszahlungKreditor(dto);
+            String response = businessPartnerCreateClient.createBusinessPartner(buildPayload(SST_009_BusinessPartnerCreate,data));
+            return Response.status(HttpStatus.SC_OK).entity(response).build();
+        }
+        catch(WebApplicationException ex){
+            return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+
+        }
+
+
     }
 
 }
