@@ -6,6 +6,12 @@
   "tags": ["scope:shared", "type:feature"],
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/feature/gesuch-form-einnahmenkosten/tsconfig.lib.json"
+      }
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

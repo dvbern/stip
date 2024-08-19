@@ -27,6 +27,7 @@ const initialState: <%= classify(name) %>State = {
 
 @Injectable()
 export class <%= classify(name) %>Store extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('<%= classify(name) %>Store'),
 ) {

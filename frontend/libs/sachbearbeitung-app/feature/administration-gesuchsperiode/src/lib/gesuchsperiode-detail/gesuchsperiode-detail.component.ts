@@ -247,6 +247,14 @@ export class GesuchsperiodeDetailComponent {
       { allowSignalWrites: true },
     );
     effect(() => {
+      const gesuchsJahre = this.store.gesuchsjahre.data();
+      if (!gesuchsJahre) {
+        this.form.controls.gesuchsjahrId.disable();
+      } else {
+        this.form.controls.gesuchsjahrId.enable();
+      }
+    });
+    effect(() => {
       const gesuchsperiode = this.store.currentGesuchsperiodeViewSig();
       if (!gesuchsperiode) {
         const latestGesuchsperiode = this.store.latestGesuchsperiodeViewSig();
