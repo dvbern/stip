@@ -131,11 +131,11 @@ public class AntragsstellerV1 {
           builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
           builder.abgeschlosseneErstausbildung(
-              gesuchFormular.getLebenslaufItems().stream().filter(
+              gesuchFormular.getLebenslaufItems().stream().anyMatch(
                   lebenslaufItem ->
                       lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
                       && lebenslaufItem.isAusbildungAbgeschlossen()
-              ).count() > 0
+              )
           );
 
           if (partner != null) {
