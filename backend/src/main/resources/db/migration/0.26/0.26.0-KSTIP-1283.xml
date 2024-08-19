@@ -4,14 +4,14 @@
       <renameColumn
         tableName="steuerdaten"
         oldColumnName="steuernstaat"
-        newColumnName="steuernKantonGemeinde"
+        newColumnName="steuernkantongemeinde"
       />
     </changeSet>
   <changeSet author="jafa (generated)" id="renameColumn-steuernkantongemeinde_aud-steuernstaat_aud">
       <renameColumn
         tableName="steuerdaten_aud"
         oldColumnName="steuernstaat"
-        newColumnName="steuernKantonGemeinde"
+        newColumnName="steuernkantongemeinde"
       />
   </changeSet>
 </databaseChangeLog>
