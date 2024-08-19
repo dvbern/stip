@@ -39,7 +39,7 @@ public class GesuchTrancheCopyUtil {
             original,
             new DateRange(createDto.getStart(), createDto.getEnd()),
             createDto.getComment()
-        ).setGesuch(original.getGesuch());
+        ).setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
     }
 
     /**
@@ -48,12 +48,13 @@ public class GesuchTrancheCopyUtil {
      */
     public GesuchTranche createNewTranche(
         final GesuchTranche gesuchTranche,
-        final CreateGesuchTrancheRequestDto createDto
+        final DateRange gueltigkeit,
+        final String comment
     ) {
         final var newTranche = copyTranche(
             gesuchTranche,
-            new DateRange(createDto.getStart(), createDto.getEnd()),
-            createDto.getComment()
+            gueltigkeit,
+            comment
         );
 
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
@@ -61,7 +62,7 @@ public class GesuchTrancheCopyUtil {
     }
 
     /**
-     * Copies a tranche without setting references
+     * Copies a tranche
      */
     public GesuchTranche copyTranche(
         final GesuchTranche original,
@@ -74,6 +75,7 @@ public class GesuchTrancheCopyUtil {
         newTranche.setComment(comment);
         newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
         newTranche.getGesuchFormular().setTranche(newTranche);
+        newTranche.setGesuch(original.getGesuch());
         return newTranche;
     }
 

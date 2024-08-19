@@ -74,9 +74,11 @@ public class GesuchTrancheService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var trancheToCopy = gesuch.getTrancheValidOnDate(createDto.getStart())
             .orElseThrow(NotFoundException::new);
-        final var newTranche = GesuchTrancheCopyUtil.createNewTranche(trancheToCopy, createDto);
-        newTranche.setGesuch(gesuch);
-        newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        final var newTranche = GesuchTrancheCopyUtil.createNewTranche(
+            trancheToCopy,
+            new DateRange(createDto.getStart(), createDto.getEnd()),
+            createDto.getComment()
+        );
         gesuch.getGesuchTranchen().add(newTranche);
         gesuchRepository.persistAndFlush(gesuch);
 
@@ -175,11 +177,11 @@ public class GesuchTrancheService {
             .with(lastDayOfMonth())
         );
 
-        return GesuchTrancheCopyUtil.copyTranche(
+        return GesuchTrancheCopyUtil.createNewTranche(
             existingTranche,
             copyGueltigkeit,
             existingTranche.getComment()
-        ).setGesuch(existingTranche.getGesuch());
+        );
     }
 
     enum OverlapType {
