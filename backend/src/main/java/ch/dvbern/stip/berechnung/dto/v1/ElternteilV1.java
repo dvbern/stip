@@ -72,7 +72,6 @@ public class ElternteilV1 {
         builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
 
         int medizinischeGrundversorgung = 0;
-        int anzahlPersonenAddedToHaushalt = 0;
         int anzahlKinderInAusbildung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
             for (final var elternteil : eltern) {
@@ -80,14 +79,12 @@ public class ElternteilV1 {
                     (int) ChronoUnit.YEARS.between(elternteil.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
-                anzahlPersonenAddedToHaushalt += 1;
             }
             for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(kindDerElternInHaushalten.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
-                anzahlPersonenAddedToHaushalt += 1;
                 if (kindDerElternInHaushalten instanceof Geschwister geschwister) {
                     if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                         anzahlKinderInAusbildung += 1;
@@ -107,7 +104,6 @@ public class ElternteilV1 {
                             (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
                             gesuchsperiode
                         );
-                        anzahlPersonenAddedToHaushalt += 1;
                         if (kind instanceof Geschwister geschwister) {
                             if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                                 anzahlKinderInAusbildung += 1;
@@ -126,7 +122,6 @@ public class ElternteilV1 {
                             (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
                             gesuchsperiode
                         );
-                        anzahlPersonenAddedToHaushalt += 1;
                         if (kind instanceof Geschwister geschwister) {
                             if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                                 anzahlKinderInAusbildung += 1;
@@ -151,7 +146,6 @@ public class ElternteilV1 {
                         (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
                         gesuchsperiode
                     );
-                    anzahlPersonenAddedToHaushalt += 1;
                     if (kind instanceof Geschwister geschwister) {
                         if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
                             anzahlKinderInAusbildung += 1;
@@ -186,7 +180,6 @@ public class ElternteilV1 {
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
-                anzahlPersonenAddedToHaushalt += 1;
             }
             case MUTTER -> {
                 final var elternteilToUse = eltern.stream().filter(
@@ -197,16 +190,7 @@ public class ElternteilV1 {
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
-                anzahlPersonenAddedToHaushalt += 1;
             }
-        }
-
-        if ((anzahlPersonenImHaushalt - anzahlPersonenAddedToHaushalt) == 1) {
-            // TODO: Check with Fach which age to assume of the Partner
-            medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(26, gesuchsperiode);
-        } else if ((anzahlPersonenImHaushalt - anzahlPersonenAddedToHaushalt) > 1 ||
-            (anzahlPersonenImHaushalt - anzahlPersonenAddedToHaushalt) < 0) {
-            throw new IllegalStateException("Anzahl Personen does not match");
         }
 
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
