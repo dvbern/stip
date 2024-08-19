@@ -77,8 +77,14 @@ class GesuchResourceEinnahmeKostenTest {
         createGesuch();
         createTranche();
 
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung;
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner());
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner()
+                .getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getPartner()
+            );
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 

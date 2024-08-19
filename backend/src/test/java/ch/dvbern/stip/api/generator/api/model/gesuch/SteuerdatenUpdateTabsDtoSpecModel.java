@@ -40,12 +40,13 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
         return list;
     }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten =
-        TestUtil.createUpdateDtoSpec(
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten() {
+        return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
             (model, faker) -> {
                 model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
-                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec);
+                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             }
         );
+    }
 }
