@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { Route } from '@angular/router';
+import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feature/verfuegung-zusammenfassung';
 import { Store } from '@ngrx/store';
 
 import {
@@ -7,7 +8,6 @@ import {
   OPTION_ZUSAMMENFASSUNG,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
 export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
   {
@@ -21,7 +21,7 @@ export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
     children: [
       {
         path: OPTION_ZUSAMMENFASSUNG.route,
-        component: SharedUiCommingSoonComponent,
+        component: SharedFeatureVerfuegungZusammenfassungComponent,
       },
       {
         path: BERECHNUNG_ROUTE + '/:index',

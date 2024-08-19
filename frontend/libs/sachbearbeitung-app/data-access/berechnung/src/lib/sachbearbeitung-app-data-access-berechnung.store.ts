@@ -26,9 +26,28 @@ export class BerechnungStore extends signalStore(
   withDevtools('BerechnungStore'),
 ) {
   private gesuchService = inject(GesuchService);
+  // private store = inject(Store);
+  // gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
-  berechnungViewSig = computed(() => {
-    return this.berechnungen.data();
+  // berechnungViewSig = computed(() => {
+  //   return this.berechnungen.data();
+  // });
+
+  berechnungZusammenfassungViewSig = computed(() => {
+    const value = { totalBetragStipendium: 0, berechnungsresultate: [] };
+    const data = this.berechnungen.data();
+
+    return data
+      ? data.reduce<{
+          totalBetragStipendium: number;
+          berechnungsresultate: Berechnungsresultat[];
+        }>((acc, curr) => {
+          return {
+            totalBetragStipendium: acc.totalBetragStipendium + curr.berechnung,
+            berechnungsresultate: [...acc.berechnungsresultate, curr],
+          };
+        }, value)
+      : value;
   });
 
   calculateBerechnung$ = rxMethod<{ gesuchId: string }>(

@@ -269,6 +269,17 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner": "Verpflegung auswärts Partner:in",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
 
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Resultat",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.angenommen": "Anhand ihrer Angaben des Gesuchs wurde dies angenommen.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.abgelehnt": "Anhand ihrer Angaben des Gesuchs wurde dies abgelehnt.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Resultat: Stipendium gewährt",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Resultat: Stipendium abgelehnt",
+  "sachbearbeitung-app.verfuegung.zusammenfassung": "Zusammenfassung",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Details der Berechnung",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung  {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechung {{ index }}",
+
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
   "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Datum",
