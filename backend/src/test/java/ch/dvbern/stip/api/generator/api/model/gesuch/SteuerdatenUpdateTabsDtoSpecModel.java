@@ -10,7 +10,7 @@ import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 
 public class SteuerdatenUpdateTabsDtoSpecModel {
     public static SteuerdatenUpdateDtoSpec steuerdatenDtoSpec(final SteuerdatenTypDtoSpec steuerdatenTypDtoSpec) {
-        return TestUtil.createUpdateDtoSpec(SteuerdatenUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(SteuerdatenUpdateDtoSpec::new, (model) -> {
             model.setSteuerdatenTyp(steuerdatenTypDtoSpec);
             model.setTotalEinkuenfte(TestUtil.getRandomInt(1, 10000));
             model.setEigenmietwert(TestUtil.getRandomInt(1, 10000));
@@ -43,7 +43,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> {
+            (model) -> {
                 model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
                 model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             }
