@@ -21,6 +21,7 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isSuccess,
   pending,
   success,
 } from '@dv/shared/util/remote-data';
@@ -52,56 +53,9 @@ export class DokumentsStore extends signalStore(
   }));
 
   gesuchDokumentKommentareSig = computed(() => {
-    return [
-      // Dummy Data, remove in 994
-      {
-        id: '1',
-        kommentar: 'Ausbildungsjahres',
-        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
-        benutzer: {
-          vorname: 'Rud',
-          nachname: 'Test',
-        },
-        timestampErstellt: '2024-08-12T12:44:43.401Z',
-        gesuchId: '1',
-      },
-      {
-        id: '2',
-        kommentar:
-          'Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein Jahr',
-        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
-        benutzer: {
-          vorname: 'Rudolpho',
-          nachname: 'Testerinho Dominguez',
-        },
-        timestampErstellt: '2024-08-12T12:44:46.401Z',
-        gesuchId: '2',
-      },
-      {
-        id: '3',
-        kommentar:
-          ',Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein JahrAusbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein JahrAusbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein Jahr',
-        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
-        benutzer: {
-          vorname: 'Rudolpho',
-          nachname: 'Testerinho Dominguez',
-        },
-        timestampErstellt: '2024-08-12T12:44:46.401Z',
-        gesuchId: '3',
-      },
-      {
-        id: '4',
-        kommentar:
-          'Ausbildungsjahres, das heisst bei Ausbildungsbeginn im August ist es kein Jahr',
-        dokumentTyp: DokumentTyp.EK_BELEG_ALIMENTE,
-        benutzer: {
-          vorname: 'Rudolpho',
-          nachname: 'Testerinho Dominguez',
-        },
-        timestampErstellt: '2024-08-12T12:44:46.401Z',
-        gesuchId: '4',
-      },
-    ];
+    return isSuccess(this.gesuchDokumentKommentare())
+      ? this.gesuchDokumentKommentare().data
+      : [];
   });
 
   hasAbgelehnteDokumentsSig = computed(() => {

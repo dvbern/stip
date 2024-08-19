@@ -167,7 +167,7 @@
                 class="detail-cell"
                 [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
               >
-                @if (!dokumentsStore.gesuchDokumentKommentareSig().length) {
+                @if (!dokumentsStore.gesuchDokumentKommentareSig()?.length) {
                   <div class="text-center p-2">
                     {{ 'shared.dokumente.table.kommentar.empty' | translate }}
                   </div>
@@ -176,16 +176,13 @@
                     @for (kommentar of dokumentsStore.gesuchDokumentKommentareSig(); track $index) {
                       <div class="d-flex align-items-md-start gap-3">
                         <i class="material-symbols-rounded text-gray">person</i>
-                        <span>
-                          <span>{{ kommentar.benutzer.vorname }}</span>
-                          <span> {{ kommentar.benutzer.nachname }}</span>
-                        </span>
+                        <span>{{ kommentar.user_erstellt }}</span>
                       </div>
                       <div>
                         {{ kommentar.timestampErstellt | date: 'dd.MM.YYYY' }}
                       </div>
                       <div>
-                        {{ kommentar.kommentar }}
+                        {{ kommentar?.kommentar }}
                       </div>
                     }
                   </div>
