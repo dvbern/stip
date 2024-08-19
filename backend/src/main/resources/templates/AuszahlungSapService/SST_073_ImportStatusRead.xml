@@ -3,7 +3,7 @@
    <soapenv:Body>
       <urn:ImportStatusRead_Request>
          <SENDER>
-            <SYSID>{dto.sysId}</SYSID>
+            <SYSID>{data.sysId}</SYSID>
             <!--Optional:-->
             <BETRIEB/>
             <!--Optional:-->
@@ -11,7 +11,7 @@
          </SENDER>
          <FILTER_PARMS>
             <!--Optional:-->
-            <DELIVERY_ID>{dto.deliveryId}</DELIVERY_ID>
+            <DELIVERY_ID>{data.deliveryId}</DELIVERY_ID>
             <!--Optional:-->
             <SHOW_DETAILS>true</SHOW_DETAILS>
             <!--Optional:-->

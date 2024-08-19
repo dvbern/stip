@@ -1164,6 +1164,62 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungForGesuch
       summary: Berechnet und holt die Berechnung für ein Gesuch
+  /auszahlung/status/{deliveryId}:
+    parameters:
+      - name: deliveryId
+        schema:
+          type: integer
+        in: path
+        required: true
+    get:
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAuszahlungImportStatusResponse'
+          description: Get import status of a payment in SAP
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getImportStatus
+      summary: Get import status of a payment in SAP
+      description: 'Get import status of a payment in SAP'
+  /auszahlung/kreditor/create:
+    post:
+      tags:
+        - Auszahlung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuszahlungKreditor'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Create a new kreditor in SAP
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createKreditor
+      summary: Create a new kreditor in SAP
+      description: 'Create a new kreditor in SAP'
   /tenant/current:
     get:
       tags:
@@ -3237,12 +3293,10 @@ components:
         - extId
         - auszahlung
       properties:
-        sysId:
-          type: string
         deliveryId:
-          type: string
+          type: integer
         extId:
-          type: string
+          type: integer
         auszahlung:
           $ref: '#/components/schemas/Auszahlung'
     GetAuszahlungImportStatusRequest:
