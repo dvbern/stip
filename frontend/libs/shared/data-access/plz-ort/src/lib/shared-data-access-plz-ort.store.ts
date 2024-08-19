@@ -23,6 +23,7 @@ const initialState: PlzOrtState = {
 
 @Injectable({ providedIn: 'root' })
 export class PlzOrtStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('PlzStore'),
 ) {

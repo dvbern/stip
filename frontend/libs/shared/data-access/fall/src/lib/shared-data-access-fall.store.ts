@@ -25,6 +25,7 @@ const initialState: FallState = {
 
 @Injectable()
 export class FallStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('FallStore'),
 ) {
