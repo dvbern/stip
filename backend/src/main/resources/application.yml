@@ -92,7 +92,9 @@ quarkus:
     AuszahlungSapBusinessPartnerChangeEndpoint:
       url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerChange&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
     AuszahlungSapBusinessPartnerReadEndpoint:
-      url: ''
+      url: 'tbd'
+    AuszahlungSapVendorPostingCreateEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_VendorPostingCreate&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING'
 #    store-type: jdbc-tx
 
 '%dev':

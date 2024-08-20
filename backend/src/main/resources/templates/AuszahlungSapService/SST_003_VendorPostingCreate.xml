@@ -1,0 +1,79 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <urn:VendorPostingCreate_Request>
+      <SENDER>
+        <SYSID>{data.sysId}</SYSID>
+        <!--Optional:-->
+        <BETRIEB/>
+        <DELIVERY_ID>{data.deliveryId}</DELIVERY_ID>
+        <!--Optional:-->
+        <VERSION>1.0</VERSION>
+      </SENDER>
+      <!--1 or more repetitions:-->
+      <VENDOR_POSTING>
+        <HEADER>
+          <DOC_TYPE>YK</DOC_TYPE>
+          <COMP_CODE>4800</COMP_CODE>
+          <HEADER_TXT>4890</HEADER_TXT>
+          <REF_DOC_NO>0001544323</REF_DOC_NO>
+          <!--Optional:-->
+          <PAYMENT_REASON/>
+          <DOC_DATE>{data.docDate}</DOC_DATE>
+          <PSTNG_DATE>{data.pstingDate}</PSTNG_DATE>
+          <CURRENCY>CHF</CURRENCY>
+          <!--Optional:-->
+          <IKS_RELEVANT>false</IKS_RELEVANT>
+        </HEADER>
+        <VENDOR>
+          <VENDOR_NO>{data.vendorNo}</VENDOR_NO>
+          <AMT_DOCCUR>7162.0</AMT_DOCCUR>
+          <ZTERM>ZB04</ZTERM>
+          <!--Optional:-->
+          <ITEM_TEXT>POSITIONSTEXT (VENDOR)</ITEM_TEXT>
+        </VENDOR>
+        <PAYMENT_DETAIL>
+          <!--Optional:-->
+          <BANK_ID/>
+          <!--Optional:-->
+          <IBAN>
+            <IBAN>{data.auszahlung.iban}</IBAN>
+            <!--Optional:-->
+            <ACCOUNTHOLDER>{data.auszahlung.vorname} {data.auszahlung.nachname}</ACCOUNTHOLDER>
+          </IBAN>
+          <!--Optional:-->
+          <QR_IBAN>
+            <QRIBAN/>
+            <QRIBAN_ADDL_INFO>ZAHLUNGSZWECK</QRIBAN_ADDL_INFO>
+            <PO_REF_NO/>
+          </QR_IBAN>
+        </PAYMENT_DETAIL>
+        <!--1 to 9999 repetitions:-->
+        <GL_ACCOUNT>
+          <ITEMNO_ACC>1</ITEMNO_ACC>
+          <GL_ACCOUNT>363710000</GL_ACCOUNT>
+          <!--Optional:-->
+          <ORDERID>485100210001</ORDERID>
+          <!--Optional:-->
+          <TAX_CODE>V0</TAX_CODE>
+          <!--Optional:-->
+          <WBS_ELEM/>
+          <!--Optional:-->
+          <COSTCENTER/>
+          <!--Optional:-->
+          <ITEM_TEXT>POSITIONSTEXT (GL_ACCOUNT)</ITEM_TEXT>
+          <!--Optional:-->
+          <KBLNR/>
+          <!--Optional:-->
+          <REFSETERLK/>
+        </GL_ACCOUNT>
+        <!--1 to 9999 repetitions:-->
+        <POSITION>
+          <ITEMNO_ACC>1</ITEMNO_ACC>
+          <AMT_DOCCUR>17779.0</AMT_DOCCUR>
+        </POSITION>
+        <!--Zero or more repetitions:-->
+      </VENDOR_POSTING>
+    </urn:VendorPostingCreate_Request>
+  </soapenv:Body>
+</soapenv:Envelope>

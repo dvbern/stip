@@ -14,6 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDtoSpec;
+import ch.dvbern.stip.generated.dto.CreateAuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDtoSpec;
 import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -60,6 +61,7 @@ public class AuszahlungApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 changeKreditor(),
+                createAuszahlung(),
                 createKreditor(),
                 getImportStatus()
         );
@@ -67,6 +69,10 @@ public class AuszahlungApiSpec {
 
     public ChangeKreditorOper changeKreditor() {
         return new ChangeKreditorOper(createReqSpec());
+    }
+
+    public CreateAuszahlungOper createAuszahlung() {
+        return new CreateAuszahlungOper(createReqSpec());
     }
 
     public CreateKreditorOper createKreditor() {
@@ -155,6 +161,78 @@ public class AuszahlungApiSpec {
          * @return operation
          */
         public ChangeKreditorOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * create a payment in SAP
+     * create a payment in SAP
+     *
+     * @see #body  (required)
+     * return String
+     */
+    public static class CreateAuszahlungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/auszahlung/create";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateAuszahlungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /auszahlung/create
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /auszahlung/create
+         * @param handler handler
+         * @return String
+         */
+        public String executeAs(Function<Response, Response> handler) {
+            TypeRef<String> type = new TypeRef<String>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param createAuszahlungDtoSpec (CreateAuszahlungDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateAuszahlungOper body(CreateAuszahlungDtoSpec createAuszahlungDtoSpec) {
+            reqSpec.setBody(createAuszahlungDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateAuszahlungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateAuszahlungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
