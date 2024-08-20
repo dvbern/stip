@@ -196,6 +196,9 @@
               [maskito]="maskitoNumber"
               type="text"
             />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
           </mat-form-field>
 
           @if (ergaenzungsleistungenPartnerDocumentSig(); as options) {
@@ -220,6 +223,9 @@
               [maskito]="maskitoNumber"
               type="text"
             />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
           </mat-form-field>
 
           @if (sozialhilfePartnerDocumentSig(); as options) {

@@ -95,10 +95,10 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     vermoegen: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     steuernKantonGemeinde: [<string | null>null, [Validators.required]],
-    ergaenzungsleistungen: [<string | null>null, []],
-    ergaenzungsleistungenPartner: [<string | null>null, []],
-    sozialhilfebeitraege: [<string | null>null, []],
-    sozialhilfebeitraegePartner: [<string | null>null, []],
+    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
+    ergaenzungsleistungenPartner: [<string | null>null, [Validators.required]],
+    sozialhilfebeitraege: [<string | null>null, [Validators.required]],
+    sozialhilfebeitraegePartner: [<string | null>null, [Validators.required]],
     steuernBund: [<string | null>null, [Validators.required]],
     fahrkosten: [<string | null>null, [Validators.required]],
     fahrkostenPartner: [<string | null>null, [Validators.required]],
@@ -175,14 +175,19 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   );
   ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
     const steuerdatenTyp = this.stepSig().type;
-    const ergaenzungsleistung = this.ergaenzungsleistungChangedSig();
+    const ergaenzungsleistung =
+      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
+      0;
 
-    return ergaenzungsleistung
+    return ergaenzungsleistung > 0
       ? `STEUERDATEN_ERGAENZUNGSLEISTUNGEN_${defaultVater(steuerdatenTyp)}`
       : null;
   });
   ergaenzungsleistungenPartnerDocumentSig = this.createUploadOptionsSig(() => {
-    const ergaenzungsleistung = this.ergaenzungsleistungPartnerChangedSig();
+    const ergaenzungsleistung =
+      fromFormatedNumber(
+        this.ergaenzungsleistungPartnerChangedSig() ?? undefined,
+      ) ?? 0;
 
     return ergaenzungsleistung
       ? 'STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER'
@@ -197,14 +202,16 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   );
   sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
     const steuerdatenTyp = this.stepSig().type;
-    const sozialhilfe = this.sozialhilfeChangedSig();
+    const sozialhilfe =
+      fromFormatedNumber(this.sozialhilfeChangedSig() ?? undefined) ?? 0;
 
-    return sozialhilfe
+    return sozialhilfe > 0
       ? `STEUERDATEN_SOZIALHILFEBUDGET_${defaultVater(steuerdatenTyp)}`
       : null;
   });
   sozialhilfePartnerDocumentSig = this.createUploadOptionsSig(() => {
-    const sozialhilfe = this.sozialhilfePartnerChangedSig();
+    const sozialhilfe =
+      fromFormatedNumber(this.sozialhilfePartnerChangedSig() ?? undefined) ?? 0;
 
     return sozialhilfe ? 'STEUERDATEN_SOZIALHILFEBUDGET_MUTTER' : null;
   });
@@ -246,6 +253,23 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
         });
       }
     });
+
+    effect(
+      () => {
+        const steuerdatenTyp = this.stepSig().type;
+        const partnerRequired = steuerdatenTyp === 'FAMILIE';
+
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.ergaenzungsleistungenPartner,
+          partnerRequired,
+        );
+        this.hiddenFieldSet.setFieldVisibility(
+          this.form.controls.sozialhilfebeitraegePartner,
+          partnerRequired,
+        );
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   handleSave(): void {
@@ -283,7 +307,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'totalEinkuenfte',
-      'eigenmietwert',
       'arbeitsverhaeltnis',
       'saeule3a',
       'saeule2',
@@ -291,7 +314,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       'ergaenzungsleistungen',
       'ergaenzungsleistungenPartner',
       'sozialhilfebeitraege',
-      'sozialhilfebeitraegePartner',
+      'ergaenzungsleistungenPartner',
       'vermoegen',
       'wohnkosten',
       'steuernKantonGemeinde',
