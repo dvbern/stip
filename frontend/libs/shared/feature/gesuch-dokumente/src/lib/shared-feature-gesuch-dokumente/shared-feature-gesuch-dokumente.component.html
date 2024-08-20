@@ -206,13 +206,11 @@
                 class="detail-cell"
                 [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
               >
-                <div class="py-2">
-                  @for (kommentar of kommentareRd.data; track $index) {
-                    <div>
-                      {{ kommentar?.kommentar }}
-                    </div>
-                  }
-                </div>
+                @for (kommentar of kommentareRd.data; track $index) {
+                  <div class="py-2">
+                    {{ kommentar?.kommentar ?? ' ' }}
+                  </div>
+                }
               </div>
             </td>
           </ng-container>
