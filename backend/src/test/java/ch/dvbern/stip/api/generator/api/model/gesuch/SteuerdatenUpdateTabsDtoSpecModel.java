@@ -31,7 +31,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setSozialhilfebeitraege(100);
             model.setSozialhilfebeitraegePartner(100);
             model.setErgaenzungsleistungen(100);
-            model.setSozialhilfebeitraegePartner(100);
+            model.setErgaenzungsleistungenPartner(100);
             model.setWohnkosten(100);
         });
     }
