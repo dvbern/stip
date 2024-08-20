@@ -14,18 +14,12 @@
   min-width: 8rem;
 }
 
-.grid-3-cols {
+.grid-2-cols {
   display: grid;
-  grid-template-columns: 25% 16% auto;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-
-  @media screen and (max-width: 570px) {
-      grid-template-columns: 25% 16% auto;
-  }
 }
 
 .required-document {
   min-width: 400px;
 }
-
-

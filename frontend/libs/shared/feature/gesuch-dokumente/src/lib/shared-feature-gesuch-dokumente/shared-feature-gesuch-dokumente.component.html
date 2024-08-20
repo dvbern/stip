@@ -51,11 +51,17 @@
           <ng-container matColumnDef="expander">
             <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
             <td class="expander-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-              @if (expandedRowId === dokument.dokumentTyp) {
-                <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
-              } @else {
-                <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
-              }
+              <button
+                class="btn btn-link"
+                [disabled]="dokument.gesuchDokument?.status === DokumentStatus.AUSSTEHEND"
+                type="button"
+              >
+                @if (expandedRowId === dokument.dokumentTyp) {
+                  <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
+                } @else {
+                  <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
+                }
+              </button>
             </td>
           </ng-container>
 
@@ -155,38 +161,58 @@
             </td>
           </ng-container>
 
-          <!-- expandedDetail -->
-          <ng-container matColumnDef="expandedDetail">
+          @let kommentareRd = dokumentsStore.gesuchDokumentKommentare();
+
+          <!-- detailColumns / Bearbeiter und Zeit  -->
+          <ng-container matColumnDef="barbeiterUndZeit">
             <td
               class="expander-cell"
               mat-cell
-              [attr.colspan]="displayedColumns.length"
+              [attr.colspan]="2"
               *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
             >
               <div
                 class="detail-cell"
                 [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
               >
-                @if (!dokumentsStore.gesuchDokumentKommentareSig()?.length) {
-                  <div class="text-center p-2">
-                    {{ 'shared.dokumente.table.kommentar.empty' | translate }}
-                  </div>
+                @if (kommentareRd | rdIsPending) {
+                  <dv-shared-ui-loading class="pb-2" type="icon"></dv-shared-ui-loading>
                 } @else {
-                  <div class="ms-5 grid-3-cols p-2">
-                    @for (kommentar of dokumentsStore.gesuchDokumentKommentareSig(); track $index) {
-                      <div class="d-flex align-items-md-start gap-3">
+                  <div class="grid-2-cols py-2">
+                    @for (kommentar of kommentareRd.data; track $index) {
+                      <div class="d-flex gap-4">
                         <i class="material-symbols-rounded text-gray">person</i>
                         <span>{{ kommentar.user_erstellt }}</span>
                       </div>
                       <div class="text-muted">
-                        {{ kommentar.timestampErstellt | date: 'dd.MMMM.YYYY hh:mm' }}
-                      </div>
-                      <div>
-                        {{ kommentar?.kommentar }}
+                        {{ kommentar.timestampErstellt | date: 'dd.MMMM.YYYY' }}
                       </div>
                     }
                   </div>
                 }
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- detailColumns / Kommentar -->
+          <ng-container matColumnDef="kommentar">
+            <td
+              class="expander-cell"
+              mat-cell
+              [attr.colspan]="3"
+              *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
+            >
+              <div
+                class="detail-cell"
+                [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
+              >
+                <div class="py-2">
+                  @for (kommentar of kommentareRd.data; track $index) {
+                    <div>
+                      {{ kommentar?.kommentar }}
+                    </div>
+                  }
+                </div>
               </div>
             </td>
           </ng-container>

@@ -21,7 +21,6 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
-  isSuccess,
   pending,
   success,
 } from '@dv/shared/util/remote-data';
@@ -52,12 +51,6 @@ export class DokumentsStore extends signalStore(
     dokuments: fromCachedDataSig(this.dokuments) ?? [],
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
-
-  gesuchDokumentKommentareSig = computed(() => {
-    return isSuccess(this.gesuchDokumentKommentare())
-      ? this.gesuchDokumentKommentare().data
-      : [];
-  });
 
   hasAbgelehnteDokumentsSig = computed(() => {
     return (

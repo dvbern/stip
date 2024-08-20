@@ -19,10 +19,13 @@
     }
 
     &.expanded-row {
-
       > .mat-mdc-cell {
         border-bottom: none;
       }
+    }
+
+    .mat-column-documentName {
+      padding: 10px;
     }
 
     &:hover:not(.expanded-row, .detail-row) {
@@ -32,6 +35,10 @@
     &.detail-row {
       height: 0;
     }
+  }
+
+  .btn-link {
+    padding: 0;
   }
 
   .expander-cell {

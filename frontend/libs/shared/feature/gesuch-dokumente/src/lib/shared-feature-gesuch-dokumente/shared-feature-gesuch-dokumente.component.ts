@@ -29,7 +29,11 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
-import { DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
+import {
+  DokumentTyp,
+  Dokumentstatus,
+  GesuchDokument,
+} from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
   getFormStepByDocumentType,
@@ -48,6 +52,7 @@ import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
@@ -70,6 +75,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     SharedUiPrefixAppTypePipe,
     TypeSafeMatCellDefDirective,
     MatExpansionPanel,
+    SharedUiRdIsPendingPipe,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
@@ -92,7 +98,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
-  detailColumns = ['expandedDetail'];
+  detailColumns = ['barbeiterUndZeit', 'kommentar'];
 
   displayedColumns = [
     'expander',
@@ -101,6 +107,8 @@ export class SharedFeatureGesuchDokumenteComponent {
     'status',
     'actions',
   ];
+
+  DokumentStatus = Dokumentstatus;
 
   expandedRowId: string | null = null;
 
@@ -243,6 +251,10 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   expandRow(dokument: SharedModelTableDokument) {
+    if (dokument.gesuchDokument?.status === Dokumentstatus.AUSSTEHEND) {
+      return;
+    }
+
     if (this.expandedRowId === dokument.dokumentTyp) {
       this.expandedRowId = null;
     } else {
