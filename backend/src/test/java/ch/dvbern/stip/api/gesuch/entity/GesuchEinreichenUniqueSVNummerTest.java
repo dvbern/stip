@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -11,9 +12,12 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +45,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @Order(1)
     @TestAsGesuchsteller
     void gesuchEinreichtenWithUniqueSvNummerAccepted() {
+        RestAssured.filters(new RequestLoggingFilter());
         UUID gesuchId = createFullGesuch();
 
         final var file = TestUtil.getTestPng();
@@ -59,6 +64,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @Order(2)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
+        RestAssured.filters(new RequestLoggingFilter());
         UUID gesuchId = createFullGesuch(); //neues Gesuch mit selber AHV-Nummer wird erstellt
 
         var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
@@ -90,14 +96,16 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .body()
             .as(GesuchDtoSpec.class)
             .getGesuchTrancheToWorkWith().getId();
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung()
             .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
-
+        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = TestUtil.createSteuerdatenUpdateDtoSpec();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().add(steuerdatenUpdateDto);
         gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()

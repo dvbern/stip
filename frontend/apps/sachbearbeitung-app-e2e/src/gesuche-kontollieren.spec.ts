@@ -13,7 +13,7 @@ const test = base.extend<{ cockpit: CockpitPO }>({
 });
 
 test.describe('Sachbearbeiter App: Gesuche Kontrollieren', () => {
-  test('Gesuch ist vorhanden  ', async ({ cockpit }) => {
+  test('Gesuch ist vorhanden', async ({ cockpit }) => {
     await expect(cockpit.elems.title).toHaveText('Gesuche');
   });
 });

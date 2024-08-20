@@ -20,6 +20,6 @@ export class CockpitPO {
   }
 
   public getGesuchNew() {
-    return this.page.getByTestId('cockpit-gesuch-new');
+    return this.page.getByTestId('cockpit-gesuch-new').first();
   }
 }

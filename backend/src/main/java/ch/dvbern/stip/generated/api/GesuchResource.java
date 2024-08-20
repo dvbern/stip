@@ -1,7 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import java.util.UUID;
-
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import jakarta.validation.Valid;
@@ -27,6 +27,12 @@ public interface GesuchResource {
     Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
+    @Path("/{gesuchId}/aenderungsantrag")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response createAenderungsantrag(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AenderungsantragCreateDto aenderungsantragCreateDto);
+
+    @POST
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
     Response createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
@@ -50,6 +56,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
     Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/aenderungsantrag")
+    @Produces({ "application/json", "text/plain" })
+    Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")

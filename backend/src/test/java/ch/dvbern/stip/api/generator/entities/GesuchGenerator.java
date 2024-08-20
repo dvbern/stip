@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
@@ -42,7 +43,7 @@ public final class GesuchGenerator {
     }
 
     public static GesuchUpdateDto createFullGesuch() {
-        GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
+        GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
         return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
     }
 
@@ -55,6 +56,8 @@ public final class GesuchGenerator {
         gesuchFormularToWorkWith.setLebenslaufItems(createLebenslaufItems());
         gesuchFormularToWorkWith.setAuszahlung(createAuszahlung());
         gesuchFormularToWorkWith.setPartner(createPartner());
+        gesuchFormularToWorkWith.setSteuerdaten(new ArrayList<>());
+        gesuchFormularToWorkWith.getSteuerdaten().add(new SteuerdatenUpdateDtoSpec());
 
         GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec = createGesuchTranche();
         gesuchTrancheDtoSpec.setGesuchFormular(gesuchFormularToWorkWith);
@@ -66,7 +69,7 @@ public final class GesuchGenerator {
     }
 
     private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
-        return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs;
+        return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
     }
 
     public static Gesuch initGesuch() {
@@ -97,7 +100,7 @@ public final class GesuchGenerator {
     }
 
     private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
-        final var familienSituationUpdateDto = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec;
+        final var familienSituationUpdateDto = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec();
         familienSituationUpdateDto.setElternVerheiratetZusammen(true);
         return familienSituationUpdateDto;
     }
@@ -117,23 +120,23 @@ public final class GesuchGenerator {
     }
 
     private static PartnerUpdateDtoSpec createPartner() {
-        PartnerUpdateDtoSpec partnerDtoSpec = PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec;
+        PartnerUpdateDtoSpec partnerDtoSpec = PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec();
         return partnerDtoSpec;
     }
 
     private static PersonInAusbildungUpdateDtoSpec createPersonInAusbildung() {
-        return PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec;
+        return PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec();
     }
 
     private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
         EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto =
-            EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec;
+            EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
         einnahmenKostenUpdateDto.setVerdienstRealisiert(false);
         return einnahmenKostenUpdateDto;
     }
 
     private static AuszahlungUpdateDtoSpec createAuszahlung() {
-        AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec;
+        AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
         auszahlungUpdateDto.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         return auszahlungUpdateDto;
     }

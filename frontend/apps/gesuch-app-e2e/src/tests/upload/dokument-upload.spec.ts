@@ -9,7 +9,7 @@ const { test } = initializeTest();
 
 test.describe('Dokument upload', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Person in Ausbildung - ', async ({ page, cockpit }) => {
+  test('Person in Ausbildung', async ({ page, cockpit }) => {
     const person = new PersonPO(page);
 
     await selectMatRadio(person.elems.sozialhilfeBeitraegeRadio, true);

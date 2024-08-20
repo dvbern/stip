@@ -20,7 +20,10 @@ public interface SteuerdatenMapper {
 
     Steuerdaten partialUpdate(SteuerdatenUpdateDto steuerdatenDto, @MappingTarget Steuerdaten steuerdaten);
 
-    default Set<Steuerdaten> map(final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos, final @MappingTarget Set<Steuerdaten> steuerdatenSet) {
+    default Set<Steuerdaten> map(
+        final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
+        final @MappingTarget Set<Steuerdaten> steuerdatenSet
+    ) {
         if (steuerdatenUpdateDtos.isEmpty()) {
             steuerdatenSet.clear();
         }

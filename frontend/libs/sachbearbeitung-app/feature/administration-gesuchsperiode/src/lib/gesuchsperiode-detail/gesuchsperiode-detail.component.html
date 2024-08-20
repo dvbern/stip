@@ -83,7 +83,6 @@
             formControlName="gesuchsjahrId"
             data-testid="form-gesuchsperiode-gesuchsjahr"
             [placeholder]="'shared.form.select.empty' | translate"
-            [disabled]="store.gesuchsjahre() | rdIsPending"
           >
             @for (jahr of store.gesuchsjahre.data(); track $index) {
               <mat-option [attr.data-testid]="'gesuchsjahr-' + jahr" [value]="jahr.id">
