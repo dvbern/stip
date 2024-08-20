@@ -20,14 +20,14 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setKinderalimente(TestUtil.getRandomInt(1, 10000));
             model.ergaenzungsleistungen(TestUtil.getRandomInt(1, 10000));
             model.setVermoegen(TestUtil.getRandomInt(1, 10000));
-            model.setSteuernStaat(TestUtil.getRandomInt(1, 10000));
+            model.setSteuernKantonGemeinde(TestUtil.getRandomInt(1, 10000));
             model.steuernBund(TestUtil.getRandomInt(1, 10000));
             model.setFahrkosten(TestUtil.getRandomInt(1, 10000));
             model.setFahrkostenPartner(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegung(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
-            model.setVeranlagungscode(0);
-            model.setSteuerjahr(2023);
+            model.setVeranlagungsCode(0);
+            model.setSteuerjahr(2022);
         });
     }
 
@@ -40,12 +40,13 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
         return list;
     }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten =
-        TestUtil.createUpdateDtoSpec(
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten() {
+        return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
             (model, faker) -> {
                 model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
-                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec);
+                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             }
         );
+    }
 }

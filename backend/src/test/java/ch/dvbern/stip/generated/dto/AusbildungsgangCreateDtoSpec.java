@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
-  AusbildungsgangCreateDtoSpec.JSON_PROPERTY_BILDUNGSART_ID,
+  AusbildungsgangCreateDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE_ID,
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID
 })
 @JsonTypeName("AusbildungsgangCreate")
@@ -42,8 +42,8 @@ public class AusbildungsgangCreateDtoSpec {
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
   private String bezeichnungFr;
 
-  public static final String JSON_PROPERTY_BILDUNGSART_ID = "bildungsartId";
-  private UUID bildungsartId;
+  public static final String JSON_PROPERTY_BILDUNGSKATEGORIE_ID = "bildungskategorieId";
+  private UUID bildungskategorieId;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID = "ausbildungsstaetteId";
   private UUID ausbildungsstaetteId;
@@ -103,29 +103,29 @@ public class AusbildungsgangCreateDtoSpec {
   }
 
 
-  public AusbildungsgangCreateDtoSpec bildungsartId(UUID bildungsartId) {
+  public AusbildungsgangCreateDtoSpec bildungskategorieId(UUID bildungskategorieId) {
     
-    this.bildungsartId = bildungsartId;
+    this.bildungskategorieId = bildungskategorieId;
     return this;
   }
 
    /**
-   * Get bildungsartId
-   * @return bildungsartId
+   * Get bildungskategorieId
+   * @return bildungskategorieId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSART_ID)
+  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getBildungsartId() {
-    return bildungsartId;
+  public UUID getBildungskategorieId() {
+    return bildungskategorieId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSART_ID)
+  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungsartId(UUID bildungsartId) {
-    this.bildungsartId = bildungsartId;
+  public void setBildungskategorieId(UUID bildungskategorieId) {
+    this.bildungskategorieId = bildungskategorieId;
   }
 
 
@@ -165,13 +165,13 @@ public class AusbildungsgangCreateDtoSpec {
     AusbildungsgangCreateDtoSpec ausbildungsgangCreate = (AusbildungsgangCreateDtoSpec) o;
     return Objects.equals(this.bezeichnungDe, ausbildungsgangCreate.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangCreate.bezeichnungFr) &&
-        Objects.equals(this.bildungsartId, ausbildungsgangCreate.bildungsartId) &&
+        Objects.equals(this.bildungskategorieId, ausbildungsgangCreate.bildungskategorieId) &&
         Objects.equals(this.ausbildungsstaetteId, ausbildungsgangCreate.ausbildungsstaetteId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungsartId, ausbildungsstaetteId);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, bildungskategorieId, ausbildungsstaetteId);
   }
 
   @Override
@@ -180,7 +180,7 @@ public class AusbildungsgangCreateDtoSpec {
     sb.append("class AusbildungsgangCreateDtoSpec {\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
-    sb.append("    bildungsartId: ").append(toIndentedString(bildungsartId)).append("\n");
+    sb.append("    bildungskategorieId: ").append(toIndentedString(bildungskategorieId)).append("\n");
     sb.append("    ausbildungsstaetteId: ").append(toIndentedString(ausbildungsstaetteId)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -32,6 +32,7 @@ const initialState: State = {
 
 @Injectable({ providedIn: 'root' })
 export class GlobalNotificationStore extends signalStore(
+  { protectedState: false },
   withDevtools('GlobalNotificationStore'),
   withState(initialState),
 ) {

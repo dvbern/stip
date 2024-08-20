@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,8 +59,8 @@ public class Steuerdaten extends AbstractEntity {
     private Integer vermoegen;
 
     @NotNull
-    @Column(name = "steuernStaat", nullable = false)
-    private Integer steuernStaat;
+    @Column(name = "steuernKantonGemeinde", nullable = false)
+    private Integer steuernKantonGemeinde;
 
     @NotNull
     @Column(name = "steuernBund", nullable = false)
@@ -68,16 +70,14 @@ public class Steuerdaten extends AbstractEntity {
     @Column(name = "fahrkosten", nullable = false)
     private Integer fahrkosten;
 
-    @NotNull
-    @Column(name = "fahrkostenPartner", nullable = false)
+    @Column(name = "fahrkostenPartner", nullable = true)
     private Integer fahrkostenPartner;
 
     @NotNull
     @Column(name = "verpflegung", nullable = false)
     private Integer verpflegung;
 
-    @NotNull
-    @Column(name = "verpflegungPartner", nullable = false)
+    @Column(name = "verpflegungPartner", nullable = true)
     private Integer verpflegungPartner;
 
     @NotNull
@@ -86,5 +86,7 @@ public class Steuerdaten extends AbstractEntity {
 
     @NotNull
     @Column(name = "veranlagungscode", nullable = false)
-    private Integer veranlagungscode = 0;
+    @Min(0)
+    @Max(99)
+    private Integer veranlagungsCode = 0;
 }

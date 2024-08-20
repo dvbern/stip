@@ -31,14 +31,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_ID,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
-  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_STAAT,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_BUND,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERPFLEGUNG,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERJAHR,
-  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERANLAGUNGSCODE,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_TOTAL_EINKUENFTE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_EIGENMIETWERT,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG,
@@ -57,8 +57,8 @@ public class SteuerdatenUpdateDtoSpec {
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
-  public static final String JSON_PROPERTY_STEUERN_STAAT = "steuernStaat";
-  private Integer steuernStaat;
+  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
+  private Integer steuernKantonGemeinde;
 
   public static final String JSON_PROPERTY_STEUERN_BUND = "steuernBund";
   private Integer steuernBund;
@@ -78,8 +78,8 @@ public class SteuerdatenUpdateDtoSpec {
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
 
-  public static final String JSON_PROPERTY_VERANLAGUNGSCODE = "veranlagungscode";
-  private Integer veranlagungscode;
+  public static final String JSON_PROPERTY_VERANLAGUNGS_CODE = "veranlagungsCode";
+  private Integer veranlagungsCode;
 
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
   private Integer totalEinkuenfte;
@@ -160,29 +160,29 @@ public class SteuerdatenUpdateDtoSpec {
   }
 
 
-  public SteuerdatenUpdateDtoSpec steuernStaat(Integer steuernStaat) {
+  public SteuerdatenUpdateDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
     
-    this.steuernStaat = steuernStaat;
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
    /**
-   * Get steuernStaat
-   * @return steuernStaat
+   * Get steuernKantonGemeinde
+   * @return steuernKantonGemeinde
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSteuernStaat() {
-    return steuernStaat;
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
 
@@ -326,9 +326,9 @@ public class SteuerdatenUpdateDtoSpec {
    * Get steuerjahr
    * @return steuerjahr
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_STEUERJAHR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getSteuerjahr() {
     return steuerjahr;
@@ -336,35 +336,35 @@ public class SteuerdatenUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STEUERJAHR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSteuerjahr(Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
   }
 
 
-  public SteuerdatenUpdateDtoSpec veranlagungscode(Integer veranlagungscode) {
+  public SteuerdatenUpdateDtoSpec veranlagungsCode(Integer veranlagungsCode) {
     
-    this.veranlagungscode = veranlagungscode;
+    this.veranlagungsCode = veranlagungsCode;
     return this;
   }
 
    /**
-   * Get veranlagungscode
-   * @return veranlagungscode
+   * Get veranlagungsCode
+   * @return veranlagungsCode
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGSCODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getVeranlagungscode() {
-    return veranlagungscode;
+  public Integer getVeranlagungsCode() {
+    return veranlagungsCode;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGSCODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVeranlagungscode(Integer veranlagungscode) {
-    this.veranlagungscode = veranlagungscode;
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVeranlagungsCode(Integer veranlagungsCode) {
+    this.veranlagungsCode = veranlagungsCode;
   }
 
 
@@ -586,14 +586,14 @@ public class SteuerdatenUpdateDtoSpec {
     SteuerdatenUpdateDtoSpec steuerdatenUpdate = (SteuerdatenUpdateDtoSpec) o;
     return Objects.equals(this.id, steuerdatenUpdate.id) &&
         Objects.equals(this.steuerdatenTyp, steuerdatenUpdate.steuerdatenTyp) &&
-        Objects.equals(this.steuernStaat, steuerdatenUpdate.steuernStaat) &&
+        Objects.equals(this.steuernKantonGemeinde, steuerdatenUpdate.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, steuerdatenUpdate.steuernBund) &&
         Objects.equals(this.fahrkosten, steuerdatenUpdate.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, steuerdatenUpdate.fahrkostenPartner) &&
         Objects.equals(this.verpflegung, steuerdatenUpdate.verpflegung) &&
         Objects.equals(this.verpflegungPartner, steuerdatenUpdate.verpflegungPartner) &&
         Objects.equals(this.steuerjahr, steuerdatenUpdate.steuerjahr) &&
-        Objects.equals(this.veranlagungscode, steuerdatenUpdate.veranlagungscode) &&
+        Objects.equals(this.veranlagungsCode, steuerdatenUpdate.veranlagungsCode) &&
         Objects.equals(this.totalEinkuenfte, steuerdatenUpdate.totalEinkuenfte) &&
         Objects.equals(this.eigenmietwert, steuerdatenUpdate.eigenmietwert) &&
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdatenUpdate.isArbeitsverhaeltnisSelbstaendig) &&
@@ -606,7 +606,7 @@ public class SteuerdatenUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungscode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
+    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
   }
 
   @Override
@@ -615,14 +615,14 @@ public class SteuerdatenUpdateDtoSpec {
     sb.append("class SteuerdatenUpdateDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
-    sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
-    sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
+    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");

@@ -135,7 +135,7 @@ GesuchsperiodeSeeding extends Seeder{
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT)
             .setPreisProMahlzeit(7)
             .setMaxSaeule3a(7000)
-            .setAnzahlWochenLehre(42)
-            .setAnzahlWochenSchule(37);
+            .setAnzahlWochenLehre(47)
+            .setAnzahlWochenSchule(38);
     }
 }

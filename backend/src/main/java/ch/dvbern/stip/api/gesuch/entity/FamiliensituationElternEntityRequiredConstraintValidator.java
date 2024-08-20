@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.Set;
+
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
@@ -24,30 +27,34 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
         if (gesuchFormular.getFamiliensituation() == null) {
             return true;
         }
-        if (isElternTeilRequired(ElternTyp.MUTTER, gesuchFormular.getFamiliensituation())) {
-            if (gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
-                .findAny()
-                .isEmpty()) {
-                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+
+        final var mutterValid = isElternTeilRequiredAndVorhanden(ElternTyp.MUTTER, gesuchFormular, constraintValidatorContext);
+        final var vaterValid = isElternTeilRequiredAndVorhanden(ElternTyp.VATER, gesuchFormular, constraintValidatorContext);
+
+        return mutterValid && vaterValid;
+    }
+
+    private boolean isElternTeilRequiredAndVorhanden(
+        final ElternTyp elternTyp,
+        final GesuchFormular gesuchFormular,
+        final ConstraintValidatorContext constraintValidatorContext
+    ) {
+        var isValid = true;
+        if (isElternTeilRequired(elternTyp, gesuchFormular.getFamiliensituation())) {
+            if (!isElternTeilVorhanden(elternTyp, gesuchFormular.getElterns())) {
+                isValid = GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
             }
-        } else if (gesuchFormular.getElterns()
-            .stream()
-            .anyMatch(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)) {
-            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
-        }
-        if (isElternTeilRequired(ElternTyp.VATER, gesuchFormular.getFamiliensituation())) {
-            return gesuchFormular.getElterns()
-                .stream()
-                .anyMatch(eltern -> eltern.getElternTyp() == ElternTyp.VATER);
         } else {
-            return gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-                .findAny()
-                .isEmpty();
+            if (isElternTeilVorhanden(elternTyp, gesuchFormular.getElterns())) {
+                isValid = GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+            }
         }
+
+        return isValid;
+    }
+
+    private boolean isElternTeilVorhanden(final ElternTyp elternTyp, final Set<Eltern> eltern) {
+        return eltern.stream().anyMatch(elternTeil -> elternTeil.getElternTyp() == elternTyp);
     }
 
     private boolean isElternTeilRequired(ElternTyp elternTyp, Familiensituation familiensituation) {

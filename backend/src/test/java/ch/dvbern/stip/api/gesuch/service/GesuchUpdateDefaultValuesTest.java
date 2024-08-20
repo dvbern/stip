@@ -5,7 +5,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -55,7 +55,7 @@ class GesuchUpdateDefaultValuesTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(99));
@@ -76,7 +76,7 @@ class GesuchUpdateDefaultValuesTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
@@ -97,7 +97,7 @@ class GesuchUpdateDefaultValuesTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
@@ -119,7 +119,7 @@ class GesuchUpdateDefaultValuesTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
 
 

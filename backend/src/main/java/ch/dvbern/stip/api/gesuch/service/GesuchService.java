@@ -19,10 +19,8 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -37,13 +35,13 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -57,9 +55,11 @@ import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -69,6 +69,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -78,7 +79,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE;
 
@@ -101,6 +101,7 @@ public class GesuchService {
     private final RequiredDokumentService requiredDokumentService;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
+    private final FallRepository fallRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuch(UUID id) {
@@ -110,7 +111,8 @@ public class GesuchService {
     @Transactional
     public void setAndValidateEinnahmenkostenUpdateLegality(
         final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
-        final GesuchTranche trancheToUpdate) {
+        final GesuchTranche trancheToUpdate
+    ) {
         final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
             .getRollen()
             .stream()
@@ -122,47 +124,80 @@ public class GesuchService {
             .getGesuchsperiode()
             .getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-
         Integer veranlagungsCodeToSet = 0;
-        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
 
-        if (!CollectionUtils.containsAny(
-            benutzerRollenIdentifiers,
-            Arrays.asList(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN))) {
-            if (einnahmenKosten != null) {
-                steuerjahrToSet = Objects.requireNonNullElse(
-                    einnahmenKosten.getSteuerjahr(),
-                    steuerjahrToSet
-                );
-                veranlagungsCodeToSet = Objects.requireNonNullElse(
-                    einnahmenKosten.getVeranlagungsCode(),
-                    veranlagungsCodeToSet
-                );
-            }
-        } else {
-            if (einnahmenKostenUpdateDto.getSteuerjahr() == null) {
-                if (einnahmenKosten != null) {
-                    steuerjahrToSet = Objects.requireNonNullElse(
-                        einnahmenKosten.getSteuerjahr(),
-                        steuerjahrToSet
-                    );
-                }
-            } else {
-                steuerjahrToSet = einnahmenKostenUpdateDto.getSteuerjahr();
-            }
-            if (einnahmenKostenUpdateDto.getVeranlagungsCode() == null) {
-                if (einnahmenKosten != null) {
-                    veranlagungsCodeToSet = Objects.requireNonNullElse(
-                        einnahmenKosten.getVeranlagungsCode(),
-                        veranlagungsCodeToSet
-                    );
-                }
-            } else {
-                veranlagungsCodeToSet = einnahmenKostenUpdateDto.getVeranlagungsCode();
-            }
+        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+        if (einnahmenKosten != null) {
+            final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
+            final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
+            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+            steuerjahrToSet = ValidateUpdateLegalityUtil
+                .getAndValidateLegalityValue(benutzerRollenIdentifiers,
+                    steuerjahrDtoValue, steuerjahrExistingValue, steuerjahrDefaultValue);
+
+            final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
+            final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
+            final Integer veranlagungscodeDefaltValue = 0;
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil
+                .getAndValidateLegalityValue(benutzerRollenIdentifiers,
+                    veranlagungsCodeDtoValue, veranlagungsCodeExistingValue, veranlagungscodeDefaltValue);
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
         einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
+    }
+
+    @Transactional
+    public void setAndValidateSteuerdatenUpdateLegality(
+        final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
+        final GesuchTranche trancheToUpdate
+    ) {
+        final var gesuchsjahr = trancheToUpdate
+            .getGesuch()
+            .getGesuchsperiode()
+            .getGesuchsjahr();
+
+        final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream()
+            .filter(tab -> tab.getSteuerdatenTyp() != null).toList();
+
+        for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos) {
+            setAndValidateSteuerdatenTabUpdateLegality(steuerdatenUpdateDto,
+                steuerdatenList.stream().filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId())).
+                    findFirst().orElse(null), gesuchsjahr);
+        }
+    }
+
+    private void setAndValidateSteuerdatenTabUpdateLegality(
+        final SteuerdatenUpdateDto steuerdatenUpdateDto,
+        final Steuerdaten steuerdatenTabs,
+        Gesuchsjahr gesuchsjahr
+    ) {
+        final var benutzerRollenIdentifiers = benutzerService.getCurrentBenutzer()
+            .getRollen()
+            .stream()
+            .map(Rolle::getKeycloakIdentifier)
+            .collect(Collectors.toSet());
+
+        Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+        Integer veranlagungsCodeToSet = 0;
+
+        if (steuerdatenTabs != null) {
+            final Integer steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
+            final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
+            final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+            steuerjahrToSet = ValidateUpdateLegalityUtil.
+                getAndValidateLegalityValue(benutzerRollenIdentifiers,
+                    steuerjahrDtoValue, steuerjahrExistingValue, steuerjahrDefaultValue);
+
+            final Integer veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
+            final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
+            final Integer veranlagungscodeDefaltValue = 0;
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.
+                getAndValidateLegalityValue(benutzerRollenIdentifiers, veranlagungsCodeDtoValue,
+                    veranlagungsCodeExistingValue, veranlagungscodeDefaltValue);
+        }
+
+        steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
+        steuerdatenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
     }
 
     @Transactional
@@ -184,6 +219,15 @@ public class GesuchService {
                     .getEinnahmenKosten(),
                 trancheToUpdate
             );
+        }
+        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
+            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()) {
+            setAndValidateSteuerdatenUpdateLegality(
+                gesuchUpdateDto
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getSteuerdaten(),
+                trancheToUpdate);
         }
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
@@ -366,8 +410,8 @@ public class GesuchService {
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
+                validationGroups.contains(AusbildungPageValidation.class) &&
+                !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }

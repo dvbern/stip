@@ -14,14 +14,14 @@ import { SteuerdatenTyp } from './steuerdatenTyp';
 export interface SteuerdatenUpdate { 
     id?: string;
     steuerdatenTyp: SteuerdatenTyp;
-    steuernStaat: number;
+    steuernKantonGemeinde: number;
     steuernBund: number;
     fahrkosten: number;
     fahrkostenPartner?: number;
     verpflegung: number;
     verpflegungPartner?: number;
-    steuerjahr: number;
-    veranlagungscode: number;
+    steuerjahr?: number;
+    veranlagungsCode?: number;
     totalEinkuenfte: number;
     eigenmietwert: number;
     isArbeitsverhaeltnisSelbstaendig: boolean;

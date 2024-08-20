@@ -4,7 +4,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import {
+  SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
+} from '@dv/shared/ui/format-chf-pipe';
 
 import { BerechnungsExpansionPanelComponent } from './berechnungs-expansion-panel.component';
 import { Berechnung } from '../../../models';
@@ -19,6 +22,7 @@ import { Berechnung } from '../../../models';
     MatExpansionModule,
     TranslateModule,
     SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
     BerechnungsExpansionPanelComponent,
   ],
   template: `
@@ -75,7 +79,7 @@ import { Berechnung } from '../../../models';
                     '.total' | translate
                 }}
                 <span class="text-nowrap">{{
-                  berechnung.total | formatChf: true
+                  berechnung.total | formatChfNegative
                 }}</span>
               </div>
             </div>

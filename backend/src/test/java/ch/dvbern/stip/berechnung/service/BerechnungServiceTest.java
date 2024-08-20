@@ -7,8 +7,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.bildungsart.entity.Bildungsart;
-import ch.dvbern.stip.api.bildungsart.type.Bildungsstufe;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -123,9 +123,9 @@ class BerechnungServiceTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.TERTIAER)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
                         )
                 )
         );
@@ -199,12 +199,11 @@ class BerechnungServiceTest {
                     .setVerpflegungPartner(0)
                     .setFahrkosten(3696)
                     .setFahrkostenPartner(0)
-                    // .setIntegrationszulage(7200) TODO: Missing
                     .setSteuernBund(0)
-                    .setSteuernStaat(0)
+                    .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(1026)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setErgaenzungsleistungen(21000 - 2400)  // TODO: adaption for integrationszulage
+                    .setErgaenzungsleistungen(21000)
             )
         );
 
@@ -212,9 +211,9 @@ class BerechnungServiceTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.SEKUNDAR_2)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
                         )
                 )
         );
@@ -283,11 +282,10 @@ class BerechnungServiceTest {
                     .setVerpflegungPartner(0)
                     .setFahrkosten(3696)
                     .setFahrkostenPartner(0)
-                    // .setIntegrationszulage(7200) TODO: Missing
                     .setSteuernBund(0)
-                    .setSteuernStaat(1857)
+                    .setSteuernKantonGemeinde(1857)
                     .setEigenmietwert(10500)
-                    .setTotalEinkuenfte(87516 - 7200) // TODO: adaption for integrationszulage
+                    .setTotalEinkuenfte(87516)
                     .setSaeule2(1500)
                     .setVermoegen(100000)
                     .setIsArbeitsverhaeltnisSelbstaendig(true)
@@ -298,9 +296,11 @@ class BerechnungServiceTest {
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
                     .setWohnsitz(Wohnsitz.FAMILIE)
                     .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(17)),
                 (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
                     .setWohnsitz(Wohnsitz.FAMILIE)
                     .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(27))
             )
@@ -310,9 +310,9 @@ class BerechnungServiceTest {
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setBildungsart(
-                            new Bildungsart()
-                                .setBildungsstufe(Bildungsstufe.SEKUNDAR_2)
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
                         )
                 )
         );

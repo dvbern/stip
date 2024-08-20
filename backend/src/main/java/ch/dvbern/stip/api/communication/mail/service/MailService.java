@@ -40,7 +40,10 @@ public class MailService {
         Templates.getStandardNotification(name, vorname, language)
             .to(receiver)
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
-            .send().subscribe().asCompletionStage();
+            .send()
+            .onFailure().invoke(this::handleFailure)
+            .subscribe()
+            .asCompletionStage();
     }
 
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
@@ -52,7 +55,10 @@ public class MailService {
         Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), redirectURI)
             .to(welcomeMailDto.getEmail())
             .subject("Benuzter Erstellt/ Utilisateur Créé")
-            .send().subscribe().asCompletionStage();
+            .send()
+            .onFailure().invoke(this::handleFailure)
+            .subscribe()
+            .asCompletionStage();
     }
 
     public Uni<Void> sendEmail(String to, String subject, String htmlContent) {
@@ -97,6 +103,10 @@ public class MailService {
             FileUtil.getFileMimeType(attachment)
         ));
         mailer.send(mail);
+    }
+
+    private void handleFailure(final Throwable failure) {
+        LOG.error("Failed to send email", failure);
     }
 
     @CheckedTemplate

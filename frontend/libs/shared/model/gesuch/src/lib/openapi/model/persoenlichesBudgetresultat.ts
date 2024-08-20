@@ -16,6 +16,7 @@
 export interface PersoenlichesBudgetresultat { 
     anzahlPersonenImHaushalt: number;
     eigenerHaushalt: boolean;
+    anteilLebenshaltungskosten: number;
     einkommen: number;
     leistungenEO: number;
     rente: number;

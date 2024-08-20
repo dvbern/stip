@@ -27,7 +27,7 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MaskitoModule } from '@maskito/angular';
+import { MaskitoDirective } from '@maskito/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
@@ -55,7 +55,7 @@ import { PublishComponent } from '../publish/publish.component';
   standalone: true,
   imports: [
     CommonModule,
-    MaskitoModule,
+    MaskitoDirective,
     MatError,
     MatFormFieldModule,
     MatHint,
