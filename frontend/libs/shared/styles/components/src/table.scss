@@ -19,15 +19,10 @@
     }
 
     &.expanded-row {
-      // background-color: var(--dv-gray-200);
 
       > .mat-mdc-cell {
         border-bottom: none;
       }
-
-      // + .detail-row {
-      //   border-bottom: solid 2px var(--dv-primary);
-      // }
     }
 
     &:hover:not(.expanded-row, .detail-row) {
@@ -35,11 +30,7 @@
     }
 
     &.detail-row {
-      // background-color: var(--dv-gray-100);
       height: 0;
-      // > .mat-mdc-cell {
-      //   border-bottom: none;
-      // }
     }
   }
 

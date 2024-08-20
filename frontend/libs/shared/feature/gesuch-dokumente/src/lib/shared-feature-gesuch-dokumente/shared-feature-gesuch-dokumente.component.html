@@ -178,8 +178,8 @@
                         <i class="material-symbols-rounded text-gray">person</i>
                         <span>{{ kommentar.user_erstellt }}</span>
                       </div>
-                      <div>
-                        {{ kommentar.timestampErstellt | date: 'dd.MM.YYYY' }}
+                      <div class="text-muted">
+                        {{ kommentar.timestampErstellt | date: 'dd.MMMM.YYYY hh:mm' }}
                       </div>
                       <div>
                         {{ kommentar?.kommentar }}
@@ -199,7 +199,7 @@
             *matRowDef="let dokument; columns: displayedColumns"
             (click)="expandRow(dokument)"
             [ngClass]="{
-              'expanded-row': dokument.dokumentTyp === expandedRowId
+              'expanded-row': dokument.dokumentTyp === expandedRowId,
             }"
           ></tr>
           <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
