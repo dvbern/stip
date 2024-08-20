@@ -2,20 +2,22 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   DestroyRef,
+  computed,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
+  SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
-  SharedDataAccessGesuchEvents,
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
@@ -25,9 +27,9 @@ import {
   getFormStepByDocumentType,
 } from '@dv/shared/model/gesuch-form';
 import {
-  createDocumentOptions,
   DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
   SharedPatternDocumentUploadComponent,
+  createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
@@ -42,8 +44,6 @@ import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-button
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',

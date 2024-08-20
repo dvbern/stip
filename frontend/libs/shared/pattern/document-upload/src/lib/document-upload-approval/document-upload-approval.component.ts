@@ -3,13 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  inject,
-  input,
   OnDestroy,
   OnInit,
+  inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { UploadView } from '@dv/shared/model/dokument';
@@ -20,7 +21,6 @@ import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-approval',
