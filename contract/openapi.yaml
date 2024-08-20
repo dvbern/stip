@@ -1220,6 +1220,34 @@ paths:
       operationId: createKreditor
       summary: Create a new kreditor in SAP
       description: 'Create a new kreditor in SAP'
+  /auszahlung/kreditor/change:
+    patch:
+      tags:
+        - Auszahlung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAuszahlungKreditor'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: change kreditor details in SAP
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeKreditor
+      summary: change kreditor details in SAP
+      description: 'change kreditor details in SAP'
   /tenant/current:
     get:
       tags:
@@ -3293,6 +3321,22 @@ components:
         - extId
         - auszahlung
       properties:
+        deliveryId:
+          type: integer
+        extId:
+          type: integer
+        auszahlung:
+          $ref: '#/components/schemas/Auszahlung'
+    ChangeAuszahlungKreditor:
+      type: object
+      required:
+        - businessPartnerId
+        - deliveryId
+        - extId
+        - auszahlung
+      properties:
+        businessPartnerId:
+          type: integer
         deliveryId:
           type: integer
         extId:

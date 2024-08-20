@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungSapService;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
+import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -15,6 +16,12 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @Slf4j
 public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungSapService auszahlungSapService;
+    @RolesAllowed({ROLE_SACHBEARBEITER})
+    @Override
+    public Response changeKreditor(ChangeAuszahlungKreditorDto changeAuszahlungKreditorDto) {
+        return auszahlungSapService.changeBusinessPartner(changeAuszahlungKreditorDto);
+    }
+
     @RolesAllowed({ROLE_SACHBEARBEITER})
     @Override
     public Response createKreditor(CreateAuszahlungKreditorDto createAuszahlungKreditorDto) {
