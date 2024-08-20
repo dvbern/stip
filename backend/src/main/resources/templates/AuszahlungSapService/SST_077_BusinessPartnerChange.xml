@@ -1,7 +1,7 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
   <soapenv:Header/>
   <soapenv:Body>
-    <urn:BusinessPartnerCreate_Request>
+    <urn:BusinessPartnerChange_Request>
       <SENDER>
         <SYSID>{data.sysId}</SYSID>
         <!--Optional:-->
@@ -12,27 +12,26 @@
       </SENDER>
       <BUSINESS_PARTNER>
         <HEADER>
-          <PARTN_CAT>1</PARTN_CAT>
-          <!--Optional:-->
-          <PARTN_TYP/>
-          <!--Optional:-->
-          <PARTN_GRP>ZBPE</PARTN_GRP>
-          <!--Optional:-->
-          <PARTN_TAXKD/>
+          <BPARTNER>{data.businessPartnerId}</BPARTNER>
         </HEADER>
         <ID_KEYS>
-          <!-- EXT_ID : length 6 -->
+          <!--Optional:-->
           <EXT_ID>{data.extId}</EXT_ID>
+          <!--Optional:-->
           <AHV_NR/>
           <!--Optional:-->
           <UID_NR/>
           <!--Optional:-->
           <ZPV_NR/>
         </ID_KEYS>
+        <!--Optional:-->
         <PERS_DATA>
-          <FIRSTNAME>{data.auszahlung.vorname}</FIRSTNAME>
-          <LASTNAME>{data.auszahlung.nachname}</LASTNAME>
-          <CORRESPONDLANGUAGEISO>DE</CORRESPONDLANGUAGEISO>
+          <!--Optional:-->
+          <FIRSTNAME/>
+          <!--Optional:-->
+          <LASTNAME/>
+          <!--Optional:-->
+          <CORRESPONDLANGUAGEISO/>
           <!--Optional:-->
           <BIRTHNAME/>
           <!--Optional:-->
@@ -78,20 +77,52 @@
           <!--Optional:-->
           <BIRTHDT_STATUS/>
         </PERS_DATA>
-        <!--1 or more repetitions:-->
+        <!--Optional:-->
+        <ORG_DATA>
+          <!--Optional:-->
+          <NAME1/>
+          <!--Optional:-->
+          <NAME2></NAME2>
+          <!--Optional:-->
+          <NAME3/>
+          <!--Optional:-->
+          <NAME4/>
+          <!--Optional:-->
+          <LANGU_ISO/>
+          <!--Optional:-->
+          <LEGALFORM/>
+          <!--Optional:-->
+          <INDUSTRYSECTOR/>
+          <!--Optional:-->
+          <LOC_NO_1/>
+          <!--Optional:-->
+          <LOC_NO_2/>
+          <!--Optional:-->
+          <CHK_DIGIT/>
+          <!--Optional:-->
+          <LEGALORG/>
+        </ORG_DATA>
+        <!--Zero or more repetitions:-->
         <ADDRESS>
           <ADR_KIND>XXDEFAULT</ADR_KIND>
           <!--Optional:-->
           <C_O_NAME>{coAdresse ?: ''}</C_O_NAME>
+          <!--Optional:-->
           <CITY>{data.auszahlung.adresse.ort}</CITY>
           <!--Optional:-->
           <DISTRICT/>
+          <!--Optional:-->
           <POSTL_COD1>{data.auszahlung.adresse.plz}</POSTL_COD1>
           <!--Optional:-->
-          <PO_BOX/>
+          <PO_BOX>.</PO_BOX>
+          <!--Optional:-->
           <STREET>{data.auszahlung.adresse.strasse}</STREET>
+          <!--Optional:-->
           <HOUSE_NO>{data.auszahlung.adresse.hausnummer}</HOUSE_NO>
+          <!--Optional:-->
           <COUNTRY>{data.auszahlung.adresse.land}</COUNTRY>
+          <!--Optional:-->
+          <POSTL_COD2/>
         </ADDRESS>
         <!--Zero or more repetitions:-->
         <COMMUNICATION>
@@ -106,11 +137,14 @@
         </COMMUNICATION>
         <!--Zero or more repetitions:-->
         <PAYMENT_DETAIL>
+          <BANK_ID/>
+          <!--Optional:-->
           <IBAN>{data.auszahlung.iban}</IBAN>
           <!--Optional:-->
           <ACCOUNTHOLDER/>
         </PAYMENT_DETAIL>
+        <!--Zero or more repetitions:-->
       </BUSINESS_PARTNER>
-    </urn:BusinessPartnerCreate_Request>
+    </urn:BusinessPartnerChange_Request>
   </soapenv:Body>
 </soapenv:Envelope>

@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungSapService;
+import ch.dvbern.stip.api.auszahlung.service.BusinessPartnerChangeClient;
 import ch.dvbern.stip.api.auszahlung.service.BusinessPartnerCreateClient;
 import ch.dvbern.stip.api.auszahlung.service.ImportStatusReadClient;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
@@ -41,6 +42,10 @@ class AuszahlungResourceImplTest {
     @InjectMock
     BusinessPartnerCreateClient businessPartnerCreateClient;
 
+    @RestClient
+    @InjectMock
+    BusinessPartnerChangeClient businessPartnerChangeClient;
+
     @TestAsSachbearbeiter
     @Test
     void getImportStatusTest() throws IOException {
@@ -77,7 +82,6 @@ class AuszahlungResourceImplTest {
         assertThrows(ForbiddenException.class, () ->  auszahlungResource.getImportStatus(EXAMPLE_DELIVERY_ID));
     }
 
-    //todo: endpoint roles allowed test
     @Test
     @TestAsGesuchsteller
     void createBusinessPartnerAsGSTest() throws IOException {
@@ -143,11 +147,60 @@ class AuszahlungResourceImplTest {
 
         final CreateAuszahlungKreditorDto requestDto3 = initCreateAuszahlungKreditorDto();
         requestDto3.setDeliveryId(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(requestDto2));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(requestDto3));
 
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
         final var response = auszahlungResource.createKreditor(initCreateAuszahlungKreditorDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void changeBusinessPartnerAsGSTest(){
+        when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn("");
+        assertThrows(ForbiddenException.class, () -> auszahlungResource.changeKreditor((initChangeAuszahlungKreditorDto())));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    void changeBusinessPartnerInvalidDtoTest() throws IOException {
+        String xml = IOUtils.toString(//todo: add proper file
+            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
+            "UTF-8"
+        );
+        final ChangeAuszahlungKreditorDto requestDto1 = initChangeAuszahlungKreditorDto();
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(null));
+        requestDto1.setExtId(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto1));
+
+        final ChangeAuszahlungKreditorDto requestDto2 = initChangeAuszahlungKreditorDto();
+        requestDto2.setAuszahlung(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto2));
+
+        final ChangeAuszahlungKreditorDto requestDto3 = initChangeAuszahlungKreditorDto();
+        requestDto3.setDeliveryId(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto3));
+
+        final ChangeAuszahlungKreditorDto requestDto4 = initChangeAuszahlungKreditorDto();
+        requestDto4.setBusinessPartnerId(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto4));
+
+        when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
+        final var response = auszahlungResource.changeKreditor(initChangeAuszahlungKreditorDto());
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    void changeBusinessPartnerTest() throws IOException { //todo: add proper xml
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerSuccessResponse.xml"),
+            "UTF-8"
+        );
+        when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
+        final var response = auszahlungResource.changeKreditor(initChangeAuszahlungKreditorDto());
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
+
     }
 
     private CreateAuszahlungKreditorDto initCreateAuszahlungKreditorDto() {
@@ -164,6 +217,27 @@ class AuszahlungResourceImplTest {
         adresseDto.setLand(Land.CH);
         auszahlungDto.setAdresse(adresseDto);
         CreateAuszahlungKreditorDto kreditorDto = new CreateAuszahlungKreditorDto();
+        kreditorDto.setAuszahlung(auszahlungDto);
+        kreditorDto.setExtId(EXAMPLE_EXT_ID);
+        kreditorDto.setDeliveryId(EXAMPLE_DELIVERY_ID);
+        return kreditorDto;
+    }
+
+    private ChangeAuszahlungKreditorDto initChangeAuszahlungKreditorDto() {
+        AuszahlungDto auszahlungDto = new AuszahlungDto();
+        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        auszahlungDto.setIban("CH5589144649329557546");
+        auszahlungDto.setNachname("Muster");
+        auszahlungDto.setVorname("Hans");
+        AdresseDto adresseDto = new AdresseDto();
+        adresseDto.setHausnummer("1a");
+        adresseDto.setStrasse("Musterstrasse");
+        adresseDto.setOrt("Bern");
+        adresseDto.setPlz("3011");
+        adresseDto.setLand(Land.CH);
+        auszahlungDto.setAdresse(adresseDto);
+        ChangeAuszahlungKreditorDto kreditorDto = new ChangeAuszahlungKreditorDto();
+        kreditorDto.setBusinessPartnerId(0);
         kreditorDto.setAuszahlung(auszahlungDto);
         kreditorDto.setExtId(EXAMPLE_EXT_ID);
         kreditorDto.setDeliveryId(EXAMPLE_DELIVERY_ID);

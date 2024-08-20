@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDtoSpec;
 import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -58,9 +59,14 @@ public class AuszahlungApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                changeKreditor(),
                 createKreditor(),
                 getImportStatus()
         );
+    }
+
+    public ChangeKreditorOper changeKreditor() {
+        return new ChangeKreditorOper(createReqSpec());
     }
 
     public CreateKreditorOper createKreditor() {
@@ -81,6 +87,78 @@ public class AuszahlungApiSpec {
         return this;
     }
 
+    /**
+     * change kreditor details in SAP
+     * change kreditor details in SAP
+     *
+     * @see #body  (required)
+     * return String
+     */
+    public static class ChangeKreditorOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/auszahlung/kreditor/change";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeKreditorOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /auszahlung/kreditor/change
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /auszahlung/kreditor/change
+         * @param handler handler
+         * @return String
+         */
+        public String executeAs(Function<Response, Response> handler) {
+            TypeRef<String> type = new TypeRef<String>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param changeAuszahlungKreditorDtoSpec (ChangeAuszahlungKreditorDtoSpec)  (required)
+         * @return operation
+         */
+        public ChangeKreditorOper body(ChangeAuszahlungKreditorDtoSpec changeAuszahlungKreditorDtoSpec) {
+            reqSpec.setBody(changeAuszahlungKreditorDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeKreditorOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeKreditorOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * Create a new kreditor in SAP
      * Create a new kreditor in SAP

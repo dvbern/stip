@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDto;
+import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
 import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
 import io.quarkus.qute.Location;
@@ -30,8 +31,12 @@ public class AuszahlungSapService {
     @Location("AuszahlungSapService/SST_009_BusinessPartnerCreate.xml")
     public Template SST_009_BusinessPartnerCreate;
 
+    @Location("AuszahlungSapService/SST_077_BusinessPartnerChange.xml")
+    public Template SST_077_BusinessPartnerChange;
+
     private final GetAuszahlungImportStatusRequestMapper getAuszahlungImportStatusRequestMapper;
     private final CreateAuszahlungKreditorMapper createAuszahlungKreditorMapper;
+    private final ChangeAuszahlungKreditorMapper changeAuszahlungKreditorMapper;
 
     @ConfigProperty(name = "stip_sap_sysid")
     Integer sysid;
@@ -41,6 +46,9 @@ public class AuszahlungSapService {
 
     @RestClient
     BusinessPartnerCreateClient businessPartnerCreateClient;
+
+    @RestClient
+    BusinessPartnerChangeClient businessPartnerChangeClient;
 
     private String buildPayload(Template template, Object data){
         return template.data("data", data).render();
@@ -73,7 +81,7 @@ public class AuszahlungSapService {
         }
     }
 
-    public Response createBusinessPartner(CreateAuszahlungKreditorDto dto){
+    public Response createBusinessPartner(@Valid CreateAuszahlungKreditorDto dto){
         try{
             CreateAuszahlungKreditor data = createAuszahlungKreditorMapper.toAuszahlungKreditor(dto);
             String response = businessPartnerCreateClient.createBusinessPartner(buildPayload(SST_009_BusinessPartnerCreate,data));
@@ -81,10 +89,17 @@ public class AuszahlungSapService {
         }
         catch(WebApplicationException ex){
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
-
         }
-
-
     }
 
+    public Response changeBusinessPartner(@Valid ChangeAuszahlungKreditorDto dto){
+        try{
+            ChangeAuszahlungKreditor data = changeAuszahlungKreditorMapper.toChangeAuszahlungKreditor(dto);
+            String response = businessPartnerCreateClient.createBusinessPartner(buildPayload(SST_077_BusinessPartnerChange,data));
+            return Response.status(HttpStatus.SC_OK).entity(response).build();
+        }
+        catch(WebApplicationException ex){
+            return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+        }
+    }
 }
