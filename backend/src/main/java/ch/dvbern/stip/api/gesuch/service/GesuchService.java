@@ -384,8 +384,8 @@ public class GesuchService {
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-                validationGroups.contains(AusbildungPageValidation.class) &&
-                !validationGroups.contains(LebenslaufItemPageValidation.class)
+            validationGroups.contains(AusbildungPageValidation.class) &&
+            !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }
