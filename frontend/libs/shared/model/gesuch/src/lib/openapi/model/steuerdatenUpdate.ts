@@ -14,7 +14,7 @@ import { SteuerdatenTyp } from './steuerdatenTyp';
 export interface SteuerdatenUpdate { 
     id?: string;
     steuerdatenTyp: SteuerdatenTyp;
-    steuernStaat: number;
+    steuernKantonGemeinde: number;
     steuernBund: number;
     fahrkosten: number;
     fahrkostenPartner?: number;

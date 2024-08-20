@@ -59,8 +59,8 @@ public class Steuerdaten extends AbstractEntity {
     private Integer vermoegen;
 
     @NotNull
-    @Column(name = "steuernStaat", nullable = false)
-    private Integer steuernStaat;
+    @Column(name = "steuernKantonGemeinde", nullable = false)
+    private Integer steuernKantonGemeinde;
 
     @NotNull
     @Column(name = "steuernBund", nullable = false)

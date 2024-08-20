@@ -81,7 +81,7 @@ class GesuchEinnahmenKostenSteuerjahrNonNullValueTest {
     @TestAsGesuchsteller
     @Order(4)
     void testUpdateGesuchEinnahmenKostenSteuerjahrNonNullValue(){
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2020);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 

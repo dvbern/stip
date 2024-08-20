@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -24,6 +25,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 public class GesuchTestSeeding extends Seeder {
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
+    private final FallRepository fallRepository;
 
     @Override
     @Startup

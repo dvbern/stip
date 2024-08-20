@@ -12,8 +12,8 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -96,7 +96,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .body()
             .as(GesuchDtoSpec.class)
             .getGesuchTrancheToWorkWith().getId();
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()

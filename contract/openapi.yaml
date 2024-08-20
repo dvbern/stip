@@ -3056,7 +3056,7 @@ components:
     SteuerdatenUpdate:
       title: Root Type for Steuerdaten
       required:
-        - steuernStaat
+        - steuernKantonGemeinde
         - steuernBund
         - fahrkosten
         - verpflegung
@@ -3073,7 +3073,7 @@ components:
           $ref: '#/components/schemas/UUID'
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
-        steuernStaat:
+        steuernKantonGemeinde:
           type: integer
         steuernBund:
           type: integer
@@ -3257,9 +3257,8 @@ components:
         - effektiveWohnkosten
         - medizinischeGrundversorgung
         - integrationszulage
-        - steuernKantonGemeinde
         - steuernBund
-        - steuernStaat
+        - steuernKantonGemeinde
         - fahrkostenPerson1
         - fahrkostenPerson2
         - essenskostenPerson1
@@ -3302,11 +3301,9 @@ components:
           type: integer
         integrationszulage:
           type: integer
-        steuernKantonGemeinde:
-          type: integer
         steuernBund:
           type: integer
-        steuernStaat:
+        steuernKantonGemeinde:
           type: integer
         fahrkostenPerson1:
           type: integer
