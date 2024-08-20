@@ -21,6 +21,14 @@ public class RequiredDocsUtil {
         assertType(requiredDocs, dokTyp);
     }
 
+    public void requiresOneOfManyAndType(
+        final List<Pair<String, List<DokumentTyp>>> requiredList,
+        final DokumentTyp dokTyp
+    ) {
+        assertThat(requiredList.size(), is(1));
+        requiresOneAndType(requiredList.get(0), dokTyp);
+    }
+
     public void requiresCountAndTypes(
         final int count,
         final Pair<String, List<DokumentTyp>> requiredDocs,
@@ -28,6 +36,17 @@ public class RequiredDocsUtil {
     ) {
         assertCount(requiredDocs, count);
         assertTypes(requiredDocs, dokTypes);
+    }
+
+    public void requiresFirstCountAndTypes(
+        final int count,
+        final List<Pair<String, List<DokumentTyp>>> requiredList,
+        final DokumentTyp... dokTypes
+    ) {
+        assertThat(requiredList.size(), is(1));
+        final var flatTypes = requiredList.stream().flatMap(x -> x.getRight().stream()).toList();
+        assertThat(flatTypes.size(), is(count));
+        assertTypes(flatTypes, dokTypes);
     }
 
     public void assertCount(final Pair<String, List<DokumentTyp>> requiredDocs, final int count) {
@@ -43,7 +62,11 @@ public class RequiredDocsUtil {
     }
 
     public void assertTypes(final Pair<String, List<DokumentTyp>> requiredDocs, final DokumentTyp... dokTyp) {
-        assertThat(requiredDocs.getRight().containsAll(Arrays.stream(dokTyp).toList()), is(true));
+        assertTypes(requiredDocs.getRight(), dokTyp);
+    }
+
+    public void assertTypes(final List<DokumentTyp> requiredDocs, final DokumentTyp... dokTyp) {
+        assertThat(requiredDocs.containsAll(Arrays.stream(dokTyp).toList()), is(true));
     }
 
     public void assertType(final List<DokumentTyp> requiredDocs, final DokumentTyp dokTyp) {

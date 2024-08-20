@@ -1,21 +1,34 @@
 package ch.dvbern.stip.api.steuerdaten.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
+import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTypRequiredDocumentsProducer.FamilieRequiredDocumentsProducer;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTypRequiredDocumentsProducer.MutterRequiredDocumentsProducer;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTypRequiredDocumentsProducer.VaterRequiredDocumentsProducer;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SteuerdatenRequiredDocumentsProducerTest {
-    private SteuerdatenRequiredDocumentsProducer producer;
+    private List<RequiredDocumentProducer> producers;
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new SteuerdatenRequiredDocumentsProducer();
+        final var producer = new SteuerdatenRequiredDocumentsProducer();
+        producers = List.of(
+            new FamilieRequiredDocumentsProducer(producer),
+            new MutterRequiredDocumentsProducer(producer),
+            new VaterRequiredDocumentsProducer(producer)
+        );
         formular = new GesuchFormular();
     }
 
@@ -23,8 +36,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
     void requiresIfWohnkostenFamilie() {
         formular.setSteuerdaten(Set.of(new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.FAMILIE).setWohnkosten(100)));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
         );
     }
@@ -40,12 +53,17 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setWohnkosten(100)
         ));
 
-        RequiredDocsUtil.requiresCountAndTypes(
-            2,
-            producer.getRequiredDocuments(formular),
-            DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
-            DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-        );
+        final var required = getRequiredDocuments(formular);
+        final Function<String, Pair<String, List<DokumentTyp>>> getWhereProperty = (prop) -> required.stream()
+            .filter(req -> req.getLeft().equals(prop))
+            .findFirst()
+            .orElse(null);
+
+        final var mutter = getWhereProperty.apply("steuerdatenMutter");
+        final var vater = getWhereProperty.apply("steuerdatenVater");
+
+        RequiredDocsUtil.requiresOneAndType(mutter, DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER);
+        RequiredDocsUtil.requiresOneAndType(vater, DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER);
     }
 
     @Test
@@ -56,8 +74,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setErgaenzungsleistungen(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
         );
     }
@@ -70,8 +88,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setErgaenzungsleistungen(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
         );
     }
@@ -84,8 +102,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setErgaenzungsleistungen(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
         );
     }
@@ -98,8 +116,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setErgaenzungsleistungenPartner(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
         );
     }
@@ -113,9 +131,9 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setErgaenzungsleistungenPartner(100)
         ));
 
-        RequiredDocsUtil.requiresCountAndTypes(
+        RequiredDocsUtil.requiresFirstCountAndTypes(
             2,
-            producer.getRequiredDocuments(formular),
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER,
             DokumentTyp.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
         );
@@ -129,8 +147,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraege(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_VATER
         );
     }
@@ -143,8 +161,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraege(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
         );
     }
@@ -157,8 +175,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraege(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_VATER
         );
     }
@@ -171,8 +189,8 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraegePartner(100)
         ));
 
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
         );
     }
@@ -186,11 +204,20 @@ class SteuerdatenRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraegePartner(100)
         ));
 
-        RequiredDocsUtil.requiresCountAndTypes(
+        RequiredDocsUtil.requiresFirstCountAndTypes(
             2,
-            producer.getRequiredDocuments(formular),
+            getRequiredDocuments(formular),
             DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_VATER,
             DokumentTyp.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
         );
+    }
+
+     List<Pair<String, List<DokumentTyp>>> getRequiredDocuments(final GesuchFormular formular) {
+        final var requiredTypes = new ArrayList<Pair<String, List<DokumentTyp>>>();
+        for (final var producer : producers) {
+            requiredTypes.add(producer.getRequiredDocuments(formular));
+        }
+
+        return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();
     }
 }
