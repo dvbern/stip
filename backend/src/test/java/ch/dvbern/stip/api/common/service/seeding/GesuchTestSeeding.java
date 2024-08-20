@@ -114,7 +114,11 @@ public class GesuchTestSeeding extends Seeder {
             .setPreisProMahlzeit(1)
             .setMaxSaeule3a(1)
             .setAnzahlWochenLehre(1)
-            .setAnzahlWochenSchule(1);
+            .setAnzahlWochenSchule(1)
+            .setVermoegensanteilInProzent(15)
+            .setReduzierungDesGrundbedarfs(2754)
+            .setZweiterAuszahlungsterminMonat(6)
+            .setZweiterAuszahlungsterminTag(1);
     }
 
     private static LocalDate getGesuchsperiodeStart() {

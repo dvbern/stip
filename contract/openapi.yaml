@@ -2740,6 +2740,10 @@ components:
         - maxSaeule3a
         - anzahlWochenLehre
         - anzahlWochenSchule
+        - vermoegensanteilInProzent
+        - reduzierungDesGrundbedarfs
+        - zweiterAuszahlungsterminMonat
+        - zweiterAuszahlungsterminTag
       properties:
         bezeichnungDe:
           type: string
@@ -2844,6 +2848,14 @@ components:
         anzahlWochenLehre:
           type: integer
         anzahlWochenSchule:
+          type: integer
+        vermoegensanteilInProzent:
+          type: integer
+        reduzierungDesGrundbedarfs:
+          type: integer
+        zweiterAuszahlungsterminMonat:
+          type: integer
+        zweiterAuszahlungsterminTag:
           type: integer
     AusbildungsstaetteUpdate:
       required:
