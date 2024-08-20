@@ -37,15 +37,29 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
         final var allValid = gesuchFormular.getSteuerdaten().stream()
             .allMatch(steuerdaten -> isSteuerjahrValid(steuerdaten, gesuchsjahr));
 
-        if (allValid) {
+        final var invalidSteuerdaten = gesuchFormular.getSteuerdaten().stream()
+            .filter(steuerdaten ->  !isSteuerjahrValid(steuerdaten, gesuchsjahr))
+            .toList();
+
+        if (invalidSteuerdaten.isEmpty()) {
             return true;
         }
 
-        return GesuchValidatorUtil.addProperty(
-            constraintValidatorContext,
-            VALIDATION_STEUERDATEN_STEUERJAHR_INVALID_MESSAGE,
-            property
-        );
+        for (final var invalid : invalidSteuerdaten) {
+            final var pagePostfix = switch (invalid.getSteuerdatenTyp()) {
+                case FAMILIE -> "Familie";
+                case VATER -> "Vater";
+                case MUTTER -> "Mutter";
+            };
+
+            GesuchValidatorUtil.addProperty(
+                constraintValidatorContext,
+                VALIDATION_STEUERDATEN_STEUERJAHR_INVALID_MESSAGE,
+                property + pagePostfix
+            );
+        }
+
+        return false;
     }
 
     private boolean isSteuerjahrValid(Steuerdaten steuerdaten, Gesuchsjahr gesuchsjahr) {
