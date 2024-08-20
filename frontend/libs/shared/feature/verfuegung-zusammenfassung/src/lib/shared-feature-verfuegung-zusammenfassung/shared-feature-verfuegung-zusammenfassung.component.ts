@@ -18,7 +18,7 @@ import {
 } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
 @Component({
   selector: 'lib-shared-feature-verfuegung-zusammenfassung',
@@ -31,7 +31,7 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
     SharedUiFormatNoChfPipe,
-    SharedUiRdIsPendingPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',

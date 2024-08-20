@@ -1,5 +1,5 @@
 @let zusammenfassung = berechnungStore.berechnungZusammenfassungViewSig();
-@if (berechnungStore.berechnungen() | rdIsPending) {
+@if (berechnungStore.berechnungen() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   <mat-card class="rounded-4 mb-4">

@@ -5,7 +5,7 @@ import {
   EventEmitter,
   Input,
   computed,
-  inject
+  inject,
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';

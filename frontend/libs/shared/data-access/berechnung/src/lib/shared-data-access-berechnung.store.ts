@@ -2,18 +2,18 @@ import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
+import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { Berechnungsresultat, GesuchService } from '@dv/shared/model/gesuch';
 import {
-  RemoteData,
+  CachedRemoteData,
+  cachedPending,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type BerechnungState = {
-  berechnungen: RemoteData<Berechnungsresultat[]>;
+  berechnungen: CachedRemoteData<Berechnungsresultat[]>;
 };
 
 const initialState: BerechnungState = {
@@ -48,8 +48,8 @@ export class BerechnungStore extends signalStore(
   getBerechnungForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          berechnungen: pending(),
+        patchState(this, (state) => ({
+          berechnungen: cachedPending(state.berechnungen),
         }));
       }),
       exhaustMap(({ gesuchId }) =>
