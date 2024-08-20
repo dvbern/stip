@@ -1,7 +1,8 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import java.util.UUID;
+
+import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import jakarta.validation.Valid;
