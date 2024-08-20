@@ -72,7 +72,7 @@ public class SteuerdatenTypRequiredDocumentsProducer {
             }
 
             final var mutterSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.FAMILIE);
-            return ImmutablePair.of("steuerdatenFamilie", producer.getForSteuerdaten(mutterSteuerdaten));
+            return ImmutablePair.of("steuerdaten", producer.getForSteuerdaten(mutterSteuerdaten));
         }
     }
 
