@@ -169,18 +169,10 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         ),
       ],
     ],
-    sozialhilfebeitraegeAusbezahlt: [
-      <boolean | null>null,
-      [Validators.required],
-    ],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
   });
 
   svnIsRequiredSig = signal(false);
-
-  sozialhilfeSig = toSignal(
-    this.form.controls.sozialhilfebeitraegeAusbezahlt.valueChanges,
-  );
 
   ausweisbFluechtlingSig = toSignal(
     this.form.controls.ausweisbFluechtling.valueChanges,
