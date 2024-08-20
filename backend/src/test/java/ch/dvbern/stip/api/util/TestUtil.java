@@ -141,7 +141,7 @@ public class TestUtil {
             .statusCode(Response.Status.CREATED.getStatusCode());
 
         final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
-        return gesuchApiSpec.getGesuch()
+        return gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

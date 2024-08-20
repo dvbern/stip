@@ -106,7 +106,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuch = gesuchApiSpec.getGesuch()
+        final var gesuch = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -407,7 +407,7 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
-        return gesuchApiSpec.getGesuch()
+        return gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
