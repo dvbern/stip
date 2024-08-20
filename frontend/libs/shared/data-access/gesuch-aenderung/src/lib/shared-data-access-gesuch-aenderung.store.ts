@@ -130,6 +130,7 @@ export class GesuchAenderungStore extends signalStore(
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey: 'shared.dialog.gesuch-aenderung.success',
                   });
+                  this.getAllTranchenForGesuch$({ gesuchId });
                 },
               },
             ),

@@ -2,7 +2,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 import { initial } from '@dv/shared/util/remote-data';
 
@@ -15,7 +14,6 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
-        GesuchAenderungStore,
         provideHttpClient(),
         provideMockStore({
           initialState: {

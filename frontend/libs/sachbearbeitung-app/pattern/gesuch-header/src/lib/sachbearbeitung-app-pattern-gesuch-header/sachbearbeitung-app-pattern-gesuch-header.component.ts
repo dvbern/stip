@@ -21,7 +21,6 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
-import { isSuccess } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -64,11 +63,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   tranchenSig = computed(() => {
     const tranchen = this.gesuchAenderungStore.cachedTranchenSlim();
 
-    if (isSuccess(tranchen)) {
-      return tranchen.data;
-    }
-
-    return [];
+    return tranchen.data ?? [];
   });
 
   constructor() {

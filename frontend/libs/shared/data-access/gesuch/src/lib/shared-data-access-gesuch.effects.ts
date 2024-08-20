@@ -158,9 +158,28 @@ export const loadGesuch = createEffect(
           );
         }
 
+        const navigateIfNotFound = {
+          context: noGlobalErrorsIf(
+            true,
+            handleNotFound((error) => {
+              globalNotifications.createNotification({
+                type: 'ERROR',
+                messageKey: 'shared.genericError.gesuch-not-found-redirection',
+                content: error,
+              });
+              router.navigate(['/'], { replaceUrl: true });
+            }),
+          ),
+        };
+
         if (trancheId) {
           return gesuchService
-            .getGesuch$({ gesuchId: id, gesuchTrancheId: trancheId })
+            .getGesuch$(
+              { gesuchId: id, gesuchTrancheId: trancheId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
+            )
             .pipe(
               map((gesuch) =>
                 SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
@@ -174,20 +193,12 @@ export const loadGesuch = createEffect(
         }
 
         return gesuchService
-          .getCurrentGesuch$({ gesuchId: id }, undefined, undefined, {
-            context: noGlobalErrorsIf(
-              true,
-              handleNotFound((error) => {
-                globalNotifications.createNotification({
-                  type: 'ERROR',
-                  messageKey:
-                    'shared.genericError.gesuch-not-found-redirection',
-                  content: error,
-                });
-                router.navigate(['/'], { replaceUrl: true });
-              }),
-            ),
-          })
+          .getCurrentGesuch$(
+            { gesuchId: id },
+            undefined,
+            undefined,
+            navigateIfNotFound,
+          )
           .pipe(
             map((gesuch) =>
               SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
