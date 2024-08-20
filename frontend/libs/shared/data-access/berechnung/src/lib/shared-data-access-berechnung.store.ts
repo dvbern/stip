@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { exhaustMap, pipe, switchMap, tap } from 'rxjs';
 
 import { Berechnungsresultat, GesuchService } from '@dv/shared/model/gesuch';
 import {
@@ -45,14 +45,14 @@ export class BerechnungStore extends signalStore(
       : value;
   });
 
-  calculateBerechnung$ = rxMethod<{ gesuchId: string }>(
+  getBerechnungForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           berechnungen: pending(),
         }));
       }),
-      switchMap(({ gesuchId }) =>
+      exhaustMap(({ gesuchId }) =>
         this.gesuchService
           .getBerechnungForGesuch$({ gesuchId })
           .pipe(

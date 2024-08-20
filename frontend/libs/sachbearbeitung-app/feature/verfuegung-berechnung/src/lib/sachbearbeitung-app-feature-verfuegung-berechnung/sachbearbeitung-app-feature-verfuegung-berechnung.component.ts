@@ -190,7 +190,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         if (!gesuchId) {
           return;
         }
-        this.berechnungStore.calculateBerechnung$({ gesuchId });
+        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
       },
       { allowSignalWrites: true },
     );

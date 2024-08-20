@@ -5,8 +5,7 @@ import {
   EventEmitter,
   Input,
   computed,
-  effect,
-  inject,
+  inject
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -73,18 +72,4 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
       fullRoute: ['/', 'verfuegung', gesuchId, ...option.route.split('/')],
     }));
   });
-
-  constructor() {
-    effect(
-      () => {
-        const { gesuchId } = this.gesuchViewSig();
-
-        if (!gesuchId) {
-          return;
-        }
-        this.berechnungStore.calculateBerechnung$({ gesuchId });
-      },
-      { allowSignalWrites: true },
-    );
-  }
 }
