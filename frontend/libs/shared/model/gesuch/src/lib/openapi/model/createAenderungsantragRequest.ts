@@ -9,18 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchFormular } from './gesuchFormular';
 
-export interface GesuchAenderungsAntrag { 
-    /**
-     * dd.MM.YYYY
-     */
-    gueltigAb: string;
-    /**
-     * dd.MM.YYYY
-     */
-    gueltigBis?: string;
-    kommentar?: string;
-    gesuchId: string;
+export interface CreateAenderungsantragRequest { 
+    start: string;
+    end?: string;
+    comment?: string;
 }
 
