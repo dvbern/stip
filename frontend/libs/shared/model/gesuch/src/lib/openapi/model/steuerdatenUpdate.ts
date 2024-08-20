@@ -14,7 +14,7 @@ import { SteuerdatenTyp } from './steuerdatenTyp';
 export interface SteuerdatenUpdate { 
     id?: string;
     steuerdatenTyp: SteuerdatenTyp;
-    steuernStaat: number;
+    steuernKantonGemeinde: number;
     steuernBund: number;
     fahrkosten: number;
     fahrkostenPartner?: number;
@@ -33,7 +33,7 @@ export interface SteuerdatenUpdate {
      */
     ergaenzungsleistungen?: number;
     /**
-     * \'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater\' \'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null\' 
+     * \'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Mutter\' \'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null\' 
      */
     ergaenzungsleistungenPartner?: number;
     vermoegen: number;

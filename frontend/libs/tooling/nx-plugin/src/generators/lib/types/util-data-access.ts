@@ -12,6 +12,12 @@ export function utilDataAccessTypeFactory(
     libGenerator: libraryGenerator,
     libDefaultOptions: {
       skipModule: true,
+      flat: true,
+      style: 'none',
+      skipSelector: true,
+      skipTests: true,
+      inlineStyle: true,
+      inlineTemplate: true,
     },
     generators: [],
     postprocess,
@@ -27,6 +33,15 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       'src',
       'lib',
       options.name + 'service.ts',
+    ),
+  );
+  tree.delete(
+    path.join(
+      options.projectRoot,
+      options.nameDasherized,
+      'src',
+      'lib',
+      options.projectName + '.component.ts',
     ),
   );
   tree.delete(

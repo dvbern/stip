@@ -293,7 +293,7 @@
   "shared.form.eltern-steuerdaten.sozialhilfebeitraege.MUTTER.label": "Sozialhilfebeträge Mutter (optional)",
   "shared.form.eltern-steuerdaten.vermoegen.label": "Vermögen",
   "shared.form.shared.section.ausgaben": "Ausgaben",
-  "shared.form.eltern-steuerdaten.steuernStaat.label": "Steuern Staat",
+  "shared.form.eltern-steuerdaten.steuernKantonGemeinde.label": "Kantons- und Gemeindesteuern",
   "shared.form.eltern-steuerdaten.steuernBund.label": "Steuern Bund",
   "shared.form.eltern-steuerdaten.fahrkosten.label": "Fahrkosten",
   "shared.form.eltern-steuerdaten.fahrkostenPartner.label": "Fahrkosten Partner:in",

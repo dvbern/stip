@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class SteuerdatenDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
-  private @Valid Integer steuernStaat;
+  private @Valid Integer steuernKantonGemeinde;
   private @Valid Integer steuernBund;
   private @Valid Integer fahrkosten;
   private @Valid Integer verpflegung;
@@ -64,21 +64,21 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenDto steuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  public SteuerdatenDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
   
-  @JsonProperty("steuernStaat")
+  @JsonProperty("steuernKantonGemeinde")
   @NotNull
-  public Integer getSteuernStaat() {
-    return steuernStaat;
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
   }
 
-  @JsonProperty("steuernStaat")
-  public void setSteuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  @JsonProperty("steuernKantonGemeinde")
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
   /**
@@ -464,7 +464,7 @@ public class SteuerdatenDto  implements Serializable {
     }
     SteuerdatenDto steuerdaten = (SteuerdatenDto) o;
     return Objects.equals(this.steuerdatenTyp, steuerdaten.steuerdatenTyp) &&
-        Objects.equals(this.steuernStaat, steuerdaten.steuernStaat) &&
+        Objects.equals(this.steuernKantonGemeinde, steuerdaten.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, steuerdaten.steuernBund) &&
         Objects.equals(this.fahrkosten, steuerdaten.fahrkosten) &&
         Objects.equals(this.verpflegung, steuerdaten.verpflegung) &&
@@ -489,7 +489,7 @@ public class SteuerdatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, wohnkosten, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, eigenmietwert, saeule3a, saeule2, ergaenzungsleistungen, ergaenzungsleistungenPartner, sozialhilfebeitraege, sozialhilfebeitraegePartner);
+    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, wohnkosten, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, eigenmietwert, saeule3a, saeule2, ergaenzungsleistungen, ergaenzungsleistungenPartner, sozialhilfebeitraege, sozialhilfebeitraegePartner);
   }
 
   @Override
@@ -498,7 +498,7 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("class SteuerdatenDto {\n");
     
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
-    sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");

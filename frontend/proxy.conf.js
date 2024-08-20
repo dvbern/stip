@@ -22,4 +22,7 @@ const config = {
 
 module.exports = {
   '/api/v1': config,
+  watchOptions: {
+    ignored: /node_modules/,
+  },
 };

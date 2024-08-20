@@ -6,6 +6,12 @@
   "tags": ["scope:shared", "type:util"],
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/util/gesuch-form-step-manager/tsconfig.lib.json"
+      }
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

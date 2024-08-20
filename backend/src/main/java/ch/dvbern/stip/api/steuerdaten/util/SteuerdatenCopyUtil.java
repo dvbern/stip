@@ -24,7 +24,7 @@ public class SteuerdatenCopyUtil {
         copy.setSozialhilfebeitraege(other.getSozialhilfebeitraege());
         copy.setSozialhilfebeitraegePartner(other.getSozialhilfebeitraegePartner());
         copy.setVermoegen(other.getVermoegen());
-        copy.setSteuernStaat(other.getSteuernStaat());
+        copy.setSteuernKantonGemeinde(other.getSteuernKantonGemeinde());
         copy.setSteuernBund(other.getSteuernBund());
         copy.setFahrkosten(other.getFahrkosten());
         copy.setFahrkostenPartner(other.getFahrkostenPartner());

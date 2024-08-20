@@ -45,9 +45,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EFFEKTIVE_WOHNKOSTEN,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_INTEGRATIONSZULAGE,
-  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_BUND,
-  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_STAAT,
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PERSON1,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PERSON2,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_ESSENSKOSTEN_PERSON1,
@@ -109,14 +108,11 @@ public class FamilienBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_INTEGRATIONSZULAGE = "integrationszulage";
   private Integer integrationszulage;
 
-  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
-  private Integer steuernKantonGemeinde;
-
   public static final String JSON_PROPERTY_STEUERN_BUND = "steuernBund";
   private Integer steuernBund;
 
-  public static final String JSON_PROPERTY_STEUERN_STAAT = "steuernStaat";
-  private Integer steuernStaat;
+  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
+  private Integer steuernKantonGemeinde;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_PERSON1 = "fahrkostenPerson1";
   private Integer fahrkostenPerson1;
@@ -581,32 +577,6 @@ public class FamilienBudgetresultatDtoSpec {
   }
 
 
-  public FamilienBudgetresultatDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
-    return this;
-  }
-
-   /**
-   * Get steuernKantonGemeinde
-   * @return steuernKantonGemeinde
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
-  }
-
-
   public FamilienBudgetresultatDtoSpec steuernBund(Integer steuernBund) {
     
     this.steuernBund = steuernBund;
@@ -633,29 +603,29 @@ public class FamilienBudgetresultatDtoSpec {
   }
 
 
-  public FamilienBudgetresultatDtoSpec steuernStaat(Integer steuernStaat) {
+  public FamilienBudgetresultatDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
     
-    this.steuernStaat = steuernStaat;
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
    /**
-   * Get steuernStaat
-   * @return steuernStaat
+   * Get steuernKantonGemeinde
+   * @return steuernKantonGemeinde
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSteuernStaat() {
-    return steuernStaat;
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
 
@@ -840,9 +810,8 @@ public class FamilienBudgetresultatDtoSpec {
         Objects.equals(this.effektiveWohnkosten, familienBudgetresultat.effektiveWohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, familienBudgetresultat.medizinischeGrundversorgung) &&
         Objects.equals(this.integrationszulage, familienBudgetresultat.integrationszulage) &&
-        Objects.equals(this.steuernKantonGemeinde, familienBudgetresultat.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, familienBudgetresultat.steuernBund) &&
-        Objects.equals(this.steuernStaat, familienBudgetresultat.steuernStaat) &&
+        Objects.equals(this.steuernKantonGemeinde, familienBudgetresultat.steuernKantonGemeinde) &&
         Objects.equals(this.fahrkostenPerson1, familienBudgetresultat.fahrkostenPerson1) &&
         Objects.equals(this.fahrkostenPerson2, familienBudgetresultat.fahrkostenPerson2) &&
         Objects.equals(this.essenskostenPerson1, familienBudgetresultat.essenskostenPerson1) &&
@@ -853,7 +822,7 @@ public class FamilienBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, vermoegen, einzahlungSaeule23a, eigenmietwert, alimente, einkommensfreibetrag, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernKantonGemeinde, steuernBund, steuernStaat, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, vermoegen, einzahlungSaeule23a, eigenmietwert, alimente, einkommensfreibetrag, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
   }
 
   @Override
@@ -877,9 +846,8 @@ public class FamilienBudgetresultatDtoSpec {
     sb.append("    effektiveWohnkosten: ").append(toIndentedString(effektiveWohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
-    sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    fahrkostenPerson1: ").append(toIndentedString(fahrkostenPerson1)).append("\n");
     sb.append("    fahrkostenPerson2: ").append(toIndentedString(fahrkostenPerson2)).append("\n");
     sb.append("    essenskostenPerson1: ").append(toIndentedString(essenskostenPerson1)).append("\n");

@@ -4,6 +4,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -25,6 +27,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -35,16 +38,20 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
-import io.restassured.response.ResponseBody;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
@@ -52,6 +59,98 @@ import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLev
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 
 public class TestUtil {
+    public static final DateTimeFormatter DATE_TIME_FORMATTER =
+        DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN);
+
+    public static final Function<io.restassured.response.Response, io.restassured.response.Response> PEEK_IF_ENV_SET =
+        response -> {
+            final var env = System.getenv("STIP_TESTING_PEEK_RESPONSE");
+            if (env != null && env.equals("true")) {
+                response.prettyPeek();
+            }
+
+            return response;
+        };
+
+    public static void deleteGesuch(final GesuchApiSpec gesuchApiSpec, final UUID gesuchId) {
+        gesuchApiSpec.deleteGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    public static void fillGesuch(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+        fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(fullGesuch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
+
+        for (final var dokTyp : DokumentTypDtoSpec.values()) {
+            final var file = TestUtil.getTestPng();
+            TestUtil.uploadFile(dokumentApiSpec, gesuch.getId(), dokTyp, file);
+        }
+    }
+
+    public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
+        final var response = fallApiSpec.getFallForGs()
+            .execute(PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+        var stringBody = response.extract().body().asString();
+        FallDtoSpec fall;
+        if (stringBody == null || stringBody.isEmpty()) {
+            fall = fallApiSpec.createFallForGs()
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(FallDtoSpec.class);
+        } else {
+            fall = response.extract().body().as(FallDtoSpec.class);
+        }
+
+        return fall;
+    }
+
+    public static GesuchDtoSpec createGesuchAndFall(final FallApiSpec fallApiSpec, final GesuchApiSpec gesuchApiSpec) {
+        final var fall = getOrCreateFall(fallApiSpec);
+        final var gesuchDTO = new GesuchCreateDtoSpec();
+        gesuchDTO.setFallId(fall.getId());
+        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
+        final var gesuchResponse = gesuchApiSpec.createGesuch()
+            .body(gesuchDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
+
+        final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
+        return gesuchApiSpec.getGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+    }
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
         var locationString = response.extract().header(HttpHeaders.LOCATION).split("/");
@@ -75,12 +174,12 @@ public class TestUtil {
         steuerdaten.setFahrkosten(0);
         steuerdaten.setKinderalimente(0);
         steuerdaten.setSteuernBund(0);
-        steuerdaten.setSteuernStaat(0);
+        steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
         steuerdaten.setErgaenzungsleistungen(0);
         steuerdaten.setSteuerjahr(0);
         steuerdaten.setWohnkosten(0);
-        return  steuerdaten;
+        return steuerdaten;
     }
 
     public static SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
@@ -90,7 +189,7 @@ public class TestUtil {
         steuerdatenUpdateDto.setFahrkosten(0);
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
-        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVermoegen(0);
         steuerdatenUpdateDto.setVerpflegung(0);
@@ -166,18 +265,23 @@ public class TestUtil {
         return new File(TEST_PNG_FILE_LOCATION);
     }
 
-    public static void uploadFile(DokumentApiSpec dokumentApiSpec, UUID gesuchId, DokumentTypDtoSpec dokTyp, File file) {
+    public static void uploadFile(
+        DokumentApiSpec dokumentApiSpec,
+        UUID gesuchId,
+        DokumentTypDtoSpec dokTyp,
+        File file) {
         dokumentApiSpec.createDokument()
             .gesuchIdPath(gesuchId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");
             })
-            .execute(ResponseBody::prettyPeek)
+            .execute(PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
+
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
@@ -186,6 +290,8 @@ public class TestUtil {
                 .setAnzahlWochenLehre(42)
                 .setAnzahlWochenSchule(37)
                 .setPreisProMahlzeit(7)
+                .setIntegrationszulage(2400)
+                .setLimiteEkFreibetragIntegrationszulage(13200)
                 .setPerson1(11724)
                 .setPersonen2(17940)
                 .setPersonen3(21816)
@@ -322,7 +428,7 @@ public class TestUtil {
                     .setFahrkosten(0)
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
-                    .setSteuernStaat(0)
+                    .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(0)
                     .setErgaenzungsleistungen(0)
                     .setEigenmietwert(0)
@@ -340,7 +446,7 @@ public class TestUtil {
                     .setFahrkosten(0)
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
-                    .setSteuernStaat(0)
+                    .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(0)
                     .setErgaenzungsleistungen(0)
                     .setEigenmietwert(0)
