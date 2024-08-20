@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+
 import { SharedFeatureVerfuegungZusammenfassungComponent } from './shared-feature-verfuegung-zusammenfassung/shared-feature-verfuegung-zusammenfassung.component';
 
 export const sharedFeatureVerfuegungZusammenfassungRoutes: Route[] = [

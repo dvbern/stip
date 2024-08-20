@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { Route } from '@angular/router';
-import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feature/verfuegung-zusammenfassung';
 import { Store } from '@ngrx/store';
 
 import {
@@ -8,6 +7,7 @@ import {
   OPTION_ZUSAMMENFASSUNG,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feature/verfuegung-zusammenfassung';
 
 export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
   {
