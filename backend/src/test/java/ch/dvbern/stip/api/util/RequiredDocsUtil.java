@@ -29,15 +29,6 @@ public class RequiredDocsUtil {
         requiresOneAndType(requiredList.get(0), dokTyp);
     }
 
-    public void requiresCountAndTypes(
-        final int count,
-        final Pair<String, List<DokumentTyp>> requiredDocs,
-        final DokumentTyp... dokTypes
-    ) {
-        assertCount(requiredDocs, count);
-        assertTypes(requiredDocs, dokTypes);
-    }
-
     public void requiresFirstCountAndTypes(
         final int count,
         final List<Pair<String, List<DokumentTyp>>> requiredList,
