@@ -1,9 +1,6 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
-import ch.dvbern.stip.api.auszahlung.service.AuszahlungSapService;
-import ch.dvbern.stip.api.auszahlung.service.BusinessPartnerChangeClient;
-import ch.dvbern.stip.api.auszahlung.service.BusinessPartnerCreateClient;
-import ch.dvbern.stip.api.auszahlung.service.ImportStatusReadClient;
+import ch.dvbern.stip.api.auszahlung.service.*;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -45,6 +42,10 @@ class AuszahlungResourceImplTest {
     @RestClient
     @InjectMock
     BusinessPartnerChangeClient businessPartnerChangeClient;
+
+    @RestClient
+    @InjectMock
+    VendorPostingCreateClient vendorPostingCreateClient;
 
     @TestAsSachbearbeiter
     @Test
@@ -203,6 +204,52 @@ class AuszahlungResourceImplTest {
 
     }
 
+    @Test
+    @TestAsGesuchsteller
+    void createAuszahlungAsGSTest(){
+        when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn("");
+        assertThrows(ForbiddenException.class, () -> auszahlungResource.createAuszahlung((initCreateAuszahlungDto())));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    void createAuszahlungInvalidDtoTest() throws IOException {
+        String xml = IOUtils.toString(//todo: add proper file
+            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
+            "UTF-8"
+        );
+        final CreateAuszahlungDto requestDto1 = initCreateAuszahlungDto();
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(null));
+        requestDto1.setDeliveryId(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto1));
+
+        final CreateAuszahlungDto requestDto2 = initCreateAuszahlungDto();
+        requestDto2.setAuszahlung(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto2));
+
+        final CreateAuszahlungDto requestDto3 = initCreateAuszahlungDto();
+        requestDto3.setVendorNo(null);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto3));
+
+        when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
+        final var response = auszahlungResource.createAuszahlung(initCreateAuszahlungDto());
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    void createAuszahlungTest() throws IOException { //todo: add proper xml
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerSuccessResponse.xml"),
+            "UTF-8"
+        );
+        when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
+        final var response = auszahlungResource.createAuszahlung(initCreateAuszahlungDto());
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
+
+    }
+
+
     private CreateAuszahlungKreditorDto initCreateAuszahlungKreditorDto() {
         AuszahlungDto auszahlungDto = new AuszahlungDto();
         auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
@@ -242,5 +289,27 @@ class AuszahlungResourceImplTest {
         kreditorDto.setExtId(EXAMPLE_EXT_ID);
         kreditorDto.setDeliveryId(EXAMPLE_DELIVERY_ID);
         return kreditorDto;
+    }
+
+    private CreateAuszahlungDto initCreateAuszahlungDto() {
+        CreateAuszahlungDto createAuszahlungDto = new CreateAuszahlungDto();
+        AuszahlungDto auszahlungDto = new AuszahlungDto();
+        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        auszahlungDto.setIban("CH5589144649329557546");
+        auszahlungDto.setNachname("Muster");
+        auszahlungDto.setVorname("Hans");
+        AdresseDto adresseDto = new AdresseDto();
+        adresseDto.setHausnummer("1a");
+        adresseDto.setStrasse("Musterstrasse");
+        adresseDto.setOrt("Bern");
+        adresseDto.setPlz("3011");
+        adresseDto.setLand(Land.CH);
+        auszahlungDto.setAdresse(adresseDto);
+        createAuszahlungDto.setAuszahlung(auszahlungDto);
+        createAuszahlungDto.setDeliveryId(EXAMPLE_DELIVERY_ID);
+        createAuszahlungDto.setPositionsText("blabala");
+        createAuszahlungDto.setZahlungszweck("blabla");
+        createAuszahlungDto.setVendorNo(1234);
+        return createAuszahlungDto;
     }
 }

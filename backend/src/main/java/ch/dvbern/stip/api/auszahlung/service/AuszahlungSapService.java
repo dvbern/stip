@@ -1,9 +1,6 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
-import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDto;
-import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
-import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,9 +31,13 @@ public class AuszahlungSapService {
     @Location("AuszahlungSapService/SST_077_BusinessPartnerChange.xml")
     public Template SST_077_BusinessPartnerChange;
 
+    @Location("AuszahlungSapService/SST_003_VendorPostingCreate.xml")
+    public Template SST_003_VendorPostingCreate;
+
     private final GetAuszahlungImportStatusRequestMapper getAuszahlungImportStatusRequestMapper;
     private final CreateAuszahlungKreditorMapper createAuszahlungKreditorMapper;
     private final ChangeAuszahlungKreditorMapper changeAuszahlungKreditorMapper;
+    private final CreateAuszahlungMapper createAuszahlungMapper;
 
     @ConfigProperty(name = "stip_sap_sysid")
     Integer sysid;
@@ -49,6 +50,9 @@ public class AuszahlungSapService {
 
     @RestClient
     BusinessPartnerChangeClient businessPartnerChangeClient;
+
+    @RestClient
+    VendorPostingCreateClient vendorPostingCreateClient;
 
     private String buildPayload(Template template, Object data){
         return template.data("data", data).render();
@@ -99,6 +103,17 @@ public class AuszahlungSapService {
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch(WebApplicationException ex){
+            return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+        }
+    }
+
+    public Response createAuszahlung(@Valid CreateAuszahlungDto dto){
+        try{
+            CreateAuszahlung data = createAuszahlungMapper.toCreateAuszahlung(dto);
+            String response = vendorPostingCreateClient.createVendorPosting(buildPayload(SST_003_VendorPostingCreate,data));
+            return Response.status(HttpStatus.SC_OK).entity(response).build();
+        }
+        catch (WebApplicationException ex){
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
         }
     }
