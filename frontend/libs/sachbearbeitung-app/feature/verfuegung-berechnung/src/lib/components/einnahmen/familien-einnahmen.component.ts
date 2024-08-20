@@ -13,12 +13,10 @@ import { FamilienBerechnung } from '../../../models';
   template: `
     <!-- Total Einkünfte -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().totalEinkuenfte }}
       </div>
@@ -26,12 +24,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Ergänzungsleistungen -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().ergaenzungsleistungen }}
       </div>
@@ -39,12 +35,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Steuerbares Vermögen -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.steuerbaresVermoegen'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.steuerbaresVermoegen'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().steuerbaresVermoegen }}
       </div>
@@ -53,12 +47,10 @@ import { FamilienBerechnung } from '../../../models';
     <!-- 15 % Vermögensaufrechnung -->
     <div class="d-flex">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung.info'
@@ -73,23 +65,19 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Abzüge -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1"></div>
     </div>
 
     <!-- Beiträge von Selbständigerwerbenden in die 2.Säule /Säule 3a -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().beitraegeSaule }}
       </div>
@@ -97,12 +85,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Abzüglich Mietwert -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().mietwert }}
       </div>
@@ -110,12 +96,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().alimenteOderRenten }}
       </div>
@@ -123,12 +107,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Einkommensfreibetrag -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().einkommensfreibeitrag }}
       </div>

@@ -13,22 +13,18 @@ import { FamilienBerechnung } from '../../../models';
   template: `
     <!-- Anzahl anrechenbare Personen -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
-            | translate: kostenSig()
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
+          | translate: kostenSig()
+      }}
     </div>
 
     <!-- Grundbedarf  -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().grundbedarf }}
       </div>
@@ -36,12 +32,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Wohnkosten -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().wohnkosten }}
       </div>
@@ -49,12 +43,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Medizinische Grundversorgung -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().medizinischeGrundversorgung }}
       </div>
@@ -63,12 +55,10 @@ import { FamilienBerechnung } from '../../../models';
     <!-- lntegrationszulage pro in Ausbildung stehendes Kind -->
     <div class="d-flex gap-5">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info'
@@ -83,12 +73,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Kantons- und Gemeindesteuern -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().kantonsGemeindesteuern }}
       </div>
@@ -96,12 +84,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Bundessteuern -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().bundessteuern }}
       </div>
@@ -109,12 +95,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Fahrkosten -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().fahrkosten }}
       </div>
@@ -122,12 +106,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Fahrkosten Partner:in -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().fahrkostenPartner }}
       </div>
@@ -135,12 +117,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Verpflegung auswärts -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().verpflegung }}
       </div>
@@ -148,12 +128,10 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Verpflegung auswärts Partner:in -->
     <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
-            | translate
-        }}
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().verpflegungPartner }}
       </div>
