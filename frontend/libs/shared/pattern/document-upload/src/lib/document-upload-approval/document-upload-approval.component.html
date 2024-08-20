@@ -1,0 +1,38 @@
+@if (dokumentsStore.dokumentViewSig()?.id) {
+  <div class="d-flex justify-content-between">
+    @switch (dokumentsStore.dokumentViewSig()?.status) {
+      @case ('AUSSTEHEND') {
+        <button
+          (click)="dokumentAblehnen()"
+          type="button"
+          class="btn table-btn btn-danger d-flex align-items-center gap-1"
+        >
+          <i class="material-symbols-rounded fs-4">close</i>
+          <span>
+            {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+          </span>
+        </button>
+        <button
+          (click)="dokumentAkzeptieren()"
+          type="button"
+          class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+        >
+          <i class="material-symbols-rounded fs-4">check</i>
+          <span>
+            {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+          </span>
+        </button>
+      }
+      @case ('AKZEPTIERT') {
+        <dv-shared-ui-icon-badge type="success" class="status ms-auto">
+          {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+        </dv-shared-ui-icon-badge>
+      }
+      @case ('ABGELEHNT') {
+        <dv-shared-ui-icon-badge type="danger" class="status ms-auto">
+          {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+        </dv-shared-ui-icon-badge>
+      }
+    }
+  </div>
+}

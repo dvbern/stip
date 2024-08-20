@@ -387,6 +387,11 @@ public class GesuchService {
         return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
     }
 
+    @Transactional
+    public GesuchDokumentDto getGesuchDokumentForGesuch(final UUID gesuchId, final DokumentTyp dokumentTyp) {
+        return gesuchDokumentMapper.toDto(gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElseThrow(NotFoundException::new));
+    }
+
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())

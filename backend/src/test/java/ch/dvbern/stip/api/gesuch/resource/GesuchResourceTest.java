@@ -621,6 +621,21 @@ class GesuchResourceTest {
             set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
             is(true)
         );
+
+        var gesuchDokumentReference = gesuchDokumente[1];
+
+        var gesuchDokument = gesuchApiSpec.getGesuchDokument()
+            .dokumentTypPath(gesuchDokumentReference.getId())
+            .gesuchsIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentDtoSpec.class);
+
+        assertThat(gesuchDokument, is(gesuchDokumentReference));
     }
 
     @Test
