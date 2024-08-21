@@ -99,7 +99,7 @@ public class AuszahlungSapService {
     public Response changeBusinessPartner(@Valid ChangeAuszahlungKreditorDto dto){
         try{
             ChangeAuszahlungKreditor data = changeAuszahlungKreditorMapper.toChangeAuszahlungKreditor(dto);
-            String response = businessPartnerCreateClient.createBusinessPartner(buildPayload(SST_077_BusinessPartnerChange,data));
+            String response = businessPartnerChangeClient.changeBusinessPartner(buildPayload(SST_077_BusinessPartnerChange,data));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch(WebApplicationException ex){
