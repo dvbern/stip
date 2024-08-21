@@ -37,7 +37,7 @@ public class Steuerdaten extends AbstractEntity {
     private Integer totalEinkuenfte;
 
     @NotNull
-    @Column(name = "eigenmietwert")
+    @Column(name = "eigenmietwert", nullable = false)
     private Integer eigenmietwert;
 
     @NotNull

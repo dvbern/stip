@@ -14,6 +14,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class SteuerdatenTypRequiredDocumentsProducer {
+    private SteuerdatenTypRequiredDocumentsProducer() {}
+
     private static @Nullable Steuerdaten getForTyp(final Set<Steuerdaten> steuerdatenSet, final SteuerdatenTyp typ) {
         return steuerdatenSet.stream()
             .filter(steuerdaten -> steuerdaten.getSteuerdatenTyp() == typ)
@@ -54,8 +56,8 @@ public class SteuerdatenTypRequiredDocumentsProducer {
                 return ImmutablePair.of("", List.of());
             }
 
-            final var mutterSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.VATER);
-            return ImmutablePair.of("steuerdatenVater", producer.getForSteuerdaten(mutterSteuerdaten));
+            final var vaterSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.VATER);
+            return ImmutablePair.of("steuerdatenVater", producer.getForSteuerdaten(vaterSteuerdaten));
         }
     }
 
@@ -71,8 +73,8 @@ public class SteuerdatenTypRequiredDocumentsProducer {
                 return ImmutablePair.of("", List.of());
             }
 
-            final var mutterSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.FAMILIE);
-            return ImmutablePair.of("steuerdaten", producer.getForSteuerdaten(mutterSteuerdaten));
+            final var familieSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.FAMILIE);
+            return ImmutablePair.of("steuerdaten", producer.getForSteuerdaten(familieSteuerdaten));
         }
     }
 

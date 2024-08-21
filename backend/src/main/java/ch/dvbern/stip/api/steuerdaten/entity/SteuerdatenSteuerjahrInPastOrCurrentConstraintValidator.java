@@ -34,11 +34,8 @@ public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
         }
 
         final var gesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr();
-        final var allValid = gesuchFormular.getSteuerdaten().stream()
-            .allMatch(steuerdaten -> isSteuerjahrValid(steuerdaten, gesuchsjahr));
-
         final var invalidSteuerdaten = gesuchFormular.getSteuerdaten().stream()
-            .filter(steuerdaten ->  !isSteuerjahrValid(steuerdaten, gesuchsjahr))
+            .filter(steuerdaten -> !isSteuerjahrValid(steuerdaten, gesuchsjahr))
             .toList();
 
         if (invalidSteuerdaten.isEmpty()) {
