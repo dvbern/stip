@@ -88,7 +88,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .statusCode(Response.Status.CREATED.getStatusCode());
 
         var gesuchId = TestUtil.extractIdFromResponse(response);
-        var gesuchTrancheId = gesuchApiSpec.getGesuch()
+        var gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek).then().extract()
             .body()

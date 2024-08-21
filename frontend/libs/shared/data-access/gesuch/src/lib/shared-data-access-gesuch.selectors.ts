@@ -46,9 +46,12 @@ const baseSteps = [
   EINNAHMEN_KOSTEN,
   DOKUMENTE,
 ];
+
 const { selectRouteParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
+
+export const selectRouteTrancheId = selectRouteParam('trancheId');
 
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,

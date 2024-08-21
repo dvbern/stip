@@ -41,8 +41,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @AhvIfSwissConstraint
 public class Eltern extends AbstractPerson {
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"), nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"))
     private Adresse adresse;
 
     @Nullable

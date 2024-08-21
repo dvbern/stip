@@ -14,19 +14,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("AenderungsantragCreate")
+@JsonTypeName("CreateGesuchTrancheRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class AenderungsantragCreateDto  implements Serializable {
+public class CreateGesuchTrancheRequestDto  implements Serializable {
   private @Valid LocalDate start;
   private @Valid LocalDate end;
   private @Valid String comment;
 
   /**
    **/
-  public AenderungsantragCreateDto start(LocalDate start) {
+  public CreateGesuchTrancheRequestDto start(LocalDate start) {
     this.start = start;
     return this;
   }
@@ -45,7 +45,7 @@ public class AenderungsantragCreateDto  implements Serializable {
 
   /**
    **/
-  public AenderungsantragCreateDto end(LocalDate end) {
+  public CreateGesuchTrancheRequestDto end(LocalDate end) {
     this.end = end;
     return this;
   }
@@ -63,7 +63,7 @@ public class AenderungsantragCreateDto  implements Serializable {
 
   /**
    **/
-  public AenderungsantragCreateDto comment(String comment) {
+  public CreateGesuchTrancheRequestDto comment(String comment) {
     this.comment = comment;
     return this;
   }
@@ -88,10 +88,10 @@ public class AenderungsantragCreateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AenderungsantragCreateDto aenderungsantragCreate = (AenderungsantragCreateDto) o;
-    return Objects.equals(this.start, aenderungsantragCreate.start) &&
-        Objects.equals(this.end, aenderungsantragCreate.end) &&
-        Objects.equals(this.comment, aenderungsantragCreate.comment);
+    CreateGesuchTrancheRequestDto createGesuchTrancheRequest = (CreateGesuchTrancheRequestDto) o;
+    return Objects.equals(this.start, createGesuchTrancheRequest.start) &&
+        Objects.equals(this.end, createGesuchTrancheRequest.end) &&
+        Objects.equals(this.comment, createGesuchTrancheRequest.comment);
   }
 
   @Override
@@ -102,7 +102,7 @@ public class AenderungsantragCreateDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AenderungsantragCreateDto {\n");
+    sb.append("class CreateGesuchTrancheRequestDto {\n");
     
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    end: ").append(toIndentedString(end)).append("\n");

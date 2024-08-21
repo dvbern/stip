@@ -2,7 +2,6 @@ import { Route } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import {
   sharedDataAccessGesuchsperiodeEffects,
   sharedDataAccessGesuchsperiodesFeature,
@@ -15,7 +14,6 @@ export const gesuchAppFeatureCockpitRoutes: Route[] = [
     path: '',
     pathMatch: 'prefix',
     providers: [
-      GesuchAenderungStore,
       provideState(sharedDataAccessGesuchsperiodesFeature),
       provideEffects(sharedDataAccessGesuchsperiodeEffects),
     ],
