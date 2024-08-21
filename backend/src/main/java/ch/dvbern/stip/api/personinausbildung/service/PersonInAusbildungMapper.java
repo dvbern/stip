@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
-public abstract class PersonInAusbildungMapper extends EntityUpdateMapper<PersonInAusbildungDto, PersonInAusbildung> {
+public abstract class PersonInAusbildungMapper extends EntityUpdateMapper<PersonInAusbildungUpdateDto, PersonInAusbildung> {
     public abstract PersonInAusbildung toEntity(PersonInAusbildungDto personInAusbildungDto);
 
     public abstract PersonInAusbildungDto toDto(PersonInAusbildung personInAusbildung);
@@ -22,7 +22,7 @@ public abstract class PersonInAusbildungMapper extends EntityUpdateMapper<Person
     @Override
     @BeforeMapping
     protected void resetDependentDataBeforeUpdate(
-        final PersonInAusbildungDto newFormular,
+        final PersonInAusbildungUpdateDto newFormular,
         final @MappingTarget PersonInAusbildung targetFormular
     ) {
         resetFieldIf(
