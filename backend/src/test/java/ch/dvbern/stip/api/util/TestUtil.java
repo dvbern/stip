@@ -201,7 +201,8 @@ public class TestUtil {
 
     public static <T> List<T> createUpdateDtoSpecs(Supplier<T> supplier, Consumer<T> consumer, int amount) {
         return Stream.generate(supplier)
-            .peek(t -> consumer.accept(t))
+            .limit(amount)
+            .peek(consumer)
             .toList();
     }
 
