@@ -129,7 +129,14 @@ public class AntragsstellerV1 {
           // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
           // TODO: builder.lehre(Objects.requireNonNullElse());
           builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
-          // TODO: builder.abgeschlosseneErstausbildung(Objects.requireNonNullElse());
+
+          builder.abgeschlosseneErstausbildung(
+              gesuchFormular.getLebenslaufItems().stream().anyMatch(
+                  lebenslaufItem ->
+                      lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+                      && lebenslaufItem.isAusbildungAbgeschlossen()
+              )
+          );
 
           if (partner != null) {
               builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));

@@ -13,6 +13,25 @@
       "SonarSource.sonarlint-vscode"
     ]
   },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Mvnd generate stubs",
+        "command": "mvnd clean package -Pgenerate-stubs-from-contract",
+        "type": "shell",
+        "args": [],
+        "problemMatcher": ["$tsc"],
+        "presentation": {
+          "reveal": "always"
+        },
+        "group": "build",
+        "options": {
+          "cwd": "${workspaceFolder}/backend"
+        }
+      }
+    ]
+  },
   "settings": {
     "files.exclude": {
       "backend/**": true
@@ -43,28 +62,6 @@
     "peacock.color": "#075fa4",
     "prettier.configPath": "frontend/.prettierrc",
     "prettier.ignorePath": "frontend/.prettierignore",
-    "sqltools.connections": [
-      {
-        "previewLimit": 50,
-        "server": "localhost",
-        "port": 5432,
-        "driver": "PostgreSQL",
-        "name": "stip",
-        "database": "stip",
-        "username": "stip",
-        "password": "stip"
-      },
-      {
-        "previewLimit": 50,
-        "server": "localhost",
-        "port": 5445,
-        "driver": "PostgreSQL",
-        "database": "stip",
-        "username": "stip",
-        "password": "stip",
-        "name": "stip-dektop"
-      }
-    ],
     "angular.enable-strict-mode-prompt": false,
     "launch": {
       "version": "0.2.0",
