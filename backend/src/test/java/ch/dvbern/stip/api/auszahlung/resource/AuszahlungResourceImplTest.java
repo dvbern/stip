@@ -249,7 +249,6 @@ class AuszahlungResourceImplTest {
 
     }
 
-
     private CreateAuszahlungKreditorDto initCreateAuszahlungKreditorDto() {
         AuszahlungDto auszahlungDto = new AuszahlungDto();
         auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);

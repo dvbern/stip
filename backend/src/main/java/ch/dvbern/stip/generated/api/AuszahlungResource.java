@@ -3,12 +3,12 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungDto;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
-
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.Valid;
+
 
 @Path("/auszahlung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
