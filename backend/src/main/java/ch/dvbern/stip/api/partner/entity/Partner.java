@@ -33,8 +33,8 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Partner extends AbstractPerson {
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_partner_adresse_id"), nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_partner_adresse_id"))
     private Adresse adresse;
 
     @NotNull
