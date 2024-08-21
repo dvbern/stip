@@ -2,8 +2,8 @@
   <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
   @if (berechnungenSig().loading) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
-  } @else if (berechnungenSig().list.length > 0) {
-    @for (berechnung of berechnungenSig().list; track $index) {
+  } @else {
+    @if (berechnungenSig().list[indexSig() - 1]; as berechnung) {
       <dl class="d-flex g-2">
         <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
         <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.YYYY' }}</dd>
@@ -42,8 +42,8 @@
           </div>
         }
       </div>
+    } @else {
+      <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
     }
-  } @else {
-    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
   }
 }

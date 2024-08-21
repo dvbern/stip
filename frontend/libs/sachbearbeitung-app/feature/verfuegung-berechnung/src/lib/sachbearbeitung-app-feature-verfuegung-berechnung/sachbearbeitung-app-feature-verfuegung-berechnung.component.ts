@@ -5,6 +5,7 @@ import {
   computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -49,6 +50,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
+  indexSig = input.required<number>({ alias: 'index' });
   expansionState = {
     persoenlich: {
       einnahmen: false,
