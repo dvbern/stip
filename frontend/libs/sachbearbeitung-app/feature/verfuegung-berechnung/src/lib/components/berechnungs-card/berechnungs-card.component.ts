@@ -31,21 +31,21 @@ import { Berechnung } from '../../../models';
         <mat-card-header>
           <mat-card-title>
             <div class="d-flex flex-column ps-1">
-              <span class="text-muted mb-2">{{
+              <span class="text-muted mb-1">{{
                 'sachbearbeitung-app.verfuegung.berechnung.' +
                   berechnung.typ +
                   '.title' | translate
               }}</span>
-              @switch (berechnung.typ) {
-                @case ('persoenlich') {
-                  <span class="h3 mb-4">{{ berechnung.name }}</span>
+              <span class="h3 mb-4 fs-4">
+                @switch (berechnung.typ) {
+                  @case ('persoenlich') {
+                    {{ berechnung.name }}
+                  }
+                  @case ('familien') {
+                    {{ berechnung.nameKey | translate: berechnung }}
+                  }
                 }
-                @case ('familien') {
-                  <span class="h3 mb-4">{{
-                    berechnung.nameKey | translate: berechnung
-                  }}</span>
-                }
-              }
+              </span>
             </div>
           </mat-card-title>
         </mat-card-header>
@@ -71,7 +71,7 @@ import { Berechnung } from '../../../models';
           <div class="mat-accordion full-width">
             <div class="mat-expansion-panel-header h-auto pe-none">
               <div
-                class="mat-expansion-panel-header-title h4 py-4 mb-0 grid ps-4 justify-content-between"
+                class="mat-expansion-panel-header-title h4 py-4 mb-0 me-0 grid ps-4 justify-content-between fs-3"
               >
                 {{
                   'sachbearbeitung-app.verfuegung.berechnung.' +
