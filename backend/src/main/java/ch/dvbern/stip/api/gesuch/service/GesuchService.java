@@ -473,7 +473,8 @@ public class GesuchService {
 
     @Transactional
     public GesuchDokumentDto getGesuchDokumentForGesuch(final UUID gesuchId, final DokumentTyp dokumentTyp) {
-        return gesuchDokumentMapper.toDto(gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElseThrow(NotFoundException::new));
+        return gesuchDokumentMapper.toDto(gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp)
+            .orElseThrow(NotFoundException::new));
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchId) {
