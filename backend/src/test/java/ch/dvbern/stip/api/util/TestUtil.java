@@ -104,9 +104,15 @@ public class TestUtil {
     }
 
     public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
-        final var response = fallApiSpec.getFallForGs().execute(PEEK_IF_ENV_SET);
+        final var response = fallApiSpec.getFallForGs()
+            .execute(PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+        var stringBody = response.extract().body().asString();
         FallDtoSpec fall;
-        if (response.statusCode() == Status.NOT_FOUND.getStatusCode()) {
+        if (stringBody == null || stringBody.isEmpty()) {
             fall = fallApiSpec.createFallForGs()
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
@@ -116,7 +122,7 @@ public class TestUtil {
                 .body()
                 .as(FallDtoSpec.class);
         } else {
-            fall = response.body().as(FallDtoSpec.class);
+            fall = response.extract().body().as(FallDtoSpec.class);
         }
 
         return fall;
@@ -135,7 +141,7 @@ public class TestUtil {
             .statusCode(Response.Status.CREATED.getStatusCode());
 
         final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
-        return gesuchApiSpec.getGesuch()
+        return gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

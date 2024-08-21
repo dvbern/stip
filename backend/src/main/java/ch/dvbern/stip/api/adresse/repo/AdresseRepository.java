@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.auszahlung.repo;
+package ch.dvbern.stip.api.adresse.repo;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
