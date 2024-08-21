@@ -15,6 +15,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -48,6 +49,7 @@ class DokumentResourcesTest {
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private UUID gesuchId;
+    private UUID gesuchTrancheId;
     private UUID dokumentId;
 
     @Test
@@ -64,6 +66,12 @@ class DokumentResourcesTest {
         response.assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
         gesuchId = TestUtil.extractIdFromResponse(response);
+        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek).then().extract()
+            .body()
+            .as(GesuchDtoSpec.class)
+            .getGesuchTrancheToWorkWith().getId();
     }
 
     @Test
@@ -73,7 +81,7 @@ class DokumentResourcesTest {
         File file = new File(TEST_XML_FILE_LOCATION);
         dokumentApiSpec.createDokument();
         given()
-            .pathParam("gesuchId", gesuchId)
+            .pathParam("gesuchTrancheId", gesuchTrancheId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
@@ -91,7 +99,7 @@ class DokumentResourcesTest {
         File file = new File(TEST_FILE_LOCATION);
         dokumentApiSpec.createDokument();
         given()
-            .pathParam("gesuchId", gesuchId)
+            .pathParam("gesuchTrancheId", gesuchTrancheId)
             .pathParam("dokumentTyp", DokumentTyp.PERSON_AUSWEIS)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
             .multiPart("fileUpload", file)
@@ -106,7 +114,7 @@ class DokumentResourcesTest {
     @Order(4)
     void test_list_and_read_dokument_for_gesuch() throws IOException {
         var dokumentDtoList = dokumentApiSpec.getDokumenteForTyp()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -121,7 +129,7 @@ class DokumentResourcesTest {
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -143,7 +151,7 @@ class DokumentResourcesTest {
     @Order(5)
     void test_delete_dokument() {
         dokumentApiSpec.deleteDokument()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentIdPath(dokumentId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)

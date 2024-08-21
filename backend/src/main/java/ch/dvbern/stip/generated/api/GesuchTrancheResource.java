@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import java.util.UUID;
@@ -19,29 +20,39 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("")
+@Path("/gesuchtranche")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchTrancheResource {
 
     @POST
-    @Path("/gesuchtranche/{gesuchId}/aenderungsantrag")
+    @Path("/{gesuchId}/aenderungsantrag")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response createAenderungsantrag(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull CreateAenderungsantragRequestDto createAenderungsantragRequestDto);
 
     @POST
-    @Path("/gesuchtranche/{gesuchId}/tranche")
+    @Path("/{gesuchId}/tranche")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response createGesuchTrancheCopy(@PathParam("gesuchId") UUID gesuchId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
 
     @GET
-    @Path("/gesuchtranche/{gesuchId}/aenderungsantrag")
+    @Path("/{gesuchId}/aenderungsantrag")
     @Produces({ "application/json", "text/plain" })
     Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/tranche/{gesuchId}")
+    @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchTrancheId}/dokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesuchDokumente(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/{gesuchTrancheId}/requiredDokumente")
+    @Produces({ "application/json", "text/plain" })
+    Response getRequiredGesuchDokumentTyp(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 }

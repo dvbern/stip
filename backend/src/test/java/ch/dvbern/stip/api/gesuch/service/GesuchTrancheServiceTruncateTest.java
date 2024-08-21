@@ -276,6 +276,10 @@ class GesuchTrancheServiceTruncateTest {
             null,
             mockTrancheRepo,
             null,
+            null,
+            null,
+            null,
+            null,
             null
         );
     }

@@ -19,7 +19,6 @@ public class RequiredDokumentService {
     private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
         return formular
             .getTranche()
-            .getGesuch()
             .getGesuchDokuments();
     }
 
@@ -39,7 +38,7 @@ public class RequiredDokumentService {
             ).toList();
     }
 
-    public List<DokumentTyp> getRequiredDokumentsForGesuch(final GesuchFormular formular) {
+    public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
         final var existingDokumentTypesHashSet = new HashSet<>(
             getExistingDokumentTypesForGesuch(formular)
         );
@@ -59,7 +58,7 @@ public class RequiredDokumentService {
         final var requiredDokumentTypesHashSet = new HashSet<>(
             getRequiredDokumentTypesForGesuch(formular)
         );
-        
+
         final var superfluousDokumentTypes = existingDokumentTypes
             .stream()
             .filter(

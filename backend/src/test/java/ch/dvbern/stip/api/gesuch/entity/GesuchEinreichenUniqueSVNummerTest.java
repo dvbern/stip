@@ -12,8 +12,8 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -41,6 +41,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
 
+    UUID gesuchTrancheId;
+
     @Test
     @Order(1)
     @TestAsGesuchsteller
@@ -50,7 +52,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
         final var file = TestUtil.getTestPng();
         for (final var dokType : DokumentTypDtoSpec.values()) {
-            TestUtil.uploadFile(dokumentApiSpec, gesuchId, dokType, file);
+            TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokType, file);
         }
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
@@ -90,7 +92,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .statusCode(Response.Status.CREATED.getStatusCode());
 
         var gesuchId = TestUtil.extractIdFromResponse(response);
-        var gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
+        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek).then().extract()
             .body()

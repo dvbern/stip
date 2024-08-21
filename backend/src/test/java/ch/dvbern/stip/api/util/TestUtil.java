@@ -164,9 +164,9 @@ public class TestUtil {
         return new File(TEST_PNG_FILE_LOCATION);
     }
 
-    public static void uploadFile(DokumentApiSpec dokumentApiSpec, UUID gesuchId, DokumentTypDtoSpec dokTyp, File file) {
+    public static void uploadFile(DokumentApiSpec dokumentApiSpec, UUID gesuchTrancheId, DokumentTypDtoSpec dokTyp, File file) {
         dokumentApiSpec.createDokument()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");

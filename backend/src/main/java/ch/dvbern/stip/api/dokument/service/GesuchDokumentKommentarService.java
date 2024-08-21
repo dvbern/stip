@@ -15,7 +15,7 @@ public class GesuchDokumentKommentarService {
     @Transactional
     public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument, final String comment) {
         final var kommentar = new GesuchDokumentKommentar()
-            .setGesuch(gesuchDokument.getGesuch())
+            .setGesuch(gesuchDokument.getGesuchTranche().getGesuch())
             .setDokumentTyp(gesuchDokument.getDokumentTyp())
             .setDokumentstatus(gesuchDokument.getStatus())
             .setKommentar(comment);

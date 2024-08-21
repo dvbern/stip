@@ -13,7 +13,7 @@ public class AkzeptiertHandler implements GesuchTrancheStatusStateChangeHandler 
     @Override
     public boolean handles(Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition) {
         return transition.getSource() == GesuchTrancheStatus.UEBERPRUEFEN &&
-            transition.getDestination() == GesuchTrancheStatus.AKZETPIERT;
+            transition.getDestination() == GesuchTrancheStatus.AKZEPTIERT;
     }
 
     @Override

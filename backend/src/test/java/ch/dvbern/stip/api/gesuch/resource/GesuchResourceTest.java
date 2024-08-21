@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
@@ -65,11 +66,13 @@ import static org.junit.Assert.assertNull;
 // TODO KSTIP-1236: Test Aenderungsantrag once proper generation is done
 class GesuchResourceTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    public final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID fallId;
     private UUID gesuchId;
+    private UUID gesuchTrancheId;
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -113,6 +116,7 @@ class GesuchResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
 
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
@@ -459,8 +463,8 @@ class GesuchResourceTest {
     void testRemoveSuperfluousDocuments() {
         // getGesuchDokumente also removes superfluous documents from the Gesuch
         // This is needed so the follow check if only necessary documents are saved works
-        gesuchApiSpec.getGesuchDokumente()
-            .gesuchIdPath(gesuchId)
+        gesuchTrancheApiSpec.getGesuchDokumente()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -604,8 +608,8 @@ class GesuchResourceTest {
             DokumentTypDtoSpec.EK_LOHNABRECHNUNG
         };
 
-        var gesuchDokumente = gesuchApiSpec.getGesuchDokumente()
-            .gesuchIdPath(gesuchId)
+        var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumente()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -721,7 +725,7 @@ class GesuchResourceTest {
 
     private void uploadDocumentWithType(final DokumentTypDtoSpec dokTyp) {
         final var file = TestUtil.getTestPng();
-        TestUtil.uploadFile(dokumentApiSpec, gesuchId, dokTyp, file);
+        TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokTyp, file);
     }
 
     private Optional<GesuchDtoSpec> findGesuchWithId(GesuchDtoSpec[] gesuche, UUID gesuchId) {

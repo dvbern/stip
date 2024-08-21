@@ -31,10 +31,10 @@ public class GesuchTrancheStatusConfigProducer {
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.ABGELEHNT, GesuchTrancheStatus.ABGELEHNT)
-            .permit(GesuchTrancheStatusChangeEvent.AKZETPIERT, GesuchTrancheStatus.AKZETPIERT);
+            .permit(GesuchTrancheStatusChangeEvent.AKZETPIERT, GesuchTrancheStatus.AKZEPTIERT);
 
         config.configure(GesuchTrancheStatus.ABGELEHNT);
-        config.configure(GesuchTrancheStatus.AKZETPIERT);
+        config.configure(GesuchTrancheStatus.AKZEPTIERT);
 
         for (final var status : GesuchTrancheStatus.values()) {
             final var state = config.getRepresentation(status);

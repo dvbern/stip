@@ -52,4 +52,18 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         );
         return Response.ok(gesuchDto).build();
     }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesuchDokumente(UUID gesuchTrancheId) {
+        var gesuchDokumente = gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
+        return Response.ok(gesuchDokumente).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getRequiredGesuchDokumentTyp(UUID gesuchTrancheId) {
+        final var requiredTypes = gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
+        return Response.ok(requiredTypes).build();
+    }
 }

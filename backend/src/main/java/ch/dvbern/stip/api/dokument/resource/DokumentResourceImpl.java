@@ -52,14 +52,14 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {
-        List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
+    public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
+    public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
@@ -73,7 +73,7 @@ public class DokumentResourceImpl implements DokumentResource {
             .completionStage(() -> gesuchDokumentService.getCreateDokumentFuture(objectId, fileUpload))
             .onItem()
             .invoke(() -> gesuchDokumentService.uploadDokument(
-                gesuchId,
+                gesuchTrancheId,
                 dokumentTyp,
                 fileUpload,
                 objectId
@@ -141,14 +141,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @Blocking
     public Uni<Response> deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
-        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokumentId);
-
-        return Uni.createFrom().completionStage(() -> gesuchDokumentService.getDeleteDokumentFuture(dokumentObjectId))
-            .onItem()
-            .ignore()
-            .andSwitchTo(Uni.createFrom().item(Response.noContent().build()))
-            .onFailure()
-            .recoverWithItem(Response.serverError().build());
+        gesuchDokumentService.removeDokument(dokumentId);
+        return Uni.createFrom().item(Response.noContent().build());
     }
 
     @RolesAllowed(GESUCH_UPDATE)

@@ -86,13 +86,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesuchDokumente(UUID gesuchId) {
-        var gesuchDokumente = gesuchService.getAndCheckGesuchDokumentsForGesuch(gesuchId);
-        return Response.ok(gesuchDokumente).build();
-    }
-
     @RolesAllowed({ GESUCH_READ})
     @Override
     public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
@@ -109,13 +102,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGesucheForFall(UUID fallId) {
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getRequiredGesuchDokumentTyp(UUID gesuchId) {
-        final var requiredTypes = gesuchService.getRequiredDokumentTypes(gesuchId);
-        return Response.ok(requiredTypes).build();
     }
 
     @RolesAllowed(GESUCH_READ)
@@ -143,4 +129,5 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response getBerechnungForGesuch(UUID gesuchId) {
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
+
 }

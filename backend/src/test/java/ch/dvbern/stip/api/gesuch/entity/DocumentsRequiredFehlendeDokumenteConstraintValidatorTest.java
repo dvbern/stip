@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -26,7 +27,7 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     void noDokumenteIsValid() {
         // Arrange
         final List<GesuchDokument> gesuchDokuments = List.of();
-        final var gesuch = new Gesuch().setGesuchDokuments(gesuchDokuments);
+        final var gesuch = new Gesuch();
         final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
 
         Mockito.doReturn(gesuchDokuments).when(gesuchServiceMock).getGesuchDokumenteForGesuch(ArgumentMatchers.any());
@@ -44,7 +45,8 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.AUSSTEHEND);
         final var gesuchDokumentDtos = gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
-        final var gesuch = new Gesuch().setGesuchDokuments(gesuchDokuments);
+        final var gesuch = GesuchGenerator.initGesuch();
+        gesuch.getNewestGesuchTranche().get().setGesuchDokuments(gesuchDokuments);
         final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
 
         Mockito.doReturn(gesuchDokumentDtos).when(gesuchServiceMock).getGesuchDokumenteForGesuch(ArgumentMatchers.any());
@@ -62,7 +64,8 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.AKZEPTIERT);
         final var gesuchDokumentDtos = gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
-        final var gesuch = new Gesuch().setGesuchDokuments(gesuchDokuments);
+        final var gesuch = GesuchGenerator.initGesuch();
+        gesuch.getNewestGesuchTranche().get().setGesuchDokuments(gesuchDokuments);
         final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
 
         Mockito.doReturn(gesuchDokumentDtos).when(gesuchServiceMock).getGesuchDokumenteForGesuch(ArgumentMatchers.any());
@@ -80,7 +83,8 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.ABGELEHNT);
         final var gesuchDokumentDtos = gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
-        final var gesuch = new Gesuch().setGesuchDokuments(gesuchDokuments);
+        final var gesuch = GesuchGenerator.initGesuch();
+        gesuch.getNewestGesuchTranche().get().setGesuchDokuments(gesuchDokuments);
         final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
 
         Mockito.doReturn(gesuchDokumentDtos).when(gesuchServiceMock).getGesuchDokumenteForGesuch(ArgumentMatchers.any());
@@ -98,8 +102,8 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.AKZEPTIERT, Dokumentstatus.ABGELEHNT);
         final var gesuchDokumentDtos = gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
-        final var gesuch = new Gesuch()
-            .setGesuchDokuments(gesuchDokuments);
+        final var gesuch = GesuchGenerator.initGesuch();
+        gesuch.getNewestGesuchTranche().get().setGesuchDokuments(gesuchDokuments);
         final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
 
         Mockito.doReturn(gesuchDokumentDtos).when(gesuchServiceMock).getGesuchDokumenteForGesuch(ArgumentMatchers.any());
@@ -117,7 +121,8 @@ class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
         // Arrange
         final var gesuchDokuments = createWithStatus(Dokumentstatus.AKZEPTIERT, Dokumentstatus.ABGELEHNT, Dokumentstatus.AUSSTEHEND);
         final var gesuchDokumentDtos = gesuchDokuments.stream().map(gesuchDokument -> gesuchDokumentMapper.toDto(gesuchDokument)).toList();
-        final var gesuch = new Gesuch().setGesuchDokuments(gesuchDokuments);
+        final var gesuch = GesuchGenerator.initGesuch();
+        gesuch.getNewestGesuchTranche().get().setGesuchDokuments(gesuchDokuments);
         final var validator = new DocumentsRequiredFehlendeDokumenteConstraintValidator();
 
         Mockito.doReturn(gesuchDokumentDtos).when(gesuchServiceMock).getGesuchDokumenteForGesuch(ArgumentMatchers.any());

@@ -17,6 +17,7 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
@@ -96,7 +97,7 @@ class GesuchDokumentServiceTest {
         GesuchTranche tranche = initGesuchTranche();
 
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        mockedDokument.setGesuch(tranche.getGesuch());
+        mockedDokument.setGesuchTranche(tranche);
 
         // Act
         gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), someKnownComment);
@@ -117,7 +118,7 @@ class GesuchDokumentServiceTest {
         GesuchTranche tranche = initGesuchTranche();
 
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        mockedDokument.setGesuch(tranche.getGesuch());
+        mockedDokument.setGesuchTranche(tranche);
 
         // Act
         gesuchDokumentService.gesuchDokumentAkzeptieren(mockedDokument.getId());
@@ -134,6 +135,7 @@ class GesuchDokumentServiceTest {
             new DokumentMapperImpl(),
             dokumentRepository,
             gesuchDokumentRepository,
+            null,
             null,
             null,
             null,
@@ -177,6 +179,7 @@ class GesuchDokumentServiceTest {
             DokumentRepository dokumentRepository,
             GesuchDokumentRepository gesuchDokumentRepository,
             GesuchRepository gesuchRepository,
+            GesuchTrancheRepository gesuchTrancheRepository,
             S3AsyncClient s3,
             ConfigService configService,
             DokumentstatusService dokumentstatusService
@@ -186,6 +189,7 @@ class GesuchDokumentServiceTest {
                 dokumentRepository,
                 gesuchDokumentRepository,
                 gesuchRepository,
+                gesuchTrancheRepository,
                 s3,
                 configService,
                 dokumentstatusService
