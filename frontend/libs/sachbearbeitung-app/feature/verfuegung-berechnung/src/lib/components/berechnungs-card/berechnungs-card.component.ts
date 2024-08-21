@@ -71,7 +71,7 @@ import { Berechnung } from '../../../models';
           <div class="mat-accordion full-width">
             <div class="mat-expansion-panel-header h-auto pe-none">
               <div
-                class="mat-expansion-panel-header-title h4 py-4 mb-0 grid ps-4 justify-content-between fs-3"
+                class="mat-expansion-panel-header-title h4 py-4 mb-0 me-0 grid ps-4 justify-content-between fs-3"
               >
                 {{
                   'sachbearbeitung-app.verfuegung.berechnung.' +

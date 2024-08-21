@@ -31,7 +31,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
       >
         <mat-expansion-panel-header>
           <mat-panel-title
-            class="mb-0 d-flex py-3"
+            class="mb-0 me-0 d-flex py-3"
             [ngClass]="panel.expanded && view.shouldChangeSize ? 'h3' : 'h4'"
           >
             <div class="d-flex flex-column flex-grow-1 fs-5">

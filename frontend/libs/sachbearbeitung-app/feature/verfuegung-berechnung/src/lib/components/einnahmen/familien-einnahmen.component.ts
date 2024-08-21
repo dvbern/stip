@@ -12,7 +12,7 @@ import { FamilienBerechnung } from '../../../models';
   imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
   template: `
     <!-- Total Einkünfte -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
           | translate
@@ -23,7 +23,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Ergänzungsleistungen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
           | translate
@@ -34,7 +34,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Steuerbares Vermögen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.steuerbaresVermoegen'
           | translate
@@ -45,7 +45,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- 15 % Vermögensaufrechnung -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung'
@@ -64,7 +64,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Abzüge -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
           | translate
@@ -73,7 +73,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Beiträge von Selbständigerwerbenden in die 2.Säule /Säule 3a -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule'
           | translate
@@ -84,7 +84,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Abzüglich Mietwert -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
           | translate
@@ -95,7 +95,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
           | translate
@@ -106,7 +106,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Einkommensfreibetrag -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
           | translate
@@ -117,7 +117,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Total -->
-    <div class="d-flex mt-3">
+    <div class="d-flex mt-3 gap-2">
       <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
@@ -125,7 +125,7 @@ import { FamilienBerechnung } from '../../../models';
         }}
       </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().total | formatChf }}
+        {{ einnahmenSig().total | formatChf: false }}
       </div>
     </div>
   `,

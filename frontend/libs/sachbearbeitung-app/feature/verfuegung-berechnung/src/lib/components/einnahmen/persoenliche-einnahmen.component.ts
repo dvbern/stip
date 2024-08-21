@@ -12,7 +12,7 @@ import { PersoenlicheBerechnung } from '../../../models';
   imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
   template: `
     <!-- Nettoerwerbseinkommen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
@@ -31,7 +31,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- EO -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
@@ -50,7 +50,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Unterhaltsbeiträge -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
           | translate
@@ -61,7 +61,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Kinder- und Ausbildungszulagen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
           | translate
@@ -72,7 +72,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Ergänzungsleistungen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
           | translate
@@ -83,7 +83,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Beiträge an Gemeindeinstitutionen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
           | translate
@@ -94,7 +94,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Steuerbares Vermögen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.steuerbaresVermoegen'
           | translate
@@ -105,7 +105,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Elterliche Leistung -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
           | translate
@@ -116,7 +116,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Einkommen Partner -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
           | translate
@@ -127,7 +127,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Total -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div class="h4 mt-3">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'

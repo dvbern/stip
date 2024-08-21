@@ -12,7 +12,7 @@ import { FamilienBerechnung } from '../../../models';
   imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
   template: `
     <!-- Anzahl anrechenbare Personen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
           | translate: kostenSig()
@@ -20,7 +20,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Grundbedarf  -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
           | translate
@@ -31,7 +31,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Wohnkosten -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
           | translate
@@ -42,7 +42,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Medizinische Grundversorgung -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
           | translate
@@ -72,7 +72,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Kantons- und Gemeindesteuern -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
           | translate
@@ -83,7 +83,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Bundessteuern -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
           | translate
@@ -94,7 +94,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Fahrkosten -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
           | translate
@@ -105,7 +105,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Fahrkosten Partner:in -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
           | translate
@@ -116,7 +116,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Verpflegung auswärts -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
           | translate
@@ -127,7 +127,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Verpflegung auswärts Partner:in -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
           | translate
@@ -138,7 +138,7 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Total -->
-    <div class="d-flex mt-3">
+    <div class="d-flex mt-3 gap-2">
       <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total'
