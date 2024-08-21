@@ -53,7 +53,7 @@ class GesuchStatusTest {
             .statusCode(Response.Status.CREATED.getStatusCode());
         gesuchId = TestUtil.extractIdFromResponse(response);
 
-        var gesuch = gesuchApiSpec.getGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+        var gesuch = gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()

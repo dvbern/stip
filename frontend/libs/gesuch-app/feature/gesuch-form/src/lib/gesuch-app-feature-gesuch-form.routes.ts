@@ -164,4 +164,8 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     path: ':id',
     redirectTo: PERSON.route + '/:id',
   },
+  {
+    path: ':id/tranche/:trancheId',
+    redirectTo: PERSON.route + '/:id/tranche/:trancheId',
+  },
 ];
