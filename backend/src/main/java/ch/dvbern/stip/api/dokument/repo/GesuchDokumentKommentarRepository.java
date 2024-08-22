@@ -38,6 +38,7 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
                     gesuchDokumentKommentar.gesuch.id.eq(gesuchId)
                         .and(gesuchDokumentKommentar.dokumentTyp.eq(dokumentTyp))
                 )
+                .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())
                 .fetch();
     }
 }
