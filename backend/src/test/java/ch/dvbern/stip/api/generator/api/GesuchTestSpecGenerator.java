@@ -1,5 +1,4 @@
 package ch.dvbern.stip.api.generator.api;
-
 import java.util.UUID;
 
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;

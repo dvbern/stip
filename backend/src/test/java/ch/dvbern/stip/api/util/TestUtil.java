@@ -41,8 +41,6 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
@@ -99,9 +97,15 @@ public class TestUtil {
     }
 
     public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
-        final var response = fallApiSpec.getFallForGs().execute(PEEK_IF_ENV_SET);
+        final var response = fallApiSpec.getFallForGs()
+            .execute(PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+        var stringBody = response.extract().body().asString();
         FallDtoSpec fall;
-        if (response.statusCode() == Status.NOT_FOUND.getStatusCode()) {
+        if (stringBody == null || stringBody.isEmpty()) {
             fall = fallApiSpec.createFallForGs()
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
@@ -111,7 +115,7 @@ public class TestUtil {
                 .body()
                 .as(FallDtoSpec.class);
         } else {
-            fall = response.body().as(FallDtoSpec.class);
+            fall = response.extract().body().as(FallDtoSpec.class);
         }
 
         return fall;
@@ -130,7 +134,7 @@ public class TestUtil {
             .statusCode(Response.Status.CREATED.getStatusCode());
 
         final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
-        return gesuchApiSpec.getGesuch()
+        return gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -166,24 +170,12 @@ public class TestUtil {
         steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
         steuerdaten.setErgaenzungsleistungen(0);
+        steuerdaten.setErgaenzungsleistungenPartner(0);
+        steuerdaten.setSozialhilfebeitraege(0);
+        steuerdaten.setSozialhilfebeitraegePartner(0);
         steuerdaten.setSteuerjahr(0);
+        steuerdaten.setWohnkosten(0);
         return steuerdaten;
-    }
-
-    public static SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
-        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = new SteuerdatenUpdateDtoSpec();
-        steuerdatenUpdateDto.setSteuerdatenTyp(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenUpdateDto.setEigenmietwert(0);
-        steuerdatenUpdateDto.setFahrkosten(0);
-        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenUpdateDto.setKinderalimente(0);
-        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
-        steuerdatenUpdateDto.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto.setVermoegen(0);
-        steuerdatenUpdateDto.setVerpflegung(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
-        steuerdatenUpdateDto.setSteuernBund(0);
-        return steuerdatenUpdateDto;
     }
 
     public static GesuchCreateDtoSpec initGesuchCreateDto() {
@@ -380,11 +372,9 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
-                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
 
             )
@@ -394,6 +384,9 @@ public class TestUtil {
             Set.of(
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setWohnkosten(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
@@ -409,6 +402,9 @@ public class TestUtil {
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setWohnkosten(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
