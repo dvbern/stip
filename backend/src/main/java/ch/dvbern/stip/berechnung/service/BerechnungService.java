@@ -192,7 +192,7 @@ public class BerechnungService {
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
             berechnungsresultat.setBerechnung(
-                (berechnungsresultat.getBerechnung() * 12 / monthsValid)
+                (berechnungsresultat.getBerechnung() * monthsValid / 12)
             );
             berechnungsresultate.add(berechnungsresultat);
         }
