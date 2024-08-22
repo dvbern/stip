@@ -106,6 +106,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       store.overrideSelector(selectSharedFeatureGesuchFormPersonView, {
         loading: false,
         gesuchId: '1',
+        trancheId: '1',
         allowTypes: '',
         gesuch: null,
         gesuchFormular: {

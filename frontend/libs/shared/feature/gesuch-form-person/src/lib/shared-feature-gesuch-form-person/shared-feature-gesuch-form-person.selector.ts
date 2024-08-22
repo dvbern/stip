@@ -10,7 +10,8 @@ export const selectSharedFeatureGesuchFormPersonView = createSelector(
   selectSharedDataAccessStammdatensView,
   (gesuchsView, benutzerView, stammdatenView) => ({
     loading: gesuchsView.loading || stammdatenView.loading,
-    gesuchId: gesuchsView.gesuch?.id,
+    gesuchId: gesuchsView.gesuchId,
+    trancheId: gesuchsView.trancheId,
     allowTypes: gesuchsView.allowTypes,
     gesuch: gesuchsView.gesuch,
     gesuchFormular: gesuchsView.gesuchFormular,

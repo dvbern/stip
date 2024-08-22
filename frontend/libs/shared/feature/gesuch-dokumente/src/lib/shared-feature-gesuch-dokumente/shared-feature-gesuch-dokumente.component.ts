@@ -42,7 +42,7 @@ import {
 } from '@dv/shared/ui/reject-dokument';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 
 @Component({
@@ -96,12 +96,12 @@ export class SharedFeatureGesuchDokumenteComponent {
     const documents = this.dokumentsStore.dokumenteViewSig().dokuments;
     const requiredDocumentTypes =
       this.dokumentsStore.dokumenteViewSig().requiredDocumentTypes;
-    const gesuchId = this.gesuchViewSig().gesuchId;
+    const trancheId = this.gesuchViewSig().trancheId;
     const readonly = this.gesuchViewSig().readonly;
     const allowTypes = this.gesuchViewSig().allowTypes;
     const stepsFlow = this.stepViewSig().stepsFlow;
 
-    if (!gesuchId || !allowTypes) {
+    if (!trancheId || !allowTypes) {
       return new MatTableDataSource<SharedModelTableDokument>([]);
     }
 
@@ -114,7 +114,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         }
 
         const documentOptions = createDocumentOptions({
-          gesuchId,
+          trancheId,
           allowTypes,
           dokumentTyp,
           initialDocuments: document.dokumente,
@@ -138,7 +138,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         const formStep = getFormStepByDocumentType(dokumentTyp);
 
         const documentOptions = createDocumentOptions({
-          gesuchId,
+          trancheId,
           allowTypes,
           dokumentTyp,
           initialDocuments: [],
@@ -170,30 +170,30 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   constructor() {
-    getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
+    getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
-      .subscribe((gesuchId) => {
-        this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+      .subscribe((trancheId) => {
+        this.dokumentsStore.getDokumenteAndRequired$(trancheId);
       });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
   dokumentAkzeptieren(document: SharedModelTableDokument) {
-    const gesuchId = this.gesuchViewSig().gesuchId;
+    const trancheId = this.gesuchViewSig().trancheId;
 
-    if (!document?.gesuchDokument?.id || !gesuchId) return;
+    if (!document?.gesuchDokument?.id || !trancheId) return;
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
-      gesuchId,
+      trancheId,
     });
   }
 
   dokumentAblehnen(document: SharedModelTableDokument) {
-    const { gesuchId } = this.gesuchViewSig();
+    const { trancheId } = this.gesuchViewSig();
 
-    if (!gesuchId) return;
+    if (!trancheId) return;
 
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
@@ -210,7 +210,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchDokumentId: result.id,
-            gesuchId,
+            trancheId,
             kommentar: result.kommentar,
           });
         }
@@ -218,11 +218,12 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteUebermitteln() {
-    const { gesuchId } = this.gesuchViewSig();
+    const { gesuchId, trancheId } = this.gesuchViewSig();
 
-    if (gesuchId) {
+    if (gesuchId && trancheId) {
       this.dokumentsStore.fehlendeDokumenteUebermitteln$({
         gesuchId,
+        trancheId,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

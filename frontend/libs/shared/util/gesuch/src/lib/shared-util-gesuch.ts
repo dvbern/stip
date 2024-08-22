@@ -18,6 +18,22 @@ export function getLatestGesuchIdFromGesuch$(
 }
 
 /**
+ * Returns the latest tranche id from the view
+ */
+export function getLatestTrancheIdFromGesuch$(
+  viewSig: Signal<{
+    gesuch?: { id: string } | null;
+    trancheId?: string | null;
+  }>,
+) {
+  return toObservable(viewSig).pipe(
+    map((view) => view.trancheId),
+    filter(isDefined),
+    distinctUntilChanged(),
+  );
+}
+
+/**
  * Emits each time the gesuch has been updated
  */
 export function getLatestGesuchIdFromGesuchOnUpdate$(

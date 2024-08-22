@@ -12,6 +12,7 @@ import {
   Dokumentstatus,
   GesuchDokument,
   GesuchService,
+  GesuchTrancheService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -40,6 +41,7 @@ export class DokumentsStore extends signalStore(
 ) {
   private dokumentService = inject(DokumentService);
   private gesuchService = inject(GesuchService);
+  private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   dokumenteViewSig = computed(() => ({
@@ -65,12 +67,12 @@ export class DokumentsStore extends signalStore(
   });
 
   gesuchDokumentAblehnen$ = rxMethod<{
-    gesuchId: string;
+    trancheId: string;
     gesuchDokumentId: string;
     kommentar: string;
   }>(
     pipe(
-      switchMap(({ gesuchId, gesuchDokumentId, kommentar }) =>
+      switchMap(({ trancheId, gesuchDokumentId, kommentar }) =>
         this.dokumentService
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
@@ -80,7 +82,7 @@ export class DokumentsStore extends signalStore(
           })
           .pipe(
             this.reloadGesuchDokumente(
-              gesuchId,
+              trancheId,
               'shared.dokumente.reject.success',
             ),
           ),
@@ -89,18 +91,18 @@ export class DokumentsStore extends signalStore(
   );
 
   gesuchDokumentAkzeptieren$ = rxMethod<{
-    gesuchId: string;
+    trancheId: string;
     gesuchDokumentId: string;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, gesuchId }) =>
+      switchMap(({ gesuchDokumentId, trancheId }) =>
         this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
           })
           .pipe(
             this.reloadGesuchDokumente(
-              gesuchId,
+              trancheId,
               'shared.dokumente.accept.success',
             ),
           ),
@@ -115,10 +117,11 @@ export class DokumentsStore extends signalStore(
    */
   fehlendeDokumenteUebermitteln$ = rxMethod<{
     gesuchId: string;
+    trancheId: string;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchId, onSuccess }) => {
+      switchMap(({ gesuchId, trancheId, onSuccess }) => {
         return this.gesuchService
           .gesuchFehlendeDokumenteUebermitteln$({ gesuchId })
           .pipe(
@@ -128,7 +131,9 @@ export class DokumentsStore extends signalStore(
               }));
             }),
             switchMap(() =>
-              this.gesuchService.getGesuchDokumente$({ gesuchId }),
+              this.trancheService.getGesuchDokumente$({
+                gesuchTrancheId: trancheId,
+              }),
             ),
             tapResponse({
               next: (dokuments) => {
@@ -152,9 +157,9 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getDokumenteAndRequired$(gesuchId: string) {
-    this.getGesuchDokumente$(gesuchId);
-    this.getRequiredDocumentTypes$(gesuchId);
+  getDokumenteAndRequired$(trancheId: string) {
+    this.getGesuchDokumente$(trancheId);
+    this.getRequiredDocumentTypes$(trancheId);
   }
 
   private getGesuchDokumente$ = rxMethod<string>(
@@ -164,8 +169,8 @@ export class DokumentsStore extends signalStore(
           dokuments: cachedPending(state.dokuments),
         }));
       }),
-      switchMap((gesuchId) =>
-        this.gesuchService.getGesuchDokumente$({ gesuchId }),
+      switchMap((gesuchTrancheId) =>
+        this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
       ),
       handleApiResponse((dokuments) => patchState(this, { dokuments })),
     ),
@@ -178,9 +183,9 @@ export class DokumentsStore extends signalStore(
           requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
         }));
       }),
-      switchMap((gesuchId) =>
-        this.gesuchService
-          .getRequiredGesuchDokumentTyp$({ gesuchId })
+      switchMap((gesuchTrancheId) =>
+        this.trancheService
+          .getRequiredGesuchDokumentTyp$({ gesuchTrancheId })
           .pipe(
             handleApiResponse((requiredDocumentTypes) =>
               patchState(this, { requiredDocumentTypes }),
@@ -190,7 +195,10 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  private reloadGesuchDokumente = (gesuchId: string, messageKey: string) =>
+  private reloadGesuchDokumente = (
+    gesuchTrancheId: string,
+    messageKey: string,
+  ) =>
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -198,8 +206,8 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap(() =>
-        this.gesuchService.getGesuchDokumente$({
-          gesuchId,
+        this.trancheService.getGesuchDokumente$({
+          gesuchTrancheId,
         }),
       ),
       tapResponse({

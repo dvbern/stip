@@ -28,14 +28,14 @@ import { Configuration }                                     from '../configurat
 
 export interface DokumentServiceCreateDokumentRequestParams {
     dokumentTyp: DokumentTyp;
-    gesuchId: string;
+    gesuchTrancheId: string;
     fileUpload: Blob;
 }
 
 export interface DokumentServiceDeleteDokumentRequestParams {
     dokumentId: string;
     dokumentTyp: DokumentTyp;
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface DokumentServiceGesuchDokumentAblehnenRequestParams {
@@ -52,14 +52,14 @@ export interface DokumentServiceGetDokumentRequestParams {
 }
 
 export interface DokumentServiceGetDokumentDownloadTokenRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
     dokumentTyp: DokumentTyp;
     dokumentId: string;
 }
 
 export interface DokumentServiceGetDokumenteForTypRequestParams {
     dokumentTyp: DokumentTyp;
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 
@@ -152,9 +152,9 @@ export class DokumentService {
         if (dokumentTyp === null || dokumentTyp === undefined) {
             throw new Error('Required parameter dokumentTyp was null or undefined when calling createDokument$.');
         }
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling createDokument$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokument$.');
         }
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
@@ -227,7 +227,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -259,9 +259,9 @@ export class DokumentService {
         if (dokumentTyp === null || dokumentTyp === undefined) {
             throw new Error('Required parameter dokumentTyp was null or undefined when calling deleteDokument$.');
         }
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling deleteDokument$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling deleteDokument$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -308,7 +308,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -552,9 +552,9 @@ export class DokumentService {
      public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<string>>;
      public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<string>>;
      public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getDokumentDownloadToken$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getDokumentDownloadToken$.');
         }
         const dokumentTyp = requestParameters.dokumentTyp;
         if (dokumentTyp === null || dokumentTyp === undefined) {
@@ -609,7 +609,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -623,7 +623,7 @@ export class DokumentService {
     }
 
     /**
-     * Returniert der GesuchDokument mit der gegebene Id und alle Dokument die dazu gehoeren.
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -636,9 +636,9 @@ export class DokumentService {
         if (dokumentTyp === null || dokumentTyp === undefined) {
             throw new Error('Required parameter dokumentTyp was null or undefined when calling getDokumenteForTyp$.');
         }
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getDokumenteForTyp$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getDokumenteForTyp$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -686,7 +686,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
         return this.httpClient.request<Array<Dokument>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
