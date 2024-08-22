@@ -195,7 +195,7 @@ public class GesuchDokumentService {
         }
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void removeGesuchDokument(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
         final var dokuments = gesuchDokument.getDokumente();

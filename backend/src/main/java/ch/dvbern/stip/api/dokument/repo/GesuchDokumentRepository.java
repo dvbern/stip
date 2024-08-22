@@ -11,7 +11,6 @@ import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -43,33 +42,6 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .where(gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId))
             .stream();
     }
-
-    /**
-     * Returns a list of distinct {@link DokumentTyp} that are present for a {@link GesuchFormular} that are in the
-	 * given types
-     */
-    // public Stream<DokumentTyp> findAllForGesuchFormularWithType(final UUID gesuchFormularId, final @Nonnull List<DokumentTyp> types) {
-    //     if (gesuchFormularId == null || types.isEmpty()) {
-    //         return Stream.empty();
-    //     }
-    //
-    //     final var gesuchDokument = QGesuchDokument.gesuchDokument;
-    //     final var gesuch = QGesuch.gesuch;
-    //     final var gesuchTranche = QGesuchTranche.gesuchTranche;
-    //     final var gesuchFormular = QGesuchFormular.gesuchFormular;
-    //
-    //     final var query = new JPAQueryFactory(entityManager)
-    //         .select(gesuchDokument.dokumentTyp)
-    //         .from(gesuchDokument)
-    //         .join(gesuchTranche).on(gesuchTranche.id.eq(gesuchDokument.gesuchTranche.id))
-    //         .join(gesuchFormular).on(gesuchFormular.id.eq(gesuchTranche.gesuchFormular.id))
-    //         .where(
-    //             gesuchFormular.id.eq(gesuchFormularId)
-    //                 .and(gesuchDokument.dokumentTyp.in(types))
-    //         ).distinct();
-    //
-    //     return query.stream();
-    // }
 
     public void dropGesuchDokumentIfNoDokumente(final UUID gesuchDokumentId) {
         final var gesuchDokument = requireById(gesuchDokumentId);

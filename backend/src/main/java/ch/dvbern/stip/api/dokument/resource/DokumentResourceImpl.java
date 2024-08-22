@@ -140,9 +140,9 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_DELETE)
     @Override
     @Blocking
-    public Uni<Response> deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+    public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
         gesuchDokumentService.removeDokument(dokumentId);
-        return Uni.createFrom().item(Response.noContent().build());
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)

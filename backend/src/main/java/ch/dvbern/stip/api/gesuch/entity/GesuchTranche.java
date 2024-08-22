@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
@@ -73,5 +74,5 @@ public class GesuchTranche extends AbstractEntity {
     private String comment;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")
-    private @Valid List<GesuchDokument> gesuchDokuments;
+    private @Valid List<GesuchDokument> gesuchDokuments = new ArrayList<>();
 }

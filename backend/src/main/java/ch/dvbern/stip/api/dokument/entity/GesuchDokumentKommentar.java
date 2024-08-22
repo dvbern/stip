@@ -27,7 +27,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Table(
     name = "gesuch_dokument_kommentar",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_kommentar_gesuchtranche_id", columnList = "gesuchtranche_id"),
+        @Index(name = "IX_gesuch_dokument_kommentar_gesuch_tranche_id", columnList = "gesuch_tranche_id"),
         @Index(name = "IX_gesuch_dokument_kommentar_mandant", columnList = "mandant")
     }
 )
@@ -36,7 +36,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuchtranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuchtranche_id"))
+    @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
 
     @NotNull

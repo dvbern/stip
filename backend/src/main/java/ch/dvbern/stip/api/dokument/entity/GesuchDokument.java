@@ -45,8 +45,8 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "gesuch_dokument",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_gesuchtranche_id", columnList = "gesuchtranche_id"),
-        @Index(name = "IX_gesuch_dokument_gesuchtranche_id_dokument_typ", columnList = "gesuchtranche_id,dokument_typ"),
+        @Index(name = "IX_gesuch_dokument_gesuch_tranche_id", columnList = "gesuch_tranche_id"),
+        @Index(name = "IX_gesuch_dokument_gesuch_tranche_id_dokument_typ", columnList = "gesuch_tranche_id,dokument_typ"),
         @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
     }
 )
@@ -55,7 +55,7 @@ import org.hibernate.envers.Audited;
 public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuchtranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuchtranche_id"))
+    @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
 
     @NotNull
@@ -70,20 +70,20 @@ public class GesuchDokument extends AbstractMandantEntity {
 
     @ManyToMany
     @JoinTable(
-        name = "gesuchdokument_dokument",
+        name = "gesuch_dokument_dokument",
         joinColumns = @JoinColumn(
-            name = "gesuchdokument_id",
+            name = "gesuch_dokument_id",
             referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_gesuchdokument_dokumente")
+            foreignKey = @ForeignKey(name = "FK_gesuch_dokument_dokumente")
         ),
         inverseJoinColumns = @JoinColumn(
             name = "dokument_id",
             referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_dokument_gesuchdokumente")
+            foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokumente")
         ),
         indexes = {
-            @Index(name = "gesuchdokument_dokument_gesuchdokument_id", columnList = "gesuchdokument_id"),
-            @Index(name = "gesuchdokument_dokument_dokument_id", columnList = "dokument_id")
+            @Index(name = "gesuch_dokument_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id"),
+            @Index(name = "gesuch_dokument_dokument_dokument_id", columnList = "dokument_id")
         }
     )
     private List<Dokument> dokumente = new ArrayList<>();
