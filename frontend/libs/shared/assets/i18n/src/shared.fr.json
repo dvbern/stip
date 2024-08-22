@@ -77,6 +77,8 @@
   "shared.form.error.minDatePast": "La date est trop éloignée dans le passé",
   "shared.form.error.maxDatePast": "La date doit se situer plus loin dans le passé",
   "shared.form.error.maxDateFuture": "La date est trop éloignée dans le temps",
+  "shared.form.error.maxDate": "La date doit être antérieure à {{maxDate}}",
+  "shared.form.error.minDate": "La date doit être postérieure à {{minDate}}",
   "shared.form.error.email": "L'adresse e-mail est invalide",
   "shared.form.error.telefonnummer": "Le numéro de téléphone est invalide",
   "shared.weiterangaben": "Plus de détails",
