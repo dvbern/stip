@@ -186,7 +186,6 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(14000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
         );
@@ -194,6 +193,7 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
+                    .setWohnkosten(14000)
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setVerpflegung(3200)
                     .setVerpflegungPartner(0)
@@ -269,7 +269,6 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(20000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
         );
@@ -277,6 +276,7 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
+                    .setWohnkosten(20000)
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setVerpflegung(3200)
                     .setVerpflegungPartner(0)
