@@ -236,10 +236,6 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   expandRow(dokument: SharedModelTableDokument) {
-    if (dokument.gesuchDokument?.status !== Dokumentstatus.ABGELEHNT) {
-      return;
-    }
-
     if (this.expandedRowId === dokument.dokumentTyp) {
       this.expandedRowId = null;
     } else {

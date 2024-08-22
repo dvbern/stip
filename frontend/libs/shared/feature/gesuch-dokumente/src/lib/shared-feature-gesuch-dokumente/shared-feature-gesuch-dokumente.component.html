@@ -51,15 +51,13 @@
           <ng-container matColumnDef="expander">
             <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
             <td class="expander-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-              @if (dokument.gesuchDokument?.status === DokumentStatus.ABGELEHNT) {
-                <button class="btn btn-link" type="button">
-                  @if (expandedRowId === dokument.dokumentTyp) {
-                    <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
-                  } @else {
-                    <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
-                  }
-                </button>
-              }
+              <button class="btn btn-link" type="button">
+                @if (expandedRowId === dokument.dokumentTyp) {
+                  <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
+                } @else {
+                  <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
+                }
+              </button>
             </td>
           </ng-container>
 
@@ -176,6 +174,10 @@
               >
                 @if (kommentareRd | rdIsPending) {
                   <dv-shared-ui-loading class="pb-2" type="icon"></dv-shared-ui-loading>
+                } @else if (kommentareRd.data === undefined || !kommentareRd.data.length) {
+                  <div class="text-muted text-center py-2">
+                    {{ 'shared.dokumente.table.noComment' | translate }}
+                  </div>
                 } @else {
                   <div class="kommentar-grid py-2">
                     @for (kommentar of kommentareRd.data; track $index) {
@@ -184,7 +186,7 @@
                       <div class="text-muted">
                         {{ kommentar.timestampErstellt | date: 'dd.MMMM.YYYY' }}
                       </div>
-                      <div class="">
+                      <div>
                         {{ kommentar.kommentar }}
                       </div>
                     }
