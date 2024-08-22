@@ -1,6 +1,8 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.service.*;
+import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
+import ch.dvbern.stip.api.auszahlung.service.sap.SapMessageType;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -12,7 +14,9 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.WebApplicationException;
+import org.aesh.command.man.TerminalPage;
 import org.apache.http.HttpStatus;
+import org.checkerframework.checker.units.qual.A;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
@@ -46,6 +50,10 @@ class AuszahlungResourceImplTest {
     @RestClient
     @InjectMock
     VendorPostingCreateClient vendorPostingCreateClient;
+
+    @InjectMock
+    @RestClient
+    SearchBusinessPartnerClient searchBusinessPartnerClient;
 
     @TestAsSachbearbeiter
     @Test
@@ -249,6 +257,56 @@ class AuszahlungResourceImplTest {
 
     }
 
+    @Inject
+    AuszahlungSapService auszahlungSapService;
+
+    @Test
+    void searchExistingBusinessPartnerTest() throws IOException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/BusinessPartnerSearchExampleResponse.xml"),
+            "UTF-8"
+        );
+        when(searchBusinessPartnerClient.searchBusinessPartner(any())).thenReturn(xml);
+        AuszahlungDto auszahlungDto = initAuszahlungDto();
+        final var response = auszahlungSapService.searchBusinessPartner(auszahlungDto);
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
+        SapMessageType messageType = SAPUtils.parseSapMessageType((String) response.getEntity());
+        assertEquals(SapMessageType.S, messageType);
+        String businessPartnerId = SAPUtils.parseBusinessPartnerId((String) response.getEntity());
+        assertNotNull(businessPartnerId);
+    }
+
+    @Test
+    void searchNonExistingBusinessPartnerTest() throws IOException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/SearchBusinessParnterNonExistingResponse.xml"),
+            "UTF-8"
+        );
+        when(searchBusinessPartnerClient.searchBusinessPartner(any())).thenReturn(xml);
+        AuszahlungDto auszahlungDto = initAuszahlungDto();
+        auszahlungDto.setVorname("xyz");
+        final var response = auszahlungSapService.searchBusinessPartner(auszahlungDto);
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
+        SapMessageType messageType = SAPUtils.parseSapMessageType((String) response.getEntity());
+        assertEquals(SapMessageType.E, messageType);
+        String businessPartnerId = SAPUtils.parseBusinessPartnerId((String) response.getEntity());
+        assertNull(businessPartnerId);
+    }
+    private AuszahlungDto initAuszahlungDto(){
+        AuszahlungDto auszahlungDto = new AuszahlungDto();
+        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        auszahlungDto.setVorname("Brigitta1111111");
+        auszahlungDto.setNachname("Flückke11111111");
+        auszahlungDto.setIban("CH2089144635452242312");
+        AdresseDto adresseDto = new AdresseDto();
+        adresseDto.setStrasse("Bundesstadtstrasse");
+        adresseDto.setOrt("Hauptstadtort");
+        adresseDto.setPlz("9299");
+        adresseDto.setLand(Land.CH);
+        adresseDto.setHausnummer("9298");
+        auszahlungDto.setAdresse(adresseDto);
+        return auszahlungDto;
+    }
     private CreateAuszahlungKreditorDto initCreateAuszahlungKreditorDto() {
         AuszahlungDto auszahlungDto = new AuszahlungDto();
         auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);

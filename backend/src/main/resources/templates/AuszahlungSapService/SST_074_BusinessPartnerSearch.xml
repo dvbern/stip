@@ -1,0 +1,75 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Header>
+    <Action s:mustUnderstand="1" xmlns="http://schemas.microsoft.com/ws/2005/05/addressing/none">http://sap.com/xi/WebService/soap1.1</Action></soapenv:Header>
+  <soapenv:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <urn:BusinessPartnerSearch_Request xmlns="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
+      <SENDER xmlns="">
+        <SYSID>2080</SYSID>
+        <!--Optional:-->
+        <BETRIEB/>
+        <!--Optional:-->
+        <VERSION>1.0</VERSION>
+      </SENDER>
+      <FILTER_PARMS xmlns="">
+        <ONLY_WITH_REF>false</ONLY_WITH_REF>
+        <READ_ALL_DETAILS>false</READ_ALL_DETAILS>
+        <!--Optional:-->
+        <OFFSET>0</OFFSET>
+        <!--Optional:-->
+        <LIMIT>1</LIMIT>
+      </FILTER_PARMS>
+      <!--Optional:-->
+      <FILTER_PARMS_ID xmlns="">
+        <!--Optional:-->
+        <BPARTNER/>
+        <!--Optional:-->
+        <EXT_ID/>
+        <!--Optional:-->
+        <AHV_NR/>
+        <!--Optional:-->
+        <UID_NR/>
+        <!--Optional:-->
+        <ZPV_NR/>
+      </FILTER_PARMS_ID>
+      <!--Optional:-->
+      <FILTER_PARMS_BASE xmlns="">
+        <!--Optional:-->
+        <NAME>{data.nachname}</NAME>
+        <!--Optional:-->
+        <VORNAME>{data.vorname}</VORNAME>
+      </FILTER_PARMS_BASE>
+      <!--Optional:-->
+      <FILTER_PARMS_ADDR xmlns="">
+        <!--Optional:-->
+        <ADR_KIND/>
+        <!--Optional:-->
+        <C_O_NAME>{data.adresse.coAdresse}</C_O_NAME>
+        <!--Optional:-->
+        <CITY>{data.adresse.ort}</CITY>
+        <!--Optional:-->
+        <DISTRICT/>
+        <!--Optional:-->
+        <POSTL_COD1>{data.adresse.plz}</POSTL_COD1>
+        <!--Optional:-->
+        <PO_BOX/>
+        <!--Optional:-->
+        <STREET>{data.adresse.strasse}</STREET>
+        <!--Optional:-->
+        <HOUSE_NO>{data.adresse.hausnummer}</HOUSE_NO>
+        <!--Optional:-->
+        <COUNTRY>{data.adresse.land}</COUNTRY>
+      </FILTER_PARMS_ADDR>
+      <!--Optional:-->
+      <FILTER_PARMS_COMM xmlns="">
+        <!--Optional:-->
+        <EMAIL/>
+        <!--Optional:-->
+        <TELEPHONE/>
+        <!--Optional:-->
+        <MOBILE/>
+        <!--Optional:-->
+        <FAX/>
+      </FILTER_PARMS_COMM>
+    </urn:BusinessPartnerSearch_Request>
+  </soapenv:Body>
+</soapenv:Envelope>

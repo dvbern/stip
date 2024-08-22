@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
@@ -34,10 +35,14 @@ public class AuszahlungSapService {
     @Location("AuszahlungSapService/SST_003_VendorPostingCreate.xml")
     public Template SST_003_VendorPostingCreate;
 
+    @Location("AuszahlungSapService/SST_074_BusinessPartnerSearch.xml")
+    public Template SST_074_BusinessPartnerSearch;
+
     private final GetAuszahlungImportStatusRequestMapper getAuszahlungImportStatusRequestMapper;
     private final CreateAuszahlungKreditorMapper createAuszahlungKreditorMapper;
     private final ChangeAuszahlungKreditorMapper changeAuszahlungKreditorMapper;
     private final CreateAuszahlungMapper createAuszahlungMapper;
+    private final AuszahlungMapper auszahlungMapper;
 
     @ConfigProperty(name = "stip_sap_sysid")
     Integer sysid;
@@ -53,6 +58,9 @@ public class AuszahlungSapService {
 
     @RestClient
     VendorPostingCreateClient vendorPostingCreateClient;
+
+    @RestClient
+    SearchBusinessPartnerClient searchBusinessPartnerClient;
 
     private String buildPayload(Template template, Object data){
         return template.data("data", data).render();
@@ -117,4 +125,17 @@ public class AuszahlungSapService {
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
         }
     }
+
+    public Response searchBusinessPartner(@Valid AuszahlungDto auszahlungDto){
+        try{
+            Auszahlung data = auszahlungMapper.toEntity(auszahlungDto);
+            String response = searchBusinessPartnerClient.searchBusinessPartner(buildPayload(SST_074_BusinessPartnerSearch,data));
+            return Response.status(HttpStatus.SC_OK).entity(response).build();
+
+        }
+        catch (WebApplicationException ex){
+            return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+        }
+    }
+
 }
