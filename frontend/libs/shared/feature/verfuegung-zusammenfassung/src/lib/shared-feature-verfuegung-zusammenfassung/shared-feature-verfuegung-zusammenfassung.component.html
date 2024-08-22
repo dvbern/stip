@@ -41,8 +41,8 @@
   <mat-card class="rounded-4 mb-4">
     <mat-card-header>
       <mat-card-title>
-        <div class="text-muted">{{ 'sachbearbeitung-app.verfuegung.zusammenfassung.subtitle' | translate }}</div>
-        <h3 class="d-flex align-items-center mb-0">
+        <div class="text-muted mb-1">{{ 'sachbearbeitung-app.verfuegung.zusammenfassung.subtitle' | translate }}</div>
+        <h3 class="mb-0 fs-4">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.title' | translate }}
         </h3>
       </mat-card-title>
@@ -53,13 +53,13 @@
     <mat-card-content class="d-flex flex-column gap-4">
       @for (berechnung of zusammenfassung.berechnungsresultate; track $index) {
         <div>
-          <div class="d-flex justify-content-between fs-4 mb-2">
-            <div translate [translateParams]="{ index: $index + 1 }">
-              sachbearbeitung-app.verfuegung.zusammenfassung.item.total
-            </div>
+          <div class="d-flex justify-content-between h4 mb-0">
+            <span class="fw-normal fs-5">
+              {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.item.total' | translate: { index: $index + 1 } }}
+            </span>
             <div>{{ berechnung.berechnung | formatNoChf }}</div>
           </div>
-          <a class="text-decoration-none text-info" [routerLink]="['../berechnung', $index + 1]">
+          <a class="text-decoration-none text-info fs-5" [routerLink]="['../berechnung', $index + 1]">
             <div class="d-flex align-items-center gap-2">
               <span class="text-decoration-underline" translate [translateParams]="{ index: $index + 1 }"
                 >sachbearbeitung-app.verfuegung.zusammenfassung.item.link</span
@@ -74,7 +74,7 @@
     <div class="border-bottom border-1 mt-4"></div>
 
     <mat-card-footer class="px-3 py-4">
-      <div class="d-flex justify-content-between fs-4 fw-bold">
+      <div class="d-flex justify-content-between fs-3 h4">
         <div>
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
         </div>
