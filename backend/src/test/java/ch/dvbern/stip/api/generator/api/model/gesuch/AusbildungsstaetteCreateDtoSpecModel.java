@@ -5,7 +5,7 @@ import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 
 public class AusbildungsstaetteCreateDtoSpecModel {
     public static AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(AusbildungsstaetteCreateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(AusbildungsstaetteCreateDtoSpec::new, (model) -> {
             model.setNameDe("Uni Bern");
             model.setNameFr("Uni Bern");
         });

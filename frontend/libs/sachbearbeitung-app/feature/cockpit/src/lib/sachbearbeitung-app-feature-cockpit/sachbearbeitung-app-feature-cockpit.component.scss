@@ -8,12 +8,9 @@
     right: -8px;
   }
   .chip {
-    width: 66px;
-    height: 66px;
+    width: 24px;
+    height: 24px;
 
-    .icon {
-      font-size: 2rem;
-    }
     &.in_bearbeitung_gs {
       background-color: var(--dv-blue-bg-subtle);
       color: var(--dv-blue-bg);

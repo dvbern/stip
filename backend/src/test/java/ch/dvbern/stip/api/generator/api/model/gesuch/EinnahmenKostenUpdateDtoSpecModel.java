@@ -6,7 +6,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 
 public class EinnahmenKostenUpdateDtoSpecModel {
     public static EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model) -> {
             model.setNettoerwerbseinkommen(TestUtil.getRandomInt(1, 2500));
             model.setZulagen(TestUtil.getRandomInt(1, 2500));
             model.setRenten(TestUtil.getRandomInt(1, 2500));
@@ -19,7 +19,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setWohnkosten(TestUtil.getRandomInt(1, 2500));
             model.setVerdienstRealisiert(false);
             model.setWillDarlehen(false);
-            model.setAuswaertigeMittagessenProWoche(faker.number().randomDigit());
+            model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setVeranlagungsCode(0);
             model.setSteuerjahr(0);
@@ -29,7 +29,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecEinnahmenKosten() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setEinnahmenKosten(einnahmenKostenUpdateDtoSpec())
+            (model) -> model.setEinnahmenKosten(einnahmenKostenUpdateDtoSpec())
         );
     }
 }

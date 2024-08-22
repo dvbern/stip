@@ -25,15 +25,12 @@ export interface Eltern {
      */
     identischerZivilrechtlicherWohnsitzPLZ?: string;
     telefonnummer: string;
-    wohnkosten: number;
     sozialversicherungsnummer?: string;
     /**
      * dd.MM.YYYY
      */
     geburtsdatum: string;
-    sozialhilfebeitraegeAusbezahlt: boolean;
     ausweisbFluechtling: boolean;
-    ergaenzungsleistungAusbezahlt: boolean;
     id?: string;
     elternTyp: ElternTyp;
     nachname: string;

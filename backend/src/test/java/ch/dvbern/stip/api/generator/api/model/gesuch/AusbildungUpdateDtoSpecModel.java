@@ -14,12 +14,12 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 public final class AusbildungUpdateDtoSpecModel {
     public static AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(AusbildungUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(AusbildungUpdateDtoSpec::new, (model) -> {
             model.setAusbildungBegin(LocalDate.now().plusYears(1).with(firstDayOfYear()).format(DATE_TIME_FORMATTER));
             model.setAusbildungEnd(LocalDate.now().plusYears(1).with(lastDayOfYear()).format(DATE_TIME_FORMATTER));
             model.setAusbildungNichtGefunden(false);
             model.setAusbildungsgangId(TestConstants.TEST_AUSBILDUNGSGANG_ID);
-            model.setFachrichtung(faker.educator().course());
+            model.setFachrichtung("Informatik");
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
             model.setIsAusbildungAusland(false);
             model.setAusbildungsort("Bern");
@@ -29,7 +29,7 @@ public final class AusbildungUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setAusbildung(ausbildungUpdateDtoSpec())
+            (model) -> model.setAusbildung(ausbildungUpdateDtoSpec())
         );
     }
 }

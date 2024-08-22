@@ -17,10 +17,7 @@ public class ElternCopyUtil {
         copy.setSozialversicherungsnummer(other.getSozialversicherungsnummer());
         copy.setElternTyp(other.getElternTyp());
         copy.setTelefonnummer(other.getTelefonnummer());
-        copy.setWohnkosten(other.getWohnkosten());
-        copy.setSozialhilfebeitraegeAusbezahlt(other.getSozialhilfebeitraegeAusbezahlt());
         copy.setAusweisbFluechtling(other.getAusweisbFluechtling());
-        copy.setErgaenzungsleistungAusbezahlt(other.getErgaenzungsleistungAusbezahlt());
         copy.setIdentischerZivilrechtlicherWohnsitz(other.isIdentischerZivilrechtlicherWohnsitz());
         copy.setIdentischerZivilrechtlicherWohnsitzOrt(other.getIdentischerZivilrechtlicherWohnsitzOrt());
         copy.setIdentischerZivilrechtlicherWohnsitzPLZ(other.getIdentischerZivilrechtlicherWohnsitzPLZ());

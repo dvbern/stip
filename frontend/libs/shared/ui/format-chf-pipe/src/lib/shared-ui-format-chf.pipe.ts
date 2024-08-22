@@ -12,12 +12,12 @@ export class SharedUiFormatChfPipe implements PipeTransform {
       return '';
     }
     if (!addSign || +value === 0) {
-      return `${toFormatedNumber(+value)} CHF`;
+      return `${toFormatedNumber(+value)}`;
     }
     if (+value > 0) {
-      return `+ ${toFormatedNumber(+value)} CHF`;
+      return `+ ${toFormatedNumber(+value)}`;
     }
-    return `- ${toFormatedNumber(+value)} CHF`;
+    return `- ${toFormatedNumber(+value)}`;
   }
 }
 
@@ -31,8 +31,8 @@ export class SharedUiFormatChfNegativePipe implements PipeTransform {
       return '';
     }
     if (+value >= 0) {
-      return `${toFormatedNumber(+value)} CHF`;
+      return `${toFormatedNumber(+value)}`;
     }
-    return `- ${toFormatedNumber(+value)} CHF`;
+    return `- ${toFormatedNumber(+value)}`;
   }
 }

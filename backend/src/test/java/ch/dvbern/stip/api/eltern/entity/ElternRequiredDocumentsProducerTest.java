@@ -34,30 +34,6 @@ class ElternRequiredDocumentsProducerTest {
     }
 
     @Test
-    void requiresIfSozialhilfebeitraege() {
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createSozialhilfebeitraege(ElternTyp.VATER)),
-            DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER
-        );
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createSozialhilfebeitraege(ElternTyp.MUTTER)),
-            DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER
-        );
-    }
-
-    @Test
-    void requiresIfErgaenzungsleistung() {
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createErgaenzungsleistung(ElternTyp.VATER)),
-            DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-        );
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createErgaenzungsleistung(ElternTyp.MUTTER)),
-            DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        );
-    }
-
-    @Test
     void requiresIfAusweisbFluechtling() {
         RequiredDocsUtil.requiresOneAndType(
             producer.getForElternteil(createAusweisbFluechtling(ElternTyp.VATER)),
@@ -69,36 +45,12 @@ class ElternRequiredDocumentsProducerTest {
         );
     }
 
-    @Test
-    void requiresIfWohnkosten() {
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createWohnkosten(ElternTyp.VATER)),
-            DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-        );
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getForElternteil(createWohnkosten(ElternTyp.MUTTER)),
-            DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
-        );
-    }
-
     private Eltern createNotBern(final ElternTyp elternTyp) {
         return createWithTyp(elternTyp).setAdresse(new Adresse().setPlz("7000"));
     }
 
-    private Eltern createSozialhilfebeitraege(final ElternTyp elternTyp) {
-        return setBernAdresse(createWithTyp(elternTyp).setSozialhilfebeitraegeAusbezahlt(true));
-    }
-
-    private Eltern createErgaenzungsleistung(final ElternTyp elternTyp) {
-        return setBernAdresse(createWithTyp(elternTyp).setErgaenzungsleistungAusbezahlt(true));
-    }
-
     private Eltern createAusweisbFluechtling(final ElternTyp elternTyp) {
         return setBernAdresse(createWithTyp(elternTyp).setAusweisbFluechtling(true));
-    }
-
-    private Eltern createWohnkosten(final ElternTyp elternTyp) {
-        return setBernAdresse(createWithTyp(elternTyp).setWohnkosten(1));
     }
 
     private Eltern createWithTyp(final ElternTyp typ) {
