@@ -3,7 +3,7 @@ package ch.dvbern.stip.api.dokument.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +27,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Table(
     name = "gesuch_dokument_kommentar",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_kommentar_gesuch_id", columnList = "gesuch_id"),
+        @Index(name = "IX_gesuch_dokument_kommentar_gesuchtranche_id", columnList = "gesuchtranche_id"),
         @Index(name = "IX_gesuch_dokument_kommentar_mandant", columnList = "mandant")
     }
 )
@@ -36,8 +36,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_id"))
-    private Gesuch gesuch;
+    @JoinColumn(name = "gesuchtranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuchtranche_id"))
+    private GesuchTranche gesuchTranche;
 
     @NotNull
     @Column(name = "dokument_typ", nullable = false)

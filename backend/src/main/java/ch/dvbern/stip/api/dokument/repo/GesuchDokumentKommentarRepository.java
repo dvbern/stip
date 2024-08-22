@@ -17,16 +17,16 @@ import lombok.RequiredArgsConstructor;
 public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchDokumentKommentar> {
     private final EntityManager entityManager;
 
-    public Optional<GesuchDokumentKommentar> getByTypAndGesuchId(
+    public Optional<GesuchDokumentKommentar> getByTypAndGesuchTrancheId(
         final DokumentTyp dokumentTyp,
-        final UUID gesuchId
+        final UUID gesuchTrancheId
     ) {
         final var gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
         return Optional.ofNullable(
             new JPAQueryFactory(entityManager)
                 .selectFrom(gesuchDokumentKommentar)
                 .where(
-                    gesuchDokumentKommentar.gesuch.id.eq(gesuchId)
+                    gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId)
                         .and(gesuchDokumentKommentar.dokumentTyp.eq(dokumentTyp))
                 )
                 .fetchOne()

@@ -1,0 +1,122 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1724310926426-18">
+        <dropForeignKeyConstraint baseTableName="dokument" constraintName="FK_dokument_gesuch_dokument_id"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-19">
+        <dropForeignKeyConstraint baseTableName="gesuch_dokument" constraintName="FK_gesuch_dokument_gesuch_id"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-20">
+        <dropForeignKeyConstraint baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_kommentar_gesuch_id"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-1">
+        <createTable tableName="gesuchdokument_dokument">
+            <column name="gesuchdokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-2">
+        <createTable tableName="gesuchdokument_dokument_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchdokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-3">
+        <addColumn tableName="gesuch_dokument">
+            <column name="gesuchtranche_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-4">
+        <addColumn tableName="gesuch_dokument_aud">
+            <column name="gesuchtranche_id" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-5">
+        <addColumn tableName="gesuch_dokument_kommentar">
+            <column name="gesuchtranche_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-6">
+        <addColumn tableName="gesuch_dokument_kommentar_aud">
+            <column name="gesuchtranche_id" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-7">
+        <addPrimaryKey columnNames="gesuchdokument_id, rev, dokument_id" constraintName="gesuchdokument_dokument_audPK" tableName="gesuchdokument_dokument_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-8">
+        <createIndex indexName="IX_gesuch_dokument_gesuchtranche_id" tableName="gesuch_dokument">
+            <column name="gesuchtranche_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-9">
+        <createIndex indexName="IX_gesuch_dokument_gesuchtranche_id_dokument_typ" tableName="gesuch_dokument">
+            <column name="gesuchtranche_id"/>
+            <column name="dokument_typ"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-10">
+        <createIndex indexName="IX_gesuch_dokument_kommentar_gesuchtranche_id" tableName="gesuch_dokument_kommentar">
+            <column name="gesuchtranche_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-11">
+        <createIndex indexName="gesuchdokument_dokument_dokument_id" tableName="gesuchdokument_dokument">
+            <column name="dokument_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-12">
+        <createIndex indexName="gesuchdokument_dokument_gesuchdokument_id" tableName="gesuchdokument_dokument">
+            <column name="gesuchdokument_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-13">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchdokument_dokument_aud" constraintName="FK7vqoyns9p50dg1xi7na0x0w5o" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-14">
+        <addForeignKeyConstraint baseColumnNames="dokument_id" baseTableName="gesuchdokument_dokument" constraintName="FK_dokument_gesuchdokumente" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-15">
+        <addForeignKeyConstraint baseColumnNames="gesuchtranche_id" baseTableName="gesuch_dokument" constraintName="FK_gesuch_dokument_gesuchtranche_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_tranche" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-16">
+        <addForeignKeyConstraint baseColumnNames="gesuchtranche_id" baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_kommentar_gesuchtranche_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_tranche" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-17">
+        <addForeignKeyConstraint baseColumnNames="gesuchdokument_id" baseTableName="gesuchdokument_dokument" constraintName="FK_gesuchdokument_dokumente" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-21">
+        <dropColumn columnName="gesuch_dokument_id" tableName="dokument"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-22">
+        <dropColumn columnName="gesuch_dokument_id" tableName="dokument_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-23">
+        <dropColumn columnName="gesuch_id" tableName="gesuch_dokument"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-24">
+        <dropColumn columnName="gesuch_id" tableName="gesuch_dokument_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-25">
+        <dropColumn columnName="gesuch_id" tableName="gesuch_dokument_kommentar"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1724310926426-26">
+        <dropColumn columnName="gesuch_id" tableName="gesuch_dokument_kommentar_aud"/>
+    </changeSet>
+</databaseChangeLog>
