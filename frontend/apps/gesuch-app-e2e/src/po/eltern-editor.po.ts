@@ -22,10 +22,7 @@ export class ElternEditorPO {
     identischerZivilrechtlicherWohnsitzOrt: Locator;
     geburtsdatum: Locator;
     telefonnummer: Locator;
-    wohnkosten: Locator;
     ausweisbFluechtlingRadio: Locator;
-    ergaenzungsleistungAusbezahltRadio: Locator;
-    sozialhilfebeitraegeAusbezahltRadio: Locator;
 
     buttonSave: Locator;
     buttonCancel: Locator;
@@ -53,15 +50,8 @@ export class ElternEditorPO {
       ),
       geburtsdatum: page.getByTestId('form-eltern-geburtsdatum'),
       telefonnummer: page.getByTestId('form-eltern-telefonnummer'),
-      wohnkosten: page.getByTestId('form-eltern-wohnkosten'),
       ausweisbFluechtlingRadio: page.getByTestId(
         'form-eltern-ausweisFluechtling',
-      ),
-      ergaenzungsleistungAusbezahltRadio: page.getByTestId(
-        'form-eltern-ergaenzungsleistungAusbezahlt',
-      ),
-      sozialhilfebeitraegeAusbezahltRadio: page.getByTestId(
-        'form-eltern-sozialhilfebeitraegeAusbezahlt',
       ),
 
       buttonSave: page.getByTestId('button-save'),
@@ -81,21 +71,10 @@ export class ElternEditorPO {
 
     await this.elems.geburtsdatum.fill(item.geburtsdatum);
     await this.elems.telefonnummer.fill(item.telefonnummer);
-    await this.elems.wohnkosten.fill(item.wohnkosten.toString());
 
     await selectMatRadio(
       this.elems.ausweisbFluechtlingRadio,
       item.ausweisbFluechtling,
-    );
-
-    await selectMatRadio(
-      this.elems.ergaenzungsleistungAusbezahltRadio,
-      item.ergaenzungsleistungAusbezahlt,
-    );
-
-    await selectMatRadio(
-      this.elems.sozialhilfebeitraegeAusbezahltRadio,
-      item.sozialhilfebeitraegeAusbezahlt,
     );
 
     await expectFormToBeValid(this.elems.form);
